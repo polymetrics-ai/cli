@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "billable_default": { "type": ["boolean", "null"] },
+    "note": { "type": ["string", "null"] },
+    "color": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "guid": "whk_fixture_1",
+          "group_guid": "grp_fixture_1",
+          "campaign_guid": null,
+          "url": "https://example.com/fixture/webhook",
+          "event": "bitlink.click",
+          "is_active": true,
+          "client_id": "fixture_client_id",
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000",
+          "updated_by": "fixture-user"
+        }
+      ]
+    }
+  }
+}

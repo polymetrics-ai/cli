@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/reports/revenue" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sales": "1000.00",
+      "iaps": "250.00",
+      "subscriptions": "500.00",
+      "ads": "10.00",
+      "edu": "0.00",
+      "business": "0.00",
+      "returns": "5.00",
+      "total": "1755.00",
+      "gross_sales": "1300.00",
+      "gross_iaps": "300.00",
+      "gross_subscriptions": "600.00",
+      "gross_edu": "0.00",
+      "gross_business": "0.00",
+      "gross_returns": "5.00",
+      "gross_total": "2195.00"
+    }
+  }
+}

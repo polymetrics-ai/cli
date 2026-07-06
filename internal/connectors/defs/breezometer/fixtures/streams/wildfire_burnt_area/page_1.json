@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fires/v1/burnt-area",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "radius": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "DiscoveryDateTime": "2026-01-01T00:00:00Z",
+          "geometry": { "type": "Polygon", "coordinates": [[[-118.26, 34.06], [-118.24, 34.06], [-118.24, 34.04]]] },
+          "BurntLat": 34.05,
+          "BurntLon": -118.25,
+          "BurntAcres": 80.2,
+          "ExtinguishedTS": "2026-01-02T00:00:00Z",
+          "InitialLat": 34.06,
+          "InitialLon": -118.26
+        }
+      ]
+    }
+  }
+}

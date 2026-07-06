@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/refunds", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "refunds": [
+        {
+          "id": "rfnd_fixture_1",
+          "object": "Refund",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "tracking_code": "TRACK1",
+          "confirmation_number": null,
+          "status": "submitted",
+          "carrier": "USPS",
+          "shipment_id": "shp_fixture_1"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

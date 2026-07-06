@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "affiliate_payouts",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "affiliateId",
+    "status",
+    "amount",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "affiliateId": {
+      "type": "string"
+    },
+    "affiliateProgramId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "amountPaid": {
+      "type": "number"
+    },
+    "periodStart": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "periodEnd": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paidAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paymentMethod": {
+      "type": "string"
+    },
+    "paymentMethodData": {
+      "type": "object"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "paymentRequestedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        { "id": "tag_fixture_1", "type": "tag", "name": "VIP" }
+      ]
+    }
+  }
+}

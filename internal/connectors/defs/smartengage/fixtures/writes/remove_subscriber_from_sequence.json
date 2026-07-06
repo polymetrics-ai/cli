@@ -1,0 +1,18 @@
+{
+  "record": {
+    "avatar_id": "av_fixture_1",
+    "subscriber_id": "sub_fixture_1",
+    "sequence": "seq_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sequences/remove"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "sub_fixture_1",
+      "sequences": []
+    }
+  }
+}

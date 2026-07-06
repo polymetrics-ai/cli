@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "coupons",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": ["string", "null"] },
+    "note": { "type": ["string", "null"] },
+    "quantity_used": { "type": ["integer", "null"] },
+    "quantity": { "type": ["integer", "null"] },
+    "promotion_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

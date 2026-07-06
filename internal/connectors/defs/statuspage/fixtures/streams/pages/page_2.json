@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/pages", "query": { "page": "2", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

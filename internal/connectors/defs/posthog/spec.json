@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PostHog Connection Specification",
+  "type": "object",
+  "required": ["project_id"],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "PostHog project ID; scopes every request to /api/projects/{project_id}/..."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "PostHog personal API key. Sent as a Bearer token; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.posthog.com",
+      "description": "Base PostHog URL. Defaults to PostHog Cloud; override for self-hosted instances or tests."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "RFC3339 lower bound sent as the events stream's after filter. Any data before this date will not be replicated."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records requested per page (sent as the limit query param)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

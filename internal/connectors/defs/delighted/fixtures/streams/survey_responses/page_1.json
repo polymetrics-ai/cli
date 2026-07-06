@@ -1,0 +1,1815 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/survey_responses.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "survey_fixture_1",
+        "person": "person_fixture_1",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 1",
+        "permalink": "https://app.delighted.com/r/fixture_1",
+        "created_at": 1767225601,
+        "updated_at": 1767225601,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_2",
+        "person": "person_fixture_2",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 2",
+        "permalink": "https://app.delighted.com/r/fixture_2",
+        "created_at": 1767225602,
+        "updated_at": 1767225602,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_3",
+        "person": "person_fixture_3",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 3",
+        "permalink": "https://app.delighted.com/r/fixture_3",
+        "created_at": 1767225603,
+        "updated_at": 1767225603,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_4",
+        "person": "person_fixture_4",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 4",
+        "permalink": "https://app.delighted.com/r/fixture_4",
+        "created_at": 1767225604,
+        "updated_at": 1767225604,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_5",
+        "person": "person_fixture_5",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 5",
+        "permalink": "https://app.delighted.com/r/fixture_5",
+        "created_at": 1767225605,
+        "updated_at": 1767225605,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_6",
+        "person": "person_fixture_6",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 6",
+        "permalink": "https://app.delighted.com/r/fixture_6",
+        "created_at": 1767225606,
+        "updated_at": 1767225606,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_7",
+        "person": "person_fixture_7",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 7",
+        "permalink": "https://app.delighted.com/r/fixture_7",
+        "created_at": 1767225607,
+        "updated_at": 1767225607,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_8",
+        "person": "person_fixture_8",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 8",
+        "permalink": "https://app.delighted.com/r/fixture_8",
+        "created_at": 1767225608,
+        "updated_at": 1767225608,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_9",
+        "person": "person_fixture_9",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 9",
+        "permalink": "https://app.delighted.com/r/fixture_9",
+        "created_at": 1767225609,
+        "updated_at": 1767225609,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_10",
+        "person": "person_fixture_10",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 10",
+        "permalink": "https://app.delighted.com/r/fixture_10",
+        "created_at": 1767225610,
+        "updated_at": 1767225610,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_11",
+        "person": "person_fixture_11",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 11",
+        "permalink": "https://app.delighted.com/r/fixture_11",
+        "created_at": 1767225611,
+        "updated_at": 1767225611,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_12",
+        "person": "person_fixture_12",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 12",
+        "permalink": "https://app.delighted.com/r/fixture_12",
+        "created_at": 1767225612,
+        "updated_at": 1767225612,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_13",
+        "person": "person_fixture_13",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 13",
+        "permalink": "https://app.delighted.com/r/fixture_13",
+        "created_at": 1767225613,
+        "updated_at": 1767225613,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_14",
+        "person": "person_fixture_14",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 14",
+        "permalink": "https://app.delighted.com/r/fixture_14",
+        "created_at": 1767225614,
+        "updated_at": 1767225614,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_15",
+        "person": "person_fixture_15",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 15",
+        "permalink": "https://app.delighted.com/r/fixture_15",
+        "created_at": 1767225615,
+        "updated_at": 1767225615,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_16",
+        "person": "person_fixture_16",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 16",
+        "permalink": "https://app.delighted.com/r/fixture_16",
+        "created_at": 1767225616,
+        "updated_at": 1767225616,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_17",
+        "person": "person_fixture_17",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 17",
+        "permalink": "https://app.delighted.com/r/fixture_17",
+        "created_at": 1767225617,
+        "updated_at": 1767225617,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_18",
+        "person": "person_fixture_18",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 18",
+        "permalink": "https://app.delighted.com/r/fixture_18",
+        "created_at": 1767225618,
+        "updated_at": 1767225618,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_19",
+        "person": "person_fixture_19",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 19",
+        "permalink": "https://app.delighted.com/r/fixture_19",
+        "created_at": 1767225619,
+        "updated_at": 1767225619,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_20",
+        "person": "person_fixture_20",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 20",
+        "permalink": "https://app.delighted.com/r/fixture_20",
+        "created_at": 1767225620,
+        "updated_at": 1767225620,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_21",
+        "person": "person_fixture_21",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 21",
+        "permalink": "https://app.delighted.com/r/fixture_21",
+        "created_at": 1767225621,
+        "updated_at": 1767225621,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_22",
+        "person": "person_fixture_22",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 22",
+        "permalink": "https://app.delighted.com/r/fixture_22",
+        "created_at": 1767225622,
+        "updated_at": 1767225622,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_23",
+        "person": "person_fixture_23",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 23",
+        "permalink": "https://app.delighted.com/r/fixture_23",
+        "created_at": 1767225623,
+        "updated_at": 1767225623,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_24",
+        "person": "person_fixture_24",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 24",
+        "permalink": "https://app.delighted.com/r/fixture_24",
+        "created_at": 1767225624,
+        "updated_at": 1767225624,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_25",
+        "person": "person_fixture_25",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 25",
+        "permalink": "https://app.delighted.com/r/fixture_25",
+        "created_at": 1767225625,
+        "updated_at": 1767225625,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_26",
+        "person": "person_fixture_26",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 26",
+        "permalink": "https://app.delighted.com/r/fixture_26",
+        "created_at": 1767225626,
+        "updated_at": 1767225626,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_27",
+        "person": "person_fixture_27",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 27",
+        "permalink": "https://app.delighted.com/r/fixture_27",
+        "created_at": 1767225627,
+        "updated_at": 1767225627,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_28",
+        "person": "person_fixture_28",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 28",
+        "permalink": "https://app.delighted.com/r/fixture_28",
+        "created_at": 1767225628,
+        "updated_at": 1767225628,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_29",
+        "person": "person_fixture_29",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 29",
+        "permalink": "https://app.delighted.com/r/fixture_29",
+        "created_at": 1767225629,
+        "updated_at": 1767225629,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_30",
+        "person": "person_fixture_30",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 30",
+        "permalink": "https://app.delighted.com/r/fixture_30",
+        "created_at": 1767225630,
+        "updated_at": 1767225630,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_31",
+        "person": "person_fixture_31",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 31",
+        "permalink": "https://app.delighted.com/r/fixture_31",
+        "created_at": 1767225631,
+        "updated_at": 1767225631,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_32",
+        "person": "person_fixture_32",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 32",
+        "permalink": "https://app.delighted.com/r/fixture_32",
+        "created_at": 1767225632,
+        "updated_at": 1767225632,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_33",
+        "person": "person_fixture_33",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 33",
+        "permalink": "https://app.delighted.com/r/fixture_33",
+        "created_at": 1767225633,
+        "updated_at": 1767225633,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_34",
+        "person": "person_fixture_34",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 34",
+        "permalink": "https://app.delighted.com/r/fixture_34",
+        "created_at": 1767225634,
+        "updated_at": 1767225634,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_35",
+        "person": "person_fixture_35",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 35",
+        "permalink": "https://app.delighted.com/r/fixture_35",
+        "created_at": 1767225635,
+        "updated_at": 1767225635,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_36",
+        "person": "person_fixture_36",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 36",
+        "permalink": "https://app.delighted.com/r/fixture_36",
+        "created_at": 1767225636,
+        "updated_at": 1767225636,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_37",
+        "person": "person_fixture_37",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 37",
+        "permalink": "https://app.delighted.com/r/fixture_37",
+        "created_at": 1767225637,
+        "updated_at": 1767225637,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_38",
+        "person": "person_fixture_38",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 38",
+        "permalink": "https://app.delighted.com/r/fixture_38",
+        "created_at": 1767225638,
+        "updated_at": 1767225638,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_39",
+        "person": "person_fixture_39",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 39",
+        "permalink": "https://app.delighted.com/r/fixture_39",
+        "created_at": 1767225639,
+        "updated_at": 1767225639,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_40",
+        "person": "person_fixture_40",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 40",
+        "permalink": "https://app.delighted.com/r/fixture_40",
+        "created_at": 1767225640,
+        "updated_at": 1767225640,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_41",
+        "person": "person_fixture_41",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 41",
+        "permalink": "https://app.delighted.com/r/fixture_41",
+        "created_at": 1767225641,
+        "updated_at": 1767225641,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_42",
+        "person": "person_fixture_42",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 42",
+        "permalink": "https://app.delighted.com/r/fixture_42",
+        "created_at": 1767225642,
+        "updated_at": 1767225642,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_43",
+        "person": "person_fixture_43",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 43",
+        "permalink": "https://app.delighted.com/r/fixture_43",
+        "created_at": 1767225643,
+        "updated_at": 1767225643,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_44",
+        "person": "person_fixture_44",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 44",
+        "permalink": "https://app.delighted.com/r/fixture_44",
+        "created_at": 1767225644,
+        "updated_at": 1767225644,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_45",
+        "person": "person_fixture_45",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 45",
+        "permalink": "https://app.delighted.com/r/fixture_45",
+        "created_at": 1767225645,
+        "updated_at": 1767225645,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_46",
+        "person": "person_fixture_46",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 46",
+        "permalink": "https://app.delighted.com/r/fixture_46",
+        "created_at": 1767225646,
+        "updated_at": 1767225646,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_47",
+        "person": "person_fixture_47",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 47",
+        "permalink": "https://app.delighted.com/r/fixture_47",
+        "created_at": 1767225647,
+        "updated_at": 1767225647,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_48",
+        "person": "person_fixture_48",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 48",
+        "permalink": "https://app.delighted.com/r/fixture_48",
+        "created_at": 1767225648,
+        "updated_at": 1767225648,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_49",
+        "person": "person_fixture_49",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 49",
+        "permalink": "https://app.delighted.com/r/fixture_49",
+        "created_at": 1767225649,
+        "updated_at": 1767225649,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_50",
+        "person": "person_fixture_50",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 50",
+        "permalink": "https://app.delighted.com/r/fixture_50",
+        "created_at": 1767225650,
+        "updated_at": 1767225650,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_51",
+        "person": "person_fixture_51",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 51",
+        "permalink": "https://app.delighted.com/r/fixture_51",
+        "created_at": 1767225651,
+        "updated_at": 1767225651,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_52",
+        "person": "person_fixture_52",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 52",
+        "permalink": "https://app.delighted.com/r/fixture_52",
+        "created_at": 1767225652,
+        "updated_at": 1767225652,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_53",
+        "person": "person_fixture_53",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 53",
+        "permalink": "https://app.delighted.com/r/fixture_53",
+        "created_at": 1767225653,
+        "updated_at": 1767225653,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_54",
+        "person": "person_fixture_54",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 54",
+        "permalink": "https://app.delighted.com/r/fixture_54",
+        "created_at": 1767225654,
+        "updated_at": 1767225654,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_55",
+        "person": "person_fixture_55",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 55",
+        "permalink": "https://app.delighted.com/r/fixture_55",
+        "created_at": 1767225655,
+        "updated_at": 1767225655,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_56",
+        "person": "person_fixture_56",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 56",
+        "permalink": "https://app.delighted.com/r/fixture_56",
+        "created_at": 1767225656,
+        "updated_at": 1767225656,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_57",
+        "person": "person_fixture_57",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 57",
+        "permalink": "https://app.delighted.com/r/fixture_57",
+        "created_at": 1767225657,
+        "updated_at": 1767225657,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_58",
+        "person": "person_fixture_58",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 58",
+        "permalink": "https://app.delighted.com/r/fixture_58",
+        "created_at": 1767225658,
+        "updated_at": 1767225658,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_59",
+        "person": "person_fixture_59",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 59",
+        "permalink": "https://app.delighted.com/r/fixture_59",
+        "created_at": 1767225659,
+        "updated_at": 1767225659,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_60",
+        "person": "person_fixture_60",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 60",
+        "permalink": "https://app.delighted.com/r/fixture_60",
+        "created_at": 1767225660,
+        "updated_at": 1767225660,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_61",
+        "person": "person_fixture_61",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 61",
+        "permalink": "https://app.delighted.com/r/fixture_61",
+        "created_at": 1767225661,
+        "updated_at": 1767225661,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_62",
+        "person": "person_fixture_62",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 62",
+        "permalink": "https://app.delighted.com/r/fixture_62",
+        "created_at": 1767225662,
+        "updated_at": 1767225662,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_63",
+        "person": "person_fixture_63",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 63",
+        "permalink": "https://app.delighted.com/r/fixture_63",
+        "created_at": 1767225663,
+        "updated_at": 1767225663,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_64",
+        "person": "person_fixture_64",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 64",
+        "permalink": "https://app.delighted.com/r/fixture_64",
+        "created_at": 1767225664,
+        "updated_at": 1767225664,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_65",
+        "person": "person_fixture_65",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 65",
+        "permalink": "https://app.delighted.com/r/fixture_65",
+        "created_at": 1767225665,
+        "updated_at": 1767225665,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_66",
+        "person": "person_fixture_66",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 66",
+        "permalink": "https://app.delighted.com/r/fixture_66",
+        "created_at": 1767225666,
+        "updated_at": 1767225666,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_67",
+        "person": "person_fixture_67",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 67",
+        "permalink": "https://app.delighted.com/r/fixture_67",
+        "created_at": 1767225667,
+        "updated_at": 1767225667,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_68",
+        "person": "person_fixture_68",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 68",
+        "permalink": "https://app.delighted.com/r/fixture_68",
+        "created_at": 1767225668,
+        "updated_at": 1767225668,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_69",
+        "person": "person_fixture_69",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 69",
+        "permalink": "https://app.delighted.com/r/fixture_69",
+        "created_at": 1767225669,
+        "updated_at": 1767225669,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_70",
+        "person": "person_fixture_70",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 70",
+        "permalink": "https://app.delighted.com/r/fixture_70",
+        "created_at": 1767225670,
+        "updated_at": 1767225670,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_71",
+        "person": "person_fixture_71",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 71",
+        "permalink": "https://app.delighted.com/r/fixture_71",
+        "created_at": 1767225671,
+        "updated_at": 1767225671,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_72",
+        "person": "person_fixture_72",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 72",
+        "permalink": "https://app.delighted.com/r/fixture_72",
+        "created_at": 1767225672,
+        "updated_at": 1767225672,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_73",
+        "person": "person_fixture_73",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 73",
+        "permalink": "https://app.delighted.com/r/fixture_73",
+        "created_at": 1767225673,
+        "updated_at": 1767225673,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_74",
+        "person": "person_fixture_74",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 74",
+        "permalink": "https://app.delighted.com/r/fixture_74",
+        "created_at": 1767225674,
+        "updated_at": 1767225674,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_75",
+        "person": "person_fixture_75",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 75",
+        "permalink": "https://app.delighted.com/r/fixture_75",
+        "created_at": 1767225675,
+        "updated_at": 1767225675,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_76",
+        "person": "person_fixture_76",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 76",
+        "permalink": "https://app.delighted.com/r/fixture_76",
+        "created_at": 1767225676,
+        "updated_at": 1767225676,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_77",
+        "person": "person_fixture_77",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 77",
+        "permalink": "https://app.delighted.com/r/fixture_77",
+        "created_at": 1767225677,
+        "updated_at": 1767225677,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_78",
+        "person": "person_fixture_78",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 78",
+        "permalink": "https://app.delighted.com/r/fixture_78",
+        "created_at": 1767225678,
+        "updated_at": 1767225678,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_79",
+        "person": "person_fixture_79",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 79",
+        "permalink": "https://app.delighted.com/r/fixture_79",
+        "created_at": 1767225679,
+        "updated_at": 1767225679,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_80",
+        "person": "person_fixture_80",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 80",
+        "permalink": "https://app.delighted.com/r/fixture_80",
+        "created_at": 1767225680,
+        "updated_at": 1767225680,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_81",
+        "person": "person_fixture_81",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 81",
+        "permalink": "https://app.delighted.com/r/fixture_81",
+        "created_at": 1767225681,
+        "updated_at": 1767225681,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_82",
+        "person": "person_fixture_82",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 82",
+        "permalink": "https://app.delighted.com/r/fixture_82",
+        "created_at": 1767225682,
+        "updated_at": 1767225682,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_83",
+        "person": "person_fixture_83",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 83",
+        "permalink": "https://app.delighted.com/r/fixture_83",
+        "created_at": 1767225683,
+        "updated_at": 1767225683,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_84",
+        "person": "person_fixture_84",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 84",
+        "permalink": "https://app.delighted.com/r/fixture_84",
+        "created_at": 1767225684,
+        "updated_at": 1767225684,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_85",
+        "person": "person_fixture_85",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 85",
+        "permalink": "https://app.delighted.com/r/fixture_85",
+        "created_at": 1767225685,
+        "updated_at": 1767225685,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_86",
+        "person": "person_fixture_86",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 86",
+        "permalink": "https://app.delighted.com/r/fixture_86",
+        "created_at": 1767225686,
+        "updated_at": 1767225686,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_87",
+        "person": "person_fixture_87",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 87",
+        "permalink": "https://app.delighted.com/r/fixture_87",
+        "created_at": 1767225687,
+        "updated_at": 1767225687,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_88",
+        "person": "person_fixture_88",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 88",
+        "permalink": "https://app.delighted.com/r/fixture_88",
+        "created_at": 1767225688,
+        "updated_at": 1767225688,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_89",
+        "person": "person_fixture_89",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 89",
+        "permalink": "https://app.delighted.com/r/fixture_89",
+        "created_at": 1767225689,
+        "updated_at": 1767225689,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_90",
+        "person": "person_fixture_90",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 90",
+        "permalink": "https://app.delighted.com/r/fixture_90",
+        "created_at": 1767225690,
+        "updated_at": 1767225690,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_91",
+        "person": "person_fixture_91",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 91",
+        "permalink": "https://app.delighted.com/r/fixture_91",
+        "created_at": 1767225691,
+        "updated_at": 1767225691,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_92",
+        "person": "person_fixture_92",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 92",
+        "permalink": "https://app.delighted.com/r/fixture_92",
+        "created_at": 1767225692,
+        "updated_at": 1767225692,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_93",
+        "person": "person_fixture_93",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 93",
+        "permalink": "https://app.delighted.com/r/fixture_93",
+        "created_at": 1767225693,
+        "updated_at": 1767225693,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_94",
+        "person": "person_fixture_94",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 94",
+        "permalink": "https://app.delighted.com/r/fixture_94",
+        "created_at": 1767225694,
+        "updated_at": 1767225694,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_95",
+        "person": "person_fixture_95",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 95",
+        "permalink": "https://app.delighted.com/r/fixture_95",
+        "created_at": 1767225695,
+        "updated_at": 1767225695,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_96",
+        "person": "person_fixture_96",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 96",
+        "permalink": "https://app.delighted.com/r/fixture_96",
+        "created_at": 1767225696,
+        "updated_at": 1767225696,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_97",
+        "person": "person_fixture_97",
+        "survey_type": "nps",
+        "score": 8,
+        "comment": "Fixture comment 97",
+        "permalink": "https://app.delighted.com/r/fixture_97",
+        "created_at": 1767225697,
+        "updated_at": 1767225697,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_98",
+        "person": "person_fixture_98",
+        "survey_type": "nps",
+        "score": 9,
+        "comment": "Fixture comment 98",
+        "permalink": "https://app.delighted.com/r/fixture_98",
+        "created_at": 1767225698,
+        "updated_at": 1767225698,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_99",
+        "person": "person_fixture_99",
+        "survey_type": "nps",
+        "score": 10,
+        "comment": "Fixture comment 99",
+        "permalink": "https://app.delighted.com/r/fixture_99",
+        "created_at": 1767225699,
+        "updated_at": 1767225699,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      },
+      {
+        "id": "survey_fixture_100",
+        "person": "person_fixture_100",
+        "survey_type": "nps",
+        "score": 7,
+        "comment": "Fixture comment 100",
+        "permalink": "https://app.delighted.com/r/fixture_100",
+        "created_at": 1767225700,
+        "updated_at": 1767225700,
+        "person_properties": {
+          "connector": "delighted",
+          "fixture": true
+        },
+        "notes": [],
+        "tags": [
+          "fixture"
+        ]
+      }
+    ]
+  }
+}

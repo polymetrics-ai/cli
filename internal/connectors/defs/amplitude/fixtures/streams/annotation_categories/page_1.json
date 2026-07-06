@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/3/annotation-categories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1001, "name": "Fixture Category One" },
+        { "id": 1002, "name": "Fixture Category Two" }
+      ]
+    }
+  }
+}

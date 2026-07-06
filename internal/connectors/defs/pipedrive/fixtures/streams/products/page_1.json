@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": { "start": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 40,
+          "name": "Fixture Product One",
+          "code": "FIX-1",
+          "unit": "unit",
+          "owner_id": 1,
+          "active_flag": true,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00"
+        }
+      ],
+      "additional_data": {
+        "pagination": { "start": 0, "limit": 100, "more_items_in_collection": false, "next_start": null }
+      }
+    }
+  }
+}

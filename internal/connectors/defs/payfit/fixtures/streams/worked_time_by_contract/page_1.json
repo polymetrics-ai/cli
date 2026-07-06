@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/contracts/time",
+    "query": {
+      "maxResults": "50",
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contracts": [
+        {
+          "contractId": "worked_time_by_contract_1",
+          "name": "Fixture worked time by contract"
+        }
+      ],
+      "meta": {
+        "nextPageToken": "",
+        "count": 1
+      }
+    }
+  }
+}

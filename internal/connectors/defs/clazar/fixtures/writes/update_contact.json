@@ -1,0 +1,8 @@
+{
+  "record": { "id": "contact_fixture_1", "phone_number": "+15550101" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contacts/contact_fixture_1/",
+    "body": { "phone_number": "+15550101" }
+  }
+}

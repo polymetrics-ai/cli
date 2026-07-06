@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/rules/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "p": 1,
+      "ps": 100,
+      "rules": [
+        {
+          "key": "go:S1481",
+          "repo": "go",
+          "name": "Unused local variables should be removed",
+          "severity": "MINOR",
+          "status": "READY",
+          "type": "CODE_SMELL",
+          "lang": "go",
+          "langName": "Go",
+          "isTemplate": false,
+          "isExternal": false,
+          "tags": [],
+          "createdAt": "2026-01-01T00:00:00+0000",
+          "updatedAt": "2026-01-01T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

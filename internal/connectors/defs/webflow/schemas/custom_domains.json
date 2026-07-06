@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "custom_domains",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "url": { "type": ["string", "null"] },
+    "lastPublished": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

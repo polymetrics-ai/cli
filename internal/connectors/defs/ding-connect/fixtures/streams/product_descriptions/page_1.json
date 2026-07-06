@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetProductDescriptions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "LocalizationKey": "product.fixture.1",
+          "LanguageCode": "en",
+          "DisplayText": "Fixture Product Description 1",
+          "DescriptionMarkdown": "A **fixture** product description.",
+          "ReadMoreMarkdown": "More fixture details."
+        }
+      ]
+    }
+  }
+}

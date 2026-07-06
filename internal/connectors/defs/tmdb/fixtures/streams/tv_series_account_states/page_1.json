@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tv/123/account_states"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture tv_series_account_states",
+      "name": "Fixture tv_series_account_states",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

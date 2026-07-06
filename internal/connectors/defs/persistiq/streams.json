@@ -1,0 +1,136 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/v1/users" },
+    "error_map": [
+      { "status": 401, "hint": "persistiq api key is missing or invalid; re-run pm credentials add persistiq" },
+      { "status": 429, "class": "rate_limited", "hint": "persistiq rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "leads",
+      "path": "/v1/leads",
+      "records": { "path": "leads" },
+      "schema": "schemas/leads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/v1/users",
+      "records": { "path": "users" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "campaigns",
+      "path": "/v1/campaigns",
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "mailboxes",
+      "path": "/v1/mailboxes",
+      "records": { "path": "mailboxes" },
+      "schema": "schemas/mailboxes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "activities",
+      "path": "/v1/activities",
+      "records": { "path": "activities" },
+      "schema": "schemas/activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "accounts",
+      "path": "/v1/accounts",
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dnc_domains",
+      "path": "/v1/dnc_domains",
+      "records": { "path": "dnc_domains" },
+      "schema": "schemas/dnc_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "events",
+      "path": "/v1/events",
+      "records": { "path": "events" },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lead_fields",
+      "path": "/v1/lead_fields",
+      "records": { "path": "lead_fields" },
+      "schema": "schemas/lead_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lead_statuses",
+      "path": "/v1/lead_statuses",
+      "records": { "path": "lead_statuses" },
+      "schema": "schemas/lead_statuses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tags",
+      "path": "/v1/tags",
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook_plugin",
+      "path": "/v1/webhook_plugin",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_plugin.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "campaign_leads",
+      "path": "/v1/campaigns/{{ fanout.id }}/leads",
+      "records": { "path": "campaign_leads" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/campaigns", "records_path": "campaigns", "id_field": "id" }
+        },
+        "into": { "path_var": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "schema": "schemas/campaign_leads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "campaign_replies",
+      "path": "/v1/campaigns/{{ fanout.id }}/replies",
+      "records": { "path": "replies" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/campaigns", "records_path": "campaigns", "id_field": "id" }
+        },
+        "into": { "path_var": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "schema": "schemas/campaign_replies.json",
+      "projection": "passthrough"
+    }
+  ]
+}

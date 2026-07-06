@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/edge-config"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ecfg_fixture_1",
+        "slug": "fixture-config",
+        "ownerId": "owner_fixture_1",
+        "digest": "abc123",
+        "sizeInBytes": 1024,
+        "itemCount": 5,
+        "createdAt": 1767225600000,
+        "updatedAt": 1767225600000
+      }
+    ]
+  }
+}

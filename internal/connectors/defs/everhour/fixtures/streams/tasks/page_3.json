@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/projects/as:1002/tasks" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "t_fixture_2",
+        "name": "Fixture Task Two",
+        "type": "task",
+        "status": "completed",
+        "completed": true,
+        "url": "https://app.everhour.com/tasks/t_fixture_2",
+        "createdAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

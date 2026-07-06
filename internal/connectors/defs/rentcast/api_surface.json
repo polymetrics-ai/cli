@@ -1,0 +1,66 @@
+{
+  "api": "RentCast API v1 (https://api.rentcast.io/v1)",
+  "docs": "https://developers.rentcast.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only; the full RentCast surface (bulk data exports, tax assessment history, comparables) is out of scope outside this connector's current declared surface. RentCast is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/properties",
+      "covered_by": {
+        "stream": "properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/listings/sale",
+      "covered_by": {
+        "stream": "sale_listings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/listings/rental/long-term",
+      "covered_by": {
+        "stream": "rental_listings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/markets",
+      "covered_by": {
+        "stream": "markets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/avm/value",
+      "covered_by": {
+        "stream": "value_estimates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/avm/rent/long-term",
+      "covered_by": {
+        "stream": "rental_estimates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/listings/rental/short-term",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/liens",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

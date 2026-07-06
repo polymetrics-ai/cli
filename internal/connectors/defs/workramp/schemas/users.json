@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "isAdmin": { "type": ["boolean", "null"] },
+    "isDeleted": { "type": ["boolean", "null"] },
+    "isPermanentlyDeleted": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["number", "null"] },
+    "updatedAt": { "type": ["number", "null"] }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "uuid": {
+      "type": "string"
+    },
+    "accountId": {
+      "type": "string"
+    },
+    "currencyId": {
+      "type": "string"
+    },
+    "quoteId": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "amountDue": {
+      "type": "number"
+    },
+    "amountPaid": {
+      "type": "number"
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "taxAmount": {
+      "type": "number"
+    },
+    "credits": {
+      "type": "number"
+    },
+    "netPaymentDays": {
+      "type": "integer"
+    },
+    "dueAt": {
+      "type": "string"
+    },
+    "paidAt": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt"
+}

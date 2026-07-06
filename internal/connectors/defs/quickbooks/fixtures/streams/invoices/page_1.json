@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/company/synthetic-conformance-value/query",
+    "query": { "query": "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "QueryResponse": {
+        "Invoice": [
+          { "Id": "1", "DocNumber": "DOC-1", "CustomerRef": { "value": "1", "name": "Fixture Customer 1" }, "TotalAmt": 150.0, "Balance": 50.0 },
+          { "Id": "2", "DocNumber": "DOC-2", "CustomerRef": { "value": "2", "name": "Fixture Customer 2" }, "TotalAmt": 250.0, "Balance": 0.0 }
+        ]
+      }
+    }
+  }
+}

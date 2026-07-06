@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Location"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/locations"
+  }
+}

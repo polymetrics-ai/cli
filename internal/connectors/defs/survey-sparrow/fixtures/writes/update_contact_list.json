@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Contact List" },
+  "expect": { "method": "PATCH", "path": "/contact_lists/1" }
+}

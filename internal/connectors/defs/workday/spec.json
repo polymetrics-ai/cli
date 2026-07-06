@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workday Connection Specification",
+  "type": "object",
+  "required": ["tenant", "username", "password"],
+  "properties": {
+    "tenant": {
+      "type": "string",
+      "description": "Workday tenant name, substituted as a path segment into every stream's resource URL (e.g. ccx/api/v1/<tenant>/workers)."
+    },
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Workday tenant API username, sent via HTTP Basic auth. Never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Workday tenant API password, sent via HTTP Basic auth. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://wd2-impl-services1.workday.com",
+      "description": "Workday API base URL override for a tenant's actual Workday instance, tests, or proxies."
+    }
+  }
+}

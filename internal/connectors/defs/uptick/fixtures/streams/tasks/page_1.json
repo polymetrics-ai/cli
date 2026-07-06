@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/tasks/",
+    "query": {
+      "ordering": "-updated",
+      "page_size": "synthetic-conformance-value",
+      "fields[Task]": "id,created,updated,deleted,ref,description,is_active,name,due,status,client,property,priority"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "deleted": null,
+          "ref": "TSK-1",
+          "description": "fixture task 1",
+          "is_active": true,
+          "name": "Fixture Task 1",
+          "due": "2026-01-01T00:00:00.000000Z",
+          "status": "active",
+          "client": "1",
+          "property": "1",
+          "priority": "normal"
+        },
+        {
+          "id": 2,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-02T00:00:00.000000Z",
+          "deleted": null,
+          "ref": "TSK-2",
+          "description": "fixture task 2",
+          "is_active": true,
+          "name": "Fixture Task 2",
+          "due": "2026-01-02T00:00:00.000000Z",
+          "status": "active",
+          "client": "1",
+          "property": "1",
+          "priority": "high"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

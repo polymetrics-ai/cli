@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/satisfaction_ratings", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "satisfaction_ratings": [
+        {
+          "id": 900,
+          "score": "good",
+          "comment": "Fast resolution",
+          "reason": "",
+          "ticket_id": 1,
+          "assignee_id": 200,
+          "requester_id": 100,
+          "group_id": 400,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": { "has_more": false, "after_cursor": null }
+    }
+  }
+}

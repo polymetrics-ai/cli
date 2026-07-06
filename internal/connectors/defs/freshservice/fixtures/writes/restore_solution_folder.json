@@ -1,0 +1,15 @@
+{
+  "record": {
+    "folder_id": 123,
+    "name": "Fixture restore_solution_folder",
+    "description": "Fixture restore_solution_folder record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/solutions/folders/123/restore",
+    "body": {
+      "name": "Fixture restore_solution_folder",
+      "description": "Fixture restore_solution_folder record"
+    }
+  }
+}

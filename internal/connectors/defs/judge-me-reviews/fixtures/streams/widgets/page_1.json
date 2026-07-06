@@ -1,0 +1,813 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widgets": [
+        {
+          "id": 1,
+          "name": "Fixture Widget 1",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:01:00Z",
+          "updated_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Widget 2",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:02:00Z",
+          "updated_at": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Widget 3",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:03:00Z",
+          "updated_at": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Widget 4",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:04:00Z",
+          "updated_at": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Widget 5",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:05:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Widget 6",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:06:00Z",
+          "updated_at": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Widget 7",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:07:00Z",
+          "updated_at": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Widget 8",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:08:00Z",
+          "updated_at": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Widget 9",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:09:00Z",
+          "updated_at": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Widget 10",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:10:00Z",
+          "updated_at": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Widget 11",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:11:00Z",
+          "updated_at": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Widget 12",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:12:00Z",
+          "updated_at": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Widget 13",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:13:00Z",
+          "updated_at": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Widget 14",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:14:00Z",
+          "updated_at": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Widget 15",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:15:00Z",
+          "updated_at": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Widget 16",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:16:00Z",
+          "updated_at": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Widget 17",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:17:00Z",
+          "updated_at": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Widget 18",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:18:00Z",
+          "updated_at": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Widget 19",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:19:00Z",
+          "updated_at": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Widget 20",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:20:00Z",
+          "updated_at": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Widget 21",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:21:00Z",
+          "updated_at": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Widget 22",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:22:00Z",
+          "updated_at": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Widget 23",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:23:00Z",
+          "updated_at": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Widget 24",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:24:00Z",
+          "updated_at": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Widget 25",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:25:00Z",
+          "updated_at": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Widget 26",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:26:00Z",
+          "updated_at": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Widget 27",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:27:00Z",
+          "updated_at": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Widget 28",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:28:00Z",
+          "updated_at": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Widget 29",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:29:00Z",
+          "updated_at": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Widget 30",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:30:00Z",
+          "updated_at": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Widget 31",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:31:00Z",
+          "updated_at": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Widget 32",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:32:00Z",
+          "updated_at": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Widget 33",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:33:00Z",
+          "updated_at": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Widget 34",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:34:00Z",
+          "updated_at": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Widget 35",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:35:00Z",
+          "updated_at": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Widget 36",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:36:00Z",
+          "updated_at": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Widget 37",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:37:00Z",
+          "updated_at": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Widget 38",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:38:00Z",
+          "updated_at": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Widget 39",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:39:00Z",
+          "updated_at": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Widget 40",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:40:00Z",
+          "updated_at": "2026-01-01T00:40:00Z"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Widget 41",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:41:00Z",
+          "updated_at": "2026-01-01T00:41:00Z"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Widget 42",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:42:00Z",
+          "updated_at": "2026-01-01T00:42:00Z"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Widget 43",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:43:00Z",
+          "updated_at": "2026-01-01T00:43:00Z"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Widget 44",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:44:00Z",
+          "updated_at": "2026-01-01T00:44:00Z"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Widget 45",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:45:00Z",
+          "updated_at": "2026-01-01T00:45:00Z"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Widget 46",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:46:00Z",
+          "updated_at": "2026-01-01T00:46:00Z"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Widget 47",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:47:00Z",
+          "updated_at": "2026-01-01T00:47:00Z"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Widget 48",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:48:00Z",
+          "updated_at": "2026-01-01T00:48:00Z"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Widget 49",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:49:00Z",
+          "updated_at": "2026-01-01T00:49:00Z"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Widget 50",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:50:00Z",
+          "updated_at": "2026-01-01T00:50:00Z"
+        },
+        {
+          "id": 51,
+          "name": "Fixture Widget 51",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:51:00Z",
+          "updated_at": "2026-01-01T00:51:00Z"
+        },
+        {
+          "id": 52,
+          "name": "Fixture Widget 52",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:52:00Z",
+          "updated_at": "2026-01-01T00:52:00Z"
+        },
+        {
+          "id": 53,
+          "name": "Fixture Widget 53",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:53:00Z",
+          "updated_at": "2026-01-01T00:53:00Z"
+        },
+        {
+          "id": 54,
+          "name": "Fixture Widget 54",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:54:00Z",
+          "updated_at": "2026-01-01T00:54:00Z"
+        },
+        {
+          "id": 55,
+          "name": "Fixture Widget 55",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:55:00Z",
+          "updated_at": "2026-01-01T00:55:00Z"
+        },
+        {
+          "id": 56,
+          "name": "Fixture Widget 56",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:56:00Z",
+          "updated_at": "2026-01-01T00:56:00Z"
+        },
+        {
+          "id": 57,
+          "name": "Fixture Widget 57",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:57:00Z",
+          "updated_at": "2026-01-01T00:57:00Z"
+        },
+        {
+          "id": 58,
+          "name": "Fixture Widget 58",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:58:00Z",
+          "updated_at": "2026-01-01T00:58:00Z"
+        },
+        {
+          "id": 59,
+          "name": "Fixture Widget 59",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:59:00Z",
+          "updated_at": "2026-01-01T00:59:00Z"
+        },
+        {
+          "id": 60,
+          "name": "Fixture Widget 60",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "name": "Fixture Widget 61",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:01:00Z",
+          "updated_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": 62,
+          "name": "Fixture Widget 62",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:02:00Z",
+          "updated_at": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": 63,
+          "name": "Fixture Widget 63",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:03:00Z",
+          "updated_at": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": 64,
+          "name": "Fixture Widget 64",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:04:00Z",
+          "updated_at": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": 65,
+          "name": "Fixture Widget 65",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:05:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": 66,
+          "name": "Fixture Widget 66",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:06:00Z",
+          "updated_at": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": 67,
+          "name": "Fixture Widget 67",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:07:00Z",
+          "updated_at": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": 68,
+          "name": "Fixture Widget 68",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:08:00Z",
+          "updated_at": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": 69,
+          "name": "Fixture Widget 69",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:09:00Z",
+          "updated_at": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": 70,
+          "name": "Fixture Widget 70",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:10:00Z",
+          "updated_at": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": 71,
+          "name": "Fixture Widget 71",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:11:00Z",
+          "updated_at": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": 72,
+          "name": "Fixture Widget 72",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:12:00Z",
+          "updated_at": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": 73,
+          "name": "Fixture Widget 73",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:13:00Z",
+          "updated_at": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": 74,
+          "name": "Fixture Widget 74",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:14:00Z",
+          "updated_at": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": 75,
+          "name": "Fixture Widget 75",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:15:00Z",
+          "updated_at": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": 76,
+          "name": "Fixture Widget 76",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:16:00Z",
+          "updated_at": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": 77,
+          "name": "Fixture Widget 77",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:17:00Z",
+          "updated_at": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": 78,
+          "name": "Fixture Widget 78",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:18:00Z",
+          "updated_at": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": 79,
+          "name": "Fixture Widget 79",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:19:00Z",
+          "updated_at": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": 80,
+          "name": "Fixture Widget 80",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:20:00Z",
+          "updated_at": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": 81,
+          "name": "Fixture Widget 81",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:21:00Z",
+          "updated_at": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": 82,
+          "name": "Fixture Widget 82",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:22:00Z",
+          "updated_at": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": 83,
+          "name": "Fixture Widget 83",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:23:00Z",
+          "updated_at": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": 84,
+          "name": "Fixture Widget 84",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:24:00Z",
+          "updated_at": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": 85,
+          "name": "Fixture Widget 85",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:25:00Z",
+          "updated_at": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": 86,
+          "name": "Fixture Widget 86",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:26:00Z",
+          "updated_at": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": 87,
+          "name": "Fixture Widget 87",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:27:00Z",
+          "updated_at": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": 88,
+          "name": "Fixture Widget 88",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:28:00Z",
+          "updated_at": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": 89,
+          "name": "Fixture Widget 89",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:29:00Z",
+          "updated_at": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": 90,
+          "name": "Fixture Widget 90",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:30:00Z",
+          "updated_at": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": 91,
+          "name": "Fixture Widget 91",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:31:00Z",
+          "updated_at": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": 92,
+          "name": "Fixture Widget 92",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:32:00Z",
+          "updated_at": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": 93,
+          "name": "Fixture Widget 93",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:33:00Z",
+          "updated_at": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": 94,
+          "name": "Fixture Widget 94",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:34:00Z",
+          "updated_at": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": 95,
+          "name": "Fixture Widget 95",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:35:00Z",
+          "updated_at": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": 96,
+          "name": "Fixture Widget 96",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:36:00Z",
+          "updated_at": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": 97,
+          "name": "Fixture Widget 97",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:37:00Z",
+          "updated_at": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": 98,
+          "name": "Fixture Widget 98",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:38:00Z",
+          "updated_at": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": 99,
+          "name": "Fixture Widget 99",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:39:00Z",
+          "updated_at": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": 100,
+          "name": "Fixture Widget 100",
+          "widget_type": "review_widget",
+          "status": "active",
+          "created_at": "2026-01-01T00:40:00Z",
+          "updated_at": "2026-01-01T00:40:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "tag_id": "fixture_tag_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/contact-tags/update",
+    "body": {
+      "tag_id": "fixture_tag_id"
+    }
+  }
+}

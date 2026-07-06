@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/app/dao/v6/customers",
+    "query": {
+      "a": "getAll",
+      "numRecords": "100",
+      "startIndex": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "customerId": "cust_fixture_101",
+          "customerName": "Fixture Customer 101",
+          "customerNumber": "CUST-0101",
+          "emailAddress": "fixture101@example.com",
+          "phoneNumber": "555-0101",
+          "website": "https://example.com",
+          "currencyCode": "USD",
+          "statusName": "Active",
+          "creationDate": "2026-01-01",
+          "lastUpdateDate": "2026-01-02"
+        }
+      ]
+    }
+  }
+}

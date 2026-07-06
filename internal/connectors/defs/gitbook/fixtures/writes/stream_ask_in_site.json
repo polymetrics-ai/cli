@@ -1,0 +1,27 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "question": "synthetic-conformance-value",
+    "scope": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/ask",
+    "body": {
+      "question": "synthetic-conformance-value",
+      "scope": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "stream_ask_in_site_fixture_1"
+    }
+  }
+}

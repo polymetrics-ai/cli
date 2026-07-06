@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Table",
+    "fields": [{ "name": "Name", "type": "singleLineText" }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/meta/bases/synthetic-conformance-value/tables",
+    "body": {
+      "name": "Fixture Table",
+      "fields": [{ "name": "Name", "type": "singleLineText" }]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "tbl_fixture_new", "name": "Fixture Table", "primaryFieldId": "fld_fixture_new" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/leave-management/reports/individual-allowances", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 11, "full_name": "Fixture Joe", "eligibilities": [ { "policy": { "name": "Vacation", "id": 1 }, "quantity": "25.0", "unit": "days", "carryover": "100.0" } ] },
+        { "id": 12, "full_name": "Fixture Jane", "eligibilities": [ { "policy": { "name": "Sickday", "id": 2 }, "quantity": "0.0", "unit": "days", "carryover": "0.0" } ] }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

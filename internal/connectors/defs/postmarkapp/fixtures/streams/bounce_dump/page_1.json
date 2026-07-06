@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bounces/synthetic-conformance-value/dump"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Body": "fixture raw bounce dump"
+    }
+  }
+}

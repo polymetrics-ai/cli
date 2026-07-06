@@ -1,0 +1,15 @@
+{
+  "record": {
+    "title": "Fixture New Event Type",
+    "slug": "fixture-new-event-type",
+    "lengthInMinutes": 45
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/event-types"
+  },
+  "response": {
+    "status": 201,
+    "body": { "status": "success", "data": { "id": 202, "title": "Fixture New Event Type", "slug": "fixture-new-event-type", "lengthInMinutes": 45 } }
+  }
+}

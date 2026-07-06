@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "name": "Fixture Product Renamed"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metadata_object/1"
+  }
+}

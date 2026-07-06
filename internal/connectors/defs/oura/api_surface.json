@@ -1,0 +1,589 @@
+{
+  "api": "Oura API v2 OpenAPI 1.35",
+  "docs": "https://cloud.ouraring.com/v2/docs",
+  "reviewed_at": "2026-07-04",
+  "scope": "All production Oura API v2 usercollection GET list/detail endpoints are covered as streams. Sandbox usercollection endpoints are documented duplicates. Webhook subscription endpoints are excluded because they require separate app-level client credentials and carry subscription-management side effects.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_activity",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_activity/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_cardiovascular_age",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_cardiovascular_age/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_readiness",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_readiness/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_resilience",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_resilience/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_sleep",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_sleep/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_spo2",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_spo2/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_stress",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/daily_stress/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/enhanced_tag",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/enhanced_tag/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/heartrate",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/rest_mode_period",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/rest_mode_period/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/ring_battery_level",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/ring_configuration",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/ring_configuration/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/session",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/session/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/sleep",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/sleep/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/sleep_time",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/sleep_time/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/tag",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/tag/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/vO2_max",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/vO2_max/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/workout",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sandbox/usercollection/workout/{document_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_activity",
+      "covered_by": {
+        "stream": "daily_activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_activity/{document_id}",
+      "covered_by": {
+        "stream": "daily_activity_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_cardiovascular_age",
+      "covered_by": {
+        "stream": "daily_cardiovascular_age"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_cardiovascular_age/{document_id}",
+      "covered_by": {
+        "stream": "daily_cardiovascular_age_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_readiness",
+      "covered_by": {
+        "stream": "daily_readiness"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_readiness/{document_id}",
+      "covered_by": {
+        "stream": "daily_readiness_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_resilience",
+      "covered_by": {
+        "stream": "daily_resilience"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_resilience/{document_id}",
+      "covered_by": {
+        "stream": "daily_resilience_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_sleep",
+      "covered_by": {
+        "stream": "daily_sleep"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_sleep/{document_id}",
+      "covered_by": {
+        "stream": "daily_sleep_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_spo2",
+      "covered_by": {
+        "stream": "daily_spo2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_spo2/{document_id}",
+      "covered_by": {
+        "stream": "daily_spo2_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_stress",
+      "covered_by": {
+        "stream": "daily_stress"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/daily_stress/{document_id}",
+      "covered_by": {
+        "stream": "daily_stress_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/enhanced_tag",
+      "covered_by": {
+        "stream": "enhanced_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/enhanced_tag/{document_id}",
+      "covered_by": {
+        "stream": "enhanced_tag_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/heartrate",
+      "covered_by": {
+        "stream": "heartrate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/personal_info",
+      "covered_by": {
+        "stream": "personal_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/rest_mode_period",
+      "covered_by": {
+        "stream": "rest_mode_period"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/rest_mode_period/{document_id}",
+      "covered_by": {
+        "stream": "rest_mode_period_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/ring_battery_level",
+      "covered_by": {
+        "stream": "ring_battery_level"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/ring_configuration",
+      "covered_by": {
+        "stream": "ring_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/ring_configuration/{document_id}",
+      "covered_by": {
+        "stream": "ring_configuration_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/session",
+      "covered_by": {
+        "stream": "session"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/session/{document_id}",
+      "covered_by": {
+        "stream": "session_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/sleep",
+      "covered_by": {
+        "stream": "sleep"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/sleep/{document_id}",
+      "covered_by": {
+        "stream": "sleep_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/sleep_time",
+      "covered_by": {
+        "stream": "sleep_time"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/sleep_time/{document_id}",
+      "covered_by": {
+        "stream": "sleep_time_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/tag",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/tag/{document_id}",
+      "covered_by": {
+        "stream": "tag_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/vO2_max",
+      "covered_by": {
+        "stream": "vo2_max"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/vO2_max/{document_id}",
+      "covered_by": {
+        "stream": "vo2_max_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/workout",
+      "covered_by": {
+        "stream": "workout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/usercollection/workout/{document_id}",
+      "covered_by": {
+        "stream": "workout_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhook/subscription",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhook/subscription/renew/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhook/subscription/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhook/subscription/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhook/subscription/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth/authorize",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth authorization endpoint; used to obtain access, not to read or write connector records."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange endpoint; credential lifecycle endpoint rather than ETL/reverse-ETL data surface."
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Location", "idwarehouse": 501 },
+  "expect": {
+    "method": "POST",
+    "path": "/locations",
+    "body": { "name": "Fixture Location", "idwarehouse": 501 }
+  },
+  "response": { "status": 200, "body": { "idlocation": 1201, "name": "Fixture Location" } }
+}

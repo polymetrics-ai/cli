@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/regions",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "region_fixture_1", "type": "regions", "attributes": { "name": "Fixture Region" } }
+      ]
+    }
+  }
+}

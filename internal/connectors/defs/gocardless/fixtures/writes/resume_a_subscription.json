@@ -1,0 +1,21 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "subscriptions": {
+      "description": "Synthetic resume_a_subscription fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/subscription_id_fixture/actions/resume",
+    "body": {
+      "subscriptions": {
+        "description": "Synthetic resume_a_subscription fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

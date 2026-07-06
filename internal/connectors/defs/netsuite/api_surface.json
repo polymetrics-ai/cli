@@ -1,0 +1,76 @@
+{
+  "api": "NetSuite REST Record API v1 (SuiteTalk REST)",
+  "docs": "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 (AuthHook) migration of internal/connectors/netsuite: the 4 allow-listed REST record list endpoints legacy itself covers (customer/vendor/inventoryItem/salesOrder). NetSuite's full object model (thousands of record types) and its SuiteQL/SuiteAnalytics surface are far broader; legacy's own doc comment describes this as an intentionally conservative, small allow-listed subset, and this migration preserves that exact scope, no more.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/customer",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendor",
+      "covered_by": {
+        "stream": "vendors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inventoryItem",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/salesOrder",
+      "covered_by": {
+        "stream": "sales_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{recordType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{recordType}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/{recordType}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{recordType}/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "destructive administrative mutation is not exposed as a reverse-ETL action for this connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/query/v1/suiteql",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    }
+  ]
+}

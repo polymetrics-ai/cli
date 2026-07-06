@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vaccinations",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "administeredVaccinations": 1000,
+        "vaccinated": 900,
+        "delta": 0,
+        "quote": 0.7
+      }
+    }
+  }
+}

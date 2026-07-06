@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1, "min_duration": 10 },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/integration_triggers/1.json",
+    "body": { "min_duration": 10 }
+  },
+  "response": { "status": 200, "body": { "id": 1, "min_duration": 10 } }
+}

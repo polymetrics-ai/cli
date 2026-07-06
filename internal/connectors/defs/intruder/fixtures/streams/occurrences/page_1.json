@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 1,
+          "title": "Fixture issue 1",
+          "description": "Fixture description",
+          "severity": "medium",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        },
+        {
+          "id": 2,
+          "title": "Fixture issue 2",
+          "description": "Fixture description",
+          "severity": "high",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        }
+      ]
+    }
+  }
+}

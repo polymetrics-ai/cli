@@ -1,0 +1,76 @@
+{
+  "api": "LinkedIn Community Management API (https://api.linkedin.com/rest)",
+  "docs": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave-fresh migration: the 4 legacy-parity read streams only; the full LinkedIn Marketing/Community Management surface (posts, comments, reactions, ad campaigns, lead gen forms, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/organizations/{id}",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/organizationalEntityFollowerStatistics",
+      "covered_by": {
+        "stream": "follower_statistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/organizationalEntityShareStatistics",
+      "covered_by": {
+        "stream": "share_statistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/networkSizes/{urn}",
+      "covered_by": {
+        "stream": "total_follower_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/posts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/rest/posts is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/socialActions/{urn}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/rest/socialActions/{urn}/comments is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/socialActions/{urn}/likes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/rest/socialActions/{urn}/likes is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/posts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "no approved reverse-ETL write surface; connector is read-only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adAccounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "LinkedIn Ads surface belongs to the linkedin-ads sibling connector"
+      }
+    }
+  ]
+}

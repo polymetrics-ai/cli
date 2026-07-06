@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "number": { "type": ["string", "null"] },
+    "client_id": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "applied": { "type": ["number", "null"] },
+    "refunded": { "type": ["number", "null"] },
+    "status_id": { "type": ["string", "null"] },
+    "transaction_reference": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "currency_id": { "type": ["string", "null"] },
+    "is_deleted": { "type": ["boolean", "null"] },
+    "created_at": { "type": "integer" },
+    "updated_at": { "type": "integer" }
+  }
+}

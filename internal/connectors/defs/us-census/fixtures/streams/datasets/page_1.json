@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/data.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "dataset": [
+        {
+          "identifier": "https://api.census.gov/data/id/FIXTURE2019CBP",
+          "title": "Fixture 2019 County Business Patterns",
+          "description": "Fixture dataset description.",
+          "c_vintage": 2019,
+          "c_dataset": ["cbp"],
+          "c_variablesLink": "http://api.census.gov/data/2019/cbp/variables.json",
+          "c_geographyLink": "http://api.census.gov/data/2019/cbp/geography.json",
+          "c_isAvailable": true,
+          "accessLevel": "public",
+          "modified": "2026-01-01"
+        }
+      ]
+    }
+  }
+}

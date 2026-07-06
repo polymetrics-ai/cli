@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/recruitment/positions", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 901, "title": "Fixture CTO", "status": "published", "visibility": "Published", "created_at": "2026-01-01", "team": "Engineering", "applicants_required": 1, "applicants_count": 2, "employment_type": "Full-time", "location": "Remote", "location_id": 1, "group": "Hiring Group", "group_id": 1 },
+        { "id": 902, "title": "Fixture CFO", "status": "completed", "visibility": "Completed", "created_at": "2026-01-02", "team": "Finance", "applicants_required": 1, "applicants_count": 1, "employment_type": "Full-time", "location": "London", "location_id": 2, "group": "Hiring Group", "group_id": 1 }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

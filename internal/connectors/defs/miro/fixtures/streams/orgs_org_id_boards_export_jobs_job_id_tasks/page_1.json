@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs/synthetic-conformance-value/tasks",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "status": "status_fixture",
+          "artifactExpiredAt": "2026-01-01T00:00:00Z",
+          "sizeInBytes": 1,
+          "errorMessage": "error_message_fixture",
+          "errorType": "error_type_fixture",
+          "board": {
+            "key": "key_fixture"
+          }
+        }
+      ],
+      "limit": 50,
+      "size": 1
+    }
+  }
+}

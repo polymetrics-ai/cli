@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trackings",
+  "type": "object",
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "course_id": { "type": ["integer", "null"] },
+    "identifier": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "progress": { "type": ["number", "null"] },
+    "completed": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "actions": [
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/clients",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new client record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames or otherwise mutates an existing client's metadata; low-risk external mutation"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a client and its association with any linked projects; irreversible, approval required"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["board", "list"] }
+        }
+      },
+      "risk": "creates a new project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["board", "list"] }
+        }
+      },
+      "risk": "renames or reconfigures an existing project; low-risk external mutation"
+    },
+    {
+      "name": "archive_project",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.id }}/archive",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "archived"],
+        "properties": {
+          "id": { "type": "string" },
+          "archived": { "type": "boolean" }
+        }
+      },
+      "risk": "archives or unarchives a project, hiding it from active project lists and blocking new time entries against it while archived; approval required for archiving a project still in active use"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a project and its tasks/sections/time associations; irreversible, approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/tasks",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name", "section"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "name": { "type": "string" },
+          "section": { "type": "integer" },
+          "labels": { "type": "array", "items": { "type": "string" } },
+          "dueOn": { "type": "string" }
+        }
+      },
+      "risk": "creates a new task under an existing project section; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "section": { "type": "integer" },
+          "status": { "type": "string" },
+          "dueOn": { "type": "string" }
+        }
+      },
+      "risk": "renames or reconfigures an existing task; low-risk external mutation"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a task and its logged time association; irreversible, approval required"
+    },
+    {
+      "name": "create_section",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/sections",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "name": { "type": "string" },
+          "position": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new task section within a project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_section",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sections/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a task section; any tasks in it become unsectioned, approval required"
+    },
+    {
+      "name": "create_time_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/time",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["time", "date"],
+        "properties": {
+          "time": { "type": "integer" },
+          "date": { "type": "string" },
+          "task": { "type": "string" },
+          "user": { "type": "integer" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "logs a new time entry against a task, which can feed directly into client billing/invoicing; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_time_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/time/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "time": { "type": "integer" },
+          "date": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "changes the logged duration/date/comment of an existing time entry that may already be invoiced; approval required if the entry is locked or billed"
+    },
+    {
+      "name": "delete_time_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a logged time entry, which can affect billing/invoicing history; irreversible, approval required"
+    },
+    {
+      "name": "create_expense",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expenses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category", "date"],
+        "properties": {
+          "category": { "type": "integer" },
+          "date": { "type": "string" },
+          "amount": { "type": "number" },
+          "billable": { "type": "boolean" },
+          "project": { "type": "string" },
+          "quantity": { "type": "number" },
+          "user": { "type": "integer" },
+          "details": { "type": "string" }
+        }
+      },
+      "risk": "logs a new billable/non-billable expense, which can feed directly into client invoicing; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_expense",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expenses/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a logged expense, which can affect billing/invoicing history; irreversible, approval required"
+    }
+  ]
+}

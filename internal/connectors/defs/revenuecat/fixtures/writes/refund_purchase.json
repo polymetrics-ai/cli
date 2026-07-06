@@ -1,0 +1,14 @@
+{
+  "record": {
+    "purchase_id": "purchase_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/purchases/purchase_fixture_1/actions/refund"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/app" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "app_fixture_1", "name": "Fixture Application One", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

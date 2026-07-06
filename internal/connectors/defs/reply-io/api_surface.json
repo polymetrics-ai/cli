@@ -1,0 +1,2558 @@
+{
+  "api": "Reply.io REST API v3 (https://api.reply.io/v3) plus legacy-observed v1 read endpoints",
+  "docs": "https://docs.reply.io/api-reference/bundled.yaml",
+  "reviewed_at": "2026-07-04",
+  "scope": "Covers current Reply.io v3 OpenAPI GET list/detail endpoints as streams and dialect-expressible JSON/empty-body mutations as write actions, while preserving the four legacy v1 read streams emitted by the Go connector. Coming-soon, binary/multipart, root-array, required-query write, and semantic POST-body read/reporting endpoints are explicitly excluded.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/people",
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/emailAccounts",
+      "covered_by": {
+        "stream": "email_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/ai-insights",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/intent-signals/industries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/intent-signals/technologies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases",
+      "covered_by": {
+        "stream": "list_knowledge_bases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases",
+      "covered_by": {
+        "write": "create_knowledge_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{id}",
+      "covered_by": {
+        "stream": "get_knowledge_base"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/ai-sdr/knowledge-bases/{id}",
+      "covered_by": {
+        "write": "update_knowledge_base"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{id}",
+      "covered_by": {
+        "write": "delete_knowledge_base"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{id}/duplicate",
+      "covered_by": {
+        "write": "duplicate_knowledge_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/links",
+      "covered_by": {
+        "stream": "list_knowledge_base_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/links",
+      "covered_by": {
+        "write": "add_knowledge_base_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/links/{link_id}",
+      "covered_by": {
+        "write": "delete_knowledge_base_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/documents",
+      "covered_by": {
+        "stream": "list_knowledge_base_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/documents",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_knowledge_base_document"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers",
+      "covered_by": {
+        "stream": "list_reply_handlers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers",
+      "covered_by": {
+        "write": "create_reply_handler"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}",
+      "covered_by": {
+        "stream": "get_reply_handler"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}",
+      "covered_by": {
+        "write": "update_reply_handler"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}",
+      "covered_by": {
+        "write": "delete_reply_handler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}/media",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}/media/{media_id}",
+      "covered_by": {
+        "write": "delete_reply_handler_media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards",
+      "covered_by": {
+        "stream": "list_reengagement_cards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards",
+      "covered_by": {
+        "write": "create_reengagement_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}",
+      "covered_by": {
+        "stream": "get_reengagement_card"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}",
+      "covered_by": {
+        "write": "update_reengagement_card"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}",
+      "covered_by": {
+        "write": "delete_reengagement_card"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}/media",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}/media/{media_id}",
+      "covered_by": {
+        "write": "delete_reengagement_card_media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/offers",
+      "covered_by": {
+        "stream": "list_offers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/offers",
+      "covered_by": {
+        "write": "create_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/offers/{id}",
+      "covered_by": {
+        "stream": "get_offer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/ai-sdr/offers/{id}",
+      "covered_by": {
+        "write": "update_offer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/offers/{id}",
+      "covered_by": {
+        "write": "delete_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/offers/{id}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/offers/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/offers/generation-attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/approvals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/approvals/send-bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/approval/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/approval/regenerate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/approval/feedback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/playbooks",
+      "covered_by": {
+        "stream": "list_playbooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/playbooks",
+      "covered_by": {
+        "write": "create_playbook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-sdr/playbooks/{id}",
+      "covered_by": {
+        "stream": "get_playbook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/ai-sdr/playbooks/{id}",
+      "covered_by": {
+        "write": "update_playbook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/playbooks/{id}",
+      "covered_by": {
+        "write": "delete_playbook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/playbooks/{id}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/playbooks/{playbook_id}/style-files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/ai-sdr/playbooks/{playbook_id}/style-files/{style_file_id}",
+      "covered_by": {
+        "write": "delete_playbook_style_file"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/preview/steps/{step_id}/feedback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/contacts/{contact_id}/preview/personalize",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/autopilot/enable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/autopilot/disable",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/autopilot/force-start",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/autopilot/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/approval-mode",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/generated-step-types",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/playbook",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/playbook",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/playbook",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/knowledge-base",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/knowledge-base",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/ai-sdr/{sequence_id}/knowledge-base",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-sdr/strategist/start",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/ai-web-search/start",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/ai-web-search/searches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-accounts",
+      "covered_by": {
+        "stream": "get_contact_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts",
+      "covered_by": {
+        "write": "create_contact_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts/filter",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-accounts/{id}",
+      "covered_by": {
+        "stream": "get_contact_account_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-accounts/{id}",
+      "covered_by": {
+        "write": "update_contact_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-accounts/{id}",
+      "covered_by": {
+        "write": "delete_contact_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts/bulk",
+      "covered_by": {
+        "write": "bulk_create_contact_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_contact_accounts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-accounts/{id}/owner",
+      "covered_by": {
+        "write": "update_contact_account_owner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-accounts/{id}/contacts",
+      "covered_by": {
+        "stream": "get_contact_account_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts/{id}/contact-links/bulk",
+      "covered_by": {
+        "write": "bulk_add_contacts_to_contact_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-accounts/{id}/contact-links/bulk-delete",
+      "covered_by": {
+        "write": "bulk_remove_contacts_from_contact_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-account-lists",
+      "covered_by": {
+        "stream": "get_contact_account_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-account-lists",
+      "covered_by": {
+        "write": "create_contact_account_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-account-lists/{id}",
+      "covered_by": {
+        "stream": "get_contact_account_list_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-account-lists/{id}",
+      "covered_by": {
+        "write": "update_contact_account_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-account-lists/{id}",
+      "covered_by": {
+        "write": "delete_contact_account_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-account-lists/{id}/move-accounts",
+      "covered_by": {
+        "write": "move_accounts_to_contact_account_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-account-lists/{id}/add-accounts",
+      "covered_by": {
+        "write": "add_accounts_to_contact_account_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/attachments/voice",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/background-jobs",
+      "covered_by": {
+        "stream": "get_background_jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/background-jobs/{jobId}",
+      "covered_by": {
+        "stream": "get_background_job_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/background-jobs/{jobId}/cancel",
+      "covered_by": {
+        "write": "cancel_background_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "stream": "get_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{id}",
+      "covered_by": {
+        "stream": "get_contact_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contacts/{id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/import",
+      "covered_by": {
+        "write": "import_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/filter",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{id}/sequences",
+      "covered_by": {
+        "stream": "get_contact_sequences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{id}/activities",
+      "covered_by": {
+        "stream": "get_contact_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/set-replied",
+      "covered_by": {
+        "write": "set_contacts_replied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/set-bounced",
+      "covered_by": {
+        "write": "set_contacts_bounced"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/set-status-in-sequence",
+      "covered_by": {
+        "write": "set_contacts_status_in_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{id}/statuses",
+      "covered_by": {
+        "stream": "get_contact_statuses"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/owner",
+      "covered_by": {
+        "write": "change_contacts_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/notes",
+      "covered_by": {
+        "write": "add_contact_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/move-to-sequence",
+      "covered_by": {
+        "write": "move_contact_to_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/domains",
+      "covered_by": {
+        "stream": "get_blacklist_domain_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/domains",
+      "covered_by": {
+        "write": "create_blacklist_domain_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/domains/{id}",
+      "covered_by": {
+        "stream": "get_blacklist_domain_rule_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-blacklist-rules/domains/{id}",
+      "covered_by": {
+        "write": "update_blacklist_domain_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-blacklist-rules/domains/{id}",
+      "covered_by": {
+        "write": "delete_blacklist_domain_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/domains/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; writes.json can construct object bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/domains/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_blacklist_domain_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/emails",
+      "covered_by": {
+        "stream": "get_blacklist_email_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/emails",
+      "covered_by": {
+        "write": "create_blacklist_email_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/emails/{id}",
+      "covered_by": {
+        "stream": "get_blacklist_email_rule_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-blacklist-rules/emails/{id}",
+      "covered_by": {
+        "write": "update_blacklist_email_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-blacklist-rules/emails/{id}",
+      "covered_by": {
+        "write": "delete_blacklist_email_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/emails/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; writes.json can construct object bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/emails/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_blacklist_email_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/email-exceptions",
+      "covered_by": {
+        "stream": "get_blacklist_email_exception_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/email-exceptions",
+      "covered_by": {
+        "write": "create_blacklist_email_exception_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/{id}",
+      "covered_by": {
+        "stream": "get_blacklist_email_exception_rule_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/{id}",
+      "covered_by": {
+        "write": "update_blacklist_email_exception_rule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/{id}",
+      "covered_by": {
+        "write": "delete_blacklist_email_exception_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; writes.json can construct object bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_blacklist_email_exception_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/enrich-by-email",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/find-emails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/find-phones",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/enrich-by-linkedin",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/enrich-ai-custom-fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-lists",
+      "covered_by": {
+        "stream": "get_contact_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-lists",
+      "covered_by": {
+        "write": "create_contact_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact-lists/{id}",
+      "covered_by": {
+        "stream": "get_contact_list_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact-lists/{id}",
+      "covered_by": {
+        "write": "update_contact_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/contact-lists/{id}",
+      "covered_by": {
+        "write": "delete_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-lists/{id}/share",
+      "covered_by": {
+        "write": "share_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-lists/{id}/unshare",
+      "covered_by": {
+        "write": "unshare_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-lists/{id}/move-contacts",
+      "covered_by": {
+        "write": "move_contacts_to_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contact-lists/{id}/add-contacts",
+      "covered_by": {
+        "write": "add_contacts_to_contact_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contacts/{id}/lists",
+      "covered_by": {
+        "stream": "get_contact_lists_for_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/custom-fields",
+      "covered_by": {
+        "stream": "get_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/custom-fields",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/custom-fields/{id}",
+      "covered_by": {
+        "stream": "get_custom_field_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/custom-fields/{id}",
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-email",
+      "covered_by": {
+        "write": "send_direct_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-linkedin-connect",
+      "covered_by": {
+        "write": "send_direct_linked_in_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-linkedin-inmail",
+      "covered_by": {
+        "write": "send_direct_linked_in_in_mail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-linkedin-message",
+      "covered_by": {
+        "write": "send_direct_linked_in_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-linkedin-voice",
+      "covered_by": {
+        "write": "send_direct_linked_in_voice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts/{id}/send-direct-linkedin-ai-voice",
+      "covered_by": {
+        "write": "send_direct_linked_in_ai_voice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-accounts",
+      "covered_by": {
+        "stream": "list_email_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts",
+      "covered_by": {
+        "write": "create_email_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/filter",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-accounts/{id}",
+      "covered_by": {
+        "stream": "get_email_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/email-accounts/{id}",
+      "covered_by": {
+        "write": "update_email_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/email-accounts/{id}",
+      "covered_by": {
+        "write": "delete_email_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/{id}/set-default",
+      "covered_by": {
+        "write": "set_default_email_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/{id}/resume-sending",
+      "covered_by": {
+        "write": "resume_sending"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_email_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-accounts/connect/gmail",
+      "covered_by": {
+        "stream": "connect_gmail_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-accounts/connect/office-365",
+      "covered_by": {
+        "stream": "connect_office365_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/test/smtp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "connectivity test body carries mailbox credential fields; connector write records and fixtures must not request or store secret values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/test/imap",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "connectivity test body carries mailbox credential fields; connector write records and fixtures must not request or store secret values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-accounts/tags",
+      "covered_by": {
+        "stream": "list_email_account_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/email-accounts/tags/{tagId}",
+      "covered_by": {
+        "write": "update_email_account_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-accounts/{id}/tags",
+      "covered_by": {
+        "write": "add_tags_to_email_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/email-accounts/{id}/tags",
+      "covered_by": {
+        "write": "remove_tags_from_email_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-templates",
+      "covered_by": {
+        "stream": "list_email_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-templates",
+      "covered_by": {
+        "write": "create_email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-templates/{id}",
+      "covered_by": {
+        "stream": "get_email_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/email-templates/{id}",
+      "covered_by": {
+        "write": "update_email_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/email-templates/{id}",
+      "covered_by": {
+        "write": "delete_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-templates/{id}/clone",
+      "covered_by": {
+        "write": "clone_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-templates/{id}/move",
+      "covered_by": {
+        "write": "move_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-templates/{id}/render",
+      "covered_by": {
+        "write": "render_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-templates/{id}/send-test",
+      "covered_by": {
+        "write": "send_test_email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-templates/variables",
+      "covered_by": {
+        "stream": "get_email_template_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-template-folders",
+      "covered_by": {
+        "stream": "list_email_template_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-template-folders",
+      "covered_by": {
+        "write": "create_email_template_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/email-template-folders/{id}",
+      "covered_by": {
+        "stream": "get_email_template_folder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/email-template-folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "write requires query parameter(s) folder_type but writes.json has no per-action query dialect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/email-template-folders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "write requires query parameter(s) folder_type but writes.json has no per-action query dialect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-template-folders/{id}/share",
+      "covered_by": {
+        "write": "share_email_template_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-template-attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "request uses multipart or binary payloads that writes.json cannot construct safely"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-validations/estimate",
+      "covered_by": {
+        "write": "estimate_email_validation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/email-validations/schedule",
+      "covered_by": {
+        "write": "schedule_email_validation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/holiday-calendars",
+      "covered_by": {
+        "stream": "list_holiday_calendars"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/holiday-calendars",
+      "covered_by": {
+        "write": "create_holiday_calendar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/holiday-calendars/{id}",
+      "covered_by": {
+        "stream": "get_holiday_calendar"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/holiday-calendars/{id}",
+      "covered_by": {
+        "write": "update_holiday_calendar"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/holiday-calendars/{id}",
+      "covered_by": {
+        "write": "delete_holiday_calendar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbox/threads",
+      "covered_by": {
+        "stream": "list_inbox_threads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/filter",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbox/threads/{id}",
+      "covered_by": {
+        "stream": "get_inbox_thread"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/inbox/threads/{id}",
+      "covered_by": {
+        "write": "delete_inbox_thread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_inbox_threads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/mark-as-read",
+      "covered_by": {
+        "write": "mark_inbox_threads_as_read"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/mark-as-unread",
+      "covered_by": {
+        "write": "mark_inbox_threads_as_unread"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbox/threads/{id}/messages",
+      "covered_by": {
+        "stream": "list_inbox_thread_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/{id}/messages",
+      "covered_by": {
+        "write": "send_inbox_thread_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/inbox/threads/{id}/category",
+      "covered_by": {
+        "write": "set_inbox_thread_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/inbox/threads/{id}/meeting-intent",
+      "covered_by": {
+        "write": "set_inbox_thread_meeting_intent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/{id}/ai-draft/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/{id}/ai-draft/feedback",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbox/threads/categories",
+      "covered_by": {
+        "stream": "list_inbox_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/categories",
+      "covered_by": {
+        "write": "create_inbox_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/inbox/threads/categories/{id}",
+      "covered_by": {
+        "stream": "get_inbox_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/inbox/threads/categories/{id}",
+      "covered_by": {
+        "write": "update_inbox_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/inbox/threads/categories/{id}",
+      "covered_by": {
+        "write": "delete_inbox_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/categories/{id}/thread-links/bulk",
+      "covered_by": {
+        "write": "assign_threads_to_inbox_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/inbox/threads/categories/{id}/thread-links/bulk-delete",
+      "covered_by": {
+        "write": "unassign_threads_from_inbox_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/linkedin-accounts",
+      "covered_by": {
+        "stream": "list_linked_in_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/linkedin-accounts/{id}",
+      "covered_by": {
+        "stream": "get_linked_in_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/linkedin-accounts/{id}",
+      "covered_by": {
+        "write": "delete_linked_in_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/linkedin-accounts/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_linked_in_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/linkedin-accounts/{id}/toggle-status",
+      "covered_by": {
+        "write": "toggle_linked_in_account_status"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/linkedin-accounts/{id}/limits",
+      "covered_by": {
+        "write": "update_linked_in_account_limits"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/linkedin-accounts/{id}/revoke-settings",
+      "covered_by": {
+        "write": "update_linked_in_account_revoke_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/linkedin-accounts/connection-link",
+      "covered_by": {
+        "write": "create_linked_in_connection_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/linkedin-accounts/connect",
+      "covered_by": {
+        "write": "create_direct_linked_in_connection_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/linkedin-accounts/{id}/reconnect",
+      "covered_by": {
+        "write": "reconnect_linked_in_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/linkedin-accounts/pending",
+      "covered_by": {
+        "stream": "list_pending_linked_in_accounts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/linkedin-accounts/pending/{id}",
+      "covered_by": {
+        "write": "delete_pending_linked_in_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/live-data/searches/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/searches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/live-data/searches",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/searches/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/filter-values/industries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/filter-values/departments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/filter-values/seniorities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/filter-values/locations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/live-data/filter-values/job-titles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/emails/overview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/calls/overview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/tasks/overview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/linkedin/overview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/team-performance/overview",
+      "covered_by": {
+        "write": "get_team_performance_overview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/channel-efficiency/overview",
+      "covered_by": {
+        "write": "get_channel_efficiency_overview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/emails",
+      "covered_by": {
+        "write": "get_emails_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/calls",
+      "covered_by": {
+        "write": "get_calls_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/tasks",
+      "covered_by": {
+        "write": "get_tasks_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/linkedin",
+      "covered_by": {
+        "write": "get_linked_in_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/reporting/team-performance/meetings",
+      "covered_by": {
+        "write": "get_meetings_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/schedules",
+      "covered_by": {
+        "stream": "list_schedules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/schedules",
+      "covered_by": {
+        "write": "create_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/schedules/{id}",
+      "covered_by": {
+        "stream": "get_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/schedules/{id}",
+      "covered_by": {
+        "write": "update_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/schedules/{id}",
+      "covered_by": {
+        "write": "delete_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/schedules/{id}/set-default",
+      "covered_by": {
+        "write": "set_default_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/schedules/{id}/holiday-calendars",
+      "covered_by": {
+        "stream": "list_schedule_holiday_calendars"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/schedules/{id}/holiday-calendar-links",
+      "covered_by": {
+        "write": "link_holiday_calendar_to_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/schedules/{id}/holiday-calendar-links/{calendarId}",
+      "covered_by": {
+        "write": "unlink_holiday_calendar_from_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences",
+      "covered_by": {
+        "stream": "get_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences",
+      "covered_by": {
+        "write": "create_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}",
+      "covered_by": {
+        "stream": "get_sequence_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/sequences/{id}",
+      "covered_by": {
+        "write": "update_sequence"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}",
+      "covered_by": {
+        "write": "delete_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/start",
+      "covered_by": {
+        "write": "start_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/pause",
+      "covered_by": {
+        "write": "pause_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/archive",
+      "covered_by": {
+        "write": "archive_sequence"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/{id}/owner",
+      "covered_by": {
+        "write": "update_sequence_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/start",
+      "covered_by": {
+        "write": "bulk_start_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/pause",
+      "covered_by": {
+        "write": "bulk_pause_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/archive",
+      "covered_by": {
+        "write": "bulk_archive_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/batch/owner",
+      "covered_by": {
+        "write": "bulk_change_sequence_owner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/save-as-template",
+      "covered_by": {
+        "write": "save_sequence_as_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/create-from-template",
+      "covered_by": {
+        "write": "create_sequence_from_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/contacts",
+      "covered_by": {
+        "stream": "get_sequence_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/contacts/{contact_id}",
+      "covered_by": {
+        "stream": "get_sequence_contact_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/contacts/state",
+      "covered_by": {
+        "stream": "get_sequence_contacts_state"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}/contact-links/{contact_id}",
+      "covered_by": {
+        "write": "remove_contact_from_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/contact-links/bulk",
+      "covered_by": {
+        "write": "bulk_add_contacts_to_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/contact-links/bulk-delete",
+      "covered_by": {
+        "write": "bulk_remove_contacts_from_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/contacts/set-status-in-sequence",
+      "covered_by": {
+        "write": "set_sequence_contacts_status_in_sequence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/contacts/set-replied",
+      "covered_by": {
+        "write": "set_sequence_contacts_replied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/contacts/set-bounced",
+      "covered_by": {
+        "write": "set_sequence_contacts_bounced"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{sequence_id}/contacts/{contact_id}/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{sequence_id}/contacts/{contact_id}/preview/reset",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented as coming soon or unstable in the current Reply API reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/email-accounts",
+      "covered_by": {
+        "stream": "get_sequence_email_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/email-account-links",
+      "covered_by": {
+        "write": "assign_email_account_to_sequence"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/{id}/email-account-links",
+      "covered_by": {
+        "write": "set_sequence_email_accounts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}/email-account-links/{email_account_id}",
+      "covered_by": {
+        "write": "remove_email_account_from_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequence-folders",
+      "covered_by": {
+        "stream": "get_sequence_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequence-folders",
+      "covered_by": {
+        "write": "create_sequence_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequence-folders/{id}",
+      "covered_by": {
+        "stream": "get_sequence_folder_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequence-folders/{id}",
+      "covered_by": {
+        "write": "update_sequence_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequence-folders/{id}",
+      "covered_by": {
+        "write": "delete_sequence_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequence-folders/{id}/sequences",
+      "covered_by": {
+        "stream": "get_folder_sequences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequence-folders/{id}/sequence-links/bulk",
+      "covered_by": {
+        "write": "bulk_assign_sequences_to_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequence-folders/{id}/sequence-links/bulk-delete",
+      "covered_by": {
+        "write": "bulk_unassign_sequences_from_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/linkedin-accounts",
+      "covered_by": {
+        "stream": "get_sequence_linked_in_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/linkedin-account-links",
+      "covered_by": {
+        "write": "assign_linked_in_account_to_sequence"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}/linkedin-account-links/{linkedInAccountId}",
+      "covered_by": {
+        "write": "remove_linked_in_account_from_sequence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/steps",
+      "covered_by": {
+        "stream": "get_sequence_steps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps",
+      "covered_by": {
+        "write": "create_sequence_step"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/steps/{step_id}",
+      "covered_by": {
+        "stream": "get_sequence_step_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/{id}/steps/{step_id}",
+      "covered_by": {
+        "write": "update_sequence_step"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}/steps/{step_id}",
+      "covered_by": {
+        "write": "delete_sequence_step"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; writes.json can construct object bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_sequence_steps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/{step_id}/enable",
+      "covered_by": {
+        "write": "enable_sequence_step_variants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/{step_id}/disable",
+      "covered_by": {
+        "write": "disable_sequence_step_variants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants",
+      "covered_by": {
+        "stream": "get_sequence_step_variants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants",
+      "covered_by": {
+        "write": "create_sequence_step_variant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants/bulk",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; writes.json can construct object bodies only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_sequence_step_variants"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants/{variant_id}",
+      "covered_by": {
+        "write": "update_sequence_step_variant"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequences/{id}/steps/{step_id}/variants/{variant_id}",
+      "covered_by": {
+        "write": "delete_sequence_step_variant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequences/steps/contact-filter-properties",
+      "covered_by": {
+        "stream": "get_condition_properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sequence-templates",
+      "covered_by": {
+        "stream": "get_sequence_templates"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/sequence-templates/{id}",
+      "covered_by": {
+        "write": "delete_sequence_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/settings",
+      "covered_by": {
+        "stream": "get_settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/settings",
+      "covered_by": {
+        "write": "update_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tasks",
+      "covered_by": {
+        "stream": "get_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/filter",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "semantic POST-body read/reporting endpoint; the read dialect cannot send request bodies and this is not a reverse-ETL write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/tasks/{id}",
+      "covered_by": {
+        "stream": "get_task_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/tasks/{id}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/tasks/{id}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/tasks/{id}/assigned-user",
+      "covered_by": {
+        "write": "assign_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/{id}/complete",
+      "covered_by": {
+        "write": "complete_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/{id}/execute",
+      "covered_by": {
+        "write": "execute_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/batch/assign",
+      "covered_by": {
+        "write": "batch_assign_tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/tasks/batch/complete",
+      "covered_by": {
+        "write": "batch_complete_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/whoami",
+      "covered_by": {
+        "stream": "whoami"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "stream": "list_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks/events",
+      "covered_by": {
+        "stream": "get_webhook_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks/{id}",
+      "covered_by": {
+        "stream": "get_webhook_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/webhooks/{id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks/{id}/test",
+      "covered_by": {
+        "write": "test_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks/{id}/enable",
+      "covered_by": {
+        "write": "enable_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/webhooks/{id}/disable",
+      "covered_by": {
+        "write": "disable_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks/{id}/logs",
+      "covered_by": {
+        "stream": "get_webhook_logs"
+      }
+    }
+  ]
+}

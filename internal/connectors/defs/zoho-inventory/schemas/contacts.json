@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "contact_id": { "type": "string" },
+    "contact_name": { "type": ["string", "null"] },
+    "company_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "contact_type": { "type": ["string", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "outstanding_receivable_amount": { "type": ["number", "null"] },
+    "created_time": { "type": ["string", "null"] },
+    "last_modified_time": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

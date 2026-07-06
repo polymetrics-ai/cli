@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets_saved_replies_reply_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "title",
+    "handle",
+    "status",
+    "tags",
+    "roles",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the saved reply."
+    },
+    "appId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ID of the app this saved reply is scoped to, if any."
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title of the saved reply."
+    },
+    "handle": {
+      "type": "string",
+      "description": "URL-safe handle for the saved reply, unique per organization. Auto-derived from `title` when not supplied. On delete the handle is suffixed with `_deleted_<id>` to free the slot."
+    },
+    "content": {
+      "type": "object",
+      "description": "Body of the saved reply, typically a TipTap JSON document. Free-form JSON object."
+    },
+    "defaultLocale": {
+      "type": "string",
+      "description": "ISO language code for the saved reply's content (default `en`)."
+    },
+    "status": {
+      "type": "string",
+      "description": "Workflow status. `draft` replies are not surfaced in suggestion or quick-pick UIs.",
+      "enum": [
+        "draft",
+        "active"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Free-form tags attached to the saved reply.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "categoryId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the SavedReplyCategory grouping this reply, if any."
+    },
+    "category": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The category grouping this saved reply, when assigned.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sortOrder": {
+          "type": "integer"
+        }
+      }
+    },
+    "userId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When set, the reply is private to this user (only visible to them via the API)."
+    },
+    "user": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The user the saved reply is private to, when applicable.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "description": "When non-empty, only users whose roles intersect with this list can read the reply. Mutually exclusive with `userId` (when both could be set, `userId` wins for visibility).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

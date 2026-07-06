@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/incidents", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "incidents": [], "more": false }
+  }
+}

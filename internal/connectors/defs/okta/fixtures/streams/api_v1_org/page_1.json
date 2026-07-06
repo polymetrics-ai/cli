@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/org"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "address1": "address1_fixture",
+      "address2": "address2_fixture",
+      "city": "city_fixture",
+      "companyName": "company_name_fixture",
+      "country": "country_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "endUserSupportHelpURL": "https://example.invalid/fixture",
+      "expiresAt": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "phoneNumber": "phone_number_fixture",
+      "postalCode": "postal_code_fixture",
+      "state": "state_fixture",
+      "status": "ACTIVE",
+      "subdomain": "subdomain_fixture",
+      "supportPhoneNumber": "support_phone_number_fixture",
+      "website": "website_fixture",
+      "_links": {
+        "contacts": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "logo": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "oktaCommunication": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "oktaSupport": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "preferences": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "uploadLogo": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

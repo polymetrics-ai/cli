@@ -1,0 +1,817 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integration_api/listings/query",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "listing_1",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 1"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_2",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 2"
+          },
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "listing_3",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 3"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_4",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 4"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_5",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 5"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_6",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 6"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_7",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 7"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_8",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 8"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_9",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 9"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_10",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 10"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_11",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 11"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_12",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 12"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_13",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 13"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_14",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 14"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_15",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 15"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_16",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 16"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_17",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 17"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_18",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 18"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_19",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 19"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_20",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 20"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_21",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 21"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_22",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 22"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_23",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 23"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_24",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 24"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_25",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 25"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_26",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 26"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_27",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 27"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_28",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 28"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_29",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 29"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_30",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 30"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_31",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 31"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_32",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 32"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_33",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 33"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_34",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 34"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_35",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 35"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_36",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 36"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_37",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 37"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_38",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 38"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_39",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 39"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_40",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 40"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_41",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 41"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_42",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 42"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_43",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 43"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_44",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 44"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_45",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 45"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_46",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 46"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_47",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 47"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_48",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 48"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_49",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 49"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_50",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 50"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_51",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 51"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_52",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 52"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_53",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 53"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_54",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 54"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_55",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 55"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_56",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 56"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_57",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 57"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_58",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 58"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_59",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 59"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_60",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 60"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_61",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 61"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_62",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 62"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_63",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 63"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_64",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 64"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_65",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 65"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_66",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 66"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_67",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 67"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_68",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 68"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_69",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 69"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_70",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 70"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_71",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 71"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_72",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 72"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_73",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 73"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_74",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 74"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_75",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 75"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_76",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 76"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_77",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 77"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_78",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 78"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_79",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 79"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_80",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 80"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_81",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 81"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_82",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 82"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_83",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 83"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_84",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 84"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_85",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 85"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_86",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 86"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_87",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 87"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_88",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 88"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_89",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 89"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_90",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 90"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_91",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 91"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_92",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 92"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_93",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 93"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_94",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 94"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_95",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 95"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_96",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 96"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_97",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 97"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_98",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 98"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_99",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 99"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "listing_100",
+          "type": "listing",
+          "attributes": {
+            "title": "Fixture Listing 100"
+          },
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "chatwoot",
+  "display_name": "Chatwoot",
+  "description": "Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, and writes contact/conversation/message/label mutations through the Chatwoot Application API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.chatwoot.com/api-reference",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 15
+  },
+  "risk": {
+    "read": "external Chatwoot Application API read of conversation, contact, and message data (account-scoped)",
+    "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
+  }
+}

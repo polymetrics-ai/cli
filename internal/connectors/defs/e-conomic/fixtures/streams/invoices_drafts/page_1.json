@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/invoices/drafts", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "draftInvoiceNumber": 1,
+          "date": "2026-01-01T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 500,
+          "grossAmount": 625,
+          "vatAmount": 125,
+          "dueDate": "2026-01-31T00:00:00Z",
+          "customer": { "customerNumber": 1 },
+          "paymentTerms": { "paymentTermsNumber": 1 },
+          "self": "https://restapi.e-conomic.com/invoices/drafts/1"
+        },
+        {
+          "draftInvoiceNumber": 2,
+          "date": "2026-01-02T00:00:00Z",
+          "currency": "DKK",
+          "netAmount": 900,
+          "grossAmount": 1125,
+          "vatAmount": 225,
+          "dueDate": "2026-02-01T00:00:00Z",
+          "customer": { "customerNumber": 2 },
+          "paymentTerms": { "paymentTermsNumber": 1 },
+          "self": "https://restapi.e-conomic.com/invoices/drafts/2"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

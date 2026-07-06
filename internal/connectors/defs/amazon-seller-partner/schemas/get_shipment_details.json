@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_details",
+  "type": "object",
+  "properties": {
+    "WarehouseId": {
+      "type": "string"
+    },
+    "AmazonOrderId": {
+      "type": "string"
+    },
+    "AmazonShipmentId": {
+      "type": "string"
+    },
+    "PurchaseDate": {
+      "type": "string"
+    },
+    "ShippingAddress": {
+      "type": "object"
+    },
+    "PaymentMethodDetails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Payments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "MarketplaceId": {
+      "type": "string"
+    },
+    "SellerId": {
+      "type": "string"
+    },
+    "BuyerName": {
+      "type": "string"
+    },
+    "BuyerCounty": {
+      "type": "string"
+    },
+    "BuyerTaxInfo": {
+      "type": "object"
+    },
+    "MarketplaceTaxInfo": {
+      "type": "object"
+    },
+    "SellerDisplayName": {
+      "type": "string"
+    },
+    "ShipmentItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "AmazonOrderId"
+  ]
+}

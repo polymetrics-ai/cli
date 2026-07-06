@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/cases",
+    "query": { "page": "1", "limit": "10" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metadata": { "url": "/cases", "object_type": "list", "total_count": 1, "has_more": false },
+      "list": [
+        {
+          "metadata": { "url": "/cases/95920003", "list_url": "/cases", "parent": "/", "object_type": "record", "record_type": "case" },
+          "record": {
+            "id": 95920003,
+            "ownerid": 90505,
+            "createddate": "2026-01-01 00:00:00",
+            "modifieddate": "2026-01-01 00:00:00"
+          }
+        }
+      ]
+    }
+  }
+}

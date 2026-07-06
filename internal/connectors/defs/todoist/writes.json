@@ -1,0 +1,355 @@
+{
+  "actions": [
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "parent_id": { "type": "string" },
+          "color": { "type": "string" },
+          "is_favorite": { "type": "boolean" },
+          "view_style": { "type": "string", "enum": ["list", "board"] }
+        }
+      },
+      "risk": "creates a new project in the caller's Todoist account; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "is_favorite": { "type": "boolean" },
+          "view_style": { "type": "string", "enum": ["list", "board"] }
+        }
+      },
+      "risk": "mutates an existing project's name, color, favorite flag, or display style"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a project and everything in it (its sections, tasks, and comments); irreversible"
+    },
+    {
+      "name": "create_section",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sections",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "name": { "type": "string" },
+          "order": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new section within an existing project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_section",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sections/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing section"
+    },
+    {
+      "name": "delete_section",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sections/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a section and every task in it; irreversible"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": { "type": "string" },
+          "description": { "type": "string" },
+          "project_id": { "type": "string" },
+          "section_id": { "type": "string" },
+          "parent_id": { "type": "string" },
+          "order": { "type": "integer" },
+          "labels": { "type": "array", "items": { "type": "string" } },
+          "priority": { "type": "integer" },
+          "due_string": { "type": "string" },
+          "due_date": { "type": "string" },
+          "due_datetime": { "type": "string" },
+          "due_lang": { "type": "string" },
+          "assignee_id": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_unit": { "type": "string", "enum": ["minute", "day"] }
+        }
+      },
+      "risk": "creates a new task in the caller's Todoist account (in the given project, or Inbox if omitted); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "content": { "type": "string" },
+          "description": { "type": "string" },
+          "labels": { "type": "array", "items": { "type": "string" } },
+          "priority": { "type": "integer" },
+          "due_string": { "type": "string" },
+          "due_date": { "type": "string" },
+          "due_datetime": { "type": "string" },
+          "due_lang": { "type": "string" },
+          "assignee_id": { "type": "string" },
+          "duration": { "type": "integer" },
+          "duration_unit": { "type": "string", "enum": ["minute", "day"] }
+        }
+      },
+      "risk": "mutates an existing task's content, description, labels, priority, due date, assignee, or duration"
+    },
+    {
+      "name": "close_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/close",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "marks an existing task as completed (mirrors clicking the checkbox in the Todoist UI); recurring tasks advance to their next occurrence instead of disappearing"
+    },
+    {
+      "name": "reopen_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/reopen",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "reopens a previously completed task, returning it to the active task list"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a task; irreversible"
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/comments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "project_id": { "type": "string" },
+          "content": { "type": "string" },
+          "attachment": { "type": "object" }
+        }
+      },
+      "risk": "posts a new comment on a task or project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/comments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "content"],
+        "properties": {
+          "id": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "edits the content of an existing comment"
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/comments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a comment; irreversible"
+    },
+    {
+      "name": "create_label",
+      "kind": "create",
+      "method": "POST",
+      "path": "/labels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "order": { "type": "integer" },
+          "color": { "type": "string" },
+          "is_favorite": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new personal label; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_label",
+      "kind": "update",
+      "method": "POST",
+      "path": "/labels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "order": { "type": "integer" },
+          "color": { "type": "string" },
+          "is_favorite": { "type": "boolean" }
+        }
+      },
+      "risk": "renames an existing label or changes its order/color/favorite flag; renaming changes how it appears on every task already using it"
+    },
+    {
+      "name": "delete_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/labels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a personal label; it is removed from every task that used it"
+    }
+  ]
+}

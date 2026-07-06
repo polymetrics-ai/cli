@@ -7,7 +7,14 @@ description: Trello connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Trello boards, lists, cards, checklists, and board actions through the Trello REST API.
+Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).
+
+## Icon
+
+- asset: icons/trello.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.atlassian.com/cloud/trello/rest/
 
 ## Capabilities
 
@@ -16,17 +23,35 @@ Reads Trello boards, lists, cards, checklists, and board actions through the Tre
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- board_ids
+- key (secret)
+- token (secret)
+
+## ETL Streams
+
+- boards:
+  - primary key: id
+  - fields: closed(), dateLastActivity(), desc(), id(), idOrganization(), name(), shortUrl(), url()
+- lists:
+  - primary key: id
+  - fields: closed(), id(), idBoard(), name(), pos(), subscribed()
+- checklists:
+  - primary key: id
+  - fields: id(), idBoard(), idCard(), name(), pos()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Trello API read of board/list/checklist data
+- approval: none; read-only, no obviously-safe reverse-ETL writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +73,3 @@ pm connectors inspect trello --json
 - Run pm connectors inspect trello before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

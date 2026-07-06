@@ -1,0 +1,14 @@
+{
+  "record": {
+    "employee_id": "employee_fixture",
+    "uuid": "time-entry-fixture-1",
+    "duration": 420
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/time-tracking/employees/employee_fixture/time-entries/time-entry-fixture-1",
+    "body": {
+      "duration": 420
+    }
+  }
+}

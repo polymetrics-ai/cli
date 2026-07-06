@@ -1,0 +1,24 @@
+{
+  "name": "emailoctopus",
+  "display_name": "EmailOctopus",
+  "description": "Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list contacts, list tags, and list custom fields through the EmailOctopus v1.6 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://emailoctopus.com/api-documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external EmailOctopus API read of list, campaign, campaign-report, contact, tag, and custom-field data",
+    "write": "external EmailOctopus API mutations covering list/contact/tag/custom-field lifecycle management, plus start_automation, which enrolls a contact into a live automation sequence and triggers its configured email sends",
+    "approval": "standard; no destructive-admin or elevated-scope actions are exposed"
+  }
+}

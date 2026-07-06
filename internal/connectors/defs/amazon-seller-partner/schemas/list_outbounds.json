@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_outbounds",
+  "type": "object",
+  "properties": {
+    "confirmedOn": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "eligiblePackagesToOutbound": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "eligibleProductsToOutbound": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "executionErrors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "orderPreferences": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "orderStatus": {
+      "type": "string"
+    },
+    "outboundShipments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "packagesToOutbound": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "productsToOutbound": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shippedOutboundPackages": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shippedOutboundProducts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

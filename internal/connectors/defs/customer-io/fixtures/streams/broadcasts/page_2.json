@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/broadcasts", "query": { "limit": "synthetic-conformance-value", "start": "cio_fixture_cursor_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "broadcasts": [
+        { "id": 3, "name": "Fixture Broadcast Three", "type": "broadcast", "state": "draft", "active": false, "created": 1767225605, "updated": 1767225606 }
+      ],
+      "next": null
+    }
+  }
+}

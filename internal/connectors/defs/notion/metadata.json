@@ -1,0 +1,27 @@
+{
+  "name": "notion",
+  "display_name": "Notion",
+  "description": "Reads Notion databases, pages, and users through the Notion REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.notion.com/reference/intro",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Notion API read of workspace databases/pages/users",
+    "approval": "none; read-only source connector"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "The databases/pages streams are StreamHook-handled (hooks/notion/hooks.go ports legacy's POST /search body-cursor pagination verbatim; the engine's declarative read path always issues a nil request body -- StreamSpec.Body is declared but never read by engine/read.go -- so a body-carried start_cursor/filter cannot be expressed declaratively at all, see docs.md's Streams notes and docs/migration/quarantine.json's notion ENGINE_GAP entry). The users stream's GET /users query-cursor pagination IS declarative-expressible, but is also routed through the same StreamHook for a single consistent dispatch path across the bundle (docs.md Known limits). hook-covered; proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+  }
+}

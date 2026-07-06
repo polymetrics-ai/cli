@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/ohlcv/synthetic-conformance-value/history",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "period_id": "synthetic-conformance-value",
+      "time_start": "2020-01-02T00:00:00.0000000Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "time_period_start": "2020-01-03T00:00:00.0000000Z",
+        "time_period_end": "2020-01-04T00:00:00.0000000Z",
+        "time_open": "2020-01-03T00:00:00.0000000Z",
+        "time_close": "2020-01-03T23:59:59.0000000Z",
+        "price_open": 31800.0,
+        "price_high": 33000.0,
+        "price_low": 31500.0,
+        "price_close": 32750.0,
+        "volume_traded": 890.75,
+        "trades_count": 15600
+      }
+    ]
+  }
+}

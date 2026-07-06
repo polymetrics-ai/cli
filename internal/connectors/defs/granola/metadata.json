@@ -1,0 +1,22 @@
+{
+  "name": "granola",
+  "display_name": "Granola",
+  "description": "Reads Granola meeting notes metadata and full note detail (summary, owner, attendees, calendar event) through the Granola public API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://docs.granola.ai/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 30
+  },
+  "risk": {
+    "read": "external Granola API read of meeting notes metadata"
+  }
+}

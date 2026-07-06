@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "teamId": { "type": ["string", "null"] },
+    "fullName": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "fields": { "type": ["object", "null"] },
+    "campaigns": { "type": ["array", "null"] },
+    "ownerId": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "unsubscribed": { "type": ["boolean", "null"] }
+  }
+}

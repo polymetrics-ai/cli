@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1", "name": "Renamed Fixture Folder" },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/folders/1"
+  }
+}

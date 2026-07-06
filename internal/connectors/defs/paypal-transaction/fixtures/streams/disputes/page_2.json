@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customer/disputes",
+    "query": { "page_size": "50", "start_time": "2026-01-01T00:00:00Z", "next_page_token": "fixture-token-2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "dispute_id": "PP-D-fixture-2",
+          "reason": "UNAUTHORIZED",
+          "status": "RESOLVED",
+          "dispute_state": "RESOLVED",
+          "dispute_amount": { "currency_code": "USD", "value": "5.00" },
+          "create_time": "2026-01-02T00:00:00Z",
+          "update_time": "2026-01-02T00:05:00Z"
+        }
+      ],
+      "links": []
+    }
+  }
+}

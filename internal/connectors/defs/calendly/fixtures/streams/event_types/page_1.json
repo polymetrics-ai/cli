@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/event_types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "uri": "https://api.calendly.com/event_types/fixture_type_1",
+          "name": "15 Minute Meeting",
+          "slug": "fixture-15min",
+          "active": true,
+          "duration": 15,
+          "kind": "solo",
+          "scheduling_url": "https://calendly.com/fixture-user/fixture-15min",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "count": 1, "next_page": null }
+    }
+  }
+}

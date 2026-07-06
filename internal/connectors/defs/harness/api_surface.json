@@ -1,0 +1,59 @@
+{
+  "api": "Harness NextGen platform API (https://app.harness.io)",
+  "docs": "https://developer.harness.io/docs/platform/automation/api/api-quickstart/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; write and Harness's broader CD/CI pipeline-execution/trigger surface is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/ng/api/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ng/api/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ng/api/servicesV2",
+      "covered_by": {
+        "stream": "services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ng/api/connectors",
+      "covered_by": {
+        "stream": "connectors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline/api/pipelines/list",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipeline/api/pipeline/execute/{identifier}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/pipeline/api/pipeline/execute/{identifier} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ng/api/pipeline-execution-summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/ng/api/pipeline-execution-summary is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

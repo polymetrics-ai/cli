@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_tracking_record",
+  "type": "object",
+  "x-primary-key": [
+    "employeeId"
+  ],
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "adjustedHours": {
+      "type": "string"
+    },
+    "dateAdjusted": {
+      "type": "string"
+    },
+    "dateHoursWorked": {
+      "type": "string"
+    },
+    "departmentId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "divisionId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employeeId": {
+      "type": "string"
+    },
+    "holidayId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "hoursWorked": {
+      "type": "string"
+    },
+    "jobCode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jobData": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jobTitleId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "payCode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "payRate": {
+      "type": "string"
+    },
+    "project": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "projectId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "rateType": {
+      "type": "string"
+    },
+    "shiftDifferential": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "shiftDifferentialId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "taskId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "timeTrackingId": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

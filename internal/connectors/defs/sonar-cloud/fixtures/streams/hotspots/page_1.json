@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/hotspots/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "pageIndex": 1, "pageSize": 100, "total": 1 },
+      "hotspots": [
+        {
+          "key": "hotspot_fixture_1",
+          "component": "fixture-org_fixture-repo:main.go",
+          "project": "fixture-org_fixture-repo",
+          "securityCategory": "others",
+          "vulnerabilityProbability": "LOW",
+          "status": "TO_REVIEW",
+          "line": 10,
+          "message": "Fixture hotspot record for conformance testing.",
+          "assignee": "fixture-user",
+          "author": "fixture-author@example.com",
+          "creationDate": "2026-01-01T00:00:00+0000",
+          "updateDate": "2026-01-01T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

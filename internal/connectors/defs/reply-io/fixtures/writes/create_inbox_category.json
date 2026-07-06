@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "color": "fixture_color"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/inbox/threads/categories",
+    "body": {
+      "name": "fixture_name",
+      "color": "fixture_color"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

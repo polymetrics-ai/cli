@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "name": "Fixture Name",
+    "employeeIds": [
+      1001
+    ],
+    "capacity": 1001
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/scheduling/shifts/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "employeeIds": [
+        1001
+      ],
+      "capacity": 1001
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "request": [
+      { "cloud": "aws", "contract_id": "contract_fixture_1", "dimension": "seats", "quantity": "10" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metering/",
+    "body": {
+      "request": [
+        { "cloud": "aws", "contract_id": "contract_fixture_1", "dimension": "seats", "quantity": "10" }
+      ]
+    }
+  }
+}

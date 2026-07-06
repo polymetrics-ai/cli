@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Supplier Updated ApS",
+    "currency": "DKK",
+    "paymentTerms": {
+      "paymentTermsNumber": 1
+    },
+    "group": {
+      "supplierGroupNumber": 1
+    },
+    "vatZone": {
+      "vatZoneNumber": 1
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/suppliers/1"
+  }
+}

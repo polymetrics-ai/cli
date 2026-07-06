@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/current_customer" },
+  "response": {
+    "status": 200,
+    "body": { "id": "cus_fixture_1" }
+  }
+}

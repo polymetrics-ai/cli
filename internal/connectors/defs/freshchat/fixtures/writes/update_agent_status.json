@@ -1,0 +1,13 @@
+{
+  "record": {
+    "agent_id": "agent_fixture_1",
+    "status": "available"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/agents/agent_fixture_1",
+    "body": {
+      "status": "available"
+    }
+  }
+}

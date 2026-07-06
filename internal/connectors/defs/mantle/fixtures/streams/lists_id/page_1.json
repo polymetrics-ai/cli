@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/lists/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "description": "fixture",
+        "customerCount": 1,
+        "contactCount": 1,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "entities": {
+        "id": "lists_id_fixture_id"
+      },
+      "total": 1,
+      "hasNextPage": true,
+      "hasPreviousPage": true
+    }
+  }
+}

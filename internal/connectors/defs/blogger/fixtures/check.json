@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/blogs/fixture_blog_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "blogger#blog",
+      "id": "fixture_blog_1",
+      "name": "Fixture Blog",
+      "description": "A fixture blog for conformance replay.",
+      "published": "2026-01-01T00:00:00Z",
+      "updated": "2026-01-02T00:00:00Z",
+      "url": "https://fixtureblog.blogspot.com/",
+      "posts": { "totalItems": "2", "selfLink": "https://www.googleapis.com/blogger/v3/blogs/fixture_blog_1/posts" },
+      "pages": { "totalItems": "1", "selfLink": "https://www.googleapis.com/blogger/v3/blogs/fixture_blog_1/pages" }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "factorial",
+  "display_name": "Factorial",
+  "description": "Reads FactorialHR employees, teams, time-off leaves, leave types, and locations through the Factorial REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidoc.factorialhr.com/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Factorial API read of employee, team, and time-off data",
+    "approval": "none; read-only"
+  }
+}

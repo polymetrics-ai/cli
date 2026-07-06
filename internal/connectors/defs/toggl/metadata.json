@@ -1,0 +1,21 @@
+{
+  "name": "toggl",
+  "display_name": "Toggl",
+  "description": "Reads and writes time entries, projects, clients, tags, tasks, and users through the Toggl Track API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.track.toggl.com/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Toggl Track API read of time-tracking and workspace data",
+    "write": "external mutation of Toggl time entries, projects, clients, tags, and tasks; no destructive-admin or elevated-scope actions modeled",
+    "approval": "create/update actions execute without approval (low-risk, reversible via a follow-up write); delete_* actions are irreversible and should be gated by the caller's own reverse-ETL approval policy"
+  }
+}

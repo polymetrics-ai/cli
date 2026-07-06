@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/collaboration_permissions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ats:collab:jobs:view": [
+        "admin",
+        "recruiter"
+      ]
+    }
+  }
+}

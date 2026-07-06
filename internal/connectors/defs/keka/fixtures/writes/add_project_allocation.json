@@ -1,0 +1,35 @@
+{
+  "record": {
+    "employeeId": "fixture_employee_id_1",
+    "allocationPercentage": 10,
+    "billingRoleId": "fixture_billing_role_id_1",
+    "billingRate": 120,
+    "startDate": "2026-01-01T00:00:00Z",
+    "endDate": "2026-01-01T00:00:00Z",
+    "project_id": "fixture_project_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/psa/projects/fixture_project_id/allocations",
+    "body": {
+      "employeeId": "fixture_employee_id_1",
+      "allocationPercentage": 10,
+      "billingRoleId": "fixture_billing_role_id_1",
+      "billingRate": 120,
+      "startDate": "2026-01-01T00:00:00Z",
+      "endDate": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "add_project_allocation_fixture_1",
+        "name": "Fixture add project allocation"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

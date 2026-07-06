@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v6/deployments" },
+  "response": {
+    "status": 200,
+    "body": { "deployments": [] }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/maintenance-windows/synthetic-conformance-value/status/pages/synthetic-conformance-value/maintenances/synthetic-conformance-value/updates",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "maintenance_updates": [
+        {
+          "id": "view_maintenance_update_from_maintenance_window",
+          "name": "Fixture view_maintenance_update_from_maintenance_window",
+          "subject": "Fixture view_maintenance_update_from_maintenance_window",
+          "description": "Fixture view_maintenance_update_from_maintenance_window record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/reports/top_active_items",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        {
+          "id": 1,
+          "name": "Fixture top_active_items_report",
+          "title": "Fixture top_active_items_report",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

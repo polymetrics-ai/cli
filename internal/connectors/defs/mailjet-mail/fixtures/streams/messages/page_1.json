@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/message" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 2,
+      "Total": 2,
+      "Data": [
+        {
+          "ID": 3001,
+          "ContactID": 1001,
+          "CampaignID": 4001,
+          "Status": "sent",
+          "ArrivedAt": "2026-01-01T00:00:00Z",
+          "AttemptCount": 1,
+          "IsClickTracked": true,
+          "IsOpenTracked": true,
+          "MessageSize": 1024
+        },
+        {
+          "ID": 3002,
+          "ContactID": 1002,
+          "CampaignID": 4001,
+          "Status": "sent",
+          "ArrivedAt": "2026-01-01T00:01:00Z",
+          "AttemptCount": 1,
+          "IsClickTracked": true,
+          "IsOpenTracked": true,
+          "MessageSize": 2048
+        }
+      ]
+    }
+  }
+}

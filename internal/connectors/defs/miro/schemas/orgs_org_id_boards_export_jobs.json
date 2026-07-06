@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Board export job.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the board export job.",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string",
+      "description": "Board export job name."
+    },
+    "boardFormat": {
+      "type": "string",
+      "description": "Specifies the format of the file to which the board will be exported. Supported formats include SVG (default), HTML, and PDF.",
+      "enum": [
+        "SVG",
+        "HTML",
+        "PDF"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates the current state of the board export job.\nPossible values:\n`created`: the job has been created but not yet started. Retry the status call after some time.\n`in_progress`: the job is in progress, and the results are not ready yet. Retry the status call after some time.\n`cancelled`: the job has been cancelled and will not produce any more results.\n`finished`: the job is complete. You can now get results for the board export job."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tasksCount": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "description": "Total number of tasks in the export."
+        },
+        "success": {
+          "type": "integer",
+          "description": "Successfully exported tasks count."
+        },
+        "error": {
+          "type": "integer",
+          "description": "Failed tasks count."
+        }
+      },
+      "additionalProperties": true
+    },
+    "creator": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user who created the board export job."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

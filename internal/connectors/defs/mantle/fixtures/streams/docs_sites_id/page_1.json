@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/sites/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "site": {
+        "id": "id_fixture",
+        "handle": "fixture",
+        "url": "https://example.com/fixture",
+        "defaultLocale": "fixture",
+        "supportedLocales": [
+          "fixture"
+        ],
+        "title": "fixture",
+        "shortDescription": "fixture",
+        "visibility": "public",
+        "customDomain": "fixture",
+        "useCustomDomain": true,
+        "customDomainVerifiedAt": "2026-01-01T00:00:00Z",
+        "widgetId": "widget_id_fixture",
+        "config": {
+          "id": "config_fixture_id"
+        },
+        "locales": [
+          {
+            "locale": "fixture",
+            "title": "fixture",
+            "shortDescription": "fixture"
+          }
+        ],
+        "repositories": [
+          {
+            "id": "id_fixture",
+            "repositoryId": "repository_id_fixture",
+            "position": 1,
+            "createdAt": "2026-01-01T00:00:00Z",
+            "repository": {
+              "id": "id_fixture",
+              "handle": "fixture"
+            }
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

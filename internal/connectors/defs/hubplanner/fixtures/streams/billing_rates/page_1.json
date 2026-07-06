@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/billingrate",
+    "query": { "page": "0", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "billingrate_fixture_1",
+        "name": "Fixture Rate 1",
+        "rate": 150,
+        "currency": "USD",
+        "default": true
+      }
+    ]
+  }
+}

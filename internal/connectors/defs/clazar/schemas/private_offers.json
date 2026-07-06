@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "private_offers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "cloud": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "archived": { "type": ["string", "null"] },
+    "cloud_id": { "type": ["string", "null"] },
+    "duration": { "type": ["string", "null"] },
+    "eula_type": { "type": ["string", "null"] },
+    "listing_id": { "type": ["string", "null"] },
+    "offer_type": { "type": ["string", "null"] },
+    "accepted_at": { "type": ["string", "null"], "format": "date-time" },
+    "published_at": { "type": ["string", "null"], "format": "date-time" },
+    "expiration_at": { "type": ["string", "null"], "format": "date-time" },
+    "last_modified_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

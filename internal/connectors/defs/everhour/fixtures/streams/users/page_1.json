@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/team/users" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "100",
+        "name": "Fixture User One",
+        "email": "fixture1@example.com",
+        "headline": "Engineer",
+        "role": "member",
+        "status": "active",
+        "type": "user",
+        "capacity": 40,
+        "isEmailVerified": true,
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "101",
+        "name": "Fixture User Two",
+        "email": "fixture2@example.com",
+        "headline": "Manager",
+        "role": "admin",
+        "status": "active",
+        "type": "user",
+        "capacity": 40,
+        "isEmailVerified": true,
+        "createdAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

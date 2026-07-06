@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "active_flag": { "type": ["boolean", "null"] },
+    "is_admin": { "type": ["integer", "boolean", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

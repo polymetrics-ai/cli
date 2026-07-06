@@ -1,0 +1,21 @@
+{
+  "name": "zendesk-sunshine",
+  "display_name": "Zendesk Sunshine",
+  "description": "Reads and writes Zendesk Sunshine legacy custom object types, objects, relationship types, and relationships.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Zendesk account read of legacy custom object types, objects, relationship types, and relationships",
+    "write": "external mutation: creates/upserts/deletes object records of existing legacy object types, creates/deletes relationship records between them, and deletes object/relationship type definitions. Zendesk blocked creating new legacy object/relationship TYPES as of January 15, 2026, and will fully remove the legacy custom objects API on July 27, 2026 -- this bundle's write surface is scoped to what remains supported today",
+    "approval": "required for all write actions; read access uses a read-only Basic-auth API token with no approval needed"
+  }
+}

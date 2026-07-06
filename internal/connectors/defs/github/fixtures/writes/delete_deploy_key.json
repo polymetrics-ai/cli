@@ -1,0 +1,7 @@
+{
+  "record": { "key_id": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/keys/1"
+  }
+}

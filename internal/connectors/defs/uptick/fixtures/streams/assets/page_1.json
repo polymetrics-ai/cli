@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/assets/",
+    "query": {
+      "ordering": "-updated",
+      "page_size": "synthetic-conformance-value",
+      "fields[Asset]": "id,created,updated,deleted,is_active,ref,uptick_ref,label,location,status,make,model,size,barcode,serviced_date,property,type,variant"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "deleted": null,
+          "is_active": true,
+          "ref": "AST-1",
+          "uptick_ref": "U-1",
+          "label": "Fixture Asset 1",
+          "location": "Roof",
+          "status": "active",
+          "make": "Acme",
+          "model": "X1",
+          "size": "Large",
+          "barcode": "BC-1",
+          "serviced_date": "2026-01-01",
+          "property": "1",
+          "type": "1",
+          "variant": "1"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/purchaseList", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "PurchaseList": [
+        {
+          "ID": "purch_fixture_1",
+          "OrderNumber": "PO-1",
+          "Supplier": "Fixture Supplier One",
+          "SupplierID": "sup_fixture_1",
+          "Status": "Active",
+          "OrderStatus": "AUTHORISED",
+          "InvoiceAmount": 300,
+          "OrderDate": "2026-01-01T00:00:00Z",
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "ID": "purch_fixture_2",
+          "OrderNumber": "PO-2",
+          "Supplier": "Fixture Supplier Two",
+          "SupplierID": "sup_fixture_2",
+          "Status": "Active",
+          "OrderStatus": "AUTHORISED",
+          "InvoiceAmount": 400,
+          "OrderDate": "2026-01-02T00:00:00Z",
+          "LastModifiedOn": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

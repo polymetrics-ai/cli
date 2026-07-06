@@ -1,0 +1,16 @@
+{
+  "record": {
+    "from": { "type": "user", "email": "fixture1@example.com", "id": 1001 },
+    "to": { "type": "admin", "id": 3 },
+    "content": "Fixture message content",
+    "attachments": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/messages",
+    "body": {
+      "content": "Fixture message content"
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "timestamp": 1767225601 } } }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchases",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "transaction_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "transaction_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "email_address": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "transaction_time": { "type": ["string", "null"] },
+    "subtotal": { "type": ["string", "null"] },
+    "tax": { "type": ["string", "null"] },
+    "shipping": { "type": ["string", "null"] },
+    "discount": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] }
+  }
+}

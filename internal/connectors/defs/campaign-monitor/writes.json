@@ -1,0 +1,300 @@
+{
+  "actions": [
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ config.client_id }}.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Title"],
+        "properties": {
+          "Title": { "type": "string" },
+          "UnsubscribePage": { "type": "string" },
+          "UnsubscribeSetting": { "type": "string" },
+          "ConfirmedOptIn": { "type": "boolean" },
+          "ConfirmationSuccessPage": { "type": "string" }
+        }
+      },
+      "risk": "creates a new subscriber list under the configured client; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.ListID }}.json",
+      "path_fields": ["ListID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "Title": { "type": "string" },
+          "UnsubscribePage": { "type": "string" },
+          "UnsubscribeSetting": { "type": "string" },
+          "ConfirmedOptIn": { "type": "boolean" },
+          "ConfirmationSuccessPage": { "type": "string" },
+          "AddUnsubscribesToSuppList": { "type": "boolean" },
+          "ScrubActiveWithSuppList": { "type": "boolean" }
+        }
+      },
+      "risk": "updates list settings; enabling ScrubActiveWithSuppList/AddUnsubscribesToSuppList changes subscriber state for existing contacts; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.ListID }}.json",
+      "path_fields": ["ListID"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID"],
+        "properties": {
+          "ListID": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a subscriber list and all of its subscribers/segments; irreversible, approval required"
+    },
+    {
+      "name": "add_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscribers/{{ record.ListID }}.json",
+      "path_fields": ["ListID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID", "EmailAddress"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "EmailAddress": { "type": "string" },
+          "Name": { "type": "string" },
+          "MobileNumber": { "type": "string" },
+          "CustomFields": { "type": "array" },
+          "Resubscribe": { "type": "boolean" },
+          "RestartSubscriptionBasedAutoresponders": { "type": "boolean" },
+          "ConsentToTrack": { "type": "string" },
+          "ConsentToSendSms": { "type": "string" }
+        }
+      },
+      "risk": "adds a new subscriber to a list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_subscriber",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscribers/{{ record.ListID }}.json?email={{ record.CurrentEmailAddress | urlencode }}",
+      "path_fields": ["ListID", "CurrentEmailAddress"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID", "CurrentEmailAddress", "EmailAddress"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "CurrentEmailAddress": { "type": "string" },
+          "EmailAddress": { "type": "string" },
+          "Name": { "type": "string" },
+          "MobileNumber": { "type": "string" },
+          "CustomFields": { "type": "array" },
+          "Resubscribe": { "type": "boolean" },
+          "RestartSubscriptionBasedAutoresponders": { "type": "boolean" },
+          "ConsentToTrack": { "type": "string" },
+          "ConsentToSendSms": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing subscriber's profile/consent fields on a list, identified by their current email (CurrentEmailAddress, kept out of the body via path_fields since the API takes it as a query param, not a body field); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "unsubscribe_subscriber",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscribers/{{ record.ListID }}/unsubscribe.json",
+      "path_fields": ["ListID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID", "EmailAddress"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "EmailAddress": { "type": "string" }
+        }
+      },
+      "risk": "unsubscribes a contact from a list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_subscriber",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscribers/{{ record.ListID }}.json?email={{ record.EmailAddress | urlencode }}",
+      "path_fields": ["ListID", "EmailAddress"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID", "EmailAddress"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "EmailAddress": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a subscriber's record from a list (distinct from unsubscribing — this deletes the record entirely); irreversible, approval recommended"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segments/{{ record.ListID }}.json",
+      "path_fields": ["ListID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ListID", "Title", "RuleGroups"],
+        "properties": {
+          "ListID": { "type": "string" },
+          "Title": { "type": "string" },
+          "RuleGroups": { "type": "array" }
+        }
+      },
+      "risk": "creates a new subscriber segment (a saved rule-based filter) on a list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/segments/{{ record.SegmentID }}.json",
+      "path_fields": ["SegmentID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["SegmentID", "Title", "RuleGroups"],
+        "properties": {
+          "SegmentID": { "type": "string" },
+          "Title": { "type": "string" },
+          "RuleGroups": { "type": "array" }
+        }
+      },
+      "risk": "replaces a segment's name and full rule set; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segments/{{ record.SegmentID }}.json",
+      "path_fields": ["SegmentID"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["SegmentID"],
+        "properties": {
+          "SegmentID": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a segment; any campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval required"
+    },
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/campaigns/{{ config.client_id }}.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["Name", "Subject", "FromName", "FromEmail", "ReplyTo", "HtmlUrl", "ListIDs"],
+        "properties": {
+          "Name": { "type": "string" },
+          "Subject": { "type": "string" },
+          "FromName": { "type": "string" },
+          "FromEmail": { "type": "string" },
+          "ReplyTo": { "type": "string" },
+          "HtmlUrl": { "type": "string" },
+          "ListIDs": { "type": "array", "items": { "type": "string" } },
+          "SegmentIDs": { "type": "array", "items": { "type": "string" } },
+          "InlineCss": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new DRAFT campaign under the configured client; drafts are not sent until send_campaign is separately invoked, so this alone has no delivery side effect; low-risk, no approval required"
+    },
+    {
+      "name": "send_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/campaigns/{{ record.CampaignID }}/send.json",
+      "path_fields": ["CampaignID"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["CampaignID", "ConfirmationEmail", "SendDate"],
+        "properties": {
+          "CampaignID": { "type": "string" },
+          "ConfirmationEmail": { "type": "string" },
+          "SendDate": { "type": "string" }
+        }
+      },
+      "risk": "delivers a real email campaign to every subscriber on its targeted lists/segments; irreversible once sent, approval required"
+    },
+    {
+      "name": "unschedule_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/campaigns/{{ record.CampaignID }}/unschedule.json",
+      "path_fields": ["CampaignID"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["CampaignID"],
+        "properties": {
+          "CampaignID": { "type": "string" }
+        }
+      },
+      "risk": "cancels a scheduled-but-not-yet-sent campaign, reverting it to a draft; low-risk, no approval required"
+    },
+    {
+      "name": "delete_campaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/campaigns/{{ record.CampaignID }}.json",
+      "path_fields": ["CampaignID"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["CampaignID"],
+        "properties": {
+          "CampaignID": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a draft or sent campaign's record from Campaign Monitor; irreversible, approval recommended"
+    }
+  ]
+}

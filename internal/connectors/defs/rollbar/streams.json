@@ -1,0 +1,555 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "X-Rollbar-Access-Token",
+        "value": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/1/items/",
+      "query": {
+        "page": "1",
+        "per_page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "rollbar access_token is missing or invalid; re-run pm credentials add rollbar"
+      },
+      {
+        "status": 403,
+        "hint": "rollbar access token lacks the required Rollbar scope for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "rollbar rate limit exceeded; retry later or reduce batch size"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "activated_counts_report",
+      "path": "/api/1/reports/activated_counts",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/activated_counts_report.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "deploy",
+      "path": "/api/1/deploy/{{ config.deploy_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/deploy.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "deploys",
+      "path": "/api/1/deploys",
+      "records": {
+        "path": "result.deploys"
+      },
+      "schema": "schemas/deploys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "email_notification_rule",
+      "path": "/api/1/notifications/email/rule/{{ config.rule_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/email_notification_rule.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "email_notification_rules",
+      "path": "/api/1/notifications/email/rules",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/email_notification_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "environments",
+      "path": "/api/1/environments",
+      "records": {
+        "path": "result.environments"
+      },
+      "schema": "schemas/environments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invitation",
+      "path": "/api/1/invite/{{ config.invite_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/invitation.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "item_by_counter",
+      "path": "/api/1/item_by_counter/{{ config.counter }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/item_by_counter.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "item_by_id",
+      "path": "/api/1/item/{{ config.item_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/item_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "item_by_uuid",
+      "path": "/api/1/item/",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/item_by_uuid.json",
+      "projection": "passthrough",
+      "query": {
+        "uuid": "{{ config.uuid }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "item_occurrences",
+      "path": "/api/1/item/{{ config.item_id }}/instances",
+      "records": {
+        "path": "result.instances"
+      },
+      "schema": "schemas/item_occurrences.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "items",
+      "path": "/api/1/items/",
+      "records": {
+        "path": "result.items"
+      },
+      "schema": "schemas/items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "occurrence",
+      "path": "/api/1/instance/{{ config.instance_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/occurrence.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "occurrence_counts_report",
+      "path": "/api/1/reports/occurrence_counts",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/occurrence_counts_report.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "occurrences",
+      "path": "/api/1/instances",
+      "records": {
+        "path": "result.instances"
+      },
+      "schema": "schemas/occurrences.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pagerduty_notification_rule",
+      "path": "/api/1/notifications/pagerduty/rule/{{ config.rule_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/pagerduty_notification_rule.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "pagerduty_notification_rules",
+      "path": "/api/1/notifications/pagerduty/rules",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/pagerduty_notification_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "person_deletion_job",
+      "path": "/api/1/people/delete_jobs/{{ config.job_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/person_deletion_job.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "project",
+      "path": "/api/1/project/{{ config.project_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/project.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "project_teams",
+      "path": "/api/1/project/{{ config.project_id }}/teams",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/project_teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "projects",
+      "path": "/api/1/projects",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "rql_job",
+      "path": "/api/1/rql/job/{{ config.job_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/rql_job.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "rql_job_result",
+      "path": "/api/1/rql/job/{{ config.job_id }}/result",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/rql_job_result.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "rql_jobs",
+      "path": "/api/1/rql/jobs/",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/rql_jobs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "service_link",
+      "path": "/api/1/service_links/{{ config.service_link_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/service_link.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "service_links",
+      "path": "/api/1/service_links",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/service_links.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "session_replay",
+      "path": "/api/1/environment/{{ config.environment }}/session/{{ config.session_id }}/replay/{{ config.replay_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/session_replay.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "slack_notification_rule",
+      "path": "/api/1/notifications/slack/rule/{{ config.rule_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/slack_notification_rule.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "slack_notification_rules",
+      "path": "/api/1/notifications/slack/rules",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/slack_notification_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "team",
+      "path": "/api/1/team/{{ config.team_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/team.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "team_invitations",
+      "path": "/api/1/team/{{ config.team_id }}/invites",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/team_invitations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "team_project_assignment",
+      "path": "/api/1/team/{{ config.team_id }}/project/{{ config.project_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/team_project_assignment.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "team_projects",
+      "path": "/api/1/team/{{ config.team_id }}/projects",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/team_projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "team_user_assignment",
+      "path": "/api/1/team/{{ config.team_id }}/user/{{ config.user_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/team_user_assignment.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "team_users",
+      "path": "/api/1/team/{{ config.team_id }}/users",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/team_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "teams",
+      "path": "/api/1/teams",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "top_active_items_report",
+      "path": "/api/1/reports/top_active_items",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/top_active_items_report.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/api/1/user/{{ config.user_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/user.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_projects",
+      "path": "/api/1/user/{{ config.user_id }}/projects",
+      "records": {
+        "path": "result.projects"
+      },
+      "schema": "schemas/user_projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_teams",
+      "path": "/api/1/user/{{ config.user_id }}/teams",
+      "records": {
+        "path": "result.teams"
+      },
+      "schema": "schemas/user_teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/api/1/users",
+      "records": {
+        "path": "result.users"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "version",
+      "path": "/api/1/versions/{{ config.version }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/version.json",
+      "projection": "passthrough",
+      "query": {
+        "environment": "{{ config.environment }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "version_items",
+      "path": "/api/1/versions/{{ config.version }}/items",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/version_items.json",
+      "projection": "passthrough",
+      "query": {
+        "environment": "{{ config.environment }}",
+        "event": "{{ config.event }}"
+      }
+    },
+    {
+      "name": "webhook_notification_rule",
+      "path": "/api/1/notifications/webhook/rule/{{ config.rule_id }}",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "schema": "schemas/webhook_notification_rule.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "webhook_notification_rules",
+      "path": "/api/1/notifications/webhook/rules",
+      "records": {
+        "path": "result"
+      },
+      "schema": "schemas/webhook_notification_rules.json",
+      "projection": "passthrough"
+    }
+  ]
+}

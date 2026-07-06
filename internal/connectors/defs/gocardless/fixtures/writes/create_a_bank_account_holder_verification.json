@@ -1,0 +1,20 @@
+{
+  "record": {
+    "bank_account_holder_verifications": {
+      "description": "Synthetic create_a_bank_account_holder_verification fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bank_account_holder_verifications",
+    "body": {
+      "bank_account_holder_verifications": {
+        "description": "Synthetic create_a_bank_account_holder_verification fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

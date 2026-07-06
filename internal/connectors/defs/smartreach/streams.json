@@ -1,0 +1,100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "teams" },
+    "error_map": [
+      { "status": 401, "hint": "smartreach api_key is missing or invalid" },
+      { "status": 429, "class": "rate_limited", "hint": "smartreach rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "campaigns",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "campaigns" },
+      "schema": "schemas/campaigns.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "prospects",
+      "path": "prospects",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "prospects" },
+      "schema": "schemas/prospects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "teams",
+      "path": "teams",
+      "query": {
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "email_settings",
+      "path": "email-settings",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "email_settings" },
+      "schema": "schemas/email_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "do_not_contact",
+      "path": "do-not-contact",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "dnc" },
+      "schema": "schemas/do_not_contact.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "users",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "accounts",
+      "path": "search/accounts",
+      "query": {
+        "team_id": { "template": "{{ config.team_id }}", "omit_when_absent": true },
+        "older_than": { "template": "{{ config.older_than }}", "omit_when_absent": true },
+        "newer_than": { "template": "{{ config.newer_than }}", "omit_when_absent": true }
+      },
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
+    }
+  ]
+}

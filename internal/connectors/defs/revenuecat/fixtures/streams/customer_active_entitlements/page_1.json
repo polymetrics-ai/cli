@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/active_entitlements",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "object": "customer_entitlement",
+          "entitlement_id": "ent_fixture_1",
+          "expires_at": 1738281600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/active_entitlements"
+    }
+  }
+}

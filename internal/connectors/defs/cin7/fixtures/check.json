@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/product", "query": { "page": "1", "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "Total": 1, "Page": 1, "Products": [] }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 0,
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/resource", "query": { "page": "0", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "hubplanner api_key is missing or invalid; re-run pm credentials add hubplanner" },
+      { "status": 403, "hint": "hubplanner api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "hubplanner rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "resources",
+      "path": "/resource",
+      "records": { "path": "" },
+      "schema": "schemas/resources.json"
+    },
+    {
+      "name": "projects",
+      "path": "/project",
+      "records": { "path": "" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "clients",
+      "path": "/client",
+      "records": { "path": "" },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "events",
+      "path": "/event",
+      "records": { "path": "" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "holidays",
+      "path": "/holiday",
+      "records": { "path": "" },
+      "schema": "schemas/holidays.json"
+    },
+    {
+      "name": "bookings",
+      "path": "/booking",
+      "records": { "path": "" },
+      "schema": "schemas/bookings.json"
+    },
+    {
+      "name": "billing_rates",
+      "path": "/billingrate",
+      "records": { "path": "" },
+      "schema": "schemas/billing_rates.json"
+    }
+  ]
+}

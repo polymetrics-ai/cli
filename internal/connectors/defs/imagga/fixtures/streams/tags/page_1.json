@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags",
+    "query": { "image_url": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "tags": [
+          { "confidence": 99.0, "tag": { "en": "fixture_cat" } },
+          { "confidence": 80.5, "tag": { "en": "fixture_pet" } }
+        ]
+      },
+      "status": { "type": "success" }
+    }
+  }
+}

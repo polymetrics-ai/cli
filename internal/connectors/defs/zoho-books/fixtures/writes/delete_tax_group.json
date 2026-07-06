@@ -1,0 +1,16 @@
+{
+  "record": {
+    "tax_group_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/settings/taxgroups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

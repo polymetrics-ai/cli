@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/forms/form_fixture_1/assignments",
+    "query": {
+      "page_index": "1",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "form_assignment_fixture_1",
+            "form_id": "form_fixture_1",
+            "member_id": "emp_fixture_1",
+            "status": "assigned"
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

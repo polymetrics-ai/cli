@@ -1,0 +1,13 @@
+{
+  "record": {
+    "deliveryFormat": "json",
+    "url": "https://example.com/logs",
+    "sources": [
+      "static"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/log-drains"
+  }
+}

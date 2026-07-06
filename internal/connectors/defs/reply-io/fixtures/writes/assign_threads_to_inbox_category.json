@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "threadIds": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/inbox/threads/categories/synthetic-conformance-value/thread-links/bulk",
+    "body": {
+      "threadIds": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

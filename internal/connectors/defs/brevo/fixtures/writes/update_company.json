@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "cmp_fixture_new",
+    "name": "Fixture Co Renamed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/companies/cmp_fixture_new",
+    "body": {
+      "name": "Fixture Co Renamed"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

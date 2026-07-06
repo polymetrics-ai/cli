@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgileCRM Milestone Pipeline",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "milestones": { "type": "string" },
+    "pipeline_default": { "type": "boolean" }
+  }
+}

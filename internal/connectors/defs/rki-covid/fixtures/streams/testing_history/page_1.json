@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/testing/history",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "history": [
+          {
+            "calendarWeek": "10/2020",
+            "performedTests": 100,
+            "positiveTests": 2,
+            "positivityRate": 0.02,
+            "laboratoryCount": 12
+          }
+        ]
+      }
+    }
+  }
+}

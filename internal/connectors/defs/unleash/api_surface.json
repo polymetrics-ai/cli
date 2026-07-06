@@ -1,0 +1,76 @@
+{
+  "api": "Unleash Admin API (self-hosted or app.unleash-hosted.com)",
+  "docs": "https://docs.getunleash.io/reference/api/unleash",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (projects, features, environments, segments) only; the full Unleash admin API surface (strategies, tags, addons, api-tokens, feature toggle mutation, playground, events, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/admin/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/projects/{projectId}/features",
+      "covered_by": {
+        "stream": "features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/features",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "superseded by project-scoped /api/admin/projects/{projectId}/features, which legacy uses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/projects/{projectId}/features",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/admin/projects/{projectId}/features is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/api-tokens",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "/api/admin/api-tokens requires elevated/admin scopes outside this connector's declared credential contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/admin/events is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/addons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/admin/addons is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

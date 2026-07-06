@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "conv_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/resources/conversations/conv_fixture_1"
+  }
+}

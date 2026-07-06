@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sheets/synthetic-conformance-value/automationrules/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 12345,
+      "name": "Fixture sheet_automation_rule",
+      "type": "sheet_automation_rule",
+      "modifiedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

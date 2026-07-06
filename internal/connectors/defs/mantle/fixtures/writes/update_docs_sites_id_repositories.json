@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "attachments": [
+      {
+        "repositoryId": "repository_id_fixture",
+        "position": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/sites/id_fixture/repositories",
+    "body": {
+      "attachments": [
+        {
+          "repositoryId": "repository_id_fixture",
+          "position": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Thinkific Courses Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key",
+    "subdomain"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Thinkific API key, sent as the X-Auth-API-Key header. Never logged."
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Thinkific account subdomain, sent as the X-Auth-Subdomain header."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.thinkific.com/api/public/v1",
+      "description": "Thinkific public API base URL override for tests or proxies."
+    },
+    "bundle_id": {
+      "type": "string",
+      "description": "Bundle ID for bundle detail, courses, enrollments, and bundle enrollment writes."
+    },
+    "chapter_id": {
+      "type": "string",
+      "description": "Chapter ID for chapter detail and contents streams."
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "Category/collection ID for category streams and writes."
+    },
+    "coupon_id": {
+      "type": "string",
+      "description": "Coupon ID for coupon detail/update/delete actions."
+    },
+    "content_id": {
+      "type": "string",
+      "description": "Content ID for content detail streams."
+    },
+    "course_id": {
+      "type": "string",
+      "description": "Course ID for course detail, course chapters, reviews, and course-scoped filters."
+    },
+    "enrollment_id": {
+      "type": "string",
+      "description": "Enrollment ID for enrollment detail/update actions."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Group ID for group detail, analysts, and group membership actions."
+    },
+    "instructor_id": {
+      "type": "string",
+      "description": "Instructor ID for instructor detail/update/delete actions."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Order ID for order detail streams."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product ID for product detail, related products, and promotion coupon lookup."
+    },
+    "product_publish_request_id": {
+      "type": "string",
+      "description": "Product publish request ID for detail and approve/deny actions."
+    },
+    "promotion_id": {
+      "type": "string",
+      "description": "Promotion ID for coupon filters and promotion detail/update/delete actions."
+    },
+    "coupon_code": {
+      "type": "string",
+      "description": "Coupon code for the promotion_by_coupon stream."
+    },
+    "course_review_id": {
+      "type": "string",
+      "description": "Course review ID for review detail streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID for user detail/authentication streams and user/group actions."
+    },
+    "provider": {
+      "type": "string",
+      "default": "thinkific",
+      "description": "Authentication provider key for the user_authentication stream."
+    },
+    "site_script_id": {
+      "type": "string",
+      "description": "Site script ID for site script detail/update/delete actions."
+    }
+  }
+}

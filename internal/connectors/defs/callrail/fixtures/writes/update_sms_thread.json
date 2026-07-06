@@ -1,0 +1,9 @@
+{
+  "record": { "id": "SMS_fixture_1", "notes": "Updated note", "tags": ["Urgent"] },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/sms-threads/SMS_fixture_1.json",
+    "body": { "notes": "Updated note", "tags": ["Urgent"] }
+  },
+  "response": { "status": 200, "body": { "id": "SMS_fixture_1", "notes": "Updated note" } }
+}

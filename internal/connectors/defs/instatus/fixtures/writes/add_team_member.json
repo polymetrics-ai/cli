@@ -1,0 +1,21 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture add team member",
+    "email": "member@example.test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/team",
+    "body": {
+      "name": "Fixture add team member",
+      "email": "member@example.test"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_team_member_fixture_response"
+    }
+  }
+}

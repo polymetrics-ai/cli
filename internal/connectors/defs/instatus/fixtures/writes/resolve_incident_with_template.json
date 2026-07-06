@@ -1,0 +1,23 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "incident_id": "incident_id_fixture_1",
+    "template": "template_fixture_1",
+    "name": "Fixture resolve incident with template",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/page_id_fixture_1/incidents/incident_id_fixture_1/incident-updates/template_fixture_1",
+    "body": {
+      "name": "Fixture resolve incident with template",
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "resolve_incident_with_template_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "size",
+      "start_page": 0,
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/classifications.json" },
+    "error_map": [
+      { "status": 401, "hint": "ticketmaster api_key is missing or invalid; re-run pm credentials add ticketmaster" },
+      { "status": 429, "class": "rate_limited", "hint": "ticketmaster rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events.json",
+      "query": {
+        "keyword": { "template": "{{ config.keyword }}", "omit_when_absent": true },
+        "countryCode": { "template": "{{ config.country_code }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "_embedded.events" },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "venues",
+      "path": "/venues.json",
+      "query": {
+        "keyword": { "template": "{{ config.keyword }}", "omit_when_absent": true },
+        "countryCode": { "template": "{{ config.country_code }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "_embedded.venues" },
+      "schema": "schemas/venues.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "attractions",
+      "path": "/attractions.json",
+      "query": {
+        "keyword": { "template": "{{ config.keyword }}", "omit_when_absent": true },
+        "countryCode": { "template": "{{ config.country_code }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "_embedded.attractions" },
+      "schema": "schemas/attractions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "classifications",
+      "path": "/classifications.json",
+      "query": {
+        "keyword": { "template": "{{ config.keyword }}", "omit_when_absent": true },
+        "countryCode": { "template": "{{ config.country_code }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "_embedded.classifications" },
+      "schema": "schemas/classifications.json",
+      "projection": "passthrough"
+    }
+  ]
+}

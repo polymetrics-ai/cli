@@ -1,0 +1,7 @@
+{
+  "record": { "id": "rwd_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/rewards/rwd_fixture_1/generate_link"
+  }
+}

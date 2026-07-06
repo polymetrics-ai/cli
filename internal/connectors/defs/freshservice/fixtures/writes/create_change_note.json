@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture create_change_note",
+    "description": "Fixture create_change_note record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes/123/notes",
+    "body": {
+      "name": "Fixture create_change_note",
+      "description": "Fixture create_change_note record"
+    }
+  }
+}

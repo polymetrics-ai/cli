@@ -1,0 +1,60 @@
+{
+  "api": "TikTok Business (Marketing) API v1.3 (https://business-api.tiktok.com/portal/docs?id=1740029169927169)",
+  "docs": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full TikTok Business surface (reporting/analytics, creative assets, audiences, pixel events, campaign/ad mutations, etc.) is out of scope until Pass B. tiktok-marketing is read-only in legacy (Capabilities.Write is false, no obviously safe reverse-ETL write surface per the legacy package doc) so no writes.json.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/advertiser/info/",
+      "covered_by": {
+        "stream": "advertisers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaign/get/",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/adgroup/get/",
+      "covered_by": {
+        "stream": "adgroups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad/get/",
+      "covered_by": {
+        "stream": "ads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/integrated/get/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/report/integrated/get/ is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign/create/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "no allow-listed reverse-ETL writes; tiktok-marketing connector is read-only"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign/update/status/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "no allow-listed reverse-ETL writes; tiktok-marketing connector is read-only"
+      }
+    }
+  ]
+}

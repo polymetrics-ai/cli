@@ -1,0 +1,38 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "categories/get" },
+    "error_map": [
+      { "status": 401, "hint": "plaid client_id/secret invalid or environment mismatch (sandbox/development/production); re-run pm credentials add plaid" },
+      { "status": 429, "class": "rate_limited", "hint": "Plaid API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "institutions",
+      "method": "POST",
+      "path": "institutions/get",
+      "records": { "path": "institutions" },
+      "computed_fields": {
+        "country_codes": "{{ record.country_codes | join:, }}"
+      },
+      "schema": "schemas/institutions.json"
+    },
+    {
+      "name": "categories",
+      "method": "POST",
+      "path": "categories/get",
+      "records": { "path": "categories" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "hierarchy": "{{ record.hierarchy | join:, }}"
+      },
+      "schema": "schemas/categories.json"
+    }
+  ]
+}

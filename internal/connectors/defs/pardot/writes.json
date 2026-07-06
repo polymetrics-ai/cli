@@ -1,0 +1,2289 @@
+{
+  "actions": [
+    {
+      "name": "create_prospect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/prospects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/prospects in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_prospect",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/prospects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/prospects/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_prospect",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/prospects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement prospect records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "upsert_prospect_latest_by_email",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/do/upsertLatestByEmail",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "Invokes Pardot upsertLatestByEmail action for prospect."
+    },
+    {
+      "name": "undelete_prospect",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/do/undelete",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "Invokes Pardot undelete action for prospect."
+    },
+    {
+      "name": "add_tag_to_prospect",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for prospect.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_prospect",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/prospects/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for prospect.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "connect_salesforce_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{{ record.id }}/do/connectSalesforceCampaign",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot connectSalesforceCampaign action for campaign.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_tag_to_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for campaign.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_campaign",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/campaigns/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for campaign.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/lists",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/lists in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/lists/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/lists/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/lists/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement list records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_list",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/lists/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for list.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_list",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/lists/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for list.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/users/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for user.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_user",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/users/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for user.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/custom-fields in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/custom-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/custom-fields/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_custom_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/custom-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement custom_field records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_custom_field",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for custom_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_custom_field",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-fields/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for custom_field.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_redirect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/custom-redirects in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_custom_redirect",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/custom-redirects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/custom-redirects/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_custom_redirect",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/custom-redirects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement custom_redirect records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_custom_redirect",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for custom_redirect.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_custom_redirect",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/custom-redirects/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for custom_redirect.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_dynamic_content",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/dynamic-contents in Salesforce Account Engagement."
+    },
+    {
+      "name": "add_tag_to_dynamic_content",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for dynamic_content.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_dynamic_content",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/dynamic-contents/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for dynamic_content.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/emails in Salesforce Account Engagement."
+    },
+    {
+      "name": "add_tag_to_email",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for email.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_email",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for email.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "copy_email_to_cms",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/emails/{{ record.id }}/do/copyToCms",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot copyToCms action for email.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_email_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/email-templates in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_email_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/email-templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/email-templates/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_email_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/email-templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement email_template records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_email_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for email_template.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_email_template",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/email-templates/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for email_template.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_list_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/list-emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/list-emails in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_file",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/files/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/files/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_file",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/files/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement file records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_file",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/files/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for file.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_file",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/files/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for file.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "copy_file_to_cms",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/files/{{ record.id }}/do/copyToCms",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot copyToCms action for file.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/forms",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/forms in Salesforce Account Engagement."
+    },
+    {
+      "name": "delete_form",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/forms/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement form records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "undelete_form",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/forms/do/undelete",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "Invokes Pardot undelete action for form."
+    },
+    {
+      "name": "reorder_form_fields",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{{ record.id }}/do/reorderFormFields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot reorderFormFields action for form.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_tag_to_form",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for form.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_form",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for form.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "copy_form_to_cms",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/forms/{{ record.id }}/do/copyToCms",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot copyToCms action for form.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_form_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/form-fields in Salesforce Account Engagement."
+    },
+    {
+      "name": "add_form_field_dependent",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/addDependent",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addDependent action for form_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_form_field_progressive",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/addProgressive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addProgressive action for form_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_form_field_value",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/addValue",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addValue action for form_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "reorder_form_field_values",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/reorderFormFieldValues",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot reorderFormFieldValues action for form_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_tag_to_form_field",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for form_field.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_form_field",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/form-fields/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for form_field.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_form_handler",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/form-handlers in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_form_handler",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/form-handlers/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/form-handlers/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_form_handler",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/form-handlers/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement form_handler records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_form_handler",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for form_handler.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_form_handler",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/form-handlers/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for form_handler.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_form_handler_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/form-handler-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/form-handler-fields in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_form_handler_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/form-handler-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/form-handler-fields/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_form_handler_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/form-handler-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement form_handler_field records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_landing_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/landing-pages in Salesforce Account Engagement."
+    },
+    {
+      "name": "add_tag_to_landing_page",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for landing_page.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_landing_page",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for landing_page.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "copy_landing_page_to_cms",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/landing-pages/{{ record.id }}/do/copyToCms",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot copyToCms action for landing_page.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_layout_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/layout-templates in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_layout_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/layout-templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/layout-templates/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_layout_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/layout-templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement layout_template records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_layout_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for layout_template.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_layout_template",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/layout-templates/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for layout_template.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_list_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/list-memberships",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/list-memberships in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_list_membership",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/list-memberships/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/list-memberships/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_list_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/list-memberships/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement list_membership records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_tag_to_opportunity",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/opportunities/{{ record.id }}/do/addTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot addTag action for opportunity.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "remove_tag_from_opportunity",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/objects/opportunities/{{ record.id }}/do/removeTag",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot removeTag action for opportunity.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/objects/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/objects/tags in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/objects/tags/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/objects/tags/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v5/objects/tags/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Deletes Salesforce Account Engagement tag records.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "merge_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/tags/{{ record.id }}/do/mergeTags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot mergeTags action for tag.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "assign_visitor_to_prospect",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/visitors/{{ record.id }}/do/assignToProspect",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot assignToProspect action for visitor.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "identify_visitor_company",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v5/objects/visitors/{{ record.id }}/do/identifyCompany",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot identifyCompany action for visitor.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_bulk_action",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/bulk-actions/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/bulk-actions/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_import_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/imports",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/imports in Salesforce Account Engagement."
+    },
+    {
+      "name": "update_import_job",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v5/imports/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "PATCH /api/v5/imports/{{ record.id }} in Salesforce Account Engagement.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "cancel_import",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/v5/imports/{{ record.id }}/do/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Invokes Pardot cancel action for import_job.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_external_activity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v5/external-activities",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true,
+        "required": []
+      },
+      "risk": "POST /api/v5/external-activities in Salesforce Account Engagement."
+    }
+  ]
+}

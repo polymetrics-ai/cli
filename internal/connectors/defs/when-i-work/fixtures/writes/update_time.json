@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "is_approved": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/2/times/1"
+  }
+}

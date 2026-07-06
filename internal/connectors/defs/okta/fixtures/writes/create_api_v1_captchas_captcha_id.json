@@ -1,0 +1,51 @@
+{
+  "record": {
+    "captcha_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "name": "name_fixture",
+    "secretKey": "fixture",
+    "siteKey": "fixture",
+    "type": "HCAPTCHA",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/captchas/synthetic-conformance-value",
+    "body": {
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "secretKey": "fixture",
+      "siteKey": "fixture",
+      "type": "HCAPTCHA",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "omnisend",
+  "display_name": "Omnisend",
+  "description": "Reads Omnisend contacts, campaigns, carts, orders, and products through the Omnisend REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.omnisend.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Omnisend API read of contact, campaign, and ecommerce order data"
+  }
+}

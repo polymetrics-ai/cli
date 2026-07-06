@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/gates",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "gate_fixture_1",
+          "name": "Fixture Gate 1",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_2",
+          "name": "Fixture Gate 2",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_3",
+          "name": "Fixture Gate 3",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_4",
+          "name": "Fixture Gate 4",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_5",
+          "name": "Fixture Gate 5",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_6",
+          "name": "Fixture Gate 6",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_7",
+          "name": "Fixture Gate 7",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_8",
+          "name": "Fixture Gate 8",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_9",
+          "name": "Fixture Gate 9",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_10",
+          "name": "Fixture Gate 10",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_11",
+          "name": "Fixture Gate 11",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_12",
+          "name": "Fixture Gate 12",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_13",
+          "name": "Fixture Gate 13",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_14",
+          "name": "Fixture Gate 14",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_15",
+          "name": "Fixture Gate 15",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_16",
+          "name": "Fixture Gate 16",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_17",
+          "name": "Fixture Gate 17",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_18",
+          "name": "Fixture Gate 18",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_19",
+          "name": "Fixture Gate 19",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_20",
+          "name": "Fixture Gate 20",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_21",
+          "name": "Fixture Gate 21",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_22",
+          "name": "Fixture Gate 22",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_23",
+          "name": "Fixture Gate 23",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_24",
+          "name": "Fixture Gate 24",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_25",
+          "name": "Fixture Gate 25",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_26",
+          "name": "Fixture Gate 26",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_27",
+          "name": "Fixture Gate 27",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_28",
+          "name": "Fixture Gate 28",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_29",
+          "name": "Fixture Gate 29",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_30",
+          "name": "Fixture Gate 30",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_31",
+          "name": "Fixture Gate 31",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_32",
+          "name": "Fixture Gate 32",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_33",
+          "name": "Fixture Gate 33",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_34",
+          "name": "Fixture Gate 34",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_35",
+          "name": "Fixture Gate 35",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_36",
+          "name": "Fixture Gate 36",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_37",
+          "name": "Fixture Gate 37",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_38",
+          "name": "Fixture Gate 38",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_39",
+          "name": "Fixture Gate 39",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_40",
+          "name": "Fixture Gate 40",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_41",
+          "name": "Fixture Gate 41",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_42",
+          "name": "Fixture Gate 42",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_43",
+          "name": "Fixture Gate 43",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_44",
+          "name": "Fixture Gate 44",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_45",
+          "name": "Fixture Gate 45",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_46",
+          "name": "Fixture Gate 46",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_47",
+          "name": "Fixture Gate 47",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_48",
+          "name": "Fixture Gate 48",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_49",
+          "name": "Fixture Gate 49",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_50",
+          "name": "Fixture Gate 50",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_51",
+          "name": "Fixture Gate 51",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_52",
+          "name": "Fixture Gate 52",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_53",
+          "name": "Fixture Gate 53",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_54",
+          "name": "Fixture Gate 54",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_55",
+          "name": "Fixture Gate 55",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_56",
+          "name": "Fixture Gate 56",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_57",
+          "name": "Fixture Gate 57",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_58",
+          "name": "Fixture Gate 58",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_59",
+          "name": "Fixture Gate 59",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_60",
+          "name": "Fixture Gate 60",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_61",
+          "name": "Fixture Gate 61",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_62",
+          "name": "Fixture Gate 62",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_63",
+          "name": "Fixture Gate 63",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_64",
+          "name": "Fixture Gate 64",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_65",
+          "name": "Fixture Gate 65",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_66",
+          "name": "Fixture Gate 66",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_67",
+          "name": "Fixture Gate 67",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_68",
+          "name": "Fixture Gate 68",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_69",
+          "name": "Fixture Gate 69",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_70",
+          "name": "Fixture Gate 70",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_71",
+          "name": "Fixture Gate 71",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_72",
+          "name": "Fixture Gate 72",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_73",
+          "name": "Fixture Gate 73",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_74",
+          "name": "Fixture Gate 74",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_75",
+          "name": "Fixture Gate 75",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_76",
+          "name": "Fixture Gate 76",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_77",
+          "name": "Fixture Gate 77",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_78",
+          "name": "Fixture Gate 78",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_79",
+          "name": "Fixture Gate 79",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_80",
+          "name": "Fixture Gate 80",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_81",
+          "name": "Fixture Gate 81",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_82",
+          "name": "Fixture Gate 82",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_83",
+          "name": "Fixture Gate 83",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_84",
+          "name": "Fixture Gate 84",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_85",
+          "name": "Fixture Gate 85",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_86",
+          "name": "Fixture Gate 86",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_87",
+          "name": "Fixture Gate 87",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_88",
+          "name": "Fixture Gate 88",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_89",
+          "name": "Fixture Gate 89",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_90",
+          "name": "Fixture Gate 90",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_91",
+          "name": "Fixture Gate 91",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_92",
+          "name": "Fixture Gate 92",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_93",
+          "name": "Fixture Gate 93",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_94",
+          "name": "Fixture Gate 94",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_95",
+          "name": "Fixture Gate 95",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_96",
+          "name": "Fixture Gate 96",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_97",
+          "name": "Fixture Gate 97",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_98",
+          "name": "Fixture Gate 98",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_99",
+          "name": "Fixture Gate 99",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        },
+        {
+          "id": "gate_fixture_100",
+          "name": "Fixture Gate 100",
+          "description": "fixture record",
+          "status": "active",
+          "isEnabled": true
+        }
+      ]
+    }
+  }
+}

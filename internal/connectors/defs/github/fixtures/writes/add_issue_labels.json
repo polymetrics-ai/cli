@@ -1,0 +1,9 @@
+{
+  "record": { "issue_number": 1, "labels": ["needs-triage"] },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/1/labels",
+    "body": { "labels": ["needs-triage"] }
+  },
+  "response": { "status": 200, "body": [] }
+}

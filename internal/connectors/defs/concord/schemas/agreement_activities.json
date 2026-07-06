@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreement_activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "action": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "organization": { "type": ["object", "null"] },
+    "userOrganization": { "type": ["object", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "params": { "type": ["object", "null"] },
+    "agreement_id": { "type": ["string", "null"] }
+  }
+}

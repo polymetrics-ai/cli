@@ -1,0 +1,23 @@
+{
+  "name": "huntr",
+  "display_name": "Huntr",
+  "description": "Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.",
+  "integration_type": "api",
+  "docs_url": "manual intervention needed",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Huntr organization API read of member, candidate, activity, note, and action data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,622 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients/synthetic-conformance-value/suppressionlist.json",
+    "query": {
+      "page": "1",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Results": [
+        {
+          "EmailAddress": "fixture1@example.com",
+          "Date": "2026-01-02 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture2@example.com",
+          "Date": "2026-01-03 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture3@example.com",
+          "Date": "2026-01-04 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture4@example.com",
+          "Date": "2026-01-05 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture5@example.com",
+          "Date": "2026-01-06 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture6@example.com",
+          "Date": "2026-01-07 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture7@example.com",
+          "Date": "2026-01-08 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture8@example.com",
+          "Date": "2026-01-09 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture9@example.com",
+          "Date": "2026-01-10 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture10@example.com",
+          "Date": "2026-01-11 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture11@example.com",
+          "Date": "2026-01-12 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture12@example.com",
+          "Date": "2026-01-13 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture13@example.com",
+          "Date": "2026-01-14 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture14@example.com",
+          "Date": "2026-01-15 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture15@example.com",
+          "Date": "2026-01-16 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture16@example.com",
+          "Date": "2026-01-17 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture17@example.com",
+          "Date": "2026-01-18 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture18@example.com",
+          "Date": "2026-01-19 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture19@example.com",
+          "Date": "2026-01-20 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture20@example.com",
+          "Date": "2026-01-21 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture21@example.com",
+          "Date": "2026-01-22 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture22@example.com",
+          "Date": "2026-01-23 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture23@example.com",
+          "Date": "2026-01-24 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture24@example.com",
+          "Date": "2026-01-25 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture25@example.com",
+          "Date": "2026-01-26 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture26@example.com",
+          "Date": "2026-01-27 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture27@example.com",
+          "Date": "2026-01-28 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture28@example.com",
+          "Date": "2026-01-01 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture29@example.com",
+          "Date": "2026-01-02 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture30@example.com",
+          "Date": "2026-01-03 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture31@example.com",
+          "Date": "2026-01-04 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture32@example.com",
+          "Date": "2026-01-05 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture33@example.com",
+          "Date": "2026-01-06 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture34@example.com",
+          "Date": "2026-01-07 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture35@example.com",
+          "Date": "2026-01-08 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture36@example.com",
+          "Date": "2026-01-09 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture37@example.com",
+          "Date": "2026-01-10 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture38@example.com",
+          "Date": "2026-01-11 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture39@example.com",
+          "Date": "2026-01-12 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture40@example.com",
+          "Date": "2026-01-13 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture41@example.com",
+          "Date": "2026-01-14 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture42@example.com",
+          "Date": "2026-01-15 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture43@example.com",
+          "Date": "2026-01-16 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture44@example.com",
+          "Date": "2026-01-17 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture45@example.com",
+          "Date": "2026-01-18 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture46@example.com",
+          "Date": "2026-01-19 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture47@example.com",
+          "Date": "2026-01-20 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture48@example.com",
+          "Date": "2026-01-21 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture49@example.com",
+          "Date": "2026-01-22 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture50@example.com",
+          "Date": "2026-01-23 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture51@example.com",
+          "Date": "2026-01-24 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture52@example.com",
+          "Date": "2026-01-25 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture53@example.com",
+          "Date": "2026-01-26 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture54@example.com",
+          "Date": "2026-01-27 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture55@example.com",
+          "Date": "2026-01-28 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture56@example.com",
+          "Date": "2026-01-01 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture57@example.com",
+          "Date": "2026-01-02 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture58@example.com",
+          "Date": "2026-01-03 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture59@example.com",
+          "Date": "2026-01-04 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture60@example.com",
+          "Date": "2026-01-05 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture61@example.com",
+          "Date": "2026-01-06 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture62@example.com",
+          "Date": "2026-01-07 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture63@example.com",
+          "Date": "2026-01-08 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture64@example.com",
+          "Date": "2026-01-09 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture65@example.com",
+          "Date": "2026-01-10 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture66@example.com",
+          "Date": "2026-01-11 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture67@example.com",
+          "Date": "2026-01-12 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture68@example.com",
+          "Date": "2026-01-13 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture69@example.com",
+          "Date": "2026-01-14 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture70@example.com",
+          "Date": "2026-01-15 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture71@example.com",
+          "Date": "2026-01-16 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture72@example.com",
+          "Date": "2026-01-17 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture73@example.com",
+          "Date": "2026-01-18 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture74@example.com",
+          "Date": "2026-01-19 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture75@example.com",
+          "Date": "2026-01-20 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture76@example.com",
+          "Date": "2026-01-21 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture77@example.com",
+          "Date": "2026-01-22 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture78@example.com",
+          "Date": "2026-01-23 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture79@example.com",
+          "Date": "2026-01-24 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture80@example.com",
+          "Date": "2026-01-25 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture81@example.com",
+          "Date": "2026-01-26 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture82@example.com",
+          "Date": "2026-01-27 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture83@example.com",
+          "Date": "2026-01-28 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture84@example.com",
+          "Date": "2026-01-01 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture85@example.com",
+          "Date": "2026-01-02 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture86@example.com",
+          "Date": "2026-01-03 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture87@example.com",
+          "Date": "2026-01-04 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture88@example.com",
+          "Date": "2026-01-05 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture89@example.com",
+          "Date": "2026-01-06 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture90@example.com",
+          "Date": "2026-01-07 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture91@example.com",
+          "Date": "2026-01-08 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture92@example.com",
+          "Date": "2026-01-09 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture93@example.com",
+          "Date": "2026-01-10 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture94@example.com",
+          "Date": "2026-01-11 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture95@example.com",
+          "Date": "2026-01-12 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture96@example.com",
+          "Date": "2026-01-13 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture97@example.com",
+          "Date": "2026-01-14 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture98@example.com",
+          "Date": "2026-01-15 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture99@example.com",
+          "Date": "2026-01-16 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        },
+        {
+          "EmailAddress": "fixture100@example.com",
+          "Date": "2026-01-17 10:00:00",
+          "State": "Suppressed",
+          "SuppressionType": "Manual"
+        }
+      ],
+      "PageNumber": 1,
+      "PageSize": 100,
+      "RecordsOnThisPage": 100,
+      "TotalNumberOfRecords": 101,
+      "NumberOfPages": 2
+    }
+  }
+}

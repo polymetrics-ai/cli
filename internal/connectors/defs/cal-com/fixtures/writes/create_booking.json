@@ -1,0 +1,26 @@
+{
+  "record": {
+    "start": "2026-02-01T09:00:00Z",
+    "eventTypeId": 201,
+    "attendee": {
+      "name": "Fixture Attendee",
+      "email": "fixture-attendee@example.com",
+      "timeZone": "UTC"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/bookings"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "status": "success",
+      "data": {
+        "id": 601,
+        "uid": "booking_fixture_new",
+        "status": "accepted"
+      }
+    }
+  }
+}

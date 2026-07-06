@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "sessionIdleTimeoutMinutes": {
+      "type": "integer",
+      "description": "The maximum idle time before the Okta Admin Console session expires. Must be no more than 12 hours."
+    },
+    "sessionMaxLifetimeMinutes": {
+      "type": "integer",
+      "description": "The absolute maximum session lifetime of the Okta Admin Console. Must be no more than 7 days."
+    }
+  },
+  "additionalProperties": true
+}

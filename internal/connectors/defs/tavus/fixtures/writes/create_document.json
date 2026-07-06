@@ -1,0 +1,9 @@
+{
+  "record": { "document_url": "https://docs.example.com/fixture-new", "document_name": "Fixture New Docs" },
+  "expect": {
+    "method": "POST",
+    "path": "/documents",
+    "body": { "document_url": "https://docs.example.com/fixture-new", "document_name": "Fixture New Docs" }
+  },
+  "response": { "status": 200, "body": { "document_id": "document_fixture_new", "status": "started" } }
+}

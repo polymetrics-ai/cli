@@ -1,0 +1,292 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/video/v1/assets",
+    "query": {
+      "page": "1",
+      "limit": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "asset_fixture_1",
+          "status": "ready",
+          "created_at": "1767225601",
+          "duration": 120,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_2",
+          "status": "ready",
+          "created_at": "1767225602",
+          "duration": 180,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_3",
+          "status": "ready",
+          "created_at": "1767225603",
+          "duration": 240,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_4",
+          "status": "ready",
+          "created_at": "1767225604",
+          "duration": 300,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_5",
+          "status": "ready",
+          "created_at": "1767225605",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_6",
+          "status": "ready",
+          "created_at": "1767225606",
+          "duration": 120,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_7",
+          "status": "ready",
+          "created_at": "1767225607",
+          "duration": 180,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_8",
+          "status": "ready",
+          "created_at": "1767225608",
+          "duration": 240,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_9",
+          "status": "ready",
+          "created_at": "1767225609",
+          "duration": 300,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_10",
+          "status": "ready",
+          "created_at": "1767225610",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_11",
+          "status": "ready",
+          "created_at": "1767225611",
+          "duration": 120,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_12",
+          "status": "ready",
+          "created_at": "1767225612",
+          "duration": 180,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_13",
+          "status": "ready",
+          "created_at": "1767225613",
+          "duration": 240,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_14",
+          "status": "ready",
+          "created_at": "1767225614",
+          "duration": 300,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_15",
+          "status": "ready",
+          "created_at": "1767225615",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_16",
+          "status": "ready",
+          "created_at": "1767225616",
+          "duration": 120,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_17",
+          "status": "ready",
+          "created_at": "1767225617",
+          "duration": 180,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_18",
+          "status": "ready",
+          "created_at": "1767225618",
+          "duration": 240,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_19",
+          "status": "ready",
+          "created_at": "1767225619",
+          "duration": 300,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_20",
+          "status": "ready",
+          "created_at": "1767225620",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_21",
+          "status": "ready",
+          "created_at": "1767225621",
+          "duration": 120,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_22",
+          "status": "ready",
+          "created_at": "1767225622",
+          "duration": 180,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_23",
+          "status": "ready",
+          "created_at": "1767225623",
+          "duration": 240,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_24",
+          "status": "ready",
+          "created_at": "1767225624",
+          "duration": 300,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        },
+        {
+          "id": "asset_fixture_25",
+          "status": "ready",
+          "created_at": "1767225625",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "record": {
+    "status": 1,
+    "billingAddress": {
+    },
+    "shippingAddress": {
+    },
+    "shippingRate": "shipping_rate_fixture",
+    "products": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders",
+    "body": {
+      "status": 1,
+      "billingAddress": {
+      },
+      "shippingAddress": {
+      },
+      "shippingRate": "shipping_rate_fixture",
+      "products": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

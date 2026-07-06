@@ -1,0 +1,17 @@
+{
+  "record": {
+    "project_id": "as:1001",
+    "name": "Fixture New Section"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/as:1001/sections",
+    "body": {
+      "name": "Fixture New Section"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 403, "name": "Fixture New Section" }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/supplySources/2020-07-01/supplySources/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "supplySourceId": "supplySourceId-fixture-1",
+      "supplySourceCode": "supplySourceCode-fixture-1",
+      "alias": "alias-fixture-1",
+      "status": "status-fixture-1",
+      "address": {},
+      "configuration": {},
+      "capabilities": {},
+      "createdAt": "createdAt-fixture-1",
+      "updatedAt": "updatedAt-fixture-1",
+      "supply_source_id": "supply_source_id-fixture-1"
+    }
+  }
+}

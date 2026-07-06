@@ -1,0 +1,56 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "item_id": "synthetic-conformance-value",
+    "data": {
+      "content": "content_fixture",
+      "shape": "square"
+    },
+    "style": {
+      "fillColor": "gray",
+      "textAlign": "left",
+      "textAlignVertical": "top"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "height": 1.25,
+      "width": 1.25
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/sticky_notes/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "content": "content_fixture",
+        "shape": "square"
+      },
+      "style": {
+        "fillColor": "gray",
+        "textAlign": "left",
+        "textAlignVertical": "top"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "height": 1.25,
+        "width": 1.25
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "order_fixture_1",
+          "order_number": "ORD-1",
+          "customer_id": "customer_fixture_1",
+          "status": "completed",
+          "total": 120.5,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "order_fixture_2",
+          "order_number": "ORD-2",
+          "customer_id": "customer_fixture_2",
+          "status": "pending",
+          "total": 45.0,
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

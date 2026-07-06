@@ -1,0 +1,8 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "guestID": "guest_fixture_1", "noteID": "note_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/deleteGuestNote"
+  },
+  "response": { "status": 200, "body": { "success": true } }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Marketo Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Marketo REST identity host base URL, ending in /rest/v1 (tenant-specific; no default). Example: https://123-ABC-456.mktorest.com/rest/v1"
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Marketo REST API access token, sent as a Bearer token. This connector does not refresh OAuth tokens internally; the caller must supply a valid, unexpired token."
+    },
+    "activity_type_ids": {
+      "type": "string",
+      "description": "Optional comma-separated activityTypeIds filter, sent as the activityTypeIds query parameter on the activities stream only."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "300",
+      "description": "Records per page (1-300), sent as the batchSize query parameter."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to read; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

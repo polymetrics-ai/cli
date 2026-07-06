@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/dispute" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 30, "refund_amount": 5000, "currency": "NGN", "status": "resolved", "resolution": "merchant-accepted", "category": "general", "domain": "test", "due_at": "2026-01-10T00:00:00.000Z", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-05T00:00:00.000Z" }
+      ],
+      "meta": { "total": 1, "perPage": 100, "page": 1, "pageCount": 1, "next": null, "previous": null }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 101,
+          "title": "Fixture issue 101",
+          "description": "Fixture description",
+          "severity": "low",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        },
+        {
+          "id": 102,
+          "title": "Fixture issue 102",
+          "description": "Fixture description",
+          "severity": "high",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        },
+        {
+          "id": 103,
+          "title": "Fixture issue 103",
+          "description": "Fixture description",
+          "severity": "medium",
+          "remediation": "Fixture remediation",
+          "occurrences": "1",
+          "snoozed": false,
+          "snooze_reason": "",
+          "snooze_until": ""
+        }
+      ],
+      "count": 103
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/air-quality/v2/current-conditions",
+    "query": {
+      "lat": "synthetic-conformance-value",
+      "lon": "synthetic-conformance-value",
+      "features": "local_aqi"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "datetime": "2026-01-01T00:00:00Z",
+        "indexes": { "baqi": { "aqi": 41, "category": "Good air quality" } },
+        "pollutants": { "co": { "concentration": { "value": 101 } } },
+        "health_recommendations": { "general_population": "Enjoy your usual outdoor activities." },
+        "data_available": true
+      }
+    }
+  }
+}

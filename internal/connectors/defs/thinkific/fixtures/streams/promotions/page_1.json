@@ -1,0 +1,1317 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/promotions",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Fixture Promotion 1",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            1
+          ],
+          "duration": null
+        },
+        {
+          "id": 2,
+          "name": "Fixture Promotion 2",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            2
+          ],
+          "duration": null
+        },
+        {
+          "id": 3,
+          "name": "Fixture Promotion 3",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            3
+          ],
+          "duration": null
+        },
+        {
+          "id": 4,
+          "name": "Fixture Promotion 4",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            4
+          ],
+          "duration": null
+        },
+        {
+          "id": 5,
+          "name": "Fixture Promotion 5",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            5
+          ],
+          "duration": null
+        },
+        {
+          "id": 6,
+          "name": "Fixture Promotion 6",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            6
+          ],
+          "duration": null
+        },
+        {
+          "id": 7,
+          "name": "Fixture Promotion 7",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            7
+          ],
+          "duration": null
+        },
+        {
+          "id": 8,
+          "name": "Fixture Promotion 8",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            8
+          ],
+          "duration": null
+        },
+        {
+          "id": 9,
+          "name": "Fixture Promotion 9",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            9
+          ],
+          "duration": null
+        },
+        {
+          "id": 10,
+          "name": "Fixture Promotion 10",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            10
+          ],
+          "duration": null
+        },
+        {
+          "id": 11,
+          "name": "Fixture Promotion 11",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            11
+          ],
+          "duration": null
+        },
+        {
+          "id": 12,
+          "name": "Fixture Promotion 12",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            12
+          ],
+          "duration": null
+        },
+        {
+          "id": 13,
+          "name": "Fixture Promotion 13",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            13
+          ],
+          "duration": null
+        },
+        {
+          "id": 14,
+          "name": "Fixture Promotion 14",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            14
+          ],
+          "duration": null
+        },
+        {
+          "id": 15,
+          "name": "Fixture Promotion 15",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            15
+          ],
+          "duration": null
+        },
+        {
+          "id": 16,
+          "name": "Fixture Promotion 16",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            16
+          ],
+          "duration": null
+        },
+        {
+          "id": 17,
+          "name": "Fixture Promotion 17",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            17
+          ],
+          "duration": null
+        },
+        {
+          "id": 18,
+          "name": "Fixture Promotion 18",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            18
+          ],
+          "duration": null
+        },
+        {
+          "id": 19,
+          "name": "Fixture Promotion 19",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            19
+          ],
+          "duration": null
+        },
+        {
+          "id": 20,
+          "name": "Fixture Promotion 20",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            20
+          ],
+          "duration": null
+        },
+        {
+          "id": 21,
+          "name": "Fixture Promotion 21",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            21
+          ],
+          "duration": null
+        },
+        {
+          "id": 22,
+          "name": "Fixture Promotion 22",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            22
+          ],
+          "duration": null
+        },
+        {
+          "id": 23,
+          "name": "Fixture Promotion 23",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            23
+          ],
+          "duration": null
+        },
+        {
+          "id": 24,
+          "name": "Fixture Promotion 24",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            24
+          ],
+          "duration": null
+        },
+        {
+          "id": 25,
+          "name": "Fixture Promotion 25",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            25
+          ],
+          "duration": null
+        },
+        {
+          "id": 26,
+          "name": "Fixture Promotion 26",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            26
+          ],
+          "duration": null
+        },
+        {
+          "id": 27,
+          "name": "Fixture Promotion 27",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            27
+          ],
+          "duration": null
+        },
+        {
+          "id": 28,
+          "name": "Fixture Promotion 28",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            28
+          ],
+          "duration": null
+        },
+        {
+          "id": 29,
+          "name": "Fixture Promotion 29",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            29
+          ],
+          "duration": null
+        },
+        {
+          "id": 30,
+          "name": "Fixture Promotion 30",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            30
+          ],
+          "duration": null
+        },
+        {
+          "id": 31,
+          "name": "Fixture Promotion 31",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            31
+          ],
+          "duration": null
+        },
+        {
+          "id": 32,
+          "name": "Fixture Promotion 32",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            32
+          ],
+          "duration": null
+        },
+        {
+          "id": 33,
+          "name": "Fixture Promotion 33",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            33
+          ],
+          "duration": null
+        },
+        {
+          "id": 34,
+          "name": "Fixture Promotion 34",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            34
+          ],
+          "duration": null
+        },
+        {
+          "id": 35,
+          "name": "Fixture Promotion 35",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            35
+          ],
+          "duration": null
+        },
+        {
+          "id": 36,
+          "name": "Fixture Promotion 36",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            36
+          ],
+          "duration": null
+        },
+        {
+          "id": 37,
+          "name": "Fixture Promotion 37",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            37
+          ],
+          "duration": null
+        },
+        {
+          "id": 38,
+          "name": "Fixture Promotion 38",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            38
+          ],
+          "duration": null
+        },
+        {
+          "id": 39,
+          "name": "Fixture Promotion 39",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            39
+          ],
+          "duration": null
+        },
+        {
+          "id": 40,
+          "name": "Fixture Promotion 40",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            40
+          ],
+          "duration": null
+        },
+        {
+          "id": 41,
+          "name": "Fixture Promotion 41",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            41
+          ],
+          "duration": null
+        },
+        {
+          "id": 42,
+          "name": "Fixture Promotion 42",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            42
+          ],
+          "duration": null
+        },
+        {
+          "id": 43,
+          "name": "Fixture Promotion 43",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            43
+          ],
+          "duration": null
+        },
+        {
+          "id": 44,
+          "name": "Fixture Promotion 44",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            44
+          ],
+          "duration": null
+        },
+        {
+          "id": 45,
+          "name": "Fixture Promotion 45",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            45
+          ],
+          "duration": null
+        },
+        {
+          "id": 46,
+          "name": "Fixture Promotion 46",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            46
+          ],
+          "duration": null
+        },
+        {
+          "id": 47,
+          "name": "Fixture Promotion 47",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            47
+          ],
+          "duration": null
+        },
+        {
+          "id": 48,
+          "name": "Fixture Promotion 48",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            48
+          ],
+          "duration": null
+        },
+        {
+          "id": 49,
+          "name": "Fixture Promotion 49",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            49
+          ],
+          "duration": null
+        },
+        {
+          "id": 50,
+          "name": "Fixture Promotion 50",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            50
+          ],
+          "duration": null
+        },
+        {
+          "id": 51,
+          "name": "Fixture Promotion 51",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            51
+          ],
+          "duration": null
+        },
+        {
+          "id": 52,
+          "name": "Fixture Promotion 52",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            52
+          ],
+          "duration": null
+        },
+        {
+          "id": 53,
+          "name": "Fixture Promotion 53",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            53
+          ],
+          "duration": null
+        },
+        {
+          "id": 54,
+          "name": "Fixture Promotion 54",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            54
+          ],
+          "duration": null
+        },
+        {
+          "id": 55,
+          "name": "Fixture Promotion 55",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            55
+          ],
+          "duration": null
+        },
+        {
+          "id": 56,
+          "name": "Fixture Promotion 56",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            56
+          ],
+          "duration": null
+        },
+        {
+          "id": 57,
+          "name": "Fixture Promotion 57",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            57
+          ],
+          "duration": null
+        },
+        {
+          "id": 58,
+          "name": "Fixture Promotion 58",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            58
+          ],
+          "duration": null
+        },
+        {
+          "id": 59,
+          "name": "Fixture Promotion 59",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            59
+          ],
+          "duration": null
+        },
+        {
+          "id": 60,
+          "name": "Fixture Promotion 60",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            60
+          ],
+          "duration": null
+        },
+        {
+          "id": 61,
+          "name": "Fixture Promotion 61",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            61
+          ],
+          "duration": null
+        },
+        {
+          "id": 62,
+          "name": "Fixture Promotion 62",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            62
+          ],
+          "duration": null
+        },
+        {
+          "id": 63,
+          "name": "Fixture Promotion 63",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            63
+          ],
+          "duration": null
+        },
+        {
+          "id": 64,
+          "name": "Fixture Promotion 64",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            64
+          ],
+          "duration": null
+        },
+        {
+          "id": 65,
+          "name": "Fixture Promotion 65",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            65
+          ],
+          "duration": null
+        },
+        {
+          "id": 66,
+          "name": "Fixture Promotion 66",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            66
+          ],
+          "duration": null
+        },
+        {
+          "id": 67,
+          "name": "Fixture Promotion 67",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            67
+          ],
+          "duration": null
+        },
+        {
+          "id": 68,
+          "name": "Fixture Promotion 68",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            68
+          ],
+          "duration": null
+        },
+        {
+          "id": 69,
+          "name": "Fixture Promotion 69",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            69
+          ],
+          "duration": null
+        },
+        {
+          "id": 70,
+          "name": "Fixture Promotion 70",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            70
+          ],
+          "duration": null
+        },
+        {
+          "id": 71,
+          "name": "Fixture Promotion 71",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            71
+          ],
+          "duration": null
+        },
+        {
+          "id": 72,
+          "name": "Fixture Promotion 72",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            72
+          ],
+          "duration": null
+        },
+        {
+          "id": 73,
+          "name": "Fixture Promotion 73",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            73
+          ],
+          "duration": null
+        },
+        {
+          "id": 74,
+          "name": "Fixture Promotion 74",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            74
+          ],
+          "duration": null
+        },
+        {
+          "id": 75,
+          "name": "Fixture Promotion 75",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            75
+          ],
+          "duration": null
+        },
+        {
+          "id": 76,
+          "name": "Fixture Promotion 76",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            76
+          ],
+          "duration": null
+        },
+        {
+          "id": 77,
+          "name": "Fixture Promotion 77",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            77
+          ],
+          "duration": null
+        },
+        {
+          "id": 78,
+          "name": "Fixture Promotion 78",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            78
+          ],
+          "duration": null
+        },
+        {
+          "id": 79,
+          "name": "Fixture Promotion 79",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            79
+          ],
+          "duration": null
+        },
+        {
+          "id": 80,
+          "name": "Fixture Promotion 80",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            80
+          ],
+          "duration": null
+        },
+        {
+          "id": 81,
+          "name": "Fixture Promotion 81",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            81
+          ],
+          "duration": null
+        },
+        {
+          "id": 82,
+          "name": "Fixture Promotion 82",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            82
+          ],
+          "duration": null
+        },
+        {
+          "id": 83,
+          "name": "Fixture Promotion 83",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            83
+          ],
+          "duration": null
+        },
+        {
+          "id": 84,
+          "name": "Fixture Promotion 84",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            84
+          ],
+          "duration": null
+        },
+        {
+          "id": 85,
+          "name": "Fixture Promotion 85",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            85
+          ],
+          "duration": null
+        },
+        {
+          "id": 86,
+          "name": "Fixture Promotion 86",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            86
+          ],
+          "duration": null
+        },
+        {
+          "id": 87,
+          "name": "Fixture Promotion 87",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            87
+          ],
+          "duration": null
+        },
+        {
+          "id": 88,
+          "name": "Fixture Promotion 88",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            88
+          ],
+          "duration": null
+        },
+        {
+          "id": 89,
+          "name": "Fixture Promotion 89",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            89
+          ],
+          "duration": null
+        },
+        {
+          "id": 90,
+          "name": "Fixture Promotion 90",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            90
+          ],
+          "duration": null
+        },
+        {
+          "id": 91,
+          "name": "Fixture Promotion 91",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            91
+          ],
+          "duration": null
+        },
+        {
+          "id": 92,
+          "name": "Fixture Promotion 92",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            92
+          ],
+          "duration": null
+        },
+        {
+          "id": 93,
+          "name": "Fixture Promotion 93",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            93
+          ],
+          "duration": null
+        },
+        {
+          "id": 94,
+          "name": "Fixture Promotion 94",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            94
+          ],
+          "duration": null
+        },
+        {
+          "id": 95,
+          "name": "Fixture Promotion 95",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            95
+          ],
+          "duration": null
+        },
+        {
+          "id": 96,
+          "name": "Fixture Promotion 96",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            96
+          ],
+          "duration": null
+        },
+        {
+          "id": 97,
+          "name": "Fixture Promotion 97",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            97
+          ],
+          "duration": null
+        },
+        {
+          "id": 98,
+          "name": "Fixture Promotion 98",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            98
+          ],
+          "duration": null
+        },
+        {
+          "id": 99,
+          "name": "Fixture Promotion 99",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            99
+          ],
+          "duration": null
+        },
+        {
+          "id": 100,
+          "name": "Fixture Promotion 100",
+          "description": "A fixture promotion",
+          "starts_at": "2026-01-01T00:00:00Z",
+          "expires_at": "2026-12-31T00:00:00Z",
+          "discount_type": "percentage",
+          "amount": 10,
+          "coupon_ids": [
+            100
+          ],
+          "duration": null
+        }
+      ]
+    }
+  }
+}

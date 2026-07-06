@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/channels", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          { "code": "ecommerce", "currencies": ["USD"], "locales": ["en_US"], "category_tree": "master", "labels": { "en_US": "E-commerce" } }
+        ]
+      }
+    }
+  }
+}

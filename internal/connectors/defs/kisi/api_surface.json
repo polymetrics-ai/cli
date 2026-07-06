@@ -1,0 +1,67 @@
+{
+  "api": "Kisi REST API",
+  "docs": "https://api.kisi.io/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out: the 5 legacy-parity read streams only (members, locks, groups, users, logins); Kisi is read-only for pm (no safe reverse-ETL writes for a physical access-control system)",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locks",
+      "covered_by": {
+        "stream": "locks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/logins",
+      "covered_by": {
+        "stream": "logins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locks/{id}/unlock",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "physical door-unlock mutation; unsafe for reverse-ETL, not implemented by legacy internal/connectors/kisi"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; not implemented by legacy internal/connectors/kisi"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/elevator_floors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; not implemented by legacy internal/connectors/kisi"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "index_settings",
+  "type": "object",
+  "x-primary-key": ["index_name"],
+  "required": ["index_name"],
+  "properties": {
+    "index_name": { "type": "string" },
+    "searchable_attributes": { "type": ["array", "null"] },
+    "attributes_for_faceting": { "type": ["array", "null"] },
+    "ranking": { "type": ["array", "null"] },
+    "custom_ranking": { "type": ["array", "null"] },
+    "replicas": { "type": ["array", "null"] },
+    "hits_per_page": { "type": ["integer", "null"] },
+    "pagination_limited_to": { "type": ["integer", "null"] }
+  }
+}

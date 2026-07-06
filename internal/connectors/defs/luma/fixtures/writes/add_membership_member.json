@@ -1,0 +1,14 @@
+{
+  "record": {
+    "email": "fixture@example.invalid",
+    "membership_tier_id": "fixture_membership_tier_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/memberships/members/add",
+    "body": {
+      "email": "fixture@example.invalid",
+      "membership_tier_id": "fixture_membership_tier_id"
+    }
+  }
+}

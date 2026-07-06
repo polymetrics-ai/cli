@@ -1,0 +1,118 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next_page"
+    },
+    "check": { "method": "GET", "path": "/v1/search" },
+    "error_map": [
+      { "status": 401, "hint": "pexels-api key is missing or invalid; re-run pm credentials add pexels-api" },
+      { "status": 429, "class": "rate_limited", "hint": "pexels-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "photos",
+      "path": "/v1/search",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "query": { "template": "{{ config.query }}", "default": "people" },
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "size": { "template": "{{ config.size }}", "omit_when_absent": true },
+        "color": { "template": "{{ config.color }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "photos" },
+      "schema": "schemas/photos.json"
+    },
+    {
+      "name": "curated_photos",
+      "path": "/v1/curated",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "size": { "template": "{{ config.size }}", "omit_when_absent": true },
+        "color": { "template": "{{ config.color }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "photos" },
+      "schema": "schemas/curated_photos.json"
+    },
+    {
+      "name": "videos",
+      "path": "/v1/videos/search",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "query": { "template": "{{ config.query }}", "default": "people" },
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "size": { "template": "{{ config.size }}", "omit_when_absent": true },
+        "color": { "template": "{{ config.color }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "videos" },
+      "schema": "schemas/videos.json"
+    },
+    {
+      "name": "popular_videos",
+      "path": "/v1/videos/popular",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "orientation": { "template": "{{ config.orientation }}", "omit_when_absent": true },
+        "size": { "template": "{{ config.size }}", "omit_when_absent": true },
+        "color": { "template": "{{ config.color }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true }
+      },
+      "records": { "path": "videos" },
+      "schema": "schemas/popular_videos.json"
+    },
+    {
+      "name": "featured_collections",
+      "path": "/v1/collections/featured",
+      "query": {
+        "page": "1",
+        "per_page": "40"
+      },
+      "records": { "path": "collections" },
+      "schema": "schemas/featured_collections.json"
+    },
+    {
+      "name": "my_collections",
+      "path": "/v1/collections",
+      "query": {
+        "page": "1",
+        "per_page": "40"
+      },
+      "records": { "path": "collections" },
+      "schema": "schemas/my_collections.json"
+    },
+    {
+      "name": "collection_media",
+      "path": "/v1/collections/{{ fanout.id }}",
+      "query": {
+        "page": "1",
+        "per_page": "40",
+        "type": { "template": "{{ config.collection_media_type }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.collection_media_sort }}", "omit_when_absent": true }
+      },
+      "records": { "path": "media" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/collections", "records_path": "collections", "id_field": "id" }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "collection_id"
+      },
+      "schema": "schemas/collection_media.json",
+      "projection": "passthrough"
+    }
+  ]
+}

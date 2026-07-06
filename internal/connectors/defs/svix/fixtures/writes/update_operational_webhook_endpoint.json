@@ -1,0 +1,7 @@
+{
+  "record": { "id": "ep_fixture_ops_1", "url": "https://example.com/ops-webhook-updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/operational-webhook/endpoint/ep_fixture_ops_1"
+  }
+}

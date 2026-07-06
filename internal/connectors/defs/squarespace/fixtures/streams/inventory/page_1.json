@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/commerce/inventory", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        {
+          "sku": "SKU-1",
+          "quantity": 42,
+          "modifiedOn": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "nextPageCursor": null, "hasNextPage": false }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/version-group/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "fixture-version-group-detail",
+      "names": [
+
+      ]
+    }
+  }
+}

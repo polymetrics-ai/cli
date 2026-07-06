@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/api/core/v1/metrics/subscriptionChurn"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": 1.23,
+      "format": "percent",
+      "period": "fixture",
+      "periodStart": "2026-01-01T00:00:00Z",
+      "periodEnd": "2026-01-01T00:00:00Z",
+      "timeSeries": [
+        {
+          "value": 1.23,
+          "periodStart": "2026-01-01T00:00:00Z",
+          "periodEnd": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "timeSeriesInterval": "fixture"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "surcharges",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "accumulation": { "type": ["string", "null"] },
+    "night": { "type": ["number", "null"] },
+    "night_increased": { "type": ["number", "null"] },
+    "nonbusiness": { "type": ["number", "null"] },
+    "nonbusiness_special": { "type": ["number", "null"] },
+    "sunday": { "type": ["number", "null"] },
+    "saturday": { "type": ["number", "null"] }
+  }
+}

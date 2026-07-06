@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/all_reviews_count"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 42
+    }
+  }
+}

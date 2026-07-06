@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture List",
+    "recipients": [
+      {
+        "address": {
+          "email": "fixture@example.com"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recipient-lists"
+  }
+}

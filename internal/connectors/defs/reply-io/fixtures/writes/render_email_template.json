@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "contactId": 1,
+    "sequenceId": 1,
+    "emailAccountId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/email-templates/synthetic-conformance-value/render",
+    "body": {
+      "contactId": 1,
+      "sequenceId": 1,
+      "emailAccountId": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

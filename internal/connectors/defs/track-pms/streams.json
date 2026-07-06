@@ -1,0 +1,113 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/reservations" },
+    "error_map": [
+      { "status": 401, "hint": "track-pms access_token is missing or invalid; re-run pm credentials add track-pms" },
+      { "status": 429, "class": "rate_limited", "hint": "track-pms rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reservations",
+      "path": "/reservations",
+      "records": { "path": "reservations" },
+      "computed_fields": {
+        "confirmation_number": "{{ coalesce record.confirmation_number record.confirmationNumber }}",
+        "arrival_date": "{{ coalesce record.arrival_date record.arrivalDate }}"
+      },
+      "schema": "schemas/reservations.json"
+    },
+    {
+      "name": "guests",
+      "path": "/guests",
+      "records": { "path": "guests" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name }}"
+      },
+      "schema": "schemas/guests.json"
+    },
+    {
+      "name": "units",
+      "path": "/units",
+      "records": { "path": "units" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.unit_name }}"
+      },
+      "schema": "schemas/units.json"
+    },
+    {
+      "name": "owners",
+      "path": "/owners",
+      "records": { "path": "owners" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.full_name }}"
+      },
+      "schema": "schemas/owners.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/crm/contacts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "size",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "_embedded.contacts" },
+      "computed_fields": {
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "primary_email": "{{ record.primaryEmail }}",
+        "secondary_email": "{{ record.secondaryEmail }}",
+        "home_phone": "{{ record.homePhone }}",
+        "cell_phone": "{{ record.cellPhone }}",
+        "work_phone": "{{ record.workPhone }}",
+        "street_address": "{{ record.streetAddress }}",
+        "postal_code": "{{ record.postalCode }}",
+        "is_vip": "{{ record.isVip }}",
+        "is_owner_contact": "{{ record.isOwnerContact }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "unit_types",
+      "path": "/pms/units/types",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "size",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "_embedded.units" },
+      "computed_fields": {
+        "short_name": "{{ record.shortName }}",
+        "type_code": "{{ record.typeCode }}",
+        "is_active": "{{ record.isActive }}",
+        "max_occupancy": "{{ record.maxOccupancy }}",
+        "node_id": "{{ record.nodeId }}",
+        "lodging_type_id": "{{ record.lodgingTypeId }}",
+        "is_bookable": "{{ record.isBookable }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/unit_types.json"
+    }
+  ]
+}

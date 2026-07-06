@@ -1,0 +1,14 @@
+{
+  "record": {
+    "payment": { "funding_source_id": "balance" },
+    "reward": {
+      "value": { "denomination": 25, "currency_code": "USD" },
+      "recipient": { "name": "Fixture Recipient", "email": "fixture@example.com" },
+      "delivery": { "method": "EMAIL" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/orders"
+  }
+}

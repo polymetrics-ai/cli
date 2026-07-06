@@ -1,0 +1,25 @@
+{
+  "record": {
+    "image_collection_id": "image-collection-id-fixture-1",
+    "items": [
+      {
+        "id": "add_image_collection_items-item-fixture-1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/images/collections/image-collection-id-fixture-1/items",
+    "body": {
+      "items": [
+        {
+          "id": "add_image_collection_items-item-fixture-1"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

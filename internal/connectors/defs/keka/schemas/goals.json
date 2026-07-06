@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "goals",
+  "type": "object",
+  "properties": {
+    "parentGoal": {
+      "type": [
+        "null"
+      ]
+    },
+    "childGoals": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "isPrivate": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "employeeId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "employeeNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeFrameId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "startDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "endDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "initialValue": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "targetValue": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "currentValue": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "progress": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "metricType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "tags": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "departmentId": {
+      "type": [
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

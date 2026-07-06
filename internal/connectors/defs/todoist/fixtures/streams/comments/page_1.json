@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/comments" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "cmt_fixture_1", "task_id": null, "project_id": "prj_fixture_1", "posted_at": "2026-01-01T00:00:00Z", "content": "Fixture comment one", "attachment": null },
+      { "id": "cmt_fixture_2", "task_id": "tsk_fixture_1", "project_id": null, "posted_at": "2026-01-02T00:00:00Z", "content": "Fixture comment two", "attachment": { "file_name": "fixture.png", "file_type": "image/png", "resource_type": "file" } }
+    ]
+  }
+}

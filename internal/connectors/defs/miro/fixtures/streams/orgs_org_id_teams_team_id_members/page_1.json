@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/members",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "role": "non_team",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "createdBy": "created_by_fixture",
+          "modifiedAt": "2026-01-01T00:00:00Z",
+          "modifiedBy": "modified_by_fixture",
+          "teamId": "team_id_fixture",
+          "type": "team-member"
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

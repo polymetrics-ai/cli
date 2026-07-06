@@ -1,0 +1,15 @@
+{
+  "record": {
+    "requester_id": 123,
+    "name": "Fixture update_a_requester",
+    "description": "Fixture update_a_requester record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/requesters/123",
+    "body": {
+      "name": "Fixture update_a_requester",
+      "description": "Fixture update_a_requester record"
+    }
+  }
+}

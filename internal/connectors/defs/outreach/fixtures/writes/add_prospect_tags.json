@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "addprospecttags",
+      "attributes": {
+        "name": "Fixture Add Prospect Tags"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAddTags",
+    "body": {
+      "data": {
+        "type": "addprospecttags",
+        "attributes": {
+          "name": "Fixture Add Prospect Tags"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

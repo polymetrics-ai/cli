@@ -1,0 +1,20 @@
+{
+  "name": "zenefits",
+  "display_name": "Zenefits",
+  "description": "Reads Zenefits people, companies, departments, locations, employments, custom fields/values, bank accounts, labor groups, and time-off data.",
+  "integration_type": "api",
+  "docs_url": "https://developers.zenefits.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Zenefits account read of people, companies, departments, locations, employments, custom field definitions/values, company and employee bank account details, labor groups, and time-off vacation types/requests",
+    "approval": "none; read-only bearer token access. The entire documented Zenefits API is read-only (no write endpoint exists), so there is no write risk to assess"
+  }
+}

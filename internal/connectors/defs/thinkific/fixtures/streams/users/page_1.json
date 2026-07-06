@@ -1,0 +1,1217 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/users",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "first_name": "Fixture1",
+          "last_name": "User",
+          "full_name": "Fixture1 User",
+          "company": null,
+          "email": "fixture1@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "first_name": "Fixture2",
+          "last_name": "User",
+          "full_name": "Fixture2 User",
+          "company": null,
+          "email": "fixture2@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "first_name": "Fixture3",
+          "last_name": "User",
+          "full_name": "Fixture3 User",
+          "company": null,
+          "email": "fixture3@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "first_name": "Fixture4",
+          "last_name": "User",
+          "full_name": "Fixture4 User",
+          "company": null,
+          "email": "fixture4@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "first_name": "Fixture5",
+          "last_name": "User",
+          "full_name": "Fixture5 User",
+          "company": null,
+          "email": "fixture5@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "first_name": "Fixture6",
+          "last_name": "User",
+          "full_name": "Fixture6 User",
+          "company": null,
+          "email": "fixture6@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "first_name": "Fixture7",
+          "last_name": "User",
+          "full_name": "Fixture7 User",
+          "company": null,
+          "email": "fixture7@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "first_name": "Fixture8",
+          "last_name": "User",
+          "full_name": "Fixture8 User",
+          "company": null,
+          "email": "fixture8@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "first_name": "Fixture9",
+          "last_name": "User",
+          "full_name": "Fixture9 User",
+          "company": null,
+          "email": "fixture9@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "first_name": "Fixture10",
+          "last_name": "User",
+          "full_name": "Fixture10 User",
+          "company": null,
+          "email": "fixture10@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "first_name": "Fixture11",
+          "last_name": "User",
+          "full_name": "Fixture11 User",
+          "company": null,
+          "email": "fixture11@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "first_name": "Fixture12",
+          "last_name": "User",
+          "full_name": "Fixture12 User",
+          "company": null,
+          "email": "fixture12@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "first_name": "Fixture13",
+          "last_name": "User",
+          "full_name": "Fixture13 User",
+          "company": null,
+          "email": "fixture13@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "first_name": "Fixture14",
+          "last_name": "User",
+          "full_name": "Fixture14 User",
+          "company": null,
+          "email": "fixture14@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "first_name": "Fixture15",
+          "last_name": "User",
+          "full_name": "Fixture15 User",
+          "company": null,
+          "email": "fixture15@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "first_name": "Fixture16",
+          "last_name": "User",
+          "full_name": "Fixture16 User",
+          "company": null,
+          "email": "fixture16@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "first_name": "Fixture17",
+          "last_name": "User",
+          "full_name": "Fixture17 User",
+          "company": null,
+          "email": "fixture17@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "first_name": "Fixture18",
+          "last_name": "User",
+          "full_name": "Fixture18 User",
+          "company": null,
+          "email": "fixture18@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "first_name": "Fixture19",
+          "last_name": "User",
+          "full_name": "Fixture19 User",
+          "company": null,
+          "email": "fixture19@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "first_name": "Fixture20",
+          "last_name": "User",
+          "full_name": "Fixture20 User",
+          "company": null,
+          "email": "fixture20@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "first_name": "Fixture21",
+          "last_name": "User",
+          "full_name": "Fixture21 User",
+          "company": null,
+          "email": "fixture21@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "first_name": "Fixture22",
+          "last_name": "User",
+          "full_name": "Fixture22 User",
+          "company": null,
+          "email": "fixture22@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "first_name": "Fixture23",
+          "last_name": "User",
+          "full_name": "Fixture23 User",
+          "company": null,
+          "email": "fixture23@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "first_name": "Fixture24",
+          "last_name": "User",
+          "full_name": "Fixture24 User",
+          "company": null,
+          "email": "fixture24@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "first_name": "Fixture25",
+          "last_name": "User",
+          "full_name": "Fixture25 User",
+          "company": null,
+          "email": "fixture25@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "first_name": "Fixture26",
+          "last_name": "User",
+          "full_name": "Fixture26 User",
+          "company": null,
+          "email": "fixture26@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "first_name": "Fixture27",
+          "last_name": "User",
+          "full_name": "Fixture27 User",
+          "company": null,
+          "email": "fixture27@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "first_name": "Fixture28",
+          "last_name": "User",
+          "full_name": "Fixture28 User",
+          "company": null,
+          "email": "fixture28@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "first_name": "Fixture29",
+          "last_name": "User",
+          "full_name": "Fixture29 User",
+          "company": null,
+          "email": "fixture29@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "first_name": "Fixture30",
+          "last_name": "User",
+          "full_name": "Fixture30 User",
+          "company": null,
+          "email": "fixture30@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "first_name": "Fixture31",
+          "last_name": "User",
+          "full_name": "Fixture31 User",
+          "company": null,
+          "email": "fixture31@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "first_name": "Fixture32",
+          "last_name": "User",
+          "full_name": "Fixture32 User",
+          "company": null,
+          "email": "fixture32@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "first_name": "Fixture33",
+          "last_name": "User",
+          "full_name": "Fixture33 User",
+          "company": null,
+          "email": "fixture33@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "first_name": "Fixture34",
+          "last_name": "User",
+          "full_name": "Fixture34 User",
+          "company": null,
+          "email": "fixture34@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "first_name": "Fixture35",
+          "last_name": "User",
+          "full_name": "Fixture35 User",
+          "company": null,
+          "email": "fixture35@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "first_name": "Fixture36",
+          "last_name": "User",
+          "full_name": "Fixture36 User",
+          "company": null,
+          "email": "fixture36@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "first_name": "Fixture37",
+          "last_name": "User",
+          "full_name": "Fixture37 User",
+          "company": null,
+          "email": "fixture37@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "first_name": "Fixture38",
+          "last_name": "User",
+          "full_name": "Fixture38 User",
+          "company": null,
+          "email": "fixture38@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "first_name": "Fixture39",
+          "last_name": "User",
+          "full_name": "Fixture39 User",
+          "company": null,
+          "email": "fixture39@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "first_name": "Fixture40",
+          "last_name": "User",
+          "full_name": "Fixture40 User",
+          "company": null,
+          "email": "fixture40@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "first_name": "Fixture41",
+          "last_name": "User",
+          "full_name": "Fixture41 User",
+          "company": null,
+          "email": "fixture41@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "first_name": "Fixture42",
+          "last_name": "User",
+          "full_name": "Fixture42 User",
+          "company": null,
+          "email": "fixture42@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "first_name": "Fixture43",
+          "last_name": "User",
+          "full_name": "Fixture43 User",
+          "company": null,
+          "email": "fixture43@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "first_name": "Fixture44",
+          "last_name": "User",
+          "full_name": "Fixture44 User",
+          "company": null,
+          "email": "fixture44@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "first_name": "Fixture45",
+          "last_name": "User",
+          "full_name": "Fixture45 User",
+          "company": null,
+          "email": "fixture45@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "first_name": "Fixture46",
+          "last_name": "User",
+          "full_name": "Fixture46 User",
+          "company": null,
+          "email": "fixture46@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "first_name": "Fixture47",
+          "last_name": "User",
+          "full_name": "Fixture47 User",
+          "company": null,
+          "email": "fixture47@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "first_name": "Fixture48",
+          "last_name": "User",
+          "full_name": "Fixture48 User",
+          "company": null,
+          "email": "fixture48@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "first_name": "Fixture49",
+          "last_name": "User",
+          "full_name": "Fixture49 User",
+          "company": null,
+          "email": "fixture49@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "first_name": "Fixture50",
+          "last_name": "User",
+          "full_name": "Fixture50 User",
+          "company": null,
+          "email": "fixture50@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "first_name": "Fixture51",
+          "last_name": "User",
+          "full_name": "Fixture51 User",
+          "company": null,
+          "email": "fixture51@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "first_name": "Fixture52",
+          "last_name": "User",
+          "full_name": "Fixture52 User",
+          "company": null,
+          "email": "fixture52@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "first_name": "Fixture53",
+          "last_name": "User",
+          "full_name": "Fixture53 User",
+          "company": null,
+          "email": "fixture53@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "first_name": "Fixture54",
+          "last_name": "User",
+          "full_name": "Fixture54 User",
+          "company": null,
+          "email": "fixture54@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "first_name": "Fixture55",
+          "last_name": "User",
+          "full_name": "Fixture55 User",
+          "company": null,
+          "email": "fixture55@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "first_name": "Fixture56",
+          "last_name": "User",
+          "full_name": "Fixture56 User",
+          "company": null,
+          "email": "fixture56@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "first_name": "Fixture57",
+          "last_name": "User",
+          "full_name": "Fixture57 User",
+          "company": null,
+          "email": "fixture57@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "first_name": "Fixture58",
+          "last_name": "User",
+          "full_name": "Fixture58 User",
+          "company": null,
+          "email": "fixture58@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "first_name": "Fixture59",
+          "last_name": "User",
+          "full_name": "Fixture59 User",
+          "company": null,
+          "email": "fixture59@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "first_name": "Fixture60",
+          "last_name": "User",
+          "full_name": "Fixture60 User",
+          "company": null,
+          "email": "fixture60@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "first_name": "Fixture61",
+          "last_name": "User",
+          "full_name": "Fixture61 User",
+          "company": null,
+          "email": "fixture61@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "first_name": "Fixture62",
+          "last_name": "User",
+          "full_name": "Fixture62 User",
+          "company": null,
+          "email": "fixture62@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "first_name": "Fixture63",
+          "last_name": "User",
+          "full_name": "Fixture63 User",
+          "company": null,
+          "email": "fixture63@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "first_name": "Fixture64",
+          "last_name": "User",
+          "full_name": "Fixture64 User",
+          "company": null,
+          "email": "fixture64@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "first_name": "Fixture65",
+          "last_name": "User",
+          "full_name": "Fixture65 User",
+          "company": null,
+          "email": "fixture65@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "first_name": "Fixture66",
+          "last_name": "User",
+          "full_name": "Fixture66 User",
+          "company": null,
+          "email": "fixture66@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "first_name": "Fixture67",
+          "last_name": "User",
+          "full_name": "Fixture67 User",
+          "company": null,
+          "email": "fixture67@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "first_name": "Fixture68",
+          "last_name": "User",
+          "full_name": "Fixture68 User",
+          "company": null,
+          "email": "fixture68@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "first_name": "Fixture69",
+          "last_name": "User",
+          "full_name": "Fixture69 User",
+          "company": null,
+          "email": "fixture69@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "first_name": "Fixture70",
+          "last_name": "User",
+          "full_name": "Fixture70 User",
+          "company": null,
+          "email": "fixture70@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "first_name": "Fixture71",
+          "last_name": "User",
+          "full_name": "Fixture71 User",
+          "company": null,
+          "email": "fixture71@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "first_name": "Fixture72",
+          "last_name": "User",
+          "full_name": "Fixture72 User",
+          "company": null,
+          "email": "fixture72@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "first_name": "Fixture73",
+          "last_name": "User",
+          "full_name": "Fixture73 User",
+          "company": null,
+          "email": "fixture73@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "first_name": "Fixture74",
+          "last_name": "User",
+          "full_name": "Fixture74 User",
+          "company": null,
+          "email": "fixture74@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "first_name": "Fixture75",
+          "last_name": "User",
+          "full_name": "Fixture75 User",
+          "company": null,
+          "email": "fixture75@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "first_name": "Fixture76",
+          "last_name": "User",
+          "full_name": "Fixture76 User",
+          "company": null,
+          "email": "fixture76@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "first_name": "Fixture77",
+          "last_name": "User",
+          "full_name": "Fixture77 User",
+          "company": null,
+          "email": "fixture77@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "first_name": "Fixture78",
+          "last_name": "User",
+          "full_name": "Fixture78 User",
+          "company": null,
+          "email": "fixture78@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "first_name": "Fixture79",
+          "last_name": "User",
+          "full_name": "Fixture79 User",
+          "company": null,
+          "email": "fixture79@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "first_name": "Fixture80",
+          "last_name": "User",
+          "full_name": "Fixture80 User",
+          "company": null,
+          "email": "fixture80@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "first_name": "Fixture81",
+          "last_name": "User",
+          "full_name": "Fixture81 User",
+          "company": null,
+          "email": "fixture81@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "first_name": "Fixture82",
+          "last_name": "User",
+          "full_name": "Fixture82 User",
+          "company": null,
+          "email": "fixture82@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "first_name": "Fixture83",
+          "last_name": "User",
+          "full_name": "Fixture83 User",
+          "company": null,
+          "email": "fixture83@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "first_name": "Fixture84",
+          "last_name": "User",
+          "full_name": "Fixture84 User",
+          "company": null,
+          "email": "fixture84@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "first_name": "Fixture85",
+          "last_name": "User",
+          "full_name": "Fixture85 User",
+          "company": null,
+          "email": "fixture85@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "first_name": "Fixture86",
+          "last_name": "User",
+          "full_name": "Fixture86 User",
+          "company": null,
+          "email": "fixture86@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "first_name": "Fixture87",
+          "last_name": "User",
+          "full_name": "Fixture87 User",
+          "company": null,
+          "email": "fixture87@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "first_name": "Fixture88",
+          "last_name": "User",
+          "full_name": "Fixture88 User",
+          "company": null,
+          "email": "fixture88@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "first_name": "Fixture89",
+          "last_name": "User",
+          "full_name": "Fixture89 User",
+          "company": null,
+          "email": "fixture89@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "first_name": "Fixture90",
+          "last_name": "User",
+          "full_name": "Fixture90 User",
+          "company": null,
+          "email": "fixture90@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "first_name": "Fixture91",
+          "last_name": "User",
+          "full_name": "Fixture91 User",
+          "company": null,
+          "email": "fixture91@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "first_name": "Fixture92",
+          "last_name": "User",
+          "full_name": "Fixture92 User",
+          "company": null,
+          "email": "fixture92@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "first_name": "Fixture93",
+          "last_name": "User",
+          "full_name": "Fixture93 User",
+          "company": null,
+          "email": "fixture93@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "first_name": "Fixture94",
+          "last_name": "User",
+          "full_name": "Fixture94 User",
+          "company": null,
+          "email": "fixture94@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "first_name": "Fixture95",
+          "last_name": "User",
+          "full_name": "Fixture95 User",
+          "company": null,
+          "email": "fixture95@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "first_name": "Fixture96",
+          "last_name": "User",
+          "full_name": "Fixture96 User",
+          "company": null,
+          "email": "fixture96@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "first_name": "Fixture97",
+          "last_name": "User",
+          "full_name": "Fixture97 User",
+          "company": null,
+          "email": "fixture97@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "first_name": "Fixture98",
+          "last_name": "User",
+          "full_name": "Fixture98 User",
+          "company": null,
+          "email": "fixture98@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "first_name": "Fixture99",
+          "last_name": "User",
+          "full_name": "Fixture99 User",
+          "company": null,
+          "email": "fixture99@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "first_name": "Fixture100",
+          "last_name": "User",
+          "full_name": "Fixture100 User",
+          "company": null,
+          "email": "fixture100@example.com",
+          "roles": [
+            "learner"
+          ],
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "rating": 5,
+    "comment": "Fixture updated rating"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/candidates/candidate_fixture/ratings",
+    "body": {
+      "rating": 5,
+      "comment": "Fixture updated rating"
+    }
+  }
+}

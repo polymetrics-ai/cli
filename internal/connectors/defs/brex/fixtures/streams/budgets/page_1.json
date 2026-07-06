@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v2/budgets", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "budget_id": "bud_fixture_1",
+          "parent_budget_id": null,
+          "account_id": "acc_fixture_1",
+          "creator_user_id": "usr_fixture_1",
+          "name": "Fixture Marketing Budget",
+          "description": "Fixture budget for conformance",
+          "status": "ACTIVE",
+          "limit": { "amount": 500000, "currency": "USD" },
+          "period_type": "MONTHLY"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

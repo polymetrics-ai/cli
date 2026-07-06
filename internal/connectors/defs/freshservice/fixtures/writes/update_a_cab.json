@@ -1,0 +1,15 @@
+{
+  "record": {
+    "cab_id": 123,
+    "name": "Fixture update_a_cab",
+    "description": "Fixture update_a_cab record"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/cabs/123",
+    "body": {
+      "name": "Fixture update_a_cab",
+      "description": "Fixture update_a_cab record"
+    }
+  }
+}

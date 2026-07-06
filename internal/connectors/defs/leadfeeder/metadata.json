@@ -1,0 +1,22 @@
+{
+  "name": "leadfeeder",
+  "display_name": "Leadfeeder",
+  "description": "Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.leadfeeder.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Leadfeeder API read of account, lead, and visit data"
+  }
+}

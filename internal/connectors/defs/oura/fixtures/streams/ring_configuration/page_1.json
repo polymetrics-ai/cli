@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/ring_configuration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ring_configuration_fixture_1",
+          "color": "fixture_color",
+          "design": "fixture_design",
+          "firmware_version": "fixture_firmware_version",
+          "hardware_type": "fixture_hardware_type",
+          "set_up_at": "2026-01-01T00:00:00+00:00",
+          "size": 80
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

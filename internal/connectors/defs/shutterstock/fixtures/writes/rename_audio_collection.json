@@ -1,0 +1,17 @@
+{
+  "record": {
+    "audio_collection_id": "audio-collection-id-fixture-1",
+    "name": "Fixture rename audio collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/audio/collections/audio-collection-id-fixture-1",
+    "body": {
+      "name": "Fixture rename audio collection"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

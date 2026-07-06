@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/competitors"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "competitors": [
+        {
+          "id": "1",
+          "name": "Fixture competitors",
+          "href": "https://app.nutshell.com/rest/competitors/1",
+          "htmlUrl": "https://app.nutshell.com/competitors/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture competitors",
+          "href": "https://app.nutshell.com/rest/competitors/2",
+          "htmlUrl": "https://app.nutshell.com/competitors/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

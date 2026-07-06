@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pipelines",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 0,
+      "message": "OK",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "data": {
+        "pipelines": [
+          {
+            "pipeline": {
+              "id": "pipelines_fixture_1",
+              "name": "Fixture pipelines",
+              "text": "Fixture pipelines text",
+              "result": "pipelines_fixture_1",
+              "code": "pipelines_fixture_1",
+              "created_at": "2026-01-01T00:00:00Z",
+              "updated_at": "2026-01-01T00:00:00Z"
+            }
+          }
+        ],
+        "page": 1,
+        "max_page": 1
+      }
+    }
+  }
+}

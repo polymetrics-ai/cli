@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/ticket_fields",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ticket_fields": [
+        {
+          "created_at": "2026-01-01T00:00:00Z",
+          "title_in_portal": "fixture_title_in_portal",
+          "visible_in_portal": true,
+          "collapsed_for_agents": true,
+          "regexp_for_validation": "fixture_regexp_for_validation",
+          "title": "fixture_title",
+          "position": 7,
+          "type": "fixture_type",
+          "editable_in_portal": true,
+          "raw_title_in_portal": "fixture_raw_title_in_portal",
+          "raw_description": "fixture_raw_description",
+          "custom_field_options": [
+
+          ],
+          "updated_at": "2026-01-01T00:00:00Z",
+          "tag": "fixture_tag",
+          "removable": true,
+          "active": true,
+          "url": "fixture_url",
+          "raw_title": "fixture_raw_title",
+          "required": true,
+          "id": 1,
+          "description": "fixture_description",
+          "agent_description": "fixture_agent_description",
+          "required_in_portal": true,
+          "system_field_options": [
+
+          ],
+          "custom_statuses": [
+
+          ],
+          "key": "fixture_key",
+          "sub_type_id": 1
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/groups",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 8,
+        "enterpriseId": 23,
+        "name": "Fixture Group 1",
+        "description": null,
+        "createdAt": 1700000000000,
+        "updatedAt": 1700000000000
+      },
+      {
+        "id": 9,
+        "enterpriseId": 23,
+        "name": "Fixture Group 2",
+        "description": null,
+        "createdAt": 1700000001000,
+        "updatedAt": 1700000001000
+      }
+    ]
+  }
+}

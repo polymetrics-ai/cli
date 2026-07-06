@@ -12,6 +12,11 @@ SYNOPSIS
 DESCRIPTION
   Reads cards and sets from the public Scryfall API. Read-only and credential-free.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
@@ -20,12 +25,23 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  q
+
+ETL STREAMS
+  cards:
+    primary key: id
+    fields: id(), name(), set()
+  sets:
+    primary key: id
+    fields: id(), name(), set()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: public, credential-free Scryfall API read of card and set data
+  approval: none; read-only, no reverse-ETL writes implemented by legacy
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

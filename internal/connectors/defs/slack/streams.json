@@ -1,0 +1,39 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}", "when": "{{ secrets.api_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "auth.test" },
+    "error_map": [
+      { "status": 401, "hint": "slack api_token/access_token is missing or invalid; re-run pm credentials add slack" },
+      { "status": 429, "class": "rate_limited", "hint": "slack API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "users.list",
+      "records": { "path": "members" },
+      "schema": "schemas/users.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (Slack Web API's primary error-signaling mechanism is a JSON body {ok:false,error:<code>} field returned at HTTP 200 -- the declarative read path has no way to inspect a body-level ok flag as a stop/error condition); hook-covered, proven live by archived parity evidence for slack and internal/connectors/hooks/slack/hooks_test.go" }
+    },
+    {
+      "name": "channels",
+      "path": "conversations.list",
+      "records": { "path": "channels" },
+      "schema": "schemas/channels.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (Slack Web API's primary error-signaling mechanism is a JSON body {ok:false,error:<code>} field returned at HTTP 200 -- the declarative read path has no way to inspect a body-level ok flag as a stop/error condition); hook-covered, proven live by archived parity evidence for slack and internal/connectors/hooks/slack/hooks_test.go" }
+    },
+    {
+      "name": "channel_messages",
+      "path": "conversations.history",
+      "records": { "path": "messages" },
+      "schema": "schemas/channel_messages.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (Slack Web API's primary error-signaling mechanism is a JSON body {ok:false,error:<code>} field returned at HTTP 200, and this stream additionally requires a runtime-only config.channel_id the declarative path cannot conditionally require); hook-covered, proven live by archived parity evidence for slack and internal/connectors/hooks/slack/hooks_test.go" }
+    }
+  ]
+}

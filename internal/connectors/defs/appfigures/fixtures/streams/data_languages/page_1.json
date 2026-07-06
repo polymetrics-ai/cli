@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/data/languages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "en": { "name": "English", "code": "en", "iso": "eng" },
+      "fr": { "name": "French", "code": "fr", "iso": "fra" }
+    }
+  }
+}

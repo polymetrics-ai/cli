@@ -1,0 +1,27 @@
+{
+  "record": {
+    "location_id": 1001,
+    "start": "2026-01-01T00:00:00Z",
+    "end": "2026-01-01T00:00:00Z",
+    "value": 1001,
+    "department_id": 1001,
+    "report_type": "sales"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/locations/1001/forecast_override_interval",
+    "body": {
+      "start": "2026-01-01T00:00:00Z",
+      "end": "2026-01-01T00:00:00Z",
+      "value": 1001,
+      "department_id": 1001,
+      "report_type": "sales"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/announcements/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "announcement": {
+        "id": "view_an_announcement",
+        "name": "Fixture view_an_announcement",
+        "subject": "Fixture view_an_announcement",
+        "description": "Fixture view_an_announcement record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

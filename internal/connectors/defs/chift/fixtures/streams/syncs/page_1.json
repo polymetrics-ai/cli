@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/syncs",
+    "query": { "size": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "syncid": "sync_fixture_1",
+        "name": "Fixture Sync 1",
+        "status": "active",
+        "consumerid": "con_fixture_1",
+        "created_on": "2026-01-01T00:00:00Z",
+        "updated_on": "2026-01-02T00:00:00Z"
+      },
+      {
+        "syncid": "sync_fixture_2",
+        "name": "Fixture Sync 2",
+        "status": "paused",
+        "consumerid": "con_fixture_2",
+        "created_on": "2026-01-01T00:00:00Z",
+        "updated_on": "2026-01-03T00:00:00Z"
+      }
+    ]
+  }
+}

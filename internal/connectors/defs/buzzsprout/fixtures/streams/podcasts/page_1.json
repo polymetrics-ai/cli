@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/api/podcasts.json", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 99001,
+        "title": "Fixture Show",
+        "author": "Fixture Author",
+        "description": "conformance fixture podcast",
+        "website_address": "https://www.buzzsprout.com",
+        "contact_email": "fixture@example.com",
+        "keywords": "fixture,test",
+        "explicit": false,
+        "main_category": "Technology",
+        "sub_category": "Software",
+        "language": "en",
+        "timezone": "UTC",
+        "artwork_url": "https://www.buzzsprout.com/fixture/artwork.jpg"
+      }
+    ]
+  }
+}

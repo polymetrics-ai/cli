@@ -1,0 +1,1415 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "customer": {
+          "id": 1,
+          "first_name": "Fixture1",
+          "last_name": "Customer",
+          "email": "fixture1@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_1",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 2,
+          "first_name": "Fixture2",
+          "last_name": "Customer",
+          "email": "fixture2@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_2",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 3,
+          "first_name": "Fixture3",
+          "last_name": "Customer",
+          "email": "fixture3@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_3",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 4,
+          "first_name": "Fixture4",
+          "last_name": "Customer",
+          "email": "fixture4@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_4",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 5,
+          "first_name": "Fixture5",
+          "last_name": "Customer",
+          "email": "fixture5@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_5",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 6,
+          "first_name": "Fixture6",
+          "last_name": "Customer",
+          "email": "fixture6@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_6",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 7,
+          "first_name": "Fixture7",
+          "last_name": "Customer",
+          "email": "fixture7@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_7",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 8,
+          "first_name": "Fixture8",
+          "last_name": "Customer",
+          "email": "fixture8@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_8",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 9,
+          "first_name": "Fixture9",
+          "last_name": "Customer",
+          "email": "fixture9@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_9",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 10,
+          "first_name": "Fixture10",
+          "last_name": "Customer",
+          "email": "fixture10@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_10",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 11,
+          "first_name": "Fixture11",
+          "last_name": "Customer",
+          "email": "fixture11@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_11",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 12,
+          "first_name": "Fixture12",
+          "last_name": "Customer",
+          "email": "fixture12@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_12",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 13,
+          "first_name": "Fixture13",
+          "last_name": "Customer",
+          "email": "fixture13@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_13",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 14,
+          "first_name": "Fixture14",
+          "last_name": "Customer",
+          "email": "fixture14@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_14",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 15,
+          "first_name": "Fixture15",
+          "last_name": "Customer",
+          "email": "fixture15@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_15",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 16,
+          "first_name": "Fixture16",
+          "last_name": "Customer",
+          "email": "fixture16@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_16",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 17,
+          "first_name": "Fixture17",
+          "last_name": "Customer",
+          "email": "fixture17@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_17",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 18,
+          "first_name": "Fixture18",
+          "last_name": "Customer",
+          "email": "fixture18@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_18",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 19,
+          "first_name": "Fixture19",
+          "last_name": "Customer",
+          "email": "fixture19@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_19",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 20,
+          "first_name": "Fixture20",
+          "last_name": "Customer",
+          "email": "fixture20@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_20",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 21,
+          "first_name": "Fixture21",
+          "last_name": "Customer",
+          "email": "fixture21@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_21",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 22,
+          "first_name": "Fixture22",
+          "last_name": "Customer",
+          "email": "fixture22@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_22",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 23,
+          "first_name": "Fixture23",
+          "last_name": "Customer",
+          "email": "fixture23@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_23",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 24,
+          "first_name": "Fixture24",
+          "last_name": "Customer",
+          "email": "fixture24@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_24",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 25,
+          "first_name": "Fixture25",
+          "last_name": "Customer",
+          "email": "fixture25@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_25",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 26,
+          "first_name": "Fixture26",
+          "last_name": "Customer",
+          "email": "fixture26@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_26",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 27,
+          "first_name": "Fixture27",
+          "last_name": "Customer",
+          "email": "fixture27@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_27",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 28,
+          "first_name": "Fixture28",
+          "last_name": "Customer",
+          "email": "fixture28@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_28",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 29,
+          "first_name": "Fixture29",
+          "last_name": "Customer",
+          "email": "fixture29@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_29",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 30,
+          "first_name": "Fixture30",
+          "last_name": "Customer",
+          "email": "fixture30@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_30",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 31,
+          "first_name": "Fixture31",
+          "last_name": "Customer",
+          "email": "fixture31@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_31",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 32,
+          "first_name": "Fixture32",
+          "last_name": "Customer",
+          "email": "fixture32@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_32",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 33,
+          "first_name": "Fixture33",
+          "last_name": "Customer",
+          "email": "fixture33@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_33",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 34,
+          "first_name": "Fixture34",
+          "last_name": "Customer",
+          "email": "fixture34@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_34",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 35,
+          "first_name": "Fixture35",
+          "last_name": "Customer",
+          "email": "fixture35@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_35",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 36,
+          "first_name": "Fixture36",
+          "last_name": "Customer",
+          "email": "fixture36@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_36",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 37,
+          "first_name": "Fixture37",
+          "last_name": "Customer",
+          "email": "fixture37@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_37",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 38,
+          "first_name": "Fixture38",
+          "last_name": "Customer",
+          "email": "fixture38@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_38",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 39,
+          "first_name": "Fixture39",
+          "last_name": "Customer",
+          "email": "fixture39@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_39",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 40,
+          "first_name": "Fixture40",
+          "last_name": "Customer",
+          "email": "fixture40@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_40",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 41,
+          "first_name": "Fixture41",
+          "last_name": "Customer",
+          "email": "fixture41@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_41",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 42,
+          "first_name": "Fixture42",
+          "last_name": "Customer",
+          "email": "fixture42@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_42",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 43,
+          "first_name": "Fixture43",
+          "last_name": "Customer",
+          "email": "fixture43@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_43",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 44,
+          "first_name": "Fixture44",
+          "last_name": "Customer",
+          "email": "fixture44@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_44",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 45,
+          "first_name": "Fixture45",
+          "last_name": "Customer",
+          "email": "fixture45@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_45",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 46,
+          "first_name": "Fixture46",
+          "last_name": "Customer",
+          "email": "fixture46@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_46",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 47,
+          "first_name": "Fixture47",
+          "last_name": "Customer",
+          "email": "fixture47@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_47",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 48,
+          "first_name": "Fixture48",
+          "last_name": "Customer",
+          "email": "fixture48@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_48",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 49,
+          "first_name": "Fixture49",
+          "last_name": "Customer",
+          "email": "fixture49@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_49",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 50,
+          "first_name": "Fixture50",
+          "last_name": "Customer",
+          "email": "fixture50@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_50",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 51,
+          "first_name": "Fixture51",
+          "last_name": "Customer",
+          "email": "fixture51@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_51",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 52,
+          "first_name": "Fixture52",
+          "last_name": "Customer",
+          "email": "fixture52@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_52",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 53,
+          "first_name": "Fixture53",
+          "last_name": "Customer",
+          "email": "fixture53@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_53",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 54,
+          "first_name": "Fixture54",
+          "last_name": "Customer",
+          "email": "fixture54@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_54",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 55,
+          "first_name": "Fixture55",
+          "last_name": "Customer",
+          "email": "fixture55@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_55",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 56,
+          "first_name": "Fixture56",
+          "last_name": "Customer",
+          "email": "fixture56@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_56",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 57,
+          "first_name": "Fixture57",
+          "last_name": "Customer",
+          "email": "fixture57@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_57",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 58,
+          "first_name": "Fixture58",
+          "last_name": "Customer",
+          "email": "fixture58@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_58",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 59,
+          "first_name": "Fixture59",
+          "last_name": "Customer",
+          "email": "fixture59@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_59",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 60,
+          "first_name": "Fixture60",
+          "last_name": "Customer",
+          "email": "fixture60@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_60",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 61,
+          "first_name": "Fixture61",
+          "last_name": "Customer",
+          "email": "fixture61@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_61",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 62,
+          "first_name": "Fixture62",
+          "last_name": "Customer",
+          "email": "fixture62@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_62",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 63,
+          "first_name": "Fixture63",
+          "last_name": "Customer",
+          "email": "fixture63@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_63",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 64,
+          "first_name": "Fixture64",
+          "last_name": "Customer",
+          "email": "fixture64@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_64",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 65,
+          "first_name": "Fixture65",
+          "last_name": "Customer",
+          "email": "fixture65@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_65",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 66,
+          "first_name": "Fixture66",
+          "last_name": "Customer",
+          "email": "fixture66@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_66",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 67,
+          "first_name": "Fixture67",
+          "last_name": "Customer",
+          "email": "fixture67@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_67",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 68,
+          "first_name": "Fixture68",
+          "last_name": "Customer",
+          "email": "fixture68@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_68",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 69,
+          "first_name": "Fixture69",
+          "last_name": "Customer",
+          "email": "fixture69@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_69",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 70,
+          "first_name": "Fixture70",
+          "last_name": "Customer",
+          "email": "fixture70@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_70",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 71,
+          "first_name": "Fixture71",
+          "last_name": "Customer",
+          "email": "fixture71@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_71",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 72,
+          "first_name": "Fixture72",
+          "last_name": "Customer",
+          "email": "fixture72@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_72",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 73,
+          "first_name": "Fixture73",
+          "last_name": "Customer",
+          "email": "fixture73@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_73",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 74,
+          "first_name": "Fixture74",
+          "last_name": "Customer",
+          "email": "fixture74@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_74",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 75,
+          "first_name": "Fixture75",
+          "last_name": "Customer",
+          "email": "fixture75@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_75",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 76,
+          "first_name": "Fixture76",
+          "last_name": "Customer",
+          "email": "fixture76@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_76",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 77,
+          "first_name": "Fixture77",
+          "last_name": "Customer",
+          "email": "fixture77@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_77",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 78,
+          "first_name": "Fixture78",
+          "last_name": "Customer",
+          "email": "fixture78@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_78",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 79,
+          "first_name": "Fixture79",
+          "last_name": "Customer",
+          "email": "fixture79@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_79",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 80,
+          "first_name": "Fixture80",
+          "last_name": "Customer",
+          "email": "fixture80@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_80",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 81,
+          "first_name": "Fixture81",
+          "last_name": "Customer",
+          "email": "fixture81@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_81",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 82,
+          "first_name": "Fixture82",
+          "last_name": "Customer",
+          "email": "fixture82@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_82",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 83,
+          "first_name": "Fixture83",
+          "last_name": "Customer",
+          "email": "fixture83@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_83",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 84,
+          "first_name": "Fixture84",
+          "last_name": "Customer",
+          "email": "fixture84@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_84",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 85,
+          "first_name": "Fixture85",
+          "last_name": "Customer",
+          "email": "fixture85@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_85",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 86,
+          "first_name": "Fixture86",
+          "last_name": "Customer",
+          "email": "fixture86@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_86",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 87,
+          "first_name": "Fixture87",
+          "last_name": "Customer",
+          "email": "fixture87@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_87",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 88,
+          "first_name": "Fixture88",
+          "last_name": "Customer",
+          "email": "fixture88@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_88",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 89,
+          "first_name": "Fixture89",
+          "last_name": "Customer",
+          "email": "fixture89@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_89",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 90,
+          "first_name": "Fixture90",
+          "last_name": "Customer",
+          "email": "fixture90@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_90",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 91,
+          "first_name": "Fixture91",
+          "last_name": "Customer",
+          "email": "fixture91@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_91",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 92,
+          "first_name": "Fixture92",
+          "last_name": "Customer",
+          "email": "fixture92@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_92",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 93,
+          "first_name": "Fixture93",
+          "last_name": "Customer",
+          "email": "fixture93@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_93",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 94,
+          "first_name": "Fixture94",
+          "last_name": "Customer",
+          "email": "fixture94@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_94",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 95,
+          "first_name": "Fixture95",
+          "last_name": "Customer",
+          "email": "fixture95@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_95",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 96,
+          "first_name": "Fixture96",
+          "last_name": "Customer",
+          "email": "fixture96@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_96",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 97,
+          "first_name": "Fixture97",
+          "last_name": "Customer",
+          "email": "fixture97@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_97",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 98,
+          "first_name": "Fixture98",
+          "last_name": "Customer",
+          "email": "fixture98@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_98",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 99,
+          "first_name": "Fixture99",
+          "last_name": "Customer",
+          "email": "fixture99@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_99",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      },
+      {
+        "customer": {
+          "id": 100,
+          "first_name": "Fixture100",
+          "last_name": "Customer",
+          "email": "fixture100@example.com",
+          "organization": "Polymetrics",
+          "reference": "ref_100",
+          "phone": "+15550100",
+          "country": "US",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      }
+    ]
+  }
+}

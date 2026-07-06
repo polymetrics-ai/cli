@@ -1,0 +1,23 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/oauth/token",
+        "client_id": "{{ config.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "extra_params": { "audience": "{{ config.base_url }}/api/v2/" }
+      }
+    ],
+    "check": { "method": "GET", "path": "/ping" }
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": { "path": "data" },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

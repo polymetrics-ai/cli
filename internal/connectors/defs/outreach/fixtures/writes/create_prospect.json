@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "prospect",
+      "attributes": {
+        "name": "Fixture Create Prospect"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/prospects",
+    "body": {
+      "data": {
+        "type": "prospect",
+        "attributes": {
+          "name": "Fixture Create Prospect"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

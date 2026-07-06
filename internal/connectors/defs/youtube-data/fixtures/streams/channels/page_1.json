@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/channels", "query": { "part": "snippet,statistics" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "chan_fixture_1",
+          "snippet": { "title": "Fixture Channel One" },
+          "statistics": { "viewCount": "1000" }
+        },
+        {
+          "id": "chan_fixture_2",
+          "snippet": { "title": "Fixture Channel Two" },
+          "statistics": { "viewCount": "2000" }
+        }
+      ]
+    }
+  }
+}

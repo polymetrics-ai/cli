@@ -1,0 +1,567 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture Customer 1",
+          "email": "fixture1@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-1",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Customer 2",
+          "email": "fixture2@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-2",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Customer 3",
+          "email": "fixture3@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-3",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Customer 4",
+          "email": "fixture4@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-4",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Customer 5",
+          "email": "fixture5@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-5",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Customer 6",
+          "email": "fixture6@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-6",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Customer 7",
+          "email": "fixture7@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-7",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Customer 8",
+          "email": "fixture8@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-8",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Customer 9",
+          "email": "fixture9@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-9",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Customer 10",
+          "email": "fixture10@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-10",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Customer 11",
+          "email": "fixture11@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-11",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Customer 12",
+          "email": "fixture12@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-12",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Customer 13",
+          "email": "fixture13@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-13",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Customer 14",
+          "email": "fixture14@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-14",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Customer 15",
+          "email": "fixture15@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-15",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Customer 16",
+          "email": "fixture16@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-16",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Customer 17",
+          "email": "fixture17@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-17",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Customer 18",
+          "email": "fixture18@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-18",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Customer 19",
+          "email": "fixture19@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-19",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Customer 20",
+          "email": "fixture20@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-20",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Customer 21",
+          "email": "fixture21@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-21",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Customer 22",
+          "email": "fixture22@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-22",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Customer 23",
+          "email": "fixture23@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-23",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Customer 24",
+          "email": "fixture24@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-24",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Customer 25",
+          "email": "fixture25@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-25",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Customer 26",
+          "email": "fixture26@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-26",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Customer 27",
+          "email": "fixture27@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-27",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Customer 28",
+          "email": "fixture28@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-28",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Customer 29",
+          "email": "fixture29@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-29",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Customer 30",
+          "email": "fixture30@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-30",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Customer 31",
+          "email": "fixture31@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-31",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Customer 32",
+          "email": "fixture32@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-32",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Customer 33",
+          "email": "fixture33@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-33",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Customer 34",
+          "email": "fixture34@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-34",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Customer 35",
+          "email": "fixture35@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-35",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Customer 36",
+          "email": "fixture36@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-36",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Customer 37",
+          "email": "fixture37@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-37",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Customer 38",
+          "email": "fixture38@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-38",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Customer 39",
+          "email": "fixture39@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-39",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Customer 40",
+          "email": "fixture40@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-40",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Customer 41",
+          "email": "fixture41@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-41",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Customer 42",
+          "email": "fixture42@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-42",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Customer 43",
+          "email": "fixture43@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-43",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Customer 44",
+          "email": "fixture44@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-44",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Customer 45",
+          "email": "fixture45@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-45",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Customer 46",
+          "email": "fixture46@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-46",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Customer 47",
+          "email": "fixture47@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-47",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Customer 48",
+          "email": "fixture48@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-48",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Customer 49",
+          "email": "fixture49@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-49",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Customer 50",
+          "email": "fixture50@example.com",
+          "phone": "+15550100",
+          "currency": "USD",
+          "reference_id": "ref-50",
+          "category": "wholesale",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

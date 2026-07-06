@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/v1/business-units/synthetic-conformance-value/categories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "categoryId": "pet_store",
+          "displayName": "Pet Store",
+          "name": "pet_store",
+          "isPrimary": true,
+          "source": "business",
+          "relevance": 1
+        },
+        {
+          "categoryId": "online_marketplace",
+          "displayName": "Online Marketplace",
+          "name": "online_marketplace",
+          "isPrimary": false,
+          "source": "trustpilot",
+          "relevance": 0.5
+        }
+      ],
+      "predictedTopCategory": {}
+    }
+  }
+}

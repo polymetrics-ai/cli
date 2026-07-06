@@ -1,0 +1,386 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Okta Connection Specification",
+  "type": "object",
+  "required": [
+    "base_url"
+  ],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Okta org API base URL, e.g. https://your-org.okta.com."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Okta API token, sent as Authorization: SSWS."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth access token, sent as Bearer when api_token is absent."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional lower bound for system log since filtering."
+    },
+    "oauth_client_id": {
+      "type": "string",
+      "description": "Required query parameter oauthClientId for well_known_app_authenticator_configuration."
+    },
+    "pool_id": {
+      "type": "string",
+      "description": "Path parameter poolId for api_v1_agent_pools_pool_id_updates."
+    },
+    "update_id": {
+      "type": "string",
+      "description": "Path parameter updateId for api_v1_agent_pools_pool_id_updates_update_id."
+    },
+    "api_token_id": {
+      "type": "string",
+      "description": "Path parameter apiTokenId for api_v1_api_tokens_api_token_id."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Path parameter appId for api_v1_apps_app_id."
+    },
+    "csr_id": {
+      "type": "string",
+      "description": "Path parameter csrId for api_v1_apps_app_id_credentials_csrs_csr_id."
+    },
+    "key_id": {
+      "type": "string",
+      "description": "Path parameter keyId for api_v1_apps_app_id_credentials_jwks_key_id."
+    },
+    "secret_id": {
+      "type": "string",
+      "description": "Path parameter secretId for api_v1_apps_app_id_credentials_secrets_secret_id."
+    },
+    "connection_id": {
+      "type": "string",
+      "description": "Path parameter connectionId for api_v1_apps_app_id_cwo_connections_connection_id."
+    },
+    "feature_name": {
+      "type": "string",
+      "description": "Path parameter featureName for api_v1_apps_app_id_features_feature_name."
+    },
+    "claim_id": {
+      "type": "string",
+      "description": "Path parameter claimId for api_v1_apps_app_id_federated_claims_claim_id."
+    },
+    "grant_id": {
+      "type": "string",
+      "description": "Path parameter grantId for api_v1_apps_app_id_grants_grant_id."
+    },
+    "mapping_id": {
+      "type": "string",
+      "description": "Path parameter mappingId for api_v1_apps_app_id_group_push_mappings_mapping_id."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Path parameter groupId for api_v1_apps_app_id_groups_group_id."
+    },
+    "token_id": {
+      "type": "string",
+      "description": "Path parameter tokenId for api_v1_apps_app_id_tokens_token_id."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Path parameter userId for api_v1_apps_app_id_users_user_id."
+    },
+    "authenticator_id": {
+      "type": "string",
+      "description": "Path parameter authenticatorId for api_v1_authenticators_authenticator_id."
+    },
+    "aaguid": {
+      "type": "string",
+      "description": "Path parameter aaguid for api_v1_authenticators_authenticator_id_aaguids_aaguid."
+    },
+    "method_type": {
+      "type": "string",
+      "description": "Path parameter methodType for api_v1_authenticators_authenticator_id_methods_method_type."
+    },
+    "auth_server_id": {
+      "type": "string",
+      "description": "Path parameter authServerId for api_v1_authorization_servers_auth_server_id."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Path parameter clientId for api_v1_authorization_servers_auth_server_id_clients_client_id_tokens."
+    },
+    "policy_id": {
+      "type": "string",
+      "description": "Path parameter policyId for api_v1_authorization_servers_auth_server_id_policies_policy_id."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Path parameter ruleId for api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id."
+    },
+    "scope_id": {
+      "type": "string",
+      "description": "Path parameter scopeId for api_v1_authorization_servers_auth_server_id_scopes_scope_id."
+    },
+    "behavior_id": {
+      "type": "string",
+      "description": "Path parameter behaviorId for api_v1_behaviors_behavior_id."
+    },
+    "brand_id": {
+      "type": "string",
+      "description": "Path parameter brandId for api_v1_brands_brand_id."
+    },
+    "template_name": {
+      "type": "string",
+      "description": "Path parameter templateName for api_v1_brands_brand_id_templates_email_template_name."
+    },
+    "customization_id": {
+      "type": "string",
+      "description": "Path parameter customizationId for api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id."
+    },
+    "theme_id": {
+      "type": "string",
+      "description": "Path parameter themeId for api_v1_brands_brand_id_themes_theme_id."
+    },
+    "path": {
+      "type": "string",
+      "description": "Path parameter path for api_v1_brands_brand_id_well_known_uris_path."
+    },
+    "captcha_id": {
+      "type": "string",
+      "description": "Path parameter captchaId for api_v1_captchas_captcha_id."
+    },
+    "device_assurance_id": {
+      "type": "string",
+      "description": "Path parameter deviceAssuranceId for api_v1_device_assurances_device_assurance_id."
+    },
+    "device_integration_id": {
+      "type": "string",
+      "description": "Path parameter deviceIntegrationId for api_v1_device_integrations_device_integration_id."
+    },
+    "posture_check_id": {
+      "type": "string",
+      "description": "Path parameter postureCheckId for api_v1_device_posture_checks_posture_check_id."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Path parameter deviceId for api_v1_devices_device_id."
+    },
+    "app_instance_id": {
+      "type": "string",
+      "description": "Path parameter appInstanceId for api_v1_directories_app_instance_id_groups_group_id_query_result_id."
+    },
+    "result_id": {
+      "type": "string",
+      "description": "Path parameter resultId for api_v1_directories_app_instance_id_groups_group_id_query_result_id."
+    },
+    "domain_id": {
+      "type": "string",
+      "description": "Path parameter domainId for api_v1_domains_domain_id."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Path parameter domain for api_v1_dr_status_domain."
+    },
+    "email_domain_id": {
+      "type": "string",
+      "description": "Path parameter emailDomainId for api_v1_email_domains_email_domain_id."
+    },
+    "email_server_id": {
+      "type": "string",
+      "description": "Path parameter emailServerId for api_v1_email_servers_email_server_id."
+    },
+    "event_hook_id": {
+      "type": "string",
+      "description": "Path parameter eventHookId for api_v1_event_hooks_event_hook_id."
+    },
+    "feature_id": {
+      "type": "string",
+      "description": "Path parameter featureId for api_v1_features_feature_id."
+    },
+    "app_name": {
+      "type": "string",
+      "description": "Path parameter appName for api_v1_first_party_app_settings_app_name."
+    },
+    "group_rule_id": {
+      "type": "string",
+      "description": "Path parameter groupRuleId for api_v1_groups_rules_group_rule_id."
+    },
+    "role_assignment_id": {
+      "type": "string",
+      "description": "Path parameter roleAssignmentId for api_v1_groups_group_id_roles_role_assignment_id."
+    },
+    "id": {
+      "type": "string",
+      "description": "Path parameter id for api_v1_hook_keys_id."
+    },
+    "bundle_id": {
+      "type": "string",
+      "description": "Path parameter bundleId for api_v1_iam_governance_bundles_bundle_id."
+    },
+    "entitlement_id": {
+      "type": "string",
+      "description": "Path parameter entitlementId for api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values."
+    },
+    "resource_set_id_or_label": {
+      "type": "string",
+      "description": "Path parameter resourceSetIdOrLabel for api_v1_iam_resource_sets_resource_set_id_or_label."
+    },
+    "role_id_or_label": {
+      "type": "string",
+      "description": "Path parameter roleIdOrLabel for api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label."
+    },
+    "member_id": {
+      "type": "string",
+      "description": "Path parameter memberId for api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id."
+    },
+    "resource_id": {
+      "type": "string",
+      "description": "Path parameter resourceId for api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id."
+    },
+    "permission_type": {
+      "type": "string",
+      "description": "Path parameter permissionType for api_v1_iam_roles_role_id_or_label_permissions_permission_type."
+    },
+    "identity_source_id": {
+      "type": "string",
+      "description": "Path parameter identitySourceId for api_v1_identity_sources_identity_source_id_groups_group_or_external_id."
+    },
+    "group_or_external_id": {
+      "type": "string",
+      "description": "Path parameter groupOrExternalId for api_v1_identity_sources_identity_source_id_groups_group_or_external_id."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Path parameter sessionId for api_v1_identity_sources_identity_source_id_sessions_session_id."
+    },
+    "external_id": {
+      "type": "string",
+      "description": "Path parameter externalId for api_v1_identity_sources_identity_source_id_users_external_id."
+    },
+    "kid": {
+      "type": "string",
+      "description": "Path parameter kid for api_v1_idps_credentials_keys_kid."
+    },
+    "idp_id": {
+      "type": "string",
+      "description": "Path parameter idpId for api_v1_idps_idp_id."
+    },
+    "idp_csr_id": {
+      "type": "string",
+      "description": "Path parameter idpCsrId for api_v1_idps_idp_id_credentials_csrs_idp_csr_id."
+    },
+    "inline_hook_id": {
+      "type": "string",
+      "description": "Path parameter inlineHookId for api_v1_inline_hooks_inline_hook_id."
+    },
+    "log_stream_id": {
+      "type": "string",
+      "description": "Path parameter logStreamId for api_v1_log_streams_log_stream_id."
+    },
+    "log_stream_type": {
+      "type": "string",
+      "description": "Path parameter logStreamType for api_v1_meta_schemas_log_stream_log_stream_type."
+    },
+    "linked_object_name": {
+      "type": "string",
+      "description": "Path parameter linkedObjectName for api_v1_meta_schemas_user_linked_objects_linked_object_name."
+    },
+    "schema_id": {
+      "type": "string",
+      "description": "Path parameter schemaId for api_v1_meta_schemas_user_schema_id."
+    },
+    "type_id": {
+      "type": "string",
+      "description": "Path parameter typeId for api_v1_meta_types_user_type_id."
+    },
+    "contact_type": {
+      "type": "string",
+      "description": "Path parameter contactType for api_v1_org_contacts_contact_type."
+    },
+    "type": {
+      "type": "string",
+      "description": "Required query parameter type for api_v1_policies."
+    },
+    "filter": {
+      "type": "string",
+      "description": "Required query parameter filter for api_v1_principal_rate_limits."
+    },
+    "principal_rate_limit_id": {
+      "type": "string",
+      "description": "Path parameter principalRateLimitId for api_v1_principal_rate_limits_principal_rate_limit_id."
+    },
+    "push_provider_id": {
+      "type": "string",
+      "description": "Path parameter pushProviderId for api_v1_push_providers_push_provider_id."
+    },
+    "assignment_id": {
+      "type": "string",
+      "description": "Path parameter assignmentId for api_v1_realm_assignments_assignment_id."
+    },
+    "realm_id": {
+      "type": "string",
+      "description": "Path parameter realmId for api_v1_realms_realm_id."
+    },
+    "role_ref": {
+      "type": "string",
+      "description": "Path parameter roleRef for api_v1_roles_role_ref_subscriptions."
+    },
+    "notification_type": {
+      "type": "string",
+      "description": "Path parameter notificationType for api_v1_roles_role_ref_subscriptions_notification_type."
+    },
+    "security_event_provider_id": {
+      "type": "string",
+      "description": "Path parameter securityEventProviderId for api_v1_security_events_providers_security_event_provider_id."
+    },
+    "stream_id": {
+      "type": "string",
+      "description": "Required query parameter stream_id for api_v1_ssf_stream_status."
+    },
+    "custom_telephony_provider_id": {
+      "type": "string",
+      "description": "Path parameter customTelephonyProviderId for api_v1_telephony_providers_custom_telephony_provider_id."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Path parameter templateId for api_v1_templates_sms_template_id."
+    },
+    "trusted_origin_id": {
+      "type": "string",
+      "description": "Path parameter trustedOriginId for api_v1_trusted_origins_trusted_origin_id."
+    },
+    "user_id_or_login": {
+      "type": "string",
+      "description": "Path parameter userIdOrLogin for api_v1_users_user_id_or_login_linked_objects_relationship_name."
+    },
+    "relationship_name": {
+      "type": "string",
+      "description": "Path parameter relationshipName for api_v1_users_user_id_or_login_linked_objects_relationship_name."
+    },
+    "enrollment_id": {
+      "type": "string",
+      "description": "Path parameter enrollmentId for api_v1_users_user_id_authenticator_enrollments_enrollment_id."
+    },
+    "factor_id": {
+      "type": "string",
+      "description": "Path parameter factorId for api_v1_users_user_id_factors_factor_id."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Path parameter transactionId for api_v1_users_user_id_factors_factor_id_transactions_transaction_id."
+    },
+    "role_id_or_encoded_role_id": {
+      "type": "string",
+      "description": "Path parameter roleIdOrEncodedRoleId for api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets."
+    },
+    "zone_id": {
+      "type": "string",
+      "description": "Path parameter zoneId for api_v1_zones_zone_id."
+    },
+    "api_service_id": {
+      "type": "string",
+      "description": "Path parameter apiServiceId for integrations_api_v1_api_services_api_service_id."
+    }
+  }
+}

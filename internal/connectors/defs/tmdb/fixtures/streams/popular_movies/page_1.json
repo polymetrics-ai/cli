@@ -1,0 +1,159 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/movie/popular",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 1,
+          "title": "Fixture Movie 1",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 2,
+          "title": "Fixture Movie 2",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 3,
+          "title": "Fixture Movie 3",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 4,
+          "title": "Fixture Movie 4",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 5,
+          "title": "Fixture Movie 5",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 6,
+          "title": "Fixture Movie 6",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 7,
+          "title": "Fixture Movie 7",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 8,
+          "title": "Fixture Movie 8",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 9,
+          "title": "Fixture Movie 9",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 10,
+          "title": "Fixture Movie 10",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 11,
+          "title": "Fixture Movie 11",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 12,
+          "title": "Fixture Movie 12",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 13,
+          "title": "Fixture Movie 13",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 14,
+          "title": "Fixture Movie 14",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 15,
+          "title": "Fixture Movie 15",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 16,
+          "title": "Fixture Movie 16",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 17,
+          "title": "Fixture Movie 17",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 18,
+          "title": "Fixture Movie 18",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 19,
+          "title": "Fixture Movie 19",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        },
+        {
+          "id": 20,
+          "title": "Fixture Movie 20",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        }
+      ],
+      "page": 1,
+      "total_pages": 2,
+      "total_results": 21
+    }
+  }
+}

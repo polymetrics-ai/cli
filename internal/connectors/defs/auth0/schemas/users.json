@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["user_id"],
+  "x-cursor-field": "updated_at",
+  "required": ["user_id"],
+  "properties": {
+    "user_id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "email_verified": { "type": ["boolean", "null"] },
+    "username": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "nickname": { "type": ["string", "null"] },
+    "given_name": { "type": ["string", "null"] },
+    "family_name": { "type": ["string", "null"] },
+    "picture": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "last_login": { "type": ["string", "null"] },
+    "logins_count": { "type": ["integer", "null"] },
+    "blocked": { "type": ["boolean", "null"] }
+  }
+}

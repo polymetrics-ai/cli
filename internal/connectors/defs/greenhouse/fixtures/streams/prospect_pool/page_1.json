@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/prospect_pools/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "name": "Synthetic Prospect Pool fixture",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z"
+    }
+  }
+}

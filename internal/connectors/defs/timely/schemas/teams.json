@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "teams",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id", "name", "color"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "color": { "type": "string" },
+    "emoji": { "type": ["string", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "user_ids": { "type": ["array", "null"], "items": { "type": "integer" } },
+    "project_ids": { "type": ["array", "null"], "items": { "type": "integer" } }
+  }
+}

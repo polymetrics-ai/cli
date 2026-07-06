@@ -1,0 +1,24 @@
+{
+  "name": "nutshell",
+  "display_name": "Nutshell",
+  "description": "Reads and writes documented Nutshell CRM REST resources through the Nutshell REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.nutshell.com/docs/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Nutshell CRM read of account/contact/lead/activity/user and related CRM data",
+    "write": "external Nutshell CRM mutations including creates, updates, undeletes, watches, and destructive deletes",
+    "approval": "required for write actions; destructive delete actions carry destructive confirmation metadata"
+  }
+}

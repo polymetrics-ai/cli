@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 201
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/event-types/201"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 201 } }
+  }
+}

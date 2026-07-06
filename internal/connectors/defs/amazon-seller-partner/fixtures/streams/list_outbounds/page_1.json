@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/outboundOrders",
+    "query": {
+      "maxResults": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "outboundOrders": [
+        {
+          "confirmedOn": "confirmedOn-fixture-1",
+          "createdAt": "createdAt-fixture-1",
+          "eligiblePackagesToOutbound": [],
+          "eligibleProductsToOutbound": [],
+          "executionErrors": [],
+          "orderId": "orderId-fixture-1",
+          "orderPreferences": [],
+          "orderStatus": "orderStatus-fixture-1",
+          "outboundShipments": [],
+          "packagesToOutbound": [],
+          "productsToOutbound": [],
+          "shippedOutboundPackages": [],
+          "shippedOutboundProducts": [],
+          "updatedAt": "updatedAt-fixture-1"
+        }
+      ]
+    }
+  }
+}

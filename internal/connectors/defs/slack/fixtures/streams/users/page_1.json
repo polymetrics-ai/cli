@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/users.list", "query": { "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "members": [
+        { "id": "U1", "team_id": "T_FIXTURE", "name": "ada", "real_name": "Ada", "deleted": false, "is_admin": false, "is_bot": false, "tz": "America/New_York", "updated": 1700000000, "profile": { "email": "ada@example.com", "display_name": "ada" } },
+        { "id": "U2", "team_id": "T_FIXTURE", "name": "grace", "real_name": "Grace", "deleted": false, "is_admin": false, "is_bot": false, "tz": "America/New_York", "updated": 1700000100, "profile": { "email": "grace@example.com", "display_name": "grace" } }
+      ],
+      "response_metadata": { "next_cursor": "PAGE2" }
+    }
+  }
+}

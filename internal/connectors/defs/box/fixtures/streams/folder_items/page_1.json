@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/folders/synthetic-conformance-value/items", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "folder_items_fixture_1",
+          "type": "file",
+          "name": "Fixture file 1",
+          "etag": "1",
+          "sequence_id": "1",
+          "sha1": "0000000000000000000000000000000000000001",
+          "size": 1024,
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        },
+        {
+          "id": "folder_items_fixture_2",
+          "type": "folder",
+          "name": "Fixture folder 2",
+          "etag": "2",
+          "sequence_id": "2",
+          "sha1": "",
+          "size": 0,
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "total_count": 2
+    }
+  }
+}

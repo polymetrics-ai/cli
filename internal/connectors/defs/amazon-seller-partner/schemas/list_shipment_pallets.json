@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_shipment_pallets",
+  "type": "object",
+  "properties": {
+    "dimensions": {
+      "type": "object"
+    },
+    "packageId": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "stackability": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "object"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/projects" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "prj_fixture_1", "name": "Fixture Project", "color": "charcoal", "is_favorite": false }
+    ]
+  }
+}

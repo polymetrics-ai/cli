@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 10
+    },
+    "check": { "method": "GET", "path": "/user/v3/account/whoAmI" },
+    "error_map": [
+      { "status": 401, "hint": "nexiopay username/api_key is missing or invalid; re-run pm credentials add nexiopay" },
+      { "status": 429, "class": "rate_limited", "hint": "nexiopay rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "card_tokens",
+      "path": "/card/v3",
+      "records": { "path": "rows" },
+      "schema": "schemas/card_tokens.json"
+    },
+    {
+      "name": "recipients",
+      "path": "/payout/v3/recipient",
+      "records": { "path": "rows" },
+      "schema": "schemas/recipients.json"
+    },
+    {
+      "name": "spendbacks",
+      "path": "/payout/v3/spendback",
+      "records": { "path": "rows" },
+      "schema": "schemas/spendbacks.json"
+    },
+    {
+      "name": "payment_types",
+      "path": "/transaction/v3/paymentTypes",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payment_types.json"
+    },
+    {
+      "name": "terminal_list",
+      "path": "/pay/v3/getTerminalList",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/terminal_list.json"
+    },
+    {
+      "name": "user",
+      "path": "/user/v3/account/whoAmI",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user.json"
+    }
+  ]
+}

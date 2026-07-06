@@ -1,0 +1,25 @@
+{
+  "name": "judge-me-reviews",
+  "display_name": "Judge.me Reviews",
+  "description": "Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, settings, replies, and legacy product/widget resources through the Judge.me REST API.",
+  "integration_type": "api",
+  "docs_url": "https://judge.me/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 100
+  },
+  "risk": {
+    "read": "external Judge.me API read of Shopify shop reviews, widgets, reviewers, webhooks, shop metadata, settings, and legacy product/widget resources",
+    "write": "external Judge.me API mutations can create reviews, update moderation/reviewer/shop/webhook state, create replies/comments, and uninstall a shop",
+    "approval": "reverse ETL writes require plan, preview, approval, execute"
+  }
+}

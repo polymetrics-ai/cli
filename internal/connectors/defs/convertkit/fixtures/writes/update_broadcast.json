@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 200,
+    "subject": "Fixture Broadcast (updated)"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/broadcasts/200",
+    "body": { "subject": "Fixture Broadcast (updated)" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "broadcast": { "id": 200, "subject": "Fixture Broadcast (updated)" } }
+  }
+}

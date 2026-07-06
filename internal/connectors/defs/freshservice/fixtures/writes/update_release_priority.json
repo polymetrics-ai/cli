@@ -1,0 +1,15 @@
+{
+  "record": {
+    "release_id": 123,
+    "name": "Fixture update_release_priority",
+    "description": "Fixture update_release_priority record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/releases/123",
+    "body": {
+      "name": "Fixture update_release_priority",
+      "description": "Fixture update_release_priority record"
+    }
+  }
+}

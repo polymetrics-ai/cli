@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/assignees/users",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        {
+          "id": "id_fixture",
+          "orn": "orn_fixture",
+          "_links": {
+            "roles": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ],
+      "_links": {
+        "next": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

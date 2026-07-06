@@ -1,0 +1,64 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next_url",
+      "max_pages": 3
+    },
+    "check": { "method": "GET", "path": "/v3/reference/tickers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "polygon-stock-api api_key is missing or invalid; re-run pm credentials add polygon-stock-api" },
+      { "status": 403, "hint": "polygon-stock-api plan lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "polygon-stock-api rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickers",
+      "path": "/v3/reference/tickers",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "ticker": { "template": "{{ config.ticker }}", "omit_when_absent": true },
+        "market": { "template": "{{ config.market }}", "omit_when_absent": true },
+        "locale": { "template": "{{ config.locale }}", "omit_when_absent": true },
+        "type": { "template": "{{ config.type }}", "omit_when_absent": true },
+        "active": { "template": "{{ config.active }}", "default": "true" },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "order": { "template": "{{ config.order }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/tickers.json"
+    },
+    {
+      "name": "dividends",
+      "path": "/v3/reference/dividends",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "ticker": { "template": "{{ config.ticker }}", "omit_when_absent": true },
+        "ex_dividend_date": { "template": "{{ config.ex_dividend_date }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "order": { "template": "{{ config.order }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/dividends.json"
+    },
+    {
+      "name": "splits",
+      "path": "/v3/reference/splits",
+      "query": {
+        "limit": "{{ config.page_size }}",
+        "ticker": { "template": "{{ config.ticker }}", "omit_when_absent": true },
+        "execution_date": { "template": "{{ config.execution_date }}", "omit_when_absent": true },
+        "sort": { "template": "{{ config.sort }}", "omit_when_absent": true },
+        "order": { "template": "{{ config.order }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/splits.json"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 42,
+      "name": "Fixture Organization",
+      "description": "Deterministic fixture record.",
+      "parent": null,
+      "region": "us",
+      "subsidiaries": [],
+      "createdAt": 1735689600000,
+      "emailDomains": ["example.com"],
+      "askForTags": false,
+      "allTagsVisible": true,
+      "canCollaboratorSign": false,
+      "subscription": { "subscriptionId": "sub_fixture_1" },
+      "deleted": false,
+      "logo": null,
+      "aiEnabled": false
+    }
+  }
+}

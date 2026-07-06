@@ -1,0 +1,15 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value",
+    "template_name": "synthetic-conformance-value",
+    "customization_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/brands/synthetic-conformance-value/templates/email/synthetic-conformance-value/customizations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

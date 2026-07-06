@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetErrorCodeDescriptions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        {
+          "Code": "InvalidAccountNumber",
+          "Message": "The account number submitted is not valid for the selected product."
+        }
+      ]
+    }
+  }
+}

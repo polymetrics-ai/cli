@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "applications",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "candidateId": {
+      "type": "string"
+    },
+    "jobId": {
+      "type": "string"
+    },
+    "currentInterviewStageId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object"
+    },
+    "archiveReason": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt"
+}

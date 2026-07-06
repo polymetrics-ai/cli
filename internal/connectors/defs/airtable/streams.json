@@ -1,0 +1,65 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "offset",
+      "token_path": "offset"
+    },
+    "check": { "method": "GET", "path": "/meta/bases" },
+    "error_map": [
+      { "status": 401, "hint": "airtable token is missing or invalid; re-run pm credentials add airtable" },
+      { "status": 403, "hint": "airtable token lacks access for this base/table" },
+      { "status": 429, "class": "rate_limited", "hint": "airtable rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bases",
+      "path": "/meta/bases",
+      "records": { "path": "bases" },
+      "schema": "schemas/bases.json"
+    },
+    {
+      "name": "tables",
+      "path": "/meta/bases/{{ config.base_id }}/tables",
+      "records": { "path": "tables" },
+      "schema": "schemas/tables.json"
+    },
+    {
+      "name": "records",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}",
+      "query": { "pageSize": "{{ config.page_size }}" },
+      "records": { "path": "records" },
+      "schema": "schemas/records.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/bases/{{ config.base_id }}/webhooks",
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "comments",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments",
+      "records": { "path": "comments" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/{{ config.base_id }}/{{ config.table_id }}",
+            "records_path": "records",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "record_id" },
+        "stamp_field": "record_id"
+      },
+      "schema": "schemas/comments.json"
+    }
+  ]
+}

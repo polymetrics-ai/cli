@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/fixture/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "fields": { "name": "Boston", "population": "617594", "state": "Fixture State" },
+        "fixture_type": "city",
+        "resource_uri": "",
+        "id": "fixture_item_1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "saved_filter_token": "svfl_fixture_1",
+    "title": "Updated Filter"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/saved_filters/svfl_fixture_1"
+  }
+}

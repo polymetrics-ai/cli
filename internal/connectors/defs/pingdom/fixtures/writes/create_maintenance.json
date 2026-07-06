@@ -1,0 +1,19 @@
+{
+  "record": {
+    "description": "Fixture maintenance window",
+    "from": 1767225600,
+    "to": 1767229200,
+    "uptimeids": [100010]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/maintenance",
+    "body": {
+      "description": "Fixture maintenance window",
+      "from": 1767225600,
+      "to": 1767229200,
+      "uptimeids": [100010]
+    }
+  },
+  "response": { "status": 200, "body": { "maintenance": { "id": 900010 } } }
+}

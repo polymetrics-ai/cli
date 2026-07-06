@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/cohorts/list", "query": { "limit": "synthetic-conformance-value", "page": "fixture-page-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "cohorts": [
+        { "id": 13, "name": "Fixture Trial Users", "count": 3 }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v2/customers", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "items_per_page": 50, "current_page": 2, "count_pages": 2, "count_items": 51 },
+      "customers": [
+        {
+          "id": 51,
+          "name": "Fixture Customer 51",
+          "number": "1051",
+          "active": true,
+          "billable_default": true,
+          "note": "",
+          "color": 51
+        }
+      ]
+    }
+  }
+}

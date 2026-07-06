@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/tasks/fixture_task_1/stories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_story_1", "resource_type": "story", "created_at": "2026-01-01T00:00:00Z", "resource_subtype": "comment_added", "text": "Fixture comment text", "type": "comment" }
+      ],
+      "next_page": null
+    }
+  }
+}

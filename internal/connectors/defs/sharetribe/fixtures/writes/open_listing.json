@@ -1,0 +1,12 @@
+{
+  "record": { "id": "listing_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/listings/open",
+    "body": { "id": "listing_fixture_1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "listing_fixture_1", "type": "listing" } }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/message-streams/synthetic-conformance-value/suppressions/dump",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "Suppressions": [
+        {
+          "EmailAddress": "suppressed@example.com",
+          "SuppressionReason": "ManualSuppression"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/settlements/v1/transactions", "query": { "size": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        {
+          "transaction_id": "txn_fixture_1",
+          "payout_reference": "payout_fixture_1",
+          "type": "Sale",
+          "amount": 1000,
+          "currency_code": "EUR",
+          "capture_id": "cap_fixture_1",
+          "order_id": "ord_fixture_1",
+          "short_order_id": "so_1",
+          "merchant_reference1": "ref1_1",
+          "merchant_reference2": "ref2_1",
+          "sale_date": "2026-01-01T00:00:00Z",
+          "capture_date": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

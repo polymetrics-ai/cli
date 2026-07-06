@@ -1,0 +1,25 @@
+{
+  "name": "reply-io",
+  "display_name": "Reply.io",
+  "description": "Reads Reply.io legacy v1 objects and current v3 API resources; writes supported v3 mutations through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.reply.io/api-reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 100
+  },
+  "risk": {
+    "read": "external Reply.io API read of outreach people, campaign, task, and email account data",
+    "write": "external Reply.io API mutations for contacts, accounts, sequences, templates, tasks, settings, webhooks, and related v3 resources",
+    "approval": "writes require explicit reverse-ETL plan, preview, approval, execute flow"
+  }
+}

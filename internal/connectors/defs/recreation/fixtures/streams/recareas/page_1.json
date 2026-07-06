@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/recareas", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        { "RecAreaID": "1", "RecAreaName": "Fixture Area 1", "LastUpdatedDate": "2026-01-01" },
+        { "RecAreaID": "2", "RecAreaName": "Fixture Area 2", "LastUpdatedDate": "2026-01-01" }
+      ],
+      "METADATA": { "RESULTS": { "TOTAL_COUNT": "2" } }
+    }
+  }
+}

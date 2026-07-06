@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contact",
+    "query": {
+      "Offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 1,
+      "Total": 101,
+      "Data": [
+        {
+          "ID": 1101,
+          "Email": "fixture101@example.com",
+          "Name": "Fixture Contact 101",
+          "CreatedAt": "2026-01-01T00:00:00Z",
+          "DeliveredCount": 101,
+          "IsExcludedFromCampaigns": false,
+          "IsOptInPending": false,
+          "IsSpamComplaining": false,
+          "LastActivityAt": "2026-01-01T00:00:00Z",
+          "LastUpdateAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/networks",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "N_fixture_1",
+        "name": "Fixture Network 1",
+        "productTypes": ["appliance", "wireless"],
+        "timeZone": "America/Los_Angeles",
+        "tags": ["fixture"],
+        "enrollmentString": null,
+        "url": "https://dashboard.meraki.com/n/fixture_1",
+        "notes": null,
+        "isBoundToConfigTemplate": false
+      }
+    ]
+  }
+}

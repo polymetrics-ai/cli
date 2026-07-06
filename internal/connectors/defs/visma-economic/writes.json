@@ -1,0 +1,318 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "currency", "paymentTerms", "customerGroup", "vatZone"],
+        "properties": {
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "paymentTerms": { "type": "object" },
+          "customerGroup": { "type": "object" },
+          "vatZone": { "type": "object" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "currency", "paymentTerms", "customerGroup", "vatZone"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "paymentTerms": { "type": "object" },
+          "customerGroup": { "type": "object" },
+          "vatZone": { "type": "object" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "destructive external mutation (deletes a customer permanently); approval required"
+    },
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/suppliers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "currency", "paymentTerms", "group", "vatZone"],
+        "properties": {
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "paymentTerms": { "type": "object" },
+          "group": { "type": "object" },
+          "vatZone": { "type": "object" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/suppliers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "currency", "paymentTerms", "group", "vatZone"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "paymentTerms": { "type": "object" },
+          "group": { "type": "object" },
+          "vatZone": { "type": "object" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_supplier",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/suppliers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "destructive external mutation (deletes a supplier permanently); approval required"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["productNumber", "name", "salesPrice", "productGroup"],
+        "properties": {
+          "productNumber": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "salesPrice": { "type": "number" },
+          "costPrice": { "type": "number" },
+          "productGroup": { "type": "object" },
+          "unit": { "type": "object" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "salesPrice", "productGroup"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "salesPrice": { "type": "number" },
+          "costPrice": { "type": "number" },
+          "productGroup": { "type": "object" },
+          "unit": { "type": "object" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "destructive external mutation (deletes a product permanently); approval required"
+    },
+    {
+      "name": "create_unit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/units",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_unit",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/units/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_unit",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/units/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "destructive external mutation (deletes a unit permanently); approval required"
+    },
+    {
+      "name": "create_payment_term",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payment-terms",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "paymentTermsType"],
+        "properties": {
+          "name": { "type": "string" },
+          "paymentTermsType": { "type": "string" },
+          "duration": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_payment_term",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/payment-terms/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "paymentTermsType"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "paymentTermsType": { "type": "string" },
+          "duration": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_payment_term",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/payment-terms/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "destructive external mutation (deletes a payment term permanently); approval required"
+    }
+  ]
+}

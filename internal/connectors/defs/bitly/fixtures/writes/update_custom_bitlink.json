@@ -1,0 +1,13 @@
+{
+  "record": {
+    "custom_bitlink": "fixture.link/promo",
+    "bitlink_id": "bit.ly/fixture2"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/custom_bitlinks/fixture.link/promo",
+    "body": {
+      "bitlink_id": "bit.ly/fixture2"
+    }
+  }
+}

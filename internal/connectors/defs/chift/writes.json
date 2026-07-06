@@ -1,0 +1,64 @@
+{
+  "actions": [
+    {
+      "name": "create_consumer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/consumers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "internal_reference": { "type": "string" },
+          "redirect_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_consumer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/consumers/{{ record.consumerid }}",
+      "path_fields": ["consumerid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["consumerid"],
+        "properties": {
+          "consumerid": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "internal_reference": { "type": "string" },
+          "redirect_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_consumer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/consumers/{{ record.consumerid }}",
+      "path_fields": ["consumerid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["consumerid"],
+        "properties": {
+          "consumerid": { "type": "string" }
+        }
+      },
+      "delete": {
+        "missing_ok_status": [404]
+      },
+      "risk": "irreversible external deletion; approval required"
+    }
+  ]
+}

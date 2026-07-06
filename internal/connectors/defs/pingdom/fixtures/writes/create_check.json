@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Check", "host": "fixture.example.com", "type": "http" },
+  "expect": {
+    "method": "POST",
+    "path": "/checks",
+    "body": { "name": "Fixture Check", "host": "fixture.example.com", "type": "http" }
+  },
+  "response": { "status": 200, "body": { "check": { "id": 100010, "name": "Fixture Check" } } }
+}

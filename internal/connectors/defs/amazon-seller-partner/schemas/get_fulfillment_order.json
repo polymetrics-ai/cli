@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_fulfillment_order",
+  "type": "object",
+  "properties": {
+    "fulfillmentOrder": {
+      "type": "object"
+    },
+    "fulfillmentOrderItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "fulfillmentShipments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "returnItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "returnAuthorizations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "paymentInformation": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "seller_fulfillment_order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "seller_fulfillment_order_id"
+  ]
+}

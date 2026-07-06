@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channel",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "Channel <link>, falling back to <title> (hooks/rss/hooks.go's channelRecord, matching legacy's rss.go channelRecord fallback chain)." },
+    "title": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"], "description": "Raw <lastBuildDate> text, verbatim (not reformatted), matching legacy exactly." }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "ebay-fulfillment",
+        "token_url": "{{ config.refresh_token_endpoint }}",
+        "client_id": "{{ secrets.username }}",
+        "client_secret": "{{ secrets.password }}",
+        "token": "{{ secrets.refresh_token }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "ebay-fulfillment refresh_token is missing or invalid; re-run pm credentials add ebay-fulfillment" },
+      { "status": 403, "hint": "ebay-fulfillment account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "ebay-fulfillment rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "orders",
+      "path": "/sell/fulfillment/v1/order",
+      "query": {
+        "filter": {
+          "template": "creationdate:[{{ incremental.lower_bound }}..]",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "orders"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "incremental": {
+        "cursor_field": "creation_date",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "order_id": "{{ record.orderId }}",
+        "legacy_order_id": "{{ record.legacyOrderId }}",
+        "creation_date": "{{ record.creationDate }}",
+        "last_modified_date": "{{ record.lastModifiedDate }}",
+        "order_fulfillment_status": "{{ record.orderFulfillmentStatus }}",
+        "order_payment_status": "{{ record.orderPaymentStatus }}",
+        "seller_id": "{{ record.sellerId }}",
+        "sales_record_reference": "{{ record.salesRecordReference }}",
+        "buyer_username": "{{ record.buyer.username }}",
+        "total_value": "{{ record.pricingSummary.total.value }}",
+        "total_currency": "{{ record.pricingSummary.total.currency }}",
+        "line_item_count": "{{ record.lineItems | length }}"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "order_line_items",
+      "path": "/sell/fulfillment/v1/order",
+      "records": {
+        "path": "orders"
+      },
+      "schema": "schemas/order_line_items.json"
+    },
+    {
+      "name": "shipping_fulfillments",
+      "path": "/sell/fulfillment/v1/order",
+      "records": {
+        "path": "orders"
+      },
+      "schema": "schemas/shipping_fulfillments.json"
+    },
+    {
+      "name": "payment_disputes",
+      "path": "/sell/fulfillment/v1/payment_dispute",
+      "query": {
+        "filter": {
+          "template": "creationdate:[{{ incremental.lower_bound }}..]",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "paymentDisputeSummaries"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "incremental": {
+        "cursor_field": "open_date",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "payment_dispute_id": "{{ record.paymentDisputeId }}",
+        "order_id": "{{ record.orderId }}",
+        "dispute_state": "{{ record.paymentDisputeStatus }}",
+        "dispute_status": "{{ record.paymentDisputeStatus }}",
+        "reason": "{{ record.reason }}",
+        "open_date": "{{ record.openDate }}",
+        "buyer_username": "{{ record.buyerUsername }}",
+        "amount_value": "{{ record.amount.value }}",
+        "amount_currency": "{{ record.amount.currency }}"
+      },
+      "schema": "schemas/payment_disputes.json"
+    }
+  ]
+}

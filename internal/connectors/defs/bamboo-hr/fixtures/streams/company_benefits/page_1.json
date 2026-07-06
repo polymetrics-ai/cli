@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefit/company_benefit"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "companyBenefits": [
+        {
+          "id": "fixture_id",
+          "type": "health",
+          "allowsCatchUp": true,
+          "allowsSuperCatchUp": true,
+          "benefitVendorId": "fixture_id",
+          "companyDeductionId": "fixture_id",
+          "deductionTypeId": "fixture_id",
+          "endDate": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

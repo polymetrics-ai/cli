@@ -1,0 +1,982 @@
+{
+  "actions": [
+    {
+      "name": "create_certification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_certification",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}",
+      "path_fields": [
+        "certification_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "certification_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "certification_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "archive_certification",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}/archive_status",
+      "path_fields": [
+        "certification_id"
+      ],
+      "body_fields": [
+        "status"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "certification_id",
+          "status"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "certification_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": [
+              "boolean",
+              "string"
+            ]
+          }
+        }
+      },
+      "risk": "archives or restores an Employment Hero certification configuration"
+    },
+    {
+      "name": "delete_certification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}",
+      "path_fields": [
+        "certification_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "certification_id"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "certification_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes an Employment Hero certification configuration",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/departments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "work_site_id": {
+            "type": "string"
+          },
+          "member_ids": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_department",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/departments/{{ record.department_id }}",
+      "path_fields": [
+        "department_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "department_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "department_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "quick_add_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/quick_add_employee",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "first_name",
+          "last_name",
+          "email"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "employing_entity_id": {
+            "type": "string"
+          },
+          "work_location": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "quick_add_contractor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/quick_add_contractor",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "first_name",
+          "last_name",
+          "email"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "trading_name": {
+            "type": "string"
+          },
+          "business_detail": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "onboard_employee_async",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/polling_onboard_employee",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "first_name",
+          "last_name",
+          "user_attributes"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "user_attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "starts an asynchronous employee onboarding job; approval required before execution"
+    },
+    {
+      "name": "update_employee_personal_details",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/personal_details",
+      "path_fields": [
+        "employee_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "personal_email": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_employee_employment_details",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/employment_details",
+      "path_fields": [
+        "employee_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "job_title": {
+            "type": "string"
+          },
+          "company_email": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_employee_contractor_details",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/contractor_details",
+      "path_fields": [
+        "employee_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "trading_name": {
+            "type": "string"
+          },
+          "business_detail": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "delete_employee",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}",
+      "path_fields": [
+        "employee_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes or removes an Employment Hero employee record",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_employee_certification",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/certifications/{{ record.id }}",
+      "path_fields": [
+        "employee_id",
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id",
+          "id"
+        ],
+        "minProperties": 3,
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "completion_date": {
+            "type": "string"
+          },
+          "expiry_date": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "delete_form",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/organisations/{{ config.organization_id }}/forms/{{ record.form_id }}",
+      "path_fields": [
+        "form_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "form_id"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "form_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes an Employment Hero form",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_form_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_categories",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_form_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_categories/{{ record.form_category_id }}",
+      "path_fields": [
+        "form_category_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "form_category_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "form_category_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "delete_form_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_categories/{{ record.form_category_id }}",
+      "path_fields": [
+        "form_category_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "form_category_id"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "form_category_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_form_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_templates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_form_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_templates/{{ record.template_id }}",
+      "path_fields": [
+        "template_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "template_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "template_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "delete_form_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/organisations/{{ config.organization_id }}/form_templates/{{ record.template_id }}",
+      "path_fields": [
+        "template_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "template_id"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "template_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_goal_archive_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ record.goal_id }}/archive_status",
+      "path_fields": [
+        "goal_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_id",
+          "status"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "goal_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "archives or restores an Employment Hero goal"
+    },
+    {
+      "name": "update_goal_health_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/goals/{{ record.goal_id }}/update_status",
+      "path_fields": [
+        "goal_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "goal_id",
+          "health_status"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "goal_id": {
+            "type": "string"
+          },
+          "health_status": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "changes an Employment Hero goal health status"
+    },
+    {
+      "name": "bulk_grant_kiosk_access",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/kiosk_members/bulk_grant_access",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "member_ids"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "member_ids": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "grants kiosk access to multiple members"
+    },
+    {
+      "name": "bulk_revoke_kiosk_access",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/kiosk_members/bulk_revoke_access",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "member_ids"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "member_ids": {
+            "type": "array"
+          },
+          "notify_members": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "revokes kiosk access from multiple members"
+    },
+    {
+      "name": "update_leave_balance",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/leave_balances/{{ record.id }}",
+      "path_fields": [
+        "employee_id",
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id",
+          "id"
+        ],
+        "minProperties": 3,
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "accrued_amount": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "adjusts an employee leave balance"
+    },
+    {
+      "name": "create_leave_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/leave_requests",
+      "path_fields": [
+        "employee_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id",
+          "leave_category_id",
+          "start_date",
+          "end_date"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "leave_category_id": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "hours_per_day": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "creates an employee leave request"
+    },
+    {
+      "name": "create_position",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/positions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "work_site_id": {
+            "type": "string"
+          },
+          "cost_centre_id": {
+            "type": "string"
+          },
+          "member_ids": {
+            "type": "array"
+          },
+          "team_ids": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_position",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/organisations/{{ config.organization_id }}/positions/{{ record.position_id }}",
+      "path_fields": [
+        "position_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "position_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "position_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "member_ids": {
+            "type": "array"
+          },
+          "team_ids": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "bulk_create_rostered_shifts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/rostered_shifts/bulk_create",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "start_date_time",
+          "end_date_time",
+          "number_of_shifts"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "start_date_time": {
+            "type": "string"
+          },
+          "end_date_time": {
+            "type": "string"
+          },
+          "number_of_shifts": {
+            "type": "integer"
+          },
+          "member_ids": {
+            "type": "array"
+          },
+          "breaks": {
+            "type": "array"
+          },
+          "published": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates rostered shifts in bulk and may publish them"
+    },
+    {
+      "name": "create_timesheet_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/timesheet_entries",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "timesheets"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "timesheets": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "creates employee timesheet entries"
+    },
+    {
+      "name": "create_work_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/organisations/{{ config.organization_id }}/work_sites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    },
+    {
+      "name": "update_work_site",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/organisations/{{ config.organization_id }}/work_sites/{{ record.work_site_id }}",
+      "path_fields": [
+        "work_site_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "work_site_id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": true,
+        "properties": {
+          "work_site_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external Employment Hero mutation; approval required before execution"
+    }
+  ]
+}

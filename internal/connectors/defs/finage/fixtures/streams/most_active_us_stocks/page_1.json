@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/fnd/market-information/us/most-actives" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "AAPL", "company_name": "Apple Inc.", "change": 1.5, "change_percentage": "0.8%", "price": "190.0" },
+      { "symbol": "TSLA", "company_name": "Tesla Inc.", "change": -2.0, "change_percentage": "-1.0%", "price": "250.0" }
+    ]
+  }
+}

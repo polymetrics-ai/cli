@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plaid Connection Specification",
+  "type": "object",
+  "required": ["client_id", "secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Plaid client_id. Sent in the JSON body of every request (Plaid's own convention, never a header); never logged."
+    },
+    "secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Plaid secret. Sent in the JSON body of every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://production.plaid.com",
+      "description": "Plaid API base URL override (e.g. https://sandbox.plaid.com or https://development.plaid.com for non-production environments)."
+    },
+    "country_codes": {
+      "type": "string",
+      "default": "US",
+      "description": "Comma-separated ISO-3166-1 alpha-2 country codes for the institutions.get request body (e.g. US,CA)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500), sent as the institutions.get request body's count field."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "3",
+      "description": "Hard cap on pages read per sync; 0, \"all\", or \"unlimited\" means unbounded."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to \"fixture\" to emit deterministic canned records with no network access (test/conformance-harness affordance only, never set in production)."
+    }
+  }
+}

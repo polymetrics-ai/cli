@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/surveys", "query": { "limit": "1" } },
+  "response": { "status": 200, "body": { "data": [] } }
+}

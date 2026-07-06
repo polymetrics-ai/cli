@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/nps", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "nps_fixture_1",
+        "name": "Fixture NPS One",
+        "state": "PUBLISHED",
+        "published": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "nps_fixture_2",
+        "name": "Fixture NPS Two",
+        "state": "DRAFT",
+        "published": false,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

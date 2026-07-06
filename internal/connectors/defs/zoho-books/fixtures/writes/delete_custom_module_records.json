@@ -1,0 +1,16 @@
+{
+  "record": {
+    "module_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

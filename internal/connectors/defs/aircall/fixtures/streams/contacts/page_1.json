@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/contacts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "current_page": 1, "per_page": 50, "next_page_link": null },
+      "contacts": [
+        {
+          "id": 1,
+          "first_name": "Fixture",
+          "last_name": "One",
+          "company_name": "Fixture Co",
+          "information": null,
+          "is_shared": false,
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

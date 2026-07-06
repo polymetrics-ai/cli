@@ -1,0 +1,4 @@
+{
+  "record": { "type": "email" },
+  "expect": { "method": "POST", "path": "/channels" }
+}

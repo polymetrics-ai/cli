@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scheduling_list_shift_assessments",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "employeeId",
+    "date",
+    "result",
+    "violations"
+  ],
+  "properties": {
+    "createdAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "date": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "compliant",
+        "violation"
+      ]
+    },
+    "shiftId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "assessmentId",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "missed",
+              "late_clock_in",
+              "early_clock_out",
+              "late_clock_out",
+              "unscheduled"
+            ]
+          },
+          "amount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "assessmentId": {
+            "type": "string"
+          },
+          "employeeTimesheetClockEntryId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,80 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/eventHooks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "channel": {
+        "config": {
+          "authScheme": {
+            "key": "fixture",
+            "type": "HEADER",
+            "value": "value_fixture"
+          },
+          "headers": [
+            {
+              "key": "fixture",
+              "value": "value_fixture"
+            }
+          ],
+          "method": "method_fixture",
+          "uri": "https://example.invalid/fixture"
+        },
+        "type": "HTTP",
+        "version": "version_fixture"
+      },
+      "created": "2026-01-01T00:00:00Z",
+      "createdBy": "2026-01-01T00:00:00Z",
+      "description": "description_fixture",
+      "events": {
+        "filter": {
+          "eventFilterMap": [
+            {
+              "condition": {
+                "expression": "expression_fixture",
+                "version": "version_fixture"
+              },
+              "event": "event_fixture"
+            }
+          ],
+          "type": "type_fixture"
+        },
+        "items": [
+          "item_fixture"
+        ],
+        "type": "EVENT_TYPE"
+      },
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "verificationStatus": "UNVERIFIED",
+      "_links": {
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "verify": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

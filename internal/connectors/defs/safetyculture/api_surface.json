@@ -1,0 +1,29 @@
+{
+  "api": "SafetyCulture legacy connector hook surface",
+  "docs": "https://developer.safetyculture.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy safetyculture connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/safetyculture, which delegates to internal/connectors/safetyculture until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/safetyculture audits read path",
+      "covered_by": {
+        "stream": "audits"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/safetyculture templates read path",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/safetyculture users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
+  ]
+}

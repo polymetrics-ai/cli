@@ -1,0 +1,32 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "description": "fixture_description",
+    "domainName": "fixture_domainName",
+    "domainSecondary": "fixture_domainSecondary",
+    "industry": "fixture_industry",
+    "companySize": "fixture_companySize",
+    "country": "fixture_country",
+    "state": "fixture_state"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/contact-accounts",
+    "body": {
+      "name": "fixture_name",
+      "description": "fixture_description",
+      "domainName": "fixture_domainName",
+      "domainSecondary": "fixture_domainSecondary",
+      "industry": "fixture_industry",
+      "companySize": "fixture_companySize",
+      "country": "fixture_country",
+      "state": "fixture_state"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

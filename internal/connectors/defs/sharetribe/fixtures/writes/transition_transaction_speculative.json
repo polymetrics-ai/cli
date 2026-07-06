@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "transaction_fixture_1",
+    "transition": "transition/accept",
+    "params": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/transactions/transition_speculative",
+    "body": {
+      "id": "transaction_fixture_1",
+      "transition": "transition/accept",
+      "params": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "transaction_fixture_1", "type": "transaction" } }
+  }
+}

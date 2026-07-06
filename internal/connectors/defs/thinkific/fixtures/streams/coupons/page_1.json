@@ -1,0 +1,917 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/coupons",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "code": "FIXTURE1",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 1,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "code": "FIXTURE2",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 2,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "code": "FIXTURE3",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 3,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "code": "FIXTURE4",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 4,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "code": "FIXTURE5",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 5,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "code": "FIXTURE6",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 6,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "code": "FIXTURE7",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 7,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "code": "FIXTURE8",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 8,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "code": "FIXTURE9",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 9,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "code": "FIXTURE10",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 10,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "code": "FIXTURE11",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 11,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "code": "FIXTURE12",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 12,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "code": "FIXTURE13",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 13,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "code": "FIXTURE14",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 14,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "code": "FIXTURE15",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 15,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "code": "FIXTURE16",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 16,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "code": "FIXTURE17",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 17,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "code": "FIXTURE18",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 18,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "code": "FIXTURE19",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 19,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "code": "FIXTURE20",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 20,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "code": "FIXTURE21",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 21,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "code": "FIXTURE22",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 22,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "code": "FIXTURE23",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 23,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "code": "FIXTURE24",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 24,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "code": "FIXTURE25",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 25,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "code": "FIXTURE26",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 26,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "code": "FIXTURE27",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 27,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "code": "FIXTURE28",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 28,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "code": "FIXTURE29",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 29,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "code": "FIXTURE30",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 30,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "code": "FIXTURE31",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 31,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "code": "FIXTURE32",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 32,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "code": "FIXTURE33",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 33,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "code": "FIXTURE34",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 34,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "code": "FIXTURE35",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 35,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "code": "FIXTURE36",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 36,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "code": "FIXTURE37",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 37,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "code": "FIXTURE38",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 38,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "code": "FIXTURE39",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 39,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "code": "FIXTURE40",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 40,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "code": "FIXTURE41",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 41,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "code": "FIXTURE42",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 42,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "code": "FIXTURE43",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 43,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "code": "FIXTURE44",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 44,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "code": "FIXTURE45",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 45,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "code": "FIXTURE46",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 46,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "code": "FIXTURE47",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 47,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "code": "FIXTURE48",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 48,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "code": "FIXTURE49",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 49,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "code": "FIXTURE50",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 50,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "code": "FIXTURE51",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 51,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "code": "FIXTURE52",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 52,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "code": "FIXTURE53",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 53,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "code": "FIXTURE54",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 54,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "code": "FIXTURE55",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 55,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "code": "FIXTURE56",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 56,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "code": "FIXTURE57",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 57,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "code": "FIXTURE58",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 58,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "code": "FIXTURE59",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 59,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "code": "FIXTURE60",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 60,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "code": "FIXTURE61",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 61,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "code": "FIXTURE62",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 62,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "code": "FIXTURE63",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 63,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "code": "FIXTURE64",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 64,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "code": "FIXTURE65",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 65,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "code": "FIXTURE66",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 66,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "code": "FIXTURE67",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 67,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "code": "FIXTURE68",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 68,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "code": "FIXTURE69",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 69,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "code": "FIXTURE70",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 70,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "code": "FIXTURE71",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 71,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "code": "FIXTURE72",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 72,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "code": "FIXTURE73",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 73,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "code": "FIXTURE74",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 74,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "code": "FIXTURE75",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 75,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "code": "FIXTURE76",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 76,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "code": "FIXTURE77",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 77,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "code": "FIXTURE78",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 78,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "code": "FIXTURE79",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 79,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "code": "FIXTURE80",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 80,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "code": "FIXTURE81",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 81,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "code": "FIXTURE82",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 82,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "code": "FIXTURE83",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 83,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "code": "FIXTURE84",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 84,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "code": "FIXTURE85",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 85,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "code": "FIXTURE86",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 86,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "code": "FIXTURE87",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 87,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "code": "FIXTURE88",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 88,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "code": "FIXTURE89",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 89,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "code": "FIXTURE90",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 90,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "code": "FIXTURE91",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 91,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "code": "FIXTURE92",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 92,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "code": "FIXTURE93",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 93,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "code": "FIXTURE94",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 94,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "code": "FIXTURE95",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 95,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "code": "FIXTURE96",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 96,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "code": "FIXTURE97",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 97,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "code": "FIXTURE98",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 98,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "code": "FIXTURE99",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 99,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "code": "FIXTURE100",
+          "note": "Fixture coupon",
+          "quantity_used": 0,
+          "quantity": 10,
+          "promotion_id": 100,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

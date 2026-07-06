@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/events/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "9001": {
+        "id": 9001,
+        "caption": "Fixture Marketing Push",
+        "date": "2026-01-01T00:00:00Z",
+        "origin": "manual",
+        "details": "conformance fixture event",
+        "products": ["100"]
+      },
+      "9002": {
+        "id": 9002,
+        "caption": "Fixture App Update",
+        "date": "2026-01-02T00:00:00Z",
+        "origin": "manual",
+        "details": null,
+        "products": ["100", "200"]
+      }
+    }
+  }
+}

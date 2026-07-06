@@ -1,0 +1,12 @@
+{
+  "record": {
+    "calendar_event_id": "fixture_calendar_event_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/events/reject",
+    "body": {
+      "calendar_event_id": "fixture_calendar_event_id"
+    }
+  }
+}

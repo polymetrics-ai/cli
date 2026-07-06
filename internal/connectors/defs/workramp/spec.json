@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkRamp Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WorkRamp API key (Integrations page -> API), sent as a Bearer token on every request. Belongs to a specific admin user; actions are attributed to that user. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.workramp.com",
+      "description": "WorkRamp API base URL. Defaults to the real production host (developers.workramp.com's Getting Started guide); EU customers should override to https://app.eu.workramp.com."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-200 for users; the real API's per_page/limit parameter name varies by resource, see docs.md)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "1",
+      "description": "Maximum pages to read; matches legacy's default of 1 page when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

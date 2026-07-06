@@ -1,0 +1,21 @@
+{
+  "record": {
+    "block_id": "block_id_fixture",
+    "blocks": {
+      "description": "Synthetic enable_a_block fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blocks/block_id_fixture/actions/enable",
+    "body": {
+      "blocks": {
+        "description": "Synthetic enable_a_block fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

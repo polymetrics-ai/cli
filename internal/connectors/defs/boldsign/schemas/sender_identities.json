@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sender_identities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_by": { "type": ["string", "null"] },
+    "approved_date": { "type": ["string", "null"] },
+    "brand_id": { "type": ["string", "null"] },
+    "redirect_url": { "type": ["string", "null"] },
+    "notification_settings": { "type": ["object", "null"] },
+    "meta_data": { "type": ["object", "null"] }
+  }
+}

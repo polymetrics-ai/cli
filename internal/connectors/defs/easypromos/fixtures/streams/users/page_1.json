@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "user_fixture_1",
+          "external_id": "ext_1",
+          "first_name": "Fixture",
+          "last_name": "User 1",
+          "nickname": "fixture1",
+          "email": "fixture1@example.com",
+          "country": "US",
+          "language": "en",
+          "login_type": "form",
+          "status": "active",
+          "promotion_id": "promo_fixture_1",
+          "created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

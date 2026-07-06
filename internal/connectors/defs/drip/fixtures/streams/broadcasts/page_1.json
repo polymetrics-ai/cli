@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/broadcasts", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "broadcasts": [
+        {
+          "id": "bcast_fixture_1",
+          "name": "Fixture Announcement",
+          "status": "sent",
+          "subject": "Fixture subject one",
+          "from_name": "Fixture Sender",
+          "from_email": "sender@example.com",
+          "send_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "bcast_fixture_2",
+          "name": "Fixture Followup",
+          "status": "scheduled",
+          "subject": "Fixture subject two",
+          "from_name": "Fixture Sender",
+          "from_email": "sender@example.com",
+          "send_at": "2026-01-02T00:00:00Z",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

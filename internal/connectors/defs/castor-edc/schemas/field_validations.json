@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "field_validations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "field_id": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "value": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stakers",
+  "type": "object",
+  "x-primary-key": ["address"],
+  "required": ["address"],
+  "properties": {
+    "address": { "type": ["string", "null"] },
+    "amount": { "type": ["string", "null"] }
+  }
+}

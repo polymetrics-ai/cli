@@ -1,0 +1,20 @@
+{
+  "record": {
+    "order_id": 1,
+    "amount": 1,
+    "comment": "comment_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/1/refunds",
+    "body": {
+      "amount": 1,
+      "comment": "comment_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

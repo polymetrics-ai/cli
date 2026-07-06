@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/tags",
+    "query": {
+      "limit": "200",
+      "fields": "id,name,objectCount,createdById,updatedById,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "name": "name_fixture",
+          "objectCount": 1,
+          "createdById": 1,
+          "updatedById": 1,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

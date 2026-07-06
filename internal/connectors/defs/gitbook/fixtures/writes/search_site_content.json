@@ -1,0 +1,21 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "query": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/search",
+    "body": {
+      "query": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "search_site_content_fixture_1"
+    }
+  }
+}

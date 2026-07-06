@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/stocks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "symbol": "AAPL_FIXTURE", "name": "Fixture Apple Inc", "currency": "USD" },
+        { "symbol": "MSFT_FIXTURE", "name": "Fixture Microsoft Corp", "currency": "USD" }
+      ],
+      "status": "ok"
+    }
+  }
+}

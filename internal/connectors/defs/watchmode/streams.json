@@ -1,0 +1,161 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apiKey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/sources/" },
+    "error_map": [
+      { "status": 401, "hint": "watchmode api_key is missing or invalid; re-run pm credentials add watchmode" },
+      { "status": 429, "class": "rate_limited", "hint": "watchmode rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "search",
+      "path": "/v1/search/",
+      "query": {
+        "search_value": { "template": "{{ config.search_val }}", "default": "Terminator" },
+        "search_field": "name",
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "title_results" },
+      "projection": "passthrough",
+      "schema": "schemas/search.json"
+    },
+    {
+      "name": "sources",
+      "path": "/v1/sources/",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "regions": { "template": "{{ config.regions }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "regions",
+      "path": "/v1/regions/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/regions.json"
+    },
+    {
+      "name": "networks",
+      "path": "/v1/networks/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/networks.json"
+    },
+    {
+      "name": "genres",
+      "path": "/v1/genres/",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/genres.json"
+    },
+    {
+      "name": "titles",
+      "path": "/v1/list-titles/",
+      "query": {
+        "types": { "template": "{{ config.types }}", "omit_when_absent": true },
+        "regions": { "template": "{{ config.regions }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.page_size }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 250
+      },
+      "records": { "path": "titles" },
+      "projection": "passthrough",
+      "schema": "schemas/titles.json"
+    },
+    {
+      "name": "releases",
+      "path": "/v1/releases/",
+      "query": {
+        "regions": { "template": "{{ config.regions }}", "omit_when_absent": true }
+      },
+      "records": { "path": "releases" },
+      "projection": "passthrough",
+      "schema": "schemas/releases.json"
+    },
+    {
+      "name": "title_details",
+      "path": "/v1/title/{{ fanout.id }}/details/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "title_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_title_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/title_details.json"
+    },
+    {
+      "name": "title_sources",
+      "path": "/v1/title/{{ fanout.id }}/sources/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "title_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_title_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/title_sources.json"
+    },
+    {
+      "name": "title_seasons",
+      "path": "/v1/title/{{ fanout.id }}/seasons/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "title_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_title_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/title_seasons.json"
+    },
+    {
+      "name": "title_episodes",
+      "path": "/v1/title/{{ fanout.id }}/episodes/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "title_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_title_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/title_episodes.json"
+    },
+    {
+      "name": "title_cast_crew",
+      "path": "/v1/title/{{ fanout.id }}/cast-crew/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "title_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_title_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/title_cast_crew.json"
+    },
+    {
+      "name": "person_details",
+      "path": "/v1/person/{{ fanout.id }}/",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "person_ids" },
+        "into": { "path_var": "id" },
+        "stamp_field": "watchmode_person_id"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_details.json"
+    }
+  ]
+}

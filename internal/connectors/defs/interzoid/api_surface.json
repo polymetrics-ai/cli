@@ -1,0 +1,60 @@
+{
+  "api": "Interzoid Core APIs (https://api.interzoid.com)",
+  "docs": "https://docs.interzoid.com/entries/interzoid-core-apis",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity lookup streams only (company_name_matching, individual_name_matching, street_address_matching, standardize_company_names); the broader Interzoid API catalog (email validation, geocoding, currency conversion, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/getcompanymatchadvanced",
+      "covered_by": {
+        "stream": "company_name_matching"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getfullnamematch",
+      "covered_by": {
+        "stream": "individual_name_matching"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getaddressmatchadvanced",
+      "covered_by": {
+        "stream": "street_address_matching"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getorgstandard",
+      "covered_by": {
+        "stream": "standardize_company_names"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getemailvalidation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/getemailvalidation is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getgeocodefromaddress",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/getgeocodefromaddress is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/getcurrencyconversion",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/getcurrencyconversion is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

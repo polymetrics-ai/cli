@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/parcels", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "parcels": [
+        {
+          "id": "prcl_fixture_1",
+          "object": "Parcel",
+          "mode": "test",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T01:00:00Z",
+          "length": 10.0,
+          "width": 8.0,
+          "height": 4.0,
+          "weight": 16.0,
+          "predefined_package": ""
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

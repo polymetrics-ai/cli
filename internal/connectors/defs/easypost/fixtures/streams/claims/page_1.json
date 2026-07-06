@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/claims", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "claims": [
+        {
+          "id": "clm_fixture_1",
+          "object": "Claim",
+          "mode": "test",
+          "type": "damage",
+          "status": "submitted",
+          "status_detail": "Claim was created.",
+          "tracking_code": "TRACK1",
+          "shipment_id": "shp_fixture_1",
+          "insurance_id": "ins_fixture_1",
+          "requested_amount": "100.00",
+          "approved_amount": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "attachments": [],
+          "history": [
+            { "status": "submitted", "status_detail": "Claim was created.", "timestamp": "2026-01-01T00:00:00Z" }
+          ]
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

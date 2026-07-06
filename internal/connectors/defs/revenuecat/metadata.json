@@ -1,0 +1,25 @@
+{
+  "name": "revenuecat",
+  "display_name": "RevenueCat",
+  "description": "Reads and writes RevenueCat v2 project configuration, customer, product, offering, subscription, purchase, paywall, virtual currency, integration, and metrics resources through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.revenuecat.com/docs/api-v2",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external RevenueCat API reads of project, app, product, offering, customer, subscription, purchase, paywall, virtual currency, integration, metrics, and audit-log data",
+    "write": "external RevenueCat API mutations that create, update, archive, delete, refund, cancel, transfer, grant, revoke, or otherwise alter project and customer resources",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive deletes/refunds/cancellations are flagged as destructive"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/getHotels", "query": { "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "propertyID": "prop_fixture_1",
+          "organizationID": "org_fixture_1",
+          "propertyName": "Fixture Hotel",
+          "propertyDescription": "Deterministic fixture property.",
+          "propertyCurrency": "USD",
+          "propertyTimezone": "America/New_York",
+          "propertyImage": "https://example.com/fixture.png"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

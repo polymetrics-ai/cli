@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "basic", "username": "{{ secrets.email }}/token", "password": "{{ secrets.api_token }}", "when": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next_page"
+    },
+    "check": { "method": "GET", "path": "/greeting_categories" },
+    "error_map": [
+      { "status": 401, "hint": "zendesk-talk credentials are missing or invalid; re-run pm credentials add zendesk-talk" },
+      { "status": 403, "hint": "zendesk-talk account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "zendesk-talk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "phone_numbers",
+      "path": "/phone_numbers",
+      "query": { "per_page": "100" },
+      "records": { "path": "phone_numbers" },
+      "schema": "schemas/phone_numbers.json"
+    },
+    {
+      "name": "greetings",
+      "path": "/greetings",
+      "query": { "per_page": "100" },
+      "records": { "path": "greetings" },
+      "schema": "schemas/greetings.json"
+    },
+    {
+      "name": "greeting_categories",
+      "path": "/greeting_categories",
+      "query": { "per_page": "100" },
+      "records": { "path": "greeting_categories" },
+      "schema": "schemas/greeting_categories.json"
+    },
+    {
+      "name": "ivrs",
+      "path": "/ivrs",
+      "query": { "per_page": "100" },
+      "records": { "path": "ivrs" },
+      "schema": "schemas/ivrs.json"
+    },
+    {
+      "name": "agents_activity",
+      "path": "/stats/agents_activity",
+      "query": { "per_page": "100" },
+      "records": { "path": "agents_activity" },
+      "schema": "schemas/agents_activity.json"
+    }
+  ]
+}

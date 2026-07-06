@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Id of the organization"
+    },
+    "fullLicensesPurchased": {
+      "type": "integer",
+      "description": "Purchased FULL licenses"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the organization"
+    },
+    "plan": {
+      "type": "string",
+      "description": "Organization plan type",
+      "enum": [
+        "company",
+        "consultant",
+        "consultant_slf",
+        "business",
+        "paid_team_org",
+        "integration_org",
+        "professional_2022",
+        "edu_team_org",
+        "free_team_org",
+        "dev_team_org",
+        "unknown"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

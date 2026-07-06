@@ -1,0 +1,75 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "data": {
+      "description": "description_fixture",
+      "fields": [
+        {
+          "fillColor": "#ffffff",
+          "iconShape": "round",
+          "iconUrl": "https://example.invalid/fixture",
+          "textColor": "#ffffff",
+          "tooltip": "tooltip_fixture",
+          "value": "value_fixture"
+        }
+      ],
+      "status": "disconnected",
+      "title": "sample app card item"
+    },
+    "style": {
+      "fillColor": "#ffffff"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "height": 1.25,
+      "rotation": 1.25,
+      "width": 1.25
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/app_cards",
+    "body": {
+      "data": {
+        "description": "description_fixture",
+        "fields": [
+          {
+            "fillColor": "#ffffff",
+            "iconShape": "round",
+            "iconUrl": "https://example.invalid/fixture",
+            "textColor": "#ffffff",
+            "tooltip": "tooltip_fixture",
+            "value": "value_fixture"
+          }
+        ],
+        "status": "disconnected",
+        "title": "sample app card item"
+      },
+      "style": {
+        "fillColor": "#ffffff"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "height": 1.25,
+        "rotation": 1.25,
+        "width": 1.25
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

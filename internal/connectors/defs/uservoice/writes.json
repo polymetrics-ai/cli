@@ -1,0 +1,170 @@
+{
+  "actions": [
+    {
+      "name": "create_suggestion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/admin/suggestions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "links"],
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "links": {
+            "type": "object",
+            "required": ["forum"],
+            "properties": {
+              "forum": { "type": "integer" },
+              "category": { "type": "integer" },
+              "status": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new customer suggestion (idea); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_suggestion",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing suggestion's title/body; external mutation, no approval required"
+    },
+    {
+      "name": "approve_suggestion",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{{ record.id }}/approve",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "approves (publishes) a pending suggestion, making it publicly visible; no approval required"
+    },
+    {
+      "name": "delete_suggestion",
+      "kind": "delete",
+      "method": "PUT",
+      "path": "/api/v2/admin/suggestions/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "soft-deletes (moderates) a suggestion; UserVoice's own API keeps a matching restore endpoint (not modeled here) so this is a reversible moderation action, not permanent data loss, but is still marked destructive-shaped for operator awareness"
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/admin/comments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["body", "links"],
+        "properties": {
+          "body": { "type": "string" },
+          "channel": { "type": "string", "enum": ["api", "admin", "import", "portal", "ios", "android", "unknown"] },
+          "links": {
+            "type": "object",
+            "required": ["suggestion"],
+            "properties": {
+              "suggestion": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "posts a new comment on an existing suggestion; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_label",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/admin/labels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "can_recommend": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new label for tagging suggestions; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_label",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/admin/labels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "can_recommend": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing label's name/settings; external mutation, no approval required"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/admin/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["body", "links"],
+        "properties": {
+          "body": { "type": "string" },
+          "links": {
+            "type": "object",
+            "required": ["suggestion"],
+            "properties": {
+              "suggestion": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "creates an internal (non-public) note on a suggestion; low-risk external mutation, no approval required"
+    }
+  ]
+}

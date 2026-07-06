@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "courses",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "section": {
+      "type": "string"
+    },
+    "descriptionHeading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "room": {
+      "type": "string"
+    },
+    "ownerId": {
+      "type": "string"
+    },
+    "creationTime": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "updateTime": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "enrollmentCode": {
+      "type": "string"
+    },
+    "courseState": {
+      "type": "string"
+    },
+    "alternateLink": {
+      "type": "string"
+    },
+    "teacherGroupEmail": {
+      "type": "string"
+    },
+    "courseGroupEmail": {
+      "type": "string"
+    },
+    "guardiansEnabled": {
+      "type": "boolean"
+    },
+    "calendarId": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updateTime"
+}

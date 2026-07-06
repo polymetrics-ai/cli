@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/segmentations/synthetic-conformance-value/contacts",
+    "query": { "page": "1", "page_size": "125" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "uuid": "seg_contact_fixture_1",
+          "name": "Fixture Seg Contact",
+          "email": "fixture.seg@example.com",
+          "phone": "+15550200",
+          "last_conversion_date": "2026-01-02T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "links": [
+            { "rel": "SELF", "href": "https://api.rd.services/platform/contacts/seg_contact_fixture_1", "media": "application/json", "type": "GET" }
+          ]
+        }
+      ]
+    }
+  }
+}

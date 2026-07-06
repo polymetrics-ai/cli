@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/reflections" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "reflections_fixture_1",
+          "name": "fixture-reflections-1",
+          "type": "RAW",
+          "datasetId": "ds_fixture_1",
+          "enabled": true,
+          "status": { "config": "OK" },
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ],
+      "nextPageToken": ""
+    }
+  }
+}

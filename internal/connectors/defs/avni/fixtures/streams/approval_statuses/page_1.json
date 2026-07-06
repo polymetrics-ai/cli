@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/approvalStatuses",
+    "query": { "page_size": "synthetic-conformance-value", "lastModifiedDateTime": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "entity_id": "subjects_fixture_1", "entity_type": "Subject", "entity_type_id": "subject_type_fixture_1", "approval_status": "Approved", "approval_status_comment": "", "status_date_time": "2026-01-01T00:00:00Z" },
+        { "entity_id": "subjects_fixture_2", "entity_type": "Subject", "entity_type_id": "subject_type_fixture_1", "approval_status": "Pending", "approval_status_comment": "", "status_date_time": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page": ""
+    }
+  }
+}

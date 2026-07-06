@@ -10,22 +10,37 @@ SYNOPSIS
   pm credentials add <name> --connector open-exchange-rates [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads live, historical, and reference foreign-exchange rates from the Open Exchange Rates JSON API (read-only).
+  Reads Open Exchange Rates account usage/plan status through the Open Exchange Rates JSON API (read-only). Live/historical/currencies rate-map streams remain quarantined (ENGINE_GAP).
+
+ICON
+  asset: icons/open-exchange-rates.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.openexchangerates.org/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  app_id (secret)
+
+ETL STREAMS
+  usage:
+    primary key: app_id
+    fields: app_id(), daily_average(), days_elapsed(), days_remaining(), plan(), requests(), requests_quota(), requests_remaining(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Open Exchange Rates API read of account usage/plan status
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,0 +1,11 @@
+{
+  "record": { "id": "asset_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/assets/asset_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/categories",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "name": "Fixture category 51",
+        "type": "Asset",
+        "eula": "",
+        "skip_checkout_emails": false,
+        "logo": "www.test.com",
+        "minimum_quantity": 0,
+        "number_of_assets": 1,
+        "number_of_accessories": 0,
+        "number_of_components": 0,
+        "number_of_consumables": 0,
+        "number_of_licenses": 0,
+        "number_of_products": 0,
+        "number_of_deployable_assets": 1,
+        "assets": [],
+        "accessories": [],
+        "components": [],
+        "consumables": [],
+        "licenses": [],
+        "products": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

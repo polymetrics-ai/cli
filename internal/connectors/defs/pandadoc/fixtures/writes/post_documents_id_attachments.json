@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "Fixture post_documents_id_attachments",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/documents/id_fixture/attachments",
+    "body": {
+      "name": "Fixture post_documents_id_attachments",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_id_attachments_response",
+      "status": "ok"
+    }
+  }
+}

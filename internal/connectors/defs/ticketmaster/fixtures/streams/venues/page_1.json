@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/venues.json",
+    "query": { "page": "0", "size": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "venues": [
+          {
+            "id": "venue_fixture_1",
+            "name": "Fixture Arena 1",
+            "url": "https://example.com/venues/1",
+            "city": { "name": "Fixture City" },
+            "country": { "name": "Fixture Country", "countryCode": "US" }
+          },
+          {
+            "id": "venue_fixture_2",
+            "name": "Fixture Arena 2",
+            "url": "https://example.com/venues/2",
+            "city": { "name": "Fixture City" },
+            "country": { "name": "Fixture Country", "countryCode": "US" }
+          }
+        ]
+      }
+    }
+  }
+}

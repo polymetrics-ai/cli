@@ -1,0 +1,7 @@
+{
+  "record": { "id": "301" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1_2/discounts/301"
+  }
+}

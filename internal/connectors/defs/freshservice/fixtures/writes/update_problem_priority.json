@@ -1,0 +1,15 @@
+{
+  "record": {
+    "problem_id": 123,
+    "name": "Fixture update_problem_priority",
+    "description": "Fixture update_problem_priority record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/problems/123",
+    "body": {
+      "name": "Fixture update_problem_priority",
+      "description": "Fixture update_problem_priority record"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mailboxes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

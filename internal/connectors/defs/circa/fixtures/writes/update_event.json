@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "ev_fixture_1",
+    "status": "SKIPPING"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/events/ev_fixture_1"
+  }
+}

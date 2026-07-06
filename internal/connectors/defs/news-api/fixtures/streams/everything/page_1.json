@@ -1,0 +1,1319 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/everything",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "totalResults": 101,
+      "articles": [
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 1",
+          "title": "Fixture Headline 1",
+          "description": "conformance fixture article 1",
+          "url": "https://example.com/article/1",
+          "urlToImage": "https://example.com/article/1.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 1."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 2",
+          "title": "Fixture Headline 2",
+          "description": "conformance fixture article 2",
+          "url": "https://example.com/article/2",
+          "urlToImage": "https://example.com/article/2.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 2."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 3",
+          "title": "Fixture Headline 3",
+          "description": "conformance fixture article 3",
+          "url": "https://example.com/article/3",
+          "urlToImage": "https://example.com/article/3.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 3."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 4",
+          "title": "Fixture Headline 4",
+          "description": "conformance fixture article 4",
+          "url": "https://example.com/article/4",
+          "urlToImage": "https://example.com/article/4.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 4."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 5",
+          "title": "Fixture Headline 5",
+          "description": "conformance fixture article 5",
+          "url": "https://example.com/article/5",
+          "urlToImage": "https://example.com/article/5.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 5."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 6",
+          "title": "Fixture Headline 6",
+          "description": "conformance fixture article 6",
+          "url": "https://example.com/article/6",
+          "urlToImage": "https://example.com/article/6.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 6."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 7",
+          "title": "Fixture Headline 7",
+          "description": "conformance fixture article 7",
+          "url": "https://example.com/article/7",
+          "urlToImage": "https://example.com/article/7.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 7."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 8",
+          "title": "Fixture Headline 8",
+          "description": "conformance fixture article 8",
+          "url": "https://example.com/article/8",
+          "urlToImage": "https://example.com/article/8.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 8."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 9",
+          "title": "Fixture Headline 9",
+          "description": "conformance fixture article 9",
+          "url": "https://example.com/article/9",
+          "urlToImage": "https://example.com/article/9.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 9."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 10",
+          "title": "Fixture Headline 10",
+          "description": "conformance fixture article 10",
+          "url": "https://example.com/article/10",
+          "urlToImage": "https://example.com/article/10.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 10."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 11",
+          "title": "Fixture Headline 11",
+          "description": "conformance fixture article 11",
+          "url": "https://example.com/article/11",
+          "urlToImage": "https://example.com/article/11.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 11."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 12",
+          "title": "Fixture Headline 12",
+          "description": "conformance fixture article 12",
+          "url": "https://example.com/article/12",
+          "urlToImage": "https://example.com/article/12.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 12."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 13",
+          "title": "Fixture Headline 13",
+          "description": "conformance fixture article 13",
+          "url": "https://example.com/article/13",
+          "urlToImage": "https://example.com/article/13.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 13."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 14",
+          "title": "Fixture Headline 14",
+          "description": "conformance fixture article 14",
+          "url": "https://example.com/article/14",
+          "urlToImage": "https://example.com/article/14.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 14."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 15",
+          "title": "Fixture Headline 15",
+          "description": "conformance fixture article 15",
+          "url": "https://example.com/article/15",
+          "urlToImage": "https://example.com/article/15.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 15."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 16",
+          "title": "Fixture Headline 16",
+          "description": "conformance fixture article 16",
+          "url": "https://example.com/article/16",
+          "urlToImage": "https://example.com/article/16.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 16."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 17",
+          "title": "Fixture Headline 17",
+          "description": "conformance fixture article 17",
+          "url": "https://example.com/article/17",
+          "urlToImage": "https://example.com/article/17.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 17."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 18",
+          "title": "Fixture Headline 18",
+          "description": "conformance fixture article 18",
+          "url": "https://example.com/article/18",
+          "urlToImage": "https://example.com/article/18.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 18."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 19",
+          "title": "Fixture Headline 19",
+          "description": "conformance fixture article 19",
+          "url": "https://example.com/article/19",
+          "urlToImage": "https://example.com/article/19.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 19."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 20",
+          "title": "Fixture Headline 20",
+          "description": "conformance fixture article 20",
+          "url": "https://example.com/article/20",
+          "urlToImage": "https://example.com/article/20.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 20."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 21",
+          "title": "Fixture Headline 21",
+          "description": "conformance fixture article 21",
+          "url": "https://example.com/article/21",
+          "urlToImage": "https://example.com/article/21.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 21."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 22",
+          "title": "Fixture Headline 22",
+          "description": "conformance fixture article 22",
+          "url": "https://example.com/article/22",
+          "urlToImage": "https://example.com/article/22.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 22."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 23",
+          "title": "Fixture Headline 23",
+          "description": "conformance fixture article 23",
+          "url": "https://example.com/article/23",
+          "urlToImage": "https://example.com/article/23.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 23."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 24",
+          "title": "Fixture Headline 24",
+          "description": "conformance fixture article 24",
+          "url": "https://example.com/article/24",
+          "urlToImage": "https://example.com/article/24.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 24."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 25",
+          "title": "Fixture Headline 25",
+          "description": "conformance fixture article 25",
+          "url": "https://example.com/article/25",
+          "urlToImage": "https://example.com/article/25.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 25."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 26",
+          "title": "Fixture Headline 26",
+          "description": "conformance fixture article 26",
+          "url": "https://example.com/article/26",
+          "urlToImage": "https://example.com/article/26.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 26."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 27",
+          "title": "Fixture Headline 27",
+          "description": "conformance fixture article 27",
+          "url": "https://example.com/article/27",
+          "urlToImage": "https://example.com/article/27.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 27."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 28",
+          "title": "Fixture Headline 28",
+          "description": "conformance fixture article 28",
+          "url": "https://example.com/article/28",
+          "urlToImage": "https://example.com/article/28.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 28."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 29",
+          "title": "Fixture Headline 29",
+          "description": "conformance fixture article 29",
+          "url": "https://example.com/article/29",
+          "urlToImage": "https://example.com/article/29.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 29."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 30",
+          "title": "Fixture Headline 30",
+          "description": "conformance fixture article 30",
+          "url": "https://example.com/article/30",
+          "urlToImage": "https://example.com/article/30.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 30."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 31",
+          "title": "Fixture Headline 31",
+          "description": "conformance fixture article 31",
+          "url": "https://example.com/article/31",
+          "urlToImage": "https://example.com/article/31.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 31."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 32",
+          "title": "Fixture Headline 32",
+          "description": "conformance fixture article 32",
+          "url": "https://example.com/article/32",
+          "urlToImage": "https://example.com/article/32.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 32."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 33",
+          "title": "Fixture Headline 33",
+          "description": "conformance fixture article 33",
+          "url": "https://example.com/article/33",
+          "urlToImage": "https://example.com/article/33.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 33."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 34",
+          "title": "Fixture Headline 34",
+          "description": "conformance fixture article 34",
+          "url": "https://example.com/article/34",
+          "urlToImage": "https://example.com/article/34.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 34."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 35",
+          "title": "Fixture Headline 35",
+          "description": "conformance fixture article 35",
+          "url": "https://example.com/article/35",
+          "urlToImage": "https://example.com/article/35.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 35."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 36",
+          "title": "Fixture Headline 36",
+          "description": "conformance fixture article 36",
+          "url": "https://example.com/article/36",
+          "urlToImage": "https://example.com/article/36.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 36."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 37",
+          "title": "Fixture Headline 37",
+          "description": "conformance fixture article 37",
+          "url": "https://example.com/article/37",
+          "urlToImage": "https://example.com/article/37.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 37."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 38",
+          "title": "Fixture Headline 38",
+          "description": "conformance fixture article 38",
+          "url": "https://example.com/article/38",
+          "urlToImage": "https://example.com/article/38.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 38."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 39",
+          "title": "Fixture Headline 39",
+          "description": "conformance fixture article 39",
+          "url": "https://example.com/article/39",
+          "urlToImage": "https://example.com/article/39.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 39."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 40",
+          "title": "Fixture Headline 40",
+          "description": "conformance fixture article 40",
+          "url": "https://example.com/article/40",
+          "urlToImage": "https://example.com/article/40.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 40."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 41",
+          "title": "Fixture Headline 41",
+          "description": "conformance fixture article 41",
+          "url": "https://example.com/article/41",
+          "urlToImage": "https://example.com/article/41.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 41."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 42",
+          "title": "Fixture Headline 42",
+          "description": "conformance fixture article 42",
+          "url": "https://example.com/article/42",
+          "urlToImage": "https://example.com/article/42.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 42."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 43",
+          "title": "Fixture Headline 43",
+          "description": "conformance fixture article 43",
+          "url": "https://example.com/article/43",
+          "urlToImage": "https://example.com/article/43.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 43."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 44",
+          "title": "Fixture Headline 44",
+          "description": "conformance fixture article 44",
+          "url": "https://example.com/article/44",
+          "urlToImage": "https://example.com/article/44.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 44."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 45",
+          "title": "Fixture Headline 45",
+          "description": "conformance fixture article 45",
+          "url": "https://example.com/article/45",
+          "urlToImage": "https://example.com/article/45.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 45."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 46",
+          "title": "Fixture Headline 46",
+          "description": "conformance fixture article 46",
+          "url": "https://example.com/article/46",
+          "urlToImage": "https://example.com/article/46.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 46."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 47",
+          "title": "Fixture Headline 47",
+          "description": "conformance fixture article 47",
+          "url": "https://example.com/article/47",
+          "urlToImage": "https://example.com/article/47.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 47."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 48",
+          "title": "Fixture Headline 48",
+          "description": "conformance fixture article 48",
+          "url": "https://example.com/article/48",
+          "urlToImage": "https://example.com/article/48.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 48."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 49",
+          "title": "Fixture Headline 49",
+          "description": "conformance fixture article 49",
+          "url": "https://example.com/article/49",
+          "urlToImage": "https://example.com/article/49.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 49."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 50",
+          "title": "Fixture Headline 50",
+          "description": "conformance fixture article 50",
+          "url": "https://example.com/article/50",
+          "urlToImage": "https://example.com/article/50.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 50."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 51",
+          "title": "Fixture Headline 51",
+          "description": "conformance fixture article 51",
+          "url": "https://example.com/article/51",
+          "urlToImage": "https://example.com/article/51.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 51."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 52",
+          "title": "Fixture Headline 52",
+          "description": "conformance fixture article 52",
+          "url": "https://example.com/article/52",
+          "urlToImage": "https://example.com/article/52.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 52."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 53",
+          "title": "Fixture Headline 53",
+          "description": "conformance fixture article 53",
+          "url": "https://example.com/article/53",
+          "urlToImage": "https://example.com/article/53.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 53."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 54",
+          "title": "Fixture Headline 54",
+          "description": "conformance fixture article 54",
+          "url": "https://example.com/article/54",
+          "urlToImage": "https://example.com/article/54.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 54."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 55",
+          "title": "Fixture Headline 55",
+          "description": "conformance fixture article 55",
+          "url": "https://example.com/article/55",
+          "urlToImage": "https://example.com/article/55.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 55."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 56",
+          "title": "Fixture Headline 56",
+          "description": "conformance fixture article 56",
+          "url": "https://example.com/article/56",
+          "urlToImage": "https://example.com/article/56.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 56."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 57",
+          "title": "Fixture Headline 57",
+          "description": "conformance fixture article 57",
+          "url": "https://example.com/article/57",
+          "urlToImage": "https://example.com/article/57.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 57."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 58",
+          "title": "Fixture Headline 58",
+          "description": "conformance fixture article 58",
+          "url": "https://example.com/article/58",
+          "urlToImage": "https://example.com/article/58.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 58."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 59",
+          "title": "Fixture Headline 59",
+          "description": "conformance fixture article 59",
+          "url": "https://example.com/article/59",
+          "urlToImage": "https://example.com/article/59.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 59."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 60",
+          "title": "Fixture Headline 60",
+          "description": "conformance fixture article 60",
+          "url": "https://example.com/article/60",
+          "urlToImage": "https://example.com/article/60.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 60."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 61",
+          "title": "Fixture Headline 61",
+          "description": "conformance fixture article 61",
+          "url": "https://example.com/article/61",
+          "urlToImage": "https://example.com/article/61.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 61."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 62",
+          "title": "Fixture Headline 62",
+          "description": "conformance fixture article 62",
+          "url": "https://example.com/article/62",
+          "urlToImage": "https://example.com/article/62.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 62."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 63",
+          "title": "Fixture Headline 63",
+          "description": "conformance fixture article 63",
+          "url": "https://example.com/article/63",
+          "urlToImage": "https://example.com/article/63.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 63."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 64",
+          "title": "Fixture Headline 64",
+          "description": "conformance fixture article 64",
+          "url": "https://example.com/article/64",
+          "urlToImage": "https://example.com/article/64.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 64."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 65",
+          "title": "Fixture Headline 65",
+          "description": "conformance fixture article 65",
+          "url": "https://example.com/article/65",
+          "urlToImage": "https://example.com/article/65.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 65."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 66",
+          "title": "Fixture Headline 66",
+          "description": "conformance fixture article 66",
+          "url": "https://example.com/article/66",
+          "urlToImage": "https://example.com/article/66.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 66."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 67",
+          "title": "Fixture Headline 67",
+          "description": "conformance fixture article 67",
+          "url": "https://example.com/article/67",
+          "urlToImage": "https://example.com/article/67.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 67."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 68",
+          "title": "Fixture Headline 68",
+          "description": "conformance fixture article 68",
+          "url": "https://example.com/article/68",
+          "urlToImage": "https://example.com/article/68.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 68."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 69",
+          "title": "Fixture Headline 69",
+          "description": "conformance fixture article 69",
+          "url": "https://example.com/article/69",
+          "urlToImage": "https://example.com/article/69.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 69."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 70",
+          "title": "Fixture Headline 70",
+          "description": "conformance fixture article 70",
+          "url": "https://example.com/article/70",
+          "urlToImage": "https://example.com/article/70.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 70."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 71",
+          "title": "Fixture Headline 71",
+          "description": "conformance fixture article 71",
+          "url": "https://example.com/article/71",
+          "urlToImage": "https://example.com/article/71.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 71."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 72",
+          "title": "Fixture Headline 72",
+          "description": "conformance fixture article 72",
+          "url": "https://example.com/article/72",
+          "urlToImage": "https://example.com/article/72.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 72."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 73",
+          "title": "Fixture Headline 73",
+          "description": "conformance fixture article 73",
+          "url": "https://example.com/article/73",
+          "urlToImage": "https://example.com/article/73.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 73."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 74",
+          "title": "Fixture Headline 74",
+          "description": "conformance fixture article 74",
+          "url": "https://example.com/article/74",
+          "urlToImage": "https://example.com/article/74.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 74."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 75",
+          "title": "Fixture Headline 75",
+          "description": "conformance fixture article 75",
+          "url": "https://example.com/article/75",
+          "urlToImage": "https://example.com/article/75.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 75."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 76",
+          "title": "Fixture Headline 76",
+          "description": "conformance fixture article 76",
+          "url": "https://example.com/article/76",
+          "urlToImage": "https://example.com/article/76.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 76."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 77",
+          "title": "Fixture Headline 77",
+          "description": "conformance fixture article 77",
+          "url": "https://example.com/article/77",
+          "urlToImage": "https://example.com/article/77.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 77."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 78",
+          "title": "Fixture Headline 78",
+          "description": "conformance fixture article 78",
+          "url": "https://example.com/article/78",
+          "urlToImage": "https://example.com/article/78.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 78."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 79",
+          "title": "Fixture Headline 79",
+          "description": "conformance fixture article 79",
+          "url": "https://example.com/article/79",
+          "urlToImage": "https://example.com/article/79.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 79."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 80",
+          "title": "Fixture Headline 80",
+          "description": "conformance fixture article 80",
+          "url": "https://example.com/article/80",
+          "urlToImage": "https://example.com/article/80.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 80."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 81",
+          "title": "Fixture Headline 81",
+          "description": "conformance fixture article 81",
+          "url": "https://example.com/article/81",
+          "urlToImage": "https://example.com/article/81.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 81."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 82",
+          "title": "Fixture Headline 82",
+          "description": "conformance fixture article 82",
+          "url": "https://example.com/article/82",
+          "urlToImage": "https://example.com/article/82.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 82."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 83",
+          "title": "Fixture Headline 83",
+          "description": "conformance fixture article 83",
+          "url": "https://example.com/article/83",
+          "urlToImage": "https://example.com/article/83.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 83."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 84",
+          "title": "Fixture Headline 84",
+          "description": "conformance fixture article 84",
+          "url": "https://example.com/article/84",
+          "urlToImage": "https://example.com/article/84.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 84."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 85",
+          "title": "Fixture Headline 85",
+          "description": "conformance fixture article 85",
+          "url": "https://example.com/article/85",
+          "urlToImage": "https://example.com/article/85.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 85."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 86",
+          "title": "Fixture Headline 86",
+          "description": "conformance fixture article 86",
+          "url": "https://example.com/article/86",
+          "urlToImage": "https://example.com/article/86.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 86."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 87",
+          "title": "Fixture Headline 87",
+          "description": "conformance fixture article 87",
+          "url": "https://example.com/article/87",
+          "urlToImage": "https://example.com/article/87.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 87."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 88",
+          "title": "Fixture Headline 88",
+          "description": "conformance fixture article 88",
+          "url": "https://example.com/article/88",
+          "urlToImage": "https://example.com/article/88.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 88."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 89",
+          "title": "Fixture Headline 89",
+          "description": "conformance fixture article 89",
+          "url": "https://example.com/article/89",
+          "urlToImage": "https://example.com/article/89.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 89."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 90",
+          "title": "Fixture Headline 90",
+          "description": "conformance fixture article 90",
+          "url": "https://example.com/article/90",
+          "urlToImage": "https://example.com/article/90.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 90."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 91",
+          "title": "Fixture Headline 91",
+          "description": "conformance fixture article 91",
+          "url": "https://example.com/article/91",
+          "urlToImage": "https://example.com/article/91.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 91."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 92",
+          "title": "Fixture Headline 92",
+          "description": "conformance fixture article 92",
+          "url": "https://example.com/article/92",
+          "urlToImage": "https://example.com/article/92.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 92."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 93",
+          "title": "Fixture Headline 93",
+          "description": "conformance fixture article 93",
+          "url": "https://example.com/article/93",
+          "urlToImage": "https://example.com/article/93.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 93."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 94",
+          "title": "Fixture Headline 94",
+          "description": "conformance fixture article 94",
+          "url": "https://example.com/article/94",
+          "urlToImage": "https://example.com/article/94.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 94."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 95",
+          "title": "Fixture Headline 95",
+          "description": "conformance fixture article 95",
+          "url": "https://example.com/article/95",
+          "urlToImage": "https://example.com/article/95.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 95."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 96",
+          "title": "Fixture Headline 96",
+          "description": "conformance fixture article 96",
+          "url": "https://example.com/article/96",
+          "urlToImage": "https://example.com/article/96.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 96."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 97",
+          "title": "Fixture Headline 97",
+          "description": "conformance fixture article 97",
+          "url": "https://example.com/article/97",
+          "urlToImage": "https://example.com/article/97.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 97."
+        },
+        {
+          "source": {
+            "id": "fixture-source-2",
+            "name": "Fixture Source 2"
+          },
+          "author": "Fixture Author 98",
+          "title": "Fixture Headline 98",
+          "description": "conformance fixture article 98",
+          "url": "https://example.com/article/98",
+          "urlToImage": "https://example.com/article/98.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 98."
+        },
+        {
+          "source": {
+            "id": "fixture-source-3",
+            "name": "Fixture Source 3"
+          },
+          "author": "Fixture Author 99",
+          "title": "Fixture Headline 99",
+          "description": "conformance fixture article 99",
+          "url": "https://example.com/article/99",
+          "urlToImage": "https://example.com/article/99.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 99."
+        },
+        {
+          "source": {
+            "id": "fixture-source-1",
+            "name": "Fixture Source 1"
+          },
+          "author": "Fixture Author 100",
+          "title": "Fixture Headline 100",
+          "description": "conformance fixture article 100",
+          "url": "https://example.com/article/100",
+          "urlToImage": "https://example.com/article/100.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture content 100."
+        }
+      ]
+    }
+  }
+}

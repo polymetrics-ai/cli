@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "custom_profile_field_definitions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "label": { "type": ["string", "null"] },
+    "field_type": { "type": ["string", "null"] },
+    "required": { "type": ["boolean", "null"] }
+  }
+}

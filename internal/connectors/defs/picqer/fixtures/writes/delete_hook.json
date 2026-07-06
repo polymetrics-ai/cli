@@ -1,0 +1,5 @@
+{
+  "record": { "idhook": 1801 },
+  "expect": { "method": "DELETE", "path": "/hooks/1801" },
+  "response": { "status": 200, "body": {} }
+}

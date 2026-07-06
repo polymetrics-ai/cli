@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Schemas"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "totalResults": 1.25,
+      "Resources": [
+        {
+          "schemas": [
+            "schema_fixture"
+          ],
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "attributes": [
+            {
+              "name": "name_fixture",
+              "type": "type_fixture",
+              "multiValued": true,
+              "description": "description_fixture",
+              "required": true,
+              "caseExact": true,
+              "mutability": "mutability_fixture",
+              "returned": "returned_fixture",
+              "uniqueness": "uniqueness_fixture"
+            }
+          ],
+          "meta": {
+            "resourceType": "resource_type_fixture",
+            "location": "location_fixture"
+          }
+        }
+      ]
+    }
+  }
+}

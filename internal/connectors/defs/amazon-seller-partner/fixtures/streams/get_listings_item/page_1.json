@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/listings/2021-08-01/items/synthetic-conformance-value/synthetic-conformance-value",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sku": "sku-fixture-1",
+      "summaries": [],
+      "attributes": {},
+      "issues": [],
+      "offers": [],
+      "fulfillmentAvailability": [],
+      "procurement": [],
+      "relationships": [],
+      "productTypes": [],
+      "seller_id": "seller_id-fixture-1"
+    }
+  }
+}

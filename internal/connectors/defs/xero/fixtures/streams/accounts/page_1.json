@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/Accounts", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "Accounts": [
+        {
+          "AccountID": "account_fixture_1",
+          "Code": "200",
+          "Name": "Sales",
+          "Type": "REVENUE",
+          "Status": "ACTIVE",
+          "Class": "REVENUE",
+          "TaxType": "OUTPUT",
+          "EnablePaymentsToAccount": false,
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

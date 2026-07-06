@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/customfields/types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "type": "text", "name": "Text" },
+        { "type": "number", "name": "Number" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/datasets",
+    "query": {
+      "Limit": "100",
+      "Offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "datasets_all_fixture_1",
+            "Name": "Fixture Datasets All",
+            "Href": "v1pre3/datasets_all/datasets_all_fixture_1",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T01:00:00Z",
+            "TotalSize": 1000
+          }
+        ],
+        "Offset": 0,
+        "Limit": 100,
+        "TotalCount": 1
+      }
+    }
+  }
+}

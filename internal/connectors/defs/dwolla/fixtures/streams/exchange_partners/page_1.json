@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/exchange-partners", "query": { "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "exchange-partners": [
+          {
+            "id": "xp_fixture_1",
+            "name": "Fixture Bank One",
+            "status": "active",
+            "created": "2026-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "xp_fixture_2",
+            "name": "Fixture Bank Two",
+            "status": "active",
+            "created": "2026-01-02T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  }
+}

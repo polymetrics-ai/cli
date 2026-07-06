@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/invoices",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "invoice_fixture_1",
+          "object": "invoice",
+          "total_amount": {
+            "amount": 100,
+            "currency": "USD"
+          },
+          "line_items": [
+
+          ],
+          "issued_at": 1735689600000,
+          "paid_at": 1735689600000,
+          "invoice_url": "https://example.invalid/invoice_fixture_1"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/invoices"
+    }
+  }
+}

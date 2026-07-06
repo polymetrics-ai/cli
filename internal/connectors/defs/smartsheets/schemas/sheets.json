@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sheets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "permalink": { "type": ["string", "null"] },
+    "modifiedAt": { "type": ["string", "null"] }
+  }
+}

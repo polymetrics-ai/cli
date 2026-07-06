@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/groups", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "group_fixture_1",
+          "type": "groups",
+          "attributes": {
+            "name": "Fixture Group",
+            "slug": "fixture-group",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "billing_rates",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "rate": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "default": { "type": ["boolean", "null"] }
+  }
+}

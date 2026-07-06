@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/collections",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_collections_in_organization_by_id_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_collections_in_organization_by_id",
+          "name": "Fixture list_collections_in_organization_by_id",
+          "status": "active",
+          "operation_id": "listCollectionsInOrganizationById"
+        }
+      ]
+    }
+  }
+}

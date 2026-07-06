@@ -1,0 +1,36 @@
+{
+  "record": {
+    "repositoryId": "repository_id_fixture",
+    "groupId": "group_id_fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "content": "fixture",
+    "seoTitle": "fixture",
+    "seoDescription": "fixture",
+    "summary": "fixture",
+    "locale": "fixture",
+    "parentPageId": "parent_page_id_fixture",
+    "displayOrder": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/pages",
+    "body": {
+      "repositoryId": "repository_id_fixture",
+      "groupId": "group_id_fixture",
+      "handle": "fixture",
+      "title": "fixture",
+      "content": "fixture",
+      "seoTitle": "fixture",
+      "seoDescription": "fixture",
+      "summary": "fixture",
+      "locale": "fixture",
+      "parentPageId": "parent_page_id_fixture",
+      "displayOrder": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "authenticator_enrollment_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webauthn-registration/api/v1/users/synthetic-conformance-value/enrollments/synthetic-conformance-value/mark-error"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

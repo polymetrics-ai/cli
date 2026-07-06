@@ -1,0 +1,23 @@
+{
+  "name": "100ms",
+  "display_name": "100ms",
+  "description": "Reads 100ms rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events, and writes room/template/room-code/recording lifecycle mutations, through the 100ms server-side REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.100ms.live/docs/server-side/v2/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external 100ms API read of rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events",
+    "write": "external 100ms mutation: creates/updates rooms, creates templates, creates/updates room join-codes, and starts/stops room recordings; approval required"
+  }
+}

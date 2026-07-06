@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/cases/synthetic-conformance-value/legal-holds"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "size": 1,
+      "total": 1,
+      "cursor": "cursor_fixture",
+      "limit": 100,
+      "type": "cursor-list",
+      "data": [
+        {
+          "id": "id_fixture",
+          "organizationId": "organization_id_fixture",
+          "caseId": "case_id_fixture",
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "state": "PROCESSING",
+          "scope": {
+            "users": [
+              {
+                "id": "id_fixture",
+                "email": "fixture@example.invalid",
+                "firstName": "first_name_fixture",
+                "lastName": "last_name_fixture"
+              }
+            ]
+          },
+          "createdBy": {
+            "id": "id_fixture",
+            "email": "fixture@example.invalid",
+            "firstName": "first_name_fixture",
+            "lastName": "last_name_fixture"
+          },
+          "lastModifiedBy": {
+            "id": "id_fixture",
+            "email": "fixture@example.invalid",
+            "firstName": "first_name_fixture",
+            "lastName": "last_name_fixture"
+          },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "lastModifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

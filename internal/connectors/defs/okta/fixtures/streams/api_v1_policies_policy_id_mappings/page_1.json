@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/policies/synthetic-conformance-value/mappings",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "id_fixture",
+        "_links": {
+          "application": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "policy": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/contracts", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "contract_fixture_1",
+          "cloud": "aws",
+          "status": "active",
+          "buyer_id": "buyer_fixture_1",
+          "cloud_id": "agr-fixture-1",
+          "listing_id": "listing_fixture_1",
+          "offer_type": "private_offer",
+          "duration": "P1Y",
+          "start_at": "2026-01-01T00:00:00.000000Z",
+          "end_at": "2027-01-01T00:00:00.000000Z",
+          "accepted_at": "2026-01-01T00:00:00.000000Z",
+          "auto_renew": false,
+          "latest_offer_id": "private_offers_fixture_1",
+          "last_modified_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

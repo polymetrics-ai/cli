@@ -1,0 +1,42 @@
+{
+  "actions": [
+    {
+      "name": "request_refund",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/refund",
+      "path_fields": ["transaction_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["transaction_id", "description"],
+        "properties": {
+          "transaction_id": { "type": "string" },
+          "description": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation; issues a full refund to the user for the given transaction; approval required"
+    },
+    {
+      "name": "request_partial_refund",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/partial_refund",
+      "path_fields": ["transaction_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["transaction_id", "description", "refund_amount"],
+        "properties": {
+          "transaction_id": { "type": "string" },
+          "description": { "type": "string" },
+          "refund_amount": { "type": "number" }
+        }
+      },
+      "risk": "irreversible external mutation; issues a partial refund to the user for the given transaction; approval required"
+    }
+  ]
+}

@@ -1,0 +1,3872 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "{{ secrets.api_token }}",
+        "prefix": "SSWS ",
+        "when": "{{ secrets.api_token }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/api/v1/users",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "okta api_token/access_token is missing or invalid; re-run pm credentials add okta"
+      },
+      {
+        "status": 403,
+        "hint": "okta credential lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "okta rate limit exceeded; retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/api/v1/users",
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/users.json",
+      "computed_fields": {
+        "email": "{{ record.profile.email }}",
+        "login": "{{ record.profile.login }}",
+        "last_login": "{{ record.lastLogin }}"
+      }
+    },
+    {
+      "name": "groups",
+      "path": "/api/v1/groups",
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/groups.json",
+      "computed_fields": {
+        "name": "{{ record.profile.name }}",
+        "description": "{{ record.profile.description }}"
+      }
+    },
+    {
+      "name": "system_logs",
+      "path": "/api/v1/logs",
+      "query": {
+        "limit": "200"
+      },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/system_logs.json",
+      "incremental": {
+        "cursor_field": "published",
+        "request_param": "since",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "event_type": "{{ record.eventType }}",
+        "display_message": "{{ record.displayMessage }}"
+      }
+    },
+    {
+      "name": "well_known_app_authenticator_configuration",
+      "path": "/.well-known/app-authenticator-configuration",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_app_authenticator_configuration.json",
+      "projection": "passthrough",
+      "query": {
+        "oauthClientId": "{{ config.oauth_client_id }}"
+      }
+    },
+    {
+      "name": "well_known_apple_app_site_association",
+      "path": "/.well-known/apple-app-site-association",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_apple_app_site_association.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "well_known_assetlinks_json",
+      "path": "/.well-known/assetlinks.json",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_assetlinks_json.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "well_known_okta_organization",
+      "path": "/.well-known/okta-organization",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_okta_organization.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "well_known_ssf_configuration",
+      "path": "/.well-known/ssf-configuration",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_ssf_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "well_known_webauthn",
+      "path": "/.well-known/webauthn",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/well_known_webauthn.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_agent_pools",
+      "path": "/api/v1/agentPools",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_agent_pools.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_agent_pools_pool_id_updates",
+      "path": "/api/v1/agentPools/{{ config.pool_id }}/updates",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_agent_pools_pool_id_updates.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_agent_pools_pool_id_updates_settings",
+      "path": "/api/v1/agentPools/{{ config.pool_id }}/updates/settings",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_agent_pools_pool_id_updates_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_agent_pools_pool_id_updates_update_id",
+      "path": "/api/v1/agentPools/{{ config.pool_id }}/updates/{{ config.update_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_agent_pools_pool_id_updates_update_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_api_tokens",
+      "path": "/api/v1/api-tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_api_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_api_tokens_api_token_id",
+      "path": "/api/v1/api-tokens/{{ config.api_token_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_api_tokens_api_token_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps",
+      "path": "/api/v1/apps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id",
+      "path": "/api/v1/apps/{{ config.app_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_connections_default",
+      "path": "/api/v1/apps/{{ config.app_id }}/connections/default",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_connections_default.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_connections_default_jwks",
+      "path": "/api/v1/apps/{{ config.app_id }}/connections/default/jwks",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_connections_default_jwks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_csrs",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/csrs",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_csrs.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_csrs_csr_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/csrs/{{ config.csr_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_csrs_csr_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_jwks",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/jwks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_jwks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_jwks_key_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/jwks/{{ config.key_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_jwks_key_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_keys",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_keys_key_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/keys/{{ config.key_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_keys_key_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_secrets",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/secrets",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_secrets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_credentials_secrets_secret_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/credentials/secrets/{{ config.secret_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_credentials_secrets_secret_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_cwo_connections",
+      "path": "/api/v1/apps/{{ config.app_id }}/cwo/connections",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_cwo_connections.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_cwo_connections_connection_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/cwo/connections/{{ config.connection_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_cwo_connections_connection_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_features",
+      "path": "/api/v1/apps/{{ config.app_id }}/features",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_features.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_features_feature_name",
+      "path": "/api/v1/apps/{{ config.app_id }}/features/{{ config.feature_name }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_features_feature_name.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_federated_claims",
+      "path": "/api/v1/apps/{{ config.app_id }}/federated-claims",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_federated_claims.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_federated_claims_claim_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/federated-claims/{{ config.claim_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_federated_claims_claim_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_grants",
+      "path": "/api/v1/apps/{{ config.app_id }}/grants",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_grants.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_grants_grant_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/grants/{{ config.grant_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_grants_grant_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_group_push_mappings",
+      "path": "/api/v1/apps/{{ config.app_id }}/group-push/mappings",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_group_push_mappings.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_group_push_mappings_mapping_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/group-push/mappings/{{ config.mapping_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_group_push_mappings_mapping_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_groups",
+      "path": "/api/v1/apps/{{ config.app_id }}/groups",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_groups_group_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/groups/{{ config.group_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_groups_group_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_tokens",
+      "path": "/api/v1/apps/{{ config.app_id }}/tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_tokens_token_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/tokens/{{ config.token_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_tokens_token_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_apps_app_id_users",
+      "path": "/api/v1/apps/{{ config.app_id }}/users",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_apps_app_id_users.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_apps_app_id_users_user_id",
+      "path": "/api/v1/apps/{{ config.app_id }}/users/{{ config.user_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_apps_app_id_users_user_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authenticators",
+      "path": "/api/v1/authenticators",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authenticators.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authenticators_authenticator_id",
+      "path": "/api/v1/authenticators/{{ config.authenticator_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authenticators_authenticator_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authenticators_authenticator_id_aaguids",
+      "path": "/api/v1/authenticators/{{ config.authenticator_id }}/aaguids",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authenticators_authenticator_id_aaguids.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authenticators_authenticator_id_aaguids_aaguid",
+      "path": "/api/v1/authenticators/{{ config.authenticator_id }}/aaguids/{{ config.aaguid }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authenticators_authenticator_id_aaguids_aaguid.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authenticators_authenticator_id_methods",
+      "path": "/api/v1/authenticators/{{ config.authenticator_id }}/methods",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authenticators_authenticator_id_methods.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authenticators_authenticator_id_methods_method_type",
+      "path": "/api/v1/authenticators/{{ config.authenticator_id }}/methods/{{ config.method_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authenticators_authenticator_id_methods_method_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers",
+      "path": "/api/v1/authorizationServers",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_associated_servers",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/associatedServers",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_associated_servers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_claims",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/claims",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_claims.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_claims_claim_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/claims/{{ config.claim_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_claims_claim_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_clients",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/clients",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_clients.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/clients/{{ config.client_id }}/tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_clients_client_id_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/clients/{{ config.client_id }}/tokens/{{ config.token_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_credentials_keys",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/credentials/keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_credentials_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_credentials_keys_key_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/credentials/keys/{{ config.key_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_credentials_keys_key_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_policies",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/policies",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_policies.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_policies_policy_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/policies/{{ config.policy_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_policies_policy_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/policies/{{ config.policy_id }}/rules",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_policies_policy_id_rules.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/policies/{{ config.policy_id }}/rules/{{ config.rule_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/resourceservercredentials/keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/resourceservercredentials/keys/{{ config.key_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_scopes",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/scopes",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_scopes.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_authorization_servers_auth_server_id_scopes_scope_id",
+      "path": "/api/v1/authorizationServers/{{ config.auth_server_id }}/scopes/{{ config.scope_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_authorization_servers_auth_server_id_scopes_scope_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_behaviors",
+      "path": "/api/v1/behaviors",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_behaviors.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_behaviors_behavior_id",
+      "path": "/api/v1/behaviors/{{ config.behavior_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_behaviors_behavior_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_bot_protection_configuration",
+      "path": "/api/v1/bot-protection/configuration",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_bot_protection_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands",
+      "path": "/api/v1/brands",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_brands.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_brands_brand_id",
+      "path": "/api/v1/brands/{{ config.brand_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_domains",
+      "path": "/api/v1/brands/{{ config.brand_id }}/domains",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_domains.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_error",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/error",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_error.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_error_customized",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/error/customized",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_error_customized.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_error_default",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/error/default",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_error_default.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_error_preview",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/error/preview",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_error_preview.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_sign_in",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/sign-in",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_sign_in.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_sign_in_customized",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/sign-in/customized",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_sign_in_customized.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_sign_in_default",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/sign-in/default",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_sign_in_default.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_sign_in_preview",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/sign-in/preview",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_sign_in_preview.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_pages_sign_out_customized",
+      "path": "/api/v1/brands/{{ config.brand_id }}/pages/sign-out/customized",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_pages_sign_out_customized.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_customizations",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/customizations",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_customizations.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/customizations/{{ config.customization_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id_preview",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/customizations/{{ config.customization_id }}/preview",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id_preview.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_default_content",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/default-content",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_default_content.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_default_content_preview",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/default-content/preview",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_default_content_preview.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_templates_email_template_name_settings",
+      "path": "/api/v1/brands/{{ config.brand_id }}/templates/email/{{ config.template_name }}/settings",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_templates_email_template_name_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_themes",
+      "path": "/api/v1/brands/{{ config.brand_id }}/themes",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_themes.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_brands_brand_id_themes_theme_id",
+      "path": "/api/v1/brands/{{ config.brand_id }}/themes/{{ config.theme_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_themes_theme_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_well_known_uris",
+      "path": "/api/v1/brands/{{ config.brand_id }}/well-known-uris",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_well_known_uris.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_well_known_uris_path",
+      "path": "/api/v1/brands/{{ config.brand_id }}/well-known-uris/{{ config.path }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_well_known_uris_path.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_brands_brand_id_well_known_uris_path_customized",
+      "path": "/api/v1/brands/{{ config.brand_id }}/well-known-uris/{{ config.path }}/customized",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_brands_brand_id_well_known_uris_path_customized.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_captchas",
+      "path": "/api/v1/captchas",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_captchas.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_captchas_captcha_id",
+      "path": "/api/v1/captchas/{{ config.captcha_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_captchas_captcha_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_device_assurances",
+      "path": "/api/v1/device-assurances",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_device_assurances.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_device_assurances_device_assurance_id",
+      "path": "/api/v1/device-assurances/{{ config.device_assurance_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_device_assurances_device_assurance_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_device_integrations",
+      "path": "/api/v1/device-integrations",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_device_integrations.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_device_integrations_device_integration_id",
+      "path": "/api/v1/device-integrations/{{ config.device_integration_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_device_integrations_device_integration_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_device_posture_checks",
+      "path": "/api/v1/device-posture-checks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_device_posture_checks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_device_posture_checks_default",
+      "path": "/api/v1/device-posture-checks/default",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_device_posture_checks_default.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_device_posture_checks_posture_check_id",
+      "path": "/api/v1/device-posture-checks/{{ config.posture_check_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_device_posture_checks_posture_check_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_devices",
+      "path": "/api/v1/devices",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_devices.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_devices_device_id",
+      "path": "/api/v1/devices/{{ config.device_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_devices_device_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_devices_device_id_users",
+      "path": "/api/v1/devices/{{ config.device_id }}/users",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_devices_device_id_users.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_directories_app_instance_id_groups_group_id_query_result_id",
+      "path": "/api/v1/directories/{{ config.app_instance_id }}/groups/{{ config.group_id }}/query/{{ config.result_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_directories_app_instance_id_groups_group_id_query_result_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_domains",
+      "path": "/api/v1/domains",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_domains.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_domains_domain_id",
+      "path": "/api/v1/domains/{{ config.domain_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_domains_domain_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_dr_status",
+      "path": "/api/v1/dr/status",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_dr_status.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_dr_status_domain",
+      "path": "/api/v1/dr/status/{{ config.domain }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_dr_status_domain.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_email_domains",
+      "path": "/api/v1/email-domains",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_email_domains.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_email_domains_email_domain_id",
+      "path": "/api/v1/email-domains/{{ config.email_domain_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_email_domains_email_domain_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_email_servers",
+      "path": "/api/v1/email-servers",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_email_servers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_email_servers_email_server_id",
+      "path": "/api/v1/email-servers/{{ config.email_server_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_email_servers_email_server_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_event_hooks",
+      "path": "/api/v1/eventHooks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_event_hooks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_event_hooks_event_hook_id",
+      "path": "/api/v1/eventHooks/{{ config.event_hook_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_event_hooks_event_hook_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_features",
+      "path": "/api/v1/features",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_features.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_features_feature_id",
+      "path": "/api/v1/features/{{ config.feature_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_features_feature_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_features_feature_id_dependencies",
+      "path": "/api/v1/features/{{ config.feature_id }}/dependencies",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_features_feature_id_dependencies.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_features_feature_id_dependents",
+      "path": "/api/v1/features/{{ config.feature_id }}/dependents",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_features_feature_id_dependents.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_first_party_app_settings_app_name",
+      "path": "/api/v1/first-party-app-settings/{{ config.app_name }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_first_party_app_settings_app_name.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_groups_rules",
+      "path": "/api/v1/groups/rules",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_rules.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_rules_group_rule_id",
+      "path": "/api/v1/groups/rules/{{ config.group_rule_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_groups_rules_group_rule_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_groups_group_id",
+      "path": "/api/v1/groups/{{ config.group_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_groups_group_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_groups_group_id_apps",
+      "path": "/api/v1/groups/{{ config.group_id }}/apps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_apps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_group_id_owners",
+      "path": "/api/v1/groups/{{ config.group_id }}/owners",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_owners.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_group_id_roles",
+      "path": "/api/v1/groups/{{ config.group_id }}/roles",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_roles.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_group_id_roles_role_assignment_id",
+      "path": "/api/v1/groups/{{ config.group_id }}/roles/{{ config.role_assignment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_groups_group_id_roles_role_assignment_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps",
+      "path": "/api/v1/groups/{{ config.group_id }}/roles/{{ config.role_assignment_id }}/targets/catalog/apps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_group_id_roles_role_assignment_id_targets_groups",
+      "path": "/api/v1/groups/{{ config.group_id }}/roles/{{ config.role_assignment_id }}/targets/groups",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_roles_role_assignment_id_targets_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_groups_group_id_users",
+      "path": "/api/v1/groups/{{ config.group_id }}/users",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_groups_group_id_users.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_hook_keys",
+      "path": "/api/v1/hook-keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_hook_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_hook_keys_public_key_id",
+      "path": "/api/v1/hook-keys/public/{{ config.key_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_hook_keys_public_key_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_hook_keys_id",
+      "path": "/api/v1/hook-keys/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_hook_keys_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_assignees_users",
+      "path": "/api/v1/iam/assignees/users",
+      "records": {
+        "path": "value"
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_assignees_users.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_governance_bundles",
+      "path": "/api/v1/iam/governance/bundles",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_governance_bundles.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_governance_bundles_bundle_id",
+      "path": "/api/v1/iam/governance/bundles/{{ config.bundle_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_governance_bundles_bundle_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_governance_bundles_bundle_id_entitlements",
+      "path": "/api/v1/iam/governance/bundles/{{ config.bundle_id }}/entitlements",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_governance_bundles_bundle_id_entitlements.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values",
+      "path": "/api/v1/iam/governance/bundles/{{ config.bundle_id }}/entitlements/{{ config.entitlement_id }}/values",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_governance_opt_in",
+      "path": "/api/v1/iam/governance/optIn",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_governance_opt_in.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_resource_sets",
+      "path": "/api/v1/iam/resource-sets",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/bindings",
+      "records": {
+        "path": "roles"
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_bindings.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/bindings/{{ config.role_id_or_label }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/bindings/{{ config.role_id_or_label }}/members",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/bindings/{{ config.role_id_or_label }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_resources",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/resources",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_resources.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id",
+      "path": "/api/v1/iam/resource-sets/{{ config.resource_set_id_or_label }}/resources/{{ config.resource_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_roles",
+      "path": "/api/v1/iam/roles",
+      "records": {
+        "path": "roles"
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_roles.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_roles_role_id_or_label",
+      "path": "/api/v1/iam/roles/{{ config.role_id_or_label }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_roles_role_id_or_label.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_iam_roles_role_id_or_label_permissions",
+      "path": "/api/v1/iam/roles/{{ config.role_id_or_label }}/permissions",
+      "records": {
+        "path": "permissions"
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_iam_roles_role_id_or_label_permissions.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_iam_roles_role_id_or_label_permissions_permission_type",
+      "path": "/api/v1/iam/roles/{{ config.role_id_or_label }}/permissions/{{ config.permission_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_iam_roles_role_id_or_label_permissions_permission_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_identity_sources_identity_source_id_groups_group_or_external_id",
+      "path": "/api/v1/identity-sources/{{ config.identity_source_id }}/groups/{{ config.group_or_external_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_identity_sources_identity_source_id_groups_group_or_external_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership",
+      "path": "/api/v1/identity-sources/{{ config.identity_source_id }}/groups/{{ config.group_or_external_id }}/membership",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_identity_sources_identity_source_id_sessions",
+      "path": "/api/v1/identity-sources/{{ config.identity_source_id }}/sessions",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_identity_sources_identity_source_id_sessions.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_identity_sources_identity_source_id_sessions_session_id",
+      "path": "/api/v1/identity-sources/{{ config.identity_source_id }}/sessions/{{ config.session_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_identity_sources_identity_source_id_sessions_session_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_identity_sources_identity_source_id_users_external_id",
+      "path": "/api/v1/identity-sources/{{ config.identity_source_id }}/users/{{ config.external_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_identity_sources_identity_source_id_users_external_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps",
+      "path": "/api/v1/idps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_credentials_keys",
+      "path": "/api/v1/idps/credentials/keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_credentials_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_credentials_keys_kid",
+      "path": "/api/v1/idps/credentials/keys/{{ config.kid }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_idps_credentials_keys_kid.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps_idp_id",
+      "path": "/api/v1/idps/{{ config.idp_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_idps_idp_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps_idp_id_credentials_csrs",
+      "path": "/api/v1/idps/{{ config.idp_id }}/credentials/csrs",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_credentials_csrs.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_idp_id_credentials_csrs_idp_csr_id",
+      "path": "/api/v1/idps/{{ config.idp_id }}/credentials/csrs/{{ config.idp_csr_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_credentials_csrs_idp_csr_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps_idp_id_credentials_keys",
+      "path": "/api/v1/idps/{{ config.idp_id }}/credentials/keys",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_credentials_keys.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_idp_id_credentials_keys_active",
+      "path": "/api/v1/idps/{{ config.idp_id }}/credentials/keys/active",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_credentials_keys_active.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_idp_id_credentials_keys_kid",
+      "path": "/api/v1/idps/{{ config.idp_id }}/credentials/keys/{{ config.kid }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_credentials_keys_kid.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps_idp_id_users",
+      "path": "/api/v1/idps/{{ config.idp_id }}/users",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_users.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_idps_idp_id_users_user_id",
+      "path": "/api/v1/idps/{{ config.idp_id }}/users/{{ config.user_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_users_user_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_idps_idp_id_users_user_id_credentials_tokens",
+      "path": "/api/v1/idps/{{ config.idp_id }}/users/{{ config.user_id }}/credentials/tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_idps_idp_id_users_user_id_credentials_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_inline_hooks",
+      "path": "/api/v1/inlineHooks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_inline_hooks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_inline_hooks_inline_hook_id",
+      "path": "/api/v1/inlineHooks/{{ config.inline_hook_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_inline_hooks_inline_hook_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_log_streams",
+      "path": "/api/v1/logStreams",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_log_streams.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_log_streams_log_stream_id",
+      "path": "/api/v1/logStreams/{{ config.log_stream_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_log_streams_log_stream_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_mappings",
+      "path": "/api/v1/mappings",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_mappings.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_mappings_mapping_id",
+      "path": "/api/v1/mappings/{{ config.mapping_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_mappings_mapping_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_schemas_apps_app_id_default",
+      "path": "/api/v1/meta/schemas/apps/{{ config.app_id }}/default",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_schemas_apps_app_id_default.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_schemas_group_default",
+      "path": "/api/v1/meta/schemas/group/default",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_schemas_group_default.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_schemas_log_stream",
+      "path": "/api/v1/meta/schemas/logStream",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_meta_schemas_log_stream.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_meta_schemas_log_stream_log_stream_type",
+      "path": "/api/v1/meta/schemas/logStream/{{ config.log_stream_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_schemas_log_stream_log_stream_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_schemas_user_linked_objects",
+      "path": "/api/v1/meta/schemas/user/linkedObjects",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_meta_schemas_user_linked_objects.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_meta_schemas_user_linked_objects_linked_object_name",
+      "path": "/api/v1/meta/schemas/user/linkedObjects/{{ config.linked_object_name }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_schemas_user_linked_objects_linked_object_name.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_schemas_user_schema_id",
+      "path": "/api/v1/meta/schemas/user/{{ config.schema_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_schemas_user_schema_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_types_user",
+      "path": "/api/v1/meta/types/user",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_meta_types_user.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_meta_types_user_type_id",
+      "path": "/api/v1/meta/types/user/{{ config.type_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_types_user_type_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_meta_uischemas",
+      "path": "/api/v1/meta/uischemas",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_meta_uischemas.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_meta_uischemas_id",
+      "path": "/api/v1/meta/uischemas/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_meta_uischemas_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org",
+      "path": "/api/v1/org",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_captcha",
+      "path": "/api/v1/org/captcha",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_captcha.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_contacts",
+      "path": "/api/v1/org/contacts",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_org_contacts.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_org_contacts_contact_type",
+      "path": "/api/v1/org/contacts/{{ config.contact_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_contacts_contact_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_factors_yubikey_token_tokens",
+      "path": "/api/v1/org/factors/yubikey_token/tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_org_factors_yubikey_token_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_org_factors_yubikey_token_tokens_token_id",
+      "path": "/api/v1/org/factors/yubikey_token/tokens/{{ config.token_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_factors_yubikey_token_tokens_token_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_org_settings_third_party_admin_setting",
+      "path": "/api/v1/org/orgSettings/thirdPartyAdminSetting",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_org_settings_third_party_admin_setting.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_preferences",
+      "path": "/api/v1/org/preferences",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_preferences.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_privacy_aerial",
+      "path": "/api/v1/org/privacy/aerial",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_privacy_aerial.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_privacy_okta_communication",
+      "path": "/api/v1/org/privacy/oktaCommunication",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_privacy_okta_communication.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_privacy_okta_support",
+      "path": "/api/v1/org/privacy/oktaSupport",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_privacy_okta_support.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_privacy_okta_support_cases",
+      "path": "/api/v1/org/privacy/oktaSupport/cases",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_org_privacy_okta_support_cases.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_org_settings_auto_assign_admin_app_setting",
+      "path": "/api/v1/org/settings/autoAssignAdminAppSetting",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_settings_auto_assign_admin_app_setting.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_org_settings_client_privileges_setting",
+      "path": "/api/v1/org/settings/clientPrivilegesSetting",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_org_settings_client_privileges_setting.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_policies",
+      "path": "/api/v1/policies",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_policies.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200",
+        "type": "{{ config.type }}"
+      }
+    },
+    {
+      "name": "api_v1_policies_policy_id",
+      "path": "/api/v1/policies/{{ config.policy_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_policies_policy_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_policies_policy_id_app",
+      "path": "/api/v1/policies/{{ config.policy_id }}/app",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_policies_policy_id_app.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_policies_policy_id_mappings",
+      "path": "/api/v1/policies/{{ config.policy_id }}/mappings",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_policies_policy_id_mappings.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_policies_policy_id_mappings_mapping_id",
+      "path": "/api/v1/policies/{{ config.policy_id }}/mappings/{{ config.mapping_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_policies_policy_id_mappings_mapping_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_policies_policy_id_rules",
+      "path": "/api/v1/policies/{{ config.policy_id }}/rules",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_policies_policy_id_rules.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_policies_policy_id_rules_rule_id",
+      "path": "/api/v1/policies/{{ config.policy_id }}/rules/{{ config.rule_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_policies_policy_id_rules_rule_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_principal_rate_limits",
+      "path": "/api/v1/principal-rate-limits",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_principal_rate_limits.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200",
+        "filter": "{{ config.filter }}"
+      }
+    },
+    {
+      "name": "api_v1_principal_rate_limits_principal_rate_limit_id",
+      "path": "/api/v1/principal-rate-limits/{{ config.principal_rate_limit_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_principal_rate_limits_principal_rate_limit_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_push_providers",
+      "path": "/api/v1/push-providers",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_push_providers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_push_providers_push_provider_id",
+      "path": "/api/v1/push-providers/{{ config.push_provider_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_push_providers_push_provider_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_rate_limit_settings_admin_notifications",
+      "path": "/api/v1/rate-limit-settings/admin-notifications",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_rate_limit_settings_admin_notifications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_rate_limit_settings_per_client",
+      "path": "/api/v1/rate-limit-settings/per-client",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_rate_limit_settings_per_client.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_rate_limit_settings_warning_threshold",
+      "path": "/api/v1/rate-limit-settings/warning-threshold",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_rate_limit_settings_warning_threshold.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_realm_assignments",
+      "path": "/api/v1/realm-assignments",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_realm_assignments.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_realm_assignments_operations",
+      "path": "/api/v1/realm-assignments/operations",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_realm_assignments_operations.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_realm_assignments_assignment_id",
+      "path": "/api/v1/realm-assignments/{{ config.assignment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_realm_assignments_assignment_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_realms",
+      "path": "/api/v1/realms",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_realms.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_realms_realm_id",
+      "path": "/api/v1/realms/{{ config.realm_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_realms_realm_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_roles_role_ref_subscriptions",
+      "path": "/api/v1/roles/{{ config.role_ref }}/subscriptions",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_roles_role_ref_subscriptions.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_roles_role_ref_subscriptions_notification_type",
+      "path": "/api/v1/roles/{{ config.role_ref }}/subscriptions/{{ config.notification_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_roles_role_ref_subscriptions_notification_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_security_events_providers",
+      "path": "/api/v1/security-events-providers",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_security_events_providers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_security_events_providers_security_event_provider_id",
+      "path": "/api/v1/security-events-providers/{{ config.security_event_provider_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_security_events_providers_security_event_provider_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_sessions_session_id",
+      "path": "/api/v1/sessions/{{ config.session_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_sessions_session_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_ssf_stream",
+      "path": "/api/v1/ssf/stream",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_ssf_stream.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_ssf_stream_status",
+      "path": "/api/v1/ssf/stream/status",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_ssf_stream_status.json",
+      "projection": "passthrough",
+      "query": {
+        "stream_id": "{{ config.stream_id }}"
+      }
+    },
+    {
+      "name": "api_v1_telephony_providers",
+      "path": "/api/v1/telephony-providers",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_telephony_providers.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_telephony_providers_custom_telephony_provider_id",
+      "path": "/api/v1/telephony-providers/{{ config.custom_telephony_provider_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_telephony_providers_custom_telephony_provider_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_templates_sms",
+      "path": "/api/v1/templates/sms",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_templates_sms.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_templates_sms_template_id",
+      "path": "/api/v1/templates/sms/{{ config.template_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_templates_sms_template_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_threats_configuration",
+      "path": "/api/v1/threats/configuration",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_threats_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_trusted_origins",
+      "path": "/api/v1/trustedOrigins",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_trusted_origins.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_trusted_origins_trusted_origin_id",
+      "path": "/api/v1/trustedOrigins/{{ config.trusted_origin_id }}",
+      "records": {
+        "path": "scopes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_trusted_origins_trusted_origin_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_id",
+      "path": "/api/v1/users/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_id_app_links",
+      "path": "/api/v1/users/{{ config.id }}/appLinks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_id_app_links.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_id_blocks",
+      "path": "/api/v1/users/{{ config.id }}/blocks",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_id_blocks.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_id_groups",
+      "path": "/api/v1/users/{{ config.id }}/groups",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_id_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_id_idps",
+      "path": "/api/v1/users/{{ config.id }}/idps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_id_idps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_or_login_linked_objects_relationship_name",
+      "path": "/api/v1/users/{{ config.user_id_or_login }}/linkedObjects/{{ config.relationship_name }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_or_login_linked_objects_relationship_name.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_authenticator_enrollments",
+      "path": "/api/v1/users/{{ config.user_id }}/authenticator-enrollments",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_authenticator_enrollments.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_authenticator_enrollments_enrollment_id",
+      "path": "/api/v1/users/{{ config.user_id }}/authenticator-enrollments/{{ config.enrollment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_authenticator_enrollments_enrollment_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_classification",
+      "path": "/api/v1/users/{{ config.user_id }}/classification",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_classification.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_clients",
+      "path": "/api/v1/users/{{ config.user_id }}/clients",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_clients.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_clients_client_id_grants",
+      "path": "/api/v1/users/{{ config.user_id }}/clients/{{ config.client_id }}/grants",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_clients_client_id_grants.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_clients_client_id_tokens",
+      "path": "/api/v1/users/{{ config.user_id }}/clients/{{ config.client_id }}/tokens",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_clients_client_id_tokens.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_clients_client_id_tokens_token_id",
+      "path": "/api/v1/users/{{ config.user_id }}/clients/{{ config.client_id }}/tokens/{{ config.token_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_clients_client_id_tokens_token_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_devices",
+      "path": "/api/v1/users/{{ config.user_id }}/devices",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_devices.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_factors",
+      "path": "/api/v1/users/{{ config.user_id }}/factors",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_factors.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_factors_catalog",
+      "path": "/api/v1/users/{{ config.user_id }}/factors/catalog",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_factors_catalog.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_factors_questions",
+      "path": "/api/v1/users/{{ config.user_id }}/factors/questions",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_factors_questions.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_factors_factor_id",
+      "path": "/api/v1/users/{{ config.user_id }}/factors/{{ config.factor_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_factors_factor_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_factors_factor_id_transactions_transaction_id",
+      "path": "/api/v1/users/{{ config.user_id }}/factors/{{ config.factor_id }}/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_factors_factor_id_transactions_transaction_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_grants",
+      "path": "/api/v1/users/{{ config.user_id }}/grants",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_grants.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_grants_grant_id",
+      "path": "/api/v1/users/{{ config.user_id }}/grants/{{ config.grant_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_grants_grant_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_risk",
+      "path": "/api/v1/users/{{ config.user_id }}/risk",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_risk.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_roles",
+      "path": "/api/v1/users/{{ config.user_id }}/roles",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id_governance",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}/governance",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id_governance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}/governance/{{ config.grant_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id_governance_grant_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id_resources",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}/governance/{{ config.grant_id }}/resources",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id_governance_grant_id_resources.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}/targets/catalog/apps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_assignment_id_targets_groups",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_assignment_id }}/targets/groups",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_assignment_id_targets_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets",
+      "path": "/api/v1/users/{{ config.user_id }}/roles/{{ config.role_id_or_encoded_role_id }}/targets",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_subscriptions",
+      "path": "/api/v1/users/{{ config.user_id }}/subscriptions",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_users_user_id_subscriptions.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_users_user_id_subscriptions_notification_type",
+      "path": "/api/v1/users/{{ config.user_id }}/subscriptions/{{ config.notification_type }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_users_user_id_subscriptions_notification_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "api_v1_zones",
+      "path": "/api/v1/zones",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/api_v1_zones.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "api_v1_zones_zone_id",
+      "path": "/api/v1/zones/{{ config.zone_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/api_v1_zones_zone_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "attack_protection_api_v1_authenticator_settings",
+      "path": "/attack-protection/api/v1/authenticator-settings",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/attack_protection_api_v1_authenticator_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "attack_protection_api_v1_user_lockout_settings",
+      "path": "/attack-protection/api/v1/user-lockout-settings",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/attack_protection_api_v1_user_lockout_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "integrations_api_v1_api_services",
+      "path": "/integrations/api/v1/api-services",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/integrations_api_v1_api_services.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "integrations_api_v1_api_services_api_service_id",
+      "path": "/integrations/api/v1/api-services/{{ config.api_service_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/integrations_api_v1_api_services_api_service_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "integrations_api_v1_api_services_api_service_id_credentials_secrets",
+      "path": "/integrations/api/v1/api-services/{{ config.api_service_id }}/credentials/secrets",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/integrations_api_v1_api_services_api_service_id_credentials_secrets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "oauth2_v1_clients_client_id_roles",
+      "path": "/oauth2/v1/clients/{{ config.client_id }}/roles",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/oauth2_v1_clients_client_id_roles.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "oauth2_v1_clients_client_id_roles_role_assignment_id",
+      "path": "/oauth2/v1/clients/{{ config.client_id }}/roles/{{ config.role_assignment_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/oauth2_v1_clients_client_id_roles_role_assignment_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps",
+      "path": "/oauth2/v1/clients/{{ config.client_id }}/roles/{{ config.role_assignment_id }}/targets/catalog/apps",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups",
+      "path": "/oauth2/v1/clients/{{ config.client_id }}/roles/{{ config.role_assignment_id }}/targets/groups",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "okta_personal_settings_api_v1_export_blocklists",
+      "path": "/okta-personal-settings/api/v1/export-blocklists",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/okta_personal_settings_api_v1_export_blocklists.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "privileged_access_api_v1_okta_service_accounts",
+      "path": "/privileged-access/api/v1/okta-service-accounts",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/privileged_access_api_v1_okta_service_accounts.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "privileged_access_api_v1_okta_service_accounts_id",
+      "path": "/privileged-access/api/v1/okta-service-accounts/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/privileged_access_api_v1_okta_service_accounts_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "privileged_access_api_v1_service_accounts",
+      "path": "/privileged-access/api/v1/service-accounts",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/privileged_access_api_v1_service_accounts.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    },
+    {
+      "name": "privileged_access_api_v1_service_accounts_id",
+      "path": "/privileged-access/api/v1/service-accounts/{{ config.id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/privileged_access_api_v1_service_accounts_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webauthn_registration_api_v1_users_user_id_enrollments",
+      "path": "/webauthn-registration/api/v1/users/{{ config.user_id }}/enrollments",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "link_header"
+      },
+      "schema": "schemas/webauthn_registration_api_v1_users_user_id_enrollments.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "200"
+      }
+    }
+  ]
+}

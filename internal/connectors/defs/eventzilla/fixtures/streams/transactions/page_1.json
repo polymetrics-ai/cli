@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        { "id": 1, "title": "Fixture Launch" },
+        { "id": 2, "title": "Fixture Expo" }
+      ]
+    }
+  }
+}

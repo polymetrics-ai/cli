@@ -1,0 +1,268 @@
+{
+  "api": "PayFit Partner API (https://partner-api.payfit.com) plus legacy customer /v1 endpoints retained for migration parity",
+  "docs": "https://developers.payfit.io/llms.txt (merged official per-endpoint OpenAPI blocks from /reference/*.md)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion: preserves the 3 legacy /v1 read streams and covers PayFit's current reference surface from llms.txt. JSON list/detail endpoints become streams, JSON customer-key mutations become writes, binary/PDF/CSV/multipart and partner/auth helper endpoints are explicitly excluded with closed categories.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/employees",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contracts",
+      "covered_by": {
+        "stream": "contracts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies-fr/{companyId}",
+      "covered_by": {
+        "stream": "company_fr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies-fr/{companyId}/health-insurance-setup-sheets",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart/form-data upload is not expressible by declarative JSON writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}",
+      "covered_by": {
+        "stream": "company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/absences",
+      "covered_by": {
+        "stream": "absences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/absences",
+      "covered_by": {
+        "write": "create_absence"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{companyId}/absences/{absenceId}",
+      "covered_by": {
+        "write": "cancel_absence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/accounting",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/accounting-v2",
+      "covered_by": {
+        "stream": "accounting_v2_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/auto-enrolment-documents",
+      "covered_by": {
+        "stream": "auto_enrolment_documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/billing-declarations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "partner-only billing declaration endpoint; the migrated connector authenticates with a customer API key, not partner-only credentials"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/collaborators",
+      "covered_by": {
+        "stream": "collaborators"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/collaborators",
+      "covered_by": {
+        "write": "create_collaborator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/collaborators/meal-vouchers",
+      "covered_by": {
+        "stream": "collaborator_meal_vouchers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/collaborators/{collaboratorId}",
+      "covered_by": {
+        "stream": "collaborator"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts",
+      "covered_by": {
+        "write": "create_contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/collaborators/{collaboratorId}/payslips",
+      "covered_by": {
+        "stream": "collaborator_payslips"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/contracts",
+      "covered_by": {
+        "stream": "company_contracts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/contracts-fr",
+      "covered_by": {
+        "stream": "company_contracts_fr"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/contracts-fr/{contractId}",
+      "covered_by": {
+        "stream": "company_contract_fr"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{companyId}/contracts-fr/{contractId}/health-insurance",
+      "covered_by": {
+        "write": "update_contract_health_insurance"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{companyId}/contracts-fr/{contractId}/provident-fund",
+      "covered_by": {
+        "write": "update_contract_provident_fund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{companyId}/contracts-fr/{contractId}/regularization",
+      "covered_by": {
+        "write": "request_health_insurance_regularization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/contracts/time",
+      "covered_by": {
+        "stream": "worked_time_by_contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/contracts/{contractId}",
+      "covered_by": {
+        "stream": "company_contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/documents/{documentId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/health-insurance-contracts",
+      "covered_by": {
+        "stream": "health_insurance_contracts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/income-taxes-documents",
+      "covered_by": {
+        "stream": "income_tax_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/payment-files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/payroll-status",
+      "covered_by": {
+        "stream": "payroll_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{companyId}/provident-fund-contracts",
+      "covered_by": {
+        "stream": "provident_fund_contracts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://oauth.payfit.com/introspect",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "API-key/OAuth introspection helper used to discover company_id; not a syncable resource or reverse-ETL mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "https://oauth.payfit.com/webhooks",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns a webhook dashboard URL using OAuth client credentials; webhook setup is an operational configuration helper, not a data stream"
+      }
+    }
+  ]
+}

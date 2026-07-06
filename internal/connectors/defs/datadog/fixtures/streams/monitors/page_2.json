@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/monitor",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 101,
+        "name": "Fixture Monitor 101",
+        "type": "metric alert",
+        "query": "avg(last_5m):avg:system.cpu.user{*} > 90",
+        "message": "fixture monitor",
+        "overall_state": "OK",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "priority": 1
+      },
+      {
+        "id": 102,
+        "name": "Fixture Monitor 102",
+        "type": "metric alert",
+        "query": "avg(last_5m):avg:system.cpu.user{*} > 90",
+        "message": "fixture monitor",
+        "overall_state": "OK",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "priority": 2
+      }
+    ]
+  }
+}

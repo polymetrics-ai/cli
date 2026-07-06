@@ -12,20 +12,54 @@ SYNOPSIS
 DESCRIPTION
   Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues through the Flowlu REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  company
+  api_key (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    cursor: updated_date
+    fields: active(), created_date(), email(), first_name(), id(), last_name(), name(), owner_id(), phone(), type(), updated_date()
+  leads:
+    primary key: id
+    cursor: updated_date
+    fields: active(), budget(), created_date(), id(), name(), owner_id(), pipeline_id(), stage_id(), title(), updated_date()
+  tasks:
+    primary key: id
+    cursor: updated_date
+    fields: created_date(), deadline(), description(), id(), name(), owner_id(), priority(), responsible_id(), updated_date(), workflow_stage_id()
+  projects:
+    primary key: id
+    cursor: updated_date
+    fields: active(), created_date(), description(), id(), manager_id(), name(), owner_id(), stage_id(), updated_date()
+  invoices:
+    primary key: id
+    cursor: updated_date
+    fields: created_date(), currency_id(), customer_id(), id(), invoice_date(), invoice_number(), invoice_status(), name(), total_amount(), updated_date()
+  agile_issues:
+    primary key: id
+    cursor: updated_date
+    fields: created_date(), description(), id(), name(), owner_id(), priority(), project_id(), sprint_id(), type(), updated_date()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Flowlu CRM read of accounts/leads/tasks/projects/invoices/agile issues
+  approval: none; read-only API-key access
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

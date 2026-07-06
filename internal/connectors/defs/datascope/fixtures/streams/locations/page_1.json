@@ -1,0 +1,53 @@
+{
+  "request": { "method": "GET", "path": "/locations", "query": { "limit": "200", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Location 1",
+        "description": "Fixture record 1",
+        "code": "LOC-1",
+        "address": "1 Rua Fixture",
+        "city": "Lisbon",
+        "country": "PT",
+        "latitude": 38.721,
+        "longitude": -9.131,
+        "region": "Lisboa",
+        "phone": "+351000000001",
+        "company_code": "ACME",
+        "company_name": "Acme Field Services"
+      },
+      {
+        "id": 2,
+        "name": "Fixture Location 2",
+        "description": "Fixture record 2",
+        "code": "LOC-2",
+        "address": "2 Rua Fixture",
+        "city": "Lisbon",
+        "country": "PT",
+        "latitude": 38.722,
+        "longitude": -9.132,
+        "region": "Lisboa",
+        "phone": "+351000000002",
+        "company_code": "ACME",
+        "company_name": "Acme Field Services"
+      },
+      {
+        "id": 3,
+        "name": "Fixture Location 3",
+        "description": "Fixture record 3",
+        "code": "LOC-3",
+        "address": "3 Rua Fixture",
+        "city": "Lisbon",
+        "country": "PT",
+        "latitude": 38.723,
+        "longitude": -9.133,
+        "region": "Lisboa",
+        "phone": "+351000000003",
+        "company_code": "ACME",
+        "company_name": "Acme Field Services"
+      }
+    ]
+  }
+}

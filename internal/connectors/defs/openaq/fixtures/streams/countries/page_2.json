@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/countries",
+    "query": {
+      "limit": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": {
+        "page": 2,
+        "limit": 100,
+        "found": 101
+      },
+      "results": [
+        {
+          "id": 101,
+          "code": "DE",
+          "name": "Germany",
+          "datetimeFirst": "2018-01-01T00:00:00Z",
+          "datetimeLast": "2026-01-01T00:00:00Z",
+          "parameters": [
+            "pm25",
+            "no2"
+          ]
+        }
+      ]
+    }
+  }
+}

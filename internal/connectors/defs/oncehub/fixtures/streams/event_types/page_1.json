@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v2/event-types", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "evt_fixture_1", "object": "event_type", "name": "Fixture Event Type", "label": "fixture-event" }
+      ]
+    }
+  }
+}

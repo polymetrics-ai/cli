@@ -1,0 +1,9 @@
+{
+  "record": { "id": "user_fixture_child_1", "user": { "name": "Fixture Child User Updated" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/user_fixture_child_1",
+    "body": { "user": { "name": "Fixture Child User Updated" } }
+  },
+  "response": { "status": 200, "body": { "id": "user_fixture_child_1", "object": "User" } }
+}

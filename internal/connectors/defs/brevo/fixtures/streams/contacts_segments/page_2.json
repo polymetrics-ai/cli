@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts/segments",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        {
+          "id": 101,
+          "segmentName": "Fixture Segment 101",
+          "categoryName": "Fixture Category",
+          "updatedAt": "2026-01-18T00:00:00.000+00:00"
+        }
+      ],
+      "count": 101
+    }
+  }
+}

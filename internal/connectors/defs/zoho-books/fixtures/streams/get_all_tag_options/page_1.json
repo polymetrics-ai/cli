@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reportingtags/options",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "tag_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "dependent_tags": [
+        {
+          "dependent_id": "get_all_tag_options_fixture_1",
+          "dependent_name": "get_all_tag_options fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "get_all_tag_options_fixture_1",
+          "name": "get_all_tag_options fixture 1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "keys",
+      "method": "GET",
+      "path": "/__legacy_hook/keys",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/keys.json",
+      "incremental": {
+        "cursor_field": "modified_at_timestamp",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "languages",
+      "method": "GET",
+      "path": "/__legacy_hook/languages",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/languages.json"
+    },
+    {
+      "name": "translations",
+      "method": "GET",
+      "path": "/__legacy_hook/translations",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/translations.json",
+      "incremental": {
+        "cursor_field": "modified_at_timestamp",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "contributors",
+      "method": "GET",
+      "path": "/__legacy_hook/contributors",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/contributors.json"
+    },
+    {
+      "name": "comments",
+      "method": "GET",
+      "path": "/__legacy_hook/comments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/comments.json"
+    }
+  ]
+}

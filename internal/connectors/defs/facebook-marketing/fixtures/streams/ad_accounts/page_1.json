@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/me/adaccounts", "query": { "limit": "100", "fields": "id,account_id,name,account_status,currency,timezone_name" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "act_1001", "account_id": "1001", "name": "Fixture Ad Account 1", "account_status": "1", "currency": "USD", "timezone_name": "America/Los_Angeles" },
+        { "id": "act_1002", "account_id": "1002", "name": "Fixture Ad Account 2", "account_status": "1", "currency": "USD", "timezone_name": "America/Los_Angeles" }
+      ],
+      "paging": {}
+    }
+  }
+}

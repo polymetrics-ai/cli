@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "space_tags",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "tag_fg": { "type": ["string", "null"] },
+    "tag_bg": { "type": ["string", "null"] },
+    "space_id": { "type": ["string", "null"] }
+  }
+}

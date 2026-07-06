@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture create image collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/images/collections",
+    "body": {
+      "name": "Fixture create image collection"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

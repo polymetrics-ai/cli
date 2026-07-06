@@ -1,0 +1,18 @@
+{
+  "record": {
+    "code": "abc-defg-hij",
+    "enabled": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/room-codes/code",
+    "body": {
+      "code": "abc-defg-hij",
+      "enabled": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "code": "abc-defg-hij", "room_id": "room_fixture_1", "enabled": false }
+  }
+}

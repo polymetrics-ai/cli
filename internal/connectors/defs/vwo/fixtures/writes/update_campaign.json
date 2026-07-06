@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "701",
+    "status": "RUNNING"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/campaigns/701",
+    "body": {
+      "status": "RUNNING"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "_data": { "id": 701, "status": "RUNNING" } }
+  }
+}

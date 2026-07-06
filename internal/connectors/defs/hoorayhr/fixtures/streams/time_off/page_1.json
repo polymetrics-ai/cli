@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time-off"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "userId": 101,
+        "status": "approved",
+        "start": "2026-02-01",
+        "end": "2026-02-05",
+        "leaveTypeId": 1,
+        "timeOffType": "vacation",
+        "leaveUnit": "days",
+        "notes": "fixture note 1",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      },
+      {
+        "id": 2,
+        "userId": 102,
+        "status": "pending",
+        "start": "2026-03-01",
+        "end": "2026-03-03",
+        "leaveTypeId": 2,
+        "timeOffType": "sick",
+        "leaveUnit": "days",
+        "notes": "fixture note 2",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

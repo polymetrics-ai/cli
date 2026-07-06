@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers_custom_fields_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The ID of the custom field."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the custom field."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the custom field.",
+      "enum": [
+        "string",
+        "number",
+        "json",
+        "checkbox",
+        "select",
+        "multiselect",
+        "url",
+        "date"
+      ]
+    },
+    "options": {
+      "type": "array",
+      "description": "The options for the custom field if it is a 'select' type.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "defaultValue": {},
+    "appId": {
+      "type": "string",
+      "description": "The ID of the app the custom field is associated with."
+    },
+    "appLevel": {
+      "type": "boolean",
+      "description": "Will be true if the custom field is an All Apps custom field. False if the custom field is a customer field, or a field specific to a single app."
+    },
+    "showOnCustomerDetail": {
+      "type": "boolean",
+      "description": "Whether the custom field should be shown on the customer detail page. This can also be toggled by the user."
+    },
+    "private": {
+      "type": "boolean",
+      "description": "If true, your field will only be accessible via the API by your client. If false, all clients can access read the field but only the owning client can mutate it."
+    },
+    "filterable": {
+      "type": "boolean",
+      "description": "If true, the custom field can be used as a filter in the customer list."
+    }
+  }
+}

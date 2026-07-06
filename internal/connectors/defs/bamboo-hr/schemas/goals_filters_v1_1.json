@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "goals_filters_v1_1",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "actions": {
+      "type": "object",
+      "properties": {
+        "canCloseGoal": {
+          "type": "boolean"
+        },
+        "canEditGoal": {
+          "type": "boolean"
+        },
+        "canEditGoalProgressBar": {
+          "type": "boolean"
+        },
+        "canReopenGoal": {
+          "type": "boolean"
+        },
+        "canShareGoal": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "count": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string",
+      "enum": [
+        "status-inProgress",
+        "status-completed",
+        "status-closed"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "enum": [
+        "In Progress",
+        "Completed",
+        "Closed"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/owners", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "owners": [
+        { "id": "own_fixture_1", "name": "Fixture Owner One", "status": "active" },
+        { "id": "own_fixture_2", "name": "Fixture Owner Two", "status": "active" }
+      ]
+    }
+  }
+}

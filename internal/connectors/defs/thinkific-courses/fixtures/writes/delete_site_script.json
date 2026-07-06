@@ -1,0 +1,16 @@
+{
+  "record": {
+    "site_script_id": "site_script_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/site_scripts/site_script_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

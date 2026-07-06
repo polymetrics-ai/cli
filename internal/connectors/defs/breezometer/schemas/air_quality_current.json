@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "air_quality_current",
+  "type": "object",
+  "x-primary-key": ["datetime", "latitude", "longitude"],
+  "x-cursor-field": "datetime",
+  "required": ["datetime", "latitude", "longitude"],
+  "properties": {
+    "datetime": { "type": "string" },
+    "latitude": { "type": "string" },
+    "longitude": { "type": "string" },
+    "data_available": { "type": ["boolean", "null"] },
+    "indexes": { "type": ["object", "null"] },
+    "pollutants": { "type": ["object", "null"] },
+    "health_recommendations": { "type": ["object", "null"] }
+  }
+}

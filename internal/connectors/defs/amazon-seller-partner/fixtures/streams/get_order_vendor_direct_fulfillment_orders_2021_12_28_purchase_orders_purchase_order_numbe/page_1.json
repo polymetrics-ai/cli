@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+      "orderDetails": {},
+      "purchase_order_number": "purchase_order_number-fixture-1"
+    }
+  }
+}

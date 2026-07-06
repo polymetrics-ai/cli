@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rankings",
+  "type": "object",
+  "x-primary-key": ["ext_id", "country", "device", "genre_id", "date"],
+  "required": ["ext_id"],
+  "properties": {
+    "ext_id": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "device": { "type": ["string", "null"] },
+    "genre_id": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "category": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "url": "https://example.com/hooks/fixture", "events": ["event.created"] },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/webhooks",
+    "body": { "url": "https://example.com/hooks/fixture", "events": ["event.created"] }
+  },
+  "response": { "status": 201, "body": { "id": "whk_fixture_new", "url": "https://example.com/hooks/fixture" } }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/blog-tags/1",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

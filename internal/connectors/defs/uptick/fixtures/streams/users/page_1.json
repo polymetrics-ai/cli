@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/users/",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 104,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "username": "fixture.user",
+          "name": "Fixture User",
+          "email": "fixture.user@example.com",
+          "is_active": true
+        }
+      ],
+      "links": {
+        "next": null
+      }
+    }
+  }
+}

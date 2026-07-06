@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Support Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Zendesk Support account root, e.g. https://acme.zendesk.com for subdomain 'acme'. The engine appends /api/v2 to every request; do not include /api/v2 yourself. Also usable as a base URL override for tests/proxies."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth2 access token. Sent as Authorization: Bearer <access_token>. Preferred over api_token when both are present (matches legacy precedence)."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk API token (Admin Center > Apps and integrations > APIs > Zendesk API). Sent via HTTP Basic as '<email>/token:<api_token>'. Requires email."
+    },
+    "email": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk agent email address paired with api_token for API-token Basic auth (the '<email>/token' username half)."
+    }
+  }
+}

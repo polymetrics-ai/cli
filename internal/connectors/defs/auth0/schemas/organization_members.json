@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_members",
+  "type": "object",
+  "x-primary-key": ["organization_id", "user_id"],
+  "required": ["organization_id", "user_id"],
+  "properties": {
+    "organization_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "picture": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] }
+  }
+}

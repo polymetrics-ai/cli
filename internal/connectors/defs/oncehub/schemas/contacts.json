@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_updated_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "mobile_phone": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "owner": { "type": ["string", "null"] },
+    "creation_time": { "type": ["string", "null"], "format": "date-time" },
+    "last_updated_time": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

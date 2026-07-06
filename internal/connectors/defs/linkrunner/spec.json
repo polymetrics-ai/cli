@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Linkrunner Connection Specification",
+  "type": "object",
+  "required": ["linkrunner-key"],
+  "properties": {
+    "linkrunner-key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Linkrunner API key, sent as the linkrunner-key request header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.linkrunner.io/api/v1",
+      "description": "Linkrunner Data API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "filter": {
+      "type": "string",
+      "description": "Optional campaigns stream filter passed through as-is."
+    },
+    "channel": {
+      "type": "string",
+      "description": "Optional campaigns stream channel filter passed through as-is."
+    },
+    "display_id": {
+      "type": "string",
+      "description": "Campaign display_id to scope the attributed_users stream. Required when reading attributed_users."
+    },
+    "start_timestamp": {
+      "type": "string",
+      "description": "Optional attributed_users stream lower-bound timestamp filter."
+    },
+    "end_timestamp": {
+      "type": "string",
+      "description": "Optional attributed_users stream upper-bound timestamp filter."
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Optional attributed_users stream timezone for timestamp filters."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "template_id": 1000001,
+    "send_email": false,
+    "order": "preserved",
+    "submitters": [
+      { "name": "Fixture Signer", "role": "First Party", "email": "fixture-signer@example.com" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/submissions"
+  }
+}

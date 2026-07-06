@@ -1,0 +1,17 @@
+{
+  "record": {
+    "slug": "fixture-web",
+    "description": "Updated fixture description"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web",
+    "body": {
+      "description": "Updated fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

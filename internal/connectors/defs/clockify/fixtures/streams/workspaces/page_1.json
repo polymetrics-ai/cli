@@ -1,0 +1,714 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/workspaces",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ws_fixture_1",
+        "name": "Fixture Workspace 1",
+        "hourlyRate": {
+          "amount": 10,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_2",
+        "name": "Fixture Workspace 2",
+        "hourlyRate": {
+          "amount": 20,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_3",
+        "name": "Fixture Workspace 3",
+        "hourlyRate": {
+          "amount": 30,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_4",
+        "name": "Fixture Workspace 4",
+        "hourlyRate": {
+          "amount": 40,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_5",
+        "name": "Fixture Workspace 5",
+        "hourlyRate": {
+          "amount": 50,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_6",
+        "name": "Fixture Workspace 6",
+        "hourlyRate": {
+          "amount": 60,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_7",
+        "name": "Fixture Workspace 7",
+        "hourlyRate": {
+          "amount": 70,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_8",
+        "name": "Fixture Workspace 8",
+        "hourlyRate": {
+          "amount": 80,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_9",
+        "name": "Fixture Workspace 9",
+        "hourlyRate": {
+          "amount": 90,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_10",
+        "name": "Fixture Workspace 10",
+        "hourlyRate": {
+          "amount": 100,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_11",
+        "name": "Fixture Workspace 11",
+        "hourlyRate": {
+          "amount": 110,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_12",
+        "name": "Fixture Workspace 12",
+        "hourlyRate": {
+          "amount": 120,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_13",
+        "name": "Fixture Workspace 13",
+        "hourlyRate": {
+          "amount": 130,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_14",
+        "name": "Fixture Workspace 14",
+        "hourlyRate": {
+          "amount": 140,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_15",
+        "name": "Fixture Workspace 15",
+        "hourlyRate": {
+          "amount": 150,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_16",
+        "name": "Fixture Workspace 16",
+        "hourlyRate": {
+          "amount": 160,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_17",
+        "name": "Fixture Workspace 17",
+        "hourlyRate": {
+          "amount": 170,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_18",
+        "name": "Fixture Workspace 18",
+        "hourlyRate": {
+          "amount": 180,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_19",
+        "name": "Fixture Workspace 19",
+        "hourlyRate": {
+          "amount": 190,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_20",
+        "name": "Fixture Workspace 20",
+        "hourlyRate": {
+          "amount": 200,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_21",
+        "name": "Fixture Workspace 21",
+        "hourlyRate": {
+          "amount": 210,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_22",
+        "name": "Fixture Workspace 22",
+        "hourlyRate": {
+          "amount": 220,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_23",
+        "name": "Fixture Workspace 23",
+        "hourlyRate": {
+          "amount": 230,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_24",
+        "name": "Fixture Workspace 24",
+        "hourlyRate": {
+          "amount": 240,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_25",
+        "name": "Fixture Workspace 25",
+        "hourlyRate": {
+          "amount": 250,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_26",
+        "name": "Fixture Workspace 26",
+        "hourlyRate": {
+          "amount": 260,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_27",
+        "name": "Fixture Workspace 27",
+        "hourlyRate": {
+          "amount": 270,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_28",
+        "name": "Fixture Workspace 28",
+        "hourlyRate": {
+          "amount": 280,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_29",
+        "name": "Fixture Workspace 29",
+        "hourlyRate": {
+          "amount": 290,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_30",
+        "name": "Fixture Workspace 30",
+        "hourlyRate": {
+          "amount": 300,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_31",
+        "name": "Fixture Workspace 31",
+        "hourlyRate": {
+          "amount": 310,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_32",
+        "name": "Fixture Workspace 32",
+        "hourlyRate": {
+          "amount": 320,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_33",
+        "name": "Fixture Workspace 33",
+        "hourlyRate": {
+          "amount": 330,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_34",
+        "name": "Fixture Workspace 34",
+        "hourlyRate": {
+          "amount": 340,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_35",
+        "name": "Fixture Workspace 35",
+        "hourlyRate": {
+          "amount": 350,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_36",
+        "name": "Fixture Workspace 36",
+        "hourlyRate": {
+          "amount": 360,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_37",
+        "name": "Fixture Workspace 37",
+        "hourlyRate": {
+          "amount": 370,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_38",
+        "name": "Fixture Workspace 38",
+        "hourlyRate": {
+          "amount": 380,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_39",
+        "name": "Fixture Workspace 39",
+        "hourlyRate": {
+          "amount": 390,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_40",
+        "name": "Fixture Workspace 40",
+        "hourlyRate": {
+          "amount": 400,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_41",
+        "name": "Fixture Workspace 41",
+        "hourlyRate": {
+          "amount": 410,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_42",
+        "name": "Fixture Workspace 42",
+        "hourlyRate": {
+          "amount": 420,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_43",
+        "name": "Fixture Workspace 43",
+        "hourlyRate": {
+          "amount": 430,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_44",
+        "name": "Fixture Workspace 44",
+        "hourlyRate": {
+          "amount": 440,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_45",
+        "name": "Fixture Workspace 45",
+        "hourlyRate": {
+          "amount": 450,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_46",
+        "name": "Fixture Workspace 46",
+        "hourlyRate": {
+          "amount": 460,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_47",
+        "name": "Fixture Workspace 47",
+        "hourlyRate": {
+          "amount": 470,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_48",
+        "name": "Fixture Workspace 48",
+        "hourlyRate": {
+          "amount": 480,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_49",
+        "name": "Fixture Workspace 49",
+        "hourlyRate": {
+          "amount": 490,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      },
+      {
+        "id": "ws_fixture_50",
+        "name": "Fixture Workspace 50",
+        "hourlyRate": {
+          "amount": 500,
+          "currency": "USD"
+        },
+        "memberships": [],
+        "workspaceSettings": {
+          "timeTrackingMode": "DEFAULT"
+        },
+        "imageUrl": "",
+        "featureSubscriptionType": "FREE"
+      }
+    ]
+  }
+}

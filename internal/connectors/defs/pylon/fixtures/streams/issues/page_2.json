@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues",
+    "query": {
+      "limit": "100",
+      "cursor": "fixture_cursor_2",
+      "updated_after": "2020-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "iss_fixture_3",
+          "title": "Fixture Issue 3",
+          "name": "Fixture Issue 3",
+          "state": "closed",
+          "email": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "next_cursor": null
+      }
+    }
+  }
+}

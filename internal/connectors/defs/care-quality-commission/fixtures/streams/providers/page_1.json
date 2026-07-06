@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/providers", "query": { "page": "1", "perPage": "1000" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "perPage": 1000,
+      "totalPages": 1,
+      "total": 2,
+      "providers": [
+        {
+          "providerId": "1-fixture-prov-1",
+          "providerName": "Fixture Healthcare 1 Ltd",
+          "organisationType": "Provider",
+          "ownershipType": "Organisation",
+          "type": "Social Care Org",
+          "registrationStatus": "Registered",
+          "registrationDate": "2026-01-01",
+          "website": "https://fixture-healthcare-1.example.com",
+          "postalAddressLine1": "1 Fixture Street",
+          "postalAddressTownCity": "Fixture Town",
+          "region": "South East",
+          "postalCode": "AB1 2CD",
+          "onspdLatitude": 51.5,
+          "onspdLongitude": -0.1,
+          "mainPhoneNumber": "01234567890",
+          "constituency": "Fixture Constituency",
+          "localAuthority": "Fixture Council"
+        },
+        { "providerId": "1-fixture-prov-2", "providerName": "Fixture Healthcare 2 Ltd" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "model_fixture_1",
+    "family_variant": "shoes_by_size",
+    "categories": ["cat_1"],
+    "values": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/product-models/model_fixture_1",
+    "body": {
+      "family_variant": "shoes_by_size",
+      "categories": ["cat_1"],
+      "values": {}
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

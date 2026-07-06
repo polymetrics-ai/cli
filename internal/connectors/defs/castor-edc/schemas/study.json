@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "study",
+  "type": "object",
+  "x-primary-key": ["study_id"],
+  "x-cursor-field": "updated_on",
+  "required": ["study_id"],
+  "properties": {
+    "study_id": { "type": "string" },
+    "crf_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "live": { "type": ["boolean", "null"] },
+    "randomization_enabled": { "type": ["boolean", "null"] },
+    "gcp_enabled": { "type": ["boolean", "null"] },
+    "surveys_enabled": { "type": ["boolean", "null"] },
+    "premium_support_enabled": { "type": ["boolean", "null"] },
+    "main_contact": { "type": ["string", "null"] },
+    "institute_id": { "type": ["string", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] }
+  }
+}

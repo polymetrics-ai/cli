@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/payment-terms", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "paymentTermsNumber": 1, "name": "Net 30", "daysOfCredit": 30, "self": "https://restapi.e-conomic.com/payment-terms/1" },
+        { "paymentTermsNumber": 2, "name": "Net 14", "daysOfCredit": 14, "self": "https://restapi.e-conomic.com/payment-terms/2" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

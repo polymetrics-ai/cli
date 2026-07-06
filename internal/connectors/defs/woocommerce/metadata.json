@@ -1,0 +1,22 @@
+{
+  "name": "woocommerce",
+  "display_name": "WooCommerce",
+  "description": "Reads WooCommerce orders, products, customers, and coupons through the WooCommerce REST API (wc/v3).",
+  "integration_type": "api",
+  "docs_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 10
+  },
+  "risk": {
+    "read": "external WooCommerce store read of orders, products, customers, and coupons"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/languages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Go": 123456,
+      "Shell": 890
+    }
+  }
+}

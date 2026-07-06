@@ -1,0 +1,15 @@
+{
+  "record": {
+    "user_id": 1,
+    "external_email": "fixture-alerts@example.com",
+    "on_cancel": [1],
+    "on_failure": [1],
+    "on_success": [],
+    "on_warning": [1],
+    "state": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/notifications/"
+  }
+}

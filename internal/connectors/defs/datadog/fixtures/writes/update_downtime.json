@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "message": "updated fixture downtime"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/downtime/1"
+  }
+}

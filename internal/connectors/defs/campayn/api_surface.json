@@ -1,0 +1,19 @@
+{
+  "api": "Campayn REST API v1 (https://<sub_domain>.campayn.com/api/v1)",
+  "docs": "https://github.com/nebojsac/Campayn-API (README.md + endpoints/{lists,contacts,forms,emails,reports,signup}.md, fetched 2026-07-04)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-confirmed against the live GitHub-hosted documentation (fetched 2026-07-04): the Campayn API's ENTIRE documented surface is 6 endpoint-doc pages covering lists/contacts/forms/emails/reports/signup. Every documented GET (list/detail) endpoint is now a stream; every documented, dialect-expressible mutation (unsubscribe, add contact, update contact) is now a writes.json action. The upstream README's own 'Writing through the API' and 'Dealing with failure' sections are literally marked 'TODO' by Campayn itself (not a Pass B scoping choice) - the only mutations that exist at all in the published docs are the 3 implemented here. 'Signup' (POST /signup, creating a brand-new Campayn ACCOUNT/tenant, not a data record) is explicitly documented as a privileged, separately-authorized call ('you are not authorized to use the signup API function' is the docs' own 'most likely error' example) and is excluded as requires_elevated_scope.",
+  "endpoints": [
+    { "method": "GET", "path": "/lists.json", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/emails.json", "covered_by": { "stream": "emails" } },
+    { "method": "GET", "path": "/reports/calendar.json", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/lists/{list_id}/forms.json", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/lists/{list_id}/forms/{form_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-form detail; identical record shape to the forms stream's per-item object (id, contact_list_id, form_title, form_type, form_html, signup_count), already covered by that stream; the docs show no additional fields on the detail response" } },
+    { "method": "GET", "path": "/lists/{list_id}/contacts.json", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/contacts/{contact_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; the docs show it returns a superset of fields (title, company, address, country, city, state, zip, birthday, phones[], sites[], social[], custom_fields[]) versus the list endpoint's documented email/first_name/last_name/image_url subset only - modeling it as its own stream would require an id already discovered from the contacts stream and would emit a fundamentally different (richer) record shape for the same logical resource, which one schema-per-stream projection cannot express as a variant of the already-covered contacts stream without misrepresenting what the list variant actually returns" } },
+    { "method": "POST", "path": "/lists/{list_id}/contacts.json", "covered_by": { "write": "add_contact" } },
+    { "method": "PUT", "path": "/contacts/{contact_id}.json", "covered_by": { "write": "update_contact" } },
+    { "method": "POST", "path": "/lists/{list_id}/unsubscribe.json", "covered_by": { "write": "unsubscribe_contact" } },
+    { "method": "POST", "path": "/signup", "excluded": { "category": "requires_elevated_scope", "reason": "creates an entirely new Campayn account/tenant (not a data record within an existing account) and is documented as requiring separate, privileged API-key authorization from Campayn support; the docs' own 'most likely error' example shows this call rejected for unauthorized keys by default" } }
+  ]
+}

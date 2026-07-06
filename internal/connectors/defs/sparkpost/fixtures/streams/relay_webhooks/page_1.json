@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/relay-webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "relay_webhook_fixture_1",
+          "name": "Fixture Replies Webhook",
+          "target": "https://example.com/fixture-replies",
+          "auth_type": "none",
+          "match": { "protocol": "SMTP", "domain": "fixture.example.com" }
+        }
+      ]
+    }
+  }
+}

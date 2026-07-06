@@ -1,0 +1,22 @@
+{
+  "record": {
+    "repositoryId": "repository_id_fixture",
+    "prompt": "fixture",
+    "groupId": "group_id_fixture",
+    "collectionId": "collection_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/pages/generate",
+    "body": {
+      "repositoryId": "repository_id_fixture",
+      "prompt": "fixture",
+      "groupId": "group_id_fixture",
+      "collectionId": "collection_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

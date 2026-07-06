@@ -1,0 +1,43 @@
+{
+  "api": "Babelforce legacy connector hook surface",
+  "docs": "https://api.babelforce.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy babelforce connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/babelforce, which delegates to internal/connectors/babelforce until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/babelforce calls read path",
+      "covered_by": {
+        "stream": "calls"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/babelforce calls_extended read path",
+      "covered_by": {
+        "stream": "calls_extended"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/babelforce recordings read path",
+      "covered_by": {
+        "stream": "recordings"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/babelforce numbers read path",
+      "covered_by": {
+        "stream": "numbers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/babelforce users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
+  ]
+}

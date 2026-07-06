@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page[size]": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "act_fixture_1",
+          "type": "account",
+          "attributes": { "reference-id": "fixture-ref-1", "created-at": "2026-01-01T00:00:00Z" },
+          "relationships": {}
+        }
+      ],
+      "links": { "next": null, "prev": null }
+    }
+  }
+}

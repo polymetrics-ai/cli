@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zapier Supported Storage Connection Specification",
+  "type": "object",
+  "required": ["secret"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://store.zapier.com",
+      "description": "Zapier Storage API root. Also usable as a base URL override for tests/proxies."
+    },
+    "secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zapier Storage secret, sent as the 'secret' query parameter on every request. Never logged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

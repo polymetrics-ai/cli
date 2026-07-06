@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/emergency_contacts",
+    "query": {
+      "page_index": "1",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "emergency_contact_fixture_1",
+            "employee_id": "emp_fixture_1",
+            "name": "Grace Hopper",
+            "relationship": "Friend",
+            "phone": "+61000000002"
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

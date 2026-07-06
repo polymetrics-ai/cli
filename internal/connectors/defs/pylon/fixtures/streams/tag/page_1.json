@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "value": "fixture-tag"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

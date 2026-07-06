@@ -12,9 +12,14 @@ SYNOPSIS
 DESCRIPTION
   Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.
 
+ICON
+  asset: icons/amazon-sqs.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
-  Integration type: api
+  Integration type: queue
 
 AUTHENTICATION
   No secret authentication is required for this connector.

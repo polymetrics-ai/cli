@@ -12,20 +12,41 @@ SYNOPSIS
 DESCRIPTION
   Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.
 
+ICON
+  asset: icons/iterable.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.iterable.com/api/docs
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  lists:
+    primary key: id
+    fields: createdAt(), id(), listType(), name(), updatedAt()
+  campaigns:
+    primary key: id
+    fields: createdAt(), id(), name(), updatedAt()
+  templates:
+    primary key: id
+    fields: createdAt(), id(), name(), updatedAt()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Iterable API read of lists, campaigns, and templates
+  approval: none; read-only marketing-data API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

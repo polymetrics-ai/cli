@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/openapi/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lastProcessedErrors": [
+        {
+          "id": "get_open_api_spec_by_slug_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_open_api_spec_by_slug",
+          "name": "Fixture get_open_api_spec_by_slug",
+          "status": "active",
+          "operation_id": "getOpenAPISpecBySlug"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the object was created",
+      "format": "date-time"
+    },
+    "credentials": {
+      "type": "object",
+      "description": "Specifies a user's credentials for the app.\nThis parameter can be omitted for apps with [sign-on mode](/openapi/okta-management/management/application/getapplication#application/getapplication/t=response&c=200&path=&d=0/signonmode) (`signOnMode`) or [authentication schemes](/openapi/okta-management/management/application/getapplication#application/getapplication/t=response&c=200&path=&d=0/credenti",
+      "properties": {
+        "password": {
+          "type": "object",
+          "description": "The user's password. This is a write-only property. An empty `password` object is returned to indicate that a password value exists.",
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Password value"
+            }
+          },
+          "additionalProperties": true
+        },
+        "userName": {
+          "type": "string",
+          "description": "The user's username in the app\n\n> **Note:** The [userNameTemplate](/openapi/okta-management/management/tags/application/other/createapplication#application/createapplication/t=response&c=200&path=&d=0/credentials/usernametemplate) in the application object defines the default username generated when a user is assigned to that app.\n> If you attempt to assign a username or password to an app with an"
+        }
+      },
+      "additionalProperties": true
+    },
+    "externalId": {
+      "type": "string",
+      "description": "The ID of the user in the target app that's linked to the Okta application user object.\nThis value is the native app-specific identifier or primary key for the user in the target app.\n\nThe `externalId` is set during import when the user is confirmed (reconciled) or during provisioning when the user is created in the target app.\nThis value isn't populated for SSO app assignments (for example, SAML "
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the Okta user"
+    },
+    "lastSync": {
+      "type": "string",
+      "description": "Timestamp of the last synchronization operation. This value is only updated for apps with the `IMPORT_PROFILE_UPDATES` or `PUSH PROFILE_UPDATES` feature.",
+      "format": "date-time"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the object was last updated",
+      "format": "date-time"
+    },
+    "passwordChanged": {
+      "type": "string",
+      "description": "Timestamp when the application user password was last changed",
+      "format": "date-time"
+    },
+    "profile": {
+      "type": "object",
+      "description": "Specifies the default and custom profile properties for a user.\nProperties that are visible in the Admin Console for an app assignment can also be assigned through the API.\nSome properties are reference properties that are imported from the target app and can't be configured.\nSee [profile](/openapi/okta-management/management/user/getuser#user/getuser/t=response&c=200&path=profile).\n",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "scope": {
+      "type": "string",
+      "description": "Indicates if the assignment is direct (`USER`) or by group membership (`GROUP`). If not specified, Okta tries to determine the scope based on the assignment type.",
+      "enum": [
+        "USER",
+        "GROUP"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of an application user",
+      "enum": [
+        "ACTIVE",
+        "APPROVED",
+        "DEPROVISIONED",
+        "IMPLICIT",
+        "IMPORTED",
+        "INACTIVE",
+        "MATCHED",
+        "PENDING",
+        "PROVISIONED",
+        "REVOKED",
+        "STAGED",
+        "SUSPENDED",
+        "UNASSIGNED"
+      ]
+    },
+    "statusChanged": {
+      "type": "string",
+      "description": "Timestamp when the application user status was last changed",
+      "format": "date-time"
+    },
+    "syncState": {
+      "type": "string",
+      "description": "The synchronization state for the application user.\nThe application user's `syncState` depends on whether the `PROFILE_MASTERING` feature is enabled for the app.\n\n> **Note:** User provisioning currently must be configured through the Admin Console.",
+      "enum": [
+        "DISABLED",
+        "ERROR",
+        "OUT_OF_SYNC",
+        "SYNCHRONIZED",
+        "SYNCING"
+      ]
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "Embedded resources related to the application user using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of resources related to the application user.",
+      "properties": {
+        "app": {
+          "type": "object",
+          "description": "Link to the app resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "group": {
+          "type": "object",
+          "description": "Link to the group resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "user": {
+          "type": "object",
+          "description": "Link to the user resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture List",
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/lists",
+    "body": {
+      "name": "Fixture List",
+      "folderId": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 55
+    }
+  }
+}

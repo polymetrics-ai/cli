@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/segment", "query": { "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        {
+          "id": "segment_fixture_1",
+          "name": "Fixture Segment 1",
+          "description": "conformance fixture segment",
+          "status": "ACTIVE",
+          "priority": "1",
+          "productId": "prod_fixture_1",
+          "productName": "PX",
+          "createdBy": "fixture",
+          "createdDate": "2026-01-01T00:00:00Z",
+          "modifiedBy": "fixture",
+          "modifiedDate": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "segment_fixture_2",
+          "name": "Fixture Segment 2",
+          "description": "conformance fixture segment",
+          "status": "ACTIVE",
+          "priority": "2",
+          "productId": "prod_fixture_1",
+          "productName": "PX",
+          "createdBy": "fixture",
+          "createdDate": "2026-01-01T00:00:00Z",
+          "modifiedBy": "fixture",
+          "modifiedDate": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "scrollId": ""
+    }
+  }
+}

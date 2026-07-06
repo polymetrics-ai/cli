@@ -1,0 +1,26 @@
+{
+  "record": {
+    "expectedDateOfJoining": "2026-01-01T00:00:00Z",
+    "preboarding_candidate_id": "fixture_preboarding_candidate_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/hire/preboarding/candidates/fixture_preboarding_candidate_id",
+    "body": {
+      "expectedDateOfJoining": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_preboarding_candidate_fixture_1",
+        "name": "Fixture update preboarding candidate"
+      },
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

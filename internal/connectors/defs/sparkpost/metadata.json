@@ -1,0 +1,21 @@
+{
+  "name": "sparkpost",
+  "display_name": "SparkPost",
+  "description": "Reads SparkPost recipient lists, templates, sending domains, transmissions, suppression list records, IP pools, webhooks, subaccounts, tracking domains, inbound domains, relay webhooks, sending IPs, and A/B tests; writes email sends, recipient list/template/domain/suppression/IP-pool/webhook/subaccount/relay-webhook lifecycle mutations.",
+  "integration_type": "api",
+  "docs_url": "https://developers.sparkpost.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external SparkPost API read of recipient list, template, sending domain, transmission, suppression list, IP pool, webhook, subaccount, tracking/inbound domain, relay webhook, sending IP, and A/B test data",
+    "write": "external SparkPost API mutation including live email sends (create_transmission), suppression/domain/webhook/subaccount lifecycle changes, and IP pool/relay webhook configuration",
+    "approval": "required for all write actions; create_transmission sends real, externally-visible email"
+  }
+}

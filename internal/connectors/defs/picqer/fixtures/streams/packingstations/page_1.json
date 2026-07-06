@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/packingstations", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idpacking_station": 1, "name": "Packing table 1", "printer_packinglists": null, "printer_shipping_labels": null, "printer_shipping_documents": null, "printer_product_labels": null }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "taskdisposition",
+      "attributes": {
+        "name": "Fixture Update Task Disposition"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/taskDispositions/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "taskdisposition",
+        "attributes": {
+          "name": "Fixture Update Task Disposition"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

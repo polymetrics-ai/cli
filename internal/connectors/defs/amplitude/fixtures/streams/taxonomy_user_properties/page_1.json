@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/2/taxonomy/user-property" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "user_property": "fixture_device_id",
+          "description": null,
+          "type": null,
+          "enum_values": null,
+          "regex": null,
+          "is_array_type": false,
+          "is_hidden": false,
+          "classifications": [],
+          "deleted": false
+        }
+      ]
+    }
+  }
+}

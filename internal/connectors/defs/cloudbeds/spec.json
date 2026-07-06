@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cloudbeds Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Cloudbeds API access token, sent as a Bearer token. Used only for auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.cloudbeds.com/api/v1.2",
+      "description": "Cloudbeds API base URL override for tests or proxies."
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Cloudbeds property (hotel) ID. Required for the groups and allotment_blocks streams specifically (Cloudbeds itself requires propertyID for GET /getGroups and /getAllotmentBlocks); ignored by every other stream, which reads across all accessible properties."
+    },
+    "rate_plans_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive start date (YYYY-MM-DD) for the rate_plans stream's rate-availability window. Required by the rate_plans stream specifically (Cloudbeds itself requires startDate/endDate for GET /getRatePlans); ignored by every other stream."
+    },
+    "rate_plans_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Exclusive end date (YYYY-MM-DD) for the rate_plans stream's rate-availability window. Required by the rate_plans stream specifically; ignored by every other stream."
+    }
+  }
+}

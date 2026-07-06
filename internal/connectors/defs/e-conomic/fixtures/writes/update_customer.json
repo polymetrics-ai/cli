@@ -1,0 +1,29 @@
+{
+  "record": {
+    "customerNumber": 1,
+    "name": "Acme A/S Updated",
+    "email": "fixture-updated@example.com",
+    "city": "Aarhus",
+    "zip": "8000",
+    "country": "Denmark",
+    "address": "2 Fixture Street",
+    "barred": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/1",
+    "body": {
+      "name": "Acme A/S Updated",
+      "email": "fixture-updated@example.com",
+      "city": "Aarhus",
+      "zip": "8000",
+      "country": "Denmark",
+      "address": "2 Fixture Street",
+      "barred": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "customerNumber": 1, "self": "https://restapi.e-conomic.com/customers/1" }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mandates",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "created_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scheme": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_possible_charge_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payments_require_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "customer_bank_account": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creditor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

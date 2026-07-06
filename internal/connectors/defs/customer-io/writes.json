@@ -1,0 +1,207 @@
+{
+  "actions": [
+    {
+      "name": "create_snippet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a reusable content snippet referenced by live messages/newsletters"
+    },
+    {
+      "name": "update_snippet",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/snippets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites the content of a live snippet, changing every message/newsletter that references it"
+    },
+    {
+      "name": "delete_snippet",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required"
+    },
+    {
+      "name": "create_reporting_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reporting_webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "endpoint", "events"],
+        "properties": {
+          "name": { "type": "string" },
+          "endpoint": { "type": "string" },
+          "disabled": { "type": "boolean" },
+          "full_resolution": { "type": "boolean" },
+          "with_content": { "type": "boolean" },
+          "events": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "external mutation; registers a new reporting webhook that will deliver live workspace event data to the given endpoint URL"
+    },
+    {
+      "name": "update_reporting_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reporting_webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "endpoint", "events"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "endpoint": { "type": "string" },
+          "disabled": { "type": "boolean" },
+          "full_resolution": { "type": "boolean" },
+          "with_content": { "type": "boolean" },
+          "events": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "external mutation; changes a live reporting webhook's target endpoint/event selection or enables/disables delivery"
+    },
+    {
+      "name": "delete_reporting_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reporting_webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required"
+    },
+    {
+      "name": "create_manual_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["segment"],
+        "properties": {
+          "segment": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new manual segment in the live workspace"
+    },
+    {
+      "name": "delete_manual_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/segments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required"
+    },
+    {
+      "name": "send_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/send/email",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["to"],
+        "properties": {
+          "to": { "type": "string" },
+          "identifiers": { "type": "object" },
+          "transactional_message_id": {},
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "from": { "type": "string" },
+          "message_data": { "type": "object" }
+        }
+      },
+      "risk": "sends a live transactional email to the given recipient on the workspace's behalf; irreversible once delivered"
+    },
+    {
+      "name": "trigger_broadcast",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/campaigns/{{ record.broadcast_id }}/triggers",
+      "path_fields": ["broadcast_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["broadcast_id"],
+        "properties": {
+          "broadcast_id": { "type": "integer" },
+          "data": { "type": "object" },
+          "email_add_duplicates": { "type": "boolean" },
+          "email_ignore_missing": { "type": "boolean" },
+          "id_ignore_missing": { "type": "boolean" }
+        }
+      },
+      "risk": "triggers a live API-triggered broadcast to its default audience; sends real messages to recipients, irreversible once delivered"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_id }}", "password": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "meta.next_page_link"
+    },
+    "check": { "method": "GET", "path": "/calls", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "aircall api_id/api_token are missing or invalid; re-run pm credentials add aircall" },
+      { "status": 403, "hint": "aircall account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "aircall rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "calls",
+      "path": "/calls",
+      "query": { "per_page": "50" },
+      "records": { "path": "calls" },
+      "incremental": {
+        "cursor_field": "started_at",
+        "request_param": "from",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/calls.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "per_page": "50" },
+      "records": { "path": "users" },
+      "incremental": { "cursor_field": "created_at" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": { "per_page": "50" },
+      "records": { "path": "contacts" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "from",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "numbers",
+      "path": "/numbers",
+      "query": { "per_page": "50" },
+      "records": { "path": "numbers" },
+      "schema": "schemas/numbers.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "query": { "per_page": "50" },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": { "per_page": "50" },
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "query": { "per_page": "50" },
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
+    }
+  ]
+}

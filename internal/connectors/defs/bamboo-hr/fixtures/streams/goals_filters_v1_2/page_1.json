@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1_2/performance/employees/synthetic-conformance-value/goals/filters"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "filters": [
+        {
+          "id": "status-inProgress",
+          "actions": {
+            "canCloseGoal": true,
+            "canEditGoal": true,
+            "canEditGoalProgressBar": true,
+            "canReopenGoal": true
+          },
+          "count": 1001,
+          "name": "In Progress"
+        }
+      ]
+    }
+  }
+}

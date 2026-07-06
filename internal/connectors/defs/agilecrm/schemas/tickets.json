@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgileCRM Ticket",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_updated_time",
+  "properties": {
+    "id": { "type": "integer" },
+    "filter_id": { "type": ["string", "null"] },
+    "subject": { "type": "string" },
+    "status": { "type": "string" },
+    "type": { "type": "string" },
+    "priority": { "type": "string" },
+    "source": { "type": "string" },
+    "requester_name": { "type": ["string", "null"] },
+    "requester_email": { "type": ["string", "null"] },
+    "contactID": { "type": ["integer", "null"] },
+    "created_time": { "type": "integer" },
+    "last_updated_time": { "type": "integer" },
+    "is_spam": { "type": "boolean" },
+    "is_favorite": { "type": "boolean" }
+  }
+}

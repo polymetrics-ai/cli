@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/autocomplete", "query": { "query": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request": { "query": "synthetic-conformance-value", "results": 2 },
+      "results": [
+        { "name": "Fixture City", "region": "Fixture Region", "country": "Fixture Country", "lat": "51.500", "lon": "-0.120", "timezone_id": "Europe/London", "utc_offset": "0.0" },
+        { "name": "Fixture Town", "region": "Fixture Region", "country": "Fixture Country", "lat": "52.500", "lon": "-1.120", "timezone_id": "Europe/London", "utc_offset": "0.0" }
+      ]
+    }
+  }
+}

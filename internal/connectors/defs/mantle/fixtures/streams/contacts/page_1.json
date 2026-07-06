@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/contacts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": "",
+      "contacts": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "phone": "fixture",
+        "jobTitle": "fixture",
+        "label": "fixture",
+        "customers": [
+          {
+            "id": "id_fixture",
+            "label": "fixture"
+          }
+        ],
+        "notes": "fixture",
+        "socialProfiles": [
+          {
+            "key": "linkedin",
+            "value": "fixture"
+          }
+        ],
+        "secondaryEmails": [
+          "fixture@example.com"
+        ],
+        "tags": [
+          "fixture"
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

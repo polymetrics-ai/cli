@@ -1,0 +1,349 @@
+{
+  "actions": [
+    {
+      "name": "create_thirdparty",
+      "kind": "create",
+      "method": "POST",
+      "path": "/thirdparties",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "address": { "type": "string" },
+          "town": { "type": "string" },
+          "zip": { "type": "string" },
+          "country_code": { "type": "string" },
+          "client": { "type": "string", "description": "1 to mark as a customer, 0 otherwise." },
+          "fournisseur": { "type": "string", "description": "1 to mark as a supplier, 0 otherwise." },
+          "code_client": { "type": "string", "description": "Pass 'auto' to auto-generate the customer code." },
+          "code_fournisseur": { "type": "string", "description": "Pass 'auto' to auto-generate the supplier code." }
+        }
+      },
+      "risk": "external mutation; creates a live Dolibarr third party (customer/supplier); approval required"
+    },
+    {
+      "name": "update_thirdparty",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/thirdparties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "address": { "type": "string" },
+          "town": { "type": "string" },
+          "zip": { "type": "string" },
+          "country_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Dolibarr third party's record fields; approval required"
+    },
+    {
+      "name": "delete_thirdparty",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/thirdparties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Dolibarr third party; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lastname"],
+        "properties": {
+          "lastname": { "type": "string" },
+          "firstname": { "type": "string" },
+          "socid": { "type": "string", "description": "Third party (rowid) this contact is attached to." },
+          "email": { "type": "string" },
+          "phone_pro": { "type": "string" },
+          "phone_mobile": { "type": "string" },
+          "address": { "type": "string" },
+          "town": { "type": "string" },
+          "zip": { "type": "string" },
+          "country_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Dolibarr contact; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "lastname": { "type": "string" },
+          "firstname": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_pro": { "type": "string" },
+          "phone_mobile": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Dolibarr contact's record fields; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Dolibarr contact; approval required"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["ref", "label"],
+        "properties": {
+          "ref": { "type": "string" },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string", "description": "0=product, 1=service." },
+          "price": { "type": "string" },
+          "tva_tx": { "type": "string" },
+          "status": { "type": "string" },
+          "status_buy": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Dolibarr product/service; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "string" },
+          "tva_tx": { "type": "string" },
+          "status": { "type": "string" },
+          "status_buy": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Dolibarr product/service record fields; approval required"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Dolibarr product/service; approval required"
+    },
+    {
+      "name": "create_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["socid"],
+        "properties": {
+          "socid": { "type": "string", "description": "Third party (rowid) this invoice is billed to." },
+          "type": { "type": "string" },
+          "date": { "type": "integer" },
+          "note_public": { "type": "string" },
+          "note_private": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Dolibarr customer invoice (draft status); approval required"
+    },
+    {
+      "name": "update_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "note_public": { "type": "string" },
+          "note_private": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Dolibarr invoice's record fields (only permitted while the invoice is in draft status); approval required"
+    },
+    {
+      "name": "delete_invoice",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/invoices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Dolibarr invoice (only permitted while in draft status); approval required"
+    },
+    {
+      "name": "validate_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/invoices/{{ record.id }}/validate",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["idwarehouse", "notrigger"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "idwarehouse": { "type": "integer", "description": "Warehouse to deduct stock from, if the invoice's products track stock." },
+          "notrigger": { "type": "integer", "description": "1 to skip Dolibarr triggers, 0 (default) to run them." }
+        }
+      },
+      "risk": "external mutation; validates a live Dolibarr invoice, transitioning it out of draft status irreversibly and assigning its final reference number; approval required"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["socid"],
+        "properties": {
+          "socid": { "type": "string", "description": "Third party (rowid) this order is placed for." },
+          "date": { "type": "integer" },
+          "note_public": { "type": "string" },
+          "note_private": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Dolibarr sales order (draft status); approval required"
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "note_public": { "type": "string" },
+          "note_private": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Dolibarr order's record fields (only permitted while the order is in draft status); approval required"
+    },
+    {
+      "name": "delete_order",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Dolibarr order (only permitted while in draft status); approval required"
+    },
+    {
+      "name": "validate_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}/validate",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["idwarehouse", "notrigger"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "idwarehouse": { "type": "integer", "description": "Warehouse to deduct stock from, if the order's products track stock." },
+          "notrigger": { "type": "integer", "description": "1 to skip Dolibarr triggers, 0 (default) to run them." }
+        }
+      },
+      "risk": "external mutation; validates a live Dolibarr order, transitioning it out of draft status irreversibly and assigning its final reference number; approval required"
+    }
+  ]
+}

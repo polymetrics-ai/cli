@@ -1,0 +1,52 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/users" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "workspace_id": 9,
+        "admin": true,
+        "organization_admin": true,
+        "workspace_admin": true,
+        "active": true,
+        "email": "fixture1@example.com",
+        "timezone": "UTC",
+        "inactive": false,
+        "at": "2026-01-01T00:00:00Z",
+        "name": "Fixture User One",
+        "rate": null,
+        "rate_last_updated": null,
+        "labour_cost": null,
+        "invite_url": null,
+        "invitation_code": null,
+        "avatar_file_name": null,
+        "group_ids": [],
+        "is_direct": true
+      },
+      {
+        "id": 2,
+        "user_id": 2,
+        "workspace_id": 9,
+        "admin": false,
+        "organization_admin": false,
+        "workspace_admin": false,
+        "active": true,
+        "email": "fixture2@example.com",
+        "timezone": "UTC",
+        "inactive": false,
+        "at": "2026-01-02T00:00:00Z",
+        "name": "Fixture User Two",
+        "rate": null,
+        "rate_last_updated": null,
+        "labour_cost": null,
+        "invite_url": null,
+        "invitation_code": null,
+        "avatar_file_name": null,
+        "group_ids": [],
+        "is_direct": true
+      }
+    ]
+  }
+}

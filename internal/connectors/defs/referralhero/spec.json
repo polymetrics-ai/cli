@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReferralHero Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ReferralHero API key, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.referralhero.com/api/v2",
+      "description": "ReferralHero API base URL override for tests or proxies."
+    },
+    "list_uuid": {
+      "type": "string",
+      "description": "Campaign/list UUID used by campaign-scoped Pass B streams, for example MFxxxxxxxxxx."
+    },
+    "subscriber_id": {
+      "type": "string",
+      "description": "Subscriber ID used by subscriber detail/referral/reward streams."
+    },
+    "subscriber_email": {
+      "type": "string",
+      "description": "Subscriber email used by the subscriber_by_email stream."
+    },
+    "subscriber_mwr": {
+      "type": "string",
+      "description": "Referral code/MWR used by the subscriber_by_mwr stream."
+    },
+    "subscriber_name": {
+      "type": "string",
+      "description": "Name search term used by subscribers_search_by_name."
+    },
+    "coupon_group_id": {
+      "type": "string",
+      "description": "Coupon group ID used by the coupon_group_coupons stream."
+    }
+  }
+}

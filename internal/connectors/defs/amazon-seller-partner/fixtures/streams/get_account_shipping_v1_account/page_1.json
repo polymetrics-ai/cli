@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v1/account"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "accountId": "accountId-fixture-1"
+      }
+    }
+  }
+}

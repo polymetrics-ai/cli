@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/upstream/pipelines", "query": { "locationId": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pipelines": [
+        { "id": "pl_fixture_1", "name": "Sales", "locationId": "synthetic-conformance-value", "stages": [], "dateAdded": "2026-01-01T00:00:00Z", "dateUpdated": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

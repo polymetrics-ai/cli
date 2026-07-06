@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/roles/synthetic-conformance-value/targets",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "assignmentType": "assignment_type_fixture",
+        "expiration": "2026-01-01T00:00:00Z",
+        "orn": "orn_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

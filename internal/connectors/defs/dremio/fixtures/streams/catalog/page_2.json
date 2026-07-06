@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/catalog", "query": { "pageToken": "page2token" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "catalog_fixture_3",
+          "type": "CONTAINER",
+          "containerType": "SOURCE",
+          "datasetType": "PROMOTED",
+          "path": ["fixture", "catalog", "3"],
+          "tag": "tag_3",
+          "createdAt": "2026-01-03T00:00:00.000Z"
+        }
+      ],
+      "nextPageToken": ""
+    }
+  }
+}

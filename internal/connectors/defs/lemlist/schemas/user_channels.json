@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user_channels",
+  "type": "object",
+  "properties": {
+    "plan": { "type": ["string", "null"] },
+    "email": { "type": ["object", "null"] },
+    "linkedin": { "type": ["object", "null"] },
+    "whatsapp": { "type": ["object", "null"] }
+  }
+}

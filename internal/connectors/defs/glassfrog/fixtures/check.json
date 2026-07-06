@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/circles" },
+  "response": {
+    "status": 200,
+    "body": { "circles": [] }
+  }
+}

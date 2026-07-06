@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v2/locations", "query": { "pageSize": "synthetic-conformance-value", "after": "21" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

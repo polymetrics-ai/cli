@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/companies/all", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "numResults": 1,
+      "results": [
+        { "id": "company-fixture-1", "name": "Fixture Company", "domains": ["example.com"], "industry": "Software", "fullTimeEmployees": 250, "isActivelyTrading": false, "updatedAt": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

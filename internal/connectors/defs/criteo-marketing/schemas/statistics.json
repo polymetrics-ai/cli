@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "statistics",
+  "type": "object",
+  "x-primary-key": ["AdvertiserId", "CampaignId", "Day"],
+  "x-cursor-field": "Day",
+  "required": ["AdvertiserId", "CampaignId", "Day"],
+  "properties": {
+    "AdvertiserId": { "type": "string" },
+    "CampaignId": { "type": "string" },
+    "Day": { "type": "string" },
+    "Clicks": { "type": ["integer", "null"] },
+    "Displays": { "type": ["integer", "null"] },
+    "Spend": { "type": ["number", "null"] },
+    "Currency": { "type": ["string", "null"] }
+  }
+}

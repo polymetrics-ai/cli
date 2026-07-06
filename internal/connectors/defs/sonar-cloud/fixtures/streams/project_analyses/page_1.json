@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/project_analyses/search",
+    "query": {
+      "project": "synthetic-conformance-value",
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "pageIndex": 1, "pageSize": 100, "total": 1 },
+      "analyses": [
+        {
+          "key": "analysis_fixture_1",
+          "date": "2026-01-01T00:00:00+0000",
+          "projectVersion": "1.0.0",
+          "buildString": "1.0.0.1",
+          "revision": "fixture0000000000000000000000000000000000",
+          "events": []
+        }
+      ]
+    }
+  }
+}

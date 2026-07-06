@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/top",
+    "query": { "type": "unique" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        { "amount": 75, "event": "Viewed Page", "percent_change": -0.2 },
+        { "amount": 2, "event": "Signup", "percent_change": 1.0 }
+      ],
+      "type": "unique"
+    }
+  }
+}

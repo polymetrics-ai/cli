@@ -1,0 +1,48 @@
+{
+  "request": { "method": "GET", "path": "/valuations", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "val_fixture_1",
+        "name": "Fixture Valuation 1",
+        "description": "Fixture record for conformance.",
+        "status": "draft",
+        "delineation": "annual",
+        "discountRate": 0.1,
+        "growthMetric": "revenue",
+        "growthRate": 0.2,
+        "terminalRate": 0.03,
+        "terminalPeriod": "perpetuity",
+        "startingQuarter": 1,
+        "startingYear": 2026,
+        "endingQuarter": 4,
+        "endingYear": 2031,
+        "shareToken": "tok_1",
+        "isFavorite": true,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "id": "val_fixture_2",
+        "name": "Fixture Valuation 2",
+        "description": "Fixture record for conformance.",
+        "status": "final",
+        "delineation": "annual",
+        "discountRate": 0.12,
+        "growthMetric": "revenue",
+        "growthRate": 0.15,
+        "terminalRate": 0.025,
+        "terminalPeriod": "perpetuity",
+        "startingQuarter": 1,
+        "startingYear": 2026,
+        "endingQuarter": 4,
+        "endingYear": 2031,
+        "shareToken": "tok_2",
+        "isFavorite": false,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

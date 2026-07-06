@@ -12,20 +12,51 @@ SYNOPSIS
 DESCRIPTION
   Reads RingCentral extensions, call logs, messages, contacts, and devices through the REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  dateFrom
+  dateTo
+  direction
+  messageType
+  type
+  access_token (secret)
+
+ETL STREAMS
+  extensions:
+    primary key: id
+    fields: extension_number(), id(), name(), status(), stream(), type()
+  call_log:
+    primary key: id
+    cursor: start_time
+    fields: direction(), id(), result(), start_time(), stream(), type()
+  messages:
+    primary key: id
+    cursor: creation_time
+    fields: creation_time(), direction(), id(), stream(), subject(), type()
+  contacts:
+    primary key: id
+    fields: company(), email(), first_name(), id(), last_name(), stream()
+  devices:
+    primary key: id
+    fields: id(), name(), status(), stream(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external RingCentral API read of account extension, call-log, message, contact, and device data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

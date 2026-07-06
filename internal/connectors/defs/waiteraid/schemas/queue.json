@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "queue",
+  "type": "object",
+  "x-primary-key": ["queue_id"],
+  "required": ["queue_id"],
+  "properties": {
+    "queue_id": { "type": "string" },
+    "cust_id": { "type": ["string", "null"] },
+    "amount": { "type": ["string", "null"], "description": "Number of persons (real API wire type is a numeric string)." },
+    "added_date": { "type": ["string", "null"], "description": "Timestamp the guest was added to the queue." },
+    "firstname": { "type": ["string", "null"] },
+    "lastname": { "type": ["string", "null"] },
+    "mobile": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] }
+  }
+}

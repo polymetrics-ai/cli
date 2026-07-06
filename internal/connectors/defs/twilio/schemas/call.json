@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "call",
+  "type": "object",
+  "x-primary-key": [
+    "sid"
+  ],
+  "properties": {
+    "sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parent_call_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to_formatted": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from_formatted": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone_number_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "price": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "price_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "direction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "answered_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "api_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "forwarded_from": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "caller_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "queue_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trunk_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subresource_uris": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

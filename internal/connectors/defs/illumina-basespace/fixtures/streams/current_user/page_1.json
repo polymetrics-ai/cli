@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/current"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Id": "current_user_fixture_1",
+        "Name": "Fixture Current User",
+        "Href": "v1pre3/current_user/current_user_fixture_1",
+        "DateCreated": "2026-01-01T00:00:00Z",
+        "DateModified": "2026-01-01T01:00:00Z",
+        "TotalSize": 1000
+      }
+    }
+  }
+}

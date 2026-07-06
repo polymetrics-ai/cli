@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 42,
+    "name": "Fixture Contact Updated",
+    "email": "fixture-contact-updated@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/42",
+    "body": {
+      "name": "Fixture Contact Updated",
+      "email": "fixture-contact-updated@example.com"
+    }
+  }
+}

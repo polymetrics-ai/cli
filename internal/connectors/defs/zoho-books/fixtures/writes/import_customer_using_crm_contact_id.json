@@ -1,0 +1,16 @@
+{
+  "record": {
+    "crm_contact_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/crm/contact/synthetic-conformance-value/import"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

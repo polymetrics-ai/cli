@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "cursor",
+      "stop_path": "hasMore"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/notes",
+      "query": { "limit": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "granola api_key is missing or invalid; re-run pm credentials add granola" },
+      { "status": 403, "hint": "granola account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "granola rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "notes",
+      "path": "/notes",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "30" }
+      },
+      "records": { "path": "notes" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "owner_name": "{{ record.owner.name }}",
+        "owner_email": "{{ record.owner.email }}"
+      },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "detailed_notes",
+      "path": "/notes/{{ fanout.id }}",
+      "query": {
+        "include": "transcript"
+      },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/notes",
+            "records_path": "notes",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "note_id" }
+      },
+      "computed_fields": {
+        "owner_name": "{{ record.owner.name }}",
+        "owner_email": "{{ record.owner.email }}"
+      },
+      "schema": "schemas/detailed_notes.json"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company_profile",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "company_name": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "exchange_short_name": { "type": ["string", "null"] },
+    "industry": { "type": ["string", "null"] },
+    "sector": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "market_cap": { "type": ["number", "null"] },
+    "last_div": { "type": ["number", "null"] },
+    "price": { "type": ["number", "null"] },
+    "beta": { "type": ["number", "null"] },
+    "vol_avg": { "type": ["integer", "null"] },
+    "is_etf": { "type": ["boolean", "null"] },
+    "is_actively_trading": { "type": ["boolean", "null"] },
+    "is_adr": { "type": ["boolean", "null"] },
+    "is_fund": { "type": ["boolean", "null"] },
+    "full_time_employees": { "type": ["string", "null"] },
+    "ipo_date": { "type": ["string", "null"] },
+    "ceo": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] }
+  }
+}

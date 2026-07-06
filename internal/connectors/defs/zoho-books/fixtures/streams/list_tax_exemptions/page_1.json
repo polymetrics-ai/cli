@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settings/taxexemptions",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "tax_exemptions": [
+        {
+          "tax_exemption_id": "list_tax_exemptions_fixture_1",
+          "name": "list_tax_exemptions fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "list_tax_exemptions_fixture_1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

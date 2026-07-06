@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "time_entry_id": 123,
+    "name": "Fixture update_ticket_time_entry",
+    "description": "Fixture update_ticket_time_entry record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/time_entries/123",
+    "body": {
+      "name": "Fixture update_ticket_time_entry",
+      "description": "Fixture update_ticket_time_entry record"
+    }
+  }
+}

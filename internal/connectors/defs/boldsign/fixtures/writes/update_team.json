@@ -1,0 +1,8 @@
+{
+  "record": { "teamId": "team_fixture_1", "teamName": "Renamed Team" },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/teams/update",
+    "body": { "teamId": "team_fixture_1", "teamName": "Renamed Team" }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/break-policies/synthetic-conformance-value/employees"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "_links": {
+        "next": {},
+        "prev": {}
+      },
+      "data": [
+        {
+          "id": 1001,
+          "name": "Fixture Name",
+          "photoUrl": "https://example.com/resource"
+        }
+      ],
+      "meta": {
+        "limit": 1001,
+        "offset": 1001,
+        "totalItems": 1001
+      }
+    }
+  }
+}

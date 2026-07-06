@@ -1,0 +1,16 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "name": "Fixture edit_schedule",
+    "description": "Fixture edit_schedule record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/oncall/ws/123/schedules/123",
+    "body": {
+      "name": "Fixture edit_schedule",
+      "description": "Fixture edit_schedule record"
+    }
+  }
+}

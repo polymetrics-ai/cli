@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "assignprospectopportunity",
+      "attributes": {
+        "name": "Fixture Assign Prospect Opportunity"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAssignOpportunity",
+    "body": {
+      "data": {
+        "type": "assignprospectopportunity",
+        "attributes": {
+          "name": "Fixture Assign Prospect Opportunity"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "record": { "id": "act_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/act_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "act_fixture_1", "type": "account", "attributes": { "redacted_at": "2026-01-01T00:00:00Z" } } }
+  }
+}

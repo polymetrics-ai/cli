@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/getSources" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "propertyID": "prop_fixture_1",
+          "sourceID": "source_fixture_1",
+          "sourceName": "Fixture Source",
+          "isThirdParty": false,
+          "status": "active",
+          "commission": 0,
+          "paymentCollect": "property",
+          "taxes": [],
+          "fees": []
+        }
+      ],
+      "count": 1
+    }
+  }
+}

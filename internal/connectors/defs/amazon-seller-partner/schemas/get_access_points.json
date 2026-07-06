@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_access_points",
+  "type": "object",
+  "properties": {
+    "accessPointsMap": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "name": "Fixture Name",
+    "billable": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/time-tracking/tasks/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "billable": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

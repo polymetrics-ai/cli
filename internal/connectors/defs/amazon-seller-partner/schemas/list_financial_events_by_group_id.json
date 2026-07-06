@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_financial_events_by_group_id",
+  "type": "object",
+  "properties": {
+    "AmazonOrderId": {
+      "type": "string"
+    },
+    "SellerOrderId": {
+      "type": "string"
+    },
+    "MarketplaceName": {
+      "type": "string"
+    },
+    "StoreName": {
+      "type": "string"
+    },
+    "OrderChargeList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "OrderChargeAdjustmentList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ShipmentFeeList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ShipmentFeeAdjustmentList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "OrderFeeList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "OrderFeeAdjustmentList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "DirectPaymentList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "PostedDate": {
+      "type": "string"
+    },
+    "ShipmentItemList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ShipmentItemAdjustmentList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "event_group_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "AmazonOrderId"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/fnd/market-information/us/sector-performance" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "sector": "Technology", "change_percentage": "1.2%" },
+      { "sector": "Healthcare", "change_percentage": "-0.4%" }
+    ]
+  }
+}

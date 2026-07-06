@@ -1,0 +1,15 @@
+{
+  "record": {
+    "requester_id": 123,
+    "name": "Fixture merge_requesters",
+    "description": "Fixture merge_requesters record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/requesters/123/merge",
+    "body": {
+      "name": "Fixture merge_requesters",
+      "description": "Fixture merge_requesters record"
+    }
+  }
+}

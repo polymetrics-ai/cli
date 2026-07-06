@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scheduling_list_shifts",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "scheduleId",
+    "status",
+    "color",
+    "start",
+    "end",
+    "timezone"
+  ],
+  "properties": {
+    "capacity": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "color": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employeeIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "end": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "recurrenceDtend": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "recurrenceDtstart": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "recurrenceId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "recurrenceRule": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "recurrenceUntil": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "scheduleId": {
+      "type": "string"
+    },
+    "start": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "published",
+        "cancelled",
+        "deleted"
+      ]
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "unpublishedChanges": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

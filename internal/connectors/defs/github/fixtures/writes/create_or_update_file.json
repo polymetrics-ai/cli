@@ -1,0 +1,15 @@
+{
+  "record": {
+    "path": "README.md",
+    "message": "Fixture commit",
+    "content": "SGVsbG8gd29ybGQ="
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/contents/README.md",
+    "body": {
+      "message": "Fixture commit",
+      "content": "SGVsbG8gd29ybGQ="
+    }
+  }
+}

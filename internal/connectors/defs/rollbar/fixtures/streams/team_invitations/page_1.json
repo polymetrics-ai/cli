@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/team/synthetic-conformance-value/invites",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        {
+          "id": 1,
+          "name": "Fixture team_invitations",
+          "title": "Fixture team_invitations",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

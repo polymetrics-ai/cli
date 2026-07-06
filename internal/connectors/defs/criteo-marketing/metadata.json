@@ -1,0 +1,27 @@
+{
+  "name": "criteo-marketing",
+  "display_name": "Criteo Marketing",
+  "description": "Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.",
+  "integration_type": "api",
+  "docs_url": "https://developers.criteo.com/marketing-solutions/reference/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Criteo Marketing Solutions API read of advertiser, campaign, and ad spend data",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/criteo-marketing (this bundle has no Tier-2 hook, so there is no paritytest package for this wave)."
+  }
+}

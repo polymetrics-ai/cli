@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "content": "fixture",
+    "completed": true,
+    "displayOrder": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tasks/id_fixture/todo-items",
+    "body": {
+      "content": "fixture",
+      "completed": true,
+      "displayOrder": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

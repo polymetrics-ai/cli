@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "journal_entries",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the journal entry."
+    },
+    "appId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ID of the app associated with this entry (if any)."
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "date": {
+      "type": "string",
+      "description": "The date of the journal entry.",
+      "format": "date-time"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The title of the journal entry."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description/content of the journal entry."
+    },
+    "tags": {
+      "type": "array",
+      "description": "Array of tags associated with the entry.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A URL associated with the entry."
+    },
+    "emoji": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "An emoji to display with the entry."
+    },
+    "files": {
+      "type": "array",
+      "description": "File attachments associated with the entry.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the file."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the file."
+          },
+          "altText": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Alternative text for the file."
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The URL of the file."
+          },
+          "fileType": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The type of the file."
+          },
+          "fileSize": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The size of the file in bytes."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The creation timestamp of the file.",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the journal entry.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the journal entry.",
+      "format": "date-time"
+    }
+  }
+}

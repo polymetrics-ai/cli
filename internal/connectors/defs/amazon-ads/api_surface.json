@@ -1,0 +1,20 @@
+{
+  "api": "Amazon Ads API (Sponsored Products / Ads API v2), https://advertising-api.amazon.com",
+  "docs": "https://advertising.amazon.com/API/docs/en-us/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B expansion of the practical declarative Amazon Ads v2 entity surface for profiles, Sponsored Products campaigns/ad groups/product ads/keywords/negative keywords, and portfolios. Batch-array mutations and async reporting remain excluded with concrete dialect reasons.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/profiles", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/v2/sp/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v2/sp/adGroups", "covered_by": { "stream": "ad_groups" } },
+    { "method": "GET", "path": "/v2/portfolios", "covered_by": { "stream": "portfolios" } },
+    { "method": "GET", "path": "/v2/sp/keywords", "covered_by": { "stream": "keywords" } },
+    { "method": "GET", "path": "/v2/sp/productAds", "covered_by": { "stream": "product_ads" } },
+    { "method": "GET", "path": "/v2/sp/negativeKeywords", "covered_by": { "stream": "negative_keywords" } },
+    { "method": "POST", "path": "/v2/sp/campaigns", "excluded": { "category": "out_of_scope", "reason": "Amazon Ads v2 campaign create is a batch-array mutation; the current write dialect sends one JSON object per input record and cannot wrap records in the required array without a WriteHook, and no new hook package is allowed in this shard" } },
+    { "method": "PUT", "path": "/v2/sp/campaigns", "excluded": { "category": "out_of_scope", "reason": "Amazon Ads v2 campaign update is a batch-array mutation; the current write dialect cannot emit the required array body or model per-element partial success without a WriteHook, and no new hook package is allowed in this shard" } },
+    { "method": "GET", "path": "/sb/campaigns", "excluded": { "category": "out_of_scope", "reason": "Sponsored Brands campaign records use a distinct product-surface shape from the Sponsored Products v2 entity streams; this bundle keeps the existing SP-scoped auth/header contract and does not guess an incompatible schema" } },
+    { "method": "GET", "path": "/sd/campaigns", "excluded": { "category": "out_of_scope", "reason": "Sponsored Display campaign records use a distinct product-surface shape from the Sponsored Products v2 entity streams; this bundle keeps the existing SP-scoped auth/header contract and does not guess an incompatible schema" } },
+    { "method": "POST", "path": "/reporting/reports", "excluded": { "category": "out_of_scope", "reason": "report creation is an async job workflow requiring POST creation, polling, and report download; conventions require a StreamHook for async report jobs and no new hook package is allowed in this shard" } }
+  ]
+}

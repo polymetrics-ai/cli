@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ResourceTypes/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "endpoint": "endpoint_fixture",
+      "schema": "schema_fixture",
+      "schemaExtensions": [
+        {
+          "schema": "schema_fixture",
+          "required": true
+        }
+      ]
+    }
+  }
+}

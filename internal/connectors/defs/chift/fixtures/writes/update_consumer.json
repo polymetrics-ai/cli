@@ -1,0 +1,13 @@
+{
+  "record": {
+    "consumerid": "con_fixture_1",
+    "email": "updated@example.com"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/consumers/con_fixture_1",
+    "body": {
+      "email": "updated@example.com"
+    }
+  }
+}

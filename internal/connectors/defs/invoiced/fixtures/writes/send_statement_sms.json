@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer_id": 123,
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/123/text_messages",
+    "body": {
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

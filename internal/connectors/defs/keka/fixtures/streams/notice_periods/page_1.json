@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/noticeperiods",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "notice_periods_fixture_1",
+          "name": "Fixture notice periods 1"
+        },
+        {
+          "id": "notice_periods_fixture_2",
+          "name": "Fixture notice periods 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/notice_periods",
+      "lastPage": "https://example.invalid/keka/notice_periods",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

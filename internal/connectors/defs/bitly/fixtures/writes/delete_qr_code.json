@@ -1,0 +1,9 @@
+{
+  "record": {
+    "qrcode_id": "qr_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/qr-codes/qr_fixture_1"
+  }
+}

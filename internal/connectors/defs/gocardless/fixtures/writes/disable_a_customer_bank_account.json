@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_bank_account_id": "customer_bank_account_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer_bank_accounts/customer_bank_account_id_fixture/actions/disable"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

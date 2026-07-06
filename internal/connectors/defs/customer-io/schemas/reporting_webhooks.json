@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reporting_webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "endpoint": { "type": ["string", "null"] },
+    "disabled": { "type": ["boolean", "null"] },
+    "full_resolution": { "type": ["boolean", "null"] },
+    "with_content": { "type": ["boolean", "null"] },
+    "events": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "api": "Discord REST API v10 (https://discord.com/developers/docs/reference)",
+  "docs": "https://discord.com/developers/docs/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: 3 of legacy's 4 read streams (guilds, channels, roles) are ported at Tier 1; the members stream is out of scope for this migration (ENGINE_GAP — see docs.md's Known limits) and keeps its legacy implementation. Discord's source surface here is read-only (Capabilities.Write is false), so there are no write endpoints in or out of scope.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}",
+      "covered_by": {
+        "stream": "guilds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}/members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: the after=highest-user-id cursor is derived from the nested user.id field of the last record in the page, but the engine's cursor pagination last_record_field reads only a flat top-level key on the raw last record (paginate.go's lastRecordFieldValue: last[field]), with no dotted-path support. Discord's real Guild Member object has no top-level id (docs.discord.com/developers/resources/guild), only a nested user.id, so this exact legacy pagination shape cannot be expressed in streams.json without a Tier-2 RecordHook/StreamHook, which this wave is forbidden from authoring. Blocked; legacy internal/connectors/discord keeps serving this stream until a follow-up wave adds either dotted-path last_record_field support or a hooks/discord package."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}/emojis",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; not modeled by legacy discord connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/guilds/{guild_id}/invites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; not modeled by legacy discord connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle; a mutation, not part of this read-only migration"
+      }
+    }
+  ]
+}

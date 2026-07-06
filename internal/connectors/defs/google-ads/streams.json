@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "developer-token": "{{ secrets.developer_token }}",
+      "login-customer-id": "{{ config.login_customer_id }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "customers:listAccessibleCustomers" },
+    "error_map": [
+      { "status": 401, "hint": "google-ads access_token is missing, expired, or invalid; re-run pm credentials add google-ads" },
+      { "status": 403, "hint": "google-ads developer_token/account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "google-ads rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accessible_customers",
+      "method": "GET",
+      "path": "customers:listAccessibleCustomers",
+      "records": { "path": "resourceNames" },
+      "schema": "schemas/accessible_customers.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (resourceNames is a bare JSON array of scalar strings, not objects -- connsdk.RecordsAt silently drops non-object array elements, yielding zero records via the declarative path); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go" }
+    },
+    {
+      "name": "campaigns",
+      "method": "POST",
+      "path": "customers/{{ config.customer_id }}/googleAds:search",
+      "records": { "path": "results" },
+      "schema": "schemas/campaigns.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GAQL search is a POST whose JSON body carries query/pageSize/pageToken, and whose pageToken pagination state lives INSIDE that body -- StreamSpec.Body is declared but never read by engine/read.go's declarative path, which always sends a nil body); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go"
+      }
+    },
+    {
+      "name": "ad_groups",
+      "method": "POST",
+      "path": "customers/{{ config.customer_id }}/googleAds:search",
+      "records": { "path": "results" },
+      "schema": "schemas/ad_groups.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GAQL search is a POST whose JSON body carries query/pageSize/pageToken, and whose pageToken pagination state lives INSIDE that body -- StreamSpec.Body is declared but never read by engine/read.go's declarative path, which always sends a nil body); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go"
+      }
+    }
+  ]
+}

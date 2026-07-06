@@ -1,0 +1,35 @@
+{
+  "record": {
+    "name": "Fixture post_contacts",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/contacts",
+    "body": {
+      "name": "Fixture post_contacts",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_contacts_response",
+      "status": "ok"
+    }
+  }
+}

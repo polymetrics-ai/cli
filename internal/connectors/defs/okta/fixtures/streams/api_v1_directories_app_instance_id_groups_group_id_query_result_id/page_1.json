@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/directories/synthetic-conformance-value/groups/synthetic-conformance-value/query/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "profile": {}
+    }
+  }
+}

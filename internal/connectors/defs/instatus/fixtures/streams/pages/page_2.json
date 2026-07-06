@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/pages",
+    "query": { "page": "2", "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "page_fixture_51",
+        "subdomain": "fixture-51",
+        "name": "Fixture Page 51",
+        "status": "UP",
+        "websiteUrl": "https://fixture51.example.com",
+        "customDomain": "",
+        "publicEmail": "fixture51@example.com",
+        "language": "en",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

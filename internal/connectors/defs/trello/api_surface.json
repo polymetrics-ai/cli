@@ -1,0 +1,15 @@
+{
+  "api": "Trello REST API v1 (https://developer.atlassian.com/cloud/trello/rest/)",
+  "docs": "https://developer.atlassian.com/cloud/trello/rest/",
+  "reviewed_at": "2026-07-03",
+  "scope": "L-size fresh migration of internal/connectors/trello: boards (full parity) plus lists/checklists (board_ids-scoped fan_out; auto-discovery narrowed, see docs.md). cards/actions are blocked — see blockers.",
+  "endpoints": [
+    { "method": "GET", "path": "/members/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-member identity probe used only by Check(), not a syncable object stream" } },
+    { "method": "GET", "path": "/members/me/boards", "covered_by": { "stream": "boards" } },
+    { "method": "GET", "path": "/boards/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy's board_ids-configured per-id GET path for the boards stream itself is not modeled; boards always lists every accessible board (see docs.md Known limits) — a documented, non-security-relevant deviation, not a missing endpoint in practice (the same board data is still reachable via /members/me/boards)" } },
+    { "method": "GET", "path": "/boards/{id}/lists", "covered_by": { "stream": "lists" } },
+    { "method": "GET", "path": "/boards/{id}/checklists", "covered_by": { "stream": "checklists" } },
+    { "method": "GET", "path": "/boards/{id}/cards", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: cards requires board auto-discovery (fan_out.ids_from.request) AND id-cursor pagination (before param, last_record_field) on the SAME stream; the engine reuses one PaginationSpec for both the id-listing request and the per-board sub-fetch, so the id-listing call would either hard 401 (stream.Query's token param is not applied to fan_out.ids_from.request) or infinite-loop under lastRecordCursor (no short-page stop, no loop guard, and /members/me/boards ignores the before param entirely). See docs.md Known limits and this migration's reported blockers[]." } },
+    { "method": "GET", "path": "/boards/{id}/actions", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical fan_out + cursor-pagination conflict as /boards/{id}/cards above (actions also uses id-cursor before pagination). See docs.md Known limits and this migration's reported blockers[]." } }
+  ]
+}

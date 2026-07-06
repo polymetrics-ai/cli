@@ -1,0 +1,35 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "DiscordBot (https://polymetrics.ai, 2.0) polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Bot ", "value": "{{ secrets.bot_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/users/@me" },
+    "error_map": [
+      { "status": 401, "hint": "discord bot_token is missing or invalid; re-run pm credentials add discord" },
+      { "status": 403, "hint": "discord bot lacks access to this guild" },
+      { "status": 429, "class": "rate_limited", "hint": "discord rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "guilds",
+      "path": "/guilds/{{ config.guild_id }}",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/guilds.json"
+    },
+    {
+      "name": "channels",
+      "path": "/guilds/{{ config.guild_id }}/channels",
+      "records": { "path": "" },
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "roles",
+      "path": "/guilds/{{ config.guild_id }}/roles",
+      "records": { "path": "" },
+      "schema": "schemas/roles.json"
+    }
+  ]
+}

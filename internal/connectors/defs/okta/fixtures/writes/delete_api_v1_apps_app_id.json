@@ -1,0 +1,13 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/apps/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

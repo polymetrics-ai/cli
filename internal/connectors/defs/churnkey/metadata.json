@@ -1,0 +1,23 @@
+{
+  "name": "churnkey",
+  "display_name": "Churnkey",
+  "description": "Reads Churnkey cancel-flow sessions and aggregated session counts through the Churnkey Data API, and sends usage/billing events and customer attribute updates through the Churnkey Event Tracking API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.churnkey.co/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Churnkey API read of cancel-flow session and customer data",
+    "write": "external mutation of Churnkey customer event/attribute data used to drive cancel-flow targeting; approval required"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ssls" },
+    "error_map": [
+      { "status": 401, "hint": "open-data-dc api key is missing or invalid; re-run pm credentials add open-data-dc" },
+      { "status": 429, "class": "rate_limited", "hint": "open-data-dc rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "locations",
+      "path": "/locations/{{ config.location }}",
+      "records": { "path": "Result.addresses" },
+      "computed_fields": {
+        "MarId": "{{ coalesce record.address.properties.MarId record.properties.MarId record.MarId }}",
+        "FullAddress": "{{ coalesce record.address.properties.FullAddress record.properties.FullAddress record.FullAddress }}",
+        "SSL": "{{ coalesce record.address.properties.SSL record.properties.SSL record.SSL }}",
+        "StName": "{{ coalesce record.address.properties.StName record.properties.StName record.StName }}",
+        "AddrNum": "{{ coalesce record.address.properties.AddrNum record.properties.AddrNum record.AddrNum }}",
+        "Quadrant": "{{ coalesce record.address.properties.Quadrant record.properties.Quadrant record.Quadrant }}",
+        "Ward": "{{ coalesce record.address.properties.Ward record.properties.Ward record.Ward }}",
+        "Anc": "{{ coalesce record.address.properties.Anc record.properties.Anc record.Anc }}",
+        "Zipcode": "{{ coalesce record.address.properties.Zipcode record.properties.Zipcode record.Zipcode }}",
+        "Status": "{{ coalesce record.address.properties.Status record.properties.Status record.Status }}",
+        "ResidenceType": "{{ coalesce record.address.properties.ResidenceType record.properties.ResidenceType record.ResidenceType }}",
+        "CensusTract": "{{ coalesce record.address.properties.CensusTract record.properties.CensusTract record.CensusTract }}",
+        "Latitude": "{{ coalesce record.address.properties.Latitude record.properties.Latitude record.Latitude }}",
+        "Longitude": "{{ coalesce record.address.properties.Longitude record.properties.Longitude record.Longitude }}",
+        "Xcoord": "{{ coalesce record.address.properties.Xcoord record.properties.Xcoord record.Xcoord }}",
+        "Ycoord": "{{ coalesce record.address.properties.Ycoord record.properties.Ycoord record.Ycoord }}",
+        "distance": "{{ record.distance }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "units",
+      "path": "/units/{{ config.marid }}",
+      "records": { "path": "Result.units" },
+      "schema": "schemas/units.json"
+    },
+    {
+      "name": "ssls",
+      "path": "/ssls",
+      "query": {
+        "marid": { "template": "{{ config.marid }}", "omit_when_absent": true }
+      },
+      "records": { "path": "Result.ssls" },
+      "schema": "schemas/ssls.json"
+    }
+  ]
+}

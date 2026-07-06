@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/tracker-domains/synthetic-conformance-value",
+    "query": {
+      "fields": "id,domain,isPrimary,isDeleted,defaultCampaignId,httpsStatus,sslStatus,validationStatus,validatedAt,createdAt,updatedAt,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "domain": "domain_fixture",
+      "isPrimary": false,
+      "isDeleted": false,
+      "defaultCampaignId": 1,
+      "httpsStatus": "httpsStatus_fixture",
+      "sslStatus": "sslStatus_fixture",
+      "validationStatus": "validationStatus_fixture",
+      "validatedAt": "2026-01-01T00:00:00Z",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

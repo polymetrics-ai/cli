@@ -1,0 +1,17 @@
+{
+  "record": {
+    "currency_id": "synthetic-conformance-value",
+    "exchange_rate_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/settings/currencies/synthetic-conformance-value/exchangerates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

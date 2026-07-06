@@ -1,0 +1,26 @@
+{
+  "base": {
+    "url": "{{ config.endpoint }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "/" },
+    "error_map": [
+      { "status": 400, "hint": "dynamodb request rejected; check table_name/region and that the table exists" },
+      { "status": 403, "hint": "dynamodb SigV4 signature invalid or access_key_id/secret_access_key lack access; re-run pm credentials add dynamodb" },
+      { "status": 429, "class": "rate_limited", "hint": "dynamodb provisioned/on-demand throughput exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "items",
+      "method": "POST",
+      "path": "/",
+      "records": { "path": "Items" },
+      "schema": "schemas/items.json",
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/dynamodb): this streams.json entry is documentation/schema-reference only (identity/spec/schema uniformity with every other connector, engine.Base.Definition()); Check/Catalog/Read are hand-written Go (SigV4 signing via connection.go's sign, AttributeValue flattening via cataloger.go's attribute), never routed through engine.Check/engine.Read -- the engine's declarative auth dialect has no SigV4 shape and RequestSpec has no AWS JSON-RPC X-Amz-Target header concept. Proven live by internal/connectors/native/dynamodb's own unit tests (dynamodb_test.go), ported rule-for-rule from legacy internal/connectors/dynamodb's identical test suite (signed-request assertions, pagination-via-LastEvaluatedKey, AttributeValue flattening)." }
+    }
+  ]
+}

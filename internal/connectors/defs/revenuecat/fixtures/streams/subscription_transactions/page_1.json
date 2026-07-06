@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/subscriptions/synthetic-conformance-value/transactions",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "txn_fixture_1",
+          "object": "subscription_transaction",
+          "purchased_at": 1735689600000,
+          "product_store_identifier": "com.fixture.monthly",
+          "revenue_in_usd": 9.99,
+          "expiration_date": 1738281600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/subscriptions/synthetic-conformance-value/transactions"
+    }
+  }
+}

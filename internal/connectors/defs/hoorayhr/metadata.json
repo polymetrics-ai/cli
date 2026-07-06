@@ -1,0 +1,26 @@
+{
+  "name": "hoorayhr",
+  "display_name": "HoorayHR",
+  "description": "Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.",
+  "integration_type": "api",
+  "docs_url": "https://hoorayhr.io",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external HoorayHR API read of employee, time-off, leave-type, and sick-leave data"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); the AuthHook's real session-token exchange target is a fixed relative /authentication path against the resolved base_url, but the exchange itself POSTs live credentials (config.hoorayhrusername / secrets.hoorayhrpassword) and reads a raw (non-Bearer-prefixed) accessToken back -- conformance's synthetic non-secret config populates every non-x-secret spec property with the literal string \"synthetic-conformance-value\" and provides no live server for that POST to land on, so the hook's real HTTP round-trip can never succeed against the replay harness; every auth-resolving dynamic check (check_fixture, every read_fixture_nonempty:<stream>, pagination_terminates, records_match_schema) would otherwise fail identically and uninformatively. This is the exact scenario conventions.md Section 4 documents as the sanctioned bundle-level skip-marker case (gmail's/keka's identical shape). The skipped behavior is proven live instead by archived parity evidence for hoorayhr, which drives both the legacy connector and the engine-backed connector (with the real registered AuthHook) against a shared httptest authentication+data server, asserting RAW connectors.Record equality and the identical raw (non-Bearer-prefixed) Authorization header value on every data request."
+  }
+}

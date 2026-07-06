@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/stockhistory", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idproduct_stock_history": 1101,
+        "idproduct": 101,
+        "idwarehouse": 501,
+        "iduser": 201,
+        "idlocation": 1,
+        "old_stock": 10,
+        "stock_change": 5,
+        "new_stock": 15,
+        "reason": "Fixture reason",
+        "change_type": "manual",
+        "changed_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

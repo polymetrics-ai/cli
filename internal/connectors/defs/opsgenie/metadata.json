@@ -1,0 +1,23 @@
+{
+  "name": "opsgenie",
+  "display_name": "Opsgenie",
+  "description": "Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgenie REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.opsgenie.com/docs/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Opsgenie API read of alerting/incident/team data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

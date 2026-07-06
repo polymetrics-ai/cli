@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "projects",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "integer", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

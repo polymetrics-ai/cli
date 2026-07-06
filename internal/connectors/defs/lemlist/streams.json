@@ -1,0 +1,161 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "access_token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/team" },
+    "error_map": [
+      { "status": 401, "hint": "lemlist api_key is missing or invalid; re-run pm credentials add lemlist" },
+      { "status": 403, "hint": "lemlist account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "lemlist rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "team",
+      "path": "/team",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team.json"
+    },
+    {
+      "name": "team_senders",
+      "path": "/team/senders",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_senders.json"
+    },
+    {
+      "name": "team_credits",
+      "path": "/team/credits",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_credits.json"
+    },
+    {
+      "name": "team_crm_users",
+      "path": "/team/crmUsers",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team_crm_users.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "records": { "path": "" },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "unsubscribes",
+      "path": "/unsubscribes",
+      "records": { "path": "" },
+      "schema": "schemas/unsubscribes.json"
+    },
+    {
+      "name": "schedules",
+      "path": "/schedules",
+      "records": { "path": "schedules" },
+      "schema": "schemas/schedules.json"
+    },
+    {
+      "name": "database_filters",
+      "path": "/database/filters",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/database_filters.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "inbox_labels",
+      "path": "/inbox/labels",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/inbox_labels.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contact_lists",
+      "path": "/contacts/lists",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/contact_lists.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/hooks",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "unsubscribed_variables",
+      "path": "/v2/unsubscribes/variables",
+      "records": { "path": "" },
+      "schema": "schemas/unsubscribed_variables.json"
+    },
+    {
+      "name": "watchlist_signals",
+      "path": "/watchlist/signals",
+      "records": { "path": "signals" },
+      "schema": "schemas/watchlist_signals.json"
+    },
+    {
+      "name": "user_channels",
+      "path": "/user/channels",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user_channels.json"
+    },
+    {
+      "name": "fields_contact",
+      "path": "/fields",
+      "records": { "path": "data.contact" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fields_contact.json"
+    },
+    {
+      "name": "fields_company",
+      "path": "/fields",
+      "records": { "path": "data.company" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/fields_company.json"
+    }
+  ]
+}

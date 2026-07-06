@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/authorization/divisions",
+    "query": { "pageSize": "100", "pageNumber": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entities": [
+        {
+          "id": "d1",
+          "name": "Fixture Division 1",
+          "description": "conformance fixture division"
+        },
+        {
+          "id": "d2",
+          "name": "Fixture Division 2",
+          "description": "conformance fixture division"
+        }
+      ]
+    }
+  }
+}

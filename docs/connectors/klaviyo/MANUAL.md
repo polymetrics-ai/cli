@@ -12,20 +12,56 @@ SYNOPSIS
 DESCRIPTION
   Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.
 
+ICON
+  asset: icons/klaviyo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  revision
+  api_key (secret)
+
+ETL STREAMS
+  profiles:
+    primary key: id
+    cursor: updated
+    fields: created(), email(), external_id(), first_name(), id(), last_name(), organization(), phone_number(), type(), updated()
+  events:
+    primary key: id
+    cursor: datetime
+    fields: datetime(), id(), timestamp(), type(), uuid()
+  campaigns:
+    primary key: id
+    cursor: updated_at
+    fields: archived(), channel(), created_at(), id(), name(), scheduled_at(), send_time(), status(), type(), updated_at()
+  lists:
+    primary key: id
+    cursor: updated
+    fields: created(), id(), name(), type(), updated()
+  metrics:
+    primary key: id
+    cursor: updated
+    fields: created(), id(), integration_name(), name(), type(), updated()
+  segments:
+    primary key: id
+    cursor: updated
+    fields: created(), id(), is_active(), is_processing(), name(), type(), updated()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Klaviyo API read of customer profile, event, and campaign data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

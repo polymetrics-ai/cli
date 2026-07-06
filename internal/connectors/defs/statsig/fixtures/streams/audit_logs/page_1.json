@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/audit_logs", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "audit_log_fixture_1",
+          "name": "Fixture Gate One",
+          "changeLog": "fixture record",
+          "actionType": "update",
+          "date": "2026-01-01",
+          "time": 1735689600,
+          "updatedBy": "Fixture Admin",
+          "updatedByUserID": "user_fixture_1",
+          "modifierEmail": "fixture1@example.com",
+          "tags": [],
+          "targetAppIDs": []
+        }
+      ]
+    }
+  }
+}

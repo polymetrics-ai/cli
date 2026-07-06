@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "starlink",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": ["string", "null"] },
+    "launch": { "type": ["string", "null"] },
+    "longitude": { "type": ["number", "null"] },
+    "latitude": { "type": ["number", "null"] },
+    "height_km": { "type": ["number", "null"] },
+    "velocity_kms": { "type": ["number", "null"] },
+    "spaceTrack": { "type": ["object", "null"] }
+  }
+}

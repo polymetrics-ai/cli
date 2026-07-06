@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "break_assessments",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "_links": {
+      "type": "object",
+      "required": [
+        "prev",
+        "next"
+      ],
+      "properties": {
+        "next": {
+          "type": [
+            "null",
+            "object"
+          ]
+        },
+        "prev": {
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "availableYmdt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "breakId": {
+            "type": "string"
+          },
+          "clockEntryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "durationDifference": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "employeeId": {
+            "type": "integer"
+          },
+          "employeeTimesheetId": {
+            "type": "integer"
+          },
+          "expectedDuration": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "recordedDuration": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "result": {
+            "enum": [
+              "compliant",
+              "violation",
+              "waived"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "unavailableYmdt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "updatedAt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "enum": [
+                    "break_started_early",
+                    "break_started_late",
+                    "break_ended_early",
+                    "break_ended_late",
+                    "break_missed"
+                  ]
+                },
+                "amount": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "assessmentId": {
+                  "type": "string"
+                },
+                "employeeTimesheetClockEntryId": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "totalItems",
+        "offset",
+        "limit"
+      ],
+      "properties": {
+        "limit": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "totalItems": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

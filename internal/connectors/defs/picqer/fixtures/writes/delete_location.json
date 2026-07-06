@@ -1,0 +1,5 @@
+{
+  "record": { "idlocation": 1201 },
+  "expect": { "method": "DELETE", "path": "/locations/1201" },
+  "response": { "status": 200, "body": {} }
+}

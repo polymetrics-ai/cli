@@ -1,0 +1,9 @@
+{
+  "record": { "id": "1", "todo-item": { "content": "Fixture Task Updated" } },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/1.json",
+    "body": { "todo-item": { "content": "Fixture Task Updated" } }
+  },
+  "response": { "status": 200, "body": {} }
+}

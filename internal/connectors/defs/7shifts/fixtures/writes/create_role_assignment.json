@@ -1,0 +1,21 @@
+{
+  "record": {
+    "user_id": 1001,
+    "role_id": 1001,
+    "primary": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/role_assignments",
+    "body": {
+      "role_id": 1001,
+      "primary": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

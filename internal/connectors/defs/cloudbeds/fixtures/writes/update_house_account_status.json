@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "houseAccountID": "houseacct_fixture_1", "status": "closed" },
+  "expect": { "method": "PUT", "path": "/putHouseAccountStatus" },
+  "response": { "status": 200, "body": { "success": true } }
+}

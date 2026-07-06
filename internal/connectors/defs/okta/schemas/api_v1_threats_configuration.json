@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "description": "Specifies how Okta responds to authentication requests from suspicious IP addresses",
+      "enum": [
+        "none",
+        "audit",
+        "block"
+      ]
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the ThreatInsight Configuration object was created",
+      "format": "date-time"
+    },
+    "excludeZones": {
+      "type": "array",
+      "description": "Accepts a list of [Network Zone](/openapi/okta-management/management/networkzone/) IDs.\nIPs in the excluded network zones aren't logged or blocked.\nThis ensures that traffic from known, trusted IPs isn't accidentally logged or blocked.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the ThreatInsight Configuration object was last updated",
+      "format": "date-time"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

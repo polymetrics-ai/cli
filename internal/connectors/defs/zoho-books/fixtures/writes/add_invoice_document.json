@@ -1,0 +1,17 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value",
+    "document_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/synthetic-conformance-value/documents/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

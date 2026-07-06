@@ -1,0 +1,44 @@
+{
+  "record": {
+    "name": "fixture",
+    "description": "fixture",
+    "dealStages": [
+      {
+        "name": "fixture",
+        "displayOrder": 1,
+        "stage": "fixture",
+        "weight": 1.23,
+        "trigger": "fixture"
+      }
+    ],
+    "defaultAcquisitionChannel": "fixture",
+    "defaultAcquisitionSource": "fixture",
+    "defaultDealOwnerId": "default_deal_owner_id_fixture",
+    "isDefaultDealFlow": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/deal_flows",
+    "body": {
+      "name": "fixture",
+      "description": "fixture",
+      "dealStages": [
+        {
+          "name": "fixture",
+          "displayOrder": 1,
+          "stage": "fixture",
+          "weight": 1.23,
+          "trigger": "fixture"
+        }
+      ],
+      "defaultAcquisitionChannel": "fixture",
+      "defaultAcquisitionSource": "fixture",
+      "defaultDealOwnerId": "default_deal_owner_id_fixture",
+      "isDefaultDealFlow": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

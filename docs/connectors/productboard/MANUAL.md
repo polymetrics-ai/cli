@@ -10,22 +10,45 @@ SYNOPSIS
   pm credentials add <name> --connector productboard [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Productboard features, notes, components, and products through the public API. Read-only.
+  Reads Productboard features, notes, components, and products through the public API.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  start_date
+  access_token (secret)
+
+ETL STREAMS
+  features:
+    primary key: id
+    fields: created_at(), id(), name(), status(), title(), updated_at()
+  notes:
+    primary key: id
+    fields: created_at(), id(), name(), status(), title(), updated_at()
+  components:
+    primary key: id
+    fields: created_at(), id(), name(), status(), title(), updated_at()
+  products:
+    primary key: id
+    fields: created_at(), id(), name(), status(), title(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Productboard API read of feature, note, component, and product data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

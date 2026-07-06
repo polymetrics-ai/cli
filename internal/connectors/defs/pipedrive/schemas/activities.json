@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "update_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "subject": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "done": { "type": ["boolean", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "deal_id": { "type": ["integer", "null"] },
+    "person_id": { "type": ["integer", "null"] },
+    "org_id": { "type": ["integer", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "update_time": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/payout/v3/recipient", "query": { "limit": "10", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "recipientId": "rec_fixture_1",
+          "name": "Fixture Recipient 1",
+          "email": "recipient1@example.com",
+          "status": "active",
+          "currency": "USD",
+          "createdDate": "2026-01-01T00:00:00Z",
+          "updatedDate": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "sender_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/brands/brand_fixture_1/senders/sender_fixture_1"
+  }
+}

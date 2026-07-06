@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Tasks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "task_fixture_1", "Subject": "Fixture Task One", "Status": "Not Started", "Priority": "High", "Due_Date": "2026-01-01" },
+        { "id": "task_fixture_2", "Subject": "Fixture Task Two", "Status": "Completed", "Priority": "Low", "Due_Date": "2026-01-02" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

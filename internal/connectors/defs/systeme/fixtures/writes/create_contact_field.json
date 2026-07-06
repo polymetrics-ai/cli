@@ -1,0 +1,7 @@
+{
+  "record": { "slug": "favorite_color", "type": "string" },
+  "expect": {
+    "method": "POST",
+    "path": "/contact_fields"
+  }
+}

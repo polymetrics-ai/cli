@@ -1,0 +1,17 @@
+{
+  "record": {
+    "title": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks",
+    "body": {
+      "title": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

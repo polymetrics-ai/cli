@@ -1,0 +1,24 @@
+{
+  "name": "cal-com",
+  "display_name": "Cal.com",
+  "description": "Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manages bookings/event types/schedules/webhooks through the Cal.com v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://cal.com/docs/api-reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Cal.com API read of bookings, event types, schedules, webhooks, and profile data",
+    "write": "external mutation of live scheduling data: creates/cancels/confirms/declines/reschedules real bookings (notifying attendees), creates/updates/deletes event types and availability schedules (changes public booking availability), and creates/deletes webhook subscriptions",
+    "approval": "required for every write action"
+  }
+}

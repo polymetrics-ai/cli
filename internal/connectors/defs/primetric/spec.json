@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Primetric Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Primetric OAuth2 client-credentials client ID. Used only for the token exchange; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Primetric OAuth2 client-credentials client secret. Used only for the token exchange; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.primetric.com/api/v1",
+      "description": "Primetric API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.primetric.com/oauth/token",
+      "description": "OAuth2 token endpoint override; defaults to Primetric's production token URL (legacy derives this independently of base_url, so this default is a fixed literal matching legacy's own defaultTokenURL constant)."
+    }
+  }
+}

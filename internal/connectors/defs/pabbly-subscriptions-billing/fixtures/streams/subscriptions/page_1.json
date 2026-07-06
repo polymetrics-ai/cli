@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions",
+    "query": { "page": "1", "per_page": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sub_fixture_1",
+          "email": "fixture1@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "amount": 1500,
+          "currency": "USD",
+          "plan_id": "plan_fixture_1",
+          "customer_id": "cus_fixture_1"
+        }
+      ]
+    }
+  }
+}

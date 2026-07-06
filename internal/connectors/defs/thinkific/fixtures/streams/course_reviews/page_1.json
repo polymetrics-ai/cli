@@ -1,0 +1,1017 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/course_reviews",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "rating": 5,
+          "title": "Fixture Review 1",
+          "review_text": "Great course!",
+          "user_id": 1,
+          "course_id": 1,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "rating": 5,
+          "title": "Fixture Review 2",
+          "review_text": "Great course!",
+          "user_id": 2,
+          "course_id": 2,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "rating": 5,
+          "title": "Fixture Review 3",
+          "review_text": "Great course!",
+          "user_id": 3,
+          "course_id": 3,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "rating": 5,
+          "title": "Fixture Review 4",
+          "review_text": "Great course!",
+          "user_id": 4,
+          "course_id": 4,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "rating": 5,
+          "title": "Fixture Review 5",
+          "review_text": "Great course!",
+          "user_id": 5,
+          "course_id": 5,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "rating": 5,
+          "title": "Fixture Review 6",
+          "review_text": "Great course!",
+          "user_id": 6,
+          "course_id": 6,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "rating": 5,
+          "title": "Fixture Review 7",
+          "review_text": "Great course!",
+          "user_id": 7,
+          "course_id": 7,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "rating": 5,
+          "title": "Fixture Review 8",
+          "review_text": "Great course!",
+          "user_id": 8,
+          "course_id": 8,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "rating": 5,
+          "title": "Fixture Review 9",
+          "review_text": "Great course!",
+          "user_id": 9,
+          "course_id": 9,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "rating": 5,
+          "title": "Fixture Review 10",
+          "review_text": "Great course!",
+          "user_id": 10,
+          "course_id": 10,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "rating": 5,
+          "title": "Fixture Review 11",
+          "review_text": "Great course!",
+          "user_id": 11,
+          "course_id": 11,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "rating": 5,
+          "title": "Fixture Review 12",
+          "review_text": "Great course!",
+          "user_id": 12,
+          "course_id": 12,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "rating": 5,
+          "title": "Fixture Review 13",
+          "review_text": "Great course!",
+          "user_id": 13,
+          "course_id": 13,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "rating": 5,
+          "title": "Fixture Review 14",
+          "review_text": "Great course!",
+          "user_id": 14,
+          "course_id": 14,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "rating": 5,
+          "title": "Fixture Review 15",
+          "review_text": "Great course!",
+          "user_id": 15,
+          "course_id": 15,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "rating": 5,
+          "title": "Fixture Review 16",
+          "review_text": "Great course!",
+          "user_id": 16,
+          "course_id": 16,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "rating": 5,
+          "title": "Fixture Review 17",
+          "review_text": "Great course!",
+          "user_id": 17,
+          "course_id": 17,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "rating": 5,
+          "title": "Fixture Review 18",
+          "review_text": "Great course!",
+          "user_id": 18,
+          "course_id": 18,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "rating": 5,
+          "title": "Fixture Review 19",
+          "review_text": "Great course!",
+          "user_id": 19,
+          "course_id": 19,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "rating": 5,
+          "title": "Fixture Review 20",
+          "review_text": "Great course!",
+          "user_id": 20,
+          "course_id": 20,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "rating": 5,
+          "title": "Fixture Review 21",
+          "review_text": "Great course!",
+          "user_id": 21,
+          "course_id": 21,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "rating": 5,
+          "title": "Fixture Review 22",
+          "review_text": "Great course!",
+          "user_id": 22,
+          "course_id": 22,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "rating": 5,
+          "title": "Fixture Review 23",
+          "review_text": "Great course!",
+          "user_id": 23,
+          "course_id": 23,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "rating": 5,
+          "title": "Fixture Review 24",
+          "review_text": "Great course!",
+          "user_id": 24,
+          "course_id": 24,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "rating": 5,
+          "title": "Fixture Review 25",
+          "review_text": "Great course!",
+          "user_id": 25,
+          "course_id": 25,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "rating": 5,
+          "title": "Fixture Review 26",
+          "review_text": "Great course!",
+          "user_id": 26,
+          "course_id": 26,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "rating": 5,
+          "title": "Fixture Review 27",
+          "review_text": "Great course!",
+          "user_id": 27,
+          "course_id": 27,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "rating": 5,
+          "title": "Fixture Review 28",
+          "review_text": "Great course!",
+          "user_id": 28,
+          "course_id": 28,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "rating": 5,
+          "title": "Fixture Review 29",
+          "review_text": "Great course!",
+          "user_id": 29,
+          "course_id": 29,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "rating": 5,
+          "title": "Fixture Review 30",
+          "review_text": "Great course!",
+          "user_id": 30,
+          "course_id": 30,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "rating": 5,
+          "title": "Fixture Review 31",
+          "review_text": "Great course!",
+          "user_id": 31,
+          "course_id": 31,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "rating": 5,
+          "title": "Fixture Review 32",
+          "review_text": "Great course!",
+          "user_id": 32,
+          "course_id": 32,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "rating": 5,
+          "title": "Fixture Review 33",
+          "review_text": "Great course!",
+          "user_id": 33,
+          "course_id": 33,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "rating": 5,
+          "title": "Fixture Review 34",
+          "review_text": "Great course!",
+          "user_id": 34,
+          "course_id": 34,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "rating": 5,
+          "title": "Fixture Review 35",
+          "review_text": "Great course!",
+          "user_id": 35,
+          "course_id": 35,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "rating": 5,
+          "title": "Fixture Review 36",
+          "review_text": "Great course!",
+          "user_id": 36,
+          "course_id": 36,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "rating": 5,
+          "title": "Fixture Review 37",
+          "review_text": "Great course!",
+          "user_id": 37,
+          "course_id": 37,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "rating": 5,
+          "title": "Fixture Review 38",
+          "review_text": "Great course!",
+          "user_id": 38,
+          "course_id": 38,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "rating": 5,
+          "title": "Fixture Review 39",
+          "review_text": "Great course!",
+          "user_id": 39,
+          "course_id": 39,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "rating": 5,
+          "title": "Fixture Review 40",
+          "review_text": "Great course!",
+          "user_id": 40,
+          "course_id": 40,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "rating": 5,
+          "title": "Fixture Review 41",
+          "review_text": "Great course!",
+          "user_id": 41,
+          "course_id": 41,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "rating": 5,
+          "title": "Fixture Review 42",
+          "review_text": "Great course!",
+          "user_id": 42,
+          "course_id": 42,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "rating": 5,
+          "title": "Fixture Review 43",
+          "review_text": "Great course!",
+          "user_id": 43,
+          "course_id": 43,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "rating": 5,
+          "title": "Fixture Review 44",
+          "review_text": "Great course!",
+          "user_id": 44,
+          "course_id": 44,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "rating": 5,
+          "title": "Fixture Review 45",
+          "review_text": "Great course!",
+          "user_id": 45,
+          "course_id": 45,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "rating": 5,
+          "title": "Fixture Review 46",
+          "review_text": "Great course!",
+          "user_id": 46,
+          "course_id": 46,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "rating": 5,
+          "title": "Fixture Review 47",
+          "review_text": "Great course!",
+          "user_id": 47,
+          "course_id": 47,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "rating": 5,
+          "title": "Fixture Review 48",
+          "review_text": "Great course!",
+          "user_id": 48,
+          "course_id": 48,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "rating": 5,
+          "title": "Fixture Review 49",
+          "review_text": "Great course!",
+          "user_id": 49,
+          "course_id": 49,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "rating": 5,
+          "title": "Fixture Review 50",
+          "review_text": "Great course!",
+          "user_id": 50,
+          "course_id": 50,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "rating": 5,
+          "title": "Fixture Review 51",
+          "review_text": "Great course!",
+          "user_id": 51,
+          "course_id": 51,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "rating": 5,
+          "title": "Fixture Review 52",
+          "review_text": "Great course!",
+          "user_id": 52,
+          "course_id": 52,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "rating": 5,
+          "title": "Fixture Review 53",
+          "review_text": "Great course!",
+          "user_id": 53,
+          "course_id": 53,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "rating": 5,
+          "title": "Fixture Review 54",
+          "review_text": "Great course!",
+          "user_id": 54,
+          "course_id": 54,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "rating": 5,
+          "title": "Fixture Review 55",
+          "review_text": "Great course!",
+          "user_id": 55,
+          "course_id": 55,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "rating": 5,
+          "title": "Fixture Review 56",
+          "review_text": "Great course!",
+          "user_id": 56,
+          "course_id": 56,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "rating": 5,
+          "title": "Fixture Review 57",
+          "review_text": "Great course!",
+          "user_id": 57,
+          "course_id": 57,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "rating": 5,
+          "title": "Fixture Review 58",
+          "review_text": "Great course!",
+          "user_id": 58,
+          "course_id": 58,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "rating": 5,
+          "title": "Fixture Review 59",
+          "review_text": "Great course!",
+          "user_id": 59,
+          "course_id": 59,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "rating": 5,
+          "title": "Fixture Review 60",
+          "review_text": "Great course!",
+          "user_id": 60,
+          "course_id": 60,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "rating": 5,
+          "title": "Fixture Review 61",
+          "review_text": "Great course!",
+          "user_id": 61,
+          "course_id": 61,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "rating": 5,
+          "title": "Fixture Review 62",
+          "review_text": "Great course!",
+          "user_id": 62,
+          "course_id": 62,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "rating": 5,
+          "title": "Fixture Review 63",
+          "review_text": "Great course!",
+          "user_id": 63,
+          "course_id": 63,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "rating": 5,
+          "title": "Fixture Review 64",
+          "review_text": "Great course!",
+          "user_id": 64,
+          "course_id": 64,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "rating": 5,
+          "title": "Fixture Review 65",
+          "review_text": "Great course!",
+          "user_id": 65,
+          "course_id": 65,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "rating": 5,
+          "title": "Fixture Review 66",
+          "review_text": "Great course!",
+          "user_id": 66,
+          "course_id": 66,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "rating": 5,
+          "title": "Fixture Review 67",
+          "review_text": "Great course!",
+          "user_id": 67,
+          "course_id": 67,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "rating": 5,
+          "title": "Fixture Review 68",
+          "review_text": "Great course!",
+          "user_id": 68,
+          "course_id": 68,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "rating": 5,
+          "title": "Fixture Review 69",
+          "review_text": "Great course!",
+          "user_id": 69,
+          "course_id": 69,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "rating": 5,
+          "title": "Fixture Review 70",
+          "review_text": "Great course!",
+          "user_id": 70,
+          "course_id": 70,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "rating": 5,
+          "title": "Fixture Review 71",
+          "review_text": "Great course!",
+          "user_id": 71,
+          "course_id": 71,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "rating": 5,
+          "title": "Fixture Review 72",
+          "review_text": "Great course!",
+          "user_id": 72,
+          "course_id": 72,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "rating": 5,
+          "title": "Fixture Review 73",
+          "review_text": "Great course!",
+          "user_id": 73,
+          "course_id": 73,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "rating": 5,
+          "title": "Fixture Review 74",
+          "review_text": "Great course!",
+          "user_id": 74,
+          "course_id": 74,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "rating": 5,
+          "title": "Fixture Review 75",
+          "review_text": "Great course!",
+          "user_id": 75,
+          "course_id": 75,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "rating": 5,
+          "title": "Fixture Review 76",
+          "review_text": "Great course!",
+          "user_id": 76,
+          "course_id": 76,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "rating": 5,
+          "title": "Fixture Review 77",
+          "review_text": "Great course!",
+          "user_id": 77,
+          "course_id": 77,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "rating": 5,
+          "title": "Fixture Review 78",
+          "review_text": "Great course!",
+          "user_id": 78,
+          "course_id": 78,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "rating": 5,
+          "title": "Fixture Review 79",
+          "review_text": "Great course!",
+          "user_id": 79,
+          "course_id": 79,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "rating": 5,
+          "title": "Fixture Review 80",
+          "review_text": "Great course!",
+          "user_id": 80,
+          "course_id": 80,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "rating": 5,
+          "title": "Fixture Review 81",
+          "review_text": "Great course!",
+          "user_id": 81,
+          "course_id": 81,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "rating": 5,
+          "title": "Fixture Review 82",
+          "review_text": "Great course!",
+          "user_id": 82,
+          "course_id": 82,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "rating": 5,
+          "title": "Fixture Review 83",
+          "review_text": "Great course!",
+          "user_id": 83,
+          "course_id": 83,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "rating": 5,
+          "title": "Fixture Review 84",
+          "review_text": "Great course!",
+          "user_id": 84,
+          "course_id": 84,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "rating": 5,
+          "title": "Fixture Review 85",
+          "review_text": "Great course!",
+          "user_id": 85,
+          "course_id": 85,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "rating": 5,
+          "title": "Fixture Review 86",
+          "review_text": "Great course!",
+          "user_id": 86,
+          "course_id": 86,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "rating": 5,
+          "title": "Fixture Review 87",
+          "review_text": "Great course!",
+          "user_id": 87,
+          "course_id": 87,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "rating": 5,
+          "title": "Fixture Review 88",
+          "review_text": "Great course!",
+          "user_id": 88,
+          "course_id": 88,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "rating": 5,
+          "title": "Fixture Review 89",
+          "review_text": "Great course!",
+          "user_id": 89,
+          "course_id": 89,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "rating": 5,
+          "title": "Fixture Review 90",
+          "review_text": "Great course!",
+          "user_id": 90,
+          "course_id": 90,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "rating": 5,
+          "title": "Fixture Review 91",
+          "review_text": "Great course!",
+          "user_id": 91,
+          "course_id": 91,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "rating": 5,
+          "title": "Fixture Review 92",
+          "review_text": "Great course!",
+          "user_id": 92,
+          "course_id": 92,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "rating": 5,
+          "title": "Fixture Review 93",
+          "review_text": "Great course!",
+          "user_id": 93,
+          "course_id": 93,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "rating": 5,
+          "title": "Fixture Review 94",
+          "review_text": "Great course!",
+          "user_id": 94,
+          "course_id": 94,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "rating": 5,
+          "title": "Fixture Review 95",
+          "review_text": "Great course!",
+          "user_id": 95,
+          "course_id": 95,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "rating": 5,
+          "title": "Fixture Review 96",
+          "review_text": "Great course!",
+          "user_id": 96,
+          "course_id": 96,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "rating": 5,
+          "title": "Fixture Review 97",
+          "review_text": "Great course!",
+          "user_id": 97,
+          "course_id": 97,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "rating": 5,
+          "title": "Fixture Review 98",
+          "review_text": "Great course!",
+          "user_id": 98,
+          "course_id": 98,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "rating": 5,
+          "title": "Fixture Review 99",
+          "review_text": "Great course!",
+          "user_id": 99,
+          "course_id": 99,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "rating": 5,
+          "title": "Fixture Review 100",
+          "review_text": "Great course!",
+          "user_id": 100,
+          "course_id": 100,
+          "approved": true,
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

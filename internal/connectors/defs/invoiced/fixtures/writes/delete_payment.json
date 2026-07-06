@@ -1,0 +1,13 @@
+{
+  "record": {
+    "payment_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/payments/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

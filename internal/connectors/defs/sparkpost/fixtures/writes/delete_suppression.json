@@ -1,0 +1,9 @@
+{
+  "record": {
+    "recipient": "fixture@example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/suppression-list/fixture@example.com"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/features/inventory/synthetic-conformance-value",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "marketplaceId": "marketplaceId-fixture-1",
+        "featureName": "featureName-fixture-1",
+        "nextToken": "nextToken-fixture-1",
+        "featureSkus": [],
+        "feature_name": "feature_name-fixture-1"
+      }
+    }
+  }
+}

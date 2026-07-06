@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "team",
+      "attributes": {
+        "name": "Fixture Create Team"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teams",
+    "body": {
+      "data": {
+        "type": "team",
+        "attributes": {
+          "name": "Fixture Create Team"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

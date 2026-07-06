@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "/", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "users": [
+          { "id": "u1", "name": "Fixture User 1", "email": "fixture1@example.com", "enabled": true, "is_admin": false, "is_guest": false, "is_pending": false, "created_at": "2026-01-01T00:00:00Z" }
+        ]
+      }
+    }
+  }
+}

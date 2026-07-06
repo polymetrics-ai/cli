@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/teams/org" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 501,
+          "orgId": 42,
+          "workspaceId": "fixture-workspace-1",
+          "name": "Fixture Sales Team",
+          "updatedAt": 1767225601000,
+          "members": [1, 2],
+          "owner": 1,
+          "status": "ENABLED",
+          "main": true,
+          "autoOffline": true,
+          "teamAvailabilityMode": "ALWAYS_ONLINE",
+          "responseTimerEnabled": true
+        },
+        {
+          "id": 502,
+          "orgId": 42,
+          "workspaceId": "fixture-workspace-1",
+          "name": "Fixture Support Team",
+          "updatedAt": 1767225602000,
+          "members": [2],
+          "owner": 2,
+          "status": "ENABLED",
+          "main": false,
+          "autoOffline": false,
+          "teamAvailabilityMode": "CUSTOM_HOURS",
+          "responseTimerEnabled": false
+        }
+      ]
+    }
+  }
+}

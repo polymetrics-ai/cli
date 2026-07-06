@@ -1,0 +1,43 @@
+{
+  "record": {
+    "agent_id": "agent_id_fixture",
+    "prompt": "fixture",
+    "sourceImageUrl": "https://example.com/fixture",
+    "imageUrls": [
+      "https://example.com/fixture"
+    ],
+    "outputSchema": {
+      "id": "output_schema_fixture_id"
+    },
+    "options": {
+      "resourceId": "resource_id_fixture",
+      "resourceType": "fixture",
+      "isTestMode": true,
+      "readOnlyMode": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/ai/agents/agent_id_fixture/runs",
+    "body": {
+      "prompt": "fixture",
+      "sourceImageUrl": "https://example.com/fixture",
+      "imageUrls": [
+        "https://example.com/fixture"
+      ],
+      "outputSchema": {
+        "id": "output_schema_fixture_id"
+      },
+      "options": {
+        "resourceId": "resource_id_fixture",
+        "resourceType": "fixture",
+        "isTestMode": true,
+        "readOnlyMode": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

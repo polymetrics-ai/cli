@@ -1,0 +1,17 @@
+{
+  "record": {
+    "pipeline_slug": "fixture-web",
+    "number": 40
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web/builds/40/rebuild"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "build_fixture_rebuilt",
+      "number": 43
+    }
+  }
+}

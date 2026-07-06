@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "customerId": "customer_id_fixture",
+    "email": "fixture@example.com",
+    "idempotencyKey": "fixture",
+    "metadata": {
+      "id": "metadata_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/campaigns/id_fixture/deliver",
+    "body": {
+      "customerId": "customer_id_fixture",
+      "email": "fixture@example.com",
+      "idempotencyKey": "fixture",
+      "metadata": {
+        "id": "metadata_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

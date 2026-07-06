@@ -1,0 +1,28 @@
+{
+  "name": "firehydrant",
+  "display_name": "FireHydrant",
+  "description": "Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireHydrant mutations through declarative write actions.",
+  "integration_type": "api",
+  "docs_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 300
+  },
+  "risk": {
+    "read": "external FireHydrant API reads across incidents, catalog, alerts, teams, runbooks, metrics, integrations, and configuration resources",
+    "write": "creates, updates, archives, deletes, triggers, and otherwise mutates FireHydrant resources through documented JSON/no-body REST endpoints",
+    "approval": "reverse ETL writes require plan preview and approval token before execution"
+  }
+}

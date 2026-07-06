@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/domains" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Domain": "fixture-domain-1.example.com", "DefaultDomain": true, "Spf": true, "Dkim": true, "MX": true, "DMARC": false, "Verify": true, "TrackingStatus": "Valid", "CertificateStatus": "Valid", "VERP": false, "CustomBouncesDomain": null, "IsMarkedForDeletion": false }
+    ]
+  }
+}

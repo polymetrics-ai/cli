@@ -1,0 +1,118 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}/company/{{ secrets.company_id }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/positions" },
+    "error_map": [
+      { "status": 401, "hint": "breezy-hr api_key is missing or invalid; re-run pm credentials add breezy-hr" },
+      { "status": 403, "hint": "breezy-hr api_key lacks access for this company_id" },
+      { "status": 429, "class": "rate_limited", "hint": "breezy-hr rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "positions",
+      "path": "/positions",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "position_id": "{{ coalesce record._id record.position_id }}",
+        "type": "{{ coalesce record.type.name record.type }}",
+        "country_id": "{{ record.location.country.id }}",
+        "country_name": "{{ record.location.country.name }}"
+      },
+      "schema": "schemas/positions.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record._id record.id }}"
+      },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "candidates",
+      "path": "/position/{{ fanout.id }}/candidates",
+      "query": { "sort": "updated_date" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/positions", "records_path": "", "id_field": "_id" }
+        },
+        "into": { "path_var": "position_id" },
+        "stamp_field": "position_id"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record._id record.id }}",
+        "stage": "{{ coalesce record.stage.name record.stage }}"
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "custom_attributes_candidate",
+      "path": "/custom-attributes/candidate",
+      "records": { "path": "." },
+      "schema": "schemas/custom_attributes_candidate.json"
+    },
+    {
+      "name": "custom_attributes_position",
+      "path": "/custom-attributes/position",
+      "records": { "path": "." },
+      "schema": "schemas/custom_attributes_position.json"
+    },
+    {
+      "name": "questionnaires",
+      "path": "/questionnaires",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/questionnaires.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record._id }}"
+      },
+      "schema": "schemas/templates.json"
+    }
+  ]
+}

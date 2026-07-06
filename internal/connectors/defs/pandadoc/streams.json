@@ -1,0 +1,646 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "prefix": "API-Key ",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/public/v1/documents",
+      "query": {
+        "count": "1",
+        "page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "pandadoc api_key is missing or invalid; re-run pm credentials add pandadoc"
+      },
+      {
+        "status": 403,
+        "hint": "pandadoc api_key lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "pandadoc rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "documents",
+      "path": "/public/v1/documents",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents.json",
+      "query": {
+        "count": "{{ config.count }}",
+        "page": "1"
+      },
+      "incremental": {
+        "cursor_field": "date_created"
+      }
+    },
+    {
+      "name": "templates",
+      "path": "/public/v1/templates",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/templates.json",
+      "query": {
+        "count": "{{ config.count }}",
+        "page": "1"
+      },
+      "incremental": {
+        "cursor_field": "date_created"
+      }
+    },
+    {
+      "name": "contacts",
+      "path": "/public/v1/contacts",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/contacts.json",
+      "query": {
+        "count": "{{ config.count }}",
+        "page": "1"
+      },
+      "incremental": {
+        "cursor_field": "created_date"
+      }
+    },
+    {
+      "name": "documents_document_id_ai_metadata",
+      "path": "/public/beta/documents/{{ config.document_id }}/ai-metadata",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_ai_metadata.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_content",
+      "path": "/public/beta/documents/{{ config.document_id }}/content",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_content.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_docx_export_tasks_task_id",
+      "path": "/public/beta/documents/{{ config.document_id }}/docx-export-tasks/{{ config.task_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_docx_export_tasks_task_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_summary",
+      "path": "/public/beta/documents/{{ config.document_id }}/summary",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_summary.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_search",
+      "path": "/public/beta/documents/search",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_search.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contacts_id",
+      "path": "/public/v1/contacts/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/contacts_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "content_library_items",
+      "path": "/public/v1/content-library-items",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/content_library_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "content_library_items_id",
+      "path": "/public/v1/content-library-items/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/content_library_items_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "content_library_items_id_details",
+      "path": "/public/v1/content-library-items/{{ config.id }}/details",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/content_library_items_id_details.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_auto_reminders",
+      "path": "/public/v1/documents/{{ config.document_id }}/auto-reminders",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_auto_reminders.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_auto_reminders_status",
+      "path": "/public/v1/documents/{{ config.document_id }}/auto-reminders/status",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_auto_reminders_status.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_esign_disclosure",
+      "path": "/public/v1/documents/{{ config.document_id }}/esign-disclosure",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_esign_disclosure.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_sections",
+      "path": "/public/v1/documents/{{ config.document_id }}/sections",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_document_id_sections.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_document_id_sections_section_id",
+      "path": "/public/v1/documents/{{ config.document_id }}/sections/{{ config.section_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_sections_section_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_document_id_sections_uploads_upload_id",
+      "path": "/public/v1/documents/{{ config.document_id }}/sections/uploads/{{ config.upload_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_sections_uploads_upload_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_id",
+      "path": "/public/v1/documents/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_id_attachments",
+      "path": "/public/v1/documents/{{ config.id }}/attachments",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_id_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_id_attachments_attachment_id",
+      "path": "/public/v1/documents/{{ config.id }}/attachments/{{ config.attachment_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_id_attachments_attachment_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_id_details",
+      "path": "/public/v1/documents/{{ config.id }}/details",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_id_details.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "documents_id_fields",
+      "path": "/public/v1/documents/{{ config.id }}/fields",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_id_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_id_linked_objects",
+      "path": "/public/v1/documents/{{ config.id }}/linked-objects",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_id_linked_objects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_folders",
+      "path": "/public/v1/documents/folders",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_folders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_linked_objects",
+      "path": "/public/v1/documents/linked-objects",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_linked_objects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "forms",
+      "path": "/public/v1/forms",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/forms.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "logs",
+      "path": "/public/v1/logs",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/logs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "logs_id",
+      "path": "/public/v1/logs/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/logs_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "members",
+      "path": "/public/v1/members",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/members.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "members_id",
+      "path": "/public/v1/members/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/members_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "members_current",
+      "path": "/public/v1/members/current",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/members_current.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sms_opt_outs",
+      "path": "/public/v1/sms-opt-outs",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/sms_opt_outs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "templates_id",
+      "path": "/public/v1/templates/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/templates_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "templates_id_details",
+      "path": "/public/v1/templates/{{ config.id }}/details",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/templates_id_details.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "templates_folders",
+      "path": "/public/v1/templates/folders",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/templates_folders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/public/v1/users",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users_user_id",
+      "path": "/public/v1/users/{{ config.user_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/users_user_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "webhook_events",
+      "path": "/public/v1/webhook-events",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/webhook_events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook_events_id",
+      "path": "/public/v1/webhook-events/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/webhook_events_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/public/v1/webhook-subscriptions",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/webhook_subscriptions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook_subscriptions_id",
+      "path": "/public/v1/webhook-subscriptions/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/webhook_subscriptions_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "workspaces",
+      "path": "/public/v1/workspaces",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/workspaces.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_document_id_audit_trail",
+      "path": "/public/v2/documents/{{ config.document_id }}/audit-trail",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/documents_document_id_audit_trail.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "documents_document_id_settings",
+      "path": "/public/v2/documents/{{ config.document_id }}/settings",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/documents_document_id_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "logs_detail",
+      "path": "/public/v2/logs",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/logs_detail.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "logs_id_detail",
+      "path": "/public/v2/logs/{{ config.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/logs_id_detail.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "notary_notaries",
+      "path": "/public/v2/notary/notaries",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/notary_notaries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notary_notarization_requests",
+      "path": "/public/v2/notary/notarization-requests",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/notary_notarization_requests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notary_notarization_requests_session_request_id",
+      "path": "/public/v2/notary/notarization-requests/{{ config.session_request_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/notary_notarization_requests_session_request_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_catalog_items_item_uuid",
+      "path": "/public/v2/product-catalog/items/{{ config.item_uuid }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/product_catalog_items_item_uuid.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_catalog_items_search",
+      "path": "/public/v2/product-catalog/items/search",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/product_catalog_items_search.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "templates_template_id_settings",
+      "path": "/public/v2/templates/{{ config.template_id }}/settings",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/templates_template_id_settings.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

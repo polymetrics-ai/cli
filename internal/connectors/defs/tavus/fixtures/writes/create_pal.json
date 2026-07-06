@@ -1,0 +1,9 @@
+{
+  "record": { "pal_name": "Fixture New PAL", "system_prompt": "You are a fixture assistant.", "default_face_id": "replica_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/pals",
+    "body": { "pal_name": "Fixture New PAL", "system_prompt": "You are a fixture assistant.", "default_face_id": "replica_fixture_1" }
+  },
+  "response": { "status": 200, "body": { "pal_id": "pal_fixture_new" } }
+}

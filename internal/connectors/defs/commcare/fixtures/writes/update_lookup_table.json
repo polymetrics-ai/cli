@@ -1,0 +1,19 @@
+{
+  "record": {
+    "lookup_table_id": "lookup_table_fixture_1",
+    "tag": "vaccines",
+    "fields": [
+      { "field_name": "name", "properties": ["lang"] },
+      { "field_name": "price", "properties": [] }
+    ],
+    "is_global": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/lookup_table/v1/lookup_table_fixture_1",
+    "body": {
+      "tag": "vaccines",
+      "is_global": false
+    }
+  }
+}

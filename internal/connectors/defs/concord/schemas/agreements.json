@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreements",
+  "type": "object",
+  "x-primary-key": ["uid"],
+  "required": ["uid"],
+  "properties": {
+    "uid": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "stage": { "type": ["string", "null"] },
+    "organizationId": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/source" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sources_fixture_1",
+          "name": "fixture-sources-1",
+          "type": "NAS",
+          "path": ["fixture", "sources", "1"],
+          "tag": "tag_1",
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "nextPageToken": ""
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "company_id": "fixture_id",
+    "status_id": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/fixture_id/synced_status",
+    "body": {
+      "status_id": "fixture_value"
+    }
+  }
+}

@@ -10,22 +10,64 @@ SYNOPSIS
   pm credentials add <name> --connector avni [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Avni subjects and encounters through a read-only HTTP API.
+  Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic authentication.
+
+ICON
+  asset: icons/avni.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  page_size
+  start_date
+  username
+  password (secret)
+
+ETL STREAMS
+  subjects:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), updated_at()
+  encounters:
+    primary key: id
+    cursor: updated_at
+    fields: encounter_type(), id(), subject_id(), updated_at()
+  program_enrolments:
+    primary key: id
+    cursor: updated_at
+    fields: enrolment_date_time(), exit_date_time(), id(), program(), subject_id(), updated_at()
+  program_encounters:
+    primary key: id
+    cursor: updated_at
+    fields: encounter_date_time(), encounter_type(), enrolment_id(), id(), program(), subject_id(), updated_at()
+  group_subjects:
+    primary key: id
+    cursor: updated_at
+    fields: group_subject_id(), id(), member_subject_id(), membership_end_date(), membership_start_date(), updated_at()
+  locations:
+    primary key: id
+    cursor: updated_at
+    fields: id(), level(), parent_id(), title(), type(), updated_at()
+  approval_statuses:
+    primary key: entity_id, entity_type
+    cursor: status_date_time
+    fields: approval_status(), approval_status_comment(), entity_id(), entity_type(), entity_type_id(), status_date_time()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Avni API read of subjects and encounters
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

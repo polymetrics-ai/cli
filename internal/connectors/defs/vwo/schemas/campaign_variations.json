@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_variations",
+  "type": "object",
+  "x-primary-key": ["campaign_id", "id"],
+  "required": ["id", "campaign_id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "campaign_id": { "type": "string", "description": "Stamped by the fan_out dialect: the parent campaign id this variation belongs to (conventions.md S3 fan_out.stamp_field)." },
+    "name": { "type": ["string", "null"] },
+    "is_control": { "type": ["boolean", "null"] },
+    "is_disabled": { "type": ["boolean", "null"] },
+    "percent_split": { "type": ["integer", "null"] },
+    "platform": { "type": ["string", "null"] }
+  }
+}

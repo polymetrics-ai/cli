@@ -1,0 +1,20 @@
+{
+  "record": {
+    "mobile_worker_id": "mobile_worker_fixture_1",
+    "email": "worker-updated@example.test",
+    "first_name": "Worker",
+    "last_name": "Updated",
+    "language": "en",
+    "phone_numbers": ["+15550111"],
+    "groups": ["group_fixture_1"],
+    "user_data": { "chw_id": "fixture_chw_1" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/user/v1/mobile_worker_fixture_1/",
+    "body": {
+      "email": "worker-updated@example.test",
+      "first_name": "Worker"
+    }
+  }
+}

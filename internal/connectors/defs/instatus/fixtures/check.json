@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v2/pages" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "page_fixture_1", "subdomain": "fixture-1", "name": "Fixture Page 1", "status": "UP" }
+    ]
+  }
+}

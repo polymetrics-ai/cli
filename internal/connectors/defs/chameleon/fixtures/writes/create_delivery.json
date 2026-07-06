@@ -1,0 +1,11 @@
+{
+  "record": {
+    "model_kind": "tour",
+    "model_id": "t_fixture_1",
+    "uid": "fixture-uid-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/edit/deliveries"
+  }
+}

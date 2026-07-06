@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/application_form"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "questions": [
+        {
+          "id": "question_fixture_1",
+          "body": "Fixture question?"
+        }
+      ]
+    }
+  }
+}

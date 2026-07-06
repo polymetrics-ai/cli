@@ -1,0 +1,23 @@
+{
+  "name": "zoho-inventory",
+  "display_name": "Zoho Inventory",
+  "description": "Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventory REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/inventory/api/v1/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Inventory API read of contact/item/sales-order data",
+    "approval": "none; read-only"
+  }
+}

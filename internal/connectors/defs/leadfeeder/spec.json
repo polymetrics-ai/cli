@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Leadfeeder Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Leadfeeder API token. Sent as the Authorization header (\"Token token=<api_token>\"); never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.leadfeeder.com",
+      "description": "Leadfeeder API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Leadfeeder account id. Required only for the leads, visits, and custom_feeds streams, which are nested under an account."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "RFC3339 or yyyy-mm-dd lower bound for the leads/visits date window. When set, end_date (or today) is also required by the Leadfeeder API."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "RFC3339 or yyyy-mm-dd upper bound for the leads/visits date window."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

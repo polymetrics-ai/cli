@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "keywords",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modification_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "ad_group_id": { "type": ["integer", "null"] },
+    "campaign_id": { "type": ["integer", "null"] },
+    "text": { "type": ["string", "null"] },
+    "match_type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "bid_amount": { "type": ["object", "null"] },
+    "modification_time": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

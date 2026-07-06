@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        {
+          "id": "1",
+          "name": "Fixture List",
+          "stringid": "fixture-list-1",
+          "sender_url": "https://example.com",
+          "subscriber_count": "10",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "userid": "1"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

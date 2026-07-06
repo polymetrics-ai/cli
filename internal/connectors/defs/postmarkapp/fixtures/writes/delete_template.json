@@ -1,0 +1,15 @@
+{
+  "record": {
+    "template_id_or_alias": "template_id_or_alias_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/templates/template_id_or_alias_fixture"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

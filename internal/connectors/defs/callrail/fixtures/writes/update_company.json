@@ -1,0 +1,9 @@
+{
+  "record": { "id": "CMP_fixture_1", "callscribe_enabled": true },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/companies/CMP_fixture_1.json",
+    "body": { "callscribe_enabled": true }
+  },
+  "response": { "status": 200, "body": { "id": "CMP_fixture_1", "callscribe_enabled": true } }
+}

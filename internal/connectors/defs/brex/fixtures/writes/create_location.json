@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Location"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/locations",
+    "body": {
+      "name": "Fixture Location"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "loc_fixture_new",
+      "name": "Fixture Location"
+    }
+  }
+}

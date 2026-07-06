@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v2/me" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 501,
+        "username": "fixtureuser",
+        "email": "fixture@example.com",
+        "name": "Fixture User",
+        "timeZone": "UTC",
+        "timeFormat": 24,
+        "weekStart": "Monday"
+      }
+    }
+  }
+}

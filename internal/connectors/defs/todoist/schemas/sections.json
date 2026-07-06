@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sections",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "project_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "order": { "type": ["integer", "null"] }
+  }
+}

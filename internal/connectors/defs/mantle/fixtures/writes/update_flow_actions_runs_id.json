@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "status": "completed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/flow/actions/runs/id_fixture",
+    "body": {
+      "status": "completed"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

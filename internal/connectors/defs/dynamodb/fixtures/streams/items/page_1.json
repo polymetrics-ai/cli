@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Items": [
+        { "pk": { "S": "fixture#1" }, "name": { "S": "Fixture 1" }, "active": { "BOOL": true }, "score": { "N": "10" } },
+        { "pk": { "S": "fixture#2" }, "name": { "S": "Fixture 2" }, "active": { "BOOL": false }, "score": { "N": "20" } }
+      ],
+      "LastEvaluatedKey": { "pk": { "S": "fixture#2" } }
+    }
+  }
+}

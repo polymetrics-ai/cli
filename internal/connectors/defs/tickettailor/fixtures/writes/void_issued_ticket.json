@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "it_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issued_tickets/it_fixture_1/void"
+  }
+}

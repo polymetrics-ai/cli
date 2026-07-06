@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/environments", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "Environments read successfully.",
+      "data": {
+        "environments": [
+          { "name": "development", "id": "fixture-env-dev", "isProduction": false, "requiresReview": false, "requiresReleasePipeline": true },
+          { "name": "production", "id": "fixture-env-prod", "isProduction": true, "requiresReview": true, "requiresReleasePipeline": true }
+        ]
+      }
+    }
+  }
+}

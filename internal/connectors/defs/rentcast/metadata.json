@@ -1,0 +1,22 @@
+{
+  "name": "rentcast",
+  "display_name": "RentCast",
+  "description": "Reads RentCast properties, sale listings, rental listings, market data, and value/rental estimates through the RentCast REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.rentcast.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external RentCast API read of property, listing, market, and valuation data"
+  }
+}

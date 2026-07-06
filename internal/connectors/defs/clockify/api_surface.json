@@ -1,0 +1,1327 @@
+{
+  "api": "Clockify API v1 (https://api.clockify.me/api)",
+  "docs": "https://docs.clockify.me/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Clockify v1 endpoint is enumerated below, covered by a stream/write or explicitly excluded with a specific reason. Scheduling and Invoicing are separate paid Clockify add-on modules not guaranteed enabled on every workspace plan.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/v1/file/image",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "multipart image upload for profile photos; no dialect-expressible binary body support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shared-reports/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "shared-report link view requires a report-sharing token distinct from the workspace api_key scope, not a workspace-scoped read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/user",
+      "covered_by": {
+        "stream": "current_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "creates a brand-new Clockify workspace (an org-level admin action, not per-record data), and API-key-scoped connections are conventionally already bound to one workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-workspace detail is already reachable via the workspaces stream (GET /v1/workspaces); no separate stream needed for one extra field set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/addons/{addonId}/webhooks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "addon-scoped webhook listing requires an installed Clockify addon id; not applicable to a plain API-key connection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet-approval workflow object; no read/write demand for Pass B, approval workflow state is operationally managed in Clockify's UI"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits a timesheet approval request; workflow-trigger mutation, not a data sync write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests/resubmit-entries-for-approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet-approval workflow action, not a data sync write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests/users/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet-approval workflow action, not a data sync write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests/users/{userId}/resubmit-entries-for-approval",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet-approval workflow action, not a data sync write"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/approval-requests/{approvalRequestId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "timesheet-approval workflow action (approve/reject), not a data sync write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/audit-log",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audit-log export requires an Enterprise-plan feature flag not guaranteed present on every workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/clients",
+      "covered_by": {
+        "write": "create_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/clients/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-client detail already reachable via the clients stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/clients/{id}",
+      "covered_by": {
+        "write": "update_client"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/clients/{id}",
+      "covered_by": {
+        "write": "delete_client"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/cost-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites the workspace-wide default cost rate for every member; a blanket billing-rate change, not a per-record data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/custom-fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/custom-fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new custom-field DEFINITION (workspace schema change), distinct from writing custom-field VALUES on a record; no custom-field-value write action exists yet either"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/custom-fields/{customFieldId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom-field definition (workspace schema change), not record data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/custom-fields/{customFieldId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a custom-field definition and all its recorded values workspace-wide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/entities/created",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimental change-feed endpoint (Clockify's own docs label it experimental/unstable); no read/write demand for Pass B"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/entities/deleted",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimental change-feed endpoint; same as entities/created"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/entities/updated",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "experimental change-feed endpoint; same as entities/created"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/expenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "expense line-item listing; no natural fan-out scope decided for Pass B (would require a project or date fan-out), deferred pending real usage signal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/expenses",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "expense creation accepts a multipart receipt-file attachment in the same request; no dialect-expressible multipart body support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/expenses/categories",
+      "covered_by": {
+        "stream": "expense_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/expenses/categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new expense-category definition; no demonstrated write demand alongside the read-only expense_categories stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/expenses/categories/{categoryId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates expense-category definition; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/expenses/categories/{categoryId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes an expense category and detaches it from all recorded expenses"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/expenses/categories/{categoryId}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "archives/restores an expense category; narrow status-only PATCH, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/expenses/{expenseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-expense detail read; the list-level expenses endpoint itself is deferred (see above), so its per-id detail is deferred with it"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/expenses/{expenseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a single expense; deferred alongside the expenses list/read decision above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/expenses/{expenseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a single expense; deferred alongside the expenses list/read decision above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/expenses/{expenseId}/files/{fileId}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "downloads a raw receipt file (image/PDF binary); no dialect-expressible binary-response stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/holidays",
+      "covered_by": {
+        "stream": "holidays"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/holidays",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a holiday-calendar entry; no demonstrated write demand alongside the read-only holidays stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/holidays/in-period",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "date-filtered view of the same holiday records already covered by the holidays stream; the base stream's records.path already returns every holiday"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/holidays/{holidayId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a holiday-calendar entry; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/holidays/{holidayId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a holiday-calendar entry; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/hourly-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites the workspace-wide default hourly billable rate for every member; blanket billing-rate change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module is a separate Clockify add-on feature not enabled on every workspace plan; no demonstrated read demand for Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a live invoice; invoicing module out of scope, see invoices list above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices/info",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/invoices/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/invoices/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/export",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "exports an invoice as a PDF binary; no dialect-expressible binary-response stream, and invoicing module itself is out of scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/items/import",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/items/{order}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/payments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/payments/{paymentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/invoices/{invoiceId}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "invoicing module out of scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/limited-users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk-adds seat-restricted (limited access) users, a workspace-admin billing/seat operation distinct from ordinary user provisioning"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/member-profile/{userId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "member-profile fields are a subset of the users stream's per-record shape; no separate stream needed for one extra profile view"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/member-profile/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a member's profile bio/avatar-style fields; no demonstrated write demand distinct from the users list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/projects/from-template",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "instantiates a project from a saved project template; the plain create_project write already covers ordinary project creation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-project detail already reachable via the projects stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/custom-fields",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-project custom-field assignment view over the same custom-field definitions already covered by the custom_fields stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/custom-fields/{customFieldId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "detaches a custom field from a project; workspace-schema-configuration action, not project record data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/custom-fields/{customFieldId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reconfigures a custom-field's default value on a project; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/estimate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "narrow single-field (estimate) PATCH already covered by update_project's full-field PUT"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "assigns/removes user memberships on a project; membership-management action distinct from project record fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk membership-management action, same as above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks/{id}/cost-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a task-level internal cost rate; sensitive billing-rate field, not ordinary task record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks/{id}/hourly-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a task-level billable hourly rate; sensitive billing-rate field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks/{taskId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task detail already reachable via the tasks stream's per-project listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks/{taskId}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/tasks/{taskId}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/template",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "marks a project as a reusable template; workspace-configuration toggle, not ordinary project record data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/users/{userId}/cost-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a per-user-per-project internal cost rate; sensitive billing-rate field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/projects/{projectId}/users/{userId}/hourly-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a per-user-per-project billable hourly rate; sensitive billing-rate field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/reports/attendance",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated attendance report document, not a listing of underlying records"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/reports/detailed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated detailed-report document layered over time entries already covered by the time_entries stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/reports/expenses/detailed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated expense report document, not a record listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/reports/summary",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated summary-report document, not a record listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/reports/weekly",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated weekly-report document, not a record listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/all",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module is a separate paid Clockify add-on not enabled on every workspace plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/projects/totals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/projects/totals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/projects/totals/{projectId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/publish",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/recurring",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/recurring/{assignmentId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/recurring/{assignmentId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/series/{assignmentId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/user-filter/totals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/users/{userId}/totals",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/scheduling/assignments/{assignmentId}/copy",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Scheduling module add-on feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/shared-reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "shared-report link management; no demonstrated read/write demand for Pass B"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/shared-reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a shared-report link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/shared-reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a shared-report link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/shared-reports/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a shared-report link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/tags/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-tag detail already reachable via the tags stream's listing; no separate stream needed"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/tags/{id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/tags/{id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "project-template listing; project templates are a distinct configuration object from ordinary projects, no demonstrated demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a project template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-template detail; templates out of scope, see above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a project template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/templates/{templateId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a project template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/time-entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a time entry for the AUTHENTICATED api_key's own user only; the per-user variant (POST .../user/{userId}/time-entries) is the general-purpose create surface and is itself deferred pending a decided write shape for the polymorphic time-entry body (plain/lump-sum/lump-sum-service variants)"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/time-entries/invoiced",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-marks time entries as invoiced; invoicing-module-adjacent bulk state mutation, not ordinary record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-entries/status/in-progress",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "in-progress-timer subset of the same time entries already reachable via the time_entries stream's per-user listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-entries/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-time-entry detail already reachable via the time_entries stream's per-user listing"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/time-entries/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a time entry; the polymorphic time-entry body (plain/lump-sum/lump-sum-service variants) has no single dialect-expressible record_schema shape yet, deferred pending a decided variant strategy"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/time-entries/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a time entry; deferred alongside the time-entry create/update decision above so create/update/delete land together in a future increment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-off/balance/policy/{policyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-policy time-off balance aggregate; no demonstrated read demand beyond the time_off_policies definitions stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/time-off/balance/policy/{policyId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "manually adjusts an accrued time-off balance; sensitive HR-adjacent mutation, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-off/balance/user/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user time-off balance aggregate; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies",
+      "covered_by": {
+        "stream": "time_off_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a time-off policy; no demonstrated write demand alongside the read-only time_off_policies stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-policy detail already reachable via the time_off_policies stream's listing"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a time-off policy; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a time-off policy; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "archives/restores a time-off policy; narrow status-only PATCH, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{policyId}/requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits a time-off request under a policy; HR-workflow action, not ordinary record data sync"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{policyId}/requests/{requestId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "withdraws a time-off request; HR-workflow action"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{policyId}/requests/{requestId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "approves/rejects a time-off request; HR-workflow action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/time-off/policies/{policyId}/users/{userId}/requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "submits a time-off request on behalf of another user; HR-workflow action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/time-off/requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists/filters time-off requests across policies (a POST-as-search endpoint); HR-workflow object, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/user-groups",
+      "covered_by": {
+        "stream": "user_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/user-groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new user group; no demonstrated write demand alongside the read-only user_groups stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/user-groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a user group's name/membership; no demonstrated write demand alongside the read-only user_groups stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/user-groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a user group; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/user-groups/{userGroupId}/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds users to a group; membership-management action distinct from group record fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/user-groups/{userGroupId}/users/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a user from a group; membership-management action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries",
+      "covered_by": {
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a time entry for a specific user; the polymorphic time-entry body has no single dialect-expressible record_schema shape yet, deferred alongside the workspace-scoped create/update/delete decision above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-edits every running/matching time entry for a user in one call; deferred alongside the time-entry write-shape decision above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-deletes every time entry for a user matching a filter in one irreversible call"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "stops a user's currently running timer; narrow state-transition PATCH, not general record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/user/{userId}/time-entries/{id}/duplicate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "duplicates a single time entry; convenience action layered over the create write, deferred alongside it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites/provisions a new user into the workspace, a billing-seat-consuming admin action distinct from ordinary record creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/users/info",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "POST-as-search filtered variant of the same users already covered by the users stream's listing"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a user's workspace status/role; no demonstrated write demand alongside the read-only users stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly removes a user's access to the workspace, a billing-seat/access-revocation admin action"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/cost-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a per-user internal cost rate; sensitive billing-rate field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/custom-field/{customFieldId}/value",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sets a custom-field value on a user record; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/hourly-rate",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "overwrites a per-user billable hourly rate; sensitive billing-rate field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/managers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reporting-line lookup for a single user; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "grants a manager/admin role to a user; access-control admin action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/users/{userId}/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes a manager/admin role from a user; access-control admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook subscription management; push-delivery configuration, not a pollable data resource this connector's pull-sync model reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook subscription detail; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries webhook delivery logs; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}/statuses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries webhook delivery status; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/workspaces/{workspaceId}/webhooks/{webhookId}/token",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "rotates a webhook signing token; not applicable to this connector's pull-sync model"
+      }
+    }
+  ]
+}

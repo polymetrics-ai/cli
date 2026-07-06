@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/templates/email/synthetic-conformance-value/default-content"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": {
+        "template": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "preview": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "test": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

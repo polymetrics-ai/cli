@@ -1,0 +1,15 @@
+{
+  "name": "fanout-valid",
+  "display_name": "Fanout Valid",
+  "description": "a control connector proving a well-formed fan_out block passes connectorgen validate cleanly (S4 engine mini-wave item 2)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

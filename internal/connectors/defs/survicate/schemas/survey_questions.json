@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "survey_questions",
+  "type": "object",
+  "x-primary-key": ["survey_id", "id"],
+  "required": ["id", "survey_id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "survey_id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "question": { "type": ["string", "null"] },
+    "introduction": { "type": ["string", "null"] },
+    "answer_choices": { "type": ["array", "null"] },
+    "columns": { "type": ["array", "null"] },
+    "fields": { "type": ["array", "null"] }
+  }
+}

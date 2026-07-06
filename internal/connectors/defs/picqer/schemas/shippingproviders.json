@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shippingproviders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idshippingprovider": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "provider": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "profiles": { "type": ["array", "null"] }
+  }
+}

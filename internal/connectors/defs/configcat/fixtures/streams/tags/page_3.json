@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/prod_fixture_2/tags" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "tagId": 2,
+        "name": "Fixture Tag 2",
+        "color": "koala",
+        "product": { "productId": "prod_fixture_2" }
+      }
+    ]
+  }
+}

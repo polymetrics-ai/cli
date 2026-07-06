@@ -1,0 +1,19 @@
+{
+  "name": "finnhub",
+  "display_name": "Finnhub",
+  "description": "Reads Finnhub stock symbols, market news, per-symbol company profiles, and per-symbol analyst recommendation trends through the Finnhub REST API.",
+  "integration_type": "api",
+  "docs_url": "https://finnhub.io/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Finnhub API read of market data"
+  }
+}

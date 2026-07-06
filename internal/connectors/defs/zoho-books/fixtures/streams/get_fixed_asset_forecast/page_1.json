@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fixedassets/synthetic-conformance-value/forecast",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "data": [
+        {
+          "id": "get_fixed_asset_forecast_fixture_1",
+          "name": "get_fixed_asset_forecast fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

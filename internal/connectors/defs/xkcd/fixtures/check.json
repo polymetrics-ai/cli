@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "month": "1",
+      "num": 1,
+      "link": "",
+      "year": "2006",
+      "news": "",
+      "safe_title": "Barrel - Part 1",
+      "transcript": "fixture transcript text",
+      "alt": "fixture alt text",
+      "img": "https://imgs.xkcd.com/comics/barrel_part_1.png",
+      "title": "Barrel - Part 1",
+      "day": "1"
+    }
+  }
+}

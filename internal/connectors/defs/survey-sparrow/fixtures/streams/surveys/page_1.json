@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture Survey 1",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Survey 2",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Survey 3",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Survey 4",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Survey 5",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Survey 6",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Survey 7",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Survey 8",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Survey 9",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Survey 10",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Survey 11",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Survey 12",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Survey 13",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Survey 14",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Survey 15",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Survey 16",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Survey 17",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Survey 18",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Survey 19",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Survey 20",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Survey 21",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Survey 22",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Survey 23",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Survey 24",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Survey 25",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Survey 26",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Survey 27",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Survey 28",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Survey 29",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Survey 30",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Survey 31",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Survey 32",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Survey 33",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Survey 34",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Survey 35",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Survey 36",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Survey 37",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Survey 38",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Survey 39",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Survey 40",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Survey 41",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Survey 42",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Survey 43",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Survey 44",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Survey 45",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Survey 46",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Survey 47",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Survey 48",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Survey 49",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Survey 50",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 51,
+          "name": "Fixture Survey 51",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 52,
+          "name": "Fixture Survey 52",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 53,
+          "name": "Fixture Survey 53",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 54,
+          "name": "Fixture Survey 54",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 55,
+          "name": "Fixture Survey 55",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 56,
+          "name": "Fixture Survey 56",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 57,
+          "name": "Fixture Survey 57",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 58,
+          "name": "Fixture Survey 58",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 59,
+          "name": "Fixture Survey 59",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 60,
+          "name": "Fixture Survey 60",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 61,
+          "name": "Fixture Survey 61",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 62,
+          "name": "Fixture Survey 62",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 63,
+          "name": "Fixture Survey 63",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 64,
+          "name": "Fixture Survey 64",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 65,
+          "name": "Fixture Survey 65",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 66,
+          "name": "Fixture Survey 66",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 67,
+          "name": "Fixture Survey 67",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 68,
+          "name": "Fixture Survey 68",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 69,
+          "name": "Fixture Survey 69",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 70,
+          "name": "Fixture Survey 70",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 71,
+          "name": "Fixture Survey 71",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 72,
+          "name": "Fixture Survey 72",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 73,
+          "name": "Fixture Survey 73",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 74,
+          "name": "Fixture Survey 74",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 75,
+          "name": "Fixture Survey 75",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 76,
+          "name": "Fixture Survey 76",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 77,
+          "name": "Fixture Survey 77",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 78,
+          "name": "Fixture Survey 78",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 79,
+          "name": "Fixture Survey 79",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 80,
+          "name": "Fixture Survey 80",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 81,
+          "name": "Fixture Survey 81",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 82,
+          "name": "Fixture Survey 82",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 83,
+          "name": "Fixture Survey 83",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 84,
+          "name": "Fixture Survey 84",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 85,
+          "name": "Fixture Survey 85",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 86,
+          "name": "Fixture Survey 86",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 87,
+          "name": "Fixture Survey 87",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 88,
+          "name": "Fixture Survey 88",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 89,
+          "name": "Fixture Survey 89",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 90,
+          "name": "Fixture Survey 90",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 91,
+          "name": "Fixture Survey 91",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 92,
+          "name": "Fixture Survey 92",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 93,
+          "name": "Fixture Survey 93",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 94,
+          "name": "Fixture Survey 94",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 95,
+          "name": "Fixture Survey 95",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 96,
+          "name": "Fixture Survey 96",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 97,
+          "name": "Fixture Survey 97",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 98,
+          "name": "Fixture Survey 98",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 99,
+          "name": "Fixture Survey 99",
+          "survey_type": "ClassicForm"
+        },
+        {
+          "id": 100,
+          "name": "Fixture Survey 100",
+          "survey_type": "ClassicForm"
+        }
+      ]
+    }
+  }
+}

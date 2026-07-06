@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/campaigns/campaign_fixture_1/reports/summary" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "campaign_fixture_1",
+      "sent": 100,
+      "bounced": { "hard": 2, "soft": 1 },
+      "opened": { "total": 60, "unique": 45 },
+      "clicked": { "total": 20, "unique": 15 },
+      "complained": 0,
+      "unsubscribed": 1
+    }
+  }
+}

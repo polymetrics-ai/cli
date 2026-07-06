@@ -1,0 +1,32 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "companyName": "fixture_companyName",
+    "companyDescription": "fixture_companyDescription",
+    "icp": "fixture_icp",
+    "reasonForOutreach": "fixture_reasonForOutreach",
+    "caseStudies": [],
+    "painPoints": [],
+    "proofPoints": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/ai-sdr/offers",
+    "body": {
+      "name": "fixture_name",
+      "companyName": "fixture_companyName",
+      "companyDescription": "fixture_companyDescription",
+      "icp": "fixture_icp",
+      "reasonForOutreach": "fixture_reasonForOutreach",
+      "caseStudies": [],
+      "painPoints": [],
+      "proofPoints": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

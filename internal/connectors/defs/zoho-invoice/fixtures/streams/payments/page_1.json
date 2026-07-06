@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerpayments",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "customerpayments": [
+        {
+          "payment_id": "payment_fixture_1",
+          "payment_number": "PMT-FIXTURE-1",
+          "reference_number": "REF-FIXTURE-1",
+          "customer_id": "customer_fixture_1",
+          "customer_name": "Fixture Customer 1",
+          "invoice_numbers": "INV-FIXTURE-1",
+          "amount": 125.5,
+          "date": "2026-01-05",
+          "payment_mode": "banktransfer",
+          "currency_code": "USD",
+          "created_time": "2026-01-05T00:00:00+0000",
+          "last_modified_time": "2026-01-05T00:00:00+0000"
+        },
+        {
+          "payment_id": "payment_fixture_2",
+          "payment_number": "PMT-FIXTURE-2",
+          "reference_number": "REF-FIXTURE-2",
+          "customer_id": "customer_fixture_2",
+          "customer_name": "Fixture Customer 2",
+          "invoice_numbers": "INV-FIXTURE-2",
+          "amount": 250.0,
+          "date": "2026-01-05",
+          "payment_mode": "creditcard",
+          "currency_code": "USD",
+          "created_time": "2026-01-05T00:00:00+0000",
+          "last_modified_time": "2026-01-05T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

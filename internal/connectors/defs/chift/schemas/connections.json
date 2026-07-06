@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "connections",
+  "type": "object",
+  "x-primary-key": ["connectionid"],
+  "required": ["connectionid"],
+  "properties": {
+    "connectionid": { "type": "string" },
+    "consumerid": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "api": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_on": { "type": ["string", "null"] }
+  }
+}

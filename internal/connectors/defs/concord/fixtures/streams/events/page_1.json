@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/events"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "id": 128538,
+          "createdAt": 1735689600000,
+          "type": "AGREEMENT_SIGN",
+          "actor": { "name": "Fixture User", "id": 7, "type": "USER" },
+          "event": { "name": "Fixture Agreement", "id": "agr_fixture_1", "type": "AGREEMENT" }
+        }
+      ]
+    }
+  }
+}

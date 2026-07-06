@@ -1,0 +1,825 @@
+{
+  "api": "ConfigCat Public Management API (https://api.configcat.com)",
+  "docs": "https://api.configcat.com/docs/ (rendered from https://api.configcat.com/docs/v1/swagger.json, the published OpenAPI 3.0 spec)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against ConfigCat's published OpenAPI spec (107 documented method+path combinations). This bundle covers every practical GET list/detail read (25 streams, up from 5) and every dialect-expressible non-destructive-admin write action (12 write actions across configs/environments/settings(flags)/tags: create+update+delete for each). Excluded: flag VALUE mutation (the get/replace/update-value family across v1/v2 settings/environments paths) -- ConfigCat's own docs distinguish flag METADATA (name/hint/tags/order, modeled here) from flag VALUE (the per-environment targeting rules/rollout percentages actually served to SDKs, a JSON-Patch-shaped body this pass does not model to avoid silently corrupting live flag evaluation logic for running applications); organization/product/environment-admin membership and integration-configuration mutations (invite/remove members, Jira/webhook/integration-link wiring, proxy-profile SDK-key selection); and code-reference/upload endpoints (a CI/CD-tool integration surface, not CLM-shaped record data). Every excluded endpoint below carries the specific reason it was not modeled.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/configs",
+      "covered_by": {
+        "stream": "configs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/environments",
+      "covered_by": {
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tags/{tagId}",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/configs/{configId}",
+      "covered_by": {
+        "stream": "config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/environments/{environmentId}",
+      "covered_by": {
+        "stream": "environment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/configs/{configId}/settings",
+      "covered_by": {
+        "stream": "settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/settings/{settingId}",
+      "covered_by": {
+        "stream": "setting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/configs/{configId}/deleted-settings",
+      "covered_by": {
+        "stream": "deleted_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/configs/{configId}/environments/{environmentId}",
+      "covered_by": {
+        "stream": "sdk_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/configs/{configId}/environments/{environmentId}/values",
+      "covered_by": {
+        "stream": "config_setting_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/segments/{segmentId}",
+      "covered_by": {
+        "stream": "segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/{webhookId}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/permissions",
+      "covered_by": {
+        "stream": "permission_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/permissions/{permissionGroupId}",
+      "covered_by": {
+        "stream": "permission_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/integrations",
+      "covered_by": {
+        "stream": "integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/{integrationId}",
+      "covered_by": {
+        "stream": "integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/{organizationId}/proxy-profiles",
+      "covered_by": {
+        "stream": "proxy_profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/proxy-profiles/{proxyProfileId}",
+      "covered_by": {
+        "stream": "proxy_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/{organizationId}/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/auditlogs",
+      "covered_by": {
+        "stream": "audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/staleflags",
+      "covered_by": {
+        "stream": "stale_flags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "covered_by": {
+        "stream": "me"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/configs",
+      "covered_by": {
+        "write": "create_config"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/configs/{configId}",
+      "covered_by": {
+        "write": "update_config"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/configs/{configId}",
+      "covered_by": {
+        "write": "delete_config"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/environments",
+      "covered_by": {
+        "write": "create_environment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/environments/{environmentId}",
+      "covered_by": {
+        "write": "update_environment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/environments/{environmentId}",
+      "covered_by": {
+        "write": "delete_environment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/configs/{configId}/settings",
+      "covered_by": {
+        "write": "create_flag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/settings/{settingId}",
+      "covered_by": {
+        "write": "update_flag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/settings/{settingId}",
+      "covered_by": {
+        "write": "delete_flag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tags/{tagId}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tags/{tagId}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-product detail already enumerable via the covered products stream's own fan-out-free list; not modeled as a separate detail stream."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/products/{productId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renames/reconfigures a product; deferred pending its own schema review, distinct from the config/environment-level create/update actions this pass models."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/products/{productId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "permanently deletes an entire ConfigCat product and every config/environment/flag within it; destructive beyond this pass's write scope (configs/environments/flags/tags only, not the product container itself)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/{organizationId}/products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a brand-new product within an organization (tenant-structure provisioning), an organization-admin action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/settings/{settingId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a partial-update variant of the already-covered update_flag (PUT) action; not modeled separately this pass."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/settings/{settingId}/code-references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "CI/CD code-scanning integration data (which source files reference this flag), a distinct developer-tooling surface unrelated to this connector's core CLM/flag-metadata streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/settings/{settingId}/predefined-variations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "predefined value/variation templates for a setting; deferred pending its own schema review, distinct from the setting metadata already covered."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/settings/{settingId}/predefined-variations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates predefined variations; deferred alongside the read side."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "flag VALUE (per-environment targeting rules/rollout percentages actually served to SDKs) is a distinct, JSON-Patch/complex-targeting-rule shape from flag METADATA (name/hint/tags/order) this pass models; not modeled to avoid silently corrupting live flag evaluation logic for running applications."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "replaces a flag's evaluated value/targeting rules; deferred alongside the read side of flag-value data, for the same live-evaluation-safety reason."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "JSON-Patch-shaped partial update to a flag's value/targeting rules; deferred alongside the read side, for the same live-evaluation-safety reason."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-excluded flag-value read; same live-evaluation-safety reason as the v1 path."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-excluded flag-value write; same live-evaluation-safety reason as the v1 path."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/settings/{settingKeyOrId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-excluded flag-value write; same live-evaluation-safety reason as the v1 path."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "an environment+setting-scoped alternate path for the same flag-value data excluded above; same live-evaluation-safety reason."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "environment+setting-scoped flag-value write; same live-evaluation-safety reason as the settingKeyOrId path."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "environment+setting-scoped flag-value write; same live-evaluation-safety reason as the settingKeyOrId path."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the same excluded environment+setting-scoped flag-value data."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the same excluded environment+setting-scoped flag-value write."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the same excluded environment+setting-scoped flag-value write."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/configs/{configId}/environments/{environmentId}/values",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-posts flag VALUE changes across every setting in a config+environment at once; same live-evaluation-safety reason as the single-flag-value exclusions above."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/configs/{configId}/environments/{environmentId}/values",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-covered config_setting_values read; not modeled as a separate stream (the v1 path is covered)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/configs/{configId}/environments/{environmentId}/values",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the bulk flag-value write already excluded at v1, same live-evaluation-safety reason."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/configs/{configId}/environments/{environmentId}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a webhook scoped to a specific config+environment (a variant creation path distinct from the covered webhooks/webhook read streams); write-side webhook creation deferred pending its own schema review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "replaces an existing webhook's URL/headers/trigger config; deferred alongside webhook creation."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "partially updates a webhook; deferred alongside webhook creation."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/webhooks/{webhookId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a webhook; deferred alongside webhook creation."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/{webhookId}/keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook HMAC signing key material; a credential-shaped value, not connector-relevant record data."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party integration-link (e.g. Jira ticket) management on a specific flag; a narrow cross-tool wiring feature outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a third-party integration link on a specific flag; deferred alongside the delete side."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrationLink/{integrationLinkType}/{key}/details",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resolves integration-link detail metadata for a third-party key; a narrow cross-tool wiring feature, not core CLM/flag data."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/jira/connect",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "establishes an org-level Jira OAuth connection; an organization-admin integration-provisioning action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/jira/environments/{environmentId}/settings/{settingId}/integrationLinks/{key}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a Jira-specific integration link on a flag; deferred alongside the generic integration-link exclusions above."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/integrations/{integrationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a configured third-party integration connection; organization/product-admin configuration surface outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/integrations/{integrationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reconfigures a third-party integration connection; organization/product-admin configuration surface outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/integrations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new third-party integration connection; organization/product-admin configuration surface outside this pass's write scope."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/invitations/{invitationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes a pending user invitation; an organization-admin user-provisioning action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/{organizationId}/invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pending organization-level invitations list; deferred pending its own schema review, a distinct user-provisioning surface from this connector's core CLM streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/invitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pending product-level invitations list; same narrowing as the organization-level invitations list."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organizations/{organizationId}/members/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a member from the organization; an organization-admin user-management action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/{organizationId}/members/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates an organization member's permissions; an organization-admin user-management action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/{organizationId}/organization-limitations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "plan/usage-limitation metadata for the organization; deferred, a narrow supplementary read not yet reviewed for schema shape."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/members",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "product-scoped member listing, a narrower variant of the already-covered organization-level members stream (every product member is also an organization member)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/members/invite",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invites a new user into the product; a product-admin user-provisioning action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/products/{productId}/members/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a member from the product; a product-admin user-management action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products/{productId}/preferences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "product-level preference settings (e.g. default reason-required/mandatory-tagging policy); deferred, a narrow supplementary read not yet reviewed for schema shape."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/preferences",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates product-level preference settings; a product-admin configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/permissions/{permissionGroupId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a custom permission group; a product-admin access-control configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/permissions/{permissionGroupId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a custom permission group's capability grants; a product-admin access-control configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a custom permission group; a product-admin access-control configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/segments/{segmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a segment's comparison-rule targeting definition; deferred pending its own schema review -- a segment mutation, unlike this pass's flag-metadata mutations, changes live targeting behavior for every flag that references it."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/segments/{segmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a segment; deferred alongside the update side, same live-targeting-behavior concern."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/products/{productId}/segments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a segment; deferred alongside update/delete for the same live-targeting-behavior concern, kept consistent (all three modeled together or none this pass)."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tags/{tagId}/settings",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "lists flags carrying a given tag, derivable by filtering the already-covered settings stream's own tags array; not modeled as a separate stream."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/proxy-profiles/{proxyProfileId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/proxy-profiles/{proxyProfileId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "replaces a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/proxy-profiles/{proxyProfileId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "partially updates a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/{organizationId}/proxy-profiles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "SDK keys selected for a Proxy profile; a credential-adjacent listing tied to the excluded Proxy-profile write surface, not modeled this pass."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/deselect",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "modifies which SDK keys a Proxy profile serves; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/select",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "modifies which SDK keys a Proxy profile serves; an infrastructure-configuration action outside this pass's write scope."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/proxy-profiles/{proxyProfileId}/secret",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "generates a new Proxy profile secret credential; a credential-generation action, never modeled as a connector write."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/code-references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "uploads CI/CD code-scanning references (which source files reference which flags); a developer-tooling ingestion surface, not CLM record data."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/code-references/delete-reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes uploaded code-reference reports; deferred alongside code-reference upload."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/{organizationId}/auditlogs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "organization-scoped audit-log listing, a broader-scoped variant of the same audit-log data the already-covered product-scoped audit_logs stream exposes; not modeled as a separate stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{organizationId}/auditlogs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the same audit-log data; the v1 product-scoped audit_logs stream already covers this connector's audit-log surface."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organizations/{organizationId}/members",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-covered members stream; not modeled as a separate stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/products/{productId}/auditlogs",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "v2 variant of the already-covered audit_logs stream; not modeled as a separate stream."
+      }
+    }
+  ]
+}

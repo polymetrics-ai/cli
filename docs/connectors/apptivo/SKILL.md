@@ -7,26 +7,60 @@ description: Apptivo connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh, read-only).
+Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- access_key (secret)
+- api_key (secret)
+
+## ETL Streams
+
+- customers:
+  - primary key: customerId
+  - fields: creationDate(), currencyCode(), customerId(), customerName(), customerNumber(), emailAddress(), lastUpdateDate(), phoneNumber(), statusName(), website()
+- contacts:
+  - primary key: contactId
+  - fields: companyName(), contactId(), creationDate(), emailAddress(), firstName(), fullName(), lastName(), lastUpdateDate(), phoneNumber()
+- leads:
+  - primary key: id
+  - fields: companyName(), creationDate(), emailAddress(), firstName(), id(), lastName(), leadId(), leadSource(), phoneNumber(), statusName()
+- opportunities:
+  - primary key: opportunityId
+  - fields: closingDate(), creationDate(), currencyCode(), customerName(), lastUpdateDate(), opportunityAmount(), opportunityId(), opportunityName(), salesStageName()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Reverse ETL Actions
+
+- remove_customer:
+  - endpoint: GET /app/dao/v6/customers?a=delete&customerId={{ record.id }}&apiKey={{ secrets.api_key }}&accessKey={{ secrets.access_key }}
+  - required fields: id
+  - risk: irreversible external deletion of a CRM customer record; approval required
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Apptivo API read of CRM customer, contact, lead, and opportunity data
+- write risk: external mutation: irreversibly deletes a CRM customer record
+- approval: required; remove_customer is a destructive, irreversible external deletion
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +82,4 @@ pm connectors inspect apptivo --json
 - Run pm connectors inspect apptivo before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

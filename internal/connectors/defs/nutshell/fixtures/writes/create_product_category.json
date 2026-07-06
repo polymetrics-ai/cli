@@ -1,0 +1,26 @@
+{
+  "record": {
+    "productCategories": [
+      {
+        "name": "Fixture create_product_category"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/productcategories",
+    "body": {
+      "productCategories": [
+        {
+          "name": "Fixture create_product_category"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

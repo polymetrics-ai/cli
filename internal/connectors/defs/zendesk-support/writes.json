@@ -1,0 +1,1094 @@
+{
+  "actions": [
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets",
+      "body_type": "json",
+      "body_fields": [
+        "ticket"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "subject"
+            ],
+            "properties": {
+              "subject": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk ticket record; external mutation requiring approval"
+    },
+    {
+      "name": "update_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "ticket"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "ticket"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "subject"
+            ],
+            "properties": {
+              "subject": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk ticket record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk ticket record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users",
+      "body_type": "json",
+      "body_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name",
+              "email"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk user record; external mutation requiring approval"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "user"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name",
+              "email"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk user record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk user record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations",
+      "body_type": "json",
+      "body_fields": [
+        "organization"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "organization"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "organization": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk organization record; external mutation requiring approval"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organizations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "organization"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "organization"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "organization": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk organization record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_organization",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk organization record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/groups",
+      "body_type": "json",
+      "body_fields": [
+        "group"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "group": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk group record; external mutation requiring approval"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/groups/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "group"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "group"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "group": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk group record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/groups/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk group record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_macro",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/macros",
+      "body_type": "json",
+      "body_fields": [
+        "macro"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "macro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "macro": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk macro record; external mutation requiring approval"
+    },
+    {
+      "name": "update_macro",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/macros/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "macro"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "macro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "macro": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk macro record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_macro",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/macros/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk macro record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/triggers",
+      "body_type": "json",
+      "body_fields": [
+        "trigger"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trigger"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk trigger record; external mutation requiring approval"
+    },
+    {
+      "name": "update_trigger",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/triggers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "trigger"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "trigger"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk trigger record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/triggers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk trigger record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_automation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/automations",
+      "body_type": "json",
+      "body_fields": [
+        "automation"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "automation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "automation": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk automation record; external mutation requiring approval"
+    },
+    {
+      "name": "update_automation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/automations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "automation"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "automation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "automation": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions",
+              "actions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              },
+              "actions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk automation record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_automation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/automations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk automation record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/views",
+      "body_type": "json",
+      "body_fields": [
+        "view"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "view"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "view": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk view record; external mutation requiring approval"
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/views/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "view"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "view"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "view": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "title",
+              "conditions"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk view record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/views/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk view record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_ticket_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_fields",
+      "body_type": "json",
+      "body_fields": [
+        "ticket_field"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_field"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ticket_field": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "title"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a Zendesk ticket field record; external mutation requiring approval"
+    },
+    {
+      "name": "update_ticket_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_fields/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "ticket_field"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "ticket_field"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "ticket_field": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "title"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk ticket field record; external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk ticket field record; destructive external mutation requiring approval"
+    }
+  ]
+}

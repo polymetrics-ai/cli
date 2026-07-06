@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoints. Read-only.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  query_for_clips
+  query_for_gif
+  query_for_stickers
+  rating
+  api_key (secret)
+
+ETL STREAMS
+  gif_search:
+    primary key: id
+    fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  sticker_search:
+    primary key: id
+    fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  clip_search:
+    primary key: id
+    fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  trending_gifs:
+    primary key: id
+    fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Giphy API read of public media search/trending results
+  approval: none; read-only public media source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

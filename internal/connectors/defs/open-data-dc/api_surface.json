@@ -1,0 +1,11 @@
+{
+  "api": "Open Data DC Master Address Repository (MAR 2) API v2.2 (https://datagate.dc.gov/mar/open/api/v2.2)",
+  "docs": "https://opendata.dc.gov/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only (locations, units, ssls); MAR 2 is a public read-only lookup API with no mutation surface, so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/locations/{location}", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/units/{marid}", "covered_by": { "stream": "units" } },
+    { "method": "GET", "path": "/ssls", "covered_by": { "stream": "ssls" } }
+  ]
+}

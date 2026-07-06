@@ -1,0 +1,25 @@
+{
+  "name": "devin-ai",
+  "display_name": "Devin AI",
+  "description": "Reads Devin AI sessions, session child resources, playbooks, knowledge notes, repositories, schedules, membership, metrics, consumption, and secret metadata through the Devin v3 REST API; writes documented organization-scoped JSON mutations.",
+  "integration_type": "api",
+  "docs_url": "https://docs.devin.ai/api-reference/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Devin AI API reads of organization-scoped sessions, context, repositories, schedules, membership, usage, and metadata",
+    "write": "creates or mutates Devin sessions, session tags/messages, schedules, playbooks, knowledge notes, repository indexing state, and PR reviews; destructive actions can terminate sessions or delete objects",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

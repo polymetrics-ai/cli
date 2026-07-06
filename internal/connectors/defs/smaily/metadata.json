@@ -1,0 +1,21 @@
+{
+  "name": "smaily",
+  "display_name": "Smaily",
+  "description": "Reads Smaily campaigns, segments, contacts, templates, automations, and organization users; creates/updates subscribers and segments, unsubscribes recipients, sends messages, and triggers automation workflows.",
+  "integration_type": "api",
+  "docs_url": "https://smaily.com/help/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only campaign/segment/contact/template/automation/organization-user data from a connected Smaily account",
+    "write": "creates/updates subscribers and segments, unsubscribes a recipient from a campaign, sends an individually-templated outbound email, and triggers an automation workflow for real subscribers",
+    "approval": "required for all 5 write actions; read is unapproved"
+  }
+}

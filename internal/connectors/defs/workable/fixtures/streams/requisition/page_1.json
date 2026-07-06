@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/requisitions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "requisition_fixture_1",
+      "code": "synthetic-conformance-value",
+      "state": "pending"
+    }
+  }
+}

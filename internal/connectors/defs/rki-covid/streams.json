@@ -1,0 +1,613 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/germany"
+    },
+    "error_map": [
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "corona-zahlen.org rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "germany",
+      "path": "/germany",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "germany",
+        "stream": "germany"
+      },
+      "schema": "schemas/germany.json"
+    },
+    {
+      "name": "states",
+      "path": "/states",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "states",
+        "stream": "states"
+      },
+      "schema": "schemas/states.json"
+    },
+    {
+      "name": "districts",
+      "path": "/districts",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "districts",
+        "stream": "districts"
+      },
+      "schema": "schemas/districts.json"
+    },
+    {
+      "name": "cases_history",
+      "path": "/germany/history/cases",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "cases_history"
+      },
+      "schema": "schemas/cases_history.json"
+    },
+    {
+      "name": "deaths_history",
+      "path": "/germany/history/deaths",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "deaths_history"
+      },
+      "schema": "schemas/deaths_history.json"
+    },
+    {
+      "name": "germany_incidence_history",
+      "path": "/germany/history/incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "germany_incidence_history"
+      },
+      "schema": "schemas/germany_incidence_history.json"
+    },
+    {
+      "name": "germany_recovered_history",
+      "path": "/germany/history/recovered",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "germany_recovered_history"
+      },
+      "schema": "schemas/germany_recovered_history.json"
+    },
+    {
+      "name": "germany_r_value_history",
+      "path": "/germany/history/rValue",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "germany_r_value_history"
+      },
+      "schema": "schemas/germany_r_value_history.json"
+    },
+    {
+      "name": "germany_hospitalization_history",
+      "path": "/germany/history/hospitalization",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "germany_hospitalization_history"
+      },
+      "schema": "schemas/germany_hospitalization_history.json"
+    },
+    {
+      "name": "germany_frozen_incidence_history",
+      "path": "/germany/history/frozen-incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data.history"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "germany_frozen_incidence_history"
+      },
+      "schema": "schemas/germany_frozen_incidence_history.json"
+    },
+    {
+      "name": "germany_age_groups",
+      "path": "/germany/age-groups",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "age_group"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.age_group }}",
+        "stream": "germany_age_groups"
+      },
+      "schema": "schemas/germany_age_groups.json"
+    },
+    {
+      "name": "states_cases_history",
+      "path": "/states/history/cases",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_cases_history"
+      },
+      "schema": "schemas/states_cases_history.json"
+    },
+    {
+      "name": "states_deaths_history",
+      "path": "/states/history/deaths",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_deaths_history"
+      },
+      "schema": "schemas/states_deaths_history.json"
+    },
+    {
+      "name": "states_incidence_history",
+      "path": "/states/history/incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_incidence_history"
+      },
+      "schema": "schemas/states_incidence_history.json"
+    },
+    {
+      "name": "states_recovered_history",
+      "path": "/states/history/recovered",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_recovered_history"
+      },
+      "schema": "schemas/states_recovered_history.json"
+    },
+    {
+      "name": "states_frozen_incidence_history",
+      "path": "/states/history/frozen-incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_frozen_incidence_history"
+      },
+      "schema": "schemas/states_frozen_incidence_history.json"
+    },
+    {
+      "name": "states_hospitalization_history",
+      "path": "/states/history/hospitalization",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_hospitalization_history"
+      },
+      "schema": "schemas/states_hospitalization_history.json"
+    },
+    {
+      "name": "states_age_groups",
+      "path": "/states/age-groups",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "states_age_groups"
+      },
+      "schema": "schemas/states_age_groups.json"
+    },
+    {
+      "name": "districts_cases_history",
+      "path": "/districts/history/cases",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_cases_history"
+      },
+      "schema": "schemas/districts_cases_history.json"
+    },
+    {
+      "name": "districts_deaths_history",
+      "path": "/districts/history/deaths",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_deaths_history"
+      },
+      "schema": "schemas/districts_deaths_history.json"
+    },
+    {
+      "name": "districts_incidence_history",
+      "path": "/districts/history/incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_incidence_history"
+      },
+      "schema": "schemas/districts_incidence_history.json"
+    },
+    {
+      "name": "districts_recovered_history",
+      "path": "/districts/history/recovered",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_recovered_history"
+      },
+      "schema": "schemas/districts_recovered_history.json"
+    },
+    {
+      "name": "districts_frozen_incidence_history",
+      "path": "/districts/history/frozen-incidence",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_frozen_incidence_history"
+      },
+      "schema": "schemas/districts_frozen_incidence_history.json"
+    },
+    {
+      "name": "districts_age_groups",
+      "path": "/districts/age-groups",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "ags"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.ags }}",
+        "stream": "districts_age_groups"
+      },
+      "schema": "schemas/districts_age_groups.json"
+    },
+    {
+      "name": "testing_history",
+      "path": "/testing/history",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data.history"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.calendarWeek }}",
+        "stream": "testing_history"
+      },
+      "schema": "schemas/testing_history.json"
+    },
+    {
+      "name": "vaccinations",
+      "path": "/vaccinations",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "germany",
+        "stream": "vaccinations"
+      },
+      "schema": "schemas/vaccinations.json"
+    },
+    {
+      "name": "vaccinations_states",
+      "path": "/vaccinations/states",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data",
+        "keyed_object": true,
+        "key_field": "abbreviation"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.abbreviation }}",
+        "stream": "vaccinations_states"
+      },
+      "schema": "schemas/vaccinations_states.json"
+    },
+    {
+      "name": "vaccinations_history",
+      "path": "/vaccinations/history",
+      "query": {
+        "days": {
+          "template": "{{ config.days }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data.history"
+      },
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "computed_fields": {
+        "id": "{{ record.date }}",
+        "stream": "vaccinations_history"
+      },
+      "schema": "schemas/vaccinations_history.json"
+    }
+  ]
+}

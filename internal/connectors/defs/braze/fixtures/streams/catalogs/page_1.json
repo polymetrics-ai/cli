@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/catalogs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "catalogs": [
+        {
+          "name": "fixture_catalog",
+          "description": "Fixture catalog",
+          "fields": [
+            { "name": "id", "type": "string" },
+            { "name": "Name", "type": "string" }
+          ],
+          "num_items": 2,
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

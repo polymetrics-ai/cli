@@ -1,0 +1,10 @@
+{
+  "record": {
+    "domain": "fixture.example.com",
+    "shared_with_subaccounts": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sending-domains/fixture.example.com"
+  }
+}

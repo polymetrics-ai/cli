@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_id": 123,
+    "name": "Fixture restore_a_project",
+    "description": "Fixture restore_a_project record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/123/restore",
+    "body": {
+      "name": "Fixture restore_a_project",
+      "description": "Fixture restore_a_project record"
+    }
+  }
+}

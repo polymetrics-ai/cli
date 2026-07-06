@@ -1,0 +1,18 @@
+{
+  "record": {
+    "affiliate_email": "fixture1@example.com",
+    "program_id": 46
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/affiliate/move-affiliate-to-program",
+    "body": {
+      "affiliate_email": "fixture1@example.com",
+      "program_id": 46
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "affiliate_id": 1969236, "affiliate_email": "fixture1@example.com", "program_id": 46 } }
+  }
+}

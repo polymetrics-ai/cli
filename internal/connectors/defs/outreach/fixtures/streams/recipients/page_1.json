@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recipients",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "recipients_fixture_1",
+          "type": "recipient",
+          "attributes": {
+            "name": "Fixture Recipients",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/recipients"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

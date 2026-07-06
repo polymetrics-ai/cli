@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/raw-data/export/app/synthetic-conformance-value/installs_report/v5" },
+  "response": {
+    "status": 200,
+    "body": "AppsFlyer ID,Event Time,Media Source,Campaign\n"
+  }
+}

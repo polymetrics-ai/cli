@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/templates" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "tpl_fixture_1", "name": "Fixture Template" }
+    ]
+  }
+}

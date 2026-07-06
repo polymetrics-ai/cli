@@ -1,0 +1,24 @@
+{
+  "name": "drip",
+  "display_name": "Drip",
+  "description": "Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags, and webhooks, and writes subscriber/tag/broadcast/workflow/event/webhook mutations through the Drip REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.drip.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Drip API read of subscriber, campaign, broadcast, account, workflow, form, tag, and webhook data",
+    "write": "external Drip API mutation of subscribers, tags, broadcasts, workflows, custom events, and webhooks; delete_subscriber and delete_broadcast/delete_webhook are destructive and require approval",
+    "approval": "required for delete_subscriber, delete_broadcast, delete_webhook, and unsubscribe_subscriber; tag/event/workflow-state writes are lower-risk and do not require approval"
+  }
+}

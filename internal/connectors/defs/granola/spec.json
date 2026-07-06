@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Granola Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Granola public API key (grn_ prefix), sent as Authorization: Bearer <api_key>; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://public-api.granola.ai/v1",
+      "description": "Granola public API base URL override, for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound applied as the notes stream's created_after filter on a fresh sync; superseded by the persisted incremental cursor on repeat syncs."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "30",
+      "description": "Records per page (1-30)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

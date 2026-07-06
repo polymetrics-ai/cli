@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture update page"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/page_id_fixture_1",
+    "body": {
+      "name": "Fixture update page"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_page_fixture_response"
+    }
+  }
+}

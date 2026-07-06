@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/jobs/{{ config.job_id }}/applicationfields",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "fieldName": "Fixture job application fields 1",
+          "id": "job_application_fields_fixture_1",
+          "required": true,
+          "fieldType": 1,
+          "isSystemGenerated": true,
+          "fieldOptions": []
+        },
+        {
+          "fieldName": "Fixture job application fields 2",
+          "id": "job_application_fields_fixture_2",
+          "required": false,
+          "fieldType": 1,
+          "isSystemGenerated": true,
+          "fieldOptions": []
+        }
+      ],
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

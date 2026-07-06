@@ -1,0 +1,18 @@
+{
+  "record": {
+    "environment": "synthetic-conformance-value",
+    "session_id": "synthetic-conformance-value",
+    "replay_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/1/environment/synthetic-conformance-value/session/synthetic-conformance-value/replay/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "fixed_asset_type_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/fixedassettypes/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/events/add",
+    "body": {
+      "name": "Fixture record"
+    }
+  }
+}

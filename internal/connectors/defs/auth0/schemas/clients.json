@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "clients",
+  "type": "object",
+  "x-primary-key": ["client_id"],
+  "required": ["client_id"],
+  "properties": {
+    "client_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "app_type": { "type": ["string", "null"] },
+    "is_first_party": { "type": ["boolean", "null"] },
+    "oidc_conformant": { "type": ["boolean", "null"] },
+    "global": { "type": ["boolean", "null"] }
+  }
+}

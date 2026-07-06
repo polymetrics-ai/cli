@@ -1,0 +1,93 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "google-forms",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token }}"
+      }
+    ],
+    "check": { "method": "GET", "path": "/forms/{{ config.form_id }}" },
+    "error_map": [
+      { "status": 401, "hint": "google-forms OAuth refresh grant failed or access token expired; re-run pm credentials add google-forms" },
+      { "status": 403, "hint": "google-forms account lacks access for this form" },
+      { "status": 404, "hint": "google-forms form_id not found or not accessible by this account" },
+      { "status": 429, "class": "rate_limited", "hint": "google-forms rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "forms",
+      "path": "/forms/{{ fanout.id }}",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "form_id" },
+        "into": { "path_var": "form_id" }
+      },
+      "computed_fields": {
+        "form_id": "{{ record.formId }}",
+        "revision_id": "{{ record.revisionId }}",
+        "responder_uri": "{{ record.responderUri }}",
+        "title": "{{ record.info.title }}",
+        "document_title": "{{ record.info.documentTitle }}",
+        "description": "{{ record.info.description }}",
+        "item_count": "{{ record.items | length }}"
+      },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "form_items",
+      "path": "/forms/{{ fanout.id }}",
+      "records": { "path": "items" },
+      "fan_out": {
+        "ids_from": { "config_key": "form_id" },
+        "into": { "path_var": "form_id" },
+        "stamp_field": "form_id"
+      },
+      "computed_fields": {
+        "item_id": "{{ record.itemId }}",
+        "title": "{{ record.title }}",
+        "description": "{{ record.description }}",
+        "question_id": "{{ record.questionItem.question.questionId }}"
+      },
+      "schema": "schemas/form_items.json"
+    },
+    {
+      "name": "responses",
+      "path": "/forms/{{ fanout.id }}/responses",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "filter": { "template": "timestamp >= {{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "responses" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "form_id" },
+        "into": { "path_var": "form_id" },
+        "stamp_field": "form_id"
+      },
+      "incremental": {
+        "cursor_field": "last_submitted_time",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "response_id": "{{ record.responseId }}",
+        "create_time": "{{ record.createTime }}",
+        "last_submitted_time": "{{ record.lastSubmittedTime }}",
+        "respondent_email": "{{ record.respondentEmail }}",
+        "total_score": "{{ record.totalScore }}",
+        "answers": "{{ record.answers }}"
+      },
+      "schema": "schemas/responses.json"
+    }
+  ]
+}

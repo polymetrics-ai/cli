@@ -1,0 +1,529 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ secrets.email }}/token",
+        "password": "{{ secrets.api_token }}",
+        "when": "{{ secrets.api_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page[after]",
+      "token_path": "meta.after_cursor",
+      "stop_path": "meta.has_more"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/v2/groups"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "zendesk-support credentials are missing or invalid; re-run pm credentials add zendesk-support"
+      },
+      {
+        "status": 403,
+        "hint": "zendesk-support account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "zendesk-support rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickets",
+      "path": "/api/v2/tickets",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "tickets"
+      },
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v2/users",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "users"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/api/v2/organizations",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "groups",
+      "path": "/api/v2/groups",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "groups"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "satisfaction_ratings",
+      "path": "/api/v2/satisfaction_ratings",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "satisfaction_ratings"
+      },
+      "schema": "schemas/satisfaction_ratings.json"
+    },
+    {
+      "name": "deleted_tickets",
+      "path": "/api/v2/deleted_tickets",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "deleted_tickets"
+      },
+      "schema": "schemas/deleted_tickets.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "account_attributes",
+      "path": "/api/v2/routing/attributes",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "attributes"
+      },
+      "schema": "schemas/account_attributes.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "attribute_definitions",
+      "path": "/api/v2/routing/attributes/definitions",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "attributes"
+      },
+      "schema": "schemas/attribute_definitions.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "brands",
+      "path": "/api/v2/brands",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "brands"
+      },
+      "schema": "schemas/brands.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "custom_roles",
+      "path": "/api/v2/custom_roles",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "custom_roles"
+      },
+      "schema": "schemas/custom_roles.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "schedules",
+      "path": "/api/v2/business_hours/schedules.json",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "schedules"
+      },
+      "schema": "schemas/schedules.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "sla_policies",
+      "path": "/api/v2/slas/policies.json",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "sla_policies"
+      },
+      "schema": "schemas/sla_policies.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "tags",
+      "path": "/api/v2/tags",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "tags"
+      },
+      "schema": "schemas/tags.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "ticket_fields",
+      "path": "/api/v2/ticket_fields",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "ticket_fields"
+      },
+      "schema": "schemas/ticket_fields.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "ticket_forms",
+      "path": "/api/v2/ticket_forms",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "ticket_forms"
+      },
+      "schema": "schemas/ticket_forms.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "topics",
+      "path": "/api/v2/community/topics",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "topics"
+      },
+      "schema": "schemas/topics.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "user_fields",
+      "path": "/api/v2/user_fields",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "user_fields"
+      },
+      "schema": "schemas/user_fields.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "automations",
+      "path": "/api/v2/automations",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "automations"
+      },
+      "schema": "schemas/automations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "categories",
+      "path": "/api/v2/help_center/categories",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "categories"
+      },
+      "schema": "schemas/categories.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "sections",
+      "path": "/api/v2/help_center/sections",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "sections"
+      },
+      "schema": "schemas/sections.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "articles",
+      "path": "/api/v2/help_center/incremental/articles",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "articles"
+      },
+      "schema": "schemas/articles.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "group_memberships",
+      "path": "/api/v2/group_memberships",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "group_memberships"
+      },
+      "schema": "schemas/group_memberships.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "macros",
+      "path": "/api/v2/macros",
+      "query": {
+        "page[size]": "100",
+        "sort_by": "created_at",
+        "sort_order": "asc"
+      },
+      "records": {
+        "path": "macros"
+      },
+      "schema": "schemas/macros.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "organization_fields",
+      "path": "/api/v2/organization_fields",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "organization_fields"
+      },
+      "schema": "schemas/organization_fields.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "organization_memberships",
+      "path": "/api/v2/organization_memberships",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "organization_memberships"
+      },
+      "schema": "schemas/organization_memberships.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "posts",
+      "path": "/api/v2/community/posts",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "posts"
+      },
+      "schema": "schemas/posts.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "ticket_activities",
+      "path": "/api/v2/activities",
+      "query": {
+        "page[size]": "100",
+        "sort": "created_at",
+        "sort_by": "created_at",
+        "sort_order": "asc"
+      },
+      "records": {
+        "path": "activities"
+      },
+      "schema": "schemas/ticket_activities.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "ticket_audits",
+      "path": "/api/v2/ticket_audits",
+      "query": {
+        "limit": "100",
+        "sort_by": "created_at",
+        "sort_order": "desc"
+      },
+      "records": {
+        "path": "audits"
+      },
+      "schema": "schemas/ticket_audits.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "before_url"
+      }
+    },
+    {
+      "name": "ticket_metric_events",
+      "path": "/api/v2/incremental/ticket_metric_events",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "ticket_metric_events"
+      },
+      "schema": "schemas/ticket_metric_events.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "ticket_events",
+      "path": "/api/v2/incremental/ticket_events.json",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "ticket_events"
+      },
+      "schema": "schemas/ticket_events.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "ticket_skips",
+      "path": "/api/v2/skips.json",
+      "query": {
+        "page[size]": "100",
+        "sort_order": "desc"
+      },
+      "records": {
+        "path": "skips"
+      },
+      "schema": "schemas/ticket_skips.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      }
+    },
+    {
+      "name": "triggers",
+      "path": "/api/v2/triggers",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "triggers"
+      },
+      "schema": "schemas/triggers.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page"
+      }
+    },
+    {
+      "name": "views",
+      "path": "/api/v2/views",
+      "query": {
+        "page[size]": "100"
+      },
+      "records": {
+        "path": "views"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/views.json"
+    }
+  ]
+}

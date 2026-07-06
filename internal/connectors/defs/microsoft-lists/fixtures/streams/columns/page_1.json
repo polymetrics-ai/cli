@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists/synthetic-conformance-value/columns", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_column_1", "name": "Title", "displayName": "Title", "description": "The title column", "columnGroup": "Custom Columns", "required": true, "readOnly": false, "hidden": false, "indexed": false }
+      ]
+    }
+  }
+}

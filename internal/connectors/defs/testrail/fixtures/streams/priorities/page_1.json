@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_priorities": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "1 - Low", "short_name": "Low", "is_default": false, "priority": 1 },
+      { "id": 4, "name": "4 - Critical", "short_name": "Critical", "is_default": false, "priority": 4 }
+    ]
+  }
+}

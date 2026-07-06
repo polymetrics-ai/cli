@@ -1,0 +1,177 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "akeneo",
+        "token_url": "{{ config.base_url }}/api/oauth/v1/token",
+        "client_id": "{{ config.client_id }}",
+        "client_secret": "{{ secrets.secret }}",
+        "username": "{{ config.api_username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "_links.next.href"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/api/rest/v1/channels",
+      "query": { "limit": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "akeneo OAuth2 password grant failed or access token expired; re-run pm credentials add akeneo" },
+      { "status": 403, "hint": "akeneo account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "akeneo API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/api/rest/v1/products",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "categories",
+      "path": "/api/rest/v1/categories",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "families",
+      "path": "/api/rest/v1/families",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/families.json"
+    },
+    {
+      "name": "attributes",
+      "path": "/api/rest/v1/attributes",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/attributes.json"
+    },
+    {
+      "name": "channels",
+      "path": "/api/rest/v1/channels",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "product_models",
+      "path": "/api/rest/v1/product-models",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/product_models.json"
+    },
+    {
+      "name": "family_variants",
+      "path": "/api/rest/v1/family-variants",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/family_variants.json"
+    },
+    {
+      "name": "attribute_groups",
+      "path": "/api/rest/v1/attribute-groups",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/attribute_groups.json"
+    },
+    {
+      "name": "association_types",
+      "path": "/api/rest/v1/association-types",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/association_types.json"
+    },
+    {
+      "name": "locales",
+      "path": "/api/rest/v1/locales",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/locales.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/api/rest/v1/currencies",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "measure_families",
+      "path": "/api/rest/v1/measure-families",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "_embedded.items" },
+      "computed_fields": {
+        "id": "{{ coalesce record.code record.identifier record.uuid }}"
+      },
+      "schema": "schemas/measure_families.json"
+    }
+  ]
+}

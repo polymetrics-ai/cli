@@ -1,0 +1,23 @@
+{
+  "name": "care-quality-commission",
+  "display_name": "Care Quality Commission",
+  "description": "Reads Care Quality Commission (CQC) registered locations, providers, and inspection areas from the public CQC Syndication API. Read-only (full-refresh).",
+  "integration_type": "api",
+  "docs_url": "https://www.cqc.org.uk/about-us/transparency/using-cqc-data",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external CQC Syndication API read of publicly published care provider/location data",
+    "approval": "none; read-only"
+  }
+}

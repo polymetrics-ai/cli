@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/gates", "query": { "limit": "1" } },
+  "response": { "status": 200, "body": { "data": [] } }
+}

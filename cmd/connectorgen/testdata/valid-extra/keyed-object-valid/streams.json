@@ -1,0 +1,14 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "check": { "method": "GET", "path": "/ping" }
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/products/mine",
+      "records": { "path": "products", "keyed_object": true, "key_field": "product_id" },
+      "schema": "schemas/products.json"
+    }
+  ]
+}

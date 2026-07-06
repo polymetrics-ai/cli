@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value",
+    "theme_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/brands/synthetic-conformance-value/themes/synthetic-conformance-value/logo"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

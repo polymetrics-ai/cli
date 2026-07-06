@@ -1,0 +1,68 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.access_key }}", "password": "{{ secrets.access_key_secret }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "records.cursor"
+    },
+    "check": { "method": "GET", "path": "/users", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "gong access_key/access_key_secret are missing or invalid; re-run pm credentials add gong" },
+      { "status": 403, "hint": "gong account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "gong rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "users" },
+      "incremental": {
+        "cursor_field": "created",
+        "request_param": "fromDateTime",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "email_address": "{{ record.emailAddress }}",
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "phone_number": "{{ record.phoneNumber }}",
+        "manager_id": "{{ record.managerId }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "calls",
+      "path": "/calls",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "calls" },
+      "incremental": {
+        "cursor_field": "started",
+        "request_param": "fromDateTime",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "is_private": "{{ record.isPrivate }}"
+      },
+      "schema": "schemas/calls.json"
+    },
+    {
+      "name": "scorecards",
+      "path": "/settings/scorecards",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "scorecards" },
+      "incremental": {
+        "cursor_field": "updated",
+        "request_param": "fromDateTime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/scorecards.json"
+    }
+  ]
+}

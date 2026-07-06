@@ -1,0 +1,67 @@
+{
+  "record": {
+    "name": "PO Fixture Booking",
+    "shipper_entity_ref": "shipper-fixture",
+    "consignee_entity_ref": "consignee-fixture",
+    "origin_address_ref": "origin-location-fixture",
+    "destination_address_ref": "destination-location-fixture",
+    "cargo_ready_date": "2026-01-10",
+    "wants_export_customs_service": false,
+    "wants_import_customs_service": true,
+    "cargo": {
+      "shipping_units": [
+        {
+          "name": "Fixture cartons",
+          "count": 9,
+          "unit_type": "carton"
+        }
+      ],
+      "contains_hazmat": false,
+      "contains_magnets": false,
+      "contains_other_dangerous_goods": false,
+      "contains_li_ion": false,
+      "contains_non_li_ion_battery": false
+    },
+    "special_instructions": "Sanitized booking fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bookings",
+    "body": {
+      "name": "PO Fixture Booking",
+      "shipper_entity_ref": "shipper-fixture",
+      "consignee_entity_ref": "consignee-fixture",
+      "origin_address_ref": "origin-location-fixture",
+      "destination_address_ref": "destination-location-fixture",
+      "cargo_ready_date": "2026-01-10",
+      "wants_export_customs_service": false,
+      "wants_import_customs_service": true,
+      "cargo": {
+        "shipping_units": [
+          {
+            "name": "Fixture cartons",
+            "count": 9,
+            "unit_type": "carton"
+          }
+        ],
+        "contains_hazmat": false,
+        "contains_magnets": false,
+        "contains_other_dangerous_goods": false,
+        "contains_li_ion": false,
+        "contains_non_li_ion_battery": false
+      },
+      "special_instructions": "Sanitized booking fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/booking",
+        "id": 2983,
+        "name": "PO Fixture Booking"
+      }
+    }
+  }
+}

@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads events, venues, attractions, and classifications from the Ticketmaster Discovery API.
 
+ICON
+  asset: icons/ticketmaster.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  country_code
+  keyword
+  locale
+  api_key (secret)
+
+ETL STREAMS
+  events:
+    primary key: id
+    fields: id(), locale(), name(), type(), url()
+  venues:
+    primary key: id
+    fields: city(), country(), id(), name(), url()
+  attractions:
+    primary key: id
+    fields: id(), locale(), name(), type(), url()
+  classifications:
+    primary key: id
+    fields: genre(), id(), name(), segment(), subGenre()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Ticketmaster Discovery API read of public event/venue data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

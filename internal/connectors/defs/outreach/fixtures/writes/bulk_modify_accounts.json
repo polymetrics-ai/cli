@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "bulkmodifyaccounts",
+      "attributes": {
+        "name": "Fixture Bulk Modify Accounts"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsBulkModify",
+    "body": {
+      "data": {
+        "type": "bulkmodifyaccounts",
+        "attributes": {
+          "name": "Fixture Bulk Modify Accounts"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

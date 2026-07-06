@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/management/responses",
+    "query": {
+      "limit": "50",
+      "skip": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "res_fixture_1",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_1",
+          "finished": false,
+          "data": {
+            "q1": "answer 1"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_2",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_2",
+          "finished": true,
+          "data": {
+            "q1": "answer 2"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_3",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_3",
+          "finished": false,
+          "data": {
+            "q1": "answer 3"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "updatedAt": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_4",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_4",
+          "finished": true,
+          "data": {
+            "q1": "answer 4"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-04T00:00:00.000Z",
+          "updatedAt": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_5",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_5",
+          "finished": false,
+          "data": {
+            "q1": "answer 5"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-05T00:00:00.000Z",
+          "updatedAt": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_6",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_6",
+          "finished": true,
+          "data": {
+            "q1": "answer 6"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-06T00:00:00.000Z",
+          "updatedAt": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_7",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_7",
+          "finished": false,
+          "data": {
+            "q1": "answer 7"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-07T00:00:00.000Z",
+          "updatedAt": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_8",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_8",
+          "finished": true,
+          "data": {
+            "q1": "answer 8"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-08T00:00:00.000Z",
+          "updatedAt": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_9",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_9",
+          "finished": false,
+          "data": {
+            "q1": "answer 9"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-09T00:00:00.000Z",
+          "updatedAt": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_10",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_10",
+          "finished": true,
+          "data": {
+            "q1": "answer 10"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-10T00:00:00.000Z",
+          "updatedAt": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_11",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_11",
+          "finished": false,
+          "data": {
+            "q1": "answer 11"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-11T00:00:00.000Z",
+          "updatedAt": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_12",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_12",
+          "finished": true,
+          "data": {
+            "q1": "answer 12"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-12T00:00:00.000Z",
+          "updatedAt": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_13",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_13",
+          "finished": false,
+          "data": {
+            "q1": "answer 13"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-13T00:00:00.000Z",
+          "updatedAt": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_14",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_14",
+          "finished": true,
+          "data": {
+            "q1": "answer 14"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-14T00:00:00.000Z",
+          "updatedAt": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_15",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_15",
+          "finished": false,
+          "data": {
+            "q1": "answer 15"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "updatedAt": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_16",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_16",
+          "finished": true,
+          "data": {
+            "q1": "answer 16"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-16T00:00:00.000Z",
+          "updatedAt": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_17",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_17",
+          "finished": false,
+          "data": {
+            "q1": "answer 17"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-17T00:00:00.000Z",
+          "updatedAt": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_18",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_18",
+          "finished": true,
+          "data": {
+            "q1": "answer 18"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-18T00:00:00.000Z",
+          "updatedAt": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_19",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_19",
+          "finished": false,
+          "data": {
+            "q1": "answer 19"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-19T00:00:00.000Z",
+          "updatedAt": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_20",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_20",
+          "finished": true,
+          "data": {
+            "q1": "answer 20"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-20T00:00:00.000Z",
+          "updatedAt": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_21",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_21",
+          "finished": false,
+          "data": {
+            "q1": "answer 21"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-21T00:00:00.000Z",
+          "updatedAt": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_22",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_22",
+          "finished": true,
+          "data": {
+            "q1": "answer 22"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-22T00:00:00.000Z",
+          "updatedAt": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_23",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_23",
+          "finished": false,
+          "data": {
+            "q1": "answer 23"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-23T00:00:00.000Z",
+          "updatedAt": "2026-01-23T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_24",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_24",
+          "finished": true,
+          "data": {
+            "q1": "answer 24"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-24T00:00:00.000Z",
+          "updatedAt": "2026-01-24T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_25",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_25",
+          "finished": false,
+          "data": {
+            "q1": "answer 25"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-25T00:00:00.000Z",
+          "updatedAt": "2026-01-25T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_26",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_26",
+          "finished": true,
+          "data": {
+            "q1": "answer 26"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-26T00:00:00.000Z",
+          "updatedAt": "2026-01-26T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_27",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_27",
+          "finished": false,
+          "data": {
+            "q1": "answer 27"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-27T00:00:00.000Z",
+          "updatedAt": "2026-01-27T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_28",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_28",
+          "finished": true,
+          "data": {
+            "q1": "answer 28"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-28T00:00:00.000Z",
+          "updatedAt": "2026-01-28T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_29",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_29",
+          "finished": false,
+          "data": {
+            "q1": "answer 29"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_30",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_30",
+          "finished": true,
+          "data": {
+            "q1": "answer 30"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_31",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_31",
+          "finished": false,
+          "data": {
+            "q1": "answer 31"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "updatedAt": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_32",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_32",
+          "finished": true,
+          "data": {
+            "q1": "answer 32"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-04T00:00:00.000Z",
+          "updatedAt": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_33",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_33",
+          "finished": false,
+          "data": {
+            "q1": "answer 33"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-05T00:00:00.000Z",
+          "updatedAt": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_34",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_34",
+          "finished": true,
+          "data": {
+            "q1": "answer 34"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-06T00:00:00.000Z",
+          "updatedAt": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_35",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_35",
+          "finished": false,
+          "data": {
+            "q1": "answer 35"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-07T00:00:00.000Z",
+          "updatedAt": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_36",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_36",
+          "finished": true,
+          "data": {
+            "q1": "answer 36"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-08T00:00:00.000Z",
+          "updatedAt": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_37",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_37",
+          "finished": false,
+          "data": {
+            "q1": "answer 37"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-09T00:00:00.000Z",
+          "updatedAt": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_38",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_38",
+          "finished": true,
+          "data": {
+            "q1": "answer 38"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-10T00:00:00.000Z",
+          "updatedAt": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_39",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_39",
+          "finished": false,
+          "data": {
+            "q1": "answer 39"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-11T00:00:00.000Z",
+          "updatedAt": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_40",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_40",
+          "finished": true,
+          "data": {
+            "q1": "answer 40"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-12T00:00:00.000Z",
+          "updatedAt": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_41",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_41",
+          "finished": false,
+          "data": {
+            "q1": "answer 41"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-13T00:00:00.000Z",
+          "updatedAt": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_42",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_42",
+          "finished": true,
+          "data": {
+            "q1": "answer 42"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-14T00:00:00.000Z",
+          "updatedAt": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_43",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_43",
+          "finished": false,
+          "data": {
+            "q1": "answer 43"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-15T00:00:00.000Z",
+          "updatedAt": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_44",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_44",
+          "finished": true,
+          "data": {
+            "q1": "answer 44"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-16T00:00:00.000Z",
+          "updatedAt": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_45",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_45",
+          "finished": false,
+          "data": {
+            "q1": "answer 45"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-17T00:00:00.000Z",
+          "updatedAt": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_46",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_46",
+          "finished": true,
+          "data": {
+            "q1": "answer 46"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-18T00:00:00.000Z",
+          "updatedAt": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_47",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_47",
+          "finished": false,
+          "data": {
+            "q1": "answer 47"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-19T00:00:00.000Z",
+          "updatedAt": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_48",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_48",
+          "finished": true,
+          "data": {
+            "q1": "answer 48"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-20T00:00:00.000Z",
+          "updatedAt": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_49",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_49",
+          "finished": false,
+          "data": {
+            "q1": "answer 49"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-21T00:00:00.000Z",
+          "updatedAt": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": "res_fixture_50",
+          "surveyId": "srv_fixture_1",
+          "contactId": "ctc_fixture_50",
+          "finished": true,
+          "data": {
+            "q1": "answer 50"
+          },
+          "meta": {
+            "source": "fixture"
+          },
+          "createdAt": "2026-01-22T00:00:00.000Z",
+          "updatedAt": "2026-01-22T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

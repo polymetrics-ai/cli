@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 1,
+    "first_name": "Fixture Updated",
+    "email_address": "fixture-updated@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscribers/1",
+    "body": {
+      "first_name": "Fixture Updated",
+      "email_address": "fixture-updated@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscriber": { "id": 1, "first_name": "Fixture Updated", "email_address": "fixture-updated@example.com" } }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "amazon-sqs",
+  "display_name": "Amazon SQS",
+  "description": "Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.",
+  "integration_type": "queue",
+  "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "risk": {
+    "read": "external AWS SQS queue read via signed ReceiveMessage calls (visibility timeout side effects per SQS semantics)",
+    "write": "n/a (read-only source)",
+    "approval": "none required for read-only sync"
+  }
+}

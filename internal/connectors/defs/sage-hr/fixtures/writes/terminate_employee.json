@@ -1,0 +1,5 @@
+{
+  "record": { "employee_id": "1", "date": "2026-02-01", "termination_reason_id": 2 },
+  "expect": { "method": "POST", "path": "/employees/1/terminations" },
+  "response": { "status": 201, "body": {} }
+}

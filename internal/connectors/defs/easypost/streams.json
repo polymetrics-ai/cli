@@ -1,0 +1,227 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "before_id",
+      "last_record_field": "id",
+      "stop_path": "has_more"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/shipments",
+      "query": { "page_size": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "easypost username (API key) is missing or invalid; re-run pm credentials add easypost" },
+      { "status": 403, "hint": "easypost account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "easypost rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": { "page_size": "100" },
+      "records": { "path": "shipments" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "trackers",
+      "path": "/trackers",
+      "query": { "page_size": "100" },
+      "records": { "path": "trackers" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/trackers.json"
+    },
+    {
+      "name": "addresses",
+      "path": "/addresses",
+      "query": { "page_size": "100" },
+      "records": { "path": "addresses" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/addresses.json"
+    },
+    {
+      "name": "parcels",
+      "path": "/parcels",
+      "query": { "page_size": "100" },
+      "records": { "path": "parcels" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/parcels.json"
+    },
+    {
+      "name": "insurances",
+      "path": "/insurances",
+      "query": { "page_size": "100" },
+      "records": { "path": "insurances" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/insurances.json"
+    },
+    {
+      "name": "batches",
+      "path": "/batches",
+      "query": { "page_size": "100" },
+      "records": { "path": "batches" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/batches.json"
+    },
+    {
+      "name": "carrier_accounts",
+      "path": "/carrier_accounts",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "projection": "passthrough",
+      "schema": "schemas/carrier_accounts.json"
+    },
+    {
+      "name": "carrier_metadata",
+      "path": "/metadata/carriers",
+      "records": { "path": "carriers" },
+      "pagination": { "type": "none" },
+      "projection": "passthrough",
+      "schema": "schemas/carrier_metadata.json"
+    },
+    {
+      "name": "carrier_types",
+      "path": "/carrier_types",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "projection": "passthrough",
+      "schema": "schemas/carrier_types.json"
+    },
+    {
+      "name": "end_shippers",
+      "path": "/end_shippers",
+      "query": { "page_size": "100" },
+      "records": { "path": "end_shippers" },
+      "projection": "passthrough",
+      "schema": "schemas/end_shippers.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": { "page_size": "100" },
+      "records": { "path": "events" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "claims",
+      "path": "/claims",
+      "query": { "page_size": "100" },
+      "records": { "path": "claims" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/claims.json"
+    },
+    {
+      "name": "pickups",
+      "path": "/pickups",
+      "query": { "page_size": "100" },
+      "records": { "path": "pickups" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pickups.json"
+    },
+    {
+      "name": "refunds",
+      "path": "/refunds",
+      "query": { "page_size": "100" },
+      "records": { "path": "refunds" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/refunds.json"
+    },
+    {
+      "name": "scan_forms",
+      "path": "/scan_forms",
+      "query": { "page_size": "100" },
+      "records": { "path": "scan_forms" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_datetime",
+        "start_config_key": "start_date"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scan_forms.json"
+    },
+    {
+      "name": "child_users",
+      "path": "/users/children",
+      "query": { "page_size": "100" },
+      "records": { "path": "children" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after_id",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/child_users.json"
+    },
+    {
+      "name": "referral_customers",
+      "path": "/referral_customers",
+      "query": { "page_size": "100" },
+      "records": { "path": "referral_customers" },
+      "projection": "passthrough",
+      "schema": "schemas/referral_customers.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "webhooks" },
+      "pagination": { "type": "none" },
+      "projection": "passthrough",
+      "schema": "schemas/webhooks.json"
+    }
+  ]
+}

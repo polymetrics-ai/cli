@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/search", "query": { "format": "json", "pageno": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "query": "conformance fixture",
+      "number_of_results": 1,
+      "results": [
+        {
+          "url": "https://example.com/fixture/1",
+          "title": "Fixture result one",
+          "content": "conformance fixture content one",
+          "engine": "fixture",
+          "engines": ["fixture"],
+          "score": 1.0,
+          "category": "general",
+          "publishedDate": "2026-01-01T00:00:00",
+          "thumbnail": null
+        }
+      ]
+    }
+  }
+}

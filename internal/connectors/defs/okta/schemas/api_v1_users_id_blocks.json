@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "appliesTo": {
+      "type": "string",
+      "description": "The devices that the block applies to",
+      "enum": [
+        "ANY_DEVICES",
+        "UNKNOWN_DEVICES"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of access block",
+      "enum": [
+        "DEVICE_BASED"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Datadog Connection Specification",
+  "type": "object",
+  "required": ["api_key", "application_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Datadog API key, sent as the DD-API-KEY header. Never logged."
+    },
+    "application_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Datadog application key, sent as the DD-APPLICATION-KEY header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.datadoghq.com",
+      "description": "Datadog API base URL override for tests, proxies, or a regional site (e.g. https://api.datadoghq.eu, https://api.us3.datadoghq.com)."
+    }
+  }
+}

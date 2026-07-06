@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/search" },
+  "response": {
+    "status": 200,
+    "body": { "query": "polymetrics", "number_of_results": 0, "results": [] }
+  }
+}

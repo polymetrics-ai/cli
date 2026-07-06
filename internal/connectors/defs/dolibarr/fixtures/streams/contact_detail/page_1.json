@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/contacts/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "socid": "1",
+      "lastname": "Fixture",
+      "firstname": "Contact",
+      "email": "fixture-contact@example.com",
+      "phone_pro": "+15550100",
+      "phone_mobile": "",
+      "address": "123 Fixture St",
+      "town": "San Francisco",
+      "zip": "94105",
+      "country_code": "US",
+      "poste": "Manager",
+      "statut": "1",
+      "date_creation": 1767225600,
+      "date_modification": 1767225601
+    }
+  }
+}

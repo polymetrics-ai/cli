@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/content-logs/items",
+    "query": {
+      "from": "synthetic-conformance-value",
+      "to": "synthetic-conformance-value",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "contentId": "content_id_fixture",
+          "actionType": "create",
+          "actionTime": "2026-01-01T00:00:00Z",
+          "actor": {
+            "id": "id_fixture",
+            "email": "fixture@example.invalid",
+            "name": "name_fixture"
+          },
+          "itemType": "widget",
+          "itemId": "item_id_fixture",
+          "state": {},
+          "relationships": [
+            {
+              "type": "type_fixture",
+              "itemType": "item_type_fixture",
+              "itemId": "item_id_fixture"
+            }
+          ]
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/list_fixture_2/tasks",
+    "query": { "maxResults": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "tasks#tasks",
+      "items": [
+        {
+          "kind": "tasks#task",
+          "id": "task_fixture_2",
+          "etag": "etag_task_2",
+          "title": "Fixture task 2",
+          "updated": "2026-01-02T00:00:00.000Z",
+          "selfLink": "https://tasks.googleapis.com/tasks/v1/lists/list_fixture_2/tasks/task_fixture_2",
+          "parent": "",
+          "position": "00000000000000000002",
+          "notes": "fixture notes 2",
+          "status": "needsAction",
+          "due": "",
+          "completed": "",
+          "deleted": false,
+          "hidden": false
+        }
+      ]
+    }
+  }
+}

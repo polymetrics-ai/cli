@@ -1,0 +1,12 @@
+{
+  "record": { "id": "cmt_fixture_1", "content": "Need two bottles of milk" },
+  "expect": {
+    "method": "POST",
+    "path": "/comments/cmt_fixture_1",
+    "body": { "content": "Need two bottles of milk" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "cmt_fixture_1", "content": "Need two bottles of milk" }
+  }
+}

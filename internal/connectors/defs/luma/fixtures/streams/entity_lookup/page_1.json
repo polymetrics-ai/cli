@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/entities/lookup",
+    "query": {
+      "slug": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entity": {
+        "type": "fixture_type",
+        "calendar": {},
+        "event": {}
+      }
+    }
+  }
+}

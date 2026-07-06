@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Devin AI Connection Specification",
+  "type": "object",
+  "required": ["org_id", "api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Devin service-user API key. Used only for Bearer auth; never logged."
+    },
+    "org_id": {
+      "type": "string",
+      "description": "Devin organization id; every stream reads /v3/organizations/{org_id}/... scoped to this org."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.devin.ai",
+      "description": "Devin API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only session-derived objects created at or after this time are read."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-200), sent as the first query param on cursor-paginated streams."
+    },
+    "metrics_time_after": {
+      "type": "string",
+      "description": "Optional Unix-seconds lower bound sent as time_after on metrics and consumption streams."
+    },
+    "metrics_time_before": {
+      "type": "string",
+      "description": "Optional Unix-seconds upper bound sent as time_before on metrics and consumption streams."
+    },
+    "repository_filter_name": {
+      "type": "string",
+      "description": "Optional case-insensitive repository-name filter for the repositories stream."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Optional exact email filter for organization user streams."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

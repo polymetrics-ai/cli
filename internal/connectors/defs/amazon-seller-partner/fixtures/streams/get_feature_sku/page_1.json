@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/features/inventory/synthetic-conformance-value/synthetic-conformance-value",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "marketplaceId": "marketplaceId-fixture-1",
+        "featureName": "featureName-fixture-1",
+        "isEligible": false,
+        "ineligibleReasons": [],
+        "sellerSku": "sellerSku-fixture-1",
+        "fnSku": "fnSku-fixture-1",
+        "asin": "asin-fixture-1",
+        "skuCount": 1.25,
+        "feature_name": "feature_name-fixture-1",
+        "seller_sku": "seller_sku-fixture-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "marketstack",
+  "display_name": "Marketstack",
+  "description": "Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends through the Marketstack REST API.",
+  "integration_type": "api",
+  "docs_url": "https://marketstack.com/documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Marketstack API read of financial market data"
+  }
+}

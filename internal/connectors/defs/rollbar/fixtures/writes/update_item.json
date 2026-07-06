@@ -1,0 +1,34 @@
+{
+  "record": {
+    "item_id": "synthetic-conformance-value",
+    "status": "enabled",
+    "resolved_in_version": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value",
+    "level": "synthetic-conformance-value",
+    "assigned_user_id": "synthetic-conformance-value",
+    "assigned_team_id": "synthetic-conformance-value",
+    "snooze_enabled": true,
+    "snooze_expiration_in_seconds": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/1/item/synthetic-conformance-value",
+    "body": {
+      "status": "enabled",
+      "resolved_in_version": "synthetic-conformance-value",
+      "title": "synthetic-conformance-value",
+      "level": "synthetic-conformance-value",
+      "assigned_user_id": "synthetic-conformance-value",
+      "assigned_team_id": "synthetic-conformance-value",
+      "snooze_enabled": true,
+      "snooze_expiration_in_seconds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

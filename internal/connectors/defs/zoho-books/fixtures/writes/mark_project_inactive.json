@@ -1,0 +1,16 @@
+{
+  "record": {
+    "project_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/inactive"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

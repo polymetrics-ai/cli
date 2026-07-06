@@ -1,0 +1,23 @@
+{
+  "name": "coinmarketcap",
+  "display_name": "CoinMarketCap",
+  "description": "Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocurrency detail and quote lookups, price conversion, fear-and-greed index, and altcoin season index. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://coinmarketcap.com/api/documentation/v1/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external CoinMarketCap Pro API read of aggregate global market metrics",
+    "approval": "none; read-only market-data API"
+  }
+}

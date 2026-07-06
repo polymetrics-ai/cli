@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "absence_id": "synthetic-conformance-value",
+    "comment": "Fixture cancellation"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/companies/synthetic-conformance-value/absences/synthetic-conformance-value",
+    "body": {
+      "comment": "Fixture cancellation"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {
+    }
+  }
+}

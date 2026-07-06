@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organisation_cis_settings",
+  "type": "object",
+  "x-primary-key": [
+    "organisation_id"
+  ],
+  "properties": {
+    "CISContractorEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CISSubContractorEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Rate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "organisation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coins/synthetic-conformance-value/tickers",
+    "query": {
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "Bitcoin",
+      "tickers": [
+        {
+          "base": "BTC",
+          "target": "USDT100",
+          "market": {
+            "name": "Fixture Exchange 100",
+            "identifier": "fixture_exchange_100",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42100.5,
+          "volume": 1334.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42100.5
+          },
+          "converted_volume": {
+            "btc": 1334.5,
+            "eth": 18864.4,
+            "usd": 51849121.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        }
+      ]
+    }
+  }
+}

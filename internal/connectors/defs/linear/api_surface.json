@@ -1,0 +1,15 @@
+{
+  "api": "Linear GraphQL API (https://api.linear.app/graphql)",
+  "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Legacy-parity Linear GraphQL surface plus a typed Pass B blocker. The current bundle covers the 4 legacy root connections (issues, teams, projects, users). Full Linear GraphQL expansion is quarantined because every additional read connection and mutation shares POST /graphql and requires a fixed GraphQL request body plus cursor state in variables; the defs-only read path does not send stream.body, write actions cannot inject static GraphQL documents safely, and this workstream may not create or edit a hook package.",
+  "endpoints": [
+    { "method": "GET", "path": "/graphql (query: issues)", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/graphql (query: teams)", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/graphql (query: projects)", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/graphql (query: users)", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/graphql (query: viewer)", "excluded": { "category": "non_data_endpoint", "reason": "bounded identity/connectivity check used by Check(), not a syncable object stream" } },
+    { "method": "POST", "path": "/graphql (mutations: issueCreate, issueUpdate, commentCreate, ...)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear mutations require fixed GraphQL query documents and variables in the JSON body; the write dialect can only send record-shaped bodies, and exposing a generic GraphQL mutation body would violate connector tool-surface rules." } },
+    { "method": "GET", "path": "/graphql (query: comments, cycles, labels, workflowStates, webhooks, other root connections)", "excluded": { "category": "out_of_scope", "reason": "Blocked by typed ENGINE_GAP in docs/migration/quarantine.json: Linear read connections require POST request bodies and body-cursor pagination via variables, but the declarative read path currently sends nil body and this pass cannot add or edit a StreamHook." } }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Account-Secret", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "before",
+      "token_path": "cursor.before"
+    },
+    "check": { "method": "GET", "path": "/edit/segments" },
+    "error_map": [
+      { "status": 401, "hint": "chameleon api_key is missing or invalid; re-run pm credentials add chameleon" },
+      { "status": 403, "hint": "chameleon api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chameleon rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "/edit/surveys",
+      "query": { "limit": "50" },
+      "records": { "path": "surveys" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "tours",
+      "path": "/edit/tours",
+      "query": { "limit": "50" },
+      "records": { "path": "tours" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/tours.json"
+    },
+    {
+      "name": "launchers",
+      "path": "/edit/launchers",
+      "query": { "limit": "50" },
+      "records": { "path": "launchers" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/launchers.json"
+    },
+    {
+      "name": "tooltips",
+      "path": "/edit/tooltips",
+      "query": { "limit": "50" },
+      "records": { "path": "tooltips" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/tooltips.json"
+    },
+    {
+      "name": "segments",
+      "path": "/edit/segments",
+      "query": { "limit": "50" },
+      "records": { "path": "segments" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "embeds",
+      "path": "/edit/embeds",
+      "query": { "limit": "50" },
+      "records": { "path": "embeds" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/embeds.json"
+    },
+    {
+      "name": "event_names",
+      "path": "/edit/event_names",
+      "query": { "limit": "50" },
+      "records": { "path": "event_names" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/event_names.json"
+    },
+    {
+      "name": "tags",
+      "path": "/edit/tags",
+      "query": { "limit": "50" },
+      "records": { "path": "tags" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "deliveries",
+      "path": "/edit/deliveries",
+      "query": { "limit": "50" },
+      "records": { "path": "deliveries" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/deliveries.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/edit/webhooks",
+      "query": { "kind": "webhook" },
+      "records": { "path": "webhooks" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "companies",
+      "path": "/analyze/companies",
+      "query": { "limit": "50" },
+      "records": { "path": "companies" },
+      "schema": "schemas/companies.json"
+    }
+  ]
+}

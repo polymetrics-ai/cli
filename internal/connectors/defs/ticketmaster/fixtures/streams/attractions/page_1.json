@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/attractions.json",
+    "query": { "page": "0", "size": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "attractions": [
+          {
+            "id": "attraction_fixture_1",
+            "name": "Fixture Attraction 1",
+            "url": "https://example.com/attractions/1",
+            "type": "attraction",
+            "locale": "en-us"
+          },
+          {
+            "id": "attraction_fixture_2",
+            "name": "Fixture Attraction 2",
+            "url": "https://example.com/attractions/2",
+            "type": "attraction",
+            "locale": "en-us"
+          }
+        ]
+      }
+    }
+  }
+}

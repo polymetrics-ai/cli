@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "entity_search",
+  "type": "object",
+  "x-primary-key": [
+    "symbol"
+  ],
+  "required": [
+    "symbol"
+  ],
+  "properties": {
+    "symbol": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "industry": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "exchange": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

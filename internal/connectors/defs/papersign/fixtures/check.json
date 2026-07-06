@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/documents", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "pagination": { "next_cursor": "" } }
+  }
+}

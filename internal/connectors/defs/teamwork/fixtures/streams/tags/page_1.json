@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": "1", "name": "fixture-urgent", "color": "#ff0000" },
+        { "id": "2", "name": "fixture-backlog", "color": "#0000ff" }
+      ]
+    }
+  }
+}

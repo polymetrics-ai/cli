@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "id": "id_fixture",
+      "meta": {
+        "resourceType": "resource_type_fixture",
+        "location": "location_fixture"
+      },
+      "displayName": "display_name_fixture",
+      "members": [
+        {
+          "value": "value_fixture",
+          "type": "type_fixture",
+          "display": "display_fixture"
+        }
+      ]
+    }
+  }
+}

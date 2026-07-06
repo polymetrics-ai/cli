@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/spaces"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [],
+      "_links": {}
+    }
+  }
+}

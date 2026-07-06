@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoices",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": "integer" },
+    "customer": { "type": ["string", "null"] },
+    "subscription": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "amount_due": { "type": ["integer", "null"] },
+    "amount_paid": { "type": ["integer", "null"] },
+    "amount_remaining": { "type": ["integer", "null"] },
+    "total": { "type": ["integer", "null"] },
+    "paid": { "type": ["boolean", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}

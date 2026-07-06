@@ -1,0 +1,11 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "id": "po_fixture_1",
+    "cidr": "10.0.1.0/24"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/org_1/policyObjects/po_fixture_1"
+  }
+}

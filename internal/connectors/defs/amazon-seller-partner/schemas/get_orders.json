@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_orders",
+  "type": "object",
+  "properties": {
+    "purchaseOrderNumber": {
+      "type": "string"
+    },
+    "orderDetails": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "purchaseOrderNumber"
+  ]
+}

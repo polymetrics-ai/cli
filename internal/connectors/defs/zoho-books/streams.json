@@ -1,0 +1,3585 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "prefix": "Zoho-oauthtoken ",
+        "value": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 200
+    },
+    "check": {
+      "method": "GET",
+      "path": "/contacts"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "zoho-books access_token is missing, expired, or invalid; re-run pm credentials add zoho-books"
+      },
+      {
+        "status": 403,
+        "hint": "zoho-books account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "zoho-books rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "contacts"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.contact_id }}",
+        "name": "{{ coalesce record.name record.contact_name record.customer_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
+      },
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoices"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.invoice_id }}",
+        "name": "{{ coalesce record.name record.invoice_number record.number }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
+      },
+      "schema": "schemas/invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "items",
+      "path": "/items",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.item_id }}",
+        "name": "{{ coalesce record.name record.item_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.last_modified_time record.updated_time }}"
+      },
+      "schema": "schemas/items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bank_accounts",
+      "path": "/bankaccounts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bankaccounts"
+      },
+      "computed_fields": {
+        "id": "{{ record.account_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_bank_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_bank_account",
+      "path": "/bankaccounts/{{ config.account_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bankaccount"
+      },
+      "computed_fields": {
+        "id": "{{ record.account_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_bank_account.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_last_imported_bank_statement",
+      "path": "/bankaccounts/{{ config.account_id }}/statement/lastimported",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "statement"
+      },
+      "computed_fields": {
+        "id": "{{ record.statement_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_last_imported_bank_statement.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bank_account_rules",
+      "path": "/bankaccounts/rules",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "rules"
+      },
+      "computed_fields": {
+        "id": "{{ record.rule_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_bank_account_rules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_bank_account_rule",
+      "path": "/bankaccounts/rules/{{ config.rule_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "target_accounts"
+      },
+      "computed_fields": {
+        "id": "{{ record.target_account_id }}",
+        "name": "{{ record.target_account_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_bank_account_rule.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bank_transactions",
+      "path": "/banktransactions",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "banktransactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_bank_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_matching_bank_transactions",
+      "path": "/banktransactions/uncategorized/{{ config.transaction_id }}/match",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "matching_transactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_matching_bank_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_bank_transaction",
+      "path": "/banktransactions/{{ config.bank_transaction_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "banktransaction"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_bank_transaction.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_base_currency_adjustments",
+      "path": "/basecurrencyadjustment",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "base_currency_adjustments"
+      },
+      "computed_fields": {
+        "id": "{{ record.base_currency_adjustment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_base_currency_adjustments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_base_currency_adjustment_accounts",
+      "path": "/basecurrencyadjustment/accounts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "currency_id": {
+          "template": "{{ config.currency_id }}"
+        },
+        "adjustment_date": {
+          "template": "{{ config.adjustment_date }}"
+        },
+        "exchange_rate": {
+          "template": "{{ config.exchange_rate }}"
+        },
+        "notes": {
+          "template": "{{ config.notes }}"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.currency_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_base_currency_adjustment_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_base_currency_adjustment_contacts",
+      "path": "/basecurrencyadjustment/contacts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "currency_id": {
+          "template": "{{ config.currency_id }}"
+        },
+        "account_id": {
+          "template": "{{ config.account_id }}"
+        },
+        "adjustment_date": {
+          "template": "{{ config.adjustment_date }}"
+        },
+        "exchange_rate": {
+          "template": "{{ config.exchange_rate }}"
+        }
+      },
+      "records": {
+        "path": "contacts"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_base_currency_adjustment_contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_base_currency_adjustment",
+      "path": "/basecurrencyadjustment/{{ config.base_currency_adjustment_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.base_currency_adjustment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_base_currency_adjustment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bills",
+      "path": "/bills",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bills"
+      },
+      "computed_fields": {
+        "id": "{{ record.bill_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_bills.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "convert_purchase_order_to_bill",
+      "path": "/bills/editpage/frompurchaseorders",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "purchaseorder_ids": {
+          "template": "{{ config.purchaseorder_ids }}"
+        }
+      },
+      "records": {
+        "path": "purchaseorder_ids"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/convert_purchase_order_to_bill.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_bill",
+      "path": "/bills/{{ config.bill_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bill"
+      },
+      "computed_fields": {
+        "id": "{{ record.bill_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_bill.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_bill_comments",
+      "path": "/bills/{{ config.bill_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_bill_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bill_payments",
+      "path": "/bills/{{ config.bill_id }}/payments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "payments"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_bill_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_chart_of_accounts",
+      "path": "/chartofaccounts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "chartofaccounts"
+      },
+      "computed_fields": {
+        "id": "{{ record.account_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_chart_of_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_chart_of_account_transactions",
+      "path": "/chartofaccounts/accounttransactions",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "account_id": {
+          "template": "{{ config.account_id }}"
+        }
+      },
+      "records": {
+        "path": "transactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.categorized_transaction_id }}",
+        "name": "{{ record.offset_account_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_chart_of_account_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_chart_of_account",
+      "path": "/chartofaccounts/{{ config.account_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "custom_fields"
+      },
+      "computed_fields": {
+        "id": "{{ record.customfield_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_chart_of_account.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_contact_persons",
+      "path": "/contacts/{{ config.contact_id }}/contactpersons",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "contact_persons"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_person_id }}",
+        "name": "{{ record.first_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_contact_persons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contact_person",
+      "path": "/contacts/{{ config.contact_id }}/contactpersons/{{ config.contact_person_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "contact_person"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_id }}",
+        "name": "{{ record.first_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_contact_person.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "contact"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_contact.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contact_address",
+      "path": "/contacts/{{ config.contact_id }}/address",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "addresses"
+      },
+      "computed_fields": {
+        "id": "{{ record.address_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_contact_address.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_contact_autobill_recurring_invoices",
+      "path": "/contacts/{{ config.contact_id }}/card/{{ config.card_id }}/recurringinvoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_invoices"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_invoice_id }}",
+        "name": "{{ record.recurrence_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_contact_autobill_recurring_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_contact_comments",
+      "path": "/contacts/{{ config.contact_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "contact_comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_contact_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_unused_retainer_payments",
+      "path": "/contacts/{{ config.contact_id }}/receivables/unusedretainerpayments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "unused_credits_receivable"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.payment_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_unused_retainer_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_contact_credit_note_refunds",
+      "path": "/contacts/{{ config.contact_id }}/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_contact_credit_note_refunds.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contact_statement_mail",
+      "path": "/contacts/{{ config.contact_id }}/statements/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_id }}",
+        "name": "{{ record.file_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_contact_statement_mail.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_credit_notes",
+      "path": "/creditnotes",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnotes"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_credit_notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_credit_note_refunds_of_all_credit_notes",
+      "path": "/creditnotes/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_credit_note_refunds_of_all_credit_notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note_refund_by_id",
+      "path": "/creditnotes/refunds/{{ config.refund_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote_refund"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_credit_note_refund_by_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_credit_note_templates",
+      "path": "/creditnotes/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_credit_note_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note",
+      "path": "/creditnotes/{{ config.creditnote_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/get_credit_note.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_credit_note_comments",
+      "path": "/creditnotes/{{ config.creditnote_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_credit_note_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note_custom_fields",
+      "path": "/creditnotes/{{ config.creditnote_id }}/customfields",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "custom_fields"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_credit_note_custom_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note_email",
+      "path": "/creditnotes/{{ config.creditnote_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.customer_id }}",
+        "name": "{{ record.file_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_credit_note_email.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note_email_history",
+      "path": "/creditnotes/{{ config.creditnote_id }}/emailhistory",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "email_history"
+      },
+      "computed_fields": {
+        "id": "{{ record.mailhistory_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_credit_note_email_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_invoices_of_credit_note",
+      "path": "/creditnotes/{{ config.creditnote_id }}/invoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoices_credited"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_id }}",
+        "name": "{{ record.invoice_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_invoices_of_credit_note.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_credit_note_refunds_of_a_credit_note",
+      "path": "/creditnotes/{{ config.creditnote_id }}/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_credit_note_refunds_of_a_credit_note.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_credit_note_refund",
+      "path": "/creditnotes/{{ config.creditnote_id }}/refunds/{{ config.creditnote_refund_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "creditnote_refund"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_credit_note_refund.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_currencies",
+      "path": "/settings/currencies",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "currencies"
+      },
+      "computed_fields": {
+        "id": "{{ record.currency_id }}",
+        "name": "{{ record.currency_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_currencies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_currency",
+      "path": "/settings/currencies/{{ config.currency_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "currency"
+      },
+      "computed_fields": {
+        "id": "{{ record.currency_id }}",
+        "name": "{{ record.currency_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_currency.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_exchange_rates",
+      "path": "/settings/currencies/{{ config.currency_id }}/exchangerates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "exchange_rates"
+      },
+      "computed_fields": {
+        "id": "{{ record.exchange_rate_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_exchange_rates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_exchange_rate",
+      "path": "/settings/currencies/{{ config.currency_id }}/exchangerates/{{ config.exchange_rate_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "exchange_rate"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_exchange_rate.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_custom_modules",
+      "path": "/settings/modules",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "modules"
+      },
+      "computed_fields": {
+        "id": "{{ record.module_id }}",
+        "name": "{{ record.module_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_custom_modules.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_custom_module",
+      "path": "/settings/modules/{{ config.module_api_name }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "module"
+      },
+      "computed_fields": {
+        "id": "{{ record.module_id }}",
+        "name": "{{ record.module_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_custom_module.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_custom_module_records",
+      "path": "/{{ config.module_name }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "module_record"
+      },
+      "computed_fields": {
+        "id": "{{ record.module_record_id }}",
+        "name": "{{ record.module_api_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_custom_module_records.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_custom_module_record",
+      "path": "/{{ config.module_name }}/{{ config.module_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "users"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_custom_module_record.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_customer_debit_note",
+      "path": "/invoices/{{ config.debit_note_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoice"
+      },
+      "computed_fields": {
+        "id": "{{ record.invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_customer_debit_note.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_customer_payments",
+      "path": "/customerpayments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "customer_payments"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.invoice_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_customer_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_customer_payment_refunds",
+      "path": "/customerpayments/{{ config.customer_payment_id }}/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "payment_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_customer_payment_refunds.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_customer_payment_refund",
+      "path": "/customerpayments/{{ config.customer_payment_id }}/refunds/{{ config.refund_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "payment_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_refund_id }}",
+        "name": "{{ record.reference_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_customer_payment_refund.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_customer_payment",
+      "path": "/customerpayments/{{ config.payment_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "payment"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_customer_payment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_delivery_challans",
+      "path": "/deliverychallans",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "deliverychallans"
+      },
+      "computed_fields": {
+        "id": "{{ record.deliverychallan_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_delivery_challans.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_delivery_challan_templates",
+      "path": "/deliverychallans/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_delivery_challan_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_delivery_challan",
+      "path": "/deliverychallans/{{ config.deliverychallan_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "deliverychallan"
+      },
+      "computed_fields": {
+        "id": "{{ record.deliverychallan_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_delivery_challan.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_estimates",
+      "path": "/estimates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "estimates"
+      },
+      "computed_fields": {
+        "id": "{{ record.estimate_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_estimates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_estimate_templates",
+      "path": "/estimates/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_estimate_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_estimate",
+      "path": "/estimates/{{ config.estimate_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "estimate"
+      },
+      "computed_fields": {
+        "id": "{{ record.estimate_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_estimate.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_estimate_comments",
+      "path": "/estimates/{{ config.estimate_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_estimate_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_estimate_email",
+      "path": "/estimates/{{ config.estimate_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "email_template_id": {
+          "template": "{{ config.email_template_id }}"
+        }
+      },
+      "records": {
+        "path": "error_list"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_estimate_email.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_employees",
+      "path": "/employees",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "employees"
+      },
+      "computed_fields": {
+        "id": "{{ record.employee_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_employees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_employee",
+      "path": "/employees/{{ config.employee_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "employee"
+      },
+      "computed_fields": {
+        "id": "{{ record.employee_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_employee.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_expenses",
+      "path": "/expenses",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "expenses"
+      },
+      "computed_fields": {
+        "id": "{{ record.expense_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_expenses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_expense",
+      "path": "/expenses/{{ config.expense_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "expense"
+      },
+      "computed_fields": {
+        "id": "{{ record.expense_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_expense.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_expense_comments",
+      "path": "/expenses/{{ config.expense_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_expense_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_fixed_assets",
+      "path": "/fixedassets",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "fixedassets"
+      },
+      "computed_fields": {
+        "id": "{{ record.fixed_asset_id }}",
+        "name": "{{ record.asset_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_fixed_assets.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_fixed_asset",
+      "path": "/fixedassets/{{ config.fixed_asset_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "fissed-asset"
+      },
+      "computed_fields": {
+        "id": "{{ record.fixed_asset_id }}",
+        "name": "{{ record.asset_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_fixed_asset.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_fixed_asset_forecast",
+      "path": "/fixedassets/{{ config.fixed_asset_id }}/forecast",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_fixed_asset_forecast.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_fixed_asset_history",
+      "path": "/fixedassets/{{ config.fixed_asset_id }}/history",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "asset_history"
+      },
+      "computed_fields": {
+        "id": "{{ record.valuation_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_fixed_asset_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_fixed_asset_type_list",
+      "path": "/fixedassettypes",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "fixed_asset_types"
+      },
+      "computed_fields": {
+        "id": "{{ record.fixed_asset_type_id }}",
+        "name": "{{ record.fixed_asset_type_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_fixed_asset_type_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_invoice_templates",
+      "path": "/invoices/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_invoice_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_invoice",
+      "path": "/invoices/{{ config.invoice_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoice"
+      },
+      "computed_fields": {
+        "id": "{{ record.invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_invoice_comments",
+      "path": "/invoices/{{ config.invoice_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_invoice_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_invoice_credits_applied",
+      "path": "/invoices/{{ config.invoice_id }}/creditsapplied",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "credits"
+      },
+      "computed_fields": {
+        "id": "{{ record.creditnote_id }}",
+        "name": "{{ record.creditnotes_number }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_invoice_credits_applied.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_invoice_document_details",
+      "path": "/invoices/{{ config.invoice_id }}/documents/{{ config.document_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "document"
+      },
+      "computed_fields": {
+        "id": "{{ record.document_id }}",
+        "name": "{{ record.document_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_invoice_document_details.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_invoice_email",
+      "path": "/invoices/{{ config.invoice_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.entity_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_invoice_email.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_payment_reminder_mail_content_for_invoice",
+      "path": "/invoices/{{ config.invoice_id }}/paymentreminder",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.entity_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_payment_reminder_mail_content_for_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_invoice_payments",
+      "path": "/invoices/{{ config.invoice_id }}/payments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "payments"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.payment_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_invoice_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "generate_invoice_payment_link",
+      "path": "/share/paymentlink",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "transaction_id": {
+          "template": "{{ config.transaction_id }}"
+        },
+        "transaction_type": {
+          "template": "{{ config.transaction_type }}"
+        },
+        "link_type": {
+          "template": "{{ config.link_type }}"
+        },
+        "expiry_time": {
+          "template": "{{ config.expiry_time }}"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/generate_invoice_payment_link.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_item_details",
+      "path": "/itemdetails",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "item_ids": {
+          "template": "{{ config.item_ids }}"
+        }
+      },
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ record.item_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_item_details.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_item",
+      "path": "/items/{{ config.item_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "item"
+      },
+      "computed_fields": {
+        "id": "{{ record.item_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_item.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_journals",
+      "path": "/journals",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "journals"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.entry_number }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_journals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_journal",
+      "path": "/journals/{{ config.journal_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "journal"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.location_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_journal.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_journal_credits",
+      "path": "/journals/{{ config.journal_id }}/credits",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "credits"
+      },
+      "computed_fields": {
+        "id": "{{ record.credit_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_journal_credits.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_journals",
+      "path": "/recurringjournals",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_journals"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.location_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_recurring_journals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_recurring_journal",
+      "path": "/recurringjournals/{{ config.recurring_journal_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "journal"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.location_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_recurring_journal.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_child_journals",
+      "path": "/recurringjournals/{{ config.recurring_journal_id }}/journals",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "journals"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.entry_number }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_child_journals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_transaction_journal_view",
+      "path": "/transactions/{{ config.transaction_id }}/journals",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "entity_type": {
+          "template": "{{ config.entity_type }}"
+        }
+      },
+      "records": {
+        "path": "journal"
+      },
+      "computed_fields": {
+        "id": "{{ record.journal_id }}",
+        "name": "{{ record.location_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_transaction_journal_view.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_locations",
+      "path": "/locations",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "locations"
+      },
+      "computed_fields": {
+        "id": "{{ record.location_id }}",
+        "name": "{{ record.location_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_locations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_opening_balance_transactions",
+      "path": "/openingbalances/transactions",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "account_id": {
+          "template": "{{ config.account_id }}"
+        }
+      },
+      "records": {
+        "path": "transactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_opening_balance_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_opening_balance_details",
+      "path": "/settings/openingbalancedetails",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "account_id": {
+          "template": "{{ config.account_id }}"
+        }
+      },
+      "records": {
+        "path": "opening_balance"
+      },
+      "computed_fields": {
+        "id": "{{ record.opening_balance_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_opening_balance_details.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_opening_balance",
+      "path": "/settings/openingbalances",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "opening_balance"
+      },
+      "computed_fields": {
+        "id": "{{ record.opening_balance_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_opening_balance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_organizations",
+      "path": "/organizations",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "organizations"
+      },
+      "computed_fields": {
+        "id": "{{ record.organization_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_organizations_for_user",
+      "path": "/organizations/user",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "organizations"
+      },
+      "computed_fields": {
+        "id": "{{ record.organization_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_organizations_for_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_organization",
+      "path": "/organizations/{{ config.organization_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "organization"
+      },
+      "computed_fields": {
+        "id": "{{ record.organization_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_organization.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_pricebooks",
+      "path": "/pricebooks",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "pricebooks"
+      },
+      "computed_fields": {
+        "id": "{{ record.currency_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_pricebooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_projects",
+      "path": "/projects",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "projects"
+      },
+      "computed_fields": {
+        "id": "{{ record.project_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/list_projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_project",
+      "path": "/projects/{{ config.project_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "project"
+      },
+      "computed_fields": {
+        "id": "{{ record.project_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/get_project.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_project_comments",
+      "path": "/projects/{{ config.project_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_project_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_project_invoices",
+      "path": "/projects/{{ config.project_id }}/invoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoices"
+      },
+      "computed_fields": {
+        "id": "{{ record.invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/list_project_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_project_tasks",
+      "path": "/projects/{{ config.project_id }}/tasks",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tasks"
+      },
+      "computed_fields": {
+        "id": "{{ record.project_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_project_tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_project_task",
+      "path": "/projects/{{ config.project_id }}/tasks/{{ config.task_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "task"
+      },
+      "computed_fields": {
+        "id": "{{ record.project_id }}",
+        "name": "{{ record.project_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_project_task.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_project_users",
+      "path": "/projects/{{ config.project_id }}/users",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "users"
+      },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.user_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_project_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_project_user",
+      "path": "/projects/{{ config.project_id }}/users/{{ config.user_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "user"
+      },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.user_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_project_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_purchase_orders",
+      "path": "/purchaseorders",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "purchaseorders"
+      },
+      "computed_fields": {
+        "id": "{{ record.purchaseorder_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_purchase_orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_purchase_order_templates",
+      "path": "/purchaseorders/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_purchase_order_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_purchase_order",
+      "path": "/purchaseorders/{{ config.purchaseorder_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "purchaseorder"
+      },
+      "computed_fields": {
+        "id": "{{ record.purchaseorder_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_purchase_order.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_purchase_order_comments",
+      "path": "/purchaseorders/{{ config.purchaseorder_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_purchase_order_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_recurring_bill",
+      "path": "/recurring_bills/{{ config.recurring_bill_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_bill"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_bill_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_recurring_bill.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_bills",
+      "path": "/recurringbills",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurringbills"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_bill_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_recurring_bills.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_expenses",
+      "path": "/recurringexpenses",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_expenses"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_expense_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_recurring_expenses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_recurring_expense",
+      "path": "/recurringexpenses/{{ config.recurring_expense_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_expense"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_expense_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_recurring_expense.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_expense_history",
+      "path": "/recurringexpenses/{{ config.recurring_expense_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_recurring_expense_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_child_expenses_of_recurring_expense",
+      "path": "/recurringexpenses/{{ config.recurring_expense_id }}/expenses",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "expensehistory"
+      },
+      "computed_fields": {
+        "id": "{{ record.expense_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_child_expenses_of_recurring_expense.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_invoices",
+      "path": "/recurringinvoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_invoices"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_recurring_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_recurring_invoice",
+      "path": "/recurringinvoices/{{ config.recurring_invoice_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "recurring_invoice"
+      },
+      "computed_fields": {
+        "id": "{{ record.recurring_invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_recurring_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_invoice_history",
+      "path": "/recurringinvoices/{{ config.recurring_invoice_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_recurring_invoice_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_recurring_invoice_child_invoices",
+      "path": "/recurringinvoices/{{ config.recurring_invoice_id }}/invoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "invoice_history"
+      },
+      "computed_fields": {
+        "id": "{{ record.invoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_recurring_invoice_child_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_register_budget_vs_actuals",
+      "path": "/registers/{{ config.account_id }}/budgetvsactuals",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "register_budget_vs_actual"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_register_budget_vs_actuals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_register_bulk_action_history",
+      "path": "/registers/{{ config.account_id }}/bulkhistory",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bulk_actions_history"
+      },
+      "computed_fields": {
+        "id": "{{ record.bulk_action_id }}",
+        "name": "{{ record.user_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_register_bulk_action_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_register_bulk_action_history",
+      "path": "/registers/{{ config.account_id }}/bulkhistory/{{ config.comment_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bulk_action_details"
+      },
+      "computed_fields": {
+        "id": "{{ record.bulk_action_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_register_bulk_action_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_register_bulk_update_editpage",
+      "path": "/registers/{{ config.account_id }}/bulkupdate/editpage",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "fields"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_register_bulk_update_editpage.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_register_transactions",
+      "path": "/registers/{{ config.account_id }}/transactions",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "register_transactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_register_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tags",
+      "path": "/reportingtags",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "reporting_tags"
+      },
+      "computed_fields": {
+        "id": "{{ record.tag_id }}",
+        "name": "{{ record.tag_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "all_tag_options",
+      "path": "/reportingtags/(\\d+)/options/all",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "tag_id": {
+          "template": "{{ config.tag_id }}"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "id": "{{ record.option_id }}",
+        "name": "{{ record.option_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/all_tag_options.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_all_tag_options",
+      "path": "/reportingtags/options",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        },
+        "tag_id": {
+          "template": "{{ config.tag_id }}"
+        }
+      },
+      "records": {
+        "path": "dependent_tags"
+      },
+      "computed_fields": {
+        "id": "{{ record.dependent_id }}",
+        "name": "{{ record.dependent_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_all_tag_options.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_retainer_invoices",
+      "path": "/retainerinvoices",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "retainerinvoices"
+      },
+      "computed_fields": {
+        "id": "{{ record.retainerinvoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_retainer_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_retainer_invoice_templates",
+      "path": "/retainerinvoices/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_retainer_invoice_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_retainer_invoice",
+      "path": "/retainerinvoices/{{ config.retainerinvoice_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "retainerinvoice"
+      },
+      "computed_fields": {
+        "id": "{{ record.retainerinvoice_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_retainer_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_retainer_invoice",
+      "path": "/retainerinvoices/{{ config.retainerinvoice_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_retainer_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_retainer_invoice_email",
+      "path": "/retainerinvoices/{{ config.retainerinvoice_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "deprecated_placeholders_used"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_retainer_invoice_email.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_sales_orders",
+      "path": "/salesorders",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "salesorders"
+      },
+      "computed_fields": {
+        "id": "{{ record.salesorder_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_sales_orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_sales_order_templates",
+      "path": "/salesorders/templates",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "templates"
+      },
+      "computed_fields": {
+        "id": "{{ record.template_id }}",
+        "name": "{{ record.template_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_sales_order_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sales_order",
+      "path": "/salesorders/{{ config.salesorder_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "salesorder"
+      },
+      "computed_fields": {
+        "id": "{{ record.customer_id }}",
+        "name": "{{ record.salesperson_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_sales_order.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sales_order_email",
+      "path": "/salesorders/{{ config.salesorder_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.entity_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_sales_order_email.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_sales_receipts",
+      "path": "/salesreceipts",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "salesreceipts"
+      },
+      "computed_fields": {
+        "id": "{{ record.sales_receipt_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_sales_receipts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sales_receipt",
+      "path": "/salesreceipts/{{ config.sales_receipt_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "salesreceipt"
+      },
+      "computed_fields": {
+        "id": "{{ record.sales_receipt_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_sales_receipt.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_tasks",
+      "path": "/tasks",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tasks"
+      },
+      "computed_fields": {
+        "id": "{{ record.task_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/list_tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_task",
+      "path": "/tasks/{{ config.task_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "task"
+      },
+      "computed_fields": {
+        "id": "{{ record.task_id }}",
+        "name": "{{ record.contact_name }}",
+        "updated_at": "{{ record.last_modified_by_id }}"
+      },
+      "schema": "schemas/get_task.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_task_comments",
+      "path": "/tasks/{{ config.task_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_task_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_task_document",
+      "path": "/tasks/{{ config.task_id }}/documents/{{ config.document_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "documents"
+      },
+      "computed_fields": {
+        "id": "{{ record.document_id }}",
+        "name": "{{ record.file_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_task_document.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_tax_authorities",
+      "path": "/settings/taxauthorities",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax_authorities"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_authority_id }}",
+        "name": "{{ record.tax_authority_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_tax_authorities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tax_authority",
+      "path": "/settings/taxauthorities/{{ config.tax_authority_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax_authority"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_authority_id }}",
+        "name": "{{ record.tax_authority_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_tax_authority.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_taxes",
+      "path": "/settings/taxes",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "taxes"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_id }}",
+        "name": "{{ record.tax_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_taxes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tax",
+      "path": "/settings/taxes/{{ config.tax_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_id }}",
+        "name": "{{ record.tax_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_tax.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_tax_exemptions",
+      "path": "/settings/taxexemptions",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax_exemptions"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_exemption_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_tax_exemptions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tax_exemption",
+      "path": "/settings/taxexemptions/{{ config.tax_exemption_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax_exemption"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_exemption_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_tax_exemption.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tax_group",
+      "path": "/settings/taxgroups/{{ config.tax_group_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tax_group"
+      },
+      "computed_fields": {
+        "id": "{{ record.tax_group_id }}",
+        "name": "{{ record.tax_group_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_tax_group.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_time_entries",
+      "path": "/projects/timeentries",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "time_entries"
+      },
+      "computed_fields": {
+        "id": "{{ record.time_entry_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/list_time_entries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_running_timer",
+      "path": "/projects/timeentries/runningtimer/me",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "time_entry"
+      },
+      "computed_fields": {
+        "id": "{{ record.time_entry_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/get_running_timer.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_time_entry",
+      "path": "/projects/timeentries/{{ config.time_entry_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "time_entry"
+      },
+      "computed_fields": {
+        "id": "{{ record.time_entry_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/get_time_entry.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_accounting_period_transaction_lock",
+      "path": "/accountingperiods/transactionlock",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "transaction_lock"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_lock_id }}",
+        "name": "{{ record.accounting_period_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_accounting_period_transaction_lock.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_transaction_lock",
+      "path": "/transactionlock",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "transaction_lock"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_lock_id }}",
+        "name": "{{ record.accounting_period_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_transaction_lock.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_transaction_locks",
+      "path": "/transactionlocks",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "transaction_locks"
+      },
+      "computed_fields": {
+        "id": "{{ record.transaction_lock_id }}",
+        "name": "{{ record.accounting_period_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_transaction_locks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_users",
+      "path": "/users",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "users"
+      },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/list_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_current_user",
+      "path": "/users/me",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "user"
+      },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/get_current_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_user",
+      "path": "/users/{{ config.user_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "user"
+      },
+      "computed_fields": {
+        "id": "{{ record.user_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.created_time }}"
+      },
+      "schema": "schemas/get_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_credits",
+      "path": "/vendorcredits",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendorcredits"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_vendor_credits.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_credit_refunds_of_all_vendor_credits",
+      "path": "/vendorcredits/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendor_credit_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_vendor_credit_refunds_of_all_vendor_credits.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_vendor_credit",
+      "path": "/vendorcredits/{{ config.vendor_credit_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendor_credit"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_vendor_credit.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_bills_credited",
+      "path": "/vendorcredits/{{ config.vendor_credit_id }}/bills",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "bills_credited"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_id }}",
+        "name": "{{ record.bill_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_bills_credited.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_credit_comments",
+      "path": "/vendorcredits/{{ config.vendor_credit_id }}/comments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "comments"
+      },
+      "computed_fields": {
+        "id": "{{ record.comment_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_vendor_credit_comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_credit_refunds_of_a_vendor_credit",
+      "path": "/vendorcredits/{{ config.vendor_credit_id }}/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendor_credit_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_refund_id }}",
+        "name": "{{ record.customer_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_vendor_credit_refunds_of_a_vendor_credit.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_vendor_credit_refund",
+      "path": "/vendorcredits/{{ config.vendor_credit_id }}/refunds/{{ config.vendor_credit_refund_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendor_credit_refund"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendor_credit_refund_id }}",
+        "name": "{{ record.account_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_vendor_credit_refund.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_payments",
+      "path": "/vendorpayments",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendorpayments"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/list_vendor_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_vendor_payment",
+      "path": "/vendorpayments/{{ config.payment_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendorpayment"
+      },
+      "computed_fields": {
+        "id": "{{ record.payment_id }}",
+        "name": "{{ record.vendor_name }}",
+        "updated_at": "{{ record.last_modified_time }}"
+      },
+      "schema": "schemas/get_vendor_payment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_vendor_payment_email_content",
+      "path": "/vendorpayments/{{ config.payment_id }}/email",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "to_contacts"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact_person_id }}",
+        "name": "{{ record.first_name }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/get_vendor_payment_email_content.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_vendor_payment_refunds",
+      "path": "/vendorpayments/{{ config.payment_id }}/refunds",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendorpayment_refunds"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendorpayment_refund_id }}",
+        "name": "{{ record.reference_number }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/list_vendor_payment_refunds.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_vendor_payment_refund",
+      "path": "/vendorpayments/{{ config.payment_id }}/refunds/{{ config.vendorpayment_refund_id }}",
+      "query": {
+        "organization_id": {
+          "template": "{{ config.organization_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "vendorpayment_refund"
+      },
+      "computed_fields": {
+        "id": "{{ record.vendorpayment_refund_id }}",
+        "name": "{{ record.to_account_name }}",
+        "updated_at": "{{ record.date }}"
+      },
+      "schema": "schemas/get_vendor_payment_refund.json",
+      "projection": "passthrough"
+    }
+  ]
+}

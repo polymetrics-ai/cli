@@ -1,0 +1,24 @@
+{
+  "name": "pylon",
+  "display_name": "Pylon",
+  "description": "Reads and writes the documented Pylon REST API surface through concrete streams and write actions.",
+  "integration_type": "api",
+  "docs_url": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pylon API read of support issues, accounts, contacts, users, and messages",
+    "write": "external Pylon API mutations for support, account, knowledge-base, project, task, tag, survey, and training-data records; approval required",
+    "approval": "writes require explicit operator approval; delete/redact/merge actions are destructive"
+  }
+}

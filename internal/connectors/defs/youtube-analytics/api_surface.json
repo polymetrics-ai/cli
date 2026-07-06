@@ -1,0 +1,61 @@
+{
+  "api": "YouTube Reporting API v1 (https://youtubereporting.googleapis.com/v1)",
+  "docs": "https://developers.google.com/youtube/reporting/v1/reports",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 auth-hook migration: the 3 legacy-parity read streams only (jobs, report_types, reports); legacy youtube-analytics is read-only (Write always returns ErrUnsupportedOperation) and the full YouTube Reporting/Analytics API surface (job creation/deletion, bulk report media download, the separate Analytics querying API) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reportTypes",
+      "covered_by": {
+        "stream": "report_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/jobs/{jobId}/reports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/jobs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/jobs/{jobId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "deletes a scheduled reporting job; not a read stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/media/{+resourceName}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "bulk report CSV/GZIP bytes are not a syncable record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://youtubeanalytics.googleapis.com/v2/reports:query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "separate YouTube Analytics query API; legacy source-youtube-analytics only implements the bulk Reporting API control-plane resources migrated here"
+      }
+    }
+  ]
+}

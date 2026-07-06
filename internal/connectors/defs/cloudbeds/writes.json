@@ -1,0 +1,663 @@
+{
+  "actions": [
+    {
+      "name": "create_guest",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postGuest",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "guestFirstName": { "type": "string" },
+          "guestLastName": { "type": "string" },
+          "guestEmail": { "type": "string" },
+          "guestPhone": { "type": "string" },
+          "guestAddress1": { "type": "string" },
+          "guestCity": { "type": "string" },
+          "guestCountry": { "type": "string" },
+          "guestZip": { "type": "string" }
+        }
+      },
+      "risk": "adds an additional guest to an existing reservation; no approval required"
+    },
+    {
+      "name": "update_guest",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putGuest",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "guestID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "guestID": { "type": "string" },
+          "guestFirstName": { "type": "string" },
+          "guestLastName": { "type": "string" },
+          "guestEmail": { "type": "string" },
+          "guestPhone": { "type": "string" }
+        }
+      },
+      "risk": "overwrites a guest's profile fields; no approval required"
+    },
+    {
+      "name": "create_guest_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postGuestNote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "guestID", "guestNote"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "guestID": { "type": "string" },
+          "guestNote": { "type": "string" },
+          "userID": { "type": "string" }
+        }
+      },
+      "risk": "adds a free-text note to a guest profile; no approval required"
+    },
+    {
+      "name": "update_guest_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putGuestNote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "guestID", "noteID", "guestNote"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "guestID": { "type": "string" },
+          "noteID": { "type": "string" },
+          "guestNote": { "type": "string" }
+        }
+      },
+      "risk": "overwrites an existing guest note's text; no approval required"
+    },
+    {
+      "name": "delete_guest_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deleteGuestNote?propertyID={{ record.propertyID }}&guestID={{ record.guestID }}&noteID={{ record.noteID }}",
+      "path_fields": ["propertyID", "guestID", "noteID"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "guestID", "noteID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "guestID": { "type": "string" },
+          "noteID": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly removes a guest note; approval required"
+    },
+    {
+      "name": "create_reservation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postReservation",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "startDate", "endDate", "guestFirstName", "guestLastName", "rooms"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "sourceID": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "guestFirstName": { "type": "string" },
+          "guestLastName": { "type": "string" },
+          "guestEmail": { "type": "string" },
+          "rooms": { "type": "array" },
+          "adults": { "type": "integer" },
+          "children": { "type": "integer" },
+          "paymentMethod": { "type": "string" },
+          "sendEmailConfirmation": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new, billable reservation (books rooms and may authorize/charge a card depending on paymentMethod); external mutation, no approval required for the booking itself but review payment-capturing config carefully"
+    },
+    {
+      "name": "update_reservation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putReservation",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "status": { "type": "string" },
+          "estimatedArrivalTime": { "type": "string" },
+          "checkoutDate": { "type": "string" },
+          "rooms": { "type": "array" },
+          "sendStatusChangeEmail": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing reservation's status/dates/room assignment; a status change to a cancelled/no-show state has real revenue and inventory-release consequences; no approval required (Cloudbeds' own confirmation flow, e.g. sendStatusChangeEmail, is the operator-facing guardrail)"
+    },
+    {
+      "name": "create_reservation_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postReservationNote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "reservationNote"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "reservationNote": { "type": "string" },
+          "userID": { "type": "string" }
+        }
+      },
+      "risk": "adds a free-text note to a reservation; no approval required"
+    },
+    {
+      "name": "update_reservation_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putReservationNote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "reservationNoteID", "reservationNote"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "reservationNoteID": { "type": "string" },
+          "reservationNote": { "type": "string" }
+        }
+      },
+      "risk": "overwrites an existing reservation note's text; no approval required"
+    },
+    {
+      "name": "delete_reservation_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deleteReservationNote?propertyID={{ record.propertyID }}&reservationID={{ record.reservationID }}&reservationNoteID={{ record.reservationNoteID }}",
+      "path_fields": ["propertyID", "reservationID", "reservationNoteID"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "reservationNoteID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "reservationNoteID": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly removes a reservation note; approval required"
+    },
+    {
+      "name": "check_in_room",
+      "kind": "update",
+      "method": "POST",
+      "path": "/postRoomCheckIn",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "roomID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "subReservationID": { "type": "string" },
+          "roomID": { "type": "string" }
+        }
+      },
+      "risk": "checks a guest into a room, changing reservation/room status; no approval required"
+    },
+    {
+      "name": "check_out_room",
+      "kind": "update",
+      "method": "POST",
+      "path": "/postRoomCheckOut",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "roomID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "subReservationID": { "type": "string" },
+          "roomID": { "type": "string" }
+        }
+      },
+      "risk": "checks a guest out of a room, changing reservation/room status and folio; no approval required"
+    },
+    {
+      "name": "assign_room",
+      "kind": "update",
+      "method": "POST",
+      "path": "/postRoomAssign",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "reservationRoomID", "newRoomID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "subReservationID": { "type": "string" },
+          "reservationRoomID": { "type": "string" },
+          "newRoomID": { "type": "string" },
+          "roomTypeID": { "type": "string" },
+          "oldRoomID": { "type": "string" },
+          "overrideRates": { "type": "boolean" },
+          "adjustPrice": { "type": "boolean" }
+        }
+      },
+      "risk": "reassigns a reservation to a different physical room, optionally repricing; no approval required"
+    },
+    {
+      "name": "post_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postPayment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "type", "amount"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "houseAccountID": { "type": "string" },
+          "groupCode": { "type": "string" },
+          "subReservationID": { "type": "string" },
+          "type": { "type": "string" },
+          "amount": { "type": "number" },
+          "cardType": { "type": "string" },
+          "description": { "type": "string" },
+          "isDeposit": { "type": "boolean" }
+        }
+      },
+      "risk": "records a payment/deposit against a reservation or house account; a real financial transaction — approval required"
+    },
+    {
+      "name": "void_payment",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/postVoidPayment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "paymentID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "houseAccountID": { "type": "string" },
+          "paymentID": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly voids a recorded payment; a real financial reversal — approval required"
+    },
+    {
+      "name": "post_adjustment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postAdjustment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "reservationID", "type", "amount"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "type": { "type": "string" },
+          "amount": { "type": "number" },
+          "notes": { "type": "string" },
+          "itemID": { "type": "string" }
+        }
+      },
+      "risk": "posts a manual folio adjustment (credit or charge) to a reservation; a real financial transaction — approval required"
+    },
+    {
+      "name": "delete_adjustment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deleteAdjustment?reservationID={{ record.reservationID }}&adjustmentID={{ record.adjustmentID }}",
+      "path_fields": ["reservationID", "adjustmentID"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["reservationID", "adjustmentID"],
+        "properties": {
+          "reservationID": { "type": "string" },
+          "adjustmentID": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly removes a folio adjustment; a real financial reversal — approval required"
+    },
+    {
+      "name": "post_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postItem",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "itemID", "itemQuantity"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "houseAccountID": { "type": "string" },
+          "groupCode": { "type": "string" },
+          "subReservationID": { "type": "string" },
+          "itemID": { "type": "string" },
+          "itemQuantity": { "type": "integer" },
+          "itemPrice": { "type": "number" },
+          "itemNote": { "type": "string" },
+          "itemPaid": { "type": "boolean" },
+          "saleDate": { "type": "string" }
+        }
+      },
+      "risk": "posts a catalog item sale to a reservation/house account folio; a real financial transaction — approval required"
+    },
+    {
+      "name": "void_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/postVoidItem",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "soldProductID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "reservationID": { "type": "string" },
+          "houseAccountID": { "type": "string" },
+          "groupCode": { "type": "string" },
+          "soldProductID": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly voids a previously-sold item line; a real financial reversal — approval required"
+    },
+    {
+      "name": "create_item_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postItemCategory",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "categoryName"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "categoryName": { "type": "string" },
+          "categoryCode": { "type": "string" },
+          "itemID": { "type": "string" },
+          "categoryColor": { "type": "string" }
+        }
+      },
+      "risk": "creates a new item catalog category; no approval required"
+    },
+    {
+      "name": "create_group_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postGroupNote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "groupCode", "groupNote"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "groupCode": { "type": "string" },
+          "groupNote": { "type": "string" }
+        }
+      },
+      "risk": "adds a free-text note to a group profile; no approval required"
+    },
+    {
+      "name": "update_housekeeping_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/postHousekeepingStatus",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "roomID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "roomID": { "type": "string" },
+          "roomCondition": { "type": "string" },
+          "doNotDisturb": { "type": "boolean" },
+          "roomComments": { "type": "string" },
+          "refusedService": { "type": "boolean" },
+          "vacantPickup": { "type": "boolean" }
+        }
+      },
+      "risk": "changes a room's live housekeeping/cleaning status; no approval required"
+    },
+    {
+      "name": "create_housekeeper",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postHousekeeper",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "name"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new housekeeper staff record; no approval required"
+    },
+    {
+      "name": "update_housekeeper",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putHousekeeper",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "housekeeperID", "name"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "housekeeperID": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing housekeeper staff record; no approval required"
+    },
+    {
+      "name": "assign_housekeeping",
+      "kind": "update",
+      "method": "POST",
+      "path": "/postHousekeepingAssignment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "roomIDs", "housekeeperID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "roomIDs": { "type": "array" },
+          "housekeeperID": { "type": "string" }
+        }
+      },
+      "risk": "assigns rooms to a housekeeper for cleaning; no approval required"
+    },
+    {
+      "name": "create_house_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postNewHouseAccount",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "accountName"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "accountName": { "type": "string" },
+          "isPrivate": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new house (folio) account for non-guest billing; no approval required"
+    },
+    {
+      "name": "update_house_account_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putHouseAccountStatus",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "houseAccountID", "status"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "houseAccountID": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "opens or closes a house account; closing prevents further postings against it; no approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postWebhook",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "object", "action", "endpointUrl"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "object": { "type": "string" },
+          "action": { "type": "string" },
+          "endpointUrl": { "type": "string" }
+        }
+      },
+      "risk": "subscribes an external endpoint URL to receive Cloudbeds event notifications; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deleteWebhook?subscriptionID={{ record.subscriptionID }}",
+      "path_fields": ["subscriptionID"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscriptionID"],
+        "properties": {
+          "subscriptionID": { "type": "string" }
+        }
+      },
+      "risk": "removes a webhook subscription; approval required (stops event delivery to the subscribed endpoint)"
+    },
+    {
+      "name": "create_room_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/postRoomBlock",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "roomBlockType", "startDate", "endDate", "rooms"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "roomBlockType": { "type": "string" },
+          "roomBlockReason": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "rooms": { "type": "array" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "lengthOfHoldInHours": { "type": "integer" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "holds rooms out of general sale for a block; no approval required"
+    },
+    {
+      "name": "update_room_block",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/putRoomBlock",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "roomBlockID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "roomBlockID": { "type": "string" },
+          "roomBlockReason": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "rooms": { "type": "array" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "lengthOfHoldInHours": { "type": "integer" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "changes an existing room block's held rooms/dates; no approval required"
+    },
+    {
+      "name": "delete_room_block",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/deleteRoomBlock",
+      "body_type": "form",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["propertyID", "roomBlockID"],
+        "properties": {
+          "propertyID": { "type": "string" },
+          "roomBlockID": { "type": "string" }
+        }
+      },
+      "risk": "releases a room block back to general sale; irreversible for any rooms already picked up under it — approval required"
+    }
+  ]
+}

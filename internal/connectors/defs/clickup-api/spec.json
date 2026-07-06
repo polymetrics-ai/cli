@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClickUp Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ClickUp personal API token, sent raw (no Bearer prefix) in the Authorization header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.clickup.com/api/v2",
+      "description": "ClickUp API base URL override for tests or proxies."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ClickUp team (workspace) id. Required for the 'spaces', 'tasks', 'goals', and 'webhooks' streams and the create_goal/create_space/create_webhook write actions."
+    },
+    "space_id": {
+      "type": "string",
+      "description": "ClickUp space id. Required for the 'folders', 'lists', and 'space_tags' streams and the create_folder write action."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "ClickUp list id. Required for the create_task write action (tasks are created within a specific List)."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "ClickUp folder id. Required for the create_list write action (Lists are created within a specific Folder)."
+    },
+    "include_archived": {
+      "type": "string",
+      "description": "When 'true', include archived spaces/folders/lists/tasks (sent as archived=true instead of the default archived=false)."
+    },
+    "include_closed_tasks": {
+      "type": "string",
+      "description": "When 'true', include closed tasks in the 'tasks' stream (sent as include_closed=true)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

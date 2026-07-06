@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_off_policies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "workspaceId": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "approve": { "type": ["boolean", "null"] },
+    "allowHalfDay": { "type": ["boolean", "null"] },
+    "allowNegativeBalance": { "type": ["boolean", "null"] },
+    "automaticAccrual": { "type": ["object", "null"] },
+    "automaticTimeEntryCreation": { "type": ["boolean", "null"] },
+    "everyoneIncludingNew": { "type": ["boolean", "null"] },
+    "negativeBalance": { "type": ["object", "null"] },
+    "timeUnit": { "type": ["string", "null"] },
+    "projectId": { "type": ["string", "null"] },
+    "userIds": { "type": ["array", "null"] },
+    "userGroupIds": { "type": ["array", "null"] }
+  }
+}

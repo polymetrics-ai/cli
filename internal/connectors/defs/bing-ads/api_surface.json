@@ -1,0 +1,20 @@
+{
+  "api": "Microsoft Advertising (Bing Ads) v13 Customer Management and Campaign Management REST APIs",
+  "docs": "https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-rest-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-3 native read scope: the 5 legacy-parity read streams only (accounts, users, campaigns, ad_groups, ads), matching internal/connectors/bing-ads's exact routing table. Microsoft Advertising's broader Bulk service, Reporting service, Ad Insight service, keyword, and mutation surfaces remain excluded because this native connector is read-only and its hand-written implementation is scoped to the Customer Management and Campaign Management query routes below. Every covered/excluded READ entry below is declared method GET (not the literal wire HTTP verb, which is always POST for these '.../Query'-style endpoints) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design SS E.1 rule 4) -- matching monday's identical convention for its GraphQL-over-POST surface. Genuine mutation endpoints (AddCampaigns/UpdateAdGroups/DeleteAds) keep their real wire verb since they are excluded, not covered.",
+  "endpoints": [
+    { "method": "GET", "path": "/CustomerManagement/v13/AccountsInfo/Query", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/CustomerManagement/v13/User/Query", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/CampaignManagement/v13/Campaigns/QueryByAccountId", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/CampaignManagement/v13/AdGroups/QueryByCampaignId", "covered_by": { "stream": "ad_groups" } },
+    { "method": "GET", "path": "/CampaignManagement/v13/Ads/QueryByAdGroupId", "covered_by": { "stream": "ads" } },
+    { "method": "GET", "path": "/CustomerManagement/v13/Customers/Query", "excluded": { "category": "out_of_scope", "reason": "customer listing is not read by legacy and would require a new native reader path beyond the 5-stream parity scope" } },
+    { "method": "GET", "path": "/CampaignManagement/v13/Keywords/QueryByAdGroupId", "excluded": { "category": "out_of_scope", "reason": "keyword listing is not read by legacy and would require an additional campaign-management native reader path" } },
+    { "method": "POST", "path": "/CampaignManagement/v13/Campaigns/AddCampaigns", "excluded": { "category": "out_of_scope", "reason": "campaign creation is a mutation and bing-ads is read-only here (legacy Write returns ErrUnsupportedOperation)" } },
+    { "method": "POST", "path": "/CampaignManagement/v13/AdGroups/UpdateAdGroups", "excluded": { "category": "out_of_scope", "reason": "ad-group update is a mutation and bing-ads is read-only here" } },
+    { "method": "POST", "path": "/CampaignManagement/v13/Ads/DeleteAds", "excluded": { "category": "destructive_admin", "reason": "destructive mutation; out of scope, bing-ads is read-only in this migration" } },
+    { "method": "GET", "path": "/Reporting/v13/GenerateReport (async report jobs)", "excluded": { "category": "out_of_scope", "reason": "async report-download jobs are not read by legacy and require polling/download behavior outside this native reader's query-route scope" } },
+    { "method": "POST", "path": "/CampaignManagement/v13/BulkService (bulk upload/download)", "excluded": { "category": "binary_payload", "reason": "bulk upload/download is file-based rather than JSON record data and is not read by legacy" } }
+  ]
+}

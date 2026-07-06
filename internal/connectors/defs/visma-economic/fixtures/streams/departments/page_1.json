@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/departments",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "departmentNumber": 1,
+          "name": "Fixture Sales Dept"
+        },
+        {
+          "departmentNumber": 2,
+          "name": "Fixture Ops Dept"
+        }
+      ]
+    }
+  }
+}

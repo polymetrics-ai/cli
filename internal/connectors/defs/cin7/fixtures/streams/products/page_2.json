@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/product",
+    "query": {
+      "page": "2",
+      "limit": "100",
+      "IncludeDeprecated": "true"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 101,
+      "Page": 2,
+      "Products": [
+        {
+          "ID": "prod_fixture_101",
+          "SKU": "SKU-101",
+          "Name": "Fixture Product 101",
+          "Category": "Fixtures",
+          "Brand": "Acme",
+          "Type": "Stock",
+          "Status": "Active",
+          "UOM": "ea",
+          "PriceTier1": 111,
+          "AverageCost": 106,
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

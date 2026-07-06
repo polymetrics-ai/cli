@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/ref/tax", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 1,
+      "Page": 1,
+      "TaxRuleList": [
+        {
+          "ID": "tax_fixture_1",
+          "Name": "Tax Exempt",
+          "Account": "820",
+          "IsActive": true,
+          "TaxInclusive": false,
+          "TaxPercent": 0,
+          "IsTaxForSale": true,
+          "IsTaxForPurchase": true,
+          "Components": [
+            {
+              "ID": "comp_fixture_1",
+              "Name": "No Tax",
+              "Percent": "0.0000000000",
+              "AccountCode": "",
+              "ComponentOrder": "1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

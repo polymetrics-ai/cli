@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/time_punches/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "shift_id": 1001,
+        "user_id": 1001,
+        "editable_punch": true,
+        "role_id": 1001,
+        "location_id": 1001,
+        "company_id": 1001,
+        "approved": true,
+        "hourly_wage": 1001,
+        "clocked_in": "2026-01-01T00:00:00Z",
+        "clocked_out": "2026-01-01T00:00:00Z",
+        "notes": "fixture notes",
+        "auto_clocked_out": true,
+        "clocked_in_offline": true,
+        "clocked_out_offline": true,
+        "tips": 1001,
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "department_id": 1001,
+        "pos_type": "fixture pos type",
+        "breaks": [
+          {
+            "id": 1001,
+            "user_id": 1001,
+            "custom_break_id": 1001,
+            "paid": true,
+            "in": "2026-01-01T00:00:00Z",
+            "out": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "deleted": true
+      }
+    }
+  }
+}

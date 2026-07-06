@@ -1,0 +1,13 @@
+{
+  "record": {
+    "mandate_id": "mandate_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mandates/mandate_id_fixture/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

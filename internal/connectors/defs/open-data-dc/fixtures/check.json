@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/ssls" },
+  "response": {
+    "status": 200,
+    "body": { "Result": { "ssls": [] } }
+  }
+}

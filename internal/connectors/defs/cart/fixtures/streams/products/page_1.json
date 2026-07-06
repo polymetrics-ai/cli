@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": { "page_size": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "prd_fixture_1", "order_number": "F-2001", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "prd_fixture_2", "order_number": "F-2002", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "next_page": "2" }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/beta/documents/synthetic-conformance-value/ai-metadata"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "documents_document_id_ai_metadata_fixture_1",
+      "name": "Fixture documents_document_id_ai_metadata",
+      "status": "fixture",
+      "date_created": "2026-01-01T00:00:00Z"
+    }
+  }
+}

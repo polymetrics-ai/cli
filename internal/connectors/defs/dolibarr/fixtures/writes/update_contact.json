@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "lastname": "Fixture Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/1"
+  }
+}

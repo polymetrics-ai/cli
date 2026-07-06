@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "source_type": { "type": ["string", "null"] },
+    "location_id": { "type": ["string", "null"] },
+    "order_id": { "type": ["string", "null"] },
+    "receipt_number": { "type": ["string", "null"] },
+    "amount_money": { "type": ["object", "null"] },
+    "total_money": { "type": ["object", "null"] },
+    "processing_fee": { "type": ["array", "null"] }
+  }
+}

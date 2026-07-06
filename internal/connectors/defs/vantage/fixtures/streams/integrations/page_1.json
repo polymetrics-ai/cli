@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/integrations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "integrations": [
+        {
+          "token": "intg_fixture_1",
+          "provider": "aws",
+          "account_identifier": "123456789012",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/integrations?page=1"
+      }
+    }
+  }
+}

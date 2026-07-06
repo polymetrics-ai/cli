@@ -1,0 +1,149 @@
+{
+  "actions": [
+    {
+      "name": "create_submission",
+      "kind": "create",
+      "method": "POST",
+      "path": "/submissions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id", "submitters"],
+        "properties": {
+          "template_id": { "type": "integer", "description": "The unique identifier of the template to create a submission (signature request) from." },
+          "send_email": { "type": "boolean", "description": "Set false to disable signature request emails sending." },
+          "send_sms": { "type": "boolean", "description": "Set true to send the signature request via phone number SMS." },
+          "order": { "type": "string", "enum": ["preserved", "random"], "description": "Signing order across submitters; 'preserved' (default) sends the next request only after the prior party signs." },
+          "completed_redirect_url": { "type": "string", "description": "URL to redirect to after submission completion." },
+          "bcc_completed": { "type": "string", "description": "BCC address to send signed documents to after completion." },
+          "reply_to": { "type": "string", "description": "Reply-To address for the notification emails." },
+          "expire_at": { "type": "string", "description": "Expiration date/time after which the submission becomes unavailable for signature." },
+          "variables": { "type": "object", "description": "Dynamic content variables object for dynamic template documents." },
+          "submitters": {
+            "type": "array",
+            "description": "The list of submitters (signers) for the submission.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "role": { "type": "string" },
+                "email": { "type": "string" },
+                "phone": { "type": "string" },
+                "values": { "type": "object" },
+                "external_id": { "type": "string" },
+                "metadata": { "type": "object" },
+                "send_email": { "type": "boolean" },
+                "send_sms": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required"
+    },
+    {
+      "name": "archive_submission",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/submissions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required"
+    },
+    {
+      "name": "update_submitter",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/submitters/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "values": { "type": "object" },
+          "external_id": { "type": "string" },
+          "send_email": { "type": "boolean", "description": "Set true to re-send signature request emails." },
+          "send_sms": { "type": "boolean" },
+          "reply_to": { "type": "string" },
+          "completed": { "type": "boolean", "description": "Pass true to mark this submitter as completed and auto-signed via API." },
+          "metadata": { "type": "object" },
+          "completed_redirect_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live DocuSeal submitter's pre-filled values/contact info, can re-send signature request notifications, and can force-mark the submitter completed/auto-signed; approval required"
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/templates/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "folder_name": { "type": "string" },
+          "roles": { "type": "array", "items": { "type": "string" } },
+          "archived": { "type": "boolean", "description": "Set false to unarchive a previously archived template." }
+        }
+      },
+      "risk": "external mutation; renames/moves/relabels a live DocuSeal template and can unarchive it; approval required"
+    },
+    {
+      "name": "archive_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/templates/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required"
+    },
+    {
+      "name": "clone_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates/{{ record.id }}/clone",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer", "description": "The unique identifier of the template to clone." },
+          "name": { "type": "string", "description": "Name for the cloned template; defaults to the source name + ' (Clone)' when unset." },
+          "folder_name": { "type": "string" },
+          "external_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new live DocuSeal template by cloning an existing one; approval required"
+    }
+  ]
+}

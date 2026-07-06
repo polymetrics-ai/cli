@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/themes/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "theme_fixture_1",
+      "name": "Fixture theme",
+      "title": "Fixture theme",
+      "sku": "SKU-FIXTURE-1",
+      "email": "fixture@example.invalid",
+      "status": "fixture",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

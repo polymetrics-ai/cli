@@ -1,0 +1,292 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/domains",
+    "query": {
+      "page": "1",
+      "limit": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "domain_fixture_1",
+          "name": "fixture-1.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_2",
+          "name": "fixture-2.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_3",
+          "name": "fixture-3.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_4",
+          "name": "fixture-4.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_5",
+          "name": "fixture-5.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_6",
+          "name": "fixture-6.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_7",
+          "name": "fixture-7.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_8",
+          "name": "fixture-8.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_9",
+          "name": "fixture-9.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_10",
+          "name": "fixture-10.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_11",
+          "name": "fixture-11.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_12",
+          "name": "fixture-12.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_13",
+          "name": "fixture-13.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_14",
+          "name": "fixture-14.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_15",
+          "name": "fixture-15.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_16",
+          "name": "fixture-16.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_17",
+          "name": "fixture-17.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_18",
+          "name": "fixture-18.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_19",
+          "name": "fixture-19.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_20",
+          "name": "fixture-20.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_21",
+          "name": "fixture-21.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_22",
+          "name": "fixture-22.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_23",
+          "name": "fixture-23.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_24",
+          "name": "fixture-24.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "domain_fixture_25",
+          "name": "fixture-25.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}

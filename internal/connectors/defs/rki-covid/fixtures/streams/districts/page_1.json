@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/districts",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "02000": {
+          "ags": "02000",
+          "name": "Hamburg",
+          "county": "SK Hamburg",
+          "state": "Hamburg",
+          "population": 1892122,
+          "cases": 828126,
+          "deaths": 4380,
+          "recovered": 823738,
+          "weekIncidence": 0.15
+        }
+      }
+    }
+  }
+}

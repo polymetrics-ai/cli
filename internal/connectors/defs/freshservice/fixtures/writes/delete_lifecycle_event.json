@@ -1,0 +1,11 @@
+{
+  "record": {
+    "lifecycle_event_id": 123,
+    "name": "Fixture delete_lifecycle_event",
+    "description": "Fixture delete_lifecycle_event record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/itam/lifecycle_events/123"
+  }
+}

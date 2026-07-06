@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "importprospects",
+      "attributes": {
+        "name": "Fixture Import Prospects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/imports/actions/prospectsImport",
+    "body": {
+      "data": {
+        "type": "importprospects",
+        "attributes": {
+          "name": "Fixture Import Prospects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "pool_id": "synthetic-conformance-value",
+    "update_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/agentPools/synthetic-conformance-value/updates/synthetic-conformance-value/pause"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

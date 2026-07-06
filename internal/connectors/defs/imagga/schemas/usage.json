@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "usage",
+  "type": "object",
+  "x-primary-key": ["period"],
+  "required": ["period"],
+  "properties": {
+    "period": { "type": "string" },
+    "requests": { "type": ["integer", "null"] },
+    "monthly_processed": { "type": ["integer", "null"] },
+    "monthly_limit": { "type": ["integer", "null"] },
+    "daily_processed": { "type": ["integer", "null"] }
+  }
+}

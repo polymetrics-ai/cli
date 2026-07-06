@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/tags", "query": { "page": "1", "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": 10, "type": "tag", "name": "vip" },
+        { "id": 11, "type": "tag", "name": "trial" }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

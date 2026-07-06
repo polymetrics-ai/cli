@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "entries",
+  "type": "object",
+  "x-primary-key": ["Hash"],
+  "x-cursor-field": "DateUpdated",
+  "properties": {
+    "Hash": { "type": ["string", "null"] },
+    "EntryId": { "type": "string" },
+    "DateCreated": { "type": ["string", "null"] },
+    "DateUpdated": { "type": ["string", "null"] }
+  }
+}

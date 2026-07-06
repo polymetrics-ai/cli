@@ -1,0 +1,24 @@
+{
+  "name": "apptivo",
+  "display_name": "Apptivo",
+  "description": "Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.",
+  "integration_type": "api",
+  "docs_url": "https://www.apptivo.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Apptivo API read of CRM customer, contact, lead, and opportunity data",
+    "write": "external mutation: irreversibly deletes a CRM customer record",
+    "approval": "required; remove_customer is a destructive, irreversible external deletion"
+  }
+}

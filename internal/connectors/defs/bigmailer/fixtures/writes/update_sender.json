@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "sender_fixture_1",
+    "share_type": "none"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/senders/sender_fixture_1",
+    "body": {
+      "share_type": "none"
+    }
+  }
+}

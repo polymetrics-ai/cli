@@ -1,0 +1,22 @@
+{
+  "name": "fulcrum",
+  "display_name": "Fulcrum",
+  "description": "Reads Fulcrum forms, records, projects, choice lists, and classification sets through the Fulcrum REST API v2.",
+  "integration_type": "api",
+  "docs_url": "https://docs.fulcrumapp.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Fulcrum API read of form, record, and project data"
+  }
+}

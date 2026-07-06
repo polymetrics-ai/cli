@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sales",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "version",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": ["integer", "null"] },
+    "invoice_number": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "register_id": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "total_price": { "type": ["number", "null"] },
+    "total_tax": { "type": ["number", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "sale_date": { "type": ["string", "null"] }
+  }
+}

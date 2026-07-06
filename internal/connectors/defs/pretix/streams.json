@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_token }}", "prefix": "Token " }
+    ],
+    "check": { "method": "GET", "path": "/organizers/" },
+    "error_map": [
+      { "status": 401, "hint": "pretix api_token is missing or invalid; re-run pm credentials add pretix" },
+      { "status": 403, "hint": "pretix account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pretix rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "organizers",
+      "path": "/organizers/",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": {
+        "id": "{{ record.slug }}"
+      },
+      "schema": "schemas/organizers.json"
+    },
+    {
+      "name": "events",
+      "path": "/organizers/{{ config.organizer }}/events/",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": {
+        "id": "{{ record.slug }}",
+        "updated_at": "{{ record.date_from }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "items",
+      "path": "/organizers/{{ config.organizer }}/events/{{ config.event }}/items/",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "orders",
+      "path": "/organizers/{{ config.organizer }}/events/{{ config.event }}/orders/",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": {
+        "id": "{{ record.code }}"
+      },
+      "schema": "schemas/orders.json"
+    }
+  ]
+}

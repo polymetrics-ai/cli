@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Contains information about the content log of for a board item.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the content log."
+    },
+    "contentId": {
+      "type": "string",
+      "description": "Unique identifier of the board where the action happened."
+    },
+    "actionType": {
+      "type": "string",
+      "description": "Type of action within the board, such as creation of a widget, update of a comment message, and so on.",
+      "enum": [
+        "create",
+        "update",
+        "delete"
+      ]
+    },
+    "actionTime": {
+      "type": "string",
+      "description": "Date and time when the action happened.<br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).\n",
+      "format": "date-time"
+    },
+    "actor": {
+      "type": "object",
+      "description": "Contains information about the user who performed the action.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user who performed the action."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the user who performed the action."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user who performed the action."
+        }
+      },
+      "additionalProperties": true
+    },
+    "itemType": {
+      "type": "string",
+      "description": "Type of the board item on which the action happened.",
+      "enum": [
+        "widget",
+        "comment_thread",
+        "comment_message"
+      ]
+    },
+    "itemId": {
+      "type": "string",
+      "description": "Unique identifier of the board item on which the action happened. For example, the widget ID."
+    },
+    "state": {
+      "type": "object",
+      "description": "Object that contains information about the state of the board item after the action was performed.",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Contains the list of items related to the current board item.",
+      "items": {
+        "type": "object",
+        "description": "Object that contains information about a related board item for the current item.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Indicates the relationship of this item with the current item. For example, if `type` returns `parent`, this means that related item is a parent for the current item."
+          },
+          "itemType": {
+            "type": "string",
+            "description": "Indicates the type of the related board item. For example, if `itemType` returns `widget`, this means that related item is a widget."
+          },
+          "itemId": {
+            "type": "string",
+            "description": "Unique identifier of the related board item."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

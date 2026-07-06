@@ -1,0 +1,33 @@
+{
+  "record": {
+    "customs_info": {
+      "customs_certify": "true",
+      "customs_signer": "Fixture Sender",
+      "contents_type": "merchandise",
+      "contents_explanation": "",
+      "restriction_type": "none",
+      "eel_pfc": "NOEEI 30.37(a)",
+      "customs_items": [
+        { "description": "Fixture item", "quantity": "1", "weight": "5", "value": "10", "origin_country": "US" }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customs_infos",
+    "body": {
+      "customs_info": {
+        "customs_certify": "true",
+        "customs_signer": "Fixture Sender",
+        "contents_type": "merchandise",
+        "contents_explanation": "",
+        "restriction_type": "none",
+        "eel_pfc": "NOEEI 30.37(a)",
+        "customs_items": [
+          { "description": "Fixture item", "quantity": "1", "weight": "5", "value": "10", "origin_country": "US" }
+        ]
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "cstinfo_fixture_new", "object": "CustomsInfo" } }
+}

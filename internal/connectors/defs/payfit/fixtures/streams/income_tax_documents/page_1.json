@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/income-taxes-documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        {
+          "documentId": "income_tax_documents_1",
+          "name": "Fixture income tax documents"
+        }
+      ]
+    }
+  }
+}

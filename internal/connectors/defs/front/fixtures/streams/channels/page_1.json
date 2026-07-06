@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/channels", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_results": [
+        {
+          "id": "channels_fixture_1",
+          "name": "Fixture Channel 1",
+          "address": "fixture1@example.com",
+          "type": "smtp",
+          "send_as": "fixture1@example.com",
+          "is_private": false,
+          "is_valid": true
+        }
+      ],
+      "_pagination": { "next": null }
+    }
+  }
+}

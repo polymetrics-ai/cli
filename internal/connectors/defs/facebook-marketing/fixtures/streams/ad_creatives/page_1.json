@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/adcreatives", "query": { "limit": "100", "fields": "id,name,object_story_id,object_type,thumbnail_url,status" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "creative_fixture_1", "name": "Fixture Creative 1", "object_story_id": "123456_789012", "object_type": "SHARE", "thumbnail_url": "https://example.com/fixture1.jpg", "status": "ACTIVE" },
+        { "id": "creative_fixture_2", "name": "Fixture Creative 2", "object_story_id": "123456_789013", "object_type": "SHARE", "thumbnail_url": "https://example.com/fixture2.jpg", "status": "ACTIVE" }
+      ],
+      "paging": {}
+    }
+  }
+}

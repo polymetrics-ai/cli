@@ -1,0 +1,7 @@
+{
+  "record": { "id": "INV-0001" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v2/invoices/INV-0001"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "account_ids": [
+
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts",
+    "body": {
+      "account_ids": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

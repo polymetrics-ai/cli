@@ -1,0 +1,17 @@
+{
+  "record": {
+    "webhook_target": {
+      "url": "https://fixture.example.com/webhooks/new"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/webhooks/targets",
+    "body": {
+      "webhook_target": {
+        "url": "https://fixture.example.com/webhooks/new"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "webhook_target": { "yotpo_id": 444444 } } }
+}

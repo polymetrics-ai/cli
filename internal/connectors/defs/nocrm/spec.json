@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "noCRM Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "noCRM API key, sent as the X-API-KEY header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.nocrm.io/api/v2",
+      "description": "noCRM API base URL. Override with your account's subdomain base URL, e.g. https://yourcompany.nocrm.io/api/v2."
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Step id for the step detail stream."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Client folder id for the client_folder detail stream."
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Lead id for lead detail and lead subresource streams."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "Lead attachment id for the lead_attachment detail stream."
+    },
+    "prospecting_list_id": {
+      "type": "string",
+      "description": "Prospecting list/spreadsheet id for current prospecting-list detail and prospect streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User id for the user detail stream."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Team id for the team detail stream."
+    },
+    "webhook_event_id": {
+      "type": "string",
+      "description": "Webhook event id for the webhook_event detail stream."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "form_id": "form_fixture_1",
+    "id": "submission_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/forms/form_fixture_1/submissions/submission_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

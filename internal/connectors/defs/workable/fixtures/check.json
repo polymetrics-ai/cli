@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "limit": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": []
+    }
+  }
+}

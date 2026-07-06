@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "releases",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "release_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "project_id": { "type": ["string", "null"] },
+    "release_group_id": { "type": ["string", "null"] },
+    "app_version": { "type": ["string", "null"] },
+    "app_version_code": { "type": ["string", "null"] },
+    "app_bundle_version": { "type": ["string", "null"] },
+    "build_label": { "type": ["string", "null"] },
+    "release_stage": { "type": ["string", "null"] },
+    "release_source": { "type": ["string", "null"] },
+    "release_time": { "type": ["string", "null"], "format": "date-time" },
+    "errors_seen_count": { "type": ["integer", "null"] },
+    "errors_introduced_count": { "type": ["integer", "null"] }
+  }
+}

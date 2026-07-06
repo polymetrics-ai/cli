@@ -1,0 +1,4 @@
+{
+  "record": { "name": "fixture_config", "description": "fixture record", "isEnabled": false },
+  "expect": { "method": "POST", "path": "/dynamic_configs" }
+}

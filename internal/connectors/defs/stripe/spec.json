@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stripe Connection Specification",
+  "type": "object",
+  "required": ["client_secret"],
+  "properties": {
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Stripe secret API key (sk_...). Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.stripe.com/v1",
+      "description": "Stripe API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional Stripe account ID; sent as the Stripe-Account header for Connect."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects created at or after this time are read."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "record": { "entity_id": 1 },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/1/cancel"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "api": "My Hours legacy connector hook surface",
+  "docs": "https://myhours.com/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy my-hours connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/my-hours, which delegates to internal/connectors/my-hours until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/my-hours clients read path",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/my-hours projects read path",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/my-hours users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/my-hours tags read path",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/my-hours time_logs read path",
+      "covered_by": {
+        "stream": "time_logs"
+      }
+    }
+  ]
+}

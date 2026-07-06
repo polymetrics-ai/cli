@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": { "page_size": "synthetic-conformance-value", "page": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ord_fixture_3", "order_number": "F-0003", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "meta": {}
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "event_ticket_type_id": "fixture_event_ticket_type_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/ticket-types/update",
+    "body": {
+      "event_ticket_type_id": "fixture_event_ticket_type_id"
+    }
+  }
+}

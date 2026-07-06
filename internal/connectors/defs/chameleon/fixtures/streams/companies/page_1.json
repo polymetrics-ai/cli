@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/analyze/companies",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "companies": [
+        {
+          "id": "comp_fixture_1",
+          "uid": "1868",
+          "domain": "example.com",
+          "plan": "custom-92",
+          "clv": 231902.42,
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

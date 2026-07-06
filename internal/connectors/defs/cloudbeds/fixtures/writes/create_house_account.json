@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "accountName": "Fixture House Account" },
+  "expect": { "method": "POST", "path": "/postNewHouseAccount" },
+  "response": { "status": 200, "body": { "success": true, "accountID": "houseacct_fixture_new" } }
+}

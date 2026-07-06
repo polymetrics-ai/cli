@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Freshdesk Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Freshdesk API key. Sent as the HTTP Basic username (password is the literal X); never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Freshdesk API base URL, e.g. https://<domain>/api/v2 (domain example: acme.freshdesk.com). This bundle requires the full /api/v2 base URL directly: legacy derives it from a bare domain config value, but that cross-key derivation (host validation + /api/v2 suffixing) has no engine mechanism today (see docs.md Known limits)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; for the tickets stream only, objects updated at or after this time are read (updated_since). Other streams ignore this value, matching legacy."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

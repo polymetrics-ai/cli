@@ -1,0 +1,24 @@
+{
+  "name": "appfigures",
+  "display_name": "Appfigures",
+  "description": "Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/revenue/subscriptions/ads/estimates), reference data (categories/countries/languages/currencies/stores/SDKs), release events, connected external accounts, account users, and account info through the Appfigures v2 REST API, and manages release events and review responses.",
+  "integration_type": "api",
+  "docs_url": "https://docs.appfigures.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Appfigures API read of app-store review, analytics, and account data",
+    "write": "external Appfigures API mutation — publishes a public review response, and creates/edits/deletes release-event markers overlaid on analytics charts",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

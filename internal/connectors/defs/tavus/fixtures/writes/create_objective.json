@@ -1,0 +1,17 @@
+{
+  "record": {
+    "data": [
+      { "objective_name": "fixture_ask_new_patient", "objective_prompt": "Ask the patient if they are new.", "confirmation_mode": "auto" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/objectives",
+    "body": {
+      "data": [
+        { "objective_name": "fixture_ask_new_patient", "objective_prompt": "Ask the patient if they are new.", "confirmation_mode": "auto" }
+      ]
+    }
+  },
+  "response": { "status": 200, "body": { "data": [ { "objectives_id": "objective_fixture_new" } ] } }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "project_id": 123,
+    "task_id": 123,
+    "name": "Fixture create_note_task_newgen",
+    "description": "Fixture create_note_task_newgen record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pm/projects/123/tasks/123/notes",
+    "body": {
+      "name": "Fixture create_note_task_newgen",
+      "description": "Fixture create_note_task_newgen record"
+    }
+  }
+}

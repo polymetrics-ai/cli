@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/jobs/synthetic-conformance-value/results", "query": { "cursor": "cursor_fixture_page2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "uid": "result_fixture_3", "job_uid": "synthetic-conformance-value", "status": "success", "data": { "fixture": true, "index": 3 }, "created_at": "2026-01-01T00:02:00Z" }
+      ],
+      "paging": { "next": "", "have_next_page": false }
+    }
+  }
+}

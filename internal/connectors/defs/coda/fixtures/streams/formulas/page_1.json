@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/docs/synthetic-conformance-value/formulas" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "formula-fixture-1",
+          "type": "formula",
+          "name": "TotalRevenue",
+          "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/formulas/formula-fixture-1"
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs/synthetic-conformance-value/formulas"
+    }
+  }
+}

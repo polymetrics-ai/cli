@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the federated claim was created"
+    },
+    "expression": {
+      "type": "string",
+      "description": "The Okta Expression Language expression to be evaluated at runtime"
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique ID of the federated claim"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the federated claim was updated"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the claim to be used in the produced token"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

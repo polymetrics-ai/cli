@@ -8,9 +8,9 @@ The `pm etl` command group has two lanes:
 | Lane | Commands | Use |
 |---|---|---|
 | Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
-| Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a destination. |
+| Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
 
-Catalog-only connectors are inspectable through `pm connectors inspect`, but they cannot execute ETL until their native Go runtime is enabled.
+Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
 
 ## Direct connector operations
 
@@ -39,7 +39,7 @@ pm etl catalog \
 
 ## How connections and sync modes work
 
-A **connection** is the named pairing of a source credential and a destination credential, with one or more configured streams. The sync mode is set at connection-creation time using `--sync-mode` -- it is not a flag on `pm etl run`.
+A **connection** is the named pairing of a connector credential and a storage credential, with one or more configured streams. The sync mode is set at connection-creation time using `--sync-mode` -- it is not a flag on `pm etl run`.
 
 ```bash
 pm connections create <name> \
@@ -56,8 +56,8 @@ pm connections create <name> \
 
 | Mode | Value | Description |
 |---|---|---|
-| Full refresh overwrite | `full_refresh_overwrite` | Re-extracts all records and replaces the destination table. Default if `--sync-mode` is omitted. |
-| Full refresh append | `full_refresh_append` | Re-extracts all records and appends them to the destination table. |
+| Full refresh overwrite | `full_refresh_overwrite` | Re-extracts all records and replaces the output table. Default if `--sync-mode` is omitted. |
+| Full refresh append | `full_refresh_append` | Re-extracts all records and appends them to the output table. |
 | Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Re-extracts and deduplicates by primary key before writing. |
 | Incremental append | `incremental_append` | Extracts only records newer than the stored cursor value and appends them. |
 | Incremental append deduped | `incremental_append_deduped` | Incremental extraction, deduplicates by primary key before writing. |
@@ -138,7 +138,7 @@ pm etl status <run-id> --json
 Before running an extraction, you can discover the streams a connector exposes:
 
 ```bash
-pm catalog refresh --connection <name>   # fetch the latest catalog from the source
+pm catalog refresh --connection <name>   # fetch the latest connector catalog
 pm catalog show   --connection <name>   # display the cached catalog
 ```
 
@@ -160,7 +160,7 @@ Agents and scripts should branch on exit codes, not parse stderr text.
 
 <Cards>
   <Card title="Query" href="/docs/query" description="Run SQL over extracted tables with pm query run." />
-  <Card title="Reverse ETL" href="/docs/reverse-etl" description="Write query results back to any destination." />
-  <Card title="Connector catalog" href="/docs/connectors" description="Browse all available source and destination connectors." />
+  <Card title="Reverse ETL" href="/docs/reverse-etl" description="Write query results through approved connector actions." />
+  <Card title="Connector catalog" href="/docs/connectors" description="Browse connector capabilities, streams, and write actions." />
   <Card title="Agent guide" href="/docs/agent-guide" description="Automate pm etl run from an AI agent using --json and exit codes." />
 </Cards>

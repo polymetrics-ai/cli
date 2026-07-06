@@ -1,0 +1,160 @@
+{
+  "actions": [
+    {
+      "name": "create_object_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/objects/records",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string" },
+              "external_id": { "type": "string" },
+              "attributes": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new record of an EXISTING legacy object type; low-risk external mutation, no approval required. Legacy custom object TYPE creation is blocked by Zendesk as of January 15, 2026, but creating records of already-existing types remains supported until the full legacy API sunset (July 27, 2026)"
+    },
+    {
+      "name": "upsert_object_record_by_external_id",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/objects/records",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "external_id", "attributes"],
+            "properties": {
+              "type": { "type": "string" },
+              "external_id": { "type": "string" },
+              "attributes": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new record with the given external_id if none exists, or overwrites the attributes object of the existing record with that external_id and type -- an overwrite, not a merge: any attribute omitted from this call's attributes is cleared on an existing record"
+    },
+    {
+      "name": "delete_object_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/objects/records/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a legacy object record; Zendesk requires every relationship record referencing this object record to be deleted first, or this request fails"
+    },
+    {
+      "name": "delete_object_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/objects/types/{{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": {
+          "key": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a legacy object type definition; only succeeds if every object record of that type has already been deleted. Standard Zendesk object types (users, tickets, organizations) cannot be deleted this way and the API rejects the request"
+    },
+    {
+      "name": "create_relationship_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/relationships/records",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["relationship_type", "source", "target"],
+            "properties": {
+              "relationship_type": { "type": "string" },
+              "source": { "type": "string" },
+              "target": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "links two existing object records (legacy custom object records, or a mix of custom and standard Zendesk records) via an EXISTING relationship type; low-risk external mutation. Legacy relationship TYPE creation is blocked by Zendesk as of January 15, 2026, but creating relationship records of already-existing types remains supported until the full legacy API sunset (July 27, 2026)"
+    },
+    {
+      "name": "delete_relationship_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/relationships/records/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a relationship record between two object records; irreversible, does not affect either underlying record"
+    },
+    {
+      "name": "delete_relationship_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/relationships/types/{{ record.key }}",
+      "path_fields": ["key"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["key"],
+        "properties": {
+          "key": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes a legacy relationship type; only succeeds if every relationship record of that type has already been deleted"
+    }
+  ]
+}

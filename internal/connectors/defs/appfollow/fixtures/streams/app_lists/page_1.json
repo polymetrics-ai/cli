@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/apps/app",
+    "query": {
+      "apps_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "apps_app": [
+        {
+          "app_id": 1001,
+          "app_collection_id": 11,
+          "ext_id": "ios:1001",
+          "store": "ios",
+          "count_reviews": 25,
+          "count_whatsnew": 2,
+          "is_favorite": 0,
+          "watch_url": "https://apps.apple.com/app/id1001",
+          "created": "2026-01-01T00:00:00Z"
+        },
+        {
+          "app_id": 1002,
+          "app_collection_id": 11,
+          "ext_id": "android:1002",
+          "store": "android",
+          "count_reviews": 10,
+          "count_whatsnew": 1,
+          "is_favorite": 1,
+          "watch_url": "https://play.google.com/store/apps/details?id=1002",
+          "created": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

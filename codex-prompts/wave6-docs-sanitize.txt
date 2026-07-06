@@ -1,0 +1,20 @@
+You are executing Wave 6 sub-phase 3 of the Polymetrics connector-architecture-v2 program: SANITIZE the per-connector docs so they read as public product documentation, not migration engineering notes. cwd = the worktree you were opened in (branch wave6-docs-sanitize). Only touch internal/connectors/defs/*/docs.md. Do NOT push, do NOT touch Go code, streams.json, schemas, or fixtures.
+
+PROBLEM: ~520 of 547 internal/connectors/defs/<name>/docs.md files are written as internal migration reports. Example (aircall): "Aircall is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full documented API surface", "matching legacy's connsdk.Basic(id, token) (aircall.go:257)", references to fidelity, conformance, quarantine, parity. These docs are user-facing (website + pm connectors inspect). A customer must never see our migration vocabulary.
+
+FIND the offenders (self-resuming — re-run any time to see what's left):
+  grep -rlE 'wave[0-9]|Pass B|pass-b|legacy|Legacy|fidelity|Fidelity|migration|Migration|migrat|parity|conformance|quarantine|\.go:[0-9]+|hand-written connector' internal/connectors/defs/*/docs.md
+
+REWRITE RULES for each docs.md:
+1. Keep the section skeleton: Overview, Auth setup, Streams notes, Write actions & risks (if writes exist), Limits.
+2. Overview = what the SERVICE is and what data the connector syncs. Delete all migration narrative ("wave2 fan-out", "expanded in Pass B", "migrates internal/connectors/x").
+3. PRESERVE every user-relevant technical fact, rephrased as plain behavior: auth mechanism and config fields, base URL default, pagination behavior, incremental/cursor parameters and formats, stream-specific caveats, rate limits, write-action risks. "matching legacy's toUnixSeconds conversion (aircall.go:203)" becomes "sent as a Unix-seconds timestamp".
+4. DELETE (never rephrase-keep): references to legacy Go files/line numbers, "legacy" comparisons, fidelity/parity/conformance/quarantine mentions, wave/Pass B/migration history, agent/tool names (Codex, GLM, Sonnet), internal doc paths (docs/migration/...).
+5. Do NOT invent new facts. If a sentence's only content is migration history, drop the sentence. If removing it leaves a section empty, write the one-line factual equivalent from streams.json/writes.json (e.g. "All streams paginate via cursor tokens.").
+6. Keep docs.md non-empty and connectorgen-valid.
+
+PROCESS: batches of ~25 files. Per batch: rewrite, then run
+  go run ./cmd/connectorgen validate internal/connectors/defs   (must stay 0 findings)
+then commit "docs(defs): sanitize connector docs — batch <n> (<first>..<last>)". Repeat until the grep above returns ZERO files. Careful with false positives: a service legitimately named like "Legacy" or an API field named "migration_id" may stay — judge by meaning, only our internal vocabulary must go.
+
+FINAL CHECK: grep returns nothing; connectorgen validate 547/0; spot-read 5 random rewritten docs.md end-to-end for coherence. Report: files rewritten, batches committed, any file left untouched and why.

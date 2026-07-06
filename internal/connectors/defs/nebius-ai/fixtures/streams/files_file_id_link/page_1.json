@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/files/synthetic-conformance-value/link"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "url": "https://example.invalid/fixture"
+    }
+  }
+}

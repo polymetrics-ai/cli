@@ -1,0 +1,22 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "metric_id": "metric_id_fixture_1",
+    "name": "Fixture add metric datapoints",
+    "value": 42
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/metrics/metric_id_fixture_1/data",
+    "body": {
+      "name": "Fixture add metric datapoints",
+      "value": 42
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_metric_datapoints_fixture_response"
+    }
+  }
+}

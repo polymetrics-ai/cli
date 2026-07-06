@@ -1,0 +1,22 @@
+{
+  "record": {
+    "time": 3600,
+    "date": "2026-01-05",
+    "task": "t_fixture_1",
+    "comment": "Fixture time entry"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/time",
+    "body": {
+      "time": 3600,
+      "date": "2026-01-05",
+      "task": "t_fixture_1",
+      "comment": "Fixture time entry"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 701, "time": 3600, "date": "2026-01-05" }
+  }
+}

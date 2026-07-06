@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": ["integer", "null"] },
+    "uuid": { "type": ["string", "null"] },
+    "inbox_id": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "additional_attributes": { "type": ["object", "null"] },
+    "custom_attributes": { "type": ["object", "null"] },
+    "labels": { "type": ["array", "null"], "items": { "type": "string" } },
+    "muted": { "type": ["boolean", "null"] },
+    "can_reply": { "type": ["boolean", "null"] },
+    "unread_count": { "type": ["integer", "null"] },
+    "agent_last_seen_at": { "type": ["integer", "null"] },
+    "assignee_last_seen_at": { "type": ["integer", "null"] },
+    "contact_last_seen_at": { "type": ["integer", "null"] },
+    "snoozed_until": { "type": ["integer", "null"] },
+    "waiting_since": { "type": ["integer", "null"] },
+    "first_reply_created_at": { "type": ["integer", "null"] },
+    "last_activity_at": { "type": ["integer", "null"] },
+    "sla_policy_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["integer", "null"] },
+    "timestamp": { "type": ["integer", "null"] }
+  }
+}

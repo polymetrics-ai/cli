@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "company_fixture_1", "Account_Name": "Fixture Co One", "Phone": "+15550200", "Website": "https://fixture1.example.com", "display_value": "Fixture Co One" },
+        { "id": "company_fixture_2", "Account_Name": "Fixture Co Two", "Phone": "+15550201", "Website": "https://fixture2.example.com", "display_value": "Fixture Co Two" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

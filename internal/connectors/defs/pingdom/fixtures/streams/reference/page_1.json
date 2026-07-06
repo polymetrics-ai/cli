@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/reference", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "checktypes": { "http": {}, "ping": {}, "tcp": {} },
+      "regions": { "NA": "North America", "EU": "Europe" },
+      "probes": { "1": "Fixture US East", "2": "Fixture EU West" }
+    }
+  }
+}

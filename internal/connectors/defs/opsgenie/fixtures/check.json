@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/alerts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "alert_fixture_1", "tinyId": "1", "alias": "fixture-alert-1", "message": "Fixture alert", "status": "open", "priority": "P3", "createdAt": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": {}
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value",
+    "theme_id": "synthetic-conformance-value",
+    "emailTemplateTouchPointVariant": "FULL_THEME",
+    "endUserDashboardTouchPointVariant": "FULL_THEME",
+    "errorPageTouchPointVariant": "BACKGROUND_IMAGE",
+    "loadingPageTouchPointVariant": "NONE",
+    "primaryColorContrastHex": "primary_color_contrast_hex_fixture",
+    "primaryColorHex": "primary_color_hex_fixture",
+    "secondaryColorContrastHex": "secondary_color_contrast_hex_fixture",
+    "secondaryColorHex": "secondary_color_hex_fixture",
+    "signInPageTouchPointVariant": "BACKGROUND_IMAGE",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/brands/synthetic-conformance-value/themes/synthetic-conformance-value",
+    "body": {
+      "emailTemplateTouchPointVariant": "FULL_THEME",
+      "endUserDashboardTouchPointVariant": "FULL_THEME",
+      "errorPageTouchPointVariant": "BACKGROUND_IMAGE",
+      "loadingPageTouchPointVariant": "NONE",
+      "primaryColorContrastHex": "primary_color_contrast_hex_fixture",
+      "primaryColorHex": "primary_color_hex_fixture",
+      "secondaryColorContrastHex": "secondary_color_contrast_hex_fixture",
+      "secondaryColorHex": "secondary_color_hex_fixture",
+      "signInPageTouchPointVariant": "BACKGROUND_IMAGE",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

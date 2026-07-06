@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/deliveries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "deliveries": {
+        "id": "id_fixture",
+        "emailId": "fixture@example.com",
+        "email": {
+          "id": "email_fixture_id"
+        },
+        "status": "fixture",
+        "audienceSize": 1,
+        "stats": {
+          "total": 1,
+          "sent": 1,
+          "delivered": 1,
+          "failed": 1,
+          "opened": 1,
+          "clicked": 1
+        },
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

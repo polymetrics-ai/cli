@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/checks" },
+  "response": { "status": 200, "body": { "checks": [] } }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "exchange_rates",
+  "type": "object",
+  "x-primary-key": ["asset_id_base", "asset_id_quote"],
+  "required": ["asset_id_base", "asset_id_quote"],
+  "properties": {
+    "asset_id_base": { "type": "string" },
+    "asset_id_quote": { "type": ["string", "null"] },
+    "time": { "type": ["string", "null"] },
+    "rate": { "type": ["number", "null"] }
+  }
+}

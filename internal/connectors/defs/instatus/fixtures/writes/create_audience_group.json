@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture create audience group"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/audience_groups",
+    "body": {
+      "name": "Fixture create audience group"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_audience_group_fixture_response"
+    }
+  }
+}

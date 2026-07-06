@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts/activities", "query": { "page_size": "100", "page_token": "20260102000000000::act_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

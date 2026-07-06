@@ -1,0 +1,84 @@
+{
+  "api": "Mux API v1 (https://api.mux.com)",
+  "docs": "https://docs.mux.com/api-reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "legacy-parity read streams only (assets, live streams, direct uploads, system signing keys); the full Mux surface (playback restrictions, transcription, DRM, webhooks, video views/errors data, spaces, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/video/v1/assets",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/video/v1/live-streams",
+      "covered_by": {
+        "stream": "live_streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/video/v1/uploads",
+      "covered_by": {
+        "stream": "uploads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/system/v1/signing-keys",
+      "covered_by": {
+        "stream": "signing_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/video/v1/assets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/video/v1/assets is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/video/v1/assets/{ASSET_ID}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "/video/v1/assets/{ASSET_ID} is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/video/v1/live-streams",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/video/v1/live-streams is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data/v1/video-views",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/data/v1/video-views is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data/v1/errors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/data/v1/errors is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/system/v1/signing-keys",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/system/v1/signing-keys is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    }
+  ]
+}

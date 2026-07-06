@@ -1,0 +1,37 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/api/station" },
+    "error_map": [
+      { "status": 401, "hint": "cimis appKey is missing or invalid; re-run pm credentials add cimis" },
+      { "status": 429, "class": "rate_limited", "hint": "cimis rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "stations",
+      "path": "/api/station",
+      "records": { "path": "Stations" },
+      "schema": "schemas/stations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "station_zip_codes",
+      "path": "/api/stationzipcode",
+      "records": { "path": "ZipCodes" },
+      "schema": "schemas/station_zip_codes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "spatial_zip_codes",
+      "path": "/api/spatialzipcode",
+      "records": { "path": "ZipCodes" },
+      "schema": "schemas/spatial_zip_codes.json",
+      "projection": "passthrough"
+    }
+  ]
+}

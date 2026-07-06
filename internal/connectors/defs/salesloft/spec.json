@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesloft Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Salesloft API key, sent as a Bearer token. Takes precedence over OAuth2 credentials when both are configured (matches legacy's authenticator selection order)."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "A Salesloft OAuth2 access token. Used directly as a Bearer token when no api_key is set and no refresh_token+client_id+client_secret triple is configured. When a refresh_token triple IS also configured, this value seeds the OAuth hook's cache and is honored once before any refresh network call (matches legacy's seedToken behavior)."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Salesloft OAuth2 refresh token. Exchanged for a short-lived access token at token_url (grant_type=refresh_token) when client_id/client_secret are also configured and no api_key is set."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Salesloft OAuth2 client ID, used only in the refresh-token-grant token request form."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Salesloft OAuth2 client secret, used only in the refresh-token-grant token request form."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.salesloft.com/v2",
+      "description": "Salesloft REST API v2 base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://accounts.salesloft.com/oauth/token",
+      "description": "Salesloft OAuth2 token endpoint override. MUST be http(s) with a host; the hook fails closed on an invalid value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects updated at or after this time are read, on a fresh sync with no persisted cursor."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

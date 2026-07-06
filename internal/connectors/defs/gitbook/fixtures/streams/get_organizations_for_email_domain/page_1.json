@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/email-domains/synthetic-conformance-value/orgs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizations": [
+        {
+          "id": "get_organizations_for_email_domain_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_organizations_for_email_domain",
+          "name": "Fixture get_organizations_for_email_domain",
+          "status": "active",
+          "operation_id": "getOrganizationsForEmailDomain"
+        }
+      ]
+    }
+  }
+}

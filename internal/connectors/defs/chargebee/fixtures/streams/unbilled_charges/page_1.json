@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/unbilled_charges",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "unbilled_charge": {
+            "id": "ubc_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "date_from": 1767225600,
+            "date_to": 1769904000,
+            "amount": 500,
+            "currency_code": "USD",
+            "entity_type": "plan_item_price",
+            "entity_id": "ip_fixture_1",
+            "is_voided": false
+          }
+        }
+      ]
+    }
+  }
+}

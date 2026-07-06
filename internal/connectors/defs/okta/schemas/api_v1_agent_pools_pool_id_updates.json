@@ -1,0 +1,261 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Agent details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the agent that's generated during installation"
+          },
+          "isHidden": {
+            "type": "boolean",
+            "description": "Determines if an agent is hidden from the Admin Console"
+          },
+          "isLatestGAedVersion": {
+            "type": "boolean",
+            "description": "Determines if the agent is on the latest generally available version"
+          },
+          "lastConnection": {
+            "type": "integer",
+            "description": "Unix timestamp in milliseconds when the agent last connected to Okta"
+          },
+          "name": {
+            "type": "string",
+            "description": "Agent name"
+          },
+          "operationalStatus": {
+            "type": "string",
+            "description": "Operational status of a given agent",
+            "enum": [
+              "DEGRADED",
+              "DISRUPTED",
+              "INACTIVE",
+              "OPERATIONAL"
+            ]
+          },
+          "poolId": {
+            "type": "string",
+            "description": "Pool ID"
+          },
+          "type": {
+            "type": "string",
+            "description": "Agent types that are being monitored",
+            "enum": [
+              "AD",
+              "IWA",
+              "LDAP",
+              "MFA",
+              "OPP",
+              "RUM",
+              "Radius"
+            ]
+          },
+          "updateMessage": {
+            "type": "string",
+            "description": "Status message of the agent"
+          },
+          "updateStatus": {
+            "type": "string",
+            "description": "Status for one agent regarding the status to auto-update that agent",
+            "enum": [
+              "Cancelled",
+              "Failed",
+              "InProgress",
+              "PendingCompletion",
+              "Scheduled",
+              "Success"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "description": "Agent version number"
+          },
+          "_links": {
+            "type": "object",
+            "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+            "properties": {
+              "self": {
+                "type": "object",
+                "description": "Link to the resource (self)",
+                "properties": {
+                  "hints": {
+                    "type": "object",
+                    "description": "Describes allowed HTTP verbs for the `href`",
+                    "properties": {
+                      "allow": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "Link URI"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Link name"
+                  },
+                  "templated": {
+                    "type": "boolean",
+                    "description": "Indicates whether the link object's `href` property is a URI template."
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "agentType": {
+      "type": "string",
+      "description": "Agent types that are being monitored",
+      "enum": [
+        "AD",
+        "IWA",
+        "LDAP",
+        "MFA",
+        "OPP",
+        "RUM",
+        "Radius"
+      ]
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Indicates if auto-update is enabled for the agent pool"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the agent pool update"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the agent pool update"
+    },
+    "notifyAdmin": {
+      "type": "boolean",
+      "description": "Indicates if the admin is notified about the update"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason for the update"
+    },
+    "schedule": {
+      "type": "object",
+      "description": "The schedule of auto-update configured by the admin",
+      "properties": {
+        "cron": {
+          "type": "string",
+          "description": "The schedule of the update in cron format. The cron settings are limited to only the day of the month or the nth-day-of-the-week configurations. For example, `0 8 ? * 6#3` indicates every third Saturday at 8:00 AM."
+        },
+        "delay": {
+          "type": "integer",
+          "description": "Delay in days"
+        },
+        "duration": {
+          "type": "integer",
+          "description": "Duration in minutes"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "Timestamp when the update finished (only for a successful or failed update, not for a cancelled update). Null is returned if the job hasn't finished once yet.",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Timezone of where the scheduled job takes place"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sortOrder": {
+      "type": "integer",
+      "description": "Specifies the sort order"
+    },
+    "status": {
+      "type": "string",
+      "description": "Overall state for the auto-update job from the admin perspective",
+      "enum": [
+        "Cancelled",
+        "Failed",
+        "InProgress",
+        "Paused",
+        "Scheduled",
+        "Success"
+      ]
+    },
+    "targetVersion": {
+      "type": "string",
+      "description": "The agent version to update to"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

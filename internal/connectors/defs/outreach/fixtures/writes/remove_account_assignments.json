@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "removeaccountassignments",
+      "attributes": {
+        "name": "Fixture Remove Account Assignments"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/accountsRemoveAssignments",
+    "body": {
+      "data": {
+        "type": "removeaccountassignments",
+        "attributes": {
+          "name": "Fixture Remove Account Assignments"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

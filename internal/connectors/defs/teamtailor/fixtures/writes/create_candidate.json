@@ -1,0 +1,19 @@
+{
+  "record": {
+    "data": {
+      "type": "candidates",
+      "attributes": { "first-name": "Fixture", "last-name": "Candidate", "email": "fixture-candidate@example.com" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates",
+    "body": {
+      "data": {
+        "type": "candidates",
+        "attributes": { "first-name": "Fixture", "last-name": "Candidate", "email": "fixture-candidate@example.com" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "candidate_fixture_new", "type": "candidates" } } }
+}

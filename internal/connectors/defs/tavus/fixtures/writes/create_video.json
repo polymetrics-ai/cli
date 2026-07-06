@@ -1,0 +1,9 @@
+{
+  "record": { "replica_id": "replica_fixture_1", "video_name": "Fixture New Video", "script": "Hello from the fixture." },
+  "expect": {
+    "method": "POST",
+    "path": "/videos",
+    "body": { "replica_id": "replica_fixture_1", "video_name": "Fixture New Video", "script": "Hello from the fixture." }
+  },
+  "response": { "status": 200, "body": { "video_id": "video_fixture_new", "status": "queued" } }
+}

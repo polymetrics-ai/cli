@@ -1,0 +1,726 @@
+{
+  "api": "Employment Hero REST API (base https://api.employmenthero.com/api; v1 and v2 paths)",
+  "docs": "https://developer.employmenthero.com/api-references and https://developer.employmenthero.com/postman-collection.json",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion from the official Employment Hero API reference/Postman collection: all practical JSON GET data endpoints are covered as streams and all simple JSON mutations are covered as writes; OAuth, portal/webhook setup, multipart uploads, binary PDF generation, and async polling/status endpoints are explicitly excluded by category.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "https://oauth.employmenthero.com/oauth2/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange is credential acquisition, not a connector read or reverse-ETL write action."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "https://oauth.employmenthero.com/oauth2/authorize",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth authorization redirect is an interactive auth flow, not a data endpoint."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://oauth.employmenthero.com/oauth2/token (refresh)",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token refresh is credential maintenance, not a connector data surface."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations",
+      "covered_by": {
+        "stream": "organisations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}",
+      "covered_by": {
+        "stream": "organisation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
+      "covered_by": {
+        "stream": "employee"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/quick_add_employee",
+      "covered_by": {
+        "write": "quick_add_employee"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/quick_add_contractor",
+      "covered_by": {
+        "write": "quick_add_contractor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/polling_onboard_employee",
+      "covered_by": {
+        "write": "onboard_employee_async"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/onboard/polling_status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Polling endpoint reports asynchronous job status for a prior mutation and needs an ephemeral polling key."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/personal_details",
+      "covered_by": {
+        "write": "update_employee_personal_details"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_details",
+      "covered_by": {
+        "write": "update_employee_employment_details"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/contractor_details",
+      "covered_by": {
+        "write": "update_employee_contractor_details"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
+      "covered_by": {
+        "write": "delete_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/teams/{team_id}/employees",
+      "covered_by": {
+        "stream": "team_employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_requests",
+      "covered_by": {
+        "stream": "leave_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_requests/{leave_request_id}",
+      "covered_by": {
+        "stream": "leave_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_requests",
+      "covered_by": {
+        "write": "create_leave_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/certifications",
+      "covered_by": {
+        "stream": "certifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "covered_by": {
+        "stream": "certification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/certifications",
+      "covered_by": {
+        "write": "create_certification"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "covered_by": {
+        "write": "update_certification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/certifications/polling_status",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Polling endpoint reports async certification import/upload status and needs an ephemeral polling key."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}/archive_status",
+      "covered_by": {
+        "write": "archive_certification"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "covered_by": {
+        "write": "delete_certification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/certifications/file_uploads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official file upload endpoint requires multipart/binary upload semantics not expressible by declarative JSON writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications",
+      "covered_by": {
+        "stream": "employee_certification_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Official employee certification file upload requires multipart/binary upload semantics not expressible by declarative JSON writes."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/{id}",
+      "covered_by": {
+        "write": "update_employee_certification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
+      "covered_by": {
+        "stream": "bank_accounts_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
+      "covered_by": {
+        "stream": "bank_accounts_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/job_histories",
+      "covered_by": {
+        "stream": "contractor_job_histories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/cost_centres",
+      "covered_by": {
+        "stream": "cost_centres"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/custom_fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/departments",
+      "covered_by": {
+        "write": "create_department"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/departments/{department_id}",
+      "covered_by": {
+        "write": "update_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents",
+      "covered_by": {
+        "stream": "documents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Document creation in the official collection has no JSON body and represents document/file upload behavior outside declarative JSON writes."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/emergency_contacts",
+      "covered_by": {
+        "stream": "emergency_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields",
+      "covered_by": {
+        "stream": "employee_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employing_entities",
+      "covered_by": {
+        "stream": "employing_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_histories",
+      "covered_by": {
+        "stream": "employment_histories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+      "covered_by": {
+        "stream": "form"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+      "covered_by": {
+        "write": "delete_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses",
+      "covered_by": {
+        "stream": "form_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}",
+      "covered_by": {
+        "stream": "form_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assignments",
+      "covered_by": {
+        "stream": "form_assignments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/members/{member_id}/form_responses",
+      "covered_by": {
+        "stream": "member_form_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_categories",
+      "covered_by": {
+        "stream": "form_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/form_categories",
+      "covered_by": {
+        "write": "create_form_category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
+      "covered_by": {
+        "write": "update_form_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
+      "covered_by": {
+        "write": "delete_form_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_templates",
+      "covered_by": {
+        "stream": "form_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "covered_by": {
+        "stream": "form_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/form_templates",
+      "covered_by": {
+        "write": "create_form_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "covered_by": {
+        "write": "update_form_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "covered_by": {
+        "write": "delete_form_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals",
+      "covered_by": {
+        "stream": "goals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+      "covered_by": {
+        "stream": "goal"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/comments",
+      "covered_by": {
+        "stream": "goal_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
+      "covered_by": {
+        "stream": "goal_key_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "covered_by": {
+        "stream": "goal_key_result"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/archive_status",
+      "covered_by": {
+        "write": "update_goal_archive_status"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/update_status",
+      "covered_by": {
+        "write": "update_goal_health_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members",
+      "covered_by": {
+        "stream": "kiosk_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_grant_access",
+      "covered_by": {
+        "write": "bulk_grant_kiosk_access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_revoke_access",
+      "covered_by": {
+        "write": "bulk_revoke_kiosk_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances",
+      "covered_by": {
+        "stream": "leave_balances"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances/{id}",
+      "covered_by": {
+        "write": "update_leave_balance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_categories",
+      "covered_by": {
+        "stream": "leave_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/pay_categories",
+      "covered_by": {
+        "stream": "pay_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details",
+      "covered_by": {
+        "stream": "pay_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips",
+      "covered_by": {
+        "stream": "payslips"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}",
+      "covered_by": {
+        "stream": "payslip"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Payslip PDF generation returns or prepares a binary PDF artifact, not a JSON write shape for this engine."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/policies",
+      "covered_by": {
+        "stream": "policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/positions",
+      "covered_by": {
+        "write": "create_position"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/positions/{position_id}",
+      "covered_by": {
+        "write": "update_position"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts",
+      "covered_by": {
+        "stream": "rostered_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/{rostered_shift_id}",
+      "covered_by": {
+        "stream": "rostered_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/cost",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Cost endpoint is an aggregate/calculation endpoint rather than a list or object data stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/bulk_create",
+      "covered_by": {
+        "write": "bulk_create_rostered_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Async bulk-create job status endpoint needs a prior mutation job id and is not an independent data stream."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
+      "covered_by": {
+        "stream": "superannuation_detail_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
+      "covered_by": {
+        "stream": "superannuation_detail_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "covered_by": {
+        "stream": "tax_declaration_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "covered_by": {
+        "stream": "tax_declaration_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/timesheet_entries",
+      "covered_by": {
+        "stream": "timesheet_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/timesheet_entries",
+      "covered_by": {
+        "write": "create_timesheet_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/unavailabilities",
+      "covered_by": {
+        "stream": "unavailabilities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/unavailabilities/{unavailability_id}",
+      "covered_by": {
+        "stream": "unavailability"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/work_eligibility",
+      "covered_by": {
+        "stream": "work_eligibility"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/work_locations",
+      "covered_by": {
+        "stream": "work_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/work_sites",
+      "covered_by": {
+        "stream": "work_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/work_sites",
+      "covered_by": {
+        "write": "create_work_site"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/organisations/{organisation_id}/work_sites/{work_site_id}",
+      "covered_by": {
+        "write": "update_work_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/work_types",
+      "covered_by": {
+        "stream": "work_types"
+      }
+    }
+  ]
+}

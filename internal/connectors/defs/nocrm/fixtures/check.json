@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/pipelines" },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

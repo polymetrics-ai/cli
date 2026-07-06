@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "team_fixture_1",
+    "description": "Updated fixture team"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/organizations/synthetic-conformance-value/teams/team_fixture_1",
+    "body": {
+      "description": "Updated fixture team"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

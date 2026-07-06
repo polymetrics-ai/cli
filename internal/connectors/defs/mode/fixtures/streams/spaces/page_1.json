@@ -1,0 +1,15 @@
+{
+  "data": [
+    {
+      "token": "fixture",
+      "id": 1,
+      "name": "fixture",
+      "description": "fixture",
+      "space_type": "fixture",
+      "state": "fixture",
+      "restricted": true,
+      "created_at": "fixture",
+      "updated_at": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/settings/scorecards", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_1",
+      "records": { "totalRecords": 1, "currentPageSize": 1, "currentPageNumber": 0, "cursor": null },
+      "scorecards": [
+        { "scorecardId": "sc_fixture_1", "scorecardName": "Discovery Call Scorecard", "workspaceId": "ws_fixture_1", "enabled": true, "created": "2026-01-01T00:00:00Z", "updated": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

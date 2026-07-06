@@ -1,0 +1,7 @@
+{
+  "record": { "issue": "AZfixture000000000000001", "tags": "fixture,conformance" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/issues/set_tags"
+  }
+}

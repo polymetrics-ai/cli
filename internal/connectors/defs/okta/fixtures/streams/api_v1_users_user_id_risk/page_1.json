@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/risk"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "riskLevel": "HIGH",
+      "_links": {
+        "user": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

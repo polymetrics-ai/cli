@@ -1,0 +1,16 @@
+{
+  "record": {
+    "release_id": 123,
+    "task_id": 123,
+    "name": "Fixture update_a_release_task",
+    "description": "Fixture update_a_release_task record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/releases/123/tasks/123",
+    "body": {
+      "name": "Fixture update_a_release_task",
+      "description": "Fixture update_a_release_task record"
+    }
+  }
+}

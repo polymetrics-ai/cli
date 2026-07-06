@@ -1,0 +1,2130 @@
+{
+  "actions": [
+    {
+      "name": "record_action_feedback",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications/{{ record.notification_id }}/feedback",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "notification_id"
+        ],
+        "properties": {
+          "notification_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /appIntegrations/2024-04-01/notifications/{notificationId}/feedback against the live SP-API account",
+      "path_fields": [
+        "notification_id"
+      ]
+    },
+    {
+      "name": "delete_notifications",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications/deletion",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /appIntegrations/2024-04-01/notifications/deletion against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/appIntegrations/2024-04-01/notifications",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /appIntegrations/2024-04-01/notifications against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_inbound",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders/{{ record.order_id }}/cancellation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/inboundOrders/{orderId}/cancellation against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_inbound",
+      "kind": "update",
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders/{{ record.order_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/inboundOrders/{orderId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_inbound",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/awd/2024-05-09/inboundOrders/{{ record.order_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /awd/2024-05-09/inboundOrders/{orderId} against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_inbound",
+      "kind": "create",
+      "method": "POST",
+      "path": "/awd/2024-05-09/inboundOrders",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/inboundOrders against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_inbound_shipment_transport_details",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/awd/2024-05-09/inboundShipments/{{ record.shipment_id }}/transport",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /awd/2024-05-09/inboundShipments/{shipmentId}/transport against the live SP-API account",
+      "path_fields": [
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_outbound",
+      "kind": "update",
+      "method": "POST",
+      "path": "/awd/2024-05-09/outboundOrders/{{ record.order_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/outboundOrders/{orderId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_outbound",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/awd/2024-05-09/outboundOrders/{{ record.order_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /awd/2024-05-09/outboundOrders/{orderId} against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_outbound",
+      "kind": "create",
+      "method": "POST",
+      "path": "/awd/2024-05-09/outboundOrders",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/outboundOrders against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_replenishment_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/awd/2024-05-09/replenishmentOrders/{{ record.order_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/replenishmentOrders/{orderId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_replenishment_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/awd/2024-05-09/replenishmentOrders",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /awd/2024-05-09/replenishmentOrders against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_query",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/dataKiosk/2023-11-15/queries/{{ record.query_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "query_id"
+        ],
+        "properties": {
+          "query_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /dataKiosk/2023-11-15/queries/{queryId} against the live SP-API account",
+      "path_fields": [
+        "query_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_query",
+      "kind": "create",
+      "method": "POST",
+      "path": "/dataKiosk/2023-11-15/queries",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /dataKiosk/2023-11-15/queries against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_scheduled_packages",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/easyShip/2022-03-23/package",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "PATCH /easyShip/2022-03-23/package against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_scheduled_package",
+      "kind": "create",
+      "method": "POST",
+      "path": "/easyShip/2022-03-23/package",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /easyShip/2022-03-23/package against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_scheduled_package_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/easyShip/2022-03-23/packages/bulk",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /easyShip/2022-03-23/packages/bulk against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_package_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ record.shipment_id }}/packages/{{ record.package_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id",
+          "package_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          },
+          "package_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PATCH /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId} against the live SP-API account",
+      "path_fields": [
+        "shipment_id",
+        "package_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_package",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ record.shipment_id }}/packages/{{ record.package_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id",
+          "package_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          },
+          "package_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId} against the live SP-API account",
+      "path_fields": [
+        "shipment_id",
+        "package_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_packages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/externalFulfillment/2024-09-11/shipments/{{ record.shipment_id }}/packages",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages against the live SP-API account",
+      "path_fields": [
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "batch_inventory",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/externalFulfillment/inventory/2024-09-11/inventories",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /externalFulfillment/inventory/2024-09-11/inventories against the live SP-API account"
+    },
+    {
+      "name": "add_inventory",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/fba/inventory/v1/items/inventory",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /fba/inventory/v1/items/inventory against the live SP-API account"
+    },
+    {
+      "name": "create_inventory_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/fba/inventory/v1/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /fba/inventory/v1/items against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delivery_offers",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/fba/outbound/2020-07-01/deliveryOffers",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /fba/outbound/2020-07-01/deliveryOffers against the live SP-API account"
+    },
+    {
+      "name": "cancel_fulfillment_order",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{{ record.seller_fulfillment_order_id }}/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "seller_fulfillment_order_id"
+        ],
+        "properties": {
+          "seller_fulfillment_order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel against the live SP-API account",
+      "path_fields": [
+        "seller_fulfillment_order_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_fulfillment_return",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{{ record.seller_fulfillment_order_id }}/return",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "seller_fulfillment_order_id"
+        ],
+        "properties": {
+          "seller_fulfillment_order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return against the live SP-API account",
+      "path_fields": [
+        "seller_fulfillment_order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_fulfillment_order_status_update",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{{ record.seller_fulfillment_order_id }}/status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "seller_fulfillment_order_id"
+        ],
+        "properties": {
+          "seller_fulfillment_order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status against the live SP-API account",
+      "path_fields": [
+        "seller_fulfillment_order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_fulfillment_order",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{{ record.seller_fulfillment_order_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "seller_fulfillment_order_id"
+        ],
+        "properties": {
+          "seller_fulfillment_order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId} against the live SP-API account",
+      "path_fields": [
+        "seller_fulfillment_order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_fulfillment_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /fba/outbound/2020-07-01/fulfillmentOrders against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_feed",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/feeds/2021-06-30/feeds/{{ record.feed_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "feed_id"
+        ],
+        "properties": {
+          "feed_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /feeds/2021-06-30/feeds/{feedId} against the live SP-API account",
+      "path_fields": [
+        "feed_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_feed",
+      "kind": "create",
+      "method": "POST",
+      "path": "/feeds/2021-06-30/feeds",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /feeds/2021-06-30/feeds against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiate_payout",
+      "kind": "update",
+      "method": "POST",
+      "path": "/finances/transfers/2024-06-01/payouts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /finances/transfers/2024-06-01/payouts against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_inbound_plan",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/cancellation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_inbound_plan_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/name",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_packing_information",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/packingInformation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ]
+    },
+    {
+      "name": "confirm_packing_option",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/packingOptions/{{ record.packing_option_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "packing_option_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "packing_option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "packing_option_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_packing_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/packingOptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_placement_option",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/placementOptions/{{ record.placement_option_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "placement_option_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "placement_option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "placement_option_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_placement_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/placementOptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_delivery_window_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/deliveryWindowOptions/{{ record.delivery_window_option_id }}/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id",
+          "delivery_window_option_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          },
+          "delivery_window_option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id",
+        "delivery_window_option_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_delivery_window_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/deliveryWindowOptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_shipment_name",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/name",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_self_ship_appointment",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/selfShipAppointmentCancellation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "schedule_self_ship_appointment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/selfShipAppointmentSlots/{{ record.slot_id }}/schedule",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id",
+          "slot_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          },
+          "slot_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id",
+        "slot_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_shipment_source_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/sourceAddress",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_shipment_tracking_details",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/shipments/{{ record.shipment_id }}/trackingDetails",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id",
+          "shipment_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id",
+        "shipment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_transportation_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/transportationOptions/confirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_transportation_options",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans/{{ record.inbound_plan_id }}/transportationOptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "inbound_plan_id"
+        ],
+        "properties": {
+          "inbound_plan_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions against the live SP-API account",
+      "path_fields": [
+        "inbound_plan_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_inbound_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/inboundPlans",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_prep_details",
+      "kind": "update",
+      "method": "POST",
+      "path": "/inbound/fba/2024-03-20/items/prepDetails",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /inbound/fba/2024-03-20/items/prepDetails against the live SP-API account"
+    },
+    {
+      "name": "cancel_shipment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/mfn/v0/shipments/{{ record.shipment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /mfn/v0/shipments/{shipmentId} against the live SP-API account",
+      "path_fields": [
+        "shipment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_shipment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mfn/v0/shipments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /mfn/v0/shipments against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_destination",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notifications/v1/destinations/{{ record.destination_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "destination_id"
+        ],
+        "properties": {
+          "destination_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /notifications/v1/destinations/{destinationId} against the live SP-API account",
+      "path_fields": [
+        "destination_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_destination",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notifications/v1/destinations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /notifications/v1/destinations against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_subscription_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notifications/v1/subscriptions/{{ record.notification_type }}/{{ record.subscription_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "notification_type",
+          "subscription_id"
+        ],
+        "properties": {
+          "notification_type": {
+            "type": "string"
+          },
+          "subscription_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /notifications/v1/subscriptions/{notificationType}/{subscriptionId} against the live SP-API account",
+      "path_fields": [
+        "notification_type",
+        "subscription_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "send_test_notification",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/notifications/v1/subscriptions/{{ record.notification_type }}/testNotification",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "notification_type"
+        ],
+        "properties": {
+          "notification_type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /notifications/v1/subscriptions/{notificationType}/testNotification against the live SP-API account",
+      "path_fields": [
+        "notification_type"
+      ]
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notifications/v1/subscriptions/{{ record.notification_type }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "notification_type"
+        ],
+        "properties": {
+          "notification_type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /notifications/v1/subscriptions/{notificationType} against the live SP-API account",
+      "path_fields": [
+        "notification_type"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_verification_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orders/v0/orders/{{ record.order_id }}/regulatedInfo",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PATCH /orders/v0/orders/{orderId}/regulatedInfo against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "confirm_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/v0/orders/{{ record.order_id }}/shipmentConfirmation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /orders/v0/orders/{orderId}/shipmentConfirmation against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_shipment_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/v0/orders/{{ record.order_id }}/shipment",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /orders/v0/orders/{orderId}/shipment against the live SP-API account",
+      "path_fields": [
+        "order_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reports/2021-06-30/reports/{{ record.report_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /reports/2021-06-30/reports/{reportId} against the live SP-API account",
+      "path_fields": [
+        "report_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/2021-06-30/reports",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /reports/2021-06-30/reports against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_report_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reports/2021-06-30/schedules/{{ record.report_schedule_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "report_schedule_id"
+        ],
+        "properties": {
+          "report_schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /reports/2021-06-30/schedules/{reportScheduleId} against the live SP-API account",
+      "path_fields": [
+        "report_schedule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_report_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reports/2021-06-30/schedules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /reports/2021-06-30/schedules against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_appointment_fulfillment_data",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{{ record.service_job_id }}/appointments/{{ record.appointment_id }}/fulfillment",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_job_id",
+          "appointment_id"
+        ],
+        "properties": {
+          "service_job_id": {
+            "type": "string"
+          },
+          "appointment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment against the live SP-API account",
+      "path_fields": [
+        "service_job_id",
+        "appointment_id"
+      ]
+    },
+    {
+      "name": "assign_appointment_resources",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{{ record.service_job_id }}/appointments/{{ record.appointment_id }}/resources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_job_id",
+          "appointment_id"
+        ],
+        "properties": {
+          "service_job_id": {
+            "type": "string"
+          },
+          "appointment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources against the live SP-API account",
+      "path_fields": [
+        "service_job_id",
+        "appointment_id"
+      ]
+    },
+    {
+      "name": "reschedule_appointment_for_service_job_by_service_job_id",
+      "kind": "update",
+      "method": "POST",
+      "path": "/service/v1/serviceJobs/{{ record.service_job_id }}/appointments/{{ record.appointment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_job_id",
+          "appointment_id"
+        ],
+        "properties": {
+          "service_job_id": {
+            "type": "string"
+          },
+          "appointment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId} against the live SP-API account",
+      "path_fields": [
+        "service_job_id",
+        "appointment_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_appointment_for_service_job_by_service_job_id",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/service/v1/serviceJobs/{{ record.service_job_id }}/appointments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_job_id"
+        ],
+        "properties": {
+          "service_job_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /service/v1/serviceJobs/{serviceJobId}/appointments against the live SP-API account",
+      "path_fields": [
+        "service_job_id"
+      ]
+    },
+    {
+      "name": "complete_service_job_by_service_job_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/service/v1/serviceJobs/{{ record.service_job_id }}/completions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service_job_id"
+        ],
+        "properties": {
+          "service_job_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/completions against the live SP-API account",
+      "path_fields": [
+        "service_job_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "purchase_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v1/purchaseShipment",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v1/purchaseShipment against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_shipment_post_shipping_v1_shipments_shipment_id_cancel",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/shipping/v1/shipments/{{ record.shipment_id }}/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v1/shipments/{shipmentId}/cancel against the live SP-API account",
+      "path_fields": [
+        "shipment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_shipment_post_shipping_v1_shipments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipping/v1/shipments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v1/shipments against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unlink_carrier_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/shipping/v2/carrierAccounts/{{ record.carrier_id }}/unlink",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "carrier_id"
+        ],
+        "properties": {
+          "carrier_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /shipping/v2/carrierAccounts/{carrierId}/unlink against the live SP-API account",
+      "path_fields": [
+        "carrier_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "link_carrier_account",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v2/carrierAccounts/{{ record.carrier_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "carrier_id"
+        ],
+        "properties": {
+          "carrier_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/carrierAccounts/{carrierId} against the live SP-API account",
+      "path_fields": [
+        "carrier_id"
+      ]
+    },
+    {
+      "name": "link_carrier_account_put_shipping_v2_carrier_accounts_carrier_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/shipping/v2/carrierAccounts/{{ record.carrier_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "carrier_id"
+        ],
+        "properties": {
+          "carrier_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /shipping/v2/carrierAccounts/{carrierId} against the live SP-API account",
+      "path_fields": [
+        "carrier_id"
+      ]
+    },
+    {
+      "name": "create_claim",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipping/v2/claims",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/claims against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_collection_form",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v2/collectionForms",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/collectionForms against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_ndr_feedback",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v2/ndrFeedback",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/ndrFeedback against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "one_click_shipment",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/shipping/v2/oneClickShipment",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/oneClickShipment against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cancel_shipment_put_shipping_v2_shipments_shipment_id_cancel",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/shipping/v2/shipments/{{ record.shipment_id }}/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "shipment_id"
+        ],
+        "properties": {
+          "shipment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /shipping/v2/shipments/{shipmentId}/cancel against the live SP-API account",
+      "path_fields": [
+        "shipment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "direct_purchase_shipment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v2/shipments/directPurchase",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/shipments/directPurchase against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "purchase_shipment_post_shipping_v2_shipments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/shipping/v2/shipments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /shipping/v2/shipments against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_supply_source_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/supplySources/2020-07-01/supplySources/{{ record.supply_source_id }}/status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "supply_source_id"
+        ],
+        "properties": {
+          "supply_source_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId}/status against the live SP-API account",
+      "path_fields": [
+        "supply_source_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "archive_supply_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/supplySources/2020-07-01/supplySources/{{ record.supply_source_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "supply_source_id"
+        ],
+        "properties": {
+          "supply_source_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "DELETE /supplySources/2020-07-01/supplySources/{supplySourceId} against the live SP-API account",
+      "path_fields": [
+        "supply_source_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_supply_source",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/supplySources/2020-07-01/supplySources/{{ record.supply_source_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "supply_source_id"
+        ],
+        "properties": {
+          "supply_source_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId} against the live SP-API account",
+      "path_fields": [
+        "supply_source_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_supply_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/supplySources/2020-07-01/supplySources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /supplySources/2020-07-01/supplySources against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_inventory_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/inventory/v1/warehouses/{{ record.warehouse_id }}/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "warehouse_id"
+        ],
+        "properties": {
+          "warehouse_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items against the live SP-API account",
+      "path_fields": [
+        "warehouse_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_acknowledgement",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/orders/2021-12-28/acknowledgements against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_acknowledgement_post_vendor_direct_fulfillment_orders_v1_acknowledgements",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/orders/v1/acknowledgements",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/orders/v1/acknowledgements against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_order_scenarios",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/sandbox/2021-10-28/orders",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/sandbox/2021-10-28/orders against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipment_confirmations",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipment_status_updates",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipment_confirmations_post_vendor_direct_fulfillment_shipping_v1_shipment_confirmations",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/shipping/v1/shipmentConfirmations against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipment_status_updates_post_vendor_direct_fulfillment_shipping_v1_shipment_status_updates",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/directFulfillment/shipping/v1/shipmentStatusUpdates against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_acknowledgement_post_vendor_orders_v1_acknowledgements",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/orders/v1/acknowledgements",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/orders/v1/acknowledgements against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipment_confirmations_post_vendor_shipping_v1_shipment_confirmations",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/shipping/v1/shipmentConfirmations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/shipping/v1/shipmentConfirmations against the live SP-API account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_shipments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vendor/shipping/v1/shipments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "POST /vendor/shipping/v1/shipments against the live SP-API account",
+      "confirm": "destructive"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "inline_hook_id": "synthetic-conformance-value",
+    "channel": {
+      "type": "HTTP",
+      "version": "version_fixture"
+    },
+    "name": "name_fixture",
+    "version": "version_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/inlineHooks/synthetic-conformance-value",
+    "body": {
+      "channel": {
+        "type": "HTTP",
+        "version": "version_fixture"
+      },
+      "name": "name_fixture",
+      "version": "version_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

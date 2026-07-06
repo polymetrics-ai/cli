@@ -1,0 +1,29 @@
+{
+  "record": {
+    "brand_id": "synthetic-conformance-value",
+    "contentSecurityPolicySetting": {
+      "mode": "enforced",
+      "reportUri": "https://example.invalid/fixture",
+      "srcList": [
+        "src_list_fixture"
+      ]
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/error/preview",
+    "body": {
+      "contentSecurityPolicySetting": {
+        "mode": "enforced",
+        "reportUri": "https://example.invalid/fixture",
+        "srcList": [
+          "src_list_fixture"
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

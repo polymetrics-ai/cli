@@ -1,0 +1,15 @@
+{
+  "record": {
+    "application_id": 123,
+    "name": "Fixture update_a_software",
+    "description": "Fixture update_a_software record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/applications/123",
+    "body": {
+      "name": "Fixture update_a_software",
+      "description": "Fixture update_a_software record"
+    }
+  }
+}

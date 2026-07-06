@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_1",
+      "records": { "totalRecords": 1, "currentPageSize": 1, "currentPageNumber": 0, "cursor": null },
+      "users": [
+        { "id": "u_fixture_1", "emailAddress": "fixture1@example.com", "firstName": "Fixture", "lastName": "One", "title": "Account Executive", "active": true, "phoneNumber": "", "managerId": "mgr_fixture_1", "created": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

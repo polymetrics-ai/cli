@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "external_id": { "type": ["string", "null"] },
+    "organization_id": { "type": ["string", "null"] },
+    "account_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"], "description": "Task body, may include HTML." },
+    "due_date": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"], "format": "date-time" },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "archived_at": { "type": ["string", "null"], "format": "date-time" },
+    "meeting_id": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "category_id": { "type": ["string", "null"] },
+    "assigned_to_id": { "type": ["string", "null"] },
+    "completed_by_id": { "type": ["string", "null"] },
+    "traits": { "type": ["object", "null"] }
+  }
+}

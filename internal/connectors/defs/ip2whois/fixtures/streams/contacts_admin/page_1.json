@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/",
+    "query": { "domain": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domain": "synthetic-conformance-value",
+      "domain_id": "synthetic-conformance-value-id",
+      "status": "clientTransferProhibited",
+      "create_date": "2020-01-01T00:00:00Z",
+      "update_date": "2026-01-01T00:00:00Z",
+      "expire_date": "2030-01-01T00:00:00Z",
+      "domain_age": 2190,
+      "whois_server": "whois.fixture-registrar.com",
+      "registrar": { "iana_id": "9999", "name": "Fixture Registrar", "url": "https://registrar.fixture" },
+      "registrant": { "name": "Fixture Registrant", "organization": "Fixture Org", "email": "registrant@fixture.example", "country": "US" },
+      "admin": { "name": "Fixture Admin", "email": "admin@fixture.example", "country": "US" },
+      "tech": { "name": "Fixture Tech", "email": "tech@fixture.example", "country": "US" },
+      "billing": { "name": "Fixture Billing", "email": "billing@fixture.example", "country": "US" },
+      "nameservers": ["ns1.fixture.example", "ns2.fixture.example"]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "api": "GoLogin API (https://api.gologin.com)",
+  "docs": "https://api.gologin.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "capability-parity migration of the legacy internal/connectors/gologin read streams; GoLogin has no reverse-ETL-safe write surface documented, matching legacy's read-only implementation",
+  "endpoints": [
+    { "method": "GET", "path": "/browser/v2", "covered_by": { "stream": "profiles" } },
+    { "method": "GET", "path": "/folders", "covered_by": { "stream": "folders" } },
+    { "method": "GET", "path": "/user", "covered_by": { "stream": "user" } },
+    { "method": "GET", "path": "/tags/all", "covered_by": { "stream": "tags" } }
+  ]
+}

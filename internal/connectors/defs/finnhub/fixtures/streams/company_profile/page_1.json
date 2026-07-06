@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stock/profile2",
+    "query": { "symbol": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ticker": "synthetic-conformance-value",
+      "name": "Fixture Co",
+      "country": "US",
+      "currency": "USD",
+      "exchange": "NASDAQ",
+      "ipo": "1990-01-01",
+      "marketCapitalization": 1000,
+      "shareOutstanding": 500,
+      "finnhubIndustry": "Technology",
+      "weburl": "https://example.com",
+      "logo": "https://example.com/logo.png",
+      "phone": "15551234567"
+    }
+  }
+}

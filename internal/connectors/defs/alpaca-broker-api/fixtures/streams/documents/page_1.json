@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/accounts" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "acct_fixture_1" },
+      { "id": "acct_fixture_2" }
+    ]
+  }
+}

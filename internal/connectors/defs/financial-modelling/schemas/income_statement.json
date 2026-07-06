@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "income_statement",
+  "type": "object",
+  "x-primary-key": ["symbol", "date", "period"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "reported_currency": { "type": ["string", "null"] },
+    "fiscal_year": { "type": ["string", "null"] },
+    "filling_date": { "type": ["string", "null"] },
+    "accepted_date": { "type": ["string", "null"] },
+    "calendar_year": { "type": ["string", "null"] },
+    "revenue": { "type": ["number", "null"] },
+    "cost_of_revenue": { "type": ["number", "null"] },
+    "gross_profit": { "type": ["number", "null"] },
+    "gross_profit_ratio": { "type": ["number", "null"] },
+    "operating_expenses": { "type": ["number", "null"] },
+    "operating_income": { "type": ["number", "null"] },
+    "operating_income_ratio": { "type": ["number", "null"] },
+    "net_income": { "type": ["number", "null"] },
+    "net_income_ratio": { "type": ["number", "null"] },
+    "eps": { "type": ["number", "null"] },
+    "eps_diluted": { "type": ["number", "null"] }
+  }
+}

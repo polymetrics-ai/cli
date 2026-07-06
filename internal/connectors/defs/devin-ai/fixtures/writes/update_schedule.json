@@ -1,0 +1,13 @@
+{
+  "record": {
+    "schedule_id": "sched-fixture-1",
+    "enabled": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v3/organizations/synthetic-conformance-value/schedules/sched-fixture-1",
+    "body": {
+      "enabled": false
+    }
+  }
+}

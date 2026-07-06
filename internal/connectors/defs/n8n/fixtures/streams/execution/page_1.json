@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/executions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "workflowId": "wf_fixture_1",
+      "finished": true,
+      "mode": "trigger",
+      "status": "success",
+      "retryOf": null,
+      "retrySuccessId": null,
+      "startedAt": "2026-01-01T00:00:00.000Z",
+      "stoppedAt": "2026-01-01T00:00:00.000Z",
+      "data": {},
+      "customData": {}
+    }
+  }
+}

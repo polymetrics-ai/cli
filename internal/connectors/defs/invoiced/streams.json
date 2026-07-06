@@ -1,0 +1,469 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": ""
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/customers",
+      "query": {
+        "per_page": "1",
+        "page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "invoiced api_key is missing or invalid; re-run pm credentials add invoiced"
+      },
+      {
+        "status": 403,
+        "hint": "invoiced credentials lack access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "invoiced rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": {
+        "path": ""
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": {
+        "path": ""
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "payments",
+      "path": "/payments",
+      "records": {
+        "path": ""
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/payments.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "records": {
+        "path": ""
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "estimates",
+      "path": "/estimates",
+      "records": {
+        "path": ""
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/estimates.json"
+    },
+    {
+      "name": "customer_contacts",
+      "path": "/customers/{{ config.customer_id }}/contacts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_contacts.json"
+    },
+    {
+      "name": "customer_contact",
+      "path": "/customers/{{ config.customer_id }}/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_contact.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "coupons",
+      "path": "/coupons",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "coupon",
+      "path": "/coupons/{{ config.coupon_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/coupon.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "credit_balance_adjustments",
+      "path": "/credit_balance_adjustments",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_balance_adjustments.json"
+    },
+    {
+      "name": "credit_balance_adjustment",
+      "path": "/credit_balance_adjustments/{{ config.credit_balance_adjustment_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_balance_adjustment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "credit_notes",
+      "path": "/credit_notes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_notes.json"
+    },
+    {
+      "name": "credit_note",
+      "path": "/credit_notes/{{ config.credit_note_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_note.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "credit_note_attachments",
+      "path": "/credit_notes/{{ config.credit_note_id }}/attachments",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_note_attachments.json"
+    },
+    {
+      "name": "customer",
+      "path": "/customers/{{ config.customer_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_balance",
+      "path": "/customers/{{ config.customer_id }}/balance",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_balance.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "estimate",
+      "path": "/estimates/{{ config.estimate_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/estimate.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "estimate_attachments",
+      "path": "/estimates/{{ config.estimate_id }}/attachments",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/estimate_attachments.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.event_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "file",
+      "path": "/files/{{ config.file_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/file.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "invoice",
+      "path": "/invoices/{{ config.invoice_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "invoice_attachments",
+      "path": "/invoices/{{ config.invoice_id }}/attachments",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoice_attachments.json"
+    },
+    {
+      "name": "items",
+      "path": "/items",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "item",
+      "path": "/items/{{ config.item_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/item.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_line_items",
+      "path": "/customers/{{ config.customer_id }}/line_items",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_line_items.json"
+    },
+    {
+      "name": "customer_line_item",
+      "path": "/customers/{{ config.customer_id }}/line_items/{{ config.line_item_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_line_item.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "customer_notes",
+      "path": "/customer/{{ config.customer_id }}/notes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_notes.json"
+    },
+    {
+      "name": "invoice_notes",
+      "path": "/invoice/{{ config.invoice_id }}/notes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoice_notes.json"
+    },
+    {
+      "name": "invoice_payment_plan",
+      "path": "/invoices/{{ config.invoice_id }}/payment_plan",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoice_payment_plan.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_payment_sources",
+      "path": "/customers/{{ config.customer_id }}/payment_sources",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_payment_sources.json"
+    },
+    {
+      "name": "payment",
+      "path": "/payments/{{ config.payment_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "plans",
+      "path": "/plans",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/plans.json"
+    },
+    {
+      "name": "plan",
+      "path": "/plans/{{ config.plan_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/plan.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "subscription",
+      "path": "/subscriptions/{{ config.subscription_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "task",
+      "path": "/tasks/{{ config.task_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/task.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tax_rates",
+      "path": "/tax_rates",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tax_rates.json"
+    },
+    {
+      "name": "tax_rate",
+      "path": "/tax_rates/{{ config.tax_rate_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tax_rate.json",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

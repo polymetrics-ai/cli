@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "vo_fixture_1",
+    "name": "Renamed Voucher"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vouchers/vo_fixture_1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "filter_id": "filter_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/tickets/saved_filters/filter_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

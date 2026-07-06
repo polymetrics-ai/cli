@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": 1,
+    "fromQuantity": 1,
+    "toQuantity": 1,
+    "price": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/bulk-prices",
+    "body": {
+      "fromQuantity": 1,
+      "toQuantity": 1,
+      "price": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

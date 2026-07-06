@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/employees", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Employee 1",
+        "email": "fixture1@example.com",
+        "title": "Engineer",
+        "location_id": 4,
+        "department_id": 5,
+        "manager_id": 8,
+        "archived": false,
+        "number_of_assets": 2,
+        "number_of_accessories": 1,
+        "number_of_consumables": 0,
+        "number_of_licenses": 1,
+        "notes": "fixture record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 2,
+        "name": "Fixture Employee 2",
+        "email": "fixture2@example.com",
+        "title": "Manager",
+        "location_id": 4,
+        "department_id": 5,
+        "manager_id": null,
+        "archived": false,
+        "number_of_assets": 1,
+        "number_of_accessories": 0,
+        "number_of_consumables": 0,
+        "number_of_licenses": 0,
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

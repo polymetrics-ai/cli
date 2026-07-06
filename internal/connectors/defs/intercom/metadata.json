@@ -1,0 +1,23 @@
+{
+  "name": "intercom",
+  "display_name": "Intercom",
+  "description": "Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Intercom API read of contact and conversation data",
+    "approval": "none; read-only source"
+  }
+}

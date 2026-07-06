@@ -1,0 +1,15 @@
+{
+  "record": {
+    "target": { "id": "folder_fixture_1", "type": "folder" },
+    "address": "https://example.com/webhooks/new",
+    "triggers": ["FILE.UPLOADED"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "address": "https://example.com/webhooks/new"
+    }
+  },
+  "response": { "status": 201, "body": { "id": "webhook_fixture_new", "type": "webhook" } }
+}

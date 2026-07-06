@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/team_memberships" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_tm_1", "resource_type": "team_membership", "is_guest": false, "is_admin": true, "is_limited_access": false },
+        { "gid": "fixture_tm_2", "resource_type": "team_membership", "is_guest": true, "is_admin": false, "is_limited_access": false }
+      ],
+      "next_page": null
+    }
+  }
+}

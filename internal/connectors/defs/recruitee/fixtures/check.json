@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/c/synthetic-conformance-value/offers", "query": { "page": "1", "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "offers": [] }
+  }
+}

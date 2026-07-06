@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_details",
+  "type": "object",
+  "x-primary-key": ["campaign_id"],
+  "required": ["campaign_id"],
+  "properties": {
+    "campaign_id": { "type": "string" },
+    "message": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "draft": { "type": ["boolean", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "has_post_launch_draft": { "type": ["boolean", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "schedule_type": { "type": ["string", "null"] },
+    "channels": { "type": ["string", "null"] },
+    "first_sent": { "type": ["string", "null"] },
+    "last_sent": { "type": ["string", "null"] },
+    "tags": { "type": ["string", "null"] },
+    "teams": { "type": ["string", "null"] },
+    "messages": { "type": ["object", "null"] },
+    "conversion_behaviors": { "type": ["array", "null"] }
+  }
+}

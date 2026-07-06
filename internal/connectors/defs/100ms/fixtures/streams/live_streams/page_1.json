@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/live-streams", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "livestream_fixture_1",
+          "room_id": "room_fixture_1",
+          "session_id": "session_fixture_1",
+          "status": "stopped",
+          "destination": "fixture-destination",
+          "meeting_url": "https://example.com/meeting/fixture",
+          "created_at": "2026-01-01T00:00:00Z",
+          "started_at": "2026-01-01T00:00:00Z",
+          "stopped_at": "2026-01-01T01:00:00Z"
+        }
+      ],
+      "last": ""
+    }
+  }
+}

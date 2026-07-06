@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "break_policies",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "_links": {
+      "type": "object",
+      "required": [
+        "prev",
+        "next"
+      ],
+      "properties": {
+        "next": {
+          "type": [
+            "null",
+            "object"
+          ]
+        },
+        "prev": {
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "deletedAt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "totalItems",
+        "offset",
+        "limit"
+      ],
+      "properties": {
+        "limit": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "totalItems": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

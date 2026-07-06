@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/emailCampaigns", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "id": 1,
+          "name": "Fixture Welcome Campaign",
+          "subject": "Welcome to Fixture Co",
+          "type": "classic",
+          "status": "sent",
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-02T00:00:00.000+00:00"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Follow-up Campaign",
+          "subject": "Thanks for signing up",
+          "type": "classic",
+          "status": "draft",
+          "createdAt": "2026-01-03T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-04T00:00:00.000+00:00"
+        }
+      ],
+      "count": 2
+    }
+  }
+}

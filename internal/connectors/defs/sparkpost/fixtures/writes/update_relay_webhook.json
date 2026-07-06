@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "relay_webhook_fixture_1",
+    "name": "Renamed Fixture Relay Webhook"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/relay-webhooks/relay_webhook_fixture_1"
+  }
+}

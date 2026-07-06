@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "members",
+  "type": "object",
+  "x-primary-key": ["userOrganizationId"],
+  "required": ["userOrganizationId"],
+  "properties": {
+    "userOrganizationId": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "user": { "type": ["object", "null"] },
+    "invitation": { "type": ["object", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "organization": { "type": ["object", "null"] },
+    "role": { "type": ["object", "null"] },
+    "groups": { "type": ["array", "null"] },
+    "job": { "type": ["string", "null"] },
+    "isActive": { "type": ["boolean", "null"] }
+  }
+}

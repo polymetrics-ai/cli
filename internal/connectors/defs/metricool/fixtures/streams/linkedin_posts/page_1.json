@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/linkedin/posts",
+    "query": {
+      "userId": "synthetic-conformance-value",
+      "blogId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "postId": "post_1",
+        "type": "share",
+        "publishDate": "2026-01-01T00:00:00",
+        "text": "Fixture LinkedIn post 1",
+        "interactions": 5,
+        "impressions": 50,
+        "likes": 3,
+        "comments": 1,
+        "shares": 1,
+        "clicks": 2,
+        "url": "https://linkedin.com/fixture1"
+      },
+      {
+        "postId": "post_2",
+        "type": "article",
+        "publishDate": "2026-01-02T00:00:00",
+        "text": "Fixture LinkedIn post 2",
+        "interactions": 9,
+        "impressions": 90,
+        "likes": 6,
+        "comments": 2,
+        "shares": 2,
+        "clicks": 4,
+        "url": "https://linkedin.com/fixture2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "api": "Infor Nexus Data API v3.1",
+  "docs": "https://docs.infor.com/inforos/nexus/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 (AuthHook) migration of internal/connectors/nexus-datasets: the single configured dataset export endpoint only (GET /datasets/{dataset_name}), matching legacy's own single-stream \"datasets\" catalog. Legacy is read-only (Write always returns ErrUnsupportedOperation); no other Infor Nexus Data API surface (dataset administration/listing, other Nexus modules) is implemented.",
+  "endpoints": [
+    { "method": "GET", "path": "/datasets/{dataset_name}", "covered_by": { "stream": "datasets" } }
+  ]
+}

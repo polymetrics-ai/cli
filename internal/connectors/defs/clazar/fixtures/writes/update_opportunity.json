@@ -1,0 +1,8 @@
+{
+  "record": { "id": "opportunity_fixture_1", "custom_properties": { "region": "emea" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/opportunities/opportunity_fixture_1/",
+    "body": { "custom_properties": { "region": "emea" } }
+  }
+}

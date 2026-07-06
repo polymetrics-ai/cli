@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "agreeToCustomPrivacyPolicy": {
+      "type": "boolean",
+      "description": "Consent for updating the custom privacy URL. Not required when resetting the URL."
+    },
+    "customPrivacyPolicyUrl": {
+      "type": "string",
+      "description": "Custom privacy policy URL"
+    },
+    "defaultApp": {
+      "type": "object",
+      "properties": {
+        "appInstanceId": {
+          "type": "string",
+          "description": "ID for the App instance"
+        },
+        "appLinkName": {
+          "type": "string",
+          "description": "Name for the app instance"
+        },
+        "classicApplicationUri": {
+          "type": "string",
+          "description": "Application URI for classic Orgs"
+        }
+      },
+      "additionalProperties": true
+    },
+    "emailDomainId": {
+      "type": "string",
+      "description": "The ID of the email domain"
+    },
+    "id": {
+      "type": "string",
+      "description": "The Brand ID"
+    },
+    "isDefault": {
+      "type": "boolean",
+      "description": "If `true`, the Brand is used for the Okta subdomain"
+    },
+    "locale": {
+      "type": "string",
+      "description": "The language specified as an [IETF BCP 47 language tag](https://datatracker.ietf.org/doc/html/rfc5646)"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the Brand"
+    },
+    "removePoweredByOkta": {
+      "type": "boolean",
+      "description": "Removes \"Powered by Okta\" from the sign-in page in redirect authentication deployments, and \"© [current year] Okta, Inc.\" from the Okta End-User Dashboard"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "x-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/replicas" },
+    "error_map": [
+      { "status": 401, "hint": "tavus api_key is missing or invalid; re-run pm credentials add tavus" },
+      { "status": 429, "class": "rate_limited", "hint": "tavus rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "replicas",
+      "path": "/replicas",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.replica_id }}",
+        "name": "{{ record.replica_name }}"
+      },
+      "schema": "schemas/replicas.json"
+    },
+    {
+      "name": "videos",
+      "path": "/videos",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.video_id }}",
+        "name": "{{ record.video_name }}"
+      },
+      "schema": "schemas/videos.json"
+    },
+    {
+      "name": "conversations",
+      "path": "/conversations",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.conversation_id }}",
+        "name": "{{ record.conversation_name }}"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "pals",
+      "path": "/pals",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.pal_id }}",
+        "name": "{{ record.pal_name }}"
+      },
+      "schema": "schemas/pals.json"
+    },
+    {
+      "name": "guardrails",
+      "path": "/guardrails",
+      "query": { "legacy": "false" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.uuid }}",
+        "name": "{{ record.guardrail_name }}"
+      },
+      "schema": "schemas/guardrails.json"
+    },
+    {
+      "name": "objectives",
+      "path": "/objectives",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.objectives_id }}",
+        "name": "{{ record.objective_name }}"
+      },
+      "schema": "schemas/objectives.json"
+    },
+    {
+      "name": "documents",
+      "path": "/documents",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.document_id }}",
+        "name": "{{ record.document_name }}"
+      },
+      "schema": "schemas/documents.json"
+    },
+    {
+      "name": "pronunciation_dictionaries",
+      "path": "/pronunciation-dictionaries",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.pronunciation_dictionary_id }}"
+      },
+      "schema": "schemas/pronunciation_dictionaries.json"
+    },
+    {
+      "name": "voices",
+      "path": "/voices",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/voices.json"
+    },
+    {
+      "name": "skills",
+      "path": "/skills",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/skills.json"
+    }
+  ]
+}

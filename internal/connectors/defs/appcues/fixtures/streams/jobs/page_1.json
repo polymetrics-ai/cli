@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/jobs", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "job_fixture_1",
+        "name": "Fixture Bulk Import",
+        "status": "COMPLETED",
+        "started_at": "2026-01-01T00:00:00.000Z",
+        "url": "https://api.appcues.com/v2/accounts/synthetic-conformance-value/jobs/job_fixture_1"
+      },
+      {
+        "id": "job_fixture_2",
+        "name": "Fixture Bulk Export",
+        "status": "IN_PROGRESS",
+        "started_at": "2026-01-02T00:00:00.000Z",
+        "url": "https://api.appcues.com/v2/accounts/synthetic-conformance-value/jobs/job_fixture_2"
+      }
+    ]
+  }
+}

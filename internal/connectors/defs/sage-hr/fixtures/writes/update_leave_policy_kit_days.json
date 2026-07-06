@@ -1,0 +1,5 @@
+{
+  "record": { "id": "1", "kit_days_enabled": true, "kit_days_quantity": 5 },
+  "expect": { "method": "PATCH", "path": "/leave-management/policies/1" },
+  "response": { "status": 200, "body": {} }
+}

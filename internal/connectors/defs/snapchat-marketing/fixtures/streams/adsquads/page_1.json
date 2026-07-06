@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/adaccounts/synthetic-conformance-value/adsquads", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_status": "SUCCESS",
+      "adsquads": [
+        {
+          "sub_request_status": "SUCCESS",
+          "adsquad": {
+            "id": "squad_fixture_1",
+            "name": "Fixture Ad Squad 1",
+            "status": "ACTIVE",
+            "campaign_id": "camp_fixture_1",
+            "type": "SNAP_ADS",
+            "optimization_goal": "IMPRESSIONS",
+            "billing_event": "IMPRESSION",
+            "bid_micro": 250000,
+            "daily_budget_micro": 1000000,
+            "created_at": "2025-12-31T00:00:00.000Z",
+            "updated_at": "2026-01-01T00:00:00.000Z"
+          }
+        }
+      ]
+    }
+  }
+}

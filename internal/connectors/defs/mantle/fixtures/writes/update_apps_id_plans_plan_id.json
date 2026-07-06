@@ -1,0 +1,114 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "plan_id": "plan_id_fixture",
+    "public": true,
+    "visible": true,
+    "name": "fixture",
+    "description": "fixture",
+    "deprecated": true,
+    "trialDays": 1,
+    "features": [
+      {
+        "featureId": "feature_id_fixture",
+        "value": "fixture"
+      }
+    ],
+    "needsReview": true,
+    "customerTags": [
+      "fixture"
+    ],
+    "customerExcludeTags": [
+      "fixture"
+    ],
+    "shopifyPlans": [
+      "fixture"
+    ],
+    "customer": {
+      "id": "customer_fixture_id"
+    },
+    "planUsageCharges": [
+      {
+        "id": "plan_usage_charge_fixture_id"
+      }
+    ],
+    "amount": 1.23,
+    "interval": "fixture",
+    "customFields": {
+      "id": "custom_fields_fixture_id"
+    },
+    "usageChargeCappedAmount": 1.23,
+    "basePlanIds": [
+      "base_plan_id_fixture"
+    ],
+    "type": "fixture",
+    "flexBilling": true,
+    "flexBillingTerms": {
+      "id": "flex_billing_terms_fixture_id"
+    },
+    "onUsageLimitReached": "fixture",
+    "autoUpgradeToPlanId": "auto_upgrade_to_plan_id_fixture",
+    "rollOverPendingUsage": true,
+    "recurringInterval": "fixture",
+    "recurringIntervalCount": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/apps/id_fixture/plans/plan_id_fixture",
+    "body": {
+      "public": true,
+      "visible": true,
+      "name": "fixture",
+      "description": "fixture",
+      "deprecated": true,
+      "trialDays": 1,
+      "features": [
+        {
+          "featureId": "feature_id_fixture",
+          "value": "fixture"
+        }
+      ],
+      "needsReview": true,
+      "customerTags": [
+        "fixture"
+      ],
+      "customerExcludeTags": [
+        "fixture"
+      ],
+      "shopifyPlans": [
+        "fixture"
+      ],
+      "customer": {
+        "id": "customer_fixture_id"
+      },
+      "planUsageCharges": [
+        {
+          "id": "plan_usage_charge_fixture_id"
+        }
+      ],
+      "amount": 1.23,
+      "interval": "fixture",
+      "customFields": {
+        "id": "custom_fields_fixture_id"
+      },
+      "usageChargeCappedAmount": 1.23,
+      "basePlanIds": [
+        "base_plan_id_fixture"
+      ],
+      "type": "fixture",
+      "flexBilling": true,
+      "flexBillingTerms": {
+        "id": "flex_billing_terms_fixture_id"
+      },
+      "onUsageLimitReached": "fixture",
+      "autoUpgradeToPlanId": "auto_upgrade_to_plan_id_fixture",
+      "rollOverPendingUsage": true,
+      "recurringInterval": "fixture",
+      "recurringIntervalCount": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

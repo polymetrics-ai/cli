@@ -1,0 +1,135 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "check": { "method": "GET", "path": "/recipient-lists" },
+    "error_map": [
+      { "status": 401, "hint": "sparkpost API key is missing or invalid; re-run pm credentials add sparkpost" },
+      { "status": 403, "hint": "sparkpost account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sparkpost rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "recipient_lists",
+      "path": "/recipient-lists",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/recipient_lists.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sending_domains",
+      "path": "/sending-domains",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/sending_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transmissions",
+      "path": "/transmissions",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/transmissions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "suppression_list",
+      "path": "/suppression-list",
+      "query": {
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/suppression_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "ip_pools",
+      "path": "/ip-pools",
+      "records": { "path": "results" },
+      "schema": "schemas/ip_pools.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "results" },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "subaccounts",
+      "path": "/subaccounts",
+      "records": { "path": "results" },
+      "schema": "schemas/subaccounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracking_domains",
+      "path": "/tracking-domains",
+      "records": { "path": "results" },
+      "schema": "schemas/tracking_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "inbound_domains",
+      "path": "/inbound-domains",
+      "records": { "path": "results" },
+      "schema": "schemas/inbound_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "relay_webhooks",
+      "path": "/relay-webhooks",
+      "records": { "path": "results" },
+      "schema": "schemas/relay_webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sending_ips",
+      "path": "/sending-ips",
+      "records": { "path": "results" },
+      "schema": "schemas/sending_ips.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "ab_tests",
+      "path": "/ab-test",
+      "records": { "path": "results" },
+      "schema": "schemas/ab_tests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "account",
+      "path": "/account",
+      "records": { "path": "results", "single_object": true },
+      "schema": "schemas/account.json",
+      "projection": "passthrough"
+    }
+  ]
+}

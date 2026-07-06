@@ -1,0 +1,7 @@
+{
+  "record": { "issue": "AZfixture000000000000001", "assignee": "fixture-user" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/issues/assign"
+  }
+}

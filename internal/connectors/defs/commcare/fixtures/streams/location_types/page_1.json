@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/location_type/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "administrative": true,
+          "code": "country",
+          "domain": "synthetic-conformance-value",
+          "id": 1,
+          "name": "Country",
+          "parent": null,
+          "resource_uri": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location_type/v1/1/",
+          "shares_cases": false,
+          "view_descendants": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "received_on",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "received_on": { "type": ["string", "null"] },
+    "server_modified_on": { "type": ["string", "null"] }
+  }
+}

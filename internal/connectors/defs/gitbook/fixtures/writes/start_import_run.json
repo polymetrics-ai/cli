@@ -1,0 +1,30 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "source": {
+      "synthetic": true
+    },
+    "target": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/org/synthetic-conformance-value/imports",
+    "body": {
+      "source": {
+        "synthetic": true
+      },
+      "target": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "start_import_run_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/customer", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 3, "customer_code": "CUS_fixture_3", "email": "fixture3@example.com", "first_name": "Fixture", "last_name": "Three", "phone": "+10000000003", "domain": "test", "risk_action": "default", "createdAt": "2026-01-03T00:00:00.000Z", "updatedAt": "2026-01-03T00:00:00.000Z" }
+      ],
+      "meta": { "total": 3, "perPage": 2, "page": 2, "pageCount": 2, "next": null, "previous": 1 }
+    }
+  }
+}

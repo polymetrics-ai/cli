@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/reports/estimates" },
+  "response": {
+    "status": 200,
+    "body": {
+      "downloads": 5000,
+      "revenue": "2500.00"
+    }
+  }
+}

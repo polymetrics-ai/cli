@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Nexio Pay Connection Specification",
+  "type": "object",
+  "required": ["api_key", "username"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Nexio Pay API key, used as the Basic auth password. Never logged."
+    },
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Nexio Pay API username, used as the Basic auth username. Part of the credential pair; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.nexiopay.com",
+      "description": "Nexio Pay API base URL override for tests, proxies, or a non-default subdomain."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

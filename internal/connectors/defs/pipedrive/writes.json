@@ -1,0 +1,331 @@
+{
+  "actions": [
+    {
+      "name": "create_lead",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "owner_id": { "type": "integer" },
+          "label_ids": { "type": "array", "items": { "type": "string" } },
+          "person_id": { "type": "integer" },
+          "organization_id": { "type": "integer" },
+          "value": { "type": "object" },
+          "expected_close_date": { "type": "string" },
+          "visible_to": { "type": "string" },
+          "was_seen": { "type": "boolean" },
+          "origin_id": { "type": "string" },
+          "channel": { "type": "integer" },
+          "channel_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a new lead; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_lead",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/leads/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "owner_id": { "type": "integer" },
+          "label_ids": { "type": "array", "items": { "type": "string" } },
+          "person_id": { "type": "integer" },
+          "organization_id": { "type": "integer" },
+          "is_archived": { "type": "boolean" },
+          "value": { "type": "object" },
+          "expected_close_date": { "type": "string" },
+          "visible_to": { "type": "string" },
+          "was_seen": { "type": "boolean" },
+          "channel": { "type": "integer" },
+          "channel_id": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing lead's fields (partial patch); external mutation, approval required"
+    },
+    {
+      "name": "delete_lead",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a lead; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": { "type": "string" },
+          "lead_id": { "type": "string" },
+          "deal_id": { "type": "integer" },
+          "person_id": { "type": "integer" },
+          "org_id": { "type": "integer" },
+          "project_id": { "type": "integer" },
+          "task_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "pinned_to_deal_flag": { "type": "boolean" },
+          "pinned_to_organization_flag": { "type": "boolean" },
+          "pinned_to_person_flag": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new note attached to a deal/person/organization/lead; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/notes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "content"],
+        "properties": {
+          "id": { "type": "integer" },
+          "content": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing note's content; external mutation, approval required"
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a note; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_filter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/filters",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "conditions", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "conditions": { "type": "object" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "creates a new saved filter; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_filter",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/filters/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "conditions"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "conditions": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing saved filter's name/conditions; external mutation, approval required"
+    },
+    {
+      "name": "delete_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/filters/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a saved filter; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_activity_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/activityTypes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "icon_key"],
+        "properties": {
+          "name": { "type": "string" },
+          "icon_key": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a new custom activity type; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_activity_type",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/activityTypes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "order_nr": { "type": "integer" }
+        }
+      },
+      "risk": "updates an existing activity type's name/color/order; external mutation, approval required"
+    },
+    {
+      "name": "delete_activity_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/activityTypes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a custom activity type; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_lead_label",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leadLabels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "color"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a new lead label; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_lead_label",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/leadLabels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing lead label's name/color; external mutation, approval required"
+    },
+    {
+      "name": "delete_lead_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leadLabels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a lead label; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscription_url", "event_action", "event_object", "name"],
+        "properties": {
+          "subscription_url": { "type": "string" },
+          "event_action": { "type": "string" },
+          "event_object": { "type": "string" },
+          "name": { "type": "string" },
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a webhook subscription; destructive external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

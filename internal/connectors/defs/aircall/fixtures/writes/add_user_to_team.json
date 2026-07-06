@@ -1,0 +1,7 @@
+{
+  "record": { "team_id": 2001, "user_id": 1001 },
+  "expect": {
+    "method": "POST",
+    "path": "/teams/2001/users/1001"
+  }
+}

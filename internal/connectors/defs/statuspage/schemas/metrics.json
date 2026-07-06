@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "metrics",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "metrics_provider_id": { "type": ["string", "null"] },
+    "metric_identifier": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "display": { "type": ["boolean", "null"] },
+    "tooltip_description": { "type": ["string", "null"] },
+    "backfilled": { "type": ["boolean", "null"] },
+    "suffix": { "type": ["string", "null"] },
+    "decimal_places": { "type": ["integer", "null"] },
+    "most_recent_data_at": { "type": ["string", "null"] },
+    "last_fetched_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

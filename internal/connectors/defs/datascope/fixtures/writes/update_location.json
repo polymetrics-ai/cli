@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "city": "Porto"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/locations/1"
+  }
+}

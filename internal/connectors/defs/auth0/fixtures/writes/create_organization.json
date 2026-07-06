@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "fixture-org-new",
+    "display_name": "Fixture Organization New"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/organizations",
+    "body": {
+      "name": "fixture-org-new",
+      "display_name": "Fixture Organization New"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "org_fixture_new",
+      "name": "fixture-org-new",
+      "display_name": "Fixture Organization New"
+    }
+  }
+}

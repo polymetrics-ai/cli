@@ -1,0 +1,20 @@
+{
+  "record": {
+    "avatar_id": "av_fixture_1",
+    "custom_field_name": "fixture_field",
+    "custom_field_title": "Fixture Field",
+    "custom_field_type": "text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customfields/create"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "custom_field_id": "cf_fixture_1",
+      "avatar_id": "av_fixture_1",
+      "custom_field_name": "fixture_field"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "$skiptoken": "fixture-skiptoken-1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "accountid": "fixture_account_3", "name": "Fixture Account 3", "emailaddress1": "fixture3@example.com", "createdon": "2026-01-01T00:00:02Z", "modifiedon": "2026-01-01T00:00:02Z" }
+      ]
+    }
+  }
+}

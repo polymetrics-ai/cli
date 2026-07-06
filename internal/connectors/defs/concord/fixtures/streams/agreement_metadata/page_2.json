@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/metadata"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organization": { "id": 42 },
+      "title": "Fixture Agreement 1",
+      "description": "Deterministic fixture record.",
+      "status": "DRAFT",
+      "read": true,
+      "inboxed": false,
+      "bookmarked": false,
+      "trashed": false,
+      "lastAccessAt": 1735689600000,
+      "tags": []
+    }
+  }
+}

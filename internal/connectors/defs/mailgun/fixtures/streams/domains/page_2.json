@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/domains",
+    "query": {
+      "skip": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_count": 101,
+      "items": [
+        {
+          "name": "fixture-101.example.com",
+          "state": "unverified",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-101.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:01:00 GMT"
+        }
+      ]
+    }
+  }
+}

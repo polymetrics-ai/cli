@@ -1,0 +1,88 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "{{ secrets.api_secret }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/usage"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "imagga api_key/api_secret are missing or invalid; re-run pm credentials add imagga"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "imagga rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "usage",
+      "path": "/usage",
+      "records": {
+        "path": "result",
+        "single_object": true
+      },
+      "computed_fields": {
+        "period": "current",
+        "requests": "{{ record.total }}",
+        "monthly_processed": "{{ record.monthly_processed }}",
+        "monthly_limit": "{{ record.monthly_limit }}",
+        "daily_processed": "{{ record.daily_processed }}"
+      },
+      "schema": "schemas/usage.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": {
+        "path": "result.tags"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_urls"
+        },
+        "into": {
+          "query_param": "image_url"
+        },
+        "stamp_field": "image_url"
+      },
+      "computed_fields": {
+        "tag": "{{ coalesce record.tag.en record.tag }}",
+        "confidence": "{{ record.confidence }}"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories/personal_photos",
+      "records": {
+        "path": "result.categories"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_urls"
+        },
+        "into": {
+          "query_param": "image_url"
+        },
+        "stamp_field": "image_url"
+      },
+      "computed_fields": {
+        "category": "{{ coalesce record.name.en record.name }}",
+        "confidence": "{{ record.confidence }}"
+      },
+      "schema": "schemas/categories.json"
+    }
+  ]
+}

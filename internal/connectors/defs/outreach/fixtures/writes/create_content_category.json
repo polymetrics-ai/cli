@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "contentcategory",
+      "attributes": {
+        "name": "Fixture Create Content Category"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contentCategories",
+    "body": {
+      "data": {
+        "type": "contentcategory",
+        "attributes": {
+          "name": "Fixture Create Content Category"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

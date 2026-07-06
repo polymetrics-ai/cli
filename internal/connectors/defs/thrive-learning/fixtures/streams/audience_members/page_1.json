@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/audiences/63f8c5361b9c80d3274b0001/members",
+    "query": {
+      "page": "1",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 2,
+        "totalPages": 1,
+        "page": 1,
+        "perPage": 1000
+      },
+      "results": [
+        {
+          "userId": "63f8c5361b9c80d3274be1",
+          "reference": "user1",
+          "email": "fixture1@example.com"
+        },
+        {
+          "userId": "63f8c5361b9c80d3274be2",
+          "reference": "user2",
+          "email": "fixture2@example.com"
+        }
+      ]
+    }
+  }
+}

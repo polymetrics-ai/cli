@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activity_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "icon_key": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "order_nr": { "type": ["integer", "null"] },
+    "key_string": { "type": ["string", "null"] },
+    "active_flag": { "type": ["boolean", "null"] },
+    "is_custom_flag": { "type": ["boolean", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "update_time": { "type": ["string", "null"] }
+  }
+}

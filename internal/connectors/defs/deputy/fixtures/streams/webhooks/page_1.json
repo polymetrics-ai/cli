@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/Webhook",
+    "query": { "max": "500", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "Topic": "Employee.Insert",
+        "Address": "https://example.com/webhooks/fixture-1",
+        "Type": "URL",
+        "Enabled": true,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      },
+      {
+        "Id": 2,
+        "Topic": "Roster.Insert",
+        "Address": "https://example.com/webhooks/fixture-2",
+        "Type": "URL",
+        "Enabled": false,
+        "Creator": 1,
+        "Created": "2026-01-02T00:00:00",
+        "Modified": "2026-01-02T00:05:00"
+      }
+    ]
+  }
+}

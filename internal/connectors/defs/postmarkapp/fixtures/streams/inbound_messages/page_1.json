@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages/inbound",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 1,
+      "InboundMessages": [
+        {
+          "MessageID": "inbound-fixture-1",
+          "From": "fixture-sender@example.com",
+          "To": "fixturehash@inbound.postmarkapp.com",
+          "Subject": "Fixture Inbound Subject",
+          "Status": "Processed"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "generic_notice_id": "generic_notice_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/page_id_fixture_1/generic-notices/generic_notice_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_generic_notice_fixture_response"
+    }
+  }
+}

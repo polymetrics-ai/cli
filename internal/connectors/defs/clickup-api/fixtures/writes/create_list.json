@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture List" },
+  "expect": {
+    "method": "POST",
+    "path": "/folder/synthetic-conformance-value/list",
+    "body": { "name": "Fixture List" }
+  },
+  "response": { "status": 200, "body": { "id": "list_fixture_new", "name": "Fixture List" } }
+}

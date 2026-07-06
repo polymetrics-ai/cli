@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sentry Connection Specification",
+  "type": "object",
+  "required": ["auth_token", "base_url"],
+  "properties": {
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Sentry internal integration / auth token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Sentry API base URL, e.g. https://sentry.io or https://<self-hosted-host>. Required: legacy derives this from a hostname config value (default sentry.io), but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+    },
+    "organization": {
+      "type": "string",
+      "description": "Organization slug; required to read the issues, events, and releases streams."
+    },
+    "project": {
+      "type": "string",
+      "description": "Project slug; required to read the issues and events streams."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    }
+  }
+}

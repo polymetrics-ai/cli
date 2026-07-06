@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "soldProductID": "soldproduct_fixture_1" },
+  "expect": { "method": "POST", "path": "/postVoidItem" },
+  "response": { "status": 200, "body": { "success": true } }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "site_url": "https://fixture.example.com/"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sites/https://fixture.example.com/"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_purchase_orders_status",
+  "type": "object",
+  "properties": {
+    "purchaseOrderNumber": {
+      "type": "string"
+    },
+    "purchaseOrderStatus": {
+      "type": "string"
+    },
+    "purchaseOrderDate": {
+      "type": "string"
+    },
+    "lastUpdatedDate": {
+      "type": "string"
+    },
+    "sellingParty": {
+      "type": "object"
+    },
+    "shipToParty": {
+      "type": "object"
+    },
+    "itemStatus": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "purchaseOrderNumber"
+  ]
+}

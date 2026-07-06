@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/tickets/filters" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 601,
+        "name": "All Tickets",
+        "conditions": [],
+        "owner_id": 900001,
+        "updated_time": 1767225601000,
+        "is_default_filter": true
+      },
+      {
+        "id": 602,
+        "name": "My Tickets",
+        "conditions": [],
+        "owner_id": 900001,
+        "updated_time": 1767225602000,
+        "is_default_filter": false
+      }
+    ]
+  }
+}

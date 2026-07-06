@@ -1,0 +1,24 @@
+{
+  "name": "rd-station-marketing",
+  "display_name": "RD Station Marketing",
+  "description": "Reads and writes RD Station Marketing platform contacts, segmentation contacts, analytics, contact fields, product catalog feeds, and workflows.",
+  "integration_type": "api",
+  "docs_url": "https://developers.rdstation.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 125
+  },
+  "risk": {
+    "read": "external RD Station Marketing API read of contact, campaign, analytics, field, workflow, and catalog-feed data",
+    "write": "creates, updates, and deletes RD Station Marketing contacts, contact fields, and catalog feeds; mutates contact funnels, tags, and workflow membership",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

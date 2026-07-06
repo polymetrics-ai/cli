@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/datasources" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Fetch Datasources",
+      "data": {
+        "dataSources": [
+          {
+            "datasourceId": "datasource_fixture_1",
+            "datasourceName": "Fixture Datasource",
+            "source": "relmodel",
+            "lastDataSyncStatus": "Not Applicable",
+            "lastDataSyncTime": "01 January, 2026 12:00:00 AM UTC",
+            "schedule": "Every 15 Minutes",
+            "nextScheduleTime": "01 January, 2026 12:15:00 AM UTC",
+            "syncUsed": "0",
+            "syncIntervalId": "syncinterval_fixture_1",
+            "totalSyncAllowed": "5",
+            "tableDetails": [
+              {
+                "viewName": "Fixture Table",
+                "viewId": "view_fixture_1",
+                "sourceName": "Fixture Table",
+                "lastSyncTime": "01 January, 2026 12:00:00 AM UTC",
+                "syncStatus": "Success"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

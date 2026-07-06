@@ -1,0 +1,12 @@
+{
+  "record": { "id": "draft_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/drafts/send",
+    "body": { "id": "draft_fixture_1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "msg_fixture_sent_from_draft_1", "threadId": "thread_fixture_sent_from_draft_1" }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "agent_fixture_1",
+    "note": "Fixture maintenance"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/agents/agent_fixture_1/pause",
+    "body": {
+      "note": "Fixture maintenance"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

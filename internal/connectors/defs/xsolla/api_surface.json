@@ -1,0 +1,26 @@
+{
+  "api": "Xsolla Pay Station API v2 / Merchant API v2 (https://api.xsolla.com/merchant/v2)",
+  "docs": "https://developers.xsolla.com/api/pay-station/overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-derived from the live Pay Station OpenAPI description (https://developers.xsolla.com/_bundle/api/pay-station/index.yaml, fetched 2026-07-04). The legacy Go connector's 3 streams (projects, orders, transactions at /projects and /projects/{project_id}/{orders,transactions}) are preserved for fidelity even though they do not correspond to the currently documented reporting surface. The bundle also models the documented Pay Station reporting surface: 5 merchant-scoped reporting streams and 2 refund writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/projects/{project_id}/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/projects/{project_id}/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "POST", "path": "/merchants/{merchant_id}/token", "excluded": { "category": "out_of_scope", "reason": "generates a payment-UI session token for a live checkout flow; not a syncable business record or a data mutation this connector models" } },
+    { "method": "POST", "path": "/projects/{project_id}/token/{token}/expire", "excluded": { "category": "out_of_scope", "reason": "invalidates a live payment-UI session token; session-lifecycle operation, not a data mutation" } },
+    { "method": "GET", "path": "/projects/{project_id}/users/{user_id}/payment_accounts", "excluded": { "category": "requires_elevated_scope", "reason": "lists a single user's saved payment accounts; requires a project-scoped API key and a known user_id with no bulk-listing discovery path, not a syncable collection stream" } },
+    { "method": "POST", "path": "/projects/{project_id}/users/{user_id}/payments/{type}/{account_id}", "excluded": { "category": "out_of_scope", "reason": "charges a user via a saved payment account; a live payment-collection action, not a dialect-expressible data mutation on a business object" } },
+    { "method": "DELETE", "path": "/projects/{project_id}/users/{user_id}/payment_accounts/{type}/{account_id}", "excluded": { "category": "requires_elevated_scope", "reason": "deletes a single user's saved payment account; requires a project-scoped API key and a known user_id/account_id with no discovery path" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transactions/search.{format}", "covered_by": { "stream": "transactions_search" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transactions/simple_search", "excluded": { "category": "duplicate_of", "reason": "narrow lookup by a single known transaction_id or external_id, returning the same transaction record shape the transactions_search stream already covers; not a distinct list resource" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transactions/{transaction_id}/details", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail lookup by ID; the transaction_id is already a field on every record the transactions_search/transactions_registry streams emit, so this is a per-ID re-fetch of an already-covered record, not a distinct list resource" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transactions/registry.{format}", "covered_by": { "stream": "transactions_registry" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transfers", "covered_by": { "stream": "payouts" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports/transactions/summary/transfer", "covered_by": { "stream": "payout_currency_breakdown" } },
+    { "method": "GET", "path": "/merchants/{merchant_id}/reports", "covered_by": { "stream": "financial_reports" } },
+    { "method": "PUT", "path": "/merchants/{merchant_id}/reports/transactions/{transaction_id}/refund", "covered_by": { "write": "request_refund" } },
+    { "method": "PUT", "path": "/merchants/{merchant_id}/reports/transactions/{transaction_id}/partial_refund", "covered_by": { "write": "request_partial_refund" } },
+    { "method": "POST", "path": "/merchants/{merchant_id}/projects/{project_id}/payments/{transaction_id}/chargeback", "excluded": { "category": "destructive_admin", "reason": "sandbox-only chargeback simulation for testing purposes; not a production data mutation and requires a Financial-manager-or-above Publisher Account role" } }
+  ]
+}

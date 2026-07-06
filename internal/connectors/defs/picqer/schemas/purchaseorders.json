@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchaseorders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idpurchaseorder": { "type": "integer" },
+    "idsupplier": { "type": ["integer", "null"] },
+    "idwarehouse": { "type": ["integer", "null"] },
+    "purchaseorderid": { "type": ["string", "null"] },
+    "supplier_name": { "type": ["string", "null"] },
+    "supplier_orderid": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "remarks": { "type": ["string", "null"] },
+    "delivery_date": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "products": { "type": ["array", "null"] }
+  }
+}

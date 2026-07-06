@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sp/campaigns",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "campaignId": 445566001,
+        "name": "Fixture campaign 1",
+        "campaignType": "sponsoredProducts",
+        "targetingType": "manual",
+        "state": "enabled",
+        "dailyBudget": 10.0,
+        "startDate": "20260101",
+        "endDate": "",
+        "premiumBidAdjustment": true,
+        "portfolioId": 778899001
+      },
+      {
+        "campaignId": 445566002,
+        "name": "Fixture campaign 2",
+        "campaignType": "sponsoredProducts",
+        "targetingType": "auto",
+        "state": "paused",
+        "dailyBudget": 20.0,
+        "startDate": "20260102",
+        "endDate": "",
+        "premiumBidAdjustment": false,
+        "portfolioId": 778899001
+      }
+    ]
+  }
+}

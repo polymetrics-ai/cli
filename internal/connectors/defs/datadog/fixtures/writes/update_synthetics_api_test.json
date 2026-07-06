@@ -1,0 +1,10 @@
+{
+  "record": {
+    "public_id": "abc-def-123",
+    "name": "Fixture API Test Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/synthetics/tests/api/abc-def-123"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leave_policies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "do_not_accrue": { "type": ["boolean", "null"] },
+    "unit": { "type": ["string", "null"] },
+    "default_allowance": { "type": ["string", "null"] },
+    "max_carryover": { "type": ["string", "null"] },
+    "accrue_type": { "type": ["string", "null"] }
+  }
+}

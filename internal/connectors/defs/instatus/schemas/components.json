@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Instatus Component",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "uniqueEmail": { "type": ["string", "null"] },
+    "showUptime": { "type": ["boolean", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "group": { "type": ["string", "null"] }
+  },
+  "required": ["id"]
+}

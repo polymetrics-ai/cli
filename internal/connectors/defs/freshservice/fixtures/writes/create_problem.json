@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_problem",
+    "description": "Fixture create_problem record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/problems",
+    "body": {
+      "name": "Fixture create_problem",
+      "description": "Fixture create_problem record"
+    }
+  }
+}

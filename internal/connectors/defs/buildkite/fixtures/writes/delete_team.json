@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "team_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/organizations/synthetic-conformance-value/teams/team_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

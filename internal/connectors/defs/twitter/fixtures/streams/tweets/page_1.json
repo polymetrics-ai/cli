@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tweets/search/recent",
+    "query": {
+      "query": "synthetic-conformance-value",
+      "max_results": "synthetic-conformance-value",
+      "tweet.fields": "id,text,author_id,created_at,conversation_id,lang,source,in_reply_to_user_id,possibly_sensitive,public_metrics",
+      "expansions": "author_id",
+      "user.fields": "id,name,username,created_at,description,location,verified,protected,url,public_metrics",
+      "start_time": "2020-01-01T00:00:00Z",
+      "end_time": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tweet_fixture_1",
+          "text": "Fixture tweet one",
+          "author_id": "author_fixture_1",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "conversation_id": "tweet_fixture_1",
+          "lang": "en",
+          "source": "Twitter Web App",
+          "in_reply_to_user_id": null,
+          "possibly_sensitive": false,
+          "public_metrics": { "like_count": 10, "retweet_count": 1, "reply_count": 0, "quote_count": 0 }
+        },
+        {
+          "id": "tweet_fixture_2",
+          "text": "Fixture tweet two",
+          "author_id": "author_fixture_2",
+          "created_at": "2026-01-02T00:00:00.000Z",
+          "conversation_id": "tweet_fixture_2",
+          "lang": "en",
+          "source": "Twitter Web App",
+          "in_reply_to_user_id": null,
+          "possibly_sensitive": false,
+          "public_metrics": { "like_count": 20, "retweet_count": 2, "reply_count": 1, "quote_count": 0 }
+        }
+      ],
+      "includes": {
+        "users": [
+          { "id": "author_fixture_1", "name": "Fixture Author 1", "username": "fixture_author_1", "created_at": "2025-01-01T00:00:00.000Z", "description": "Fixture author one.", "location": "Nowhere", "verified": false, "protected": false, "url": "https://example.com/1", "public_metrics": { "followers_count": 100 } },
+          { "id": "author_fixture_2", "name": "Fixture Author 2", "username": "fixture_author_2", "created_at": "2025-01-02T00:00:00.000Z", "description": "Fixture author two.", "location": "Nowhere", "verified": false, "protected": false, "url": "https://example.com/2", "public_metrics": { "followers_count": 200 } }
+        ]
+      },
+      "meta": { "result_count": 2, "next_token": "fixture_cursor_2" }
+    }
+  }
+}

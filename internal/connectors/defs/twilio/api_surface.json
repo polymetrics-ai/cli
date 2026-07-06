@@ -1,0 +1,1387 @@
+{
+  "api": "Twilio REST API 2010-04-01 (api.twilio.com)",
+  "docs": "https://www.twilio.com/docs/usage/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion for the official Twilio public REST API v2010 OpenAPI file (twilio_api_v2010.json) plus the legacy Twilio streams. All documented v2010 GET endpoints are covered as streams; all documented v2010 POST and DELETE endpoints are covered as typed write actions. Separate Twilio product APIs with distinct hosts/versions are outside this connector bundle because metadata and legacy code scope this connector to api.twilio.com/2010-04-01.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/Accounts.json",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts.json",
+      "covered_by": {
+        "write": "create_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Addresses.json",
+      "covered_by": {
+        "stream": "address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Addresses.json",
+      "covered_by": {
+        "write": "create_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json",
+      "covered_by": {
+        "stream": "dependent_phone_numbers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "covered_by": {
+        "write": "delete_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "covered_by": {
+        "stream": "address_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "covered_by": {
+        "write": "update_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Applications.json",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Applications.json",
+      "covered_by": {
+        "write": "create_application"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "covered_by": {
+        "write": "delete_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "covered_by": {
+        "stream": "application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "covered_by": {
+        "write": "update_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AuthorizedConnectApps.json",
+      "covered_by": {
+        "stream": "authorized_connect_apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json",
+      "covered_by": {
+        "stream": "authorized_connect_app"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers.json",
+      "covered_by": {
+        "stream": "available_phone_number_countries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json",
+      "covered_by": {
+        "stream": "available_phone_number_country"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json",
+      "covered_by": {
+        "stream": "available_phone_number_locals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json",
+      "covered_by": {
+        "stream": "available_phone_number_machine_to_machines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json",
+      "covered_by": {
+        "stream": "available_phone_number_mobiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json",
+      "covered_by": {
+        "stream": "available_phone_number_nationals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json",
+      "covered_by": {
+        "stream": "available_phone_number_shared_costs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json",
+      "covered_by": {
+        "stream": "available_phone_number_toll_frees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json",
+      "covered_by": {
+        "stream": "available_phone_number_voips"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Balance.json",
+      "covered_by": {
+        "stream": "balance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls.json",
+      "covered_by": {
+        "stream": "calls"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls.json",
+      "covered_by": {
+        "write": "create_call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Events.json",
+      "covered_by": {
+        "stream": "call_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json",
+      "covered_by": {
+        "stream": "call_notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json",
+      "covered_by": {
+        "stream": "call_notification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+      "covered_by": {
+        "write": "create_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+      "covered_by": {
+        "write": "update_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "covered_by": {
+        "stream": "call_recordings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "covered_by": {
+        "write": "create_call_recording"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_call_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "stream": "call_recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "write": "update_call_recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+      "covered_by": {
+        "write": "create_siprec"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+      "covered_by": {
+        "write": "update_siprec"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+      "covered_by": {
+        "write": "create_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+      "covered_by": {
+        "write": "update_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+      "covered_by": {
+        "write": "create_realtime_transcription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+      "covered_by": {
+        "write": "update_realtime_transcription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+      "covered_by": {
+        "write": "create_user_defined_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+      "covered_by": {
+        "write": "create_user_defined_message_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+      "covered_by": {
+        "write": "delete_user_defined_message_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "covered_by": {
+        "write": "delete_call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "covered_by": {
+        "stream": "call"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "covered_by": {
+        "write": "update_call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences.json",
+      "covered_by": {
+        "stream": "conferences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "covered_by": {
+        "stream": "participants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "covered_by": {
+        "write": "create_participant"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "covered_by": {
+        "write": "delete_participant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "covered_by": {
+        "stream": "participant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "covered_by": {
+        "write": "update_participant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json",
+      "covered_by": {
+        "stream": "conference_recordings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_conference_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "stream": "conference_recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "write": "update_conference_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "covered_by": {
+        "stream": "conference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "covered_by": {
+        "write": "update_conference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/ConnectApps.json",
+      "covered_by": {
+        "stream": "connect_apps"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "covered_by": {
+        "write": "delete_connect_app"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "covered_by": {
+        "stream": "connect_app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "covered_by": {
+        "write": "update_connect_app"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "covered_by": {
+        "stream": "incoming_phone_numbers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "covered_by": {
+        "write": "create_incoming_phone_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_assigned_add_ons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "covered_by": {
+        "write": "create_incoming_phone_number_assigned_add_on"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_assigned_add_on_extensions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_assigned_add_on_extension"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "covered_by": {
+        "write": "delete_incoming_phone_number_assigned_add_on"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_assigned_add_on"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "covered_by": {
+        "write": "delete_incoming_phone_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "covered_by": {
+        "stream": "incoming_phone_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "covered_by": {
+        "write": "update_incoming_phone_number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_locals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "covered_by": {
+        "write": "create_incoming_phone_number_local"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_mobiles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "covered_by": {
+        "write": "create_incoming_phone_number_mobile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "covered_by": {
+        "stream": "incoming_phone_number_toll_frees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "covered_by": {
+        "write": "create_incoming_phone_number_toll_free"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Keys.json",
+      "covered_by": {
+        "stream": "keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Keys.json",
+      "covered_by": {
+        "write": "create_key"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "covered_by": {
+        "write": "delete_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "covered_by": {
+        "stream": "key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "covered_by": {
+        "write": "update_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Messages.json",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Messages.json",
+      "covered_by": {
+        "write": "create_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+      "covered_by": {
+        "write": "create_message_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json",
+      "covered_by": {
+        "stream": "medias"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "covered_by": {
+        "write": "delete_media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "covered_by": {
+        "stream": "media"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "covered_by": {
+        "write": "delete_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "covered_by": {
+        "stream": "message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "covered_by": {
+        "write": "update_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Notifications.json",
+      "covered_by": {
+        "stream": "notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Notifications/{Sid}.json",
+      "covered_by": {
+        "stream": "notification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "covered_by": {
+        "stream": "outgoing_caller_ids"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "covered_by": {
+        "write": "create_outgoing_caller_id_validation_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "covered_by": {
+        "write": "delete_outgoing_caller_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "covered_by": {
+        "stream": "outgoing_caller_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "covered_by": {
+        "write": "update_outgoing_caller_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Queues.json",
+      "covered_by": {
+        "stream": "queues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Queues.json",
+      "covered_by": {
+        "write": "create_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "covered_by": {
+        "stream": "member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "covered_by": {
+        "write": "update_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "covered_by": {
+        "write": "delete_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "covered_by": {
+        "stream": "queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "covered_by": {
+        "write": "update_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings.json",
+      "covered_by": {
+        "stream": "recordings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json",
+      "covered_by": {
+        "stream": "recording_transcriptions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "covered_by": {
+        "write": "delete_recording_transcription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "covered_by": {
+        "stream": "recording_transcription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json",
+      "covered_by": {
+        "stream": "recording_add_on_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json",
+      "covered_by": {
+        "stream": "recording_add_on_result_payloads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json",
+      "covered_by": {
+        "stream": "recording_add_on_result_payload_data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "covered_by": {
+        "write": "delete_recording_add_on_result_payload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "covered_by": {
+        "stream": "recording_add_on_result_payload"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "covered_by": {
+        "write": "delete_recording_add_on_result"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "covered_by": {
+        "stream": "recording_add_on_result"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "covered_by": {
+        "stream": "recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SigningKeys.json",
+      "covered_by": {
+        "stream": "signing_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SigningKeys.json",
+      "covered_by": {
+        "write": "create_signing_key"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "covered_by": {
+        "write": "delete_signing_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "covered_by": {
+        "stream": "signing_key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "covered_by": {
+        "write": "update_signing_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "covered_by": {
+        "stream": "sip_credential_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "covered_by": {
+        "write": "create_sip_credential_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "covered_by": {
+        "stream": "sip_credentials"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "covered_by": {
+        "write": "create_sip_credential"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_credential"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_credential"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "covered_by": {
+        "write": "update_sip_credential"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_credential_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_credential_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "covered_by": {
+        "write": "update_sip_credential_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains.json",
+      "covered_by": {
+        "stream": "sip_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains.json",
+      "covered_by": {
+        "write": "create_sip_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "covered_by": {
+        "stream": "sip_auth_calls_credential_list_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "covered_by": {
+        "write": "create_sip_auth_calls_credential_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_auth_calls_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_auth_calls_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "covered_by": {
+        "stream": "sip_auth_calls_ip_access_control_list_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "covered_by": {
+        "write": "create_sip_auth_calls_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_auth_calls_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_auth_calls_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "covered_by": {
+        "stream": "sip_auth_registrations_credential_list_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "covered_by": {
+        "write": "create_sip_auth_registrations_credential_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_auth_registrations_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_auth_registrations_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "covered_by": {
+        "stream": "sip_credential_list_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "covered_by": {
+        "write": "create_sip_credential_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_credential_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "covered_by": {
+        "stream": "sip_ip_access_control_list_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "covered_by": {
+        "write": "create_sip_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_ip_access_control_list_mapping"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_domain"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "covered_by": {
+        "write": "update_sip_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "covered_by": {
+        "stream": "sip_ip_access_control_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "covered_by": {
+        "write": "create_sip_ip_access_control_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "covered_by": {
+        "stream": "sip_ip_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "covered_by": {
+        "write": "create_sip_ip_address"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_ip_address"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_ip_address_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "covered_by": {
+        "write": "update_sip_ip_address"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "covered_by": {
+        "write": "delete_sip_ip_access_control_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "covered_by": {
+        "stream": "sip_ip_access_control_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "covered_by": {
+        "write": "update_sip_ip_access_control_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SMS/ShortCodes.json",
+      "covered_by": {
+        "stream": "short_codes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "covered_by": {
+        "stream": "short_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "covered_by": {
+        "write": "update_short_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Tokens.json",
+      "covered_by": {
+        "write": "create_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Transcriptions.json",
+      "covered_by": {
+        "stream": "transcriptions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "covered_by": {
+        "write": "delete_transcription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "covered_by": {
+        "stream": "transcription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records.json",
+      "covered_by": {
+        "stream": "usage_records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/AllTime.json",
+      "covered_by": {
+        "stream": "usage_record_all_times"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/Daily.json",
+      "covered_by": {
+        "stream": "usage_record_dailies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/LastMonth.json",
+      "covered_by": {
+        "stream": "usage_record_last_months"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/Monthly.json",
+      "covered_by": {
+        "stream": "usage_record_monthlies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/ThisMonth.json",
+      "covered_by": {
+        "stream": "usage_record_this_months"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/Today.json",
+      "covered_by": {
+        "stream": "usage_record_todays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/Yearly.json",
+      "covered_by": {
+        "stream": "usage_record_yearlies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Records/Yesterday.json",
+      "covered_by": {
+        "stream": "usage_record_yesterdays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Triggers.json",
+      "covered_by": {
+        "stream": "usage_triggers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Usage/Triggers.json",
+      "covered_by": {
+        "write": "create_usage_trigger"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "covered_by": {
+        "write": "delete_usage_trigger"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "covered_by": {
+        "stream": "usage_trigger"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "covered_by": {
+        "write": "update_usage_trigger"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Accounts/{Sid}.json",
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Accounts/{Sid}.json",
+      "covered_by": {
+        "write": "update_account"
+      }
+    }
+  ]
+}

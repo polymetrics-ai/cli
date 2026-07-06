@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LinkedIn Ads Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "LinkedIn member OAuth2 access token (resolved from legacy's credentials.access_token secret). Sent as a Bearer token; never logged. The refresh_token exchange is performed outside this connector."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.linkedin.com/rest",
+      "description": "LinkedIn Marketing API base URL override for tests or proxies."
+    },
+    "linkedin_version": {
+      "type": "string",
+      "default": "202601",
+      "description": "LinkedIn-Version header value (monthly, YYYYMM). Defaults to the connector's built-in version."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (count parameter), 1-1000."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

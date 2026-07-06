@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audiences",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "ad_account_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "audience_type": { "type": ["string", "null"] },
+    "size": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_timestamp": { "type": ["integer", "null"] }
+  }
+}

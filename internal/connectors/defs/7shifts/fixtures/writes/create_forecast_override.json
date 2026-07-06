@@ -1,0 +1,25 @@
+{
+  "record": {
+    "location_id": 1001,
+    "date": "2026-01-01",
+    "value": 1001,
+    "report_type": "sales",
+    "department_id": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/location/1001/forecast_override",
+    "body": {
+      "date": "2026-01-01",
+      "value": 1001,
+      "report_type": "sales",
+      "department_id": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

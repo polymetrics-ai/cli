@@ -1,0 +1,81 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/jobs",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "hire_jobs_fixture_1",
+          "title": "Fixture hire jobs 1",
+          "description": "fixture_hire_jobs_1",
+          "noOfOpenings": "fixture_hire_jobs_1",
+          "departmentName": "Fixture hire jobs 1",
+          "jobType": "fixture_hire_jobs_1",
+          "orgJobId": null,
+          "jobLocations": [
+            {
+              "name": "Fixture hire jobs 1",
+              "city": "fixture_hire_jobs_1",
+              "state": "fixture_hire_jobs_1",
+              "countryCode": "FIX",
+              "countryName": null
+            }
+          ],
+          "targetHireDate": "2026-01-01T00:00:00Z",
+          "status": 1,
+          "createdBy": "fixture_hire_jobs_1",
+          "createdOn": "fixture_hire_jobs_1",
+          "publishedBy": "fixture_hire_jobs_1",
+          "publishedOn": "fixture_hire_jobs_1",
+          "experience": null,
+          "totalHiredPositions": "fixture_hire_jobs_1"
+        },
+        {
+          "id": "hire_jobs_fixture_2",
+          "title": "Fixture hire jobs 2",
+          "description": "fixture_hire_jobs_2",
+          "noOfOpenings": "fixture_hire_jobs_2",
+          "departmentName": "Fixture hire jobs 2",
+          "jobType": "fixture_hire_jobs_2",
+          "orgJobId": null,
+          "jobLocations": [
+            {
+              "name": "Fixture hire jobs 1",
+              "city": "fixture_hire_jobs_1",
+              "state": "fixture_hire_jobs_1",
+              "countryCode": "FIX",
+              "countryName": "Fixture hire jobs 1"
+            }
+          ],
+          "targetHireDate": "2026-01-01T00:00:00Z",
+          "status": 1,
+          "createdBy": "fixture_hire_jobs_2",
+          "createdOn": "fixture_hire_jobs_2",
+          "publishedBy": "fixture_hire_jobs_2",
+          "publishedOn": "fixture_hire_jobs_2",
+          "experience": "fixture_hire_jobs_2",
+          "totalHiredPositions": "fixture_hire_jobs_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/hire_jobs",
+      "lastPage": "https://example.invalid/keka/hire_jobs",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 2,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

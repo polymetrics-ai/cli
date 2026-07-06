@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "suppressionlist",
+  "type": "object",
+  "x-primary-key": ["EmailAddress"],
+  "x-cursor-field": "Date",
+  "required": ["EmailAddress"],
+  "properties": {
+    "EmailAddress": { "type": "string" },
+    "Date": { "type": ["string", "null"] },
+    "State": { "type": ["string", "null"] },
+    "SuppressionType": { "type": ["string", "null"] }
+  }
+}

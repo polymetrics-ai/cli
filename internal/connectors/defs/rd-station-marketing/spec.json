@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RD Station Marketing Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RD Station Marketing OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.rd.services/platform",
+      "description": "RD Station Marketing platform API base URL override for tests or proxies."
+    },
+    "contact_identifier": {
+      "type": "string",
+      "enum": ["uuid", "email", "phone"],
+      "default": "uuid",
+      "description": "Identifier kind for contact detail/funnel streams."
+    },
+    "contact_identifier_value": {
+      "type": "string",
+      "description": "Identifier value for contact detail/funnel streams."
+    },
+    "contact_uuid": {
+      "type": "string",
+      "description": "Contact UUID for contact event streams."
+    },
+    "segmentation_id": {
+      "type": "string",
+      "description": "Segmentation ID for the segmentation_contacts stream."
+    },
+    "catalog_feed_id": {
+      "type": "string",
+      "description": "Product catalog feed ID for the catalog_feed detail stream."
+    }
+  }
+}

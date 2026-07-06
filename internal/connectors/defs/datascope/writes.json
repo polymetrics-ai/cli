@@ -1,0 +1,211 @@
+{
+  "actions": [
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" },
+          "latitude": { "type": "number" },
+          "longitude": { "type": "number" },
+          "phone": { "type": "string" },
+          "company_code": { "type": "string" },
+          "company_name": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "creates a new field-data-collection location record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "POST",
+      "path": "/locations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "address": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" },
+          "latitude": { "type": "number" },
+          "longitude": { "type": "number" },
+          "phone": { "type": "string" },
+          "company_code": { "type": "string" },
+          "company_name": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing location's address/contact metadata; external mutation, approval required"
+    },
+    {
+      "name": "assign_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/assign_task",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["form_id", "user_id", "date"],
+        "properties": {
+          "form_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "date": { "type": "string" },
+          "l_code": { "type": "string" },
+          "location_name": { "type": "string" },
+          "location_address": { "type": "string" },
+          "l_phone": { "type": "string" },
+          "l_email": { "type": "string" },
+          "c_name": { "type": "string" },
+          "c_code": { "type": "string" },
+          "latitude": { "type": "number" },
+          "longitude": { "type": "number" },
+          "task_instruction": { "type": "string" },
+          "gap": { "type": "integer" },
+          "code": { "type": "string" }
+        }
+      },
+      "risk": "assigns a new field task/inspection to a user for a scheduled date; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_metadata_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/metadata_object",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["metadata_type", "name"],
+        "properties": {
+          "metadata_type": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "attribute1": { "type": "string" },
+          "attribute2": { "type": "string" }
+        }
+      },
+      "risk": "creates a new list (metadata object) element; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_metadata_object",
+      "kind": "update",
+      "method": "POST",
+      "path": "/metadata_object/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "attribute1": { "type": "string" },
+          "attribute2": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing list element's fields; external mutation, approval required"
+    },
+    {
+      "name": "bulk_update_metadata_objects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/metadata_objects/bulk_update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["metadata_type", "list_objects"],
+        "properties": {
+          "metadata_type": { "type": "string" },
+          "name": { "type": "string" },
+          "list_objects": { "type": "array" }
+        }
+      },
+      "risk": "replaces/updates many list elements of one metadata_type in a single call; higher blast radius than a single-object update, approval required"
+    },
+    {
+      "name": "create_metadata_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/metadata_types",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "list_type": { "type": "string" }
+        }
+      },
+      "risk": "creates a new empty list (metadata type/category); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_metadata_type",
+      "kind": "update",
+      "method": "POST",
+      "path": "/metadata_types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "code": { "type": "string" },
+          "list_type": { "type": "string" }
+        }
+      },
+      "risk": "renames/reconfigures an existing list definition; every list element under it is affected, external mutation, approval required"
+    },
+    {
+      "name": "change_form_answer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/change_form_answer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["form_name", "form_code", "question_name", "question_value"],
+        "properties": {
+          "form_name": { "type": "string" },
+          "form_code": { "type": "string" },
+          "question_name": { "type": "string" },
+          "question_value": { "type": "string" },
+          "subform_index": { "type": "integer" }
+        }
+      },
+      "risk": "overwrites a previously-submitted form answer's value in place, rewriting collected field data after the fact; external mutation, approval required"
+    }
+  ]
+}

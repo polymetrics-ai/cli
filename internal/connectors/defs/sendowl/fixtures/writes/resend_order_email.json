@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "type": "order"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/orders/1/resend_email"
+  }
+}

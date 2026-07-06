@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "expenses",
+  "type": "object",
+  "x-primary-key": [
+    "expense_id"
+  ],
+  "properties": {
+    "expense_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-cursor-field": "modified_time"
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "CampaignID": "camp_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/camp_fixture_1/unschedule.json"
+  },
+  "response": { "status": 200, "body": {} }
+}

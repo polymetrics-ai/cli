@@ -1,0 +1,16 @@
+{
+  "record": {
+    "contact_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/synthetic-conformance-value/attachment"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

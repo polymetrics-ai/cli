@@ -1,0 +1,14 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "tag": "vip",
+    "new_tag": "vip-2026"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/list_fixture_1/tags/vip",
+    "body": {
+      "new_tag": "vip-2026"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/Pipelines" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "pipeline_fixture_1", "name": "Sales Pipeline", "display_value": "Sales Pipeline" }
+      ]
+    }
+  }
+}

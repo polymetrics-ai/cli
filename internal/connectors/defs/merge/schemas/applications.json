@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "applications",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "remote_id": { "type": ["string", "null"] },
+    "candidate": { "type": ["string", "null"] },
+    "job": { "type": ["string", "null"] },
+    "applied_at": { "type": ["string", "null"] },
+    "rejected_at": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "credited_to": { "type": ["string", "null"] },
+    "current_stage": { "type": ["string", "null"] },
+    "reject_reason": { "type": ["string", "null"] },
+    "modified_at": { "type": "string" },
+    "remote_was_deleted": { "type": ["boolean", "null"] }
+  }
+}

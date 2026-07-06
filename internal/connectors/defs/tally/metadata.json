@@ -1,0 +1,27 @@
+{
+  "name": "tally",
+  "display_name": "Tally",
+  "description": "Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and writes form/webhook/workspace mutations through the Tally REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.tally.so/api-reference/introduction",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
+  },
+  "risk": {
+    "read": "external Tally API read of form definitions, submission responses, webhook configuration, and workspace membership",
+    "write": "external Tally API mutation (form/webhook/workspace create-update-delete, submission delete)",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

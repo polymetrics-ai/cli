@@ -1,0 +1,17 @@
+{
+  "record": {
+    "payment_ids": "synthetic-conformance-value",
+    "bulk_delete": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customerpayments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "page": "1", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "campaigns": [
+        {
+          "campaign_key": "campaign_fixture_1",
+          "campaign_name": "Fixture Launch Campaign",
+          "status": "Sent",
+          "sent_time": "2026-01-02 00:00:00",
+          "subject": "Fixture subject line",
+          "from_email": "fixture@example.com",
+          "modified_time": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

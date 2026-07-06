@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/drug/drugsfda.json",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": {
+        "results": {
+          "skip": 0,
+          "limit": 100,
+          "total": 1
+        }
+      },
+      "results": [
+        {
+          "id": "drug_drugsfda_fixture_1",
+          "openfda": {
+            "brand_name": [
+              "Fixture"
+            ],
+            "manufacturer_name": [
+              "Fixture FDA"
+            ]
+          },
+          "fixture": true
+        }
+      ]
+    }
+  }
+}

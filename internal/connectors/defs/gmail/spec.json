@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gmail Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client secret (optional for some client types). Used only in the token-request form; never logged."
+    },
+    "client_refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Google OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://gmail.googleapis.com/gmail/v1",
+      "description": "Gmail API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth2.googleapis.com/token",
+      "description": "Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen endpoint."
+    },
+    "scopes": {
+      "type": "string",
+      "default": "https://mail.google.com/",
+      "description": "OAuth scope requested on the token-refresh grant. Pass B widens the default from the wave1-pilot read-only gmail.readonly scope to the full https://mail.google.com/ scope, since this bundle now declares mutating write actions (send/modify/trash/delete/settings) that gmail.readonly cannot authorize; narrow this back to a read-only scope string if only the streams in this bundle are ever used."
+    },
+    "user_id": {
+      "type": "string",
+      "default": "me",
+      "description": "Gmail user ID path segment (email address for delegated access, or 'me')."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; translated to a Gmail search query 'after:<unix-seconds>' filter. Not a true incremental cursor: messages/threads/drafts list endpoints are newest-first and publish no cursor field, matching legacy."
+    },
+    "include_spam_and_trash": {
+      "type": "string",
+      "description": "When 'true', includes SPAM and TRASH in list results (includeSpamTrash=true). Unset keeps Gmail's default exclusion, matching legacy's omitted-param false default."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500, maxResults)."
+    },
+    "start_history_id": {
+      "type": "string",
+      "description": "Gmail historyId lower bound for the history stream's incremental sync (users.history.list's required startHistoryId). Unlike messages/threads/drafts, history genuinely publishes a server-recognized, monotonically-increasing cursor (historyId) -- see Streams notes in docs.md. Obtain an initial value from any message/thread/label/profile record's historyId field."
+    }
+  }
+}

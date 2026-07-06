@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Open Exchange Rates Connection Specification",
+  "type": "object",
+  "required": ["app_id"],
+  "properties": {
+    "app_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Open Exchange Rates app_id, sent as the app_id query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://openexchangerates.org/api",
+      "description": "Open Exchange Rates API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

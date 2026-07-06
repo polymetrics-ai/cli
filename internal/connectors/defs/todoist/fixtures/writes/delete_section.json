@@ -1,0 +1,11 @@
+{
+  "record": { "id": "sec_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sections/sec_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

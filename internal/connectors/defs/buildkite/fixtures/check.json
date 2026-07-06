@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/organizations", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "org_fixture_1", "slug": "fixture-org", "name": "Fixture Org", "created_at": "2026-01-01T00:00:00Z" }
+    ]
+  }
+}

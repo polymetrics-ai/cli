@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/collections",
+    "query": {
+      "page": "1",
+      "per_page": "40"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 40,
+      "total_results": 1,
+      "collections": [
+        {
+          "id": "fixture_col_1",
+          "title": "Fixture Collection",
+          "description": "A fixture personal collection.",
+          "private": false,
+          "media_count": 2,
+          "photos_count": 1,
+          "videos_count": 1
+        }
+      ]
+    }
+  }
+}

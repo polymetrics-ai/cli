@@ -1,0 +1,43 @@
+{
+  "api": "Less Annoying CRM legacy connector hook surface",
+  "docs": "https://www.lessannoyingcrm.com/help/topic/API",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy less-annoying-crm connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/less-annoying-crm, which delegates to internal/connectors/less-annoying-crm until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/less-annoying-crm users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/less-annoying-crm contacts read path",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/less-annoying-crm tasks read path",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/less-annoying-crm notes read path",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/less-annoying-crm events read path",
+      "covered_by": {
+        "stream": "events"
+      }
+    }
+  ]
+}

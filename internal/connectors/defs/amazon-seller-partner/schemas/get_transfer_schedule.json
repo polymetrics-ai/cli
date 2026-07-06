@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_transfer_schedule",
+  "type": "object",
+  "properties": {
+    "transferScheduleId": {
+      "type": "string"
+    },
+    "transactionType": {
+      "type": "string"
+    },
+    "transactionSourceAccount": {
+      "type": "object"
+    },
+    "transactionDestinationAccount": {
+      "type": "object"
+    },
+    "transferScheduleStatus": {
+      "type": "string"
+    },
+    "transferScheduleInformation": {
+      "type": "object"
+    },
+    "paymentPreference": {
+      "type": "object"
+    },
+    "transferScheduleFailures": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "transfer_schedule_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "transferScheduleId"
+  ]
+}

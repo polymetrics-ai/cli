@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zoho Books Connection Specification",
+  "type": "object",
+  "required": [
+    "access_token"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zoho OAuth access token. Sent as the Authorization header with a 'Zoho-oauthtoken ' prefix; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.zohoapis.com/books/v3",
+      "description": "Zoho Books API base URL override for tests or region-specific data centers."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Zoho Books organization ID; sent as organization_id on read requests when set and required for write actions that target organization-scoped resources."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "200",
+      "description": "Records per page (legacy default 200)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "accept": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'accept' used by one or more documented endpoints."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'account_id' used by one or more documented endpoints."
+    },
+    "adjustment_date": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'adjustment_date' used by one or more documented endpoints."
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'bank_account_id' used by one or more documented endpoints."
+    },
+    "bank_transaction_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'bank_transaction_id' used by one or more documented endpoints."
+    },
+    "base_currency_adjustment_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'base_currency_adjustment_id' used by one or more documented endpoints."
+    },
+    "bill_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'bill_id' used by one or more documented endpoints."
+    },
+    "card_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'card_id' used by one or more documented endpoints."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'comment_id' used by one or more documented endpoints."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'contact_id' used by one or more documented endpoints."
+    },
+    "contact_person_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'contact_person_id' used by one or more documented endpoints."
+    },
+    "contactperson_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'contactperson_id' used by one or more documented endpoints."
+    },
+    "creditnote_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'creditnote_id' used by one or more documented endpoints."
+    },
+    "creditnote_ids": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'creditnote_ids' used by one or more documented endpoints."
+    },
+    "creditnote_refund_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'creditnote_refund_id' used by one or more documented endpoints."
+    },
+    "currency_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'currency_id' used by one or more documented endpoints."
+    },
+    "customer_payment_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'customer_payment_id' used by one or more documented endpoints."
+    },
+    "debit_note_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'debit_note_id' used by one or more documented endpoints."
+    },
+    "deliverychallan_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'deliverychallan_id' used by one or more documented endpoints."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'document_id' used by one or more documented endpoints."
+    },
+    "email_template_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'email_template_id' used by one or more documented endpoints."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'employee_id' used by one or more documented endpoints."
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'entity_type' used by one or more documented endpoints."
+    },
+    "estimate_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'estimate_id' used by one or more documented endpoints."
+    },
+    "estimate_ids": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'estimate_ids' used by one or more documented endpoints."
+    },
+    "exchange_rate": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'exchange_rate' used by one or more documented endpoints."
+    },
+    "exchange_rate_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'exchange_rate_id' used by one or more documented endpoints."
+    },
+    "expense_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'expense_id' used by one or more documented endpoints."
+    },
+    "expiry_time": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'expiry_time' used by one or more documented endpoints."
+    },
+    "fixed_asset_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'fixed_asset_id' used by one or more documented endpoints."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'invoice_id' used by one or more documented endpoints."
+    },
+    "invoice_ids": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'invoice_ids' used by one or more documented endpoints."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'item_id' used by one or more documented endpoints."
+    },
+    "item_ids": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'item_ids' used by one or more documented endpoints."
+    },
+    "journal_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'journal_id' used by one or more documented endpoints."
+    },
+    "line1": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'line1' used by one or more documented endpoints."
+    },
+    "link_type": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'link_type' used by one or more documented endpoints."
+    },
+    "metadata_name": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'metadata_name' used by one or more documented endpoints."
+    },
+    "module_api_name": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'module_api_name' used by one or more documented endpoints."
+    },
+    "module_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'module_id' used by one or more documented endpoints."
+    },
+    "module_name": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'module_name' used by one or more documented endpoints."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'notes' used by one or more documented endpoints."
+    },
+    "payment_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'payment_id' used by one or more documented endpoints."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'project_id' used by one or more documented endpoints."
+    },
+    "purchaseorder_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'purchaseorder_id' used by one or more documented endpoints."
+    },
+    "purchaseorder_ids": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'purchaseorder_ids' used by one or more documented endpoints."
+    },
+    "reconciliation_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'reconciliation_id' used by one or more documented endpoints."
+    },
+    "recurring_bill_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'recurring_bill_id' used by one or more documented endpoints."
+    },
+    "recurring_expense_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'recurring_expense_id' used by one or more documented endpoints."
+    },
+    "recurring_invoice_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'recurring_invoice_id' used by one or more documented endpoints."
+    },
+    "recurring_journal_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'recurring_journal_id' used by one or more documented endpoints."
+    },
+    "reference_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'reference_id' used by one or more documented endpoints."
+    },
+    "refund_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'refund_id' used by one or more documented endpoints."
+    },
+    "retainerinvoice_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'retainerinvoice_id' used by one or more documented endpoints."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'rule_id' used by one or more documented endpoints."
+    },
+    "sales_receipt_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'sales_receipt_id' used by one or more documented endpoints."
+    },
+    "salesorder_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'salesorder_id' used by one or more documented endpoints."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'tag_id' used by one or more documented endpoints."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'task_id' used by one or more documented endpoints."
+    },
+    "tax_authority_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'tax_authority_id' used by one or more documented endpoints."
+    },
+    "tax_exemption_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'tax_exemption_id' used by one or more documented endpoints."
+    },
+    "tax_group_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'tax_group_id' used by one or more documented endpoints."
+    },
+    "tax_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'tax_id' used by one or more documented endpoints."
+    },
+    "time_entry_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'time_entry_id' used by one or more documented endpoints."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'transaction_id' used by one or more documented endpoints."
+    },
+    "transaction_type": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'transaction_type' used by one or more documented endpoints."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'user_id' used by one or more documented endpoints."
+    },
+    "vendor_credit_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'vendor_credit_id' used by one or more documented endpoints."
+    },
+    "vendor_credit_refund_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'vendor_credit_refund_id' used by one or more documented endpoints."
+    },
+    "vendorpayment_refund_id": {
+      "type": "string",
+      "description": "Zoho Books path or required-query parameter 'vendorpayment_refund_id' used by one or more documented endpoints."
+    }
+  }
+}

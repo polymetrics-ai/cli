@@ -1,0 +1,264 @@
+{
+  "actions": [
+    {
+      "name": "create_booking",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/bookings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start", "eventTypeId", "attendee"],
+        "properties": {
+          "start": { "type": "string" },
+          "eventTypeId": { "type": "integer" },
+          "attendee": {
+            "type": "object",
+            "required": ["name", "email"],
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "timeZone": { "type": "string" }
+            }
+          },
+          "guests": { "type": "array", "items": { "type": "string" } },
+          "bookingFieldsResponses": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; books a real meeting slot on the target event type and notifies attendees; approval required"
+    },
+    {
+      "name": "cancel_booking",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/bookings/{{ record.uid }}/cancel",
+      "path_fields": ["uid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid"],
+        "properties": {
+          "uid": { "type": "string" },
+          "cancellationReason": { "type": "string" },
+          "cancelSubsequentBookings": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; cancels a real booking and notifies attendees; approval required"
+    },
+    {
+      "name": "confirm_booking",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/bookings/{{ record.uid }}/confirm",
+      "path_fields": ["uid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid"],
+        "properties": {
+          "uid": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; confirms a booking pending host approval, notifying the attendee; approval required"
+    },
+    {
+      "name": "decline_booking",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/bookings/{{ record.uid }}/decline",
+      "path_fields": ["uid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid"],
+        "properties": {
+          "uid": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; declines a booking pending host approval, notifying the attendee; approval required"
+    },
+    {
+      "name": "reschedule_booking",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/bookings/{{ record.uid }}/reschedule",
+      "path_fields": ["uid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid", "start"],
+        "properties": {
+          "uid": { "type": "string" },
+          "start": { "type": "string" },
+          "reschedulingReason": { "type": "string" },
+          "rescheduledBy": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; moves a real booking to a new time and notifies attendees; approval required"
+    },
+    {
+      "name": "create_event_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/event-types",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "slug", "lengthInMinutes"],
+        "properties": {
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "lengthInMinutes": { "type": "integer" },
+          "description": { "type": "string" },
+          "hidden": { "type": "boolean" },
+          "scheduleId": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a new publicly-bookable event type; approval required"
+    },
+    {
+      "name": "update_event_type",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/event-types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "lengthInMinutes": { "type": "integer" },
+          "description": { "type": "string" },
+          "hidden": { "type": "boolean" },
+          "scheduleId": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; changes the public scheduling configuration of an existing event type; approval required"
+    },
+    {
+      "name": "delete_event_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/event-types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "destructive; permanently deletes an event type, breaking any existing public booking links; approval required"
+    },
+    {
+      "name": "create_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/schedules",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "timeZone", "isDefault"],
+        "properties": {
+          "name": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "isDefault": { "type": "boolean" },
+          "availability": { "type": "array" },
+          "overrides": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a new availability schedule, which can be attached to event types and change public availability; approval required"
+    },
+    {
+      "name": "update_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/schedules/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "isDefault": { "type": "boolean" },
+          "availability": { "type": "array" },
+          "overrides": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; changes a real availability schedule's hours/timezone, directly affecting public bookable slots; approval required"
+    },
+    {
+      "name": "delete_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/schedules/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "destructive; permanently deletes an availability schedule; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscriberUrl", "triggers", "active"],
+        "properties": {
+          "subscriberUrl": { "type": "string" },
+          "triggers": { "type": "array", "items": { "type": "string" } },
+          "active": { "type": "boolean" },
+          "payloadTemplate": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; registers a new webhook endpoint that will receive live booking event payloads; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "destructive; permanently deletes a webhook subscription; approval required"
+    }
+  ]
+}

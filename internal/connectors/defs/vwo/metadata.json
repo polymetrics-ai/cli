@@ -1,0 +1,24 @@
+{
+  "name": "vwo",
+  "display_name": "VWO",
+  "description": "Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.",
+  "integration_type": "api",
+  "docs_url": "https://developers.wingify.com/reference/get-the-campaigns-of-an-account",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external VWO API read of experiment/campaign metadata",
+    "write": "external mutation of VWO campaign configuration, including starting/pausing/stopping live A/B experiments; approval required",
+    "approval": "read: none, read-only campaign directory sync. write: required for all mutating actions (create/update campaigns)."
+  }
+}

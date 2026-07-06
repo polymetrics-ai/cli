@@ -1,0 +1,17 @@
+{
+  "record": {
+    "payee": {
+      "name": "Fixture New Payee"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/synthetic-conformance-value/payees",
+    "body": {
+      "payee": {
+        "name": "Fixture New Payee"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "payee": { "id": "payee_new_fixture" } } } }
+}

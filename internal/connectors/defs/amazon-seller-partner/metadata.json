@@ -1,0 +1,29 @@
+{
+  "name": "amazon-seller-partner",
+  "display_name": "Amazon Seller Partner",
+  "description": "Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.",
+  "integration_type": "api",
+  "docs_url": "https://developer-docs.amazon.com/sp-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Amazon Selling Partner API read of order, inventory, and financial data",
+    "write": "external Amazon Selling Partner API mutations such as feed/report creation, fulfillment, inventory, order, shipping, notification, and vendor workflow actions",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive/cancel/delete actions are marked destructive"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for amazon-seller-partner for LWA refresh_token-grant auth and legacy read parity. Dynamic fixture replay cannot exercise custom LWA auth or write auth because the synthetic token URL is not a real LWA endpoint, so conformance skips auth-dependent read/write replay checks."
+  }
+}

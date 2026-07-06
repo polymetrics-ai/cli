@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Klaus API Connection Specification",
+  "type": "object",
+  "required": ["api_key", "account"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Klaus API key. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://kibbles.klausapp.com/api/v2",
+      "description": "Klaus API base URL override for tests or proxies."
+    },
+    "account": {
+      "type": "string",
+      "description": "Klaus account id (integer). Required for every stream; account-scoped paths are /account/{account}/<resource>."
+    },
+    "workspace": {
+      "type": "string",
+      "description": "Klaus workspace id (integer). Required only for the categories stream, which is workspace-scoped (/account/{account}/workspace/{workspace}/categories)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

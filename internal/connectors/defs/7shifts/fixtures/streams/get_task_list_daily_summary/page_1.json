@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/task_list_daily_summary",
+    "query": {
+      "location_id": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "total_completed_percentage": 1001,
+        "total_in_progress_percentage": 1001,
+        "total_incomplete_percentage": 1001,
+        "report_time": "2026-01-01T00:00:00Z",
+        "date": "2026-01-01",
+        "has_recent_task_completed": true,
+        "task_lists": [
+          {
+            "id": 1001,
+            "title": "fixture title",
+            "description": "fixture description",
+            "completion_status": "complete",
+            "total_tasks_completed": 1001,
+            "total_tasks": 1001,
+            "completion_percentage": 1001,
+            "is_overdue": true,
+            "minutes_overdue": 1001,
+            "minutes_until_due": 1001,
+            "departments": [
+              "fixture department"
+            ],
+            "roles": [
+              "fixture role"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "redirect_flows": {
+      "description": "Synthetic create_a_redirect_flow fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/redirect_flows",
+    "body": {
+      "redirect_flows": {
+        "description": "Synthetic create_a_redirect_flow fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

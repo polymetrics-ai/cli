@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "campaigns": [
+          {
+            "display_id": "camp_fixture_101",
+            "name": "Fixture Campaign 101",
+            "created_at": "2026-01-18T00:00:00Z",
+            "update_at": "2026-01-18T00:00:00Z",
+            "google": false,
+            "meta": false,
+            "meta_campaign_id": "",
+            "active": true,
+            "default_link": false,
+            "attributed_users": 505,
+            "link": "https://lr.example/c/101",
+            "shareable_link": "https://lr.example/s/101",
+            "website": "https://example.com",
+            "domain": "example.com"
+          }
+        ]
+      }
+    }
+  }
+}

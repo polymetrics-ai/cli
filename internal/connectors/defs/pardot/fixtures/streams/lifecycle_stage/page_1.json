@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/lifecycle-stages/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,matchType,isLocked,position,isDeleted,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "matchType": "matchType_fixture",
+      "isLocked": false,
+      "position": 1,
+      "isDeleted": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "id": "segment_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/segments/segment_fixture_1" }
+}

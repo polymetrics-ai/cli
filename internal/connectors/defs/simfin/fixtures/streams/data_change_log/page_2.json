@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/data-change-log",
+    "query": {
+      "pageNumber": "1",
+      "itemsPerPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "pageNumber": 1,
+      "itemsPerPage": 100
+    }
+  }
+}

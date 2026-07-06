@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "campaign_key": { "type": "string" },
+    "campaignkey": { "type": ["string", "null"] },
+    "campaign_name": { "type": ["string", "null"] },
+    "campaignname": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "sent_time": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "from_email": { "type": ["string", "null"] },
+    "modified_time": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

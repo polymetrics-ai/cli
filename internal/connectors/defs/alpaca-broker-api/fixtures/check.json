@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/clock" },
+  "response": {
+    "status": 200,
+    "body": {
+      "timestamp": "2026-06-25T12:00:00Z",
+      "is_open": true,
+      "next_open": "2026-06-26T13:30:00Z",
+      "next_close": "2026-06-25T20:00:00Z"
+    }
+  }
+}

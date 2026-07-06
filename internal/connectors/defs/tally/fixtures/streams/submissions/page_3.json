@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/form_fixture_1/submissions",
+    "query": {
+      "limit": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "limit": 100,
+      "hasMore": false,
+      "totalNumberOfSubmissionsPerFilter": {
+        "all": 101,
+        "completed": 101,
+        "partial": 0
+      },
+      "questions": [
+        {
+          "id": "question_fixture_1",
+          "type": "INPUT_TEXT",
+          "title": "Name"
+        }
+      ],
+      "submissions": [
+        {
+          "id": "submission_fixture_101",
+          "formId": "form_fixture_1",
+          "isCompleted": true,
+          "submittedAt": "2026-01-0101T00:00:00Z",
+          "previewUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_101?token=fixture_token_placeholder",
+          "pdfUrl": "https://tally.so/r/form_fixture_1/submissions/submission_fixture_101.pdf?token=fixture_token_placeholder",
+          "responses": [
+            {
+              "id": "response_fixture_101_1",
+              "formId": "form_fixture_1",
+              "questionId": "question_fixture_1",
+              "respondentId": "respondent_fixture_1",
+              "submissionId": "submission_fixture_1",
+              "sessionUuid": "11111111-1111-1111-1111-111111111111",
+              "answer": "Fixture Name",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

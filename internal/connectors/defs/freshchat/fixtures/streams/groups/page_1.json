@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/groups",
+    "query": { "page": "1", "items_per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        {
+          "id": "groups_fixture_1",
+          "name": "Fixture groups 1",
+          "description": "fixture record",
+          "routing_type": "INTELLIGENT",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

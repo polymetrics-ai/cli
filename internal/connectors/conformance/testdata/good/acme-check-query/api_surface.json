@@ -1,0 +1,10 @@
+{
+  "api": "Acme Check Query API v1 (synthetic, conformance self-test)",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "events endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/ping", "excluded": { "category": "non_data_endpoint", "reason": "check-only probe endpoint, not a data endpoint" } }
+  ]
+}

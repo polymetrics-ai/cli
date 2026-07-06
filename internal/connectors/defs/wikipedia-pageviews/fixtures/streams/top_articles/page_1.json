@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/rest_v1/metrics/pageviews/top-per-country/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "project": "en.wikipedia.org",
+          "access": "all-access",
+          "year": "2026",
+          "month": "01",
+          "day": "01",
+          "country": "US",
+          "articles": [
+            {
+              "article": "Fixture_Article_One",
+              "views_ceil": 5000,
+              "rank": 1
+            },
+            {
+              "article": "Fixture_Article_Two",
+              "views_ceil": 4200,
+              "rank": 2
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

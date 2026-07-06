@@ -1,0 +1,9 @@
+{
+  "record": { "ListID": "list_fixture_1", "Title": "Renamed Fixture List" },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/list_fixture_1.json",
+    "body": { "Title": "Renamed Fixture List" }
+  },
+  "response": { "status": 200, "body": {} }
+}

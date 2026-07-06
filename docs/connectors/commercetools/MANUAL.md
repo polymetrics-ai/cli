@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads commercetools customers, orders, and products through the HTTP API.
 
+ICON
+  asset: icons/commercetools.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.commercetools.com/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  project_key
+  token_url
+  client_id (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: createdAt
+    fields: addresses(), authenticationMode(), createdAt(), customerNumber(), email(), firstName(), id(), isEmailVerified(), lastModifiedAt(), lastName(), version()
+  orders:
+    primary key: id
+    cursor: createdAt
+    fields: createdAt(), customerId(), id(), lastModifiedAt(), lineItems(), orderNumber(), orderState(), totalPrice(), version()
+  products:
+    primary key: id
+    cursor: createdAt
+    fields: createdAt(), id(), lastModifiedAt(), masterData(), productType(), version()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external commercetools API read of customer, order, and product data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

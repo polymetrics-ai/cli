@@ -1,0 +1,22 @@
+{
+  "name": "launchdarkly",
+  "display_name": "LaunchDarkly",
+  "description": "Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.launchdarkly.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 20
+  },
+  "risk": {
+    "read": "external LaunchDarkly API read of project, membership, audit, and feature-flag configuration data"
+  }
+}

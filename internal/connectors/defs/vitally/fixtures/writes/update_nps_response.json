@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "nps_fixture_1",
+    "feedback": "Updated feedback text."
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/npsResponses/nps_fixture_1",
+    "body": {
+      "feedback": "Updated feedback text."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "nps_fixture_1", "feedback": "Updated feedback text." }
+  }
+}

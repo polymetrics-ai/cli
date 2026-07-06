@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/det_export_instance/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "det_export_fixture_1",
+          "name": "Fixture Case Export",
+          "type": "case",
+          "export_format": "csv",
+          "is_deidentified": false,
+          "case_type": "fixture_case",
+          "xmlns": null,
+          "det_config_url": "https://www.commcarehq.org/a/synthetic-conformance-value/fixture-det-config"
+        }
+      ]
+    }
+  }
+}

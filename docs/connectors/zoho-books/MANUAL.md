@@ -10,22 +10,3012 @@ SYNOPSIS
   pm credentials add <name> --connector zoho-books [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Zoho Books contacts, invoices, and items through the Zoho Books REST API.
+  Reads and writes Zoho Books API v3 accounting resources using the declarative connector engine.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  accept
+  account_id
+  adjustment_date
+  bank_account_id
+  bank_transaction_id
+  base_currency_adjustment_id
+  base_url
+  bill_id
+  card_id
+  comment_id
+  contact_id
+  contact_person_id
+  contactperson_id
+  creditnote_id
+  creditnote_ids
+  creditnote_refund_id
+  currency_id
+  customer_payment_id
+  debit_note_id
+  deliverychallan_id
+  document_id
+  email_template_id
+  employee_id
+  entity_type
+  estimate_id
+  estimate_ids
+  exchange_rate
+  exchange_rate_id
+  expense_id
+  expiry_time
+  fixed_asset_id
+  invoice_id
+  invoice_ids
+  item_id
+  item_ids
+  journal_id
+  line1
+  link_type
+  max_pages
+  metadata_name
+  mode
+  module_api_name
+  module_id
+  module_name
+  notes
+  organization_id
+  page_size
+  payment_id
+  project_id
+  purchaseorder_id
+  purchaseorder_ids
+  reconciliation_id
+  recurring_bill_id
+  recurring_expense_id
+  recurring_invoice_id
+  recurring_journal_id
+  reference_id
+  refund_id
+  retainerinvoice_id
+  rule_id
+  sales_receipt_id
+  salesorder_id
+  tag_id
+  task_id
+  tax_authority_id
+  tax_exemption_id
+  tax_group_id
+  tax_id
+  time_entry_id
+  transaction_id
+  transaction_type
+  user_id
+  vendor_credit_id
+  vendor_credit_refund_id
+  vendorpayment_refund_id
+  access_token (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), contact_name(), id(), last_modified_time(), name(), status(), updated_at()
+  invoices:
+    primary key: id
+    cursor: updated_at
+    fields: id(), invoice_id(), invoice_number(), last_modified_time(), name(), status(), updated_at()
+  items:
+    primary key: id
+    cursor: updated_at
+    fields: id(), item_id(), last_modified_time(), name(), status(), updated_at()
+  list_bank_accounts:
+    primary key: id
+    cursor: updated_at
+    fields: account_id(), account_name(), id(), name(), status(), updated_at()
+  get_bank_account:
+    primary key: id
+    cursor: updated_at
+    fields: account_id(), account_name(), id(), name(), status(), updated_at()
+  get_last_imported_bank_statement:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), statement_id(), status(), updated_at()
+  list_bank_account_rules:
+    primary key: id
+    cursor: updated_at
+    fields: account_name(), id(), name(), rule_id(), status(), updated_at()
+  get_bank_account_rule:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), target_account_id(), target_account_name(), updated_at()
+  list_bank_transactions:
+    primary key: id
+    cursor: updated_at
+    fields: account_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  get_matching_bank_transactions:
+    primary key: id
+    cursor: updated_at
+    fields: contact_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  get_bank_transaction:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), name(), status(), transaction_id(), updated_at()
+  list_base_currency_adjustments:
+    primary key: id
+    cursor: updated_at
+    fields: base_currency_adjustment_id(), id(), name(), status(), updated_at()
+  list_base_currency_adjustment_accounts:
+    primary key: id
+    cursor: updated_at
+    fields: currency_id(), id(), name(), status(), updated_at()
+  list_base_currency_adjustment_contacts:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), contact_name(), id(), name(), status(), updated_at()
+  get_base_currency_adjustment:
+    primary key: id
+    cursor: updated_at
+    fields: base_currency_adjustment_id(), id(), name(), status(), updated_at()
+  list_bills:
+    primary key: id
+    cursor: updated_at
+    fields: bill_id(), id(), last_modified_time(), name(), status(), updated_at(), vendor_name()
+  convert_purchase_order_to_bill:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  get_bill:
+    primary key: id
+    cursor: updated_at
+    fields: bill_id(), id(), last_modified_time(), name(), status(), updated_at(), vendor_name()
+  get_bill_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_bill_payments:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), payment_id(), status(), updated_at(), vendor_name()
+  list_chart_of_accounts:
+    primary key: id
+    cursor: updated_at
+    fields: account_id(), account_name(), id(), last_modified_time(), name(), status(), updated_at()
+  list_chart_of_account_transactions:
+    primary key: id
+    cursor: updated_at
+    fields: categorized_transaction_id(), id(), name(), offset_account_name(), status(), updated_at()
+  get_chart_of_account:
+    primary key: id
+    cursor: updated_at
+    fields: customfield_id(), id(), name(), status(), updated_at()
+  list_contact_persons:
+    primary key: id
+    cursor: updated_at
+    fields: contact_person_id(), first_name(), id(), name(), status(), updated_at()
+  get_contact_person:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), first_name(), id(), name(), status(), updated_at()
+  get_contact:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), contact_name(), id(), last_modified_time(), name(), status(), updated_at()
+  get_contact_address:
+    primary key: id
+    cursor: updated_at
+    fields: address_id(), id(), name(), status(), updated_at()
+  list_contact_autobill_recurring_invoices:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), recurrence_name(), recurring_invoice_id(), status(), updated_at()
+  list_contact_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), contact_name(), date(), id(), name(), status(), updated_at()
+  get_unused_retainer_payments:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), payment_id(), payment_number(), status(), updated_at()
+  list_contact_credit_note_refunds:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  get_contact_statement_mail:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), file_name(), id(), name(), status(), updated_at()
+  list_credit_notes:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_id(), customer_name(), id(), last_modified_time(), name(), status(), updated_at()
+  list_credit_note_refunds_of_all_credit_notes:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  get_credit_note_refund_by_id:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  list_credit_note_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_credit_note:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_id(), customer_name(), id(), name(), status(), updated_at(), updated_time()
+  list_credit_note_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  get_credit_note_custom_fields:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  get_credit_note_email:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), file_name(), id(), name(), status(), updated_at()
+  get_credit_note_email_history:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), mailhistory_id(), name(), status(), updated_at()
+  list_invoices_of_credit_note:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_id(), date(), id(), invoice_number(), name(), status(), updated_at()
+  list_credit_note_refunds_of_a_credit_note:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  get_credit_note_refund:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_refund_id(), customer_name(), date(), id(), name(), status(), updated_at()
+  list_currencies:
+    primary key: id
+    cursor: updated_at
+    fields: currency_id(), currency_name(), id(), name(), status(), updated_at()
+  get_currency:
+    primary key: id
+    cursor: updated_at
+    fields: currency_id(), currency_name(), id(), name(), status(), updated_at()
+  list_exchange_rates:
+    primary key: id
+    cursor: updated_at
+    fields: exchange_rate_id(), id(), name(), status(), updated_at()
+  get_exchange_rate:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_custom_modules:
+    primary key: id
+    cursor: updated_at
+    fields: id(), module_id(), module_name(), name(), status(), updated_at()
+  get_custom_module:
+    primary key: id
+    cursor: updated_at
+    fields: id(), module_id(), module_name(), name(), status(), updated_at()
+  list_custom_module_records:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), module_api_name(), module_record_id(), name(), status(), updated_at()
+  get_custom_module_record:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  get_customer_debit_note:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), invoice_id(), last_modified_time(), name(), status(), updated_at()
+  list_customer_payments:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), invoice_number(), name(), payment_id(), status(), updated_at()
+  list_customer_payment_refunds:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), name(), payment_refund_id(), status(), updated_at()
+  get_customer_payment_refund:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), payment_refund_id(), reference_number(), status(), updated_at()
+  get_customer_payment:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), name(), payment_id(), status(), updated_at()
+  list_delivery_challans:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), deliverychallan_id(), id(), last_modified_time(), name(), status(), updated_at()
+  list_delivery_challan_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_delivery_challan:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), deliverychallan_id(), id(), last_modified_time(), name(), status(), updated_at()
+  list_estimates:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), estimate_id(), id(), last_modified_time(), name(), status(), updated_at()
+  list_estimate_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_estimate:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), estimate_id(), id(), last_modified_time(), name(), status(), updated_at()
+  list_estimate_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  get_estimate_email:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_employees:
+    primary key: id
+    cursor: updated_at
+    fields: employee_id(), id(), name(), status(), updated_at()
+  get_employee:
+    primary key: id
+    cursor: updated_at
+    fields: employee_id(), id(), name(), status(), updated_at()
+  list_expenses:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), expense_id(), id(), last_modified_time(), name(), status(), updated_at()
+  get_expense:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), expense_id(), id(), last_modified_time(), name(), status(), updated_at()
+  list_expense_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), id(), name(), status(), updated_at()
+  list_fixed_assets:
+    primary key: id
+    cursor: updated_at
+    fields: asset_name(), fixed_asset_id(), id(), name(), status(), updated_at()
+  get_fixed_asset:
+    primary key: id
+    cursor: updated_at
+    fields: asset_name(), fixed_asset_id(), id(), name(), status(), updated_at()
+  get_fixed_asset_forecast:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  get_fixed_asset_history:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at(), valuation_id()
+  get_fixed_asset_type_list:
+    primary key: id
+    cursor: updated_at
+    fields: fixed_asset_type_id(), fixed_asset_type_name(), id(), name(), status(), updated_at()
+  list_invoice_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_invoice:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), invoice_id(), last_modified_time(), name(), status(), updated_at()
+  list_invoice_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_invoice_credits_applied:
+    primary key: id
+    cursor: updated_at
+    fields: creditnote_id(), creditnotes_number(), id(), name(), status(), updated_at()
+  get_invoice_document_details:
+    primary key: id
+    cursor: updated_at
+    fields: document_id(), document_name(), id(), last_modified_time(), name(), status(), updated_at()
+  get_invoice_email:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  get_payment_reminder_mail_content_for_invoice:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  list_invoice_payments:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), payment_id(), payment_number(), status(), updated_at()
+  generate_invoice_payment_link:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_item_details:
+    primary key: id
+    cursor: updated_at
+    fields: id(), item_id(), name(), status(), updated_at()
+  get_item:
+    primary key: id
+    cursor: updated_at
+    fields: id(), item_id(), name(), status(), updated_at()
+  list_journals:
+    primary key: id
+    cursor: updated_at
+    fields: entry_number(), id(), journal_id(), name(), status(), updated_at()
+  get_journal:
+    primary key: id
+    cursor: updated_at
+    fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  list_journal_credits:
+    primary key: id
+    cursor: updated_at
+    fields: credit_id(), id(), name(), status(), updated_at()
+  list_recurring_journals:
+    primary key: id
+    cursor: updated_at
+    fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  get_recurring_journal:
+    primary key: id
+    cursor: updated_at
+    fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  list_child_journals:
+    primary key: id
+    cursor: updated_at
+    fields: entry_number(), id(), journal_id(), name(), status(), updated_at()
+  get_transaction_journal_view:
+    primary key: id
+    cursor: updated_at
+    fields: id(), journal_id(), last_modified_time(), location_name(), name(), status(), updated_at()
+  list_locations:
+    primary key: id
+    cursor: updated_at
+    fields: id(), location_id(), location_name(), name(), status(), updated_at()
+  list_opening_balance_transactions:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), transaction_id(), updated_at()
+  list_opening_balance_details:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), opening_balance_id(), status(), updated_at()
+  get_opening_balance:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), opening_balance_id(), status(), updated_at()
+  list_organizations:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), organization_id(), status(), updated_at()
+  list_organizations_for_user:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), organization_id(), status(), updated_at()
+  get_organization:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), organization_id(), status(), updated_at()
+  list_pricebooks:
+    primary key: id
+    cursor: updated_at
+    fields: currency_id(), id(), name(), status(), updated_at()
+  list_projects:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), name(), project_id(), status(), updated_at()
+  get_project:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), name(), project_id(), status(), updated_at()
+  list_project_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_project_invoices:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), invoice_id(), name(), status(), updated_at()
+  list_project_tasks:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), name(), project_id(), status(), updated_at()
+  get_project_task:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), project_id(), project_name(), status(), updated_at()
+  list_project_users:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at(), user_id(), user_name()
+  get_project_user:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at(), user_id(), user_name()
+  list_purchase_orders:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), purchaseorder_id(), status(), updated_at(), vendor_name()
+  list_purchase_order_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_purchase_order:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), purchaseorder_id(), status(), updated_at(), vendor_name()
+  list_purchase_order_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  get_recurring_bill:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), recurring_bill_id(), status(), updated_at(), vendor_name()
+  list_recurring_bills:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), recurring_bill_id(), status(), updated_at(), vendor_name()
+  list_recurring_expenses:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), recurring_expense_id(), status(), updated_at()
+  get_recurring_expense:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), recurring_expense_id(), status(), updated_at()
+  list_recurring_expense_history:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_child_expenses_of_recurring_expense:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), expense_id(), id(), name(), status(), updated_at()
+  list_recurring_invoices:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), name(), recurring_invoice_id(), status(), updated_at()
+  get_recurring_invoice:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), name(), recurring_invoice_id(), status(), updated_at()
+  list_recurring_invoice_history:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_recurring_invoice_child_invoices:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), invoice_id(), name(), status(), updated_at()
+  get_register_budget_vs_actuals:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_register_bulk_action_history:
+    primary key: id
+    cursor: updated_at
+    fields: bulk_action_id(), date(), id(), name(), status(), updated_at(), user_name()
+  get_register_bulk_action_history:
+    primary key: id
+    cursor: updated_at
+    fields: account_name(), bulk_action_id(), date(), id(), name(), status(), updated_at()
+  get_register_bulk_update_editpage:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_register_transactions:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  get_tags:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tag_id(), tag_name(), updated_at()
+  all_tag_options:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), option_id(), option_name(), status(), updated_at()
+  get_all_tag_options:
+    primary key: id
+    cursor: updated_at
+    fields: dependent_id(), dependent_name(), id(), name(), status(), updated_at()
+  list_retainer_invoices:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), retainerinvoice_id(), status(), updated_at()
+  list_retainer_invoice_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_retainer_invoice:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), retainerinvoice_id(), status(), updated_at()
+  list_retainer_invoice:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  get_retainer_invoice_email:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  list_sales_orders:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), salesorder_id(), status(), updated_at()
+  list_sales_order_templates:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), template_id(), template_name(), updated_at()
+  get_sales_order:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), date(), id(), name(), salesperson_name(), status(), updated_at()
+  get_sales_order_email:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), entity_id(), id(), name(), status(), updated_at()
+  list_sales_receipts:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), sales_receipt_id(), status(), updated_at()
+  get_sales_receipt:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), id(), last_modified_time(), name(), sales_receipt_id(), status(), updated_at()
+  list_tasks:
+    primary key: id
+    cursor: updated_at
+    fields: contact_name(), created_time(), id(), name(), status(), task_id(), updated_at()
+  get_task:
+    primary key: id
+    cursor: updated_at
+    fields: contact_name(), id(), last_modified_by_id(), name(), status(), task_id(), updated_at()
+  list_task_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  get_task_document:
+    primary key: id
+    cursor: updated_at
+    fields: document_id(), file_name(), id(), name(), status(), updated_at()
+  list_tax_authorities:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_authority_id(), tax_authority_name(), updated_at()
+  get_tax_authority:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_authority_id(), tax_authority_name(), updated_at()
+  list_taxes:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_id(), tax_name(), updated_at()
+  get_tax:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_id(), tax_name(), updated_at()
+  list_tax_exemptions:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_exemption_id(), updated_at()
+  get_tax_exemption:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_exemption_id(), updated_at()
+  get_tax_group:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), tax_group_id(), tax_group_name(), updated_at()
+  list_time_entries:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  get_running_timer:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  get_time_entry:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), customer_name(), id(), name(), status(), time_entry_id(), updated_at()
+  get_accounting_period_transaction_lock:
+    primary key: id
+    cursor: updated_at
+    fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  get_transaction_lock:
+    primary key: id
+    cursor: updated_at
+    fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  list_transaction_locks:
+    primary key: id
+    cursor: updated_at
+    fields: accounting_period_name(), id(), name(), status(), transaction_lock_id(), updated_at()
+  list_users:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at(), user_id()
+  get_current_user:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), id(), name(), status(), updated_at(), user_id()
+  get_user:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), id(), name(), status(), updated_at(), user_id()
+  list_vendor_credits:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), status(), updated_at(), vendor_credit_id(), vendor_name()
+  list_vendor_credit_refunds_of_all_vendor_credits:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  get_vendor_credit:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), status(), updated_at(), vendor_credit_id(), vendor_name()
+  list_bills_credited:
+    primary key: id
+    cursor: updated_at
+    fields: bill_number(), date(), id(), name(), status(), updated_at(), vendor_credit_id()
+  list_vendor_credit_comments:
+    primary key: id
+    cursor: updated_at
+    fields: comment_id(), date(), id(), name(), status(), updated_at()
+  list_vendor_credit_refunds_of_a_vendor_credit:
+    primary key: id
+    cursor: updated_at
+    fields: customer_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  get_vendor_credit_refund:
+    primary key: id
+    cursor: updated_at
+    fields: account_name(), date(), id(), name(), status(), updated_at(), vendor_credit_refund_id()
+  list_vendor_payments:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), payment_id(), status(), updated_at(), vendor_name()
+  get_vendor_payment:
+    primary key: id
+    cursor: updated_at
+    fields: id(), last_modified_time(), name(), payment_id(), status(), updated_at(), vendor_name()
+  get_vendor_payment_email_content:
+    primary key: id
+    cursor: updated_at
+    fields: contact_person_id(), first_name(), id(), name(), status(), updated_at()
+  list_vendor_payment_refunds:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), reference_number(), status(), updated_at(), vendorpayment_refund_id()
+  get_vendor_payment_refund:
+    primary key: id
+    cursor: updated_at
+    fields: date(), id(), name(), status(), to_account_name(), updated_at(), vendorpayment_refund_id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  create_bank_account:
+    endpoint: POST /bankaccounts?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_account:
+    endpoint: PUT /bankaccounts/{{ record.account_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_account:
+    endpoint: DELETE /bankaccounts/{{ record.account_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_bank_account_active:
+    endpoint: POST /bankaccounts/{{ record.account_id }}/active?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_bank_account_inactive:
+    endpoint: POST /bankaccounts/{{ record.account_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_account_preferences:
+    endpoint: PUT /bankaccounts/{{ record.account_id }}/preferences?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_bank_reconciliation:
+    endpoint: POST /bankaccounts/{{ record.account_id }}/reconciliations?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_reconciliation:
+    endpoint: PUT /bankaccounts/{{ record.account_id }}/reconciliations/{{ record.reconciliation_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id, reconciliation_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_reconciliation:
+    endpoint: DELETE /bankaccounts/{{ record.account_id }}/reconciliations/{{ record.reconciliation_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id, reconciliation_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_bank_reconciliation_attachment:
+    endpoint: POST /bankaccounts/{{ record.account_id }}/reconciliations/{{ record.reconciliation_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: account_id, reconciliation_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_reconciliation_document:
+    endpoint: DELETE /bankaccounts/{{ record.account_id }}/reconciliations/{{ record.reconciliation_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id, reconciliation_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  save_bank_reconciliation_draft:
+    endpoint: PUT /bankaccounts/{{ record.account_id }}/reconciliations/{{ record.reconciliation_id }}/draft?organization_id={{ config.organization_id }}
+    required fields: account_id, reconciliation_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_last_imported_bank_statement:
+    endpoint: DELETE /bankaccounts/{{ record.account_id }}/statement/{{ record.statement_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id, statement_id
+    risk: external destructive mutation in Zoho Books; approval required
+  import_bank_statements:
+    endpoint: POST /bankstatements?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_bank_account_match_filter:
+    endpoint: POST /bankaccounts/matchfilters?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_account_match_filter:
+    endpoint: PUT /bankaccounts/matchfilters/{{ record.match_filter_id }}?organization_id={{ config.organization_id }}
+    required fields: match_filter_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_account_match_filter:
+    endpoint: DELETE /bankaccounts/matchfilters/{{ record.match_filter_id }}?organization_id={{ config.organization_id }}
+    required fields: match_filter_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_bank_account_rule:
+    endpoint: POST /bankaccounts/rules?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_update_bank_account_rules:
+    endpoint: PUT /bankaccounts/rules?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_bank_account_rules:
+    endpoint: DELETE /bankaccounts/rules?organization_id={{ config.organization_id }}&rule_ids={{ record.rule_ids }}
+    required fields: rule_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  reorder_bank_account_rules:
+    endpoint: POST /bankaccounts/rules/order?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  skip_suggested_bank_account_rule:
+    endpoint: POST /bankaccounts/rules/skipsuggest?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_account_rule:
+    endpoint: PUT /bankaccounts/rules/{{ record.rule_id }}?organization_id={{ config.organization_id }}
+    required fields: rule_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_account_rule:
+    endpoint: DELETE /bankaccounts/rules/{{ record.rule_id }}?organization_id={{ config.organization_id }}
+    required fields: rule_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_bank_transaction:
+    endpoint: POST /banktransactions?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_bank_transaction_as_payment_refund:
+    endpoint: POST /banktransactions/uncategorized/{{ record.statement_line_id }}/categorize/paymentrefunds?organization_id={{ config.organization_id }}
+    required fields: statement_line_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_as_vendor_payment_refund:
+    endpoint: POST /banktransactions/uncategorized/{{ record.statement_line_id }}/categorize/vendorpaymentrefunds?organization_id={{ config.organization_id }}
+    required fields: statement_line_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_bank_transaction:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_as_credit_note_refunds:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize/creditnoterefunds?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_bank_transaction_as_customer_payment:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize/customerpayments?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_bank_transaction_as_expense:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize/expenses?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_as_vendor_credit_refunds:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize/vendorcreditrefunds?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  categorize_bank_transaction_as_vendor_payment:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/categorize/vendorpayments?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  exclude_bank_transaction:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/exclude?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  match_bank_transaction:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/match?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  restore_bank_transaction:
+    endpoint: POST /banktransactions/uncategorized/{{ record.transaction_id }}/restore?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bank_transaction:
+    endpoint: PUT /banktransactions/{{ record.bank_transaction_id }}?organization_id={{ config.organization_id }}
+    required fields: bank_transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bank_transaction:
+    endpoint: DELETE /banktransactions/{{ record.bank_transaction_id }}?organization_id={{ config.organization_id }}
+    required fields: bank_transaction_id
+    risk: external destructive mutation in Zoho Books; approval required
+  uncategorize_bank_transaction:
+    endpoint: POST /banktransactions/{{ record.transaction_id }}/uncategorize?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  unmatch_bank_transaction:
+    endpoint: POST /banktransactions/{{ record.transaction_id }}/unmatch?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_base_currency_adjustment:
+    endpoint: POST /basecurrencyadjustment?organization_id={{ config.organization_id }}&account_ids={{ record.account_ids }}
+    required fields: account_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_base_currency_adjustments:
+    endpoint: DELETE /basecurrencyadjustment/bulkdelete?organization_id={{ config.organization_id }}&base_currency_adjustment_ids={{ record.base_currency_adjustment_ids }}
+    required fields: base_currency_adjustment_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  delete_base_currency_adjustment:
+    endpoint: DELETE /basecurrencyadjustment/{{ record.base_currency_adjustment_id }}?organization_id={{ config.organization_id }}
+    required fields: base_currency_adjustment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  reevaluate_base_currency_adjustment:
+    endpoint: POST /basecurrencyadjustment/{{ record.base_currency_adjustment_id }}/reevaluate?organization_id={{ config.organization_id }}
+    required fields: base_currency_adjustment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_custom_fields_in_bill:
+    endpoint: PUT /bill/{{ record.bill_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_bill:
+    endpoint: POST /bills?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_bill:
+    endpoint: PUT /bills/{{ record.bill_id }}?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bill:
+    endpoint: DELETE /bills/{{ record.bill_id }}?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_bill_billing_address:
+    endpoint: PUT /bills/{{ record.bill_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_bill:
+    endpoint: POST /bills/{{ record.bill_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_bill_attachment:
+    endpoint: POST /bills/{{ record.bill_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bill_attachment:
+    endpoint: DELETE /bills/{{ record.bill_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_bill_comment:
+    endpoint: POST /bills/{{ record.bill_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bill_comment:
+    endpoint: DELETE /bills/{{ record.bill_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: bill_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  apply_credits_to_bill:
+    endpoint: POST /bills/{{ record.bill_id }}/credits?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_bill_payment:
+    endpoint: DELETE /bills/{{ record.bill_id }}/payments/{{ record.bill_payment_id }}?organization_id={{ config.organization_id }}
+    required fields: bill_id, bill_payment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_bill_open:
+    endpoint: POST /bills/{{ record.bill_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_bill_void:
+    endpoint: POST /bills/{{ record.bill_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_bill:
+    endpoint: POST /bills/{{ record.bill_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_chart_of_account:
+    endpoint: POST /chartofaccounts?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_mark_chart_of_accounts_active:
+    endpoint: POST /chartofaccounts/active?organization_id={{ config.organization_id }}&account_ids={{ record.account_ids }}
+    required fields: account_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_chart_of_accounts:
+    endpoint: DELETE /chartofaccounts/bulkdelete?organization_id={{ config.organization_id }}&account_ids={{ record.account_ids }}
+    required fields: account_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  bulk_mark_chart_of_accounts_inactive:
+    endpoint: POST /chartofaccounts/inactive?organization_id={{ config.organization_id }}&account_ids={{ record.account_ids }}
+    required fields: account_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_chart_of_account_transaction:
+    endpoint: DELETE /chartofaccounts/transactions/{{ record.transaction_id }}?organization_id={{ config.organization_id }}
+    required fields: transaction_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_chart_of_account:
+    endpoint: PUT /chartofaccounts/{{ record.account_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_chart_of_account:
+    endpoint: DELETE /chartofaccounts/{{ record.account_id }}?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_chart_of_account_active:
+    endpoint: POST /chartofaccounts/{{ record.account_id }}/active?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_chart_of_account_inactive:
+    endpoint: POST /chartofaccounts/{{ record.account_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_contact_person:
+    endpoint: POST /contacts/contactpersons?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_person:
+    endpoint: PUT /contacts/contactpersons/{{ record.contact_person_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_person_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_person:
+    endpoint: DELETE /contacts/contactpersons/{{ record.contact_person_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_person_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_contact_person_primary:
+    endpoint: POST /contacts/contactpersons/{{ record.contact_person_id }}/primary?organization_id={{ config.organization_id }}
+    required fields: contact_person_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_contact:
+    endpoint: POST /contacts?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contacts:
+    endpoint: DELETE /contacts?organization_id={{ config.organization_id }}&contact_ids={{ record.contact_ids }}
+    required fields: contact_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  create_contact_person_2:
+    endpoint: POST /contacts/contactpersons?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_person_2:
+    endpoint: PUT /contacts/contactpersons/{{ record.contactperson_id }}?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_person_2:
+    endpoint: DELETE /contacts/contactpersons/{{ record.contactperson_id }}?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external destructive mutation in Zoho Books; approval required
+  invite_contact_person_to_portal:
+    endpoint: POST /contacts/contactpersons/{{ record.contactperson_id }}/portal/invite?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  resend_contact_person_portal_invite:
+    endpoint: POST /contacts/contactpersons/{{ record.contactperson_id }}/portal/invite/resend?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_contact_person_primary_2:
+    endpoint: POST /contacts/contactpersons/{{ record.contactperson_id }}/primary?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  disable_contact_person_sms:
+    endpoint: POST /contacts/contactpersons/{{ record.contactperson_id }}/sms/disable?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_contact_person_sms:
+    endpoint: POST /contacts/contactpersons/{{ record.contactperson_id }}/sms/enable?organization_id={{ config.organization_id }}
+    required fields: contactperson_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  restore_contact_documents:
+    endpoint: POST /contacts/documents/restore?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  assign_owner_to_contacts:
+    endpoint: POST /contacts/owner?organization_id={{ config.organization_id }}&contact_ids={{ record.contact_ids }}
+    required fields: contact_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_contacts_sms:
+    endpoint: POST /contacts/sms?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_contacts_for_1099_tracking:
+    endpoint: POST /contacts/track1099?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact:
+    endpoint: PUT /contacts/{{ record.contact_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact:
+    endpoint: DELETE /contacts/{{ record.contact_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_contact_active:
+    endpoint: POST /contacts/{{ record.contact_id }}/active?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_contact_address:
+    endpoint: POST /contacts/{{ record.contact_id }}/address?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_address:
+    endpoint: PUT /contacts/{{ record.contact_id }}/address/{{ record.address_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, address_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_address:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/address/{{ record.address_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, address_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_contact_address_as_billing:
+    endpoint: POST /contacts/{{ record.contact_id }}/address/{{ record.address_id }}/markasbilling?organization_id={{ config.organization_id }}
+    required fields: contact_id, address_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_contact_address_as_shipping:
+    endpoint: POST /contacts/{{ record.contact_id }}/address/{{ record.address_id }}/markasshipping?organization_id={{ config.organization_id }}
+    required fields: contact_id, address_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  verify_contact_address_by_id:
+    endpoint: POST /contacts/{{ record.contact_id }}/address/{{ record.address_id }}/verify?organization_id={{ config.organization_id }}
+    required fields: contact_id, address_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_contact_attachment:
+    endpoint: POST /contacts/{{ record.contact_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_contact_bank_account:
+    endpoint: POST /contacts/{{ record.contact_id }}/bankaccount?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_bank_account:
+    endpoint: PUT /contacts/{{ record.contact_id }}/bankaccount/{{ record.bank_account_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, bank_account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_bank_account:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/bankaccount/{{ record.bank_account_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, bank_account_id
+    risk: external destructive mutation in Zoho Books; approval required
+  approve_contact_bank_account:
+    endpoint: POST /contacts/{{ record.contact_id }}/bankaccount/{{ record.bank_account_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: contact_id, bank_account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  decline_contact_bank_account:
+    endpoint: POST /contacts/{{ record.contact_id }}/bankaccount/{{ record.bank_account_id }}/decline?organization_id={{ config.organization_id }}
+    required fields: contact_id, bank_account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  verify_contact_bank_account:
+    endpoint: POST /contacts/{{ record.contact_id }}/bankaccount/{{ record.bank_account_id }}/verify?organization_id={{ config.organization_id }}
+    required fields: contact_id, bank_account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_contact_card:
+    endpoint: POST /contacts/{{ record.contact_id }}/card?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_card:
+    endpoint: PUT /contacts/{{ record.contact_id }}/card/{{ record.card_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, card_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_card:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/card/{{ record.card_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, card_id
+    risk: external destructive mutation in Zoho Books; approval required
+  send_contact_client_review_email:
+    endpoint: POST /contacts/{{ record.contact_id }}/clientreviews/email?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_contact_comment:
+    endpoint: POST /contacts/{{ record.contact_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_comment:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_contact_document:
+    endpoint: PUT /contacts/{{ record.contact_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, document_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_document:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  verify_contact_einvoice:
+    endpoint: POST /contacts/{{ record.contact_id }}/einvoice/verify?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_contact:
+    endpoint: POST /contacts/{{ record.contact_id }}/email?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_contact_inactive:
+    endpoint: POST /contacts/{{ record.contact_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  merge_contact:
+    endpoint: POST /contacts/{{ record.contact_id }}/merge?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  assign_contact_owner:
+    endpoint: POST /contacts/{{ record.contact_id }}/owner?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_contact_payment_method_email:
+    endpoint: POST /contacts/{{ record.contact_id }}/paymentmethod/email?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  disable_contact_payment_reminder:
+    endpoint: POST /contacts/{{ record.contact_id }}/paymentreminder/disable?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_contact_payment_reminder:
+    endpoint: POST /contacts/{{ record.contact_id }}/paymentreminder/enable?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  disable_contact_portal:
+    endpoint: POST /contacts/{{ record.contact_id }}/portal/disable?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_contact_portal:
+    endpoint: POST /contacts/{{ record.contact_id }}/portal/enable?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_contact_sms:
+    endpoint: POST /contacts/{{ record.contact_id }}/sms?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_contact_statement:
+    endpoint: POST /contacts/{{ record.contact_id }}/statements/email?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_tags:
+    endpoint: PUT /contacts/{{ record.contact_id }}/tags?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_tag:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, tag_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_contact_tax_info:
+    endpoint: POST /contacts/{{ record.contact_id }}/taxinfo?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_tax_info:
+    endpoint: PUT /contacts/{{ record.contact_id }}/taxinfo/{{ record.tax_info_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, tax_info_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_contact_tax_info:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/taxinfo/{{ record.tax_info_id }}?organization_id={{ config.organization_id }}
+    required fields: contact_id, tax_info_id
+    risk: external destructive mutation in Zoho Books; approval required
+  track_contact_1099:
+    endpoint: POST /contacts/{{ record.contact_id }}/track1099?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_contact_trn_status:
+    endpoint: POST /contacts/{{ record.contact_id }}/trnstatus?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  untrack_contact_1099:
+    endpoint: POST /contacts/{{ record.contact_id }}/untrack1099?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_contact_vendor_statement_email:
+    endpoint: POST /contacts/{{ record.contact_id }}/vendorstatements/email?organization_id={{ config.organization_id }}
+    required fields: contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_credit_note:
+    endpoint: POST /creditnotes?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_credit_notes:
+    endpoint: POST /creditnotes/approve?organization_id={{ config.organization_id }}&creditnote_ids={{ record.creditnote_ids }}
+    required fields: creditnote_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_credit_notes_einvoice:
+    endpoint: POST /creditnotes/einvoice/cancel?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  push_credit_notes_einvoice:
+    endpoint: POST /creditnotes/einvoice/push?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_credit_notes:
+    endpoint: POST /creditnotes/submit?organization_id={{ config.organization_id }}&creditnote_ids={{ record.creditnote_ids }}
+    required fields: creditnote_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_credit_note:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_credit_note_billing_address:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_credit_note_shipping_address:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}/address/shipping?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_credit_note:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  finalize_credit_note_approval:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/approve/final?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_credit_note_attachment:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_credit_note_cfdi_status:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/cfdi/status?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_credit_note_comment:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note_comment:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_credit_note_custom_fields:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_credit_note_document:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, document_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note_document:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_credit_note_digital_signature:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/dsign?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  upload_credit_note_digital_signature:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/dsign/upload?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_credit_note_einvoice:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/cancel?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  fetch_credit_note_einvoice:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/fetch?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  push_credit_note_einvoice:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/push?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note_einvoice_status:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/einvoice/status?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_credit_note_einvoice_cancelled:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/status/cancel?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_credit_note_einvoice_pushed:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/status/push?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  recall_credit_note_einvoice_status:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/einvoice/status/recall?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_credit_note:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/email?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_credit_note_to_invoice:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/invoices?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_of_credit_note:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/invoices/{{ record.creditnote_invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, creditnote_invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_credit_note_refund:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/refunds?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  push_credit_note_refund_einvoice:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/refunds/einvoice/push?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_credit_note_refund:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}/refunds/{{ record.creditnote_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, creditnote_refund_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note_refund:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/refunds/{{ record.creditnote_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, creditnote_refund_id
+    risk: external destructive mutation in Zoho Books; approval required
+  reject_credit_note:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/reject?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_credit_note_draft:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/status/draft?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_credit_note_open:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_credit_note_ready_to_push:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/status/readytopush?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_credit_note_void:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_credit_note:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_credit_note_substatus:
+    endpoint: POST /creditnotes/{{ record.creditnote_id }}/substatus/{{ record.substatus_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, substatus_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_credit_note_substatus:
+    endpoint: DELETE /creditnotes/{{ record.creditnote_id }}/substatus/{{ record.substatus_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, substatus_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_credit_note_template:
+    endpoint: PUT /creditnotes/{{ record.creditnote_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: creditnote_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_einvoice_credit_note:
+    endpoint: POST /einvoices/creditnotes/{{ record.creditnote_id }}/cancel?organization_id={{ config.organization_id }}
+    required fields: creditnote_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_currency:
+    endpoint: POST /settings/currencies?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_currency:
+    endpoint: PUT /settings/currencies/{{ record.currency_id }}?organization_id={{ config.organization_id }}
+    required fields: currency_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_currency:
+    endpoint: DELETE /settings/currencies/{{ record.currency_id }}?organization_id={{ config.organization_id }}
+    required fields: currency_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_exchange_rate:
+    endpoint: POST /settings/currencies/{{ record.currency_id }}/exchangerates?organization_id={{ config.organization_id }}
+    required fields: currency_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_exchange_rate:
+    endpoint: PUT /settings/currencies/{{ record.currency_id }}/exchangerates/{{ record.exchange_rate_id }}?organization_id={{ config.organization_id }}
+    required fields: currency_id, exchange_rate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_exchange_rate:
+    endpoint: DELETE /settings/currencies/{{ record.currency_id }}/exchangerates/{{ record.exchange_rate_id }}?organization_id={{ config.organization_id }}
+    required fields: currency_id, exchange_rate_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_custom_module:
+    endpoint: POST /settings/modules?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_custom_module:
+    endpoint: PUT /settings/modules/{{ record.module_api_name }}?organization_id={{ config.organization_id }}
+    required fields: module_api_name
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_custom_module:
+    endpoint: DELETE /settings/modules/{{ record.module_api_name }}?organization_id={{ config.organization_id }}
+    required fields: module_api_name
+    risk: external destructive mutation in Zoho Books; approval required
+  create_custom_module_record:
+    endpoint: POST /{{ record.module_name }}?organization_id={{ config.organization_id }}
+    required fields: module_name
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_update_custom_module_records:
+    endpoint: PUT /{{ record.module_name }}?organization_id={{ config.organization_id }}
+    required fields: module_name
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_custom_module_records:
+    endpoint: DELETE /{{ record.module_name }}?organization_id={{ config.organization_id }}
+    required fields: module_name
+    risk: external destructive mutation in Zoho Books; approval required
+  update_custom_module_record:
+    endpoint: PUT /{{ record.module_name }}/{{ record.module_id }}?organization_id={{ config.organization_id }}
+    required fields: module_name, module_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_custom_module_record:
+    endpoint: DELETE /{{ record.module_name }}/{{ record.module_id }}?organization_id={{ config.organization_id }}
+    required fields: module_name, module_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_customer_debit_note:
+    endpoint: POST /invoices?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_customer_debit_note:
+    endpoint: PUT /invoices/{{ record.debit_note_id }}?organization_id={{ config.organization_id }}
+    required fields: debit_note_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_customer_debit_note:
+    endpoint: DELETE /invoices/{{ record.debit_note_id }}?organization_id={{ config.organization_id }}
+    required fields: debit_note_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_custom_fields_in_customer_payment:
+    endpoint: PUT /customerpayment/{{ record.customer_payment_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: customer_payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_customer_payment:
+    endpoint: POST /customerpayments?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_customer_payments:
+    endpoint: DELETE /customerpayments?organization_id={{ config.organization_id }}&payment_ids={{ record.payment_ids }}&bulk_delete={{ record.bulk_delete }}
+    required fields: payment_ids, bulk_delete
+    risk: external destructive mutation in Zoho Books; approval required
+  create_customer_payment_refund:
+    endpoint: POST /customerpayments/{{ record.customer_payment_id }}/refunds?organization_id={{ config.organization_id }}
+    required fields: customer_payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_customer_payment_refund:
+    endpoint: PUT /customerpayments/{{ record.customer_payment_id }}/refunds/{{ record.refund_id }}?organization_id={{ config.organization_id }}
+    required fields: customer_payment_id, refund_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_customer_payment_refund:
+    endpoint: DELETE /customerpayments/{{ record.customer_payment_id }}/refunds/{{ record.refund_id }}?organization_id={{ config.organization_id }}
+    required fields: customer_payment_id, refund_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_customer_payment:
+    endpoint: PUT /customerpayments/{{ record.payment_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_customer_payment:
+    endpoint: DELETE /customerpayments/{{ record.payment_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_delivery_challan:
+    endpoint: POST /deliverychallans?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  return_delivery_challans:
+    endpoint: PUT /deliverychallans/return?organization_id={{ config.organization_id }}&deliverychallan_ids={{ record.deliverychallan_ids }}
+    required fields: deliverychallan_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  undo_return_delivery_challans:
+    endpoint: PUT /deliverychallans/undo/return?organization_id={{ config.organization_id }}&deliverychallan_ids={{ record.deliverychallan_ids }}
+    required fields: deliverychallan_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_delivery_challan:
+    endpoint: PUT /deliverychallans/{{ record.deliverychallan_id }}?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_delivery_challan:
+    endpoint: DELETE /deliverychallans/{{ record.deliverychallan_id }}?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_delivery_challan_shipping_address:
+    endpoint: PUT /deliverychallans/{{ record.deliverychallan_id }}/address/shipping?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_delivery_challan_attachment:
+    endpoint: DELETE /deliverychallans/{{ record.deliverychallan_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_delivery_challan_as_delivered:
+    endpoint: POST /deliverychallans/{{ record.deliverychallan_id }}/status/delivered?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_delivery_challan_as_open:
+    endpoint: POST /deliverychallans/{{ record.deliverychallan_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_delivery_challan_as_returned:
+    endpoint: POST /deliverychallans/{{ record.deliverychallan_id }}/status/returned?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_delivery_challan_as_undelivered:
+    endpoint: POST /deliverychallans/{{ record.deliverychallan_id }}/status/undelivered?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_delivery_challan_template:
+    endpoint: PUT /deliverychallans/{{ record.deliverychallan_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: deliverychallan_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_custom_fields_in_estimate:
+    endpoint: PUT /estimate/{{ record.estimate_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_estimate:
+    endpoint: POST /estimates?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_multiple_estimates:
+    endpoint: POST /estimates/email?organization_id={{ config.organization_id }}&estimate_ids={{ record.estimate_ids }}
+    required fields: estimate_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_estimate:
+    endpoint: PUT /estimates/{{ record.estimate_id }}?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_estimate:
+    endpoint: DELETE /estimates/{{ record.estimate_id }}?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_estimate_billing_address:
+    endpoint: PUT /estimates/{{ record.estimate_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_estimate_shipping_address:
+    endpoint: PUT /estimates/{{ record.estimate_id }}/address/shipping?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_estimate:
+    endpoint: POST /estimates/{{ record.estimate_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_estimate_comment:
+    endpoint: POST /estimates/{{ record.estimate_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_estimate_comment:
+    endpoint: PUT /estimates/{{ record.estimate_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: estimate_id, comment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_estimate_comment:
+    endpoint: DELETE /estimates/{{ record.estimate_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: estimate_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_estimate:
+    endpoint: POST /estimates/{{ record.estimate_id }}/email?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_estimate_accepted:
+    endpoint: POST /estimates/{{ record.estimate_id }}/status/accepted?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_estimate_declined:
+    endpoint: POST /estimates/{{ record.estimate_id }}/status/declined?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_estimate_sent:
+    endpoint: POST /estimates/{{ record.estimate_id }}/status/sent?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_estimate:
+    endpoint: POST /estimates/{{ record.estimate_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: estimate_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_estimate_template:
+    endpoint: PUT /estimates/{{ record.estimate_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: estimate_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_employee:
+    endpoint: DELETE /employee/{{ record.employee_id }}?organization_id={{ config.organization_id }}
+    required fields: employee_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_employee:
+    endpoint: POST /employees?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_expense:
+    endpoint: POST /expenses?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_expense:
+    endpoint: PUT /expenses/{{ record.expense_id }}?organization_id={{ config.organization_id }}
+    required fields: expense_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_expense:
+    endpoint: DELETE /expenses/{{ record.expense_id }}?organization_id={{ config.organization_id }}
+    required fields: expense_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_expense_receipt:
+    endpoint: POST /expenses/{{ record.expense_id }}/receipt?organization_id={{ config.organization_id }}
+    required fields: expense_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_expense_receipt:
+    endpoint: DELETE /expenses/{{ record.expense_id }}/receipt?organization_id={{ config.organization_id }}
+    required fields: expense_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_fixed_asset:
+    endpoint: POST /fixedassets?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_fixed_asset:
+    endpoint: PUT /fixedassets/{{ record.fixed_asset_id }}?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_fixed_asset:
+    endpoint: DELETE /fixedassets/{{ record.fixed_asset_id }}?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_fixed_asset_comment:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_fixed_asset_comment:
+    endpoint: DELETE /fixedassets/{{ record.fixed_asset_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  sell_fixed_asset:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/sell?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_fixed_asset_active:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/status/active?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_fixed_asset_cancel:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/status/cancel?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_fixed_asset_draft:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/status/draft?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  write_off_fixed_asset:
+    endpoint: POST /fixedassets/{{ record.fixed_asset_id }}/writeoff?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_fixed_asset_type:
+    endpoint: POST /fixedassettypes?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_fixed_asset_type:
+    endpoint: PUT /fixedassettypes/{{ record.fixed_asset_type_id }}?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_type_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_fixed_asset_type:
+    endpoint: DELETE /fixedassettypes/{{ record.fixed_asset_type_id }}?organization_id={{ config.organization_id }}
+    required fields: fixed_asset_type_id
+    risk: external destructive mutation in Zoho Books; approval required
+  import_customer_using_crm_account_id:
+    endpoint: POST /crm/account/{{ record.crm_account_id }}/import?organization_id={{ config.organization_id }}
+    required fields: crm_account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  import_customer_using_crm_contact_id:
+    endpoint: POST /crm/contact/{{ record.crm_contact_id }}/import?organization_id={{ config.organization_id }}
+    required fields: crm_contact_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  import_item_using_crm_product_id:
+    endpoint: POST /crm/item/{{ record.crm_product_id }}/import?organization_id={{ config.organization_id }}
+    required fields: crm_product_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  import_vendor_using_crm_vendor_id:
+    endpoint: POST /crm/vendor/{{ record.crm_vendor_id }}/import?organization_id={{ config.organization_id }}
+    required fields: crm_vendor_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_einvoice_invoice:
+    endpoint: POST /einvoices/invoices/{{ record.invoice_id }}/cancel?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_custom_fields_in_invoice:
+    endpoint: PUT /invoice/{{ record.invoice_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_invoice:
+    endpoint: POST /invoices?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoices:
+    endpoint: DELETE /invoices?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  approve_invoices:
+    endpoint: POST /invoices/approve?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  preview_invoice_coupons:
+    endpoint: POST /invoices/coupons/preview?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_invoices_einvoice:
+    endpoint: POST /invoices/einvoice/cancel?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  push_invoices_einvoice:
+    endpoint: POST /invoices/einvoice/push?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_invoices:
+    endpoint: POST /invoices/email?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_expense_receipt:
+    endpoint: DELETE /invoices/expenses/{{ record.expense_id }}/receipt?organization_id={{ config.organization_id }}
+    required fields: expense_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_invoices_from_estimates:
+    endpoint: POST /invoices/fromestimates?organization_id={{ config.organization_id }}&estimate_ids={{ record.estimate_ids }}
+    required fields: estimate_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_invoices_from_projects:
+    endpoint: POST /invoices/fromprojects?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_invoice_from_salesorder:
+    endpoint: POST /invoices/fromsalesorder?organization_id={{ config.organization_id }}&salesorder_id={{ record.salesorder_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  map_invoice_with_salesorder:
+    endpoint: POST /invoices/mapwithorder?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoices_shipped:
+    endpoint: POST /invoices/markasshipped?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_invoice_reminder:
+    endpoint: POST /invoices/paymentreminder?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoices_sent:
+    endpoint: POST /invoices/status/sent?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  void_invoices:
+    endpoint: POST /invoices/status/void?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_invoices:
+    endpoint: POST /invoices/submit?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  unmap_invoices_from_salesorders:
+    endpoint: PUT /invoices/unmap/salesorders?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  unship_invoices:
+    endpoint: POST /invoices/unship?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  write_off_invoices:
+    endpoint: POST /invoices/writeoff?organization_id={{ config.organization_id }}&invoice_ids={{ record.invoice_ids }}
+    required fields: invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_invoice_billing_address:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_shipping_address:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/address/shipping?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_advanced_tracking_details:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/advancedtrackingdetails?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  finalize_invoice_approval:
+    endpoint: POST /invoices/{{ record.invoice_id }}/approve/final?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_invoice_attachment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_attachment_preference:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/attachment?organization_id={{ config.organization_id }}&can_send_in_mail={{ record.can_send_in_mail }}
+    required fields: invoice_id, can_send_in_mail
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_attachment:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_invoice_cfdi_status:
+    endpoint: POST /invoices/{{ record.invoice_id }}/cfdi/status?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_invoice_comment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_comment:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, comment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_comment:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  apply_credits_to_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/credits?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_applied_credit:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/creditsapplied/{{ record.creditnotes_invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, creditnotes_invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_invoice_document:
+    endpoint: POST /invoices/{{ record.invoice_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, document_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_document:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  upload_invoice_document:
+    endpoint: POST /invoices/{{ record.invoice_id }}/documents/{{ record.document_id }}/upload?organization_id={{ config.organization_id }}
+    required fields: invoice_id, document_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_invoice_digital_signature:
+    endpoint: POST /invoices/{{ record.invoice_id }}/dsign?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  upload_invoice_digital_signature:
+    endpoint: POST /invoices/{{ record.invoice_id }}/dsign/upload?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_invoice_einvoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/cancel?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  fetch_invoice_einvoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/fetch?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_einvoice_payment_status:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/einvoice/paymentstatus?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  push_invoice_einvoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/push?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_einvoice_status:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/einvoice/status?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_invoice_einvoice_cancelled:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/status/cancel?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoice_einvoice_pushed:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/status/push?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  recall_invoice_einvoice_status:
+    endpoint: POST /invoices/{{ record.invoice_id }}/einvoice/status/recall?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  email_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/email?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  schedule_invoice_email:
+    endpoint: POST /invoices/{{ record.invoice_id }}/email/schedule?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_scheduled_invoice_email:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/email/schedule?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  force_pay_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/forcepay?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_line_item:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/lineitems/{{ record.line_item_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, line_item_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mail_invoice_pdf:
+    endpoint: POST /invoices/{{ record.invoice_id }}/mailpdf?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_invoice_metadata:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/metadata/{{ record.metadata_name }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, metadata_name
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_invoice_asynchronous_online_payment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/onlinepayments/asynchronous?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_invoice_online_payment_bank_account:
+    endpoint: POST /invoices/{{ record.invoice_id }}/onlinepayments/bankaccount?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_invoice_synchronous_online_payment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/onlinepayments/synchronous?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  remind_customer_for_invoice_payment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/paymentreminder?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  disable_invoice_payment_reminder:
+    endpoint: POST /invoices/{{ record.invoice_id }}/paymentreminder/disable?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_invoice_payment_reminder:
+    endpoint: POST /invoices/{{ record.invoice_id }}/paymentreminder/enable?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_payment:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/payments/{{ record.invoice_payment_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, invoice_payment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  apply_pricebook_to_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/pricebooks/{{ record.pricebook_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, pricebook_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  reject_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/reject?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_invoice_dunning_notifications:
+    endpoint: POST /invoices/{{ record.invoice_id }}/senddunningnotifications?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_invoice_retry_sms:
+    endpoint: POST /invoices/{{ record.invoice_id }}/sendretrysms?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_invoice_sms:
+    endpoint: POST /invoices/{{ record.invoice_id }}/sms?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  send_invoice_via_snail_mail:
+    endpoint: POST /invoices/{{ record.invoice_id }}/snailmail?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/status/cancel?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoice_draft:
+    endpoint: POST /invoices/{{ record.invoice_id }}/status/draft?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoice_ready_to_push:
+    endpoint: POST /invoices/{{ record.invoice_id }}/status/readytopush?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoice_sent:
+    endpoint: POST /invoices/{{ record.invoice_id }}/status/sent?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_invoice_void:
+    endpoint: POST /invoices/{{ record.invoice_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_invoice_substatus:
+    endpoint: POST /invoices/{{ record.invoice_id }}/substatus/{{ record.substatus_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, substatus_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_invoice_substatus:
+    endpoint: DELETE /invoices/{{ record.invoice_id }}/substatus/{{ record.substatus_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, substatus_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_invoice_template:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: invoice_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  write_off_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/writeoff?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_write_off_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/writeoff/cancel?organization_id={{ config.organization_id }}
+    required fields: invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_custom_fields_in_item:
+    endpoint: PUT /item/{{ record.item_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_item:
+    endpoint: POST /items?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_items_to_portal:
+    endpoint: POST /items/addtoportal?organization_id={{ config.organization_id }}&item_ids={{ record.item_ids }}
+    required fields: item_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_item:
+    endpoint: PUT /items/{{ record.item_id }}?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_item:
+    endpoint: DELETE /items/{{ record.item_id }}?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_item_active:
+    endpoint: POST /items/{{ record.item_id }}/active?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_item_to_portal:
+    endpoint: POST /items/{{ record.item_id }}/addtoportal?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_item_inactive:
+    endpoint: POST /items/{{ record.item_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  remove_item_from_portal:
+    endpoint: POST /items/{{ record.item_id }}/removefromportal?organization_id={{ config.organization_id }}
+    required fields: item_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_journal:
+    endpoint: POST /journals?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_approve_journals:
+    endpoint: POST /journals/approve?organization_id={{ config.organization_id }}&journal_ids={{ record.journal_ids }}
+    required fields: journal_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_journals:
+    endpoint: DELETE /journals/bulkdelete?organization_id={{ config.organization_id }}&journal_ids={{ record.journal_ids }}
+    required fields: journal_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  bulk_publish_journals:
+    endpoint: POST /journals/status/publish?organization_id={{ config.organization_id }}&journal_ids={{ record.journal_ids }}
+    required fields: journal_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_submit_journals:
+    endpoint: POST /journals/submit?organization_id={{ config.organization_id }}&journal_ids={{ record.journal_ids }}
+    required fields: journal_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_journal:
+    endpoint: PUT /journals/{{ record.journal_id }}?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_journal:
+    endpoint: DELETE /journals/{{ record.journal_id }}?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external destructive mutation in Zoho Books; approval required
+  approve_journal:
+    endpoint: POST /journals/{{ record.journal_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_journal_attachment:
+    endpoint: POST /journals/{{ record.journal_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_journal_comment:
+    endpoint: POST /journals/{{ record.journal_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_journal_comment:
+    endpoint: DELETE /journals/{{ record.journal_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: journal_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  apply_journal_credits_to_bills:
+    endpoint: POST /journals/{{ record.journal_id }}/credits/{{ record.journal_line_id }}/bills?organization_id={{ config.organization_id }}
+    required fields: journal_id, journal_line_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_journal_credits_to_invoices:
+    endpoint: POST /journals/{{ record.journal_id }}/credits/{{ record.journal_line_id }}/invoices?organization_id={{ config.organization_id }}
+    required fields: journal_id, journal_line_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_journal_credits_payables:
+    endpoint: DELETE /journals/{{ record.journal_id }}/credits/{{ record.journal_line_id }}/payables?organization_id={{ config.organization_id }}
+    required fields: journal_id, journal_line_id
+    risk: external destructive mutation in Zoho Books; approval required
+  delete_journal_credits_receivables:
+    endpoint: DELETE /journals/{{ record.journal_id }}/credits/{{ record.journal_line_id }}/receivables?organization_id={{ config.organization_id }}
+    required fields: journal_id, journal_line_id
+    risk: external destructive mutation in Zoho Books; approval required
+  reject_journal:
+    endpoint: POST /journals/{{ record.journal_id }}/reject?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  reverse_journal:
+    endpoint: POST /journals/{{ record.journal_id }}/reverse?organization_id={{ config.organization_id }}&reversal_date={{ record.reversal_date }}&is_reversal_scheduled={{ record.is_reversal_scheduled }}
+    required fields: journal_id, reversal_date, is_reversal_scheduled
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_journal_published:
+    endpoint: POST /journals/{{ record.journal_id }}/status/publish?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_journal_for_approval:
+    endpoint: POST /journals/{{ record.journal_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_recurring_journal:
+    endpoint: POST /recurringjournals?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_recurring_journal:
+    endpoint: PUT /recurringjournals/{{ record.recurring_journal_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_journal:
+    endpoint: DELETE /recurringjournals/{{ record.recurring_journal_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_journal_id
+    risk: external destructive mutation in Zoho Books; approval required
+  resume_recurring_journal:
+    endpoint: POST /recurringjournals/{{ record.recurring_journal_id }}/status/resume?organization_id={{ config.organization_id }}
+    required fields: recurring_journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  stop_recurring_journal:
+    endpoint: POST /recurringjournals/{{ record.recurring_journal_id }}/status/stop?organization_id={{ config.organization_id }}
+    required fields: recurring_journal_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_location:
+    endpoint: POST /locations?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_location:
+    endpoint: PUT /locations/{{ record.location_id }}?organization_id={{ config.organization_id }}
+    required fields: location_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_location:
+    endpoint: DELETE /locations/{{ record.location_id }}?organization_id={{ config.organization_id }}
+    required fields: location_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_location_active:
+    endpoint: POST /locations/{{ record.location_id }}/active?organization_id={{ config.organization_id }}
+    required fields: location_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_location_inactive:
+    endpoint: POST /locations/{{ record.location_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: location_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_location_primary:
+    endpoint: POST /locations/{{ record.location_id }}/markasprimary?organization_id={{ config.organization_id }}
+    required fields: location_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_locations:
+    endpoint: POST /settings/locations/enable?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  writeoff_opening_balance:
+    endpoint: POST /openingbalances/{{ record.opening_balance_id }}/writeoff?organization_id={{ config.organization_id }}
+    required fields: opening_balance_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  cancel_writeoff_opening_balance:
+    endpoint: POST /openingbalances/{{ record.opening_balance_id }}/writeoff/cancel?organization_id={{ config.organization_id }}
+    required fields: opening_balance_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_opening_balance:
+    endpoint: POST /settings/openingbalances?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_opening_balance:
+    endpoint: PUT /settings/openingbalances?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_opening_balance:
+    endpoint: DELETE /settings/openingbalances?organization_id={{ config.organization_id }}
+    risk: external destructive mutation in Zoho Books; approval required
+  create_organization:
+    endpoint: POST /organizations
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_organization_address:
+    endpoint: POST /organizations/address
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_organization_address:
+    endpoint: PUT /organizations/address/{{ record.address_id }}
+    required fields: address_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_organization_address:
+    endpoint: DELETE /organizations/address/{{ record.address_id }}
+    required fields: address_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_organization:
+    endpoint: PUT /organizations/{{ record.organization_id }}
+    required fields: organization_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  copy_organization_settings:
+    endpoint: POST /organizations/{{ record.organization_id }}/copysettings?settings_to_copy={{ record.settings_to_copy }}
+    required fields: organization_id, settings_to_copy
+    risk: external mutation in Zoho Books accounting data; approval required
+  downgrade_organization_to_invoice:
+    endpoint: POST /organizations/{{ record.organization_id }}/downgradetoinvoice
+    required fields: organization_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_organization_inactive:
+    endpoint: POST /organizations/{{ record.organization_id }}/inactive
+    required fields: organization_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  upgrade_organization_to_books:
+    endpoint: POST /organizations/{{ record.organization_id }}/upgradetobooks
+    required fields: organization_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_pricebook:
+    endpoint: POST /pricebooks?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_pricebook:
+    endpoint: PUT /pricebooks/{{ record.pricebook_id }}?organization_id={{ config.organization_id }}
+    required fields: pricebook_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_pricebook:
+    endpoint: DELETE /pricebooks/{{ record.pricebook_id }}?organization_id={{ config.organization_id }}
+    required fields: pricebook_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_pricebook_active:
+    endpoint: POST /pricebooks/{{ record.pricebook_id }}/active?organization_id={{ config.organization_id }}
+    required fields: pricebook_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_pricebook_inactive:
+    endpoint: POST /pricebooks/{{ record.pricebook_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: pricebook_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_project:
+    endpoint: POST /projects?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_project:
+    endpoint: PUT /projects/{{ record.project_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_project:
+    endpoint: DELETE /projects/{{ record.project_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_project_active:
+    endpoint: POST /projects/{{ record.project_id }}/active?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  clone_project:
+    endpoint: POST /projects/{{ record.project_id }}/clone?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_project_comment:
+    endpoint: POST /projects/{{ record.project_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_project_comment:
+    endpoint: DELETE /projects/{{ record.project_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_project_inactive:
+    endpoint: POST /projects/{{ record.project_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_project_task:
+    endpoint: POST /projects/{{ record.project_id }}/tasks?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_project_task:
+    endpoint: PUT /projects/{{ record.project_id }}/tasks/{{ record.task_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id, task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_project_task:
+    endpoint: DELETE /projects/{{ record.project_id }}/tasks/{{ record.task_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id, task_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_project_user:
+    endpoint: POST /projects/{{ record.project_id }}/users?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  invite_project_user:
+    endpoint: POST /projects/{{ record.project_id }}/users/invite?organization_id={{ config.organization_id }}
+    required fields: project_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_project_user:
+    endpoint: PUT /projects/{{ record.project_id }}/users/{{ record.user_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id, user_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_project_user:
+    endpoint: DELETE /projects/{{ record.project_id }}/users/{{ record.user_id }}?organization_id={{ config.organization_id }}
+    required fields: project_id, user_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_custom_fields_in_purchase_order:
+    endpoint: PUT /purchaseorder/{{ record.purchaseorder_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_purchase_order:
+    endpoint: POST /purchaseorders?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_purchase_order:
+    endpoint: PUT /purchaseorders/{{ record.purchaseorder_id }}?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_purchase_order:
+    endpoint: DELETE /purchaseorders/{{ record.purchaseorder_id }}?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_purchase_order_billing_address:
+    endpoint: PUT /purchaseorders/{{ record.purchaseorder_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_purchase_order:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_purchase_order_attachment:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_purchase_order_attachment:
+    endpoint: PUT /purchaseorders/{{ record.purchaseorder_id }}/attachment?organization_id={{ config.organization_id }}&can_send_in_mail={{ record.can_send_in_mail }}
+    required fields: purchaseorder_id, can_send_in_mail
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_purchase_order_attachment:
+    endpoint: DELETE /purchaseorders/{{ record.purchaseorder_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_purchase_order_comment:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_purchase_order_comment:
+    endpoint: PUT /purchaseorders/{{ record.purchaseorder_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id, comment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_purchase_order_comment:
+    endpoint: DELETE /purchaseorders/{{ record.purchaseorder_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_purchase_order:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/email?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  reject_purchase_orders:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/reject?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_purchase_order_billed:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/status/billed?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_purchase_order_cancelled:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/status/cancelled?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_purchase_order_open:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_purchase_order:
+    endpoint: POST /purchaseorders/{{ record.purchaseorder_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_purchase_order_template:
+    endpoint: PUT /purchaseorders/{{ record.purchaseorder_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: purchaseorder_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_bill:
+    endpoint: DELETE /recurring_bills/{{ record.recurring_bill_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_bill_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_recurring_bill:
+    endpoint: POST /recurringbills?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_recurring_bill:
+    endpoint: PUT /recurringbills/{{ record.recurring_bill_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  resume_recurring_bill:
+    endpoint: POST /recurringbills/{{ record.recurring_bill_id }}/status/resume?organization_id={{ config.organization_id }}
+    required fields: recurring_bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  stop_recurring_bill:
+    endpoint: POST /recurringbills/{{ record.recurring_bill_id }}/status/stop?organization_id={{ config.organization_id }}
+    required fields: recurring_bill_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_recurring_expense:
+    endpoint: POST /recurringexpenses?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_recurring_expense:
+    endpoint: PUT /recurringexpenses/{{ record.recurring_expense_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_expense_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_expense:
+    endpoint: DELETE /recurringexpenses/{{ record.recurring_expense_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_expense_id
+    risk: external destructive mutation in Zoho Books; approval required
+  resume_recurring_expense:
+    endpoint: POST /recurringexpenses/{{ record.recurring_expense_id }}/status/resume?organization_id={{ config.organization_id }}
+    required fields: recurring_expense_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  stop_recurring_expense:
+    endpoint: POST /recurringexpenses/{{ record.recurring_expense_id }}/status/stop?organization_id={{ config.organization_id }}
+    required fields: recurring_expense_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_recurring_invoice:
+    endpoint: POST /recurringinvoices?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  resume_recurring_invoices:
+    endpoint: POST /recurringinvoices/status/resume?organization_id={{ config.organization_id }}&recurring_invoice_ids={{ record.recurring_invoice_ids }}
+    required fields: recurring_invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  stop_recurring_invoices:
+    endpoint: POST /recurringinvoices/status/stop?organization_id={{ config.organization_id }}&recurring_invoice_ids={{ record.recurring_invoice_ids }}
+    required fields: recurring_invoice_ids
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_recurring_invoice:
+    endpoint: PUT /recurringinvoices/{{ record.recurring_invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_invoice:
+    endpoint: DELETE /recurringinvoices/{{ record.recurring_invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  disable_recurring_invoice_autobill:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/autobill/disable?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  enable_recurring_invoice_autobill:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/autobill/enable?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_invoice_bank_account:
+    endpoint: DELETE /recurringinvoices/{{ record.recurring_invoice_id }}/bankaccount?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  associate_recurring_invoice_bank_account:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/bankaccount/{{ record.account_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id, account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_recurring_invoice_card:
+    endpoint: DELETE /recurringinvoices/{{ record.recurring_invoice_id }}/card?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  associate_recurring_invoice_card:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/card/{{ record.card_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id, card_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  resume_recurring_invoice:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/status/resume?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  stop_recurring_invoice:
+    endpoint: POST /recurringinvoices/{{ record.recurring_invoice_id }}/status/stop?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_recurring_invoice_template:
+    endpoint: PUT /recurringinvoices/{{ record.recurring_invoice_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: recurring_invoice_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_register_transactions:
+    endpoint: PUT /registers/{{ record.account_id }}/transactions/bulkdelete?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_update_register_transactions:
+    endpoint: PUT /registers/{{ record.account_id }}/transactions/bulkupdate?organization_id={{ config.organization_id }}
+    required fields: account_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_tag:
+    endpoint: POST /reportingtags?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  reorder_tags:
+    endpoint: PUT /reportingtags/reorder?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_default_option:
+    endpoint: POST /reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}&default_option_id={{ record.default_option_id }}
+    required fields: tag_id, default_option_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tag:
+    endpoint: PUT /reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tag:
+    endpoint: DELETE /reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external destructive mutation in Zoho Books; approval required
+  active_tag:
+    endpoint: POST /reportingtags/{{ record.tag_id }}/active?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tag_criteria:
+    endpoint: PUT /reportingtags/{{ record.tag_id }}/criteria?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  inactive_tag:
+    endpoint: POST /reportingtags/{{ record.tag_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  active_tag_option:
+    endpoint: POST /reportingtags/{{ record.tag_id }}/option/(\d+)/active?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  inactive_tag_option:
+    endpoint: POST /reportingtags/{{ record.tag_id }}/option/(\d+)/inactive?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tag_options:
+    endpoint: PUT /reportingtags/{{ record.tag_id }}/options?organization_id={{ config.organization_id }}
+    required fields: tag_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_retainer_invoice:
+    endpoint: POST /retainerinvoices?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_retainer_invoice:
+    endpoint: PUT /retainerinvoices/{{ record.retainerinvoice_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_retainer_invoice:
+    endpoint: DELETE /retainerinvoices/{{ record.retainerinvoice_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_retainer_invoice_billing_address:
+    endpoint: PUT /retainerinvoices/{{ record.retainerinvoice_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_retainer_invoice:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_retainer_invoice_attachment:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_retainer_invoice_comment:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_retainer_invoice_comment:
+    endpoint: PUT /retainerinvoices/{{ record.retainerinvoice_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id, comment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_retainer_invoice_comment:
+    endpoint: DELETE /retainerinvoices/{{ record.retainerinvoice_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  delete_retainer_invoice_attachment:
+    endpoint: DELETE /retainerinvoices/{{ record.retainerinvoice_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_retainer_invoice:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/email?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_retainer_payments_to_invoices:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/invoices?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_applied_retainer_payment:
+    endpoint: DELETE /retainerinvoices/{{ record.retainerinvoice_id }}/invoices/{{ record.invoice_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id, invoice_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_retainer_invoice_async_online_payment:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/onlinepayments/asynchronous?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_retainer_invoice_draft:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/status/draft?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_retainer_invoice_sent:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/status/sent?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_retainer_invoice_void:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_retainer_invoice:
+    endpoint: POST /retainerinvoices/{{ record.retainerinvoice_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_retainer_invoice_template:
+    endpoint: PUT /retainerinvoices/{{ record.retainerinvoice_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: retainerinvoice_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_salesorder_customfields:
+    endpoint: PUT /salesorder/{{ record.salesorder_id }}/customfields?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_sales_order:
+    endpoint: POST /salesorders?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_sales_order:
+    endpoint: DELETE /salesorders/{{ record.salesorder_id }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_sales_order_billing_address:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}/address/billing?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order_shipping_address:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}/address/shipping?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  approve_sales_order:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_sales_order_attachment:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order_attachment_preference:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}/attachment?organization_id={{ config.organization_id }}&can_send_in_mail={{ record.can_send_in_mail }}
+    required fields: salesorder_id, can_send_in_mail
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_sales_order_attachment:
+    endpoint: DELETE /salesorders/{{ record.salesorder_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_sales_order_comment:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order_comment:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id, comment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_sales_order_comment:
+    endpoint: DELETE /salesorders/{{ record.salesorder_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_sales_order:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/email?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_sales_order_as_open:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_sales_order_as_void:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_sales_order:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: salesorder_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order_sub_status:
+    endpoint: POST /salesorders/{{ record.salesorder_id }}/substatus/{{ record.status_code }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id, status_code
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_order_template:
+    endpoint: PUT /salesorders/{{ record.salesorder_id }}/templates/{{ record.template_id }}?organization_id={{ config.organization_id }}
+    required fields: salesorder_id, template_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_sales_receipt:
+    endpoint: POST /salesreceipts?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_sales_receipt:
+    endpoint: PUT /salesreceipts/{{ record.sales_receipt_id }}?organization_id={{ config.organization_id }}
+    required fields: sales_receipt_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_sales_receipt:
+    endpoint: DELETE /salesreceipts/{{ record.sales_receipt_id }}?organization_id={{ config.organization_id }}
+    required fields: sales_receipt_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_sales_receipt:
+    endpoint: POST /salesreceipts/{{ record.sales_receipt_id }}/email
+    required fields: sales_receipt_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_task:
+    endpoint: POST /tasks?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tasks:
+    endpoint: PUT /tasks?organization_id={{ config.organization_id }}&bulk_update={{ record.bulk_update }}
+    required fields: bulk_update
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tasks:
+    endpoint: DELETE /tasks?organization_id={{ config.organization_id }}&task_ids={{ record.task_ids }}
+    required fields: task_ids
+    risk: external destructive mutation in Zoho Books; approval required
+  update_a_task:
+    endpoint: PUT /tasks/{{ record.task_id }}?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_task:
+    endpoint: DELETE /tasks/{{ record.task_id }}?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_task_attachment:
+    endpoint: POST /tasks/{{ record.task_id }}/attachment?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  add_task_comment:
+    endpoint: POST /tasks/{{ record.task_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_task_comment:
+    endpoint: DELETE /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: task_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  delete_task_document:
+    endpoint: DELETE /tasks/{{ record.task_id }}/documents/{{ record.document_id }}?organization_id={{ config.organization_id }}
+    required fields: task_id, document_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_task_as_completed:
+    endpoint: POST /tasks/{{ record.task_id }}/markascompleted?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_task_as_ongoing:
+    endpoint: POST /tasks/{{ record.task_id }}/markasongoing?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_task_as_open:
+    endpoint: POST /tasks/{{ record.task_id }}/markasopen?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_percentage_task:
+    endpoint: POST /tasks/{{ record.task_id }}/percentage?organization_id={{ config.organization_id }}
+    required fields: task_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_tax_authority:
+    endpoint: POST /settings/taxauthorities?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tax_authority:
+    endpoint: PUT /settings/taxauthorities/{{ record.tax_authority_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_authority_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tax_authority:
+    endpoint: DELETE /settings/taxauthorities/{{ record.tax_authority_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_authority_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_tax:
+    endpoint: POST /settings/taxes?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tax:
+    endpoint: PUT /settings/taxes/{{ record.tax_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tax:
+    endpoint: DELETE /settings/taxes/{{ record.tax_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_tax_exemption:
+    endpoint: POST /settings/taxexemptions?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tax_exemption:
+    endpoint: PUT /settings/taxexemptions/{{ record.tax_exemption_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_exemption_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tax_exemption:
+    endpoint: DELETE /settings/taxexemptions/{{ record.tax_exemption_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_exemption_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_tax_group:
+    endpoint: POST /settings/taxgroups?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_tax_group:
+    endpoint: PUT /settings/taxgroups/{{ record.tax_group_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_group_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_tax_group:
+    endpoint: DELETE /settings/taxgroups/{{ record.tax_group_id }}?organization_id={{ config.organization_id }}
+    required fields: tax_group_id
+    risk: external destructive mutation in Zoho Books; approval required
+  create_time_entries:
+    endpoint: POST /projects/timeentries?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_time_entries:
+    endpoint: DELETE /projects/timeentries?organization_id={{ config.organization_id }}
+    risk: external destructive mutation in Zoho Books; approval required
+  stop_entry_timer:
+    endpoint: POST /projects/timeentries/timer/stop?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_time_entry:
+    endpoint: PUT /projects/timeentries/{{ record.time_entry_id }}?organization_id={{ config.organization_id }}
+    required fields: time_entry_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_time_entry:
+    endpoint: DELETE /projects/timeentries/{{ record.time_entry_id }}?organization_id={{ config.organization_id }}
+    required fields: time_entry_id
+    risk: external destructive mutation in Zoho Books; approval required
+  start_entry_timer:
+    endpoint: POST /projects/timeentries/{{ record.time_entry_id }}/timer/start?organization_id={{ config.organization_id }}
+    required fields: time_entry_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_transaction_lock:
+    endpoint: PUT /transactionlock?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_transaction_lock:
+    endpoint: DELETE /transactionlock?organization_id={{ config.organization_id }}&transaction_lock_id={{ record.transaction_lock_id }}
+    required fields: transaction_lock_id
+    risk: external destructive mutation in Zoho Books; approval required
+  update_partial_unlock:
+    endpoint: PUT /transactionlock/partialunlock?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_user:
+    endpoint: POST /users?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_user:
+    endpoint: PUT /users/{{ record.user_id }}?organization_id={{ config.organization_id }}
+    required fields: user_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_user:
+    endpoint: DELETE /users/{{ record.user_id }}?organization_id={{ config.organization_id }}
+    required fields: user_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_user_active:
+    endpoint: POST /users/{{ record.user_id }}/active?organization_id={{ config.organization_id }}
+    required fields: user_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_user_inactive:
+    endpoint: POST /users/{{ record.user_id }}/inactive?organization_id={{ config.organization_id }}
+    required fields: user_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  invite_user:
+    endpoint: POST /users/{{ record.user_id }}/invite?organization_id={{ config.organization_id }}
+    required fields: user_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_vendor_credit:
+    endpoint: POST /vendorcredits?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_vendor_credit:
+    endpoint: PUT /vendorcredits/{{ record.vendor_credit_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_credit:
+    endpoint: DELETE /vendorcredits/{{ record.vendor_credit_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external destructive mutation in Zoho Books; approval required
+  approve_vendor_credit:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/approve?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  apply_credits_to_a_bill:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/bills?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_credit_bill:
+    endpoint: DELETE /vendorcredits/{{ record.vendor_credit_id }}/bills/{{ record.vendor_credit_bill_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id, vendor_credit_bill_id
+    risk: external destructive mutation in Zoho Books; approval required
+  add_vendor_credit_comment:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/comments?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_credit_comment:
+    endpoint: DELETE /vendorcredits/{{ record.vendor_credit_id }}/comments/{{ record.comment_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id, comment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  refund_vendor_credit:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/refunds?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_vendor_credit_refund:
+    endpoint: PUT /vendorcredits/{{ record.vendor_credit_id }}/refunds/{{ record.vendor_credit_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id, vendor_credit_refund_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_credit_refund:
+    endpoint: DELETE /vendorcredits/{{ record.vendor_credit_id }}/refunds/{{ record.vendor_credit_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id, vendor_credit_refund_id
+    risk: external destructive mutation in Zoho Books; approval required
+  mark_vendor_credit_open:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/status/open?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  mark_vendor_credit_void:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/status/void?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  submit_vendor_credit:
+    endpoint: POST /vendorcredits/{{ record.vendor_credit_id }}/submit?organization_id={{ config.organization_id }}
+    required fields: vendor_credit_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  create_vendor_payment:
+    endpoint: POST /vendorpayments?organization_id={{ config.organization_id }}
+    risk: external mutation in Zoho Books accounting data; approval required
+  bulk_delete_vendor_payments:
+    endpoint: DELETE /vendorpayments?organization_id={{ config.organization_id }}&vendorpayment_id={{ record.vendorpayment_id }}&bulk_delete={{ record.bulk_delete }}
+    required fields: vendorpayment_id, bulk_delete
+    risk: external destructive mutation in Zoho Books; approval required
+  update_vendor_payment:
+    endpoint: PUT /vendorpayments/{{ record.payment_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_payment:
+    endpoint: DELETE /vendorpayments/{{ record.payment_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external destructive mutation in Zoho Books; approval required
+  email_vendor_payment:
+    endpoint: POST /vendorpayments/{{ record.payment_id }}/email?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  refund_excess_vendor_payment:
+    endpoint: POST /vendorpayments/{{ record.payment_id }}/refunds?organization_id={{ config.organization_id }}
+    required fields: payment_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  update_vendor_payment_refund:
+    endpoint: PUT /vendorpayments/{{ record.payment_id }}/refunds/{{ record.vendorpayment_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id, vendorpayment_refund_id
+    risk: external mutation in Zoho Books accounting data; approval required
+  delete_vendor_payment_refund:
+    endpoint: DELETE /vendorpayments/{{ record.payment_id }}/refunds/{{ record.vendorpayment_refund_id }}?organization_id={{ config.organization_id }}
+    required fields: payment_id, vendorpayment_refund_id
+    risk: external destructive mutation in Zoho Books; approval required
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoho Books API read of accounting/contact data
+  write risk: external Zoho Books API mutation of accounting, contact, inventory, project, banking, tax, and organization-adjacent records
+  approval: writes require explicit user approval before execution; destructive deletes are marked destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +3029,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect zoho-books before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

@@ -1,0 +1,80 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/c/{{ config.company_id }}/offers", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "recruitee api_key is missing or invalid; re-run pm credentials add recruitee" },
+      { "status": 403, "hint": "recruitee account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "recruitee rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "offers",
+      "path": "/c/{{ config.company_id }}/offers",
+      "records": { "path": "offers" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "title": "{{ record.title }}",
+        "status": "{{ record.status }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/offers.json"
+    },
+    {
+      "name": "candidates",
+      "path": "/c/{{ config.company_id }}/candidates",
+      "records": { "path": "candidates" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "email": "{{ record.email }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "departments",
+      "path": "/c/{{ config.company_id }}/departments",
+      "records": { "path": "departments" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "sources",
+      "path": "/c/{{ config.company_id }}/sources",
+      "records": { "path": "sources" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "tags",
+      "path": "/c/{{ config.company_id }}/tags",
+      "records": { "path": "tags" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/tags.json"
+    }
+  ]
+}

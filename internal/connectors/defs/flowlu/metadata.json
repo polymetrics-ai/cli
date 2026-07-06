@@ -1,0 +1,23 @@
+{
+  "name": "flowlu",
+  "display_name": "Flowlu",
+  "description": "Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues through the Flowlu REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.flowlu.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Flowlu CRM read of accounts/leads/tasks/projects/invoices/agile issues",
+    "approval": "none; read-only API-key access"
+  }
+}

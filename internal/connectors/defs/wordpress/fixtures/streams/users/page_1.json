@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/users", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture User One",
+        "url": "",
+        "description": "",
+        "link": "https://example.com/author/fixture-user-one/",
+        "slug": "fixture-user-one",
+        "avatar_urls": { "24": "https://example.com/avatar/1?s=24" },
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/users/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/users" }]
+        }
+      },
+      {
+        "id": 2,
+        "name": "Fixture User Two",
+        "url": "",
+        "description": "",
+        "link": "https://example.com/author/fixture-user-two/",
+        "slug": "fixture-user-two",
+        "avatar_urls": { "24": "https://example.com/avatar/2?s=24" },
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/users/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/users" }]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["Id"],
+  "required": ["Id"],
+  "properties": {
+    "Id": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "CampaignType": { "type": ["string", "null"] },
+    "BudgetType": { "type": ["string", "null"] },
+    "DailyBudget": { "type": ["number", "null"] },
+    "TimeZone": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "actions": [
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/products",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "string" },
+          "currency_code": { "type": "string" },
+          "product_type": { "type": "string" }
+        }
+      },
+      "risk": "creates a new sellable product (no file attachment; SendOwl's file-upload create path is a separate multipart-only endpoint this dialect cannot express, see docs.md Known limits); external mutation, approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "string" },
+          "currency_code": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing product's name/price/currency; affects future checkouts of this product"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a product; breaks any existing order-fulfillment/download links referencing it"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/subscriptions",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "string" },
+          "currency_code": { "type": "string" },
+          "period": { "type": "string" }
+        }
+      },
+      "risk": "creates a new recurring-billing subscription product; external mutation, approval required"
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/subscriptions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing subscription's name/price; affects future recurring charges for new subscribers to this plan"
+    },
+    {
+      "name": "delete_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/subscriptions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a subscription product; does not itself cancel any buyer's already-active recurring order (see cancel_order_subscription)"
+    },
+    {
+      "name": "create_discount",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1_2/discounts",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string" },
+          "discount_percentage": { "type": "string" },
+          "discount_flat_rate": { "type": "string" },
+          "max_uses": { "type": "string" },
+          "end_at": { "type": "string" }
+        }
+      },
+      "risk": "creates a new discount code usable at checkout; external mutation, approval required"
+    },
+    {
+      "name": "update_discount",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1_2/discounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "discount_percentage": { "type": "string" },
+          "max_uses": { "type": "string" },
+          "end_at": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing discount's percentage/usage cap/expiry; affects all buyers subsequently applying this code"
+    },
+    {
+      "name": "delete_discount",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1_2/discounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a discount code; any buyer with the code saved can no longer redeem it"
+    },
+    {
+      "name": "update_bundle",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/packages/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing bundle's name/price; affects future checkouts of this bundle"
+    },
+    {
+      "name": "delete_bundle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/packages/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a bundle; breaks any existing order-fulfillment links referencing it"
+    },
+    {
+      "name": "refund_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/orders/{{ record.id }}/refund",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "body_fields": ["amount", "cancel_subscription", "revoke_access"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "amount"],
+        "properties": {
+          "id": { "type": "string" },
+          "amount": { "type": "string" },
+          "cancel_subscription": { "type": "boolean" },
+          "revoke_access": { "type": "boolean" }
+        }
+      },
+      "risk": "issues a real financial refund against the buyer's original payment method; irreversible external money movement, approval required"
+    },
+    {
+      "name": "cancel_order_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/orders/{{ record.id }}/cancel_subscription",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "cancels the buyer's active recurring subscription tied to this order; stops future recurring charges, irreversible without the buyer re-subscribing"
+    },
+    {
+      "name": "resend_order_email",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/orders/{{ record.id }}/resend_email",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "body_fields": ["type"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "resends the order confirmation/receipt/download email to the buyer's address on file; low-risk external side effect, no approval required"
+    }
+  ]
+}

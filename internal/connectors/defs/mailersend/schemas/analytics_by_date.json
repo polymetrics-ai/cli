@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "analytics_by_date",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "string" },
+    "queued": { "type": ["integer", "null"] },
+    "sent": { "type": ["integer", "null"] },
+    "delivered": { "type": ["integer", "null"] },
+    "opened": { "type": ["integer", "null"] },
+    "clicked": { "type": ["integer", "null"] },
+    "soft_bounced": { "type": ["integer", "null"] },
+    "hard_bounced": { "type": ["integer", "null"] },
+    "unsubscribed": { "type": ["integer", "null"] },
+    "spam_complaints": { "type": ["integer", "null"] },
+    "opened_unique": { "type": ["integer", "null"] },
+    "clicked_unique": { "type": ["integer", "null"] },
+    "survey_opened": { "type": ["integer", "null"] },
+    "survey_submitted": { "type": ["integer", "null"] }
+  }
+}

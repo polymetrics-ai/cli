@@ -1,0 +1,25 @@
+{
+  "name": "flexport",
+  "display_name": "Flexport",
+  "description": "Reads Flexport logistics, network, billing, booking, purchase order, product, document, port, and webhook-event data through the Flexport REST API; writes supported JSON create/update actions.",
+  "integration_type": "api",
+  "docs_url": "https://developers.flexport.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Flexport API read of freight/logistics, network, purchase order, booking, document, webhook event, and billing data",
+    "write": "creates or updates Flexport bookings, booking amendments, booking line items, network companies/entities/contacts/locations, products, shipment metadata, shipment share links, and base64 JSON document uploads",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

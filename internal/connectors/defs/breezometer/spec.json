@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Breezometer Connection Specification",
+  "type": "object",
+  "required": ["api_key", "latitude", "longitude"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.breezometer.com",
+      "description": "BreezoMeter API base URL override for tests or proxies."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "BreezoMeter API key, sent as the `key` query parameter; never logged."
+    },
+    "latitude": {
+      "type": "string",
+      "description": "Latitude of the location to read conditions/forecasts for."
+    },
+    "longitude": {
+      "type": "string",
+      "description": "Longitude of the location to read conditions/forecasts for."
+    },
+    "hours_to_forecast": {
+      "type": "string",
+      "description": "Optional `hours` query param for the air_quality_forecast stream (number of hourly forecast points to return)."
+    },
+    "historic_hours": {
+      "type": "string",
+      "description": "Optional `hours` query param for the air_quality_history stream (number of hourly historical points to return)."
+    },
+    "days_to_forecast": {
+      "type": "string",
+      "description": "Optional `days` query param for the pollen_forecast stream (number of daily forecast points to return)."
+    },
+    "weather_days_to_forecast": {
+      "type": "string",
+      "description": "Optional `days` query param for the weather_daily_forecast stream (number of daily weather forecast points to return, 1-5)."
+    },
+    "wildfire_radius_km": {
+      "type": "string",
+      "description": "Required `radius` query param (kilometers) for the wildfire_active_tracking and wildfire_burnt_area streams: desired search radius from latitude/longitude, 5-100 km."
+    },
+    "wildfire_days_from_extinguish": {
+      "type": "string",
+      "description": "Optional `daysFromExtinguish` query param for the wildfire_burnt_area stream (days since a fire was marked extinguished to still include its burnt area)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

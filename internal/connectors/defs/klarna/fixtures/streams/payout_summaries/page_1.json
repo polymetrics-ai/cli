@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settlements/v1/payouts/summary",
+    "query": {
+      "start_date": "synthetic-conformance-value",
+      "end_date": "synthetic-conformance-value",
+      "currency_code": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "summary_total_fee_correction_amount": 0,
+        "summary_payout_date_start": "2026-01-01T00:00:00Z",
+        "summary_total_release_amount": 10,
+        "summary_settlement_currency": "EUR",
+        "summary_payout_date_end": "2026-01-31T23:59:59Z",
+        "summary_total_tax_amount": 20,
+        "summary_total_settlement_amount": 1000,
+        "summary_total_holdback_amount": 30,
+        "summary_total_reversal_amount": 40,
+        "summary_total_return_amount": 50,
+        "summary_total_fee_amount": 60,
+        "summary_total_commission_amount": 70,
+        "summary_total_commission_reversal_amount": 0,
+        "summary_total_sale_amount": 1200,
+        "summary_total_repay_amount": 80
+      }
+    ]
+  }
+}

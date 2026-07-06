@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/tables"
+  },
+  "response": {
+    "status": 200,
+    "body": { "tables": [] }
+  }
+}

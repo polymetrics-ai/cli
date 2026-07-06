@@ -1,0 +1,1014 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uid": "agr_fixture_1",
+        "id": 1,
+        "title": "Fixture Agreement 1",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_2",
+        "id": 2,
+        "title": "Fixture Agreement 2",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_3",
+        "id": 3,
+        "title": "Fixture Agreement 3",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_4",
+        "id": 4,
+        "title": "Fixture Agreement 4",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_5",
+        "id": 5,
+        "title": "Fixture Agreement 5",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_6",
+        "id": 6,
+        "title": "Fixture Agreement 6",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_7",
+        "id": 7,
+        "title": "Fixture Agreement 7",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_8",
+        "id": 8,
+        "title": "Fixture Agreement 8",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_9",
+        "id": 9,
+        "title": "Fixture Agreement 9",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_10",
+        "id": 10,
+        "title": "Fixture Agreement 10",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_11",
+        "id": 11,
+        "title": "Fixture Agreement 11",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_12",
+        "id": 12,
+        "title": "Fixture Agreement 12",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_13",
+        "id": 13,
+        "title": "Fixture Agreement 13",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_14",
+        "id": 14,
+        "title": "Fixture Agreement 14",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_15",
+        "id": 15,
+        "title": "Fixture Agreement 15",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_16",
+        "id": 16,
+        "title": "Fixture Agreement 16",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_17",
+        "id": 17,
+        "title": "Fixture Agreement 17",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_18",
+        "id": 18,
+        "title": "Fixture Agreement 18",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_19",
+        "id": 19,
+        "title": "Fixture Agreement 19",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_20",
+        "id": 20,
+        "title": "Fixture Agreement 20",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_21",
+        "id": 21,
+        "title": "Fixture Agreement 21",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_22",
+        "id": 22,
+        "title": "Fixture Agreement 22",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_23",
+        "id": 23,
+        "title": "Fixture Agreement 23",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_24",
+        "id": 24,
+        "title": "Fixture Agreement 24",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_25",
+        "id": 25,
+        "title": "Fixture Agreement 25",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_26",
+        "id": 26,
+        "title": "Fixture Agreement 26",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_27",
+        "id": 27,
+        "title": "Fixture Agreement 27",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_28",
+        "id": 28,
+        "title": "Fixture Agreement 28",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_29",
+        "id": 29,
+        "title": "Fixture Agreement 29",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_30",
+        "id": 30,
+        "title": "Fixture Agreement 30",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_31",
+        "id": 31,
+        "title": "Fixture Agreement 31",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_32",
+        "id": 32,
+        "title": "Fixture Agreement 32",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_33",
+        "id": 33,
+        "title": "Fixture Agreement 33",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_34",
+        "id": 34,
+        "title": "Fixture Agreement 34",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_35",
+        "id": 35,
+        "title": "Fixture Agreement 35",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_36",
+        "id": 36,
+        "title": "Fixture Agreement 36",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_37",
+        "id": 37,
+        "title": "Fixture Agreement 37",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_38",
+        "id": 38,
+        "title": "Fixture Agreement 38",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_39",
+        "id": 39,
+        "title": "Fixture Agreement 39",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_40",
+        "id": 40,
+        "title": "Fixture Agreement 40",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_41",
+        "id": 41,
+        "title": "Fixture Agreement 41",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_42",
+        "id": 42,
+        "title": "Fixture Agreement 42",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_43",
+        "id": 43,
+        "title": "Fixture Agreement 43",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_44",
+        "id": 44,
+        "title": "Fixture Agreement 44",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_45",
+        "id": 45,
+        "title": "Fixture Agreement 45",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_46",
+        "id": 46,
+        "title": "Fixture Agreement 46",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_47",
+        "id": 47,
+        "title": "Fixture Agreement 47",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_48",
+        "id": 48,
+        "title": "Fixture Agreement 48",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_49",
+        "id": 49,
+        "title": "Fixture Agreement 49",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_50",
+        "id": 50,
+        "title": "Fixture Agreement 50",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_51",
+        "id": 51,
+        "title": "Fixture Agreement 51",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_52",
+        "id": 52,
+        "title": "Fixture Agreement 52",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_53",
+        "id": 53,
+        "title": "Fixture Agreement 53",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_54",
+        "id": 54,
+        "title": "Fixture Agreement 54",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_55",
+        "id": 55,
+        "title": "Fixture Agreement 55",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_56",
+        "id": 56,
+        "title": "Fixture Agreement 56",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_57",
+        "id": 57,
+        "title": "Fixture Agreement 57",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_58",
+        "id": 58,
+        "title": "Fixture Agreement 58",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_59",
+        "id": 59,
+        "title": "Fixture Agreement 59",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_60",
+        "id": 60,
+        "title": "Fixture Agreement 60",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_61",
+        "id": 61,
+        "title": "Fixture Agreement 61",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_62",
+        "id": 62,
+        "title": "Fixture Agreement 62",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_63",
+        "id": 63,
+        "title": "Fixture Agreement 63",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_64",
+        "id": 64,
+        "title": "Fixture Agreement 64",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_65",
+        "id": 65,
+        "title": "Fixture Agreement 65",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_66",
+        "id": 66,
+        "title": "Fixture Agreement 66",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_67",
+        "id": 67,
+        "title": "Fixture Agreement 67",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_68",
+        "id": 68,
+        "title": "Fixture Agreement 68",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_69",
+        "id": 69,
+        "title": "Fixture Agreement 69",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_70",
+        "id": 70,
+        "title": "Fixture Agreement 70",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_71",
+        "id": 71,
+        "title": "Fixture Agreement 71",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_72",
+        "id": 72,
+        "title": "Fixture Agreement 72",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_73",
+        "id": 73,
+        "title": "Fixture Agreement 73",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_74",
+        "id": 74,
+        "title": "Fixture Agreement 74",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_75",
+        "id": 75,
+        "title": "Fixture Agreement 75",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_76",
+        "id": 76,
+        "title": "Fixture Agreement 76",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_77",
+        "id": 77,
+        "title": "Fixture Agreement 77",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_78",
+        "id": 78,
+        "title": "Fixture Agreement 78",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_79",
+        "id": 79,
+        "title": "Fixture Agreement 79",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_80",
+        "id": 80,
+        "title": "Fixture Agreement 80",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_81",
+        "id": 81,
+        "title": "Fixture Agreement 81",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_82",
+        "id": 82,
+        "title": "Fixture Agreement 82",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_83",
+        "id": 83,
+        "title": "Fixture Agreement 83",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_84",
+        "id": 84,
+        "title": "Fixture Agreement 84",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_85",
+        "id": 85,
+        "title": "Fixture Agreement 85",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_86",
+        "id": 86,
+        "title": "Fixture Agreement 86",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_87",
+        "id": 87,
+        "title": "Fixture Agreement 87",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_88",
+        "id": 88,
+        "title": "Fixture Agreement 88",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_89",
+        "id": 89,
+        "title": "Fixture Agreement 89",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_90",
+        "id": 90,
+        "title": "Fixture Agreement 90",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_91",
+        "id": 91,
+        "title": "Fixture Agreement 91",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_92",
+        "id": 92,
+        "title": "Fixture Agreement 92",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_93",
+        "id": 93,
+        "title": "Fixture Agreement 93",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_94",
+        "id": 94,
+        "title": "Fixture Agreement 94",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_95",
+        "id": 95,
+        "title": "Fixture Agreement 95",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_96",
+        "id": 96,
+        "title": "Fixture Agreement 96",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_97",
+        "id": 97,
+        "title": "Fixture Agreement 97",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_98",
+        "id": 98,
+        "title": "Fixture Agreement 98",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_99",
+        "id": 99,
+        "title": "Fixture Agreement 99",
+        "status": "DRAFT",
+        "stage": "REVIEW",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      },
+      {
+        "uid": "agr_fixture_100",
+        "id": 100,
+        "title": "Fixture Agreement 100",
+        "status": "SIGNED",
+        "stage": "EXECUTED",
+        "organizationId": 42,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

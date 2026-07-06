@@ -1,0 +1,8 @@
+{
+  "record": { "course_id": 1001, "language": "es" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/headless/translation/1001/es"
+  },
+  "response": { "status": 200, "body": { "success": true } }
+}

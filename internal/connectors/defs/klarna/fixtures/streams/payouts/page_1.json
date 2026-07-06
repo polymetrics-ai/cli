@@ -1,0 +1,1217 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settlements/v1/payouts",
+    "query": {
+      "size": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payouts": [
+        {
+          "payout_reference": "payout_fixture_1",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_1",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 1000,
+            "sale_amount": 1200,
+            "return_amount": 0,
+            "fee_amount": 200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_2",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_2",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 2000,
+            "sale_amount": 2400,
+            "return_amount": 0,
+            "fee_amount": 400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_3",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_3",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 3000,
+            "sale_amount": 3600,
+            "return_amount": 0,
+            "fee_amount": 600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_4",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_4",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 4000,
+            "sale_amount": 4800,
+            "return_amount": 0,
+            "fee_amount": 800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_5",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_5",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 5000,
+            "sale_amount": 6000,
+            "return_amount": 0,
+            "fee_amount": 1000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_6",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_6",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 6000,
+            "sale_amount": 7200,
+            "return_amount": 0,
+            "fee_amount": 1200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_7",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_7",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 7000,
+            "sale_amount": 8400,
+            "return_amount": 0,
+            "fee_amount": 1400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_8",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_8",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 8000,
+            "sale_amount": 9600,
+            "return_amount": 0,
+            "fee_amount": 1600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_9",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_9",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 9000,
+            "sale_amount": 10800,
+            "return_amount": 0,
+            "fee_amount": 1800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_10",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_10",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 10000,
+            "sale_amount": 12000,
+            "return_amount": 0,
+            "fee_amount": 2000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_11",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_11",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 11000,
+            "sale_amount": 13200,
+            "return_amount": 0,
+            "fee_amount": 2200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_12",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_12",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 12000,
+            "sale_amount": 14400,
+            "return_amount": 0,
+            "fee_amount": 2400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_13",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_13",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 13000,
+            "sale_amount": 15600,
+            "return_amount": 0,
+            "fee_amount": 2600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_14",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_14",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 14000,
+            "sale_amount": 16800,
+            "return_amount": 0,
+            "fee_amount": 2800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_15",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_15",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 15000,
+            "sale_amount": 18000,
+            "return_amount": 0,
+            "fee_amount": 3000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_16",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_16",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 16000,
+            "sale_amount": 19200,
+            "return_amount": 0,
+            "fee_amount": 3200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_17",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_17",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 17000,
+            "sale_amount": 20400,
+            "return_amount": 0,
+            "fee_amount": 3400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_18",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_18",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 18000,
+            "sale_amount": 21600,
+            "return_amount": 0,
+            "fee_amount": 3600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_19",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_19",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 19000,
+            "sale_amount": 22800,
+            "return_amount": 0,
+            "fee_amount": 3800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_20",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_20",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 20000,
+            "sale_amount": 24000,
+            "return_amount": 0,
+            "fee_amount": 4000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_21",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_21",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 21000,
+            "sale_amount": 25200,
+            "return_amount": 0,
+            "fee_amount": 4200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_22",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_22",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 22000,
+            "sale_amount": 26400,
+            "return_amount": 0,
+            "fee_amount": 4400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_23",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_23",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 23000,
+            "sale_amount": 27600,
+            "return_amount": 0,
+            "fee_amount": 4600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_24",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_24",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 24000,
+            "sale_amount": 28800,
+            "return_amount": 0,
+            "fee_amount": 4800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_25",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_25",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 25000,
+            "sale_amount": 30000,
+            "return_amount": 0,
+            "fee_amount": 5000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_26",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_26",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 26000,
+            "sale_amount": 31200,
+            "return_amount": 0,
+            "fee_amount": 5200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_27",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_27",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 27000,
+            "sale_amount": 32400,
+            "return_amount": 0,
+            "fee_amount": 5400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_28",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_28",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 28000,
+            "sale_amount": 33600,
+            "return_amount": 0,
+            "fee_amount": 5600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_29",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_29",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 29000,
+            "sale_amount": 34800,
+            "return_amount": 0,
+            "fee_amount": 5800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_30",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_30",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 30000,
+            "sale_amount": 36000,
+            "return_amount": 0,
+            "fee_amount": 6000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_31",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_31",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 31000,
+            "sale_amount": 37200,
+            "return_amount": 0,
+            "fee_amount": 6200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_32",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_32",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 32000,
+            "sale_amount": 38400,
+            "return_amount": 0,
+            "fee_amount": 6400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_33",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_33",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 33000,
+            "sale_amount": 39600,
+            "return_amount": 0,
+            "fee_amount": 6600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_34",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_34",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 34000,
+            "sale_amount": 40800,
+            "return_amount": 0,
+            "fee_amount": 6800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_35",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_35",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 35000,
+            "sale_amount": 42000,
+            "return_amount": 0,
+            "fee_amount": 7000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_36",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_36",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 36000,
+            "sale_amount": 43200,
+            "return_amount": 0,
+            "fee_amount": 7200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_37",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_37",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 37000,
+            "sale_amount": 44400,
+            "return_amount": 0,
+            "fee_amount": 7400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_38",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_38",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 38000,
+            "sale_amount": 45600,
+            "return_amount": 0,
+            "fee_amount": 7600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_39",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_39",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 39000,
+            "sale_amount": 46800,
+            "return_amount": 0,
+            "fee_amount": 7800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_40",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_40",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 40000,
+            "sale_amount": 48000,
+            "return_amount": 0,
+            "fee_amount": 8000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_41",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_41",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 41000,
+            "sale_amount": 49200,
+            "return_amount": 0,
+            "fee_amount": 8200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_42",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_42",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 42000,
+            "sale_amount": 50400,
+            "return_amount": 0,
+            "fee_amount": 8400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_43",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_43",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 43000,
+            "sale_amount": 51600,
+            "return_amount": 0,
+            "fee_amount": 8600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_44",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_44",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 44000,
+            "sale_amount": 52800,
+            "return_amount": 0,
+            "fee_amount": 8800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_45",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_45",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 45000,
+            "sale_amount": 54000,
+            "return_amount": 0,
+            "fee_amount": 9000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_46",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_46",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 46000,
+            "sale_amount": 55200,
+            "return_amount": 0,
+            "fee_amount": 9200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_47",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_47",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 47000,
+            "sale_amount": 56400,
+            "return_amount": 0,
+            "fee_amount": 9400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_48",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_48",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 48000,
+            "sale_amount": 57600,
+            "return_amount": 0,
+            "fee_amount": 9600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_49",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_49",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 49000,
+            "sale_amount": 58800,
+            "return_amount": 0,
+            "fee_amount": 9800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_50",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_50",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 50000,
+            "sale_amount": 60000,
+            "return_amount": 0,
+            "fee_amount": 10000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_51",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_51",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 51000,
+            "sale_amount": 61200,
+            "return_amount": 0,
+            "fee_amount": 10200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_52",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_52",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 52000,
+            "sale_amount": 62400,
+            "return_amount": 0,
+            "fee_amount": 10400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_53",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_53",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 53000,
+            "sale_amount": 63600,
+            "return_amount": 0,
+            "fee_amount": 10600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_54",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_54",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 54000,
+            "sale_amount": 64800,
+            "return_amount": 0,
+            "fee_amount": 10800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_55",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_55",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 55000,
+            "sale_amount": 66000,
+            "return_amount": 0,
+            "fee_amount": 11000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_56",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_56",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 56000,
+            "sale_amount": 67200,
+            "return_amount": 0,
+            "fee_amount": 11200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_57",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_57",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 57000,
+            "sale_amount": 68400,
+            "return_amount": 0,
+            "fee_amount": 11400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_58",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_58",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 58000,
+            "sale_amount": 69600,
+            "return_amount": 0,
+            "fee_amount": 11600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_59",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_59",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 59000,
+            "sale_amount": 70800,
+            "return_amount": 0,
+            "fee_amount": 11800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_60",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_60",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 60000,
+            "sale_amount": 72000,
+            "return_amount": 0,
+            "fee_amount": 12000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_61",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_61",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 61000,
+            "sale_amount": 73200,
+            "return_amount": 0,
+            "fee_amount": 12200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_62",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_62",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 62000,
+            "sale_amount": 74400,
+            "return_amount": 0,
+            "fee_amount": 12400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_63",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_63",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 63000,
+            "sale_amount": 75600,
+            "return_amount": 0,
+            "fee_amount": 12600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_64",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_64",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 64000,
+            "sale_amount": 76800,
+            "return_amount": 0,
+            "fee_amount": 12800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_65",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_65",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 65000,
+            "sale_amount": 78000,
+            "return_amount": 0,
+            "fee_amount": 13000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_66",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_66",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 66000,
+            "sale_amount": 79200,
+            "return_amount": 0,
+            "fee_amount": 13200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_67",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_67",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 67000,
+            "sale_amount": 80400,
+            "return_amount": 0,
+            "fee_amount": 13400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_68",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_68",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 68000,
+            "sale_amount": 81600,
+            "return_amount": 0,
+            "fee_amount": 13600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_69",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_69",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 69000,
+            "sale_amount": 82800,
+            "return_amount": 0,
+            "fee_amount": 13800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_70",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_70",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 70000,
+            "sale_amount": 84000,
+            "return_amount": 0,
+            "fee_amount": 14000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_71",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_71",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 71000,
+            "sale_amount": 85200,
+            "return_amount": 0,
+            "fee_amount": 14200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_72",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_72",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 72000,
+            "sale_amount": 86400,
+            "return_amount": 0,
+            "fee_amount": 14400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_73",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_73",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 73000,
+            "sale_amount": 87600,
+            "return_amount": 0,
+            "fee_amount": 14600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_74",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_74",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 74000,
+            "sale_amount": 88800,
+            "return_amount": 0,
+            "fee_amount": 14800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_75",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_75",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 75000,
+            "sale_amount": 90000,
+            "return_amount": 0,
+            "fee_amount": 15000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_76",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_76",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 76000,
+            "sale_amount": 91200,
+            "return_amount": 0,
+            "fee_amount": 15200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_77",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_77",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 77000,
+            "sale_amount": 92400,
+            "return_amount": 0,
+            "fee_amount": 15400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_78",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_78",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 78000,
+            "sale_amount": 93600,
+            "return_amount": 0,
+            "fee_amount": 15600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_79",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_79",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 79000,
+            "sale_amount": 94800,
+            "return_amount": 0,
+            "fee_amount": 15800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_80",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_80",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 80000,
+            "sale_amount": 96000,
+            "return_amount": 0,
+            "fee_amount": 16000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_81",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_81",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 81000,
+            "sale_amount": 97200,
+            "return_amount": 0,
+            "fee_amount": 16200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_82",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_82",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 82000,
+            "sale_amount": 98400,
+            "return_amount": 0,
+            "fee_amount": 16400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_83",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_83",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 83000,
+            "sale_amount": 99600,
+            "return_amount": 0,
+            "fee_amount": 16600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_84",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_84",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 84000,
+            "sale_amount": 100800,
+            "return_amount": 0,
+            "fee_amount": 16800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_85",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_85",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 85000,
+            "sale_amount": 102000,
+            "return_amount": 0,
+            "fee_amount": 17000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_86",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_86",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 86000,
+            "sale_amount": 103200,
+            "return_amount": 0,
+            "fee_amount": 17200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_87",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_87",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 87000,
+            "sale_amount": 104400,
+            "return_amount": 0,
+            "fee_amount": 17400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_88",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_88",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 88000,
+            "sale_amount": 105600,
+            "return_amount": 0,
+            "fee_amount": 17600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_89",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_89",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 89000,
+            "sale_amount": 106800,
+            "return_amount": 0,
+            "fee_amount": 17800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_90",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_90",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 90000,
+            "sale_amount": 108000,
+            "return_amount": 0,
+            "fee_amount": 18000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_91",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_91",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 91000,
+            "sale_amount": 109200,
+            "return_amount": 0,
+            "fee_amount": 18200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_92",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_92",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 92000,
+            "sale_amount": 110400,
+            "return_amount": 0,
+            "fee_amount": 18400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_93",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_93",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 93000,
+            "sale_amount": 111600,
+            "return_amount": 0,
+            "fee_amount": 18600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_94",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_94",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 94000,
+            "sale_amount": 112800,
+            "return_amount": 0,
+            "fee_amount": 18800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_95",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_95",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 95000,
+            "sale_amount": 114000,
+            "return_amount": 0,
+            "fee_amount": 19000
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_96",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_96",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 96000,
+            "sale_amount": 115200,
+            "return_amount": 0,
+            "fee_amount": 19200
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_97",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_97",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 97000,
+            "sale_amount": 116400,
+            "return_amount": 0,
+            "fee_amount": 19400
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_98",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_98",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 98000,
+            "sale_amount": 117600,
+            "return_amount": 0,
+            "fee_amount": 19600
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_99",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_99",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 99000,
+            "sale_amount": 118800,
+            "return_amount": 0,
+            "fee_amount": 19800
+          }
+        },
+        {
+          "payout_reference": "payout_fixture_100",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_100",
+          "merchant_settlement_type": "Sale",
+          "totals": {
+            "settlement_amount": 100000,
+            "sale_amount": 120000,
+            "return_amount": 0,
+            "fee_amount": 20000
+          }
+        }
+      ]
+    }
+  }
+}

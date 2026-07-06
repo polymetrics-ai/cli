@@ -1,0 +1,177 @@
+{
+  "actions": [
+    {
+      "name": "create_signature_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signature_requests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "delivery_mode"],
+        "properties": {
+          "name": { "type": "string", "description": "1-128 characters." },
+          "delivery_mode": { "type": "string", "enum": ["email", "none"] },
+          "ordered_signers": { "type": "boolean" },
+          "expiration_date": { "type": "string", "format": "date" },
+          "external_id": { "type": "string" },
+          "timezone": { "type": "string" },
+          "signers_allowed_to_decline": { "type": "boolean" },
+          "template_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a new draft signature request (no documents/signers attached yet); external mutation, approval required"
+    },
+    {
+      "name": "activate_signature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signature_requests/{{ record.id }}/activate",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "activates a draft signature request, taking it out of draft status; if delivery_mode is not none this immediately notifies approvers/signers/followers by email; external mutation, approval required"
+    },
+    {
+      "name": "cancel_signature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signature_requests/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "reason"],
+        "properties": {
+          "id": { "type": "string" },
+          "reason": { "type": "string", "enum": ["contractualization_aborted", "errors_in_document", "other"] },
+          "custom_note": { "type": "string", "description": "Max 500 characters." }
+        }
+      },
+      "risk": "irreversibly cancels a signature request in approval or ongoing status; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name", "email", "locale"],
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "locale": { "type": "string", "enum": ["en", "fr", "de", "it", "nl", "es", "pl"] },
+          "phone_number": { "type": "string" },
+          "company_name": { "type": "string" },
+          "job_title": { "type": "string" },
+          "workspace_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a new saved contact profile; external mutation, approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "phone_number": { "type": "string" },
+          "company_name": { "type": "string" },
+          "job_title": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing contact's profile fields; external mutation, approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a saved contact profile; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["endpoint", "subscribed_events", "scopes", "sandbox", "auto_retry", "enabled"],
+        "properties": {
+          "endpoint": { "type": "string", "format": "uri", "description": "HTTPS target URL, max 1024 characters." },
+          "subscribed_events": { "type": "array", "items": { "type": "string" } },
+          "scopes": { "type": "array", "items": { "type": "string" } },
+          "sandbox": { "type": "boolean" },
+          "auto_retry": { "type": "boolean" },
+          "enabled": { "type": "boolean" },
+          "description": { "type": ["string", "null"], "description": "Max 128 characters." },
+          "workspaces": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "registers a new webhook subscription that will receive real-time event notifications at an external endpoint; external mutation, approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a registered webhook subscription, silently stopping the caller's own event delivery; external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        { "id": "contact_fixture_1", "name": "Fixture Contact One", "email": "fixture1@example.com", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "contact_fixture_2", "name": "Fixture Contact Two", "email": "fixture2@example.com", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

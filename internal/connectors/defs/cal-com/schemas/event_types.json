@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "slug": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "length": { "type": ["integer", "null"] },
+    "hidden": { "type": ["boolean", "null"] },
+    "position": { "type": ["integer", "null"] }
+  }
+}

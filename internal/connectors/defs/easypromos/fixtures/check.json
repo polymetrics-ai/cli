@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/promotions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "promo_fixture_1", "title": "Fixture Promotion 1", "status": "active" }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

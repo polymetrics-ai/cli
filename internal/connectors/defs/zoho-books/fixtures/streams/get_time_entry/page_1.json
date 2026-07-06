@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/timeentries/synthetic-conformance-value",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "time_entry": {
+        "time_entry_id": "get_time_entry_fixture_1",
+        "customer_name": "get_time_entry fixture 1",
+        "created_time": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "get_time_entry_fixture_1",
+        "name": "get_time_entry fixture 1",
+        "updated_at": "2026-01-01T00:00:01Z"
+      }
+    }
+  }
+}

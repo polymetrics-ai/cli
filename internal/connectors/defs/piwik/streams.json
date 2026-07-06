@@ -1,0 +1,2397 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "token_auth",
+        "value": "{{ secrets.token_auth }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getAllSites"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "piwik token_auth is missing or invalid; re-run pm credentials add piwik"
+      },
+      {
+        "status": 403,
+        "hint": "piwik token_auth lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "piwik rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sites",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getAllSites",
+        "filter_limit": "100",
+        "filter_offset": "0"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
+      },
+      "schema": "schemas/sites.json"
+    },
+    {
+      "name": "visits",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Live.getLastVisitsDetails",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100,
+        "max_pages": 3
+      },
+      "computed_fields": {
+        "visit_id": "{{ coalesce record.idVisit record.visit_id }}",
+        "visitor_id": "{{ coalesce record.visitorId record.visitor_id }}",
+        "last_action_at": "{{ coalesce record.lastActionDateTime record.last_action_at }}"
+      },
+      "schema": "schemas/visits.json"
+    },
+    {
+      "name": "actions",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getPageUrls",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100,
+        "max_pages": 3
+      },
+      "computed_fields": {
+        "hits": "{{ coalesce record.nb_hits record.hits }}",
+        "visits": "{{ coalesce record.nb_visits record.visits }}"
+      },
+      "schema": "schemas/actions.json"
+    },
+    {
+      "name": "goals",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getGoals",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}",
+        "filter_limit": "100",
+        "filter_offset": "0"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "goal_id": "{{ coalesce record.idgoal record.idGoal }}"
+      },
+      "schema": "schemas/goals.json"
+    },
+    {
+      "name": "report_metadata",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "API.getReportMetadata",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "record_id": "{{ record.uniqueId }}",
+        "unique_id": "{{ record.uniqueId }}"
+      },
+      "schema": "schemas/report_metadata.json"
+    },
+    {
+      "name": "live_counters",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Live.getCounters",
+        "idSite": "{{ config.site_id }}",
+        "lastMinutes": "{{ config.last_minutes }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "report": "live_counters"
+      },
+      "schema": "schemas/live_counters.json"
+    },
+    {
+      "name": "site",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getSiteFromId",
+        "idSite": "{{ config.site_id }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
+      },
+      "schema": "schemas/site.json"
+    },
+    {
+      "name": "sites_manager_sites_with_at_least_view_access",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getSitesWithAtLeastViewAccess",
+        "filter_limit": "100",
+        "filter_offset": "0"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
+      },
+      "schema": "schemas/sites_manager_sites_with_at_least_view_access.json"
+    },
+    {
+      "name": "sites_manager_sites_with_view_access",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getSitesWithViewAccess",
+        "filter_limit": "100",
+        "filter_offset": "0"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
+      },
+      "schema": "schemas/sites_manager_sites_with_view_access.json"
+    },
+    {
+      "name": "sites_manager_sites_with_admin_access",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SitesManager.getSitesWithAdminAccess",
+        "filter_limit": "100",
+        "filter_offset": "0"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
+      },
+      "schema": "schemas/sites_manager_sites_with_admin_access.json"
+    },
+    {
+      "name": "actions_summary",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_summary"
+      },
+      "schema": "schemas/actions_summary.json"
+    },
+    {
+      "name": "actions_downloads",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getDownloads",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_downloads",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_downloads.json"
+    },
+    {
+      "name": "actions_entry_page_titles",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getEntryPageTitles",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_entry_page_titles",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_entry_page_titles.json"
+    },
+    {
+      "name": "actions_entry_page_urls",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getEntryPageUrls",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_entry_page_urls",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_entry_page_urls.json"
+    },
+    {
+      "name": "actions_exit_page_titles",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getExitPageTitles",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_exit_page_titles",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_exit_page_titles.json"
+    },
+    {
+      "name": "actions_exit_page_urls",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getExitPageUrls",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_exit_page_urls",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_exit_page_urls.json"
+    },
+    {
+      "name": "actions_outlinks",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getOutlinks",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_outlinks",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_outlinks.json"
+    },
+    {
+      "name": "actions_page_titles",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getPageTitles",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_page_titles",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_page_titles.json"
+    },
+    {
+      "name": "actions_page_titles_following_site_search",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getPageTitlesFollowingSiteSearch",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_page_titles_following_site_search",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_page_titles_following_site_search.json"
+    },
+    {
+      "name": "actions_page_urls_following_site_search",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getPageUrlsFollowingSiteSearch",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_page_urls_following_site_search",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_page_urls_following_site_search.json"
+    },
+    {
+      "name": "actions_site_search_categories",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getSiteSearchCategories",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_site_search_categories",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_site_search_categories.json"
+    },
+    {
+      "name": "actions_site_search_keywords",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getSiteSearchKeywords",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_site_search_keywords",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_site_search_keywords.json"
+    },
+    {
+      "name": "actions_site_search_no_result_keywords",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Actions.getSiteSearchNoResultKeywords",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "actions_site_search_no_result_keywords",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/actions_site_search_no_result_keywords.json"
+    },
+    {
+      "name": "contents_content_names",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Contents.getContentNames",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "contents_content_names",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/contents_content_names.json"
+    },
+    {
+      "name": "contents_content_pieces",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Contents.getContentPieces",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "contents_content_pieces",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/contents_content_pieces.json"
+    },
+    {
+      "name": "custom_dimensions_custom_dimension",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "CustomDimensions.getCustomDimension",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}",
+        "idDimension": "{{ config.custom_dimension_id }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "custom_dimensions_custom_dimension",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/custom_dimensions_custom_dimension.json"
+    },
+    {
+      "name": "custom_variables_custom_variables",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "CustomVariables.getCustomVariables",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "custom_variables_custom_variables",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/custom_variables_custom_variables.json"
+    },
+    {
+      "name": "device_plugins_plugin",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicePlugins.getPlugin",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "device_plugins_plugin",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/device_plugins_plugin.json"
+    },
+    {
+      "name": "devices_detection_brand",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getBrand",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_brand",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_brand.json"
+    },
+    {
+      "name": "devices_detection_browser_engines",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getBrowserEngines",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_browser_engines",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_browser_engines.json"
+    },
+    {
+      "name": "devices_detection_browser_versions",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getBrowserVersions",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_browser_versions",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_browser_versions.json"
+    },
+    {
+      "name": "devices_detection_browsers",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getBrowsers",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_browsers",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_browsers.json"
+    },
+    {
+      "name": "devices_detection_model",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getModel",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_model",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_model.json"
+    },
+    {
+      "name": "devices_detection_os_families",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getOsFamilies",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_os_families",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_os_families.json"
+    },
+    {
+      "name": "devices_detection_os_versions",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getOsVersions",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_os_versions",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_os_versions.json"
+    },
+    {
+      "name": "devices_detection_type",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "DevicesDetection.getType",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "devices_detection_type",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/devices_detection_type.json"
+    },
+    {
+      "name": "events_action",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Events.getAction",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "events_action",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/events_action.json"
+    },
+    {
+      "name": "events_category",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Events.getCategory",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "events_category",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/events_category.json"
+    },
+    {
+      "name": "events_name",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Events.getName",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "events_name",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/events_name.json"
+    },
+    {
+      "name": "goals_summary",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_summary"
+      },
+      "schema": "schemas/goals_summary.json"
+    },
+    {
+      "name": "goals_days_to_conversion",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getDaysToConversion",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_days_to_conversion",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/goals_days_to_conversion.json"
+    },
+    {
+      "name": "goals_items_category",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getItemsCategory",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_items_category",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/goals_items_category.json"
+    },
+    {
+      "name": "goals_items_name",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getItemsName",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_items_name",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/goals_items_name.json"
+    },
+    {
+      "name": "goals_items_sku",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getItemsSku",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_items_sku",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/goals_items_sku.json"
+    },
+    {
+      "name": "goals_visits_until_conversion",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Goals.getVisitsUntilConversion",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "goals_visits_until_conversion",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/goals_visits_until_conversion.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_content",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getContent",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_content",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_content.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_group",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getGroup",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_group",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_group.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_id",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getId",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_id",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_id.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_keyword",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getKeyword",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_keyword",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_keyword.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_medium",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getMedium",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_medium",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_medium.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_name",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getName",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_name",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_name.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_placement",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getPlacement",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_placement",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_placement.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_source",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getSource",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_source",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_source.json"
+    },
+    {
+      "name": "marketing_campaigns_reporting_source_medium",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MarketingCampaignsReporting.getSourceMedium",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "marketing_campaigns_reporting_source_medium",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/marketing_campaigns_reporting_source_medium.json"
+    },
+    {
+      "name": "multi_channel_conversion_attribution_channel_attribution",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MultiChannelConversionAttribution.getChannelAttribution",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "multi_channel_conversion_attribution_channel_attribution",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/multi_channel_conversion_attribution_channel_attribution.json"
+    },
+    {
+      "name": "multi_sites_all",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MultiSites.getAll",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "multi_sites_all",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/multi_sites_all.json"
+    },
+    {
+      "name": "multi_sites_one",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "MultiSites.getOne",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "multi_sites_one",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/multi_sites_one.json"
+    },
+    {
+      "name": "page_performance",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "PagePerformance.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "page_performance"
+      },
+      "schema": "schemas/page_performance.json"
+    },
+    {
+      "name": "referrers_summary",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_summary"
+      },
+      "schema": "schemas/referrers_summary.json"
+    },
+    {
+      "name": "referrers_ai_assistants",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getAIAssistants",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_ai_assistants",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_ai_assistants.json"
+    },
+    {
+      "name": "referrers_all",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getAll",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_all",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_all.json"
+    },
+    {
+      "name": "referrers_keywords",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getKeywords",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_keywords",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_keywords.json"
+    },
+    {
+      "name": "referrers_referrer_type",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getReferrerType",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_referrer_type",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_referrer_type.json"
+    },
+    {
+      "name": "referrers_search_engines",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getSearchEngines",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_search_engines",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_search_engines.json"
+    },
+    {
+      "name": "referrers_socials",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getSocials",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_socials",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_socials.json"
+    },
+    {
+      "name": "referrers_websites",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Referrers.getWebsites",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "referrers_websites",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/referrers_websites.json"
+    },
+    {
+      "name": "resolution_configuration",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Resolution.getConfiguration",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "resolution_configuration",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/resolution_configuration.json"
+    },
+    {
+      "name": "resolution_resolution",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "Resolution.getResolution",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "resolution_resolution",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/resolution_resolution.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_crawling_overview_bing",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getCrawlingOverviewBing",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_crawling_overview_bing"
+      },
+      "schema": "schemas/search_engine_keywords_performance_crawling_overview_bing.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywords",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords_bing",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywordsBing",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords_bing",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords_bing.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords_google_image",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywordsGoogleImage",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords_google_image",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords_google_image.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords_google_video",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywordsGoogleVideo",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords_google_video",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords_google_video.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords_google_web",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywordsGoogleWeb",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords_google_web",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords_google_web.json"
+    },
+    {
+      "name": "search_engine_keywords_performance_keywords_imported",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "SearchEngineKeywordsPerformance.getKeywordsImported",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "search_engine_keywords_performance_keywords_imported",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/search_engine_keywords_performance_keywords_imported.json"
+    },
+    {
+      "name": "user_country_city",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserCountry.getCity",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_country_city",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_country_city.json"
+    },
+    {
+      "name": "user_country_continent",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserCountry.getContinent",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_country_continent",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_country_continent.json"
+    },
+    {
+      "name": "user_country_country",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserCountry.getCountry",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_country_country",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_country_country.json"
+    },
+    {
+      "name": "user_country_region",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserCountry.getRegion",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_country_region",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_country_region.json"
+    },
+    {
+      "name": "user_id_users",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserId.getUsers",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_id_users",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_id_users.json"
+    },
+    {
+      "name": "user_language_language",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserLanguage.getLanguage",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_language_language",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_language_language.json"
+    },
+    {
+      "name": "user_language_language_code",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UserLanguage.getLanguageCode",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "user_language_language_code",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/user_language_language_code.json"
+    },
+    {
+      "name": "users_flow_users_flow_pretty",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "UsersFlow.getUsersFlowPretty",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "users_flow_users_flow_pretty",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/users_flow_users_flow_pretty.json"
+    },
+    {
+      "name": "visit_frequency",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitFrequency.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visit_frequency"
+      },
+      "schema": "schemas/visit_frequency.json"
+    },
+    {
+      "name": "visit_time_by_day_of_week",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitTime.getByDayOfWeek",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visit_time_by_day_of_week",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visit_time_by_day_of_week.json"
+    },
+    {
+      "name": "visit_time_visit_information_per_local_time",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitTime.getVisitInformationPerLocalTime",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visit_time_visit_information_per_local_time",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visit_time_visit_information_per_local_time.json"
+    },
+    {
+      "name": "visit_time_visit_information_per_server_time",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitTime.getVisitInformationPerServerTime",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visit_time_visit_information_per_server_time",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visit_time_visit_information_per_server_time.json"
+    },
+    {
+      "name": "visitor_interest_number_of_visits_by_days_since_last",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitorInterest.getNumberOfVisitsByDaysSinceLast",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visitor_interest_number_of_visits_by_days_since_last",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visitor_interest_number_of_visits_by_days_since_last.json"
+    },
+    {
+      "name": "visitor_interest_number_of_visits_by_visit_count",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitorInterest.getNumberOfVisitsByVisitCount",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visitor_interest_number_of_visits_by_visit_count",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visitor_interest_number_of_visits_by_visit_count.json"
+    },
+    {
+      "name": "visitor_interest_number_of_visits_per_page",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitorInterest.getNumberOfVisitsPerPage",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visitor_interest_number_of_visits_per_page",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visitor_interest_number_of_visits_per_page.json"
+    },
+    {
+      "name": "visitor_interest_number_of_visits_per_visit_duration",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitorInterest.getNumberOfVisitsPerVisitDuration",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visitor_interest_number_of_visits_per_visit_duration",
+        "record_id": "{{ record.label }}"
+      },
+      "schema": "schemas/visitor_interest_number_of_visits_per_visit_duration.json"
+    },
+    {
+      "name": "visits_summary",
+      "path": "/index.php",
+      "query": {
+        "module": "API",
+        "format": "JSON",
+        "method": "VisitsSummary.get",
+        "idSite": "{{ config.site_id }}",
+        "period": "{{ config.period }}",
+        "date": "{{ config.date }}"
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "filter_limit",
+        "offset_param": "filter_offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "report": "visits_summary"
+      },
+      "schema": "schemas/visits_summary.json"
+    }
+  ]
+}

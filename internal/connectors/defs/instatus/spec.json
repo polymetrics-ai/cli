@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Instatus Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Instatus API key. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.instatus.com",
+      "description": "Instatus API base URL override for tests or proxies."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Status page id required by the components/incidents/maintenances streams (parent-scoped resources)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-100)."
+    },
+    "component_id": {
+      "type": "string",
+      "description": "Component id used by the component_detail stream."
+    },
+    "incident_id": {
+      "type": "string",
+      "description": "Incident id used by incident detail/update streams."
+    },
+    "incident_update_id": {
+      "type": "string",
+      "description": "Incident update id used by incident_update_detail."
+    },
+    "maintenance_id": {
+      "type": "string",
+      "description": "Maintenance id used by maintenance detail/update streams."
+    },
+    "maintenance_update_id": {
+      "type": "string",
+      "description": "Maintenance update id used by maintenance_update_detail."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Template id used by template_detail."
+    },
+    "generic_notice_id": {
+      "type": "string",
+      "description": "General notice id used by generic_notice_detail."
+    },
+    "metric_id": {
+      "type": "string",
+      "description": "Metric id used by metric_detail."
+    },
+    "audience_group_id": {
+      "type": "string",
+      "description": "Audience group id used by audience_group_detail."
+    },
+    "monitor_id": {
+      "type": "string",
+      "description": "Monitor id used by monitor_logs."
+    },
+    "on_call_schedule_id": {
+      "type": "string",
+      "description": "On-call schedule id used by on_call_schedule_members."
+    },
+    "subscriber_search": {
+      "type": "string",
+      "description": "Optional subscriber search query for the subscribers stream."
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Connection Specification",
+  "type": "object",
+  "required": ["instance_url", "access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Salesforce OAuth access token, used as the Bearer credential. Never logged."
+    },
+    "instance_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Salesforce instance/org base URL (e.g. https://yourinstance.my.salesforce.com)."
+    },
+    "api_version": {
+      "type": "string",
+      "default": "v60.0",
+      "description": "Salesforce REST API version, e.g. v60.0 or 60.0 (a leading v is added if missing)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

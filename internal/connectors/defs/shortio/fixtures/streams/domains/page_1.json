@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        { "id": "dom_fixture_1", "hostname": "fixture.example.com", "title": "Fixture domain", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPageToken": null
+    }
+  }
+}

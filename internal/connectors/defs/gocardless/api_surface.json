@@ -1,0 +1,1005 @@
+{
+  "api": "GoCardless REST API",
+  "docs": "https://developer.gocardless.com/api-reference/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from 142 distinct method/path blocks in the official GoCardless API reference. Documented JSON GET list/detail endpoints are streams; bearer-authenticated JSON-compatible mutations are write actions; Connect OAuth token helper endpoints are explicitly excluded.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/bank_authorisations",
+      "covered_by": {
+        "write": "create_a_bank_authorisation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_authorisations/{bank_authorisation_id}",
+      "covered_by": {
+        "stream": "bank_authorisation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests",
+      "covered_by": {
+        "write": "create_a_billing_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/collect_customer_details",
+      "covered_by": {
+        "write": "collect_customer_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/collect_bank_account",
+      "covered_by": {
+        "write": "collect_bank_account_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/confirm_payer_details",
+      "covered_by": {
+        "write": "confirm_the_payer_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/fulfil",
+      "covered_by": {
+        "write": "fulfil_a_billing_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_a_billing_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_requests",
+      "covered_by": {
+        "stream": "billing_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_requests/{billing_request_id}",
+      "covered_by": {
+        "stream": "billing_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/notify",
+      "covered_by": {
+        "write": "notify_the_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/fallback",
+      "covered_by": {
+        "write": "trigger_fallback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/choose_currency",
+      "covered_by": {
+        "write": "change_currency"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/{billing_request_id}/actions/select_institution",
+      "covered_by": {
+        "write": "select_institution_for_a_billing_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_request_flows",
+      "covered_by": {
+        "write": "create_a_billing_request_flow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_request_flows/{billing_request_flow_id}/actions/initialise",
+      "covered_by": {
+        "write": "initialise_a_billing_request_flow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_request_templates",
+      "covered_by": {
+        "stream": "billing_request_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_request_templates/{billing_request_template_id}",
+      "covered_by": {
+        "stream": "billing_request_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_request_templates",
+      "covered_by": {
+        "write": "create_a_billing_request_template"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/billing_request_templates/{billing_request_template_id}",
+      "covered_by": {
+        "write": "update_a_billing_request_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/billing_requests/create_with_actions",
+      "covered_by": {
+        "write": "create_a_billing_request_with_actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/institutions",
+      "covered_by": {
+        "stream": "institutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/billing_requests/{billing_request_id}/institutions",
+      "covered_by": {
+        "stream": "billing_request_institutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/balances",
+      "covered_by": {
+        "stream": "balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_account_details/{bank_account_detail_id}",
+      "covered_by": {
+        "stream": "bank_account_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bank_account_holder_verifications",
+      "covered_by": {
+        "write": "create_a_bank_account_holder_verification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bank_account_holder_verifications/{bank_account_holder_verification_id}",
+      "covered_by": {
+        "stream": "bank_account_holder_verification"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks",
+      "covered_by": {
+        "write": "create_a_block"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocks/{block_id}",
+      "covered_by": {
+        "stream": "block"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocks",
+      "covered_by": {
+        "stream": "blocks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks/{block_id}/actions/disable",
+      "covered_by": {
+        "write": "disable_a_block"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks/{block_id}/actions/enable",
+      "covered_by": {
+        "write": "enable_a_block"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks/block_by_ref",
+      "covered_by": {
+        "write": "create_blocks_by_reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditors",
+      "covered_by": {
+        "write": "create_a_creditor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditors",
+      "covered_by": {
+        "stream": "creditors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditors/{creditor_id}",
+      "covered_by": {
+        "stream": "creditor"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/creditors/{creditor_id}",
+      "covered_by": {
+        "write": "update_a_creditor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditor_bank_accounts",
+      "covered_by": {
+        "write": "create_a_creditor_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditor_bank_accounts",
+      "covered_by": {
+        "stream": "creditor_bank_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/creditor_bank_accounts/{creditor_bank_account_id}",
+      "covered_by": {
+        "stream": "creditor_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/creditor_bank_accounts/{creditor_bank_account_id}/actions/disable",
+      "covered_by": {
+        "write": "disable_a_creditor_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currency_exchange_rates",
+      "covered_by": {
+        "stream": "currency_exchange_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "covered_by": {
+        "write": "create_a_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}",
+      "covered_by": {
+        "write": "update_a_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}",
+      "covered_by": {
+        "write": "remove_a_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_bank_accounts",
+      "covered_by": {
+        "write": "create_a_customer_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_bank_accounts",
+      "covered_by": {
+        "stream": "customer_bank_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_bank_accounts/{customer_bank_account_id}",
+      "covered_by": {
+        "stream": "customer_bank_account"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customer_bank_accounts/{customer_bank_account_id}",
+      "covered_by": {
+        "write": "update_a_customer_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_bank_accounts/{customer_bank_account_id}/actions/disable",
+      "covered_by": {
+        "write": "disable_a_customer_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_notifications/{customer_notification_id}/actions/handle",
+      "covered_by": {
+        "write": "handle_a_notification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exports/{export_id}",
+      "covered_by": {
+        "stream": "export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/exports",
+      "covered_by": {
+        "stream": "exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funds_availability/{mandate_id}",
+      "covered_by": {
+        "stream": "funds_availability"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/instalment_schedules",
+      "covered_by": {
+        "write": "create_with_dates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instalment_schedules",
+      "covered_by": {
+        "stream": "instalment_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instalment_schedules/{instalment_schedule_id}",
+      "covered_by": {
+        "stream": "instalment_schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/instalment_schedules/{instalment_schedule_id}",
+      "covered_by": {
+        "write": "update_an_instalment_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/instalment_schedules/{instalment_schedule_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_an_instalment_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/branding/logos",
+      "covered_by": {
+        "write": "create_a_logo_associated_with_a_creditor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandates",
+      "covered_by": {
+        "write": "create_a_mandate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mandates",
+      "covered_by": {
+        "stream": "mandates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mandates/{mandate_id}",
+      "covered_by": {
+        "stream": "mandate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/mandates/{mandate_id}",
+      "covered_by": {
+        "write": "update_a_mandate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandates/{mandate_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_a_mandate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandates/{mandate_id}/actions/reinstate",
+      "covered_by": {
+        "write": "reinstate_a_mandate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandate_imports",
+      "covered_by": {
+        "write": "create_a_new_mandate_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mandate_imports/{mandate_import_id}",
+      "covered_by": {
+        "stream": "mandate_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandate_imports/{mandate_import_id}/actions/submit",
+      "covered_by": {
+        "write": "submit_a_mandate_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandate_imports/{mandate_import_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_a_mandate_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandate_import_entries",
+      "covered_by": {
+        "write": "add_a_mandate_import_entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mandate_import_entries",
+      "covered_by": {
+        "stream": "mandate_import_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/negative_balance_limits",
+      "covered_by": {
+        "stream": "negative_balance_limits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outbound_payments",
+      "covered_by": {
+        "write": "create_an_outbound_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outbound_payments/withdrawal",
+      "covered_by": {
+        "write": "create_a_withdrawal_outbound_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outbound_payments/{outbound_payment_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_an_outbound_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outbound_payments/{outbound_payment_id}/actions/approve",
+      "covered_by": {
+        "write": "approve_an_outbound_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payments/{outbound_payment_id}",
+      "covered_by": {
+        "stream": "outbound_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payments",
+      "covered_by": {
+        "stream": "outbound_payments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/outbound_payments/{outbound_payment_id}",
+      "covered_by": {
+        "write": "update_an_outbound_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payments/stats",
+      "covered_by": {
+        "stream": "outbound_payment_stats"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outbound_payment_imports",
+      "covered_by": {
+        "write": "create_an_outbound_payment_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payment_imports/{outbound_payment_import_id}",
+      "covered_by": {
+        "stream": "outbound_payment_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payment_imports",
+      "covered_by": {
+        "stream": "outbound_payment_imports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outbound_payment_import_entries",
+      "covered_by": {
+        "stream": "outbound_payment_import_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payer_authorisations/{payer_authorisation_id}",
+      "covered_by": {
+        "stream": "payer_authorisation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payer_authorisations",
+      "covered_by": {
+        "write": "create_a_payer_authorisation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payer_authorisations/{payer_authorisation_id}",
+      "covered_by": {
+        "write": "update_a_payer_authorisation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payer_authorisations/{payer_authorisation_id}/actions/submit",
+      "covered_by": {
+        "write": "submit_a_payer_authorisation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payer_authorisations/{payer_authorisation_id}/actions/confirm",
+      "covered_by": {
+        "write": "confirm_a_payer_authorisation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/branding/payer_themes",
+      "covered_by": {
+        "write": "create_a_payer_theme_associated_with_a_creditor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments",
+      "covered_by": {
+        "write": "create_a_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments",
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments/{payment_id}",
+      "covered_by": {
+        "stream": "payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payments/{payment_id}",
+      "covered_by": {
+        "write": "update_a_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/{payment_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_a_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/{payment_id}/actions/retry",
+      "covered_by": {
+        "write": "retry_a_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_accounts/{payment_account_id}",
+      "covered_by": {
+        "stream": "payment_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_accounts",
+      "covered_by": {
+        "stream": "payment_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_account_transactions/{payment_account_transaction_id}",
+      "covered_by": {
+        "stream": "payment_account_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payment_accounts/{payment_account_id}/transactions",
+      "covered_by": {
+        "stream": "payment_account_transactions_by_payment_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payouts",
+      "covered_by": {
+        "stream": "payouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payouts/{payout_id}",
+      "covered_by": {
+        "stream": "payout"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/payouts/{payout_id}",
+      "covered_by": {
+        "write": "update_a_payout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payout_items",
+      "covered_by": {
+        "stream": "payout_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/redirect_flows",
+      "covered_by": {
+        "write": "create_a_redirect_flow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/redirect_flows/{redirect_flow_id}",
+      "covered_by": {
+        "stream": "redirect_flow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/redirect_flows/{redirect_flow_id}/actions/complete",
+      "covered_by": {
+        "write": "complete_a_redirect_flow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/refunds",
+      "covered_by": {
+        "write": "create_a_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds",
+      "covered_by": {
+        "stream": "refunds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds/{refund_id}",
+      "covered_by": {
+        "stream": "refund"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/refunds/{refund_id}",
+      "covered_by": {
+        "write": "update_a_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scenario_simulators/{scenario}/actions/run",
+      "covered_by": {
+        "write": "simulate_a_scenario"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheme_identifiers",
+      "covered_by": {
+        "write": "create_a_scheme_identifier"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheme_identifiers",
+      "covered_by": {
+        "stream": "scheme_identifiers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheme_identifiers/{scheme_identifier_id}",
+      "covered_by": {
+        "stream": "scheme_identifier"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "covered_by": {
+        "write": "create_a_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}",
+      "covered_by": {
+        "stream": "subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}",
+      "covered_by": {
+        "write": "update_a_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/actions/pause",
+      "covered_by": {
+        "write": "pause_a_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/actions/resume",
+      "covered_by": {
+        "write": "resume_a_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/actions/cancel",
+      "covered_by": {
+        "write": "cancel_a_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax_rates",
+      "covered_by": {
+        "stream": "tax_rates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax_rates/{tax_rate_id}",
+      "covered_by": {
+        "stream": "tax_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transferred_mandates/{transferred_mandate_id}",
+      "covered_by": {
+        "stream": "transferred_mandate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verification_details",
+      "covered_by": {
+        "write": "create_a_verification_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/verification_details",
+      "covered_by": {
+        "stream": "verification_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhook_id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{webhook_id}/actions/retry",
+      "covered_by": {
+        "write": "retry_a_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bank_details_lookups",
+      "covered_by": {
+        "write": "perform_a_bank_details_lookup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mandate_pdfs",
+      "covered_by": {
+        "write": "create_a_mandate_pdf"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer_bank_account_tokens",
+      "covered_by": {
+        "write": "create_a_customer_bank_account_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer_bank_account_tokens/{customer_bank_account_token_id}",
+      "covered_by": {
+        "stream": "customer_bank_account_token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/access_token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/introspect",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token introspection uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/revoke",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token revocation uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
+      }
+    }
+  ]
+}

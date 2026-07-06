@@ -1,0 +1,17 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value",
+    "metadata_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/synthetic-conformance-value/metadata/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

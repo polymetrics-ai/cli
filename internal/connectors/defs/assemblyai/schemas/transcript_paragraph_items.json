@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transcript_paragraph_items",
+  "type": "object",
+  "x-primary-key": ["transcript_id", "start"],
+  "required": ["transcript_id", "start"],
+  "properties": {
+    "transcript_id": { "type": "string" },
+    "text": { "type": ["string", "null"] },
+    "start": { "type": ["integer", "null"] },
+    "end": { "type": ["integer", "null"] },
+    "confidence": { "type": ["number", "null"] },
+    "speaker": { "type": ["string", "null"] },
+    "channel": { "type": ["string", "null"] }
+  }
+}

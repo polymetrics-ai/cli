@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/charges", "query": { "count": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "count": 100,
+      "offset": 100,
+      "data": [
+        {
+          "charge_id": "chg_fixture_101",
+          "object": "charge",
+          "occurred": 1767225701,
+          "amount": "101.00",
+          "amount_refunded": "0.00",
+          "currency": "usd",
+          "status": "refunded",
+          "description": "Fixture charge 101",
+          "customer_id": "cus_fixture_1",
+          "customer_email": "fixture1@example.com",
+          "customer_name": "Fixture One",
+          "transaction_id": "txn_fixture_101",
+          "subscription_id": null,
+          "product_id": "prod_fixture_1",
+          "payment_method": "card"
+        }
+      ]
+    }
+  }
+}

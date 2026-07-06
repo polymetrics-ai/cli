@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Events" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "event_fixture_1", "Event_Title": "Fixture Event One", "Location": "Fixture Office", "Start_DateTime": "2026-01-01T09:00:00+00:00", "End_DateTime": "2026-01-01T10:00:00+00:00" },
+        { "id": "event_fixture_2", "Event_Title": "Fixture Event Two", "Location": "Remote", "Start_DateTime": "2026-01-02T09:00:00+00:00", "End_DateTime": "2026-01-02T10:00:00+00:00" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

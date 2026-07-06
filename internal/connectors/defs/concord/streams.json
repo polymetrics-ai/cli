@@ -1,0 +1,301 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 0,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/user/me/organizations" },
+    "error_map": [
+      { "status": 401, "hint": "concord api_key is missing or invalid; re-run pm credentials add concord" },
+      { "status": 403, "hint": "concord account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "concord rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "agreements",
+      "path": "/organizations/{{ config.organization_id }}/agreements",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/agreements.json"
+    },
+    {
+      "name": "user_organizations",
+      "path": "/user/me/organizations",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "organizations" },
+      "schema": "schemas/user_organizations.json"
+    },
+    {
+      "name": "folders",
+      "path": "/organizations/{{ config.organization_id }}/folders",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "" },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "reports",
+      "path": "/organizations/{{ config.organization_id }}/reports",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "reports" },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "organization",
+      "path": "/organizations/{{ config.organization_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/organization.json"
+    },
+    {
+      "name": "folder",
+      "path": "/organizations/{{ config.organization_id }}/folders/{{ config.folder_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/folder.json"
+    },
+    {
+      "name": "folder_agreements",
+      "path": "/organizations/{{ config.organization_id }}/folders/{{ config.folder_id }}/agreements",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/folder_agreements.json"
+    },
+    {
+      "name": "report",
+      "path": "/organizations/{{ config.organization_id }}/reports/{{ config.report_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/report.json"
+    },
+    {
+      "name": "clauses",
+      "path": "/organizations/{{ config.organization_id }}/clauses",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "query": { "limit": { "template": "{{ config.clauses_page_size }}", "default": "100" } },
+      "records": { "path": "organizationClauses" },
+      "schema": "schemas/clauses.json"
+    },
+    {
+      "name": "clause",
+      "path": "/organizations/{{ config.organization_id }}/clauses/{{ config.clause_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/clause.json"
+    },
+    {
+      "name": "approvals",
+      "path": "/organizations/{{ config.organization_id }}/approvals",
+      "pagination": { "type": "none" },
+      "records": { "path": "approvals" },
+      "schema": "schemas/approvals.json"
+    },
+    {
+      "name": "approval",
+      "path": "/organizations/{{ config.organization_id }}/approvals/{{ config.approval_id }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/approval.json"
+    },
+    {
+      "name": "groups",
+      "path": "/organizations/{{ config.organization_id }}/groups",
+      "pagination": { "type": "none" },
+      "records": { "path": "groups" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "members",
+      "path": "/organizations/{{ config.organization_id }}/members",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "start",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "records": { "path": "members" },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "events",
+      "path": "/organizations/{{ config.organization_id }}/events",
+      "pagination": { "type": "none" },
+      "query": {
+        "start": "{{ config.events_start_date }}",
+        "end": "{{ config.events_end_date }}"
+      },
+      "records": { "path": "events" },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "subscription",
+      "path": "/organizations/{{ config.organization_id }}/subscription",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/subscription.json"
+    },
+    {
+      "name": "branding",
+      "path": "/organizations/{{ config.organization_id }}/branding",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/branding.json"
+    },
+    {
+      "name": "automated_templates",
+      "path": "/organizations/{{ config.organization_id }}/auto",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/automated_templates.json"
+    },
+    {
+      "name": "user_me",
+      "path": "/user/me",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/user_me.json"
+    },
+    {
+      "name": "user_preferences",
+      "path": "/user/me/preferences",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/user_preferences.json"
+    },
+    {
+      "name": "webhooks_integrations",
+      "path": "/users/me/integrations/webhooks",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/webhooks_integrations.json"
+    },
+    {
+      "name": "agreement",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ config.agreement_uid }}",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/agreement.json"
+    },
+    {
+      "name": "agreement_metadata",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/metadata",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_uid"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/agreement_metadata.json"
+    },
+    {
+      "name": "agreement_summary",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/summary",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_uid"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/agreement_summary.json"
+    },
+    {
+      "name": "agreement_comments",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/comments",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_id"
+      },
+      "records": { "path": "", "keyed_object": true, "key_field": "comment_uuid" },
+      "schema": "schemas/agreement_comments.json"
+    },
+    {
+      "name": "agreement_activities",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/activities",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_id"
+      },
+      "records": { "path": "activities" },
+      "schema": "schemas/agreement_activities.json"
+    },
+    {
+      "name": "agreement_members",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/members",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_id"
+      },
+      "computed_fields": {
+        "member_id": "{{ record.user.id }}"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/agreement_members.json"
+    },
+    {
+      "name": "agreement_versions",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/versions",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_id"
+      },
+      "records": { "path": "" },
+      "schema": "schemas/agreement_versions.json"
+    },
+    {
+      "name": "agreement_attachments",
+      "path": "/organizations/{{ config.organization_id }}/agreements/{{ fanout.id }}/attachments",
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/organizations/{{ config.organization_id }}/agreements", "records_path": "", "id_field": "uid" }
+        },
+        "into": { "path_var": "agreement_uid" },
+        "stamp_field": "agreement_id"
+      },
+      "records": { "path": "attachments" },
+      "schema": "schemas/agreement_attachments.json"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/published"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "scripts": [
+        {
+          "id": "get_published_content_site_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_published_content_site",
+          "name": "Fixture get_published_content_site",
+          "status": "active",
+          "operation_id": "getPublishedContentSite"
+        }
+      ]
+    }
+  }
+}

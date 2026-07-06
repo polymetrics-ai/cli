@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "events",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "timestamp",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "event": { "type": ["string", "null"] },
+    "timestamp": { "type": ["number", "null"] },
+    "recipient": { "type": ["string", "null"] },
+    "message_id": { "type": ["string", "null"] },
+    "log_level": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] }
+  }
+}

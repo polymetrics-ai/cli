@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/lists", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "list_fixture_2",
+          "brand_id": "brand_fixture_2",
+          "name": "Fixture List 2",
+          "num_contacts": 8,
+          "created": 1767225602
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Taboola Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "account_id"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Taboola Backstage OAuth2 client ID. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Taboola Backstage OAuth2 client secret. Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Taboola account ID; sent as a path segment on the campaigns endpoint."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://backstage.taboola.com",
+      "description": "Taboola Backstage API base URL override for tests or proxies. Also used to derive the OAuth2 token endpoint (<base_url>/backstage/oauth/token)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

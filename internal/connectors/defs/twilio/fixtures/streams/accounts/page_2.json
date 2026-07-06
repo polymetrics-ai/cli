@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts.json",
+    "query": {
+      "Page": "1",
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [],
+      "next_page_uri": null,
+      "page": 1,
+      "page_size": 50
+    }
+  }
+}

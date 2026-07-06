@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ipo_calendar",
+  "type": "object",
+  "x-primary-key": ["symbol", "date"],
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string", "format": "date" },
+    "company": { "type": ["string", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "shares": { "type": ["integer", "null"] },
+    "price_range": { "type": ["string", "null"] },
+    "market_cap": { "type": ["number", "null"] }
+  }
+}

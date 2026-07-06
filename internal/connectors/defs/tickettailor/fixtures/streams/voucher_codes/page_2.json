@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vouchers/vo_fixture_1/codes",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vc_fixture_1",
+          "code": "CODE1",
+          "used": false,
+          "value": 1000,
+          "expiry": 1798848000
+        },
+        {
+          "id": "vc_fixture_2",
+          "code": "CODE2",
+          "used": true,
+          "value": 1000,
+          "expiry": 1798848000
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

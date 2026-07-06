@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "workspaces": [
+        {
+          "id": "ws_fixture_1",
+          "name": "Fixture Workspace 1",
+          "slug": "fixture-workspace-1",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_2",
+          "name": "Fixture Workspace 2",
+          "slug": "fixture-workspace-2",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_3",
+          "name": "Fixture Workspace 3",
+          "slug": "fixture-workspace-3",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_4",
+          "name": "Fixture Workspace 4",
+          "slug": "fixture-workspace-4",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_5",
+          "name": "Fixture Workspace 5",
+          "slug": "fixture-workspace-5",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_6",
+          "name": "Fixture Workspace 6",
+          "slug": "fixture-workspace-6",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_7",
+          "name": "Fixture Workspace 7",
+          "slug": "fixture-workspace-7",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_8",
+          "name": "Fixture Workspace 8",
+          "slug": "fixture-workspace-8",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_9",
+          "name": "Fixture Workspace 9",
+          "slug": "fixture-workspace-9",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_10",
+          "name": "Fixture Workspace 10",
+          "slug": "fixture-workspace-10",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_11",
+          "name": "Fixture Workspace 11",
+          "slug": "fixture-workspace-11",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_12",
+          "name": "Fixture Workspace 12",
+          "slug": "fixture-workspace-12",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_13",
+          "name": "Fixture Workspace 13",
+          "slug": "fixture-workspace-13",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_14",
+          "name": "Fixture Workspace 14",
+          "slug": "fixture-workspace-14",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_15",
+          "name": "Fixture Workspace 15",
+          "slug": "fixture-workspace-15",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_16",
+          "name": "Fixture Workspace 16",
+          "slug": "fixture-workspace-16",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_17",
+          "name": "Fixture Workspace 17",
+          "slug": "fixture-workspace-17",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_18",
+          "name": "Fixture Workspace 18",
+          "slug": "fixture-workspace-18",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_19",
+          "name": "Fixture Workspace 19",
+          "slug": "fixture-workspace-19",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_20",
+          "name": "Fixture Workspace 20",
+          "slug": "fixture-workspace-20",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_21",
+          "name": "Fixture Workspace 21",
+          "slug": "fixture-workspace-21",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_22",
+          "name": "Fixture Workspace 22",
+          "slug": "fixture-workspace-22",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_23",
+          "name": "Fixture Workspace 23",
+          "slug": "fixture-workspace-23",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_24",
+          "name": "Fixture Workspace 24",
+          "slug": "fixture-workspace-24",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_25",
+          "name": "Fixture Workspace 25",
+          "slug": "fixture-workspace-25",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_26",
+          "name": "Fixture Workspace 26",
+          "slug": "fixture-workspace-26",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_27",
+          "name": "Fixture Workspace 27",
+          "slug": "fixture-workspace-27",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_28",
+          "name": "Fixture Workspace 28",
+          "slug": "fixture-workspace-28",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_29",
+          "name": "Fixture Workspace 29",
+          "slug": "fixture-workspace-29",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_30",
+          "name": "Fixture Workspace 30",
+          "slug": "fixture-workspace-30",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_31",
+          "name": "Fixture Workspace 31",
+          "slug": "fixture-workspace-31",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_32",
+          "name": "Fixture Workspace 32",
+          "slug": "fixture-workspace-32",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_33",
+          "name": "Fixture Workspace 33",
+          "slug": "fixture-workspace-33",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_34",
+          "name": "Fixture Workspace 34",
+          "slug": "fixture-workspace-34",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_35",
+          "name": "Fixture Workspace 35",
+          "slug": "fixture-workspace-35",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_36",
+          "name": "Fixture Workspace 36",
+          "slug": "fixture-workspace-36",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_37",
+          "name": "Fixture Workspace 37",
+          "slug": "fixture-workspace-37",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_38",
+          "name": "Fixture Workspace 38",
+          "slug": "fixture-workspace-38",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_39",
+          "name": "Fixture Workspace 39",
+          "slug": "fixture-workspace-39",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_40",
+          "name": "Fixture Workspace 40",
+          "slug": "fixture-workspace-40",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_41",
+          "name": "Fixture Workspace 41",
+          "slug": "fixture-workspace-41",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_42",
+          "name": "Fixture Workspace 42",
+          "slug": "fixture-workspace-42",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_43",
+          "name": "Fixture Workspace 43",
+          "slug": "fixture-workspace-43",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_44",
+          "name": "Fixture Workspace 44",
+          "slug": "fixture-workspace-44",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_45",
+          "name": "Fixture Workspace 45",
+          "slug": "fixture-workspace-45",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_46",
+          "name": "Fixture Workspace 46",
+          "slug": "fixture-workspace-46",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_47",
+          "name": "Fixture Workspace 47",
+          "slug": "fixture-workspace-47",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_48",
+          "name": "Fixture Workspace 48",
+          "slug": "fixture-workspace-48",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_49",
+          "name": "Fixture Workspace 49",
+          "slug": "fixture-workspace-49",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_50",
+          "name": "Fixture Workspace 50",
+          "slug": "fixture-workspace-50",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_51",
+          "name": "Fixture Workspace 51",
+          "slug": "fixture-workspace-51",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_52",
+          "name": "Fixture Workspace 52",
+          "slug": "fixture-workspace-52",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_53",
+          "name": "Fixture Workspace 53",
+          "slug": "fixture-workspace-53",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_54",
+          "name": "Fixture Workspace 54",
+          "slug": "fixture-workspace-54",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_55",
+          "name": "Fixture Workspace 55",
+          "slug": "fixture-workspace-55",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_56",
+          "name": "Fixture Workspace 56",
+          "slug": "fixture-workspace-56",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_57",
+          "name": "Fixture Workspace 57",
+          "slug": "fixture-workspace-57",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_58",
+          "name": "Fixture Workspace 58",
+          "slug": "fixture-workspace-58",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_59",
+          "name": "Fixture Workspace 59",
+          "slug": "fixture-workspace-59",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_60",
+          "name": "Fixture Workspace 60",
+          "slug": "fixture-workspace-60",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_61",
+          "name": "Fixture Workspace 61",
+          "slug": "fixture-workspace-61",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_62",
+          "name": "Fixture Workspace 62",
+          "slug": "fixture-workspace-62",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_63",
+          "name": "Fixture Workspace 63",
+          "slug": "fixture-workspace-63",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_64",
+          "name": "Fixture Workspace 64",
+          "slug": "fixture-workspace-64",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_65",
+          "name": "Fixture Workspace 65",
+          "slug": "fixture-workspace-65",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_66",
+          "name": "Fixture Workspace 66",
+          "slug": "fixture-workspace-66",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_67",
+          "name": "Fixture Workspace 67",
+          "slug": "fixture-workspace-67",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_68",
+          "name": "Fixture Workspace 68",
+          "slug": "fixture-workspace-68",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_69",
+          "name": "Fixture Workspace 69",
+          "slug": "fixture-workspace-69",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_70",
+          "name": "Fixture Workspace 70",
+          "slug": "fixture-workspace-70",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_71",
+          "name": "Fixture Workspace 71",
+          "slug": "fixture-workspace-71",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_72",
+          "name": "Fixture Workspace 72",
+          "slug": "fixture-workspace-72",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_73",
+          "name": "Fixture Workspace 73",
+          "slug": "fixture-workspace-73",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_74",
+          "name": "Fixture Workspace 74",
+          "slug": "fixture-workspace-74",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_75",
+          "name": "Fixture Workspace 75",
+          "slug": "fixture-workspace-75",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_76",
+          "name": "Fixture Workspace 76",
+          "slug": "fixture-workspace-76",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_77",
+          "name": "Fixture Workspace 77",
+          "slug": "fixture-workspace-77",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_78",
+          "name": "Fixture Workspace 78",
+          "slug": "fixture-workspace-78",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_79",
+          "name": "Fixture Workspace 79",
+          "slug": "fixture-workspace-79",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_80",
+          "name": "Fixture Workspace 80",
+          "slug": "fixture-workspace-80",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_81",
+          "name": "Fixture Workspace 81",
+          "slug": "fixture-workspace-81",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_82",
+          "name": "Fixture Workspace 82",
+          "slug": "fixture-workspace-82",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_83",
+          "name": "Fixture Workspace 83",
+          "slug": "fixture-workspace-83",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_84",
+          "name": "Fixture Workspace 84",
+          "slug": "fixture-workspace-84",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_85",
+          "name": "Fixture Workspace 85",
+          "slug": "fixture-workspace-85",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_86",
+          "name": "Fixture Workspace 86",
+          "slug": "fixture-workspace-86",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_87",
+          "name": "Fixture Workspace 87",
+          "slug": "fixture-workspace-87",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_88",
+          "name": "Fixture Workspace 88",
+          "slug": "fixture-workspace-88",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_89",
+          "name": "Fixture Workspace 89",
+          "slug": "fixture-workspace-89",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_90",
+          "name": "Fixture Workspace 90",
+          "slug": "fixture-workspace-90",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_91",
+          "name": "Fixture Workspace 91",
+          "slug": "fixture-workspace-91",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_92",
+          "name": "Fixture Workspace 92",
+          "slug": "fixture-workspace-92",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_93",
+          "name": "Fixture Workspace 93",
+          "slug": "fixture-workspace-93",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_94",
+          "name": "Fixture Workspace 94",
+          "slug": "fixture-workspace-94",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_95",
+          "name": "Fixture Workspace 95",
+          "slug": "fixture-workspace-95",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_96",
+          "name": "Fixture Workspace 96",
+          "slug": "fixture-workspace-96",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_97",
+          "name": "Fixture Workspace 97",
+          "slug": "fixture-workspace-97",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_98",
+          "name": "Fixture Workspace 98",
+          "slug": "fixture-workspace-98",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_99",
+          "name": "Fixture Workspace 99",
+          "slug": "fixture-workspace-99",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "ws_fixture_100",
+          "name": "Fixture Workspace 100",
+          "slug": "fixture-workspace-100",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

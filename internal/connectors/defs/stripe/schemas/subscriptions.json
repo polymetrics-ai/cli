@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscriptions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": "integer" },
+    "customer": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "current_period_start": { "type": ["integer", "null"] },
+    "current_period_end": { "type": ["integer", "null"] },
+    "cancel_at_period_end": { "type": ["boolean", "null"] },
+    "canceled_at": { "type": ["integer", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}

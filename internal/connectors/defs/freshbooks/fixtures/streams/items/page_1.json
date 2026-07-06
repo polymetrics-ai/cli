@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounting/account/synthetic-conformance-value/items/items",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "result": {
+          "items": [
+            {
+              "id": 1,
+              "itemid": 1,
+              "name": "Fixture Item 1",
+              "description": "fixture item 1",
+              "qty": "1",
+              "unit_cost": { "amount": "10.00", "code": "USD" },
+              "inventory": "10",
+              "updated": "2026-01-01 00:00:00"
+            }
+          ],
+          "page": 1,
+          "pages": 1,
+          "per_page": 100,
+          "total": 1
+        }
+      }
+    }
+  }
+}

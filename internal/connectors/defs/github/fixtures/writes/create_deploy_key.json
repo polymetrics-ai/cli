@@ -1,0 +1,17 @@
+{
+  "record": {
+    "title": "Fixture deploy key",
+    "key": "ssh-rsa AAAAB3NzaC1yc2EA-fixture-key",
+    "read_only": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/keys",
+    "body": {
+      "title": "Fixture deploy key",
+      "key": "ssh-rsa AAAAB3NzaC1yc2EA-fixture-key",
+      "read_only": true
+    }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

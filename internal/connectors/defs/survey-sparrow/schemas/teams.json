@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "teams",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "account_id": { "type": ["integer", "null"] },
+    "business_hour_id": { "type": ["integer", "null"] },
+    "round_robin_enabled": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "deleted_at": { "type": ["string", "null"] }
+  }
+}

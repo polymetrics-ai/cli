@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time_off/whos_out"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "type": "timeOff",
+        "employeeId": 1001,
+        "end": "fixture_value",
+        "name": "Fixture Name",
+        "start": "fixture_value"
+      }
+    ]
+  }
+}

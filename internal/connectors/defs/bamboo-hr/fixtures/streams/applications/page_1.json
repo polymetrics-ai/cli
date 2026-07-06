@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/applicant_tracking/applications"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "applications": [
+        {
+          "id": 1001,
+          "applicant": {
+            "avatar": "fixture_value",
+            "email": "fixture@example.com",
+            "firstName": "Fixture Name",
+            "id": 1001
+          },
+          "appliedDate": "2026-01-01T00:00:00Z",
+          "job": {
+            "title": {
+              "id": 1001,
+              "label": "fixture_value"
+            },
+            "id": 1001
+          },
+          "rating": 1001,
+          "status": {
+            "id": 1001,
+            "label": "fixture_value"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "blocks": {
+      "description": "Synthetic create_a_block fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blocks",
+    "body": {
+      "blocks": {
+        "description": "Synthetic create_a_block fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

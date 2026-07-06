@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/solutions/articles/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "article": {
+        "id": "view_solution_article",
+        "name": "Fixture view_solution_article",
+        "subject": "Fixture view_solution_article",
+        "description": "Fixture view_solution_article record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

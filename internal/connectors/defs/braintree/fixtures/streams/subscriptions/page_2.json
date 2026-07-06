@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/subscriptions",
+    "query": { "page_size": "synthetic-conformance-value", "page": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscriptions": [
+        { "id": "sub_fixture_3", "status": "active" }
+      ],
+      "pagination": {}
+    }
+  }
+}

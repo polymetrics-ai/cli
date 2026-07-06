@@ -1,0 +1,296 @@
+{
+  "actions": [
+    {
+      "name": "create_listing",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integration_api/listings/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "authorId"],
+        "properties": {
+          "title": { "type": "string" },
+          "authorId": { "type": "string" },
+          "state": { "type": "string" },
+          "description": { "type": "string" },
+          "geolocation": { "type": "object" },
+          "price": { "type": "object" },
+          "availabilityPlan": { "type": "object" },
+          "publicData": { "type": "object" },
+          "privateData": { "type": "object" },
+          "metadata": { "type": "object" },
+          "images": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new marketplace listing; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_listing",
+      "kind": "update",
+      "method": "POST",
+      "path": "/integration_api/listings/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "geolocation": { "type": ["object", "null"] },
+          "price": { "type": ["object", "null"] },
+          "availabilityPlan": { "type": ["object", "null"] },
+          "publicData": { "type": "object" },
+          "privateData": { "type": "object" },
+          "metadata": { "type": "object" },
+          "images": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing listing's details by id; cannot be used to change listing state (use close_listing/open_listing/approve_listing for that); publicData/privateData/metadata are merged with the existing object on the top level, not deep-merged"
+    },
+    {
+      "name": "close_listing",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/listings/close",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "sets the listing's state to closed; it stops being discoverable via the public Marketplace API listings/query endpoint but remains reachable by id or through related transactions"
+    },
+    {
+      "name": "open_listing",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/listings/open",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "sets a closed listing's state back to published, making it publicly discoverable again; low-risk, no approval required"
+    },
+    {
+      "name": "approve_listing",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/listings/approve",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "approves a listing currently in pendingApproval state, setting it to published and making it publicly visible; review before enabling in a caller with untrusted input if the marketplace relies on manual listing moderation"
+    },
+    {
+      "name": "approve_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/users/approve",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "approves a pending user account, setting its state to active and granting it marketplace access; higher-scrutiny than listing writes since it grants account access"
+    },
+    {
+      "name": "update_user_profile",
+      "kind": "update",
+      "method": "POST",
+      "path": "/integration_api/users/update_profile",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "displayName": { "type": ["string", "null"] },
+          "bio": { "type": ["string", "null"] },
+          "publicData": { "type": "object" },
+          "protectedData": { "type": "object" },
+          "privateData": { "type": "object" },
+          "metadata": { "type": "object" },
+          "profileImageId": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "mutates an existing user's profile fields by id; publicData/protectedData/privateData/metadata are merged with the existing object on the top level, not deep-merged"
+    },
+    {
+      "name": "update_user_permissions",
+      "kind": "update",
+      "method": "POST",
+      "path": "/integration_api/users/update_permissions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "postListings": { "type": "string" },
+          "initiateTransactions": { "type": "string" },
+          "read": { "type": "string" }
+        }
+      },
+      "risk": "changes what a user is permitted to do on the marketplace (post listings, initiate transactions, read); a higher-scrutiny access-control mutation, review before enabling in a caller with untrusted input"
+    },
+    {
+      "name": "verify_user_email",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/users/verify_email",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "email"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "marks the given email address as verified for the user; low-risk account-state mutation"
+    },
+    {
+      "name": "transition_transaction",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/transactions/transition",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "transition", "params"],
+        "properties": {
+          "id": { "type": "string" },
+          "transition": { "type": "string" },
+          "params": { "type": "object" }
+        }
+      },
+      "risk": "transitions a real transaction to a new state via the marketplace's transaction process (e.g. accepting/declining a booking, marking payment); only operator-actor transitions are permitted; a maximum of 100 transitions per transaction; can trigger real payment capture/payout actions depending on the process definition"
+    },
+    {
+      "name": "transition_transaction_speculative",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integration_api/transactions/transition_speculative",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "transition", "params"],
+        "properties": {
+          "id": { "type": "string" },
+          "transition": { "type": "string" },
+          "params": { "type": "object" }
+        }
+      },
+      "risk": "simulates a transaction transition to validate parameters or preview the resulting price breakdown; the transaction state is NOT actually changed — safe to call freely, no approval required"
+    },
+    {
+      "name": "update_transaction_metadata",
+      "kind": "update",
+      "method": "POST",
+      "path": "/integration_api/transactions/update_metadata",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "metadata"],
+        "properties": {
+          "id": { "type": "string" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "mutates an existing transaction's metadata (merged with the existing object on the top level, not deep-merged); low-risk, does not affect payment/process state"
+    },
+    {
+      "name": "create_availability_exception",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integration_api/availability_exceptions/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["listingId", "seats", "start", "end"],
+        "properties": {
+          "listingId": { "type": "string" },
+          "seats": { "type": "integer" },
+          "start": { "type": "string" },
+          "end": { "type": "string" }
+        }
+      },
+      "risk": "overrides a listing's availability plan for a given time range (e.g. blocking it out or opening extra seats); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_availability_exception",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/integration_api/availability_exceptions/delete",
+      "body_type": "json",
+      "delete": {
+        "idempotent": true
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes an availability exception by id, restoring the listing's default availability plan for that time range"
+    },
+    {
+      "name": "set_listing_stock",
+      "kind": "update",
+      "method": "POST",
+      "path": "/integration_api/stock/compare_and_set",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["listingId", "newTotal"],
+        "properties": {
+          "listingId": { "type": "string" },
+          "oldTotal": { "type": ["integer", "null"] },
+          "newTotal": { "type": "integer" }
+        }
+      },
+      "risk": "sets a listing's total available stock via a compare-and-set (only applied if the listing's current stock matches oldTotal); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_stock_adjustment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integration_api/stock_adjustments/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["listingId", "quantity"],
+        "properties": {
+          "listingId": { "type": "string" },
+          "quantity": { "type": "integer" }
+        }
+      },
+      "risk": "creates an immutable stock adjustment for a listing (increases or decreases available stock by quantity); low-risk external mutation, no approval required"
+    }
+  ]
+}

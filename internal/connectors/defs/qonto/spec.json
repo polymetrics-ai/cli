@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Qonto Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Qonto API key, typically formatted '<organization-slug>:<secret-key>'. Sent verbatim as the Authorization header (no Bearer prefix, matching Qonto's own convention). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://thirdparty.qonto.com/v2",
+      "description": "Qonto API base URL. Defaults to https://thirdparty.qonto.com/v2."
+    },
+    "iban": {
+      "type": "string",
+      "description": "IBAN of the Qonto bank account to read transactions for. Required for the transactions stream."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Lower bound sent as the start_date query parameter on every request, when set. Matches legacy's optional start_date passthrough."
+    }
+  }
+}

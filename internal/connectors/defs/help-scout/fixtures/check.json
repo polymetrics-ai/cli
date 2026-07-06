@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/mailboxes" },
+  "response": {
+    "status": 200,
+    "body": { "_embedded": { "mailboxes": [] }, "page": { "number": 1, "size": 50, "totalElements": 0, "totalPages": 0 } }
+  }
+}

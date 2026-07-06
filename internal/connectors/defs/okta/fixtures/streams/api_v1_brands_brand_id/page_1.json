@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agreeToCustomPrivacyPolicy": true,
+      "customPrivacyPolicyUrl": "https://example.invalid/fixture",
+      "defaultApp": {
+        "appInstanceId": "app_instance_id_fixture",
+        "appLinkName": "https://example.invalid/fixture",
+        "classicApplicationUri": "https://example.invalid/fixture"
+      },
+      "emailDomainId": "fixture@example.invalid",
+      "id": "id_fixture",
+      "isDefault": true,
+      "locale": "locale_fixture",
+      "name": "name_fixture",
+      "removePoweredByOkta": true
+    }
+  }
+}

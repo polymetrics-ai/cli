@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/supplier", "query": { "page": "1", "limit": "100", "IncludeDeprecated": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "SupplierList": [
+        {
+          "ID": "sup_fixture_1",
+          "Name": "Fixture Supplier One",
+          "Email": "supplier1@example.com",
+          "Phone": "555-0200",
+          "Status": "Active",
+          "Currency": "USD",
+          "PaymentTerm": "Net 30",
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "ID": "sup_fixture_2",
+          "Name": "Fixture Supplier Two",
+          "Email": "supplier2@example.com",
+          "Phone": "555-0201",
+          "Status": "Active",
+          "Currency": "USD",
+          "PaymentTerm": "Net 30",
+          "LastModifiedOn": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

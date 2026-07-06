@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "wsub_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/webhooks/wsub_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

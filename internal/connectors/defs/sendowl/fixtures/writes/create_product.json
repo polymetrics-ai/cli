@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Product Created",
+    "price": "9.99",
+    "currency_code": "USD",
+    "product_type": "digital"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/products"
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": 999, "name": "Fixture Product Created" }
+  }
+}

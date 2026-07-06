@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/documents",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/document",
+            "id": "document_fixture_1",
+            "file_name": "fixture-commercial-invoice.pdf",
+            "document_type": "commercial_invoice",
+            "memo": "sanitized fixture document",
+            "file_link": "https://api.flexport.com/documents/document_fixture_1/download",
+            "archived_at": null,
+            "file_metadata": {
+              "size": 1024,
+              "mime_type": "application/pdf"
+            },
+            "shipment": {
+              "_object": "/api/refs/object",
+              "ref_type": "/shipment",
+              "link": "https://api.flexport.com/shipments/2983",
+              "id": 2983
+            }
+          }
+        ]
+      }
+    }
+  }
+}

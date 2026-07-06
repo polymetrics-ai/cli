@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "candidates",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "Computed from the raw API's `_id` field, falling back to `id` to match legacy firstString." },
+    "position_id": { "type": ["string", "null"], "description": "Stamped by the fan_out dialect from the enclosing position id discovered via the positions listing." },
+    "name": { "type": ["string", "null"] },
+    "email_address": { "type": ["string", "null"] },
+    "phone_number": { "type": ["string", "null"] },
+    "headline": { "type": ["string", "null"] },
+    "origin": { "type": ["string", "null"] },
+    "stage": { "type": ["string", "null"], "description": "Computed from the raw API's nested `stage.name` object field, falling back to scalar `stage` to match legacy nestedName." },
+    "creation_date": { "type": ["string", "null"] },
+    "updated_date": { "type": ["string", "null"] }
+  }
+}

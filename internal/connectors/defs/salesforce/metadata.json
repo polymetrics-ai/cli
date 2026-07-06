@@ -1,0 +1,22 @@
+{
+  "name": "salesforce",
+  "display_name": "Salesforce",
+  "description": "Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQL queries through the REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 2000
+  },
+  "risk": {
+    "read": "external Salesforce API read of object metadata, Account, Contact, and Lead records"
+  }
+}

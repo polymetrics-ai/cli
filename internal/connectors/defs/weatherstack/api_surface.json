@@ -1,0 +1,13 @@
+{
+  "api": "Weatherstack REST API (https://weatherstack.com/documentation)",
+  "docs": "https://weatherstack.com/documentation",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Weatherstack endpoint (current, historical incl. its date-range time-series mode, forecast, marine, autocomplete) is now covered_by a stream. Weatherstack's semicolon-separated 'bulk' query capability (documented at weatherstack.com/documentation's Bulk Queries section) is not a distinct endpoint/path — it is a caller-supplied value SHAPE on the existing query parameter of current/historical/forecast/marine, so it needs no separate api_surface.json entry; a caller may already pass a semicolon-joined query value through config.query today. Weatherstack has no write/mutation endpoints at all (a read-only weather-data API), so capabilities.write stays false and this bundle ships no writes.json.",
+  "endpoints": [
+    { "method": "GET", "path": "/current", "covered_by": { "stream": "current" } },
+    { "method": "GET", "path": "/historical", "covered_by": { "stream": "historical" } },
+    { "method": "GET", "path": "/forecast", "covered_by": { "stream": "forecast" } },
+    { "method": "GET", "path": "/marine", "covered_by": { "stream": "marine" } },
+    { "method": "GET", "path": "/autocomplete", "covered_by": { "stream": "autocomplete" } }
+  ]
+}

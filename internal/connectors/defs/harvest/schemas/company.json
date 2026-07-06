@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company",
+  "type": "object",
+  "x-primary-key": ["full_domain"],
+  "required": ["full_domain"],
+  "properties": {
+    "base_uri": { "type": ["string", "null"] },
+    "full_domain": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "week_start_day": { "type": ["string", "null"] },
+    "wants_timestamp_timers": { "type": ["boolean", "null"] },
+    "time_format": { "type": ["string", "null"] },
+    "date_format": { "type": ["string", "null"] },
+    "plan_type": { "type": ["string", "null"] },
+    "expense_feature": { "type": ["boolean", "null"] },
+    "invoice_feature": { "type": ["boolean", "null"] },
+    "estimate_feature": { "type": ["boolean", "null"] },
+    "approval_feature": { "type": ["boolean", "null"] },
+    "clock": { "type": ["string", "null"] },
+    "currency_code_display": { "type": ["string", "null"] },
+    "currency_symbol_display": { "type": ["string", "null"] },
+    "decimal_symbol": { "type": ["string", "null"] },
+    "thousands_separator": { "type": ["string", "null"] },
+    "color_scheme": { "type": ["string", "null"] },
+    "weekly_capacity": { "type": ["integer", "null"] }
+  }
+}

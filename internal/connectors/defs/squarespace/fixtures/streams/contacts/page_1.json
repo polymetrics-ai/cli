@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v1/contacts", "query": { "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": "contact_fixture_1",
+          "firstName": "Fixture",
+          "lastName": "One",
+          "locale": "en-US",
+          "createdOn": "2026-01-01T00:00:00Z",
+          "primaryEmail": { "email": "fixture1@example.com", "acceptsMarketing": false }
+        }
+      ],
+      "pagination": { "nextPageCursor": "fixture-contacts-cursor-2", "hasNextPage": true }
+    }
+  }
+}

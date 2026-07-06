@@ -1,0 +1,9 @@
+{
+  "record": { "task_id": "task_fixture_1", "comment_text": "Fixture comment", "notify_all": false },
+  "expect": {
+    "method": "POST",
+    "path": "/task/task_fixture_1/comment",
+    "body": { "comment_text": "Fixture comment", "notify_all": false }
+  },
+  "response": { "status": 200, "body": { "id": "comment_fixture_1" } }
+}

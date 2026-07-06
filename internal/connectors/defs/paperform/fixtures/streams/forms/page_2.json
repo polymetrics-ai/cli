@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms",
+    "query": {
+      "limit": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "form_fixture_101",
+          "title": "Fixture Form 101",
+          "slug": "fixture-form-101",
+          "created_at": "2026-01-29T00:00:00Z",
+          "updated_at": "2026-01-29T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

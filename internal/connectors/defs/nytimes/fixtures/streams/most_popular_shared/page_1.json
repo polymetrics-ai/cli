@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/mostpopular/v2/shared/synthetic-conformance-value.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "OK",
+      "copyright": "Copyright (c) 2026 The New York Times Company. All Rights Reserved.",
+      "num_results": 1,
+      "results": [
+        { "id": 3001, "url": "https://www.nytimes.com/fixture/4", "title": "Fixture Shared 1", "abstract": "Fixture abstract 4", "byline": "By Fixture Author", "section": "Health", "source": "New York Times", "type": "Article", "published_date": "2026-01-04", "updated": "2026-01-04 12:00:00", "uri": "nyt://article/fixture-4" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/orgs/synthetic-conformance-value/members", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "member_fixture_1",
+          "role": "admin",
+          "user": {
+            "id": "user_fixture_1",
+            "displayName": "Fixture User One",
+            "email": "fixture1@example.com"
+          }
+        },
+        {
+          "id": "member_fixture_2",
+          "role": "member",
+          "user": {
+            "id": "user_fixture_2",
+            "displayName": "Fixture User Two",
+            "email": "fixture2@example.com"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "step_id": "synthetic-conformance-value",
+    "variant_id": "synthetic-conformance-value",
+    "message": "fixture_message",
+    "subject": "fixture_subject",
+    "isEnabled": true,
+    "attachmentIds": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/sequences/synthetic-conformance-value/steps/synthetic-conformance-value/variants/synthetic-conformance-value",
+    "body": {
+      "message": "fixture_message",
+      "subject": "fixture_subject",
+      "isEnabled": true,
+      "attachmentIds": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

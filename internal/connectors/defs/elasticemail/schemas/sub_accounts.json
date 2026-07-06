@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sub_accounts",
+  "type": "object",
+  "x-primary-key": ["PublicAccountID"],
+  "required": ["PublicAccountID"],
+  "properties": {
+    "PublicAccountID": { "type": "string" },
+    "Email": { "type": ["string", "null"] },
+    "LastActivity": { "type": ["string", "null"] },
+    "EmailCredits": { "type": ["integer", "null"] },
+    "TotalEmailsSent": { "type": ["integer", "null"] },
+    "Reputation": { "type": ["number", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "ContactsCount": { "type": ["integer", "null"] }
+  }
+}

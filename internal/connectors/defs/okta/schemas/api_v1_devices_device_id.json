@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "providers": {
+      "type": "array",
+      "description": "List of providers for the device when the `expand=providers` query parameter is specified",
+      "items": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "object",
+            "description": "Payload data for the OktaVerify provider",
+            "properties": {
+              "clientVersion": {
+                "type": "string",
+                "description": "The version of the Okta Verify client"
+              }
+            },
+            "additionalProperties": true
+          },
+          "payloadVersion": {
+            "type": "string",
+            "description": "The version of the payload schema"
+          },
+          "provider": {
+            "type": "string",
+            "description": "The name of the provider"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

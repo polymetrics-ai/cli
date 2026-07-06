@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DynamoDB Connection Specification",
+  "type": "object",
+  "required": ["access_key_id", "secret_access_key", "region"],
+  "properties": {
+    "access_key_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AWS access key id used to derive the AWS Signature Version 4 (SigV4) Authorization header. Never logged."
+    },
+    "secret_access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AWS secret access key used to derive the SigV4 signing key HMAC chain. Never placed in a header or logged."
+    },
+    "endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "DynamoDB JSON HTTP API endpoint, e.g. https://dynamodb.us-east-1.amazonaws.com. One of endpoint/base_url is required for live mode -- enforced by native/dynamodb's own Go config resolution (connection.go's resolveEndpoint), not this schema's required[] (JSON Schema's required[] cannot express an either-or pair)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Alias for endpoint, matching legacy's identical endpoint/base_url fallback. Ignored when endpoint is set."
+    },
+    "region": {
+      "type": "string",
+      "description": "AWS region used in the SigV4 credential scope (e.g. us-east-1) and, conventionally, the endpoint's own region."
+    },
+    "table_name": {
+      "type": "string",
+      "description": "DynamoDB table name to Scan. One of table_name/table is required for live mode -- enforced by native/dynamodb's own Go config resolution (reader.go's tableName), not this schema's required[]."
+    },
+    "table": {
+      "type": "string",
+      "description": "Alias for table_name, matching legacy's identical table_name/table fallback. Ignored when table_name is set."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Scan Limit per page (a positive integer)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "100",
+      "description": "Maximum Scan pages to request (a positive integer)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

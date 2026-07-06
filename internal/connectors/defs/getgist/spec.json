@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GetGist Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Gist API key. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.getgist.com",
+      "description": "Gist API base URL override for tests or proxies."
+    },
+    "article_id": {
+      "type": "string",
+      "description": "Article id for article_details, update_article, and delete_article."
+    },
+    "article_query": {
+      "type": "string",
+      "description": "Search text for article_search."
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "Collection id for collection_details."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Contact id for contact_details."
+    },
+    "contact_email": {
+      "type": "string",
+      "description": "Optional contact email lookup filter."
+    },
+    "contact_user_id": {
+      "type": "string",
+      "description": "Optional contact user_id lookup filter."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "Contact batch import id for contact_batch_status."
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Optional event type filter for events."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "Segment id for segment_details."
+    },
+    "include_count": {
+      "type": "string",
+      "description": "Optional include_count query value for segment streams."
+    },
+    "form_id": {
+      "type": "string",
+      "description": "Form id for form_details and form_submissions."
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Campaign id for campaign_details."
+    },
+    "subscription_type_id": {
+      "type": "string",
+      "description": "Subscription type id for subscription_type_details."
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "Conversation id for conversation detail, message, and mutation endpoints."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Team id for team_details."
+    },
+    "teammate_id": {
+      "type": "string",
+      "description": "Teammate id for teammate_details."
+    },
+    "store_id": {
+      "type": "string",
+      "description": "E-commerce store id for store-scoped resources."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "E-commerce customer id for customer and cart resources."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "E-commerce product id for product and variant resources."
+    },
+    "product_variant_id": {
+      "type": "string",
+      "description": "Product variant id for update_product_variant."
+    },
+    "variant_id": {
+      "type": "string",
+      "description": "Product variant id for product_variant_details."
+    },
+    "category_id": {
+      "type": "string",
+      "description": "Product category id for product_category_details."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Order id for update_order."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

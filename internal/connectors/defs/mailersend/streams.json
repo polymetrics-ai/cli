@@ -1,0 +1,156 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 25
+    },
+    "check": { "method": "GET", "path": "/domains", "query": { "limit": "10" } },
+    "error_map": [
+      { "status": 401, "hint": "mailersend api_token is missing or invalid; re-run pm credentials add mailersend" },
+      { "status": 429, "class": "rate_limited", "hint": "mailersend rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "activity",
+      "path": "/activity/{{ config.domain_id }}",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/activity.json"
+    },
+    {
+      "name": "domains",
+      "path": "/domains",
+      "records": { "path": "data" },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "query": {
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "recipients",
+      "path": "/recipients",
+      "records": { "path": "data" },
+      "schema": "schemas/recipients.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "query": {
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "scheduled_messages",
+      "path": "/message-schedules",
+      "records": { "path": "data" },
+      "schema": "schemas/scheduled_messages.json"
+    },
+    {
+      "name": "sender_identities",
+      "path": "/identities",
+      "records": { "path": "data" },
+      "schema": "schemas/sender_identities.json"
+    },
+    {
+      "name": "inbound_routes",
+      "path": "/inbound",
+      "records": { "path": "data" },
+      "schema": "schemas/inbound_routes.json"
+    },
+    {
+      "name": "account_users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "schema": "schemas/account_users.json"
+    },
+    {
+      "name": "invites",
+      "path": "/invites",
+      "records": { "path": "data" },
+      "schema": "schemas/invites.json"
+    },
+    {
+      "name": "tokens",
+      "path": "/token",
+      "records": { "path": "data" },
+      "schema": "schemas/tokens.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "query": {
+        "domain_id": "{{ config.domain_id }}"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "analytics_by_date",
+      "path": "/analytics/date",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}",
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.stats" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_by_date.json"
+    },
+    {
+      "name": "analytics_country",
+      "path": "/analytics/country",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}",
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.stats" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_stat_counts.json"
+    },
+    {
+      "name": "analytics_user_agents",
+      "path": "/analytics/ua-name",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}",
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.stats" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_stat_counts.json"
+    },
+    {
+      "name": "analytics_reading_environment",
+      "path": "/analytics/ua-type",
+      "query": {
+        "date_from": "{{ config.date_from }}",
+        "date_to": "{{ config.date_to }}",
+        "domain_id": { "template": "{{ config.domain_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.stats" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_stat_counts.json"
+    }
+  ]
+}

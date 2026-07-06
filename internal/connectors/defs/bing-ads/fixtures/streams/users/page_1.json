@@ -1,0 +1,11 @@
+{
+  "request": { "method": "POST", "path": "/User/Query", "body": { "UserId": null } },
+  "response": {
+    "status": 200,
+    "body": {
+      "User": [
+        { "Id": "2000001", "UserName": "fixture-user", "CustomerId": "3000001", "JobTitle": "Account Manager", "UserLifeCycleStatus": "Active", "LastModifiedTime": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

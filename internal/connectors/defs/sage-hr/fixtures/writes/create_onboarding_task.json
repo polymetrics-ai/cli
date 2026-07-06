@@ -1,0 +1,5 @@
+{
+  "record": { "title": "Fixture Onboarding Task", "boarding_task_template_category_id": 1, "due_in": 30 },
+  "expect": { "method": "POST", "path": "/onboarding/tasks" },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

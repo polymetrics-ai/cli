@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/currencies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "code": "USD", "name": "US Dollar" },
+        { "code": "EUR", "name": "Euro" }
+      ]
+    }
+  }
+}

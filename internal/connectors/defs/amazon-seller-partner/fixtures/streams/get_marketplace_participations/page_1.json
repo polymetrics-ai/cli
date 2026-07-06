@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sellers/v1/marketplaceParticipations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "marketplace": {},
+          "participation": {},
+          "storeName": "storeName-fixture-1"
+        }
+      ]
+    }
+  }
+}

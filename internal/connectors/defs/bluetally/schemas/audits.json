@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audits",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "audit_date": { "type": ["string", "null"] },
+    "next_audit_date": { "type": ["string", "null"] },
+    "scheduled": { "type": ["boolean", "null"] },
+    "completed": { "type": ["boolean", "null"] },
+    "asset_id": { "type": ["integer", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "audit_status": { "type": ["string", "null"] },
+    "audit_failed_reason": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

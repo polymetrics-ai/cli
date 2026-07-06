@@ -1,0 +1,8 @@
+{
+  "record": { "id": "contract_fixture_1", "custom_properties": { "renewal_owner": "fixture-owner" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contracts/contract_fixture_1/",
+    "body": { "custom_properties": { "renewal_owner": "fixture-owner" } }
+  }
+}

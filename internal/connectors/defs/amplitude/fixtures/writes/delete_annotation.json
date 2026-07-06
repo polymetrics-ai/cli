@@ -1,0 +1,11 @@
+{
+  "record": { "id": 5001 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/3/annotations/5001"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/roles/synthetic-conformance-value/permissions",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "permissions": [
+        {
+          "conditions": {
+            "exclude": {},
+            "include": {}
+          },
+          "created": "2026-01-01T00:00:00Z",
+          "label": "label_fixture",
+          "lastUpdated": "2026-01-01T00:00:00Z",
+          "_links": {
+            "role": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

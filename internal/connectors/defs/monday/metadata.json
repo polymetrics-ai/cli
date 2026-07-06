@@ -1,0 +1,23 @@
+{
+  "name": "monday",
+  "display_name": "Monday",
+  "description": "Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.monday.com/api-reference/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external monday.com GraphQL API read of boards/items/users/teams/tags",
+    "approval": "none; read-only source connector"
+  }
+}

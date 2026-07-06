@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bookings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/bookings",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/booking",
+            "id": 2983,
+            "name": "PO Fixture Booking",
+            "status": "submitted",
+            "quote_status": "pending_quote",
+            "transportation_mode": "ocean",
+            "origin_address": {
+              "_object": "/address",
+              "street_address": "1 Market St",
+              "city": "San Francisco",
+              "state": "CA",
+              "zip": "94105",
+              "country_code": "US"
+            },
+            "cargo_ready_date": "2026-01-10",
+            "delivery_date": "2026-02-15",
+            "wants_export_customs_service": false,
+            "wants_import_customs_service": true,
+            "special_instructions": "Sanitized booking fixture",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z",
+            "metadata": { "PO": ["PO-FIXTURE-1"] }
+          }
+        ]
+      }
+    }
+  }
+}

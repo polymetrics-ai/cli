@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/booking_line_items"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/booking_line_items",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/purchase_orders/booking_line_item",
+            "id": 1234,
+            "booking": {
+              "_object": "/api/refs/object",
+              "ref_type": "/booking",
+              "link": "https://api.flexport.com/bookings/2983",
+              "id": 2983
+            },
+            "purchase_order_line_item": {
+              "_object": "/api/refs/object",
+              "ref_type": "/purchase_orders/line_item",
+              "link": "https://api.flexport.com/purchase_order_line_items/9988",
+              "id": 9988
+            },
+            "units": 10
+          }
+        ]
+      }
+    }
+  }
+}

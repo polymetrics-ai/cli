@@ -1,0 +1,15 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "client_id": "synthetic-conformance-value",
+    "token_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/clients/synthetic-conformance-value/tokens/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

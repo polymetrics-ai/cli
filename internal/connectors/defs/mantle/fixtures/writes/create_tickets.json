@@ -1,0 +1,112 @@
+{
+  "record": {
+    "subject": "fixture",
+    "status": "open",
+    "priority": "low",
+    "tags": [
+      "fixture"
+    ],
+    "contactId": "contact_id_fixture",
+    "contactIds": [
+      "contact_id_fixture"
+    ],
+    "customerId": "customer_id_fixture",
+    "channelId": "channel_id_fixture",
+    "appId": "app_id_fixture",
+    "assignedToId": "assigned_to_id_fixture",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-01-01T00:00:00Z",
+    "lastMessageAt": "2026-01-01T00:00:00Z",
+    "readOnly": true,
+    "managedBy": "fixture",
+    "contact": {
+      "email": "fixture@example.com",
+      "name": "fixture"
+    },
+    "inboxId": "inbox_id_fixture",
+    "cxEmailAddressId": "fixture@example.com",
+    "send": true,
+    "message": {
+      "actorType": "customer",
+      "content": "fixture",
+      "contentType": "fixture",
+      "isInternal": true,
+      "contactId": "contact_id_fixture",
+      "agentId": "agent_id_fixture",
+      "occurredAt": "2026-01-01T00:00:00Z",
+      "messageId": "message_id_fixture",
+      "inReplyToId": "in_reply_to_id_fixture",
+      "referencesIds": [
+        "references_id_fixture"
+      ],
+      "attachments": [
+        {
+          "id": "attachment_fixture_id"
+        }
+      ],
+      "contact": {
+        "email": "fixture@example.com",
+        "name": "fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tickets",
+    "body": {
+      "subject": "fixture",
+      "status": "open",
+      "priority": "low",
+      "tags": [
+        "fixture"
+      ],
+      "contactId": "contact_id_fixture",
+      "contactIds": [
+        "contact_id_fixture"
+      ],
+      "customerId": "customer_id_fixture",
+      "channelId": "channel_id_fixture",
+      "appId": "app_id_fixture",
+      "assignedToId": "assigned_to_id_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "lastMessageAt": "2026-01-01T00:00:00Z",
+      "readOnly": true,
+      "managedBy": "fixture",
+      "contact": {
+        "email": "fixture@example.com",
+        "name": "fixture"
+      },
+      "inboxId": "inbox_id_fixture",
+      "cxEmailAddressId": "fixture@example.com",
+      "send": true,
+      "message": {
+        "actorType": "customer",
+        "content": "fixture",
+        "contentType": "fixture",
+        "isInternal": true,
+        "contactId": "contact_id_fixture",
+        "agentId": "agent_id_fixture",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "messageId": "message_id_fixture",
+        "inReplyToId": "in_reply_to_id_fixture",
+        "referencesIds": [
+          "references_id_fixture"
+        ],
+        "attachments": [
+          {
+            "id": "attachment_fixture_id"
+          }
+        ],
+        "contact": {
+          "email": "fixture@example.com",
+          "name": "fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

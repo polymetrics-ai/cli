@@ -1,0 +1,10 @@
+{
+  "record": {
+    "dashboard_token": "dbrd_fixture_1",
+    "title": "Updated Dashboard"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/dashboards/dbrd_fixture_1"
+  }
+}

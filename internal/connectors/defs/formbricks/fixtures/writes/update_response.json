@@ -1,0 +1,14 @@
+{
+  "record": {
+    "responseId": "res_fixture_1",
+    "data": { "question_fixture_1": "updated fixture answer" },
+    "finished": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/management/responses/res_fixture_1",
+    "body": {
+      "finished": true
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/tasks",
+    "query": {
+      "limit": "25",
+      "body-format": "storage"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "task_fixture_1",
+          "localId": "1",
+          "spaceId": "spaces_fixture_1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "status": "incomplete",
+          "createdBy": "author_fixture_1",
+          "assignedTo": "author_fixture_2",
+          "completedBy": "",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z",
+          "dueAt": "",
+          "completedAt": ""
+        },
+        {
+          "id": "task_fixture_2",
+          "localId": "2",
+          "spaceId": "spaces_fixture_1",
+          "pageId": "pages_fixture_2",
+          "blogPostId": "",
+          "status": "complete",
+          "createdBy": "author_fixture_1",
+          "assignedTo": "author_fixture_1",
+          "completedBy": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z",
+          "dueAt": "",
+          "completedAt": "2026-01-02T00:00:00.000Z"
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

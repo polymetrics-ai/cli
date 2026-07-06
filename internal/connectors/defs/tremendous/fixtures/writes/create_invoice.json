@@ -1,0 +1,7 @@
+{
+  "record": { "amount": 100.0, "currency_code": "USD" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/invoices"
+  }
+}

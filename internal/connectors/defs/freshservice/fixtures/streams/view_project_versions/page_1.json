@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pm/projects/synthetic-conformance-value/versions",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "versions": [
+        {
+          "id": "view_project_versions",
+          "name": "Fixture view_project_versions",
+          "subject": "Fixture view_project_versions",
+          "description": "Fixture view_project_versions record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

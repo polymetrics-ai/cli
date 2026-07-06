@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists", "query": { "$skiptoken": "fixture-skiptoken-1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_list_3", "name": "Fixture-List-3", "displayName": "Fixture List 3", "description": "Third sample list", "webUrl": "https://contoso.sharepoint.com/lists/3", "eTag": "etag-3", "createdDateTime": "2026-01-03T00:00:00Z", "lastModifiedDateTime": "2026-01-03T00:00:00Z", "list": { "template": "genericList" } }
+      ]
+    }
+  }
+}

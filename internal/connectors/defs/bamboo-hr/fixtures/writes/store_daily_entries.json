@@ -1,0 +1,30 @@
+{
+  "record": {
+    "entries": [
+      {
+        "dailyEntryId": 1001,
+        "date": "2026-01-01T00:00:00Z",
+        "employeeId": 1001,
+        "hours": 12.34
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/daily_entries",
+    "body": {
+      "entries": [
+        {
+          "dailyEntryId": 1001,
+          "date": "2026-01-01T00:00:00Z",
+          "employeeId": 1001,
+          "hours": 12.34
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apps_app_id_checklists_checklist_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the checklist."
+    },
+    "name": {
+      "type": "string",
+      "description": "Internal name for the checklist."
+    },
+    "handle": {
+      "type": "string",
+      "description": "URL-friendly handle for the checklist."
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title for the checklist."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the checklist."
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the checklist.",
+      "enum": [
+        "draft",
+        "active",
+        "archived"
+      ]
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the step."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the step."
+          },
+          "handle": {
+            "type": "string",
+            "description": "URL-friendly handle for the step."
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title for the step."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the step."
+          },
+          "conditionType": {
+            "type": "string",
+            "description": "The type of condition that triggers step completion.",
+            "enum": [
+              "usage_event",
+              "app_event",
+              "usage_metric",
+              "custom_field"
+            ]
+          },
+          "conditionOperator": {
+            "type": "string",
+            "description": "The operator for the condition.",
+            "enum": [
+              "equals",
+              "not_equals",
+              "greater_than",
+              "less_than",
+              "greater_than_or_equal",
+              "less_than_or_equal",
+              "is_true",
+              "is_false",
+              "is_blank",
+              "is_not_blank"
+            ]
+          },
+          "conditionValue": {
+            "type": "string",
+            "description": "The value to compare against."
+          },
+          "allowManualCompletion": {
+            "type": "boolean",
+            "description": "Whether the step can be manually completed."
+          },
+          "allowSkip": {
+            "type": "boolean",
+            "description": "Whether the step can be skipped."
+          },
+          "order": {
+            "type": "string",
+            "description": "Fractional index for ordering."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

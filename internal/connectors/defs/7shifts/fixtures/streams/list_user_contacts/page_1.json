@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/contacts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "company_id": 1001,
+          "first_name": "fixture first name",
+          "last_name": "fixture last name",
+          "photo": "fixture photo",
+          "type": "employee",
+          "pronouns": "fixture pronouns",
+          "mobile_phone": "fixture mobile phone",
+          "home_phone": "fixture home phone",
+          "email": "fixture@example.com"
+        }
+      ],
+      "meta": {
+        "cursor": {
+          "next": null
+        }
+      }
+    }
+  }
+}

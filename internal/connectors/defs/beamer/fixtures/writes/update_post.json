@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "post_fixture_1",
+    "publish": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/posts/post_fixture_1",
+    "body": {
+      "publish": true
+    }
+  }
+}

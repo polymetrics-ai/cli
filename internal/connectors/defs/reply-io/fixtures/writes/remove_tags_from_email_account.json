@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "tags": []
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v3/email-accounts/synthetic-conformance-value/tags",
+    "body": {
+      "tags": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

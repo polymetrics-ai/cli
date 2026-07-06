@@ -1,0 +1,5 @@
+{
+  "record": { "idorder": 301 },
+  "expect": { "method": "POST", "path": "/orders/301/pause" },
+  "response": { "status": 200, "body": {} }
+}

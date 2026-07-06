@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "customduty",
+      "attributes": {
+        "name": "Fixture Create Custom Duty"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customDuties",
+    "body": {
+      "data": {
+        "type": "customduty",
+        "attributes": {
+          "name": "Fixture Create Custom Duty"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

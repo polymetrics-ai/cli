@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": { "page_size": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": {} }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-Token", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "next",
+      "token_path": "next",
+      "stop_path": "hasNext"
+    },
+    "check": { "method": "GET", "path": "/codesnippets" },
+    "error_map": [
+      { "status": 401, "hint": "mixmax api_key is missing or invalid; re-run pm credentials add mixmax" },
+      { "status": 429, "class": "rate_limited", "hint": "mixmax rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "codesnippets",
+      "path": "/codesnippets",
+      "records": { "path": "results" },
+      "schema": "schemas/codesnippets.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "records": { "path": "results" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "rules",
+      "path": "/rules",
+      "records": { "path": "results" },
+      "schema": "schemas/rules.json"
+    },
+    {
+      "name": "sequences",
+      "path": "/sequences",
+      "records": { "path": "results" },
+      "schema": "schemas/sequences.json"
+    },
+    {
+      "name": "meetingtypes",
+      "path": "/meetingtypes",
+      "records": { "path": "results" },
+      "schema": "schemas/meetingtypes.json"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "booking_pages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] }
+  }
+}

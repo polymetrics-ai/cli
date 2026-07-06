@@ -1,0 +1,5 @@
+{
+  "record": { "id": "1", "status": "approve" },
+  "expect": { "method": "PATCH", "path": "/leave-management/kit-days/1" },
+  "response": { "status": 200, "body": {} }
+}

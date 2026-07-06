@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Tag",
+    "colour": "#009aed"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/datasets/uploads/synthetic-conformance-value/parts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "object_fixture",
+      "data": [
+        {
+          "id": "id_fixture",
+          "upload_id": "upload_id_fixture",
+          "status": "status_fixture",
+          "created_at": 1
+        }
+      ]
+    }
+  }
+}

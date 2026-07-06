@@ -1,0 +1,584 @@
+{
+  "api": "Workable SPI v3 API Reference",
+  "docs": "https://workable.readme.io/reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B reviewed the official Workable ReadMe endpoint index. Authenticated SPI v3 GET list/detail endpoints are represented as streams; JSON-expressible mutations are represented as write actions. Public careers API duplication and multipart document upload are explicitly excluded.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/accounts/{subdomain}",
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/collaboration_permissions",
+      "covered_by": {
+        "stream": "collaboration_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/disqualification_reasons",
+      "covered_by": {
+        "stream": "disqualification_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/legal_entities",
+      "covered_by": {
+        "stream": "legal_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/permission_sets",
+      "covered_by": {
+        "stream": "permission_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/recruiters",
+      "covered_by": {
+        "stream": "recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/stages",
+      "covered_by": {
+        "stream": "stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employee_fields",
+      "covered_by": {
+        "stream": "employee_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/orgchart",
+      "covered_by": {
+        "stream": "employees_orgchart"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}",
+      "covered_by": {
+        "stream": "employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/employees/{id}/documents",
+      "covered_by": {
+        "stream": "employee_documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates",
+      "covered_by": {
+        "stream": "review_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/review-cycles/templates/{id}",
+      "covered_by": {
+        "stream": "review_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "covered_by": {
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/balances",
+      "covered_by": {
+        "stream": "timeoff_balances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/categories",
+      "covered_by": {
+        "stream": "timeoff_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/timeoff/requests",
+      "covered_by": {
+        "stream": "timeoff_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/work_schedules",
+      "covered_by": {
+        "stream": "work_schedules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/activities",
+      "covered_by": {
+        "stream": "candidate_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/files",
+      "covered_by": {
+        "stream": "candidate_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/offer",
+      "covered_by": {
+        "stream": "candidate_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/custom_attributes",
+      "covered_by": {
+        "stream": "custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/activities",
+      "covered_by": {
+        "stream": "job_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+      "covered_by": {
+        "stream": "job_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/members",
+      "covered_by": {
+        "stream": "job_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/questions",
+      "covered_by": {
+        "stream": "job_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/stages",
+      "covered_by": {
+        "stream": "job_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}",
+      "covered_by": {
+        "stream": "job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/application_form",
+      "covered_by": {
+        "stream": "job_application_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/recruiters",
+      "covered_by": {
+        "stream": "job_recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions",
+      "covered_by": {
+        "stream": "requisitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions/{code}",
+      "covered_by": {
+        "stream": "requisition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/offers/{id}",
+      "covered_by": {
+        "stream": "offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/{subdomain}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Public careers-site jobs are served from Workable public API rather than the configured SPI v3 base URL and duplicate the authenticated jobs data surface."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/departments",
+      "covered_by": {
+        "write": "create_department"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/departments",
+      "covered_by": {
+        "write": "update_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/departments/{id}/merge",
+      "covered_by": {
+        "write": "merge_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/departments/{id}",
+      "covered_by": {
+        "write": "delete_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/members/invite",
+      "covered_by": {
+        "write": "invite_member"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/members",
+      "covered_by": {
+        "write": "update_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/members/{id}",
+      "covered_by": {
+        "write": "deactivate_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/members/{id}/enable",
+      "covered_by": {
+        "write": "enable_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/subscriptions",
+      "covered_by": {
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/subscriptions/{id}",
+      "covered_by": {
+        "write": "delete_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/employees",
+      "covered_by": {
+        "write": "create_employee"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/employees/{id}",
+      "covered_by": {
+        "write": "update_employee"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/employees/{id}/documents",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Document upload is multipart/binary and outside the declarative JSON write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/review-cycles/templates",
+      "covered_by": {
+        "write": "create_review_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "covered_by": {
+        "write": "bulk_create_time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+      "covered_by": {
+        "write": "create_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "covered_by": {
+        "write": "update_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "covered_by": {
+        "write": "archive_time_entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/timeoff/approvals/{key}",
+      "covered_by": {
+        "write": "decide_timeoff_approval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/timeoff/requests",
+      "covered_by": {
+        "write": "create_timeoff_request"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
+      "covered_by": {
+        "write": "update_candidate_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/comments",
+      "covered_by": {
+        "write": "comment_on_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/copy",
+      "covered_by": {
+        "write": "copy_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/disqualify",
+      "covered_by": {
+        "write": "disqualify_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/jobs/{shortcode}/candidates",
+      "covered_by": {
+        "write": "create_job_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/move",
+      "covered_by": {
+        "write": "move_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/relocate",
+      "covered_by": {
+        "write": "relocate_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/revert",
+      "covered_by": {
+        "write": "revert_candidate_disqualification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/tags",
+      "covered_by": {
+        "write": "update_candidate_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "covered_by": {
+        "write": "rate_candidate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "covered_by": {
+        "write": "update_candidate_rating"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}",
+      "covered_by": {
+        "write": "update_candidate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/approve",
+      "covered_by": {
+        "write": "approve_offer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/reject",
+      "covered_by": {
+        "write": "reject_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/requisitions",
+      "covered_by": {
+        "write": "create_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{id}",
+      "covered_by": {
+        "write": "update_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/approve",
+      "covered_by": {
+        "write": "approve_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/reject",
+      "covered_by": {
+        "write": "reject_requisition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/talent_pool/{stage}/candidates",
+      "covered_by": {
+        "write": "create_talent_pool_candidate"
+      }
+    }
+  ]
+}

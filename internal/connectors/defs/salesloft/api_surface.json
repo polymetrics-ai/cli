@@ -1,0 +1,20 @@
+{
+  "api": "Salesloft REST API v2 (https://api.salesloft.com/v2)",
+  "docs": "https://developers.salesloft.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "fresh migration: the 5 legacy-parity read streams only; legacy internal/connectors/salesloft is read-only (Capabilities.Write: false, no write.go), so there are no write endpoints in or out of scope. The full Salesloft v2 surface (calls, meetings, notes, tasks, action items, custom fields, imports, etc.) is out of scope until a capability-expansion pass.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/people", "covered_by": { "stream": "people" } },
+    { "method": "GET", "path": "/v2/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/v2/cadences", "covered_by": { "stream": "cadences" } },
+    { "method": "GET", "path": "/v2/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/v2/emails", "covered_by": { "stream": "emails" } },
+    { "method": "POST", "path": "/oauth/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 refresh-token exchange, consumed internally by the salesloft AuthHook, not a syncable object stream" } },
+    { "method": "GET", "path": "/v2/calls", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
+    { "method": "GET", "path": "/v2/meetings", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
+    { "method": "GET", "path": "/v2/notes", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
+    { "method": "GET", "path": "/v2/tasks", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
+    { "method": "GET", "path": "/v2/action_items", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } },
+    { "method": "POST", "path": "/v2/people", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/salesloft; capability expansion" } }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/pages",
+    "query": {
+      "limit": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "pages_fixture_1",
+          "status": "current",
+          "title": "Fixture Page 1",
+          "spaceId": "spaces_fixture_1",
+          "parentId": "",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": {
+            "number": 1
+          }
+        },
+        {
+          "id": "pages_fixture_2",
+          "status": "current",
+          "title": "Fixture Page 2",
+          "spaceId": "spaces_fixture_1",
+          "parentId": "pages_fixture_1",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": {
+            "number": 2
+          }
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

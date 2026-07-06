@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/event_series",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "es_fixture_1",
+          "name": "Fixture Series 1",
+          "description": "A fixture series",
+          "created_at": 1767225600,
+          "currency": "gbp"
+        }
+      ]
+    }
+  }
+}

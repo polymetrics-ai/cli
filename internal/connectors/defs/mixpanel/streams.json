@@ -1,0 +1,112 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "mixpanel" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/cohorts/list" },
+    "error_map": [
+      { "status": 401, "hint": "mixpanel username/password credentials are missing or invalid; re-run pm credentials add mixpanel" },
+      { "status": 403, "hint": "mixpanel service account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mixpanel rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "cohorts",
+      "path": "/cohorts/list",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "cohorts" },
+      "schema": "schemas/cohorts.json"
+    },
+    {
+      "name": "annotations",
+      "path": "/annotations",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "annotations" },
+      "schema": "schemas/annotations.json"
+    },
+    {
+      "name": "engage",
+      "path": "/engage",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "schema": "schemas/engage.json"
+    },
+    {
+      "name": "saved_funnels",
+      "path": "https://mixpanel.com/api/query/funnels/list",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/saved_funnels.json"
+    },
+    {
+      "name": "activity_stream",
+      "path": "https://mixpanel.com/api/query/stream/query",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "distinct_ids": "{{ config.distinct_ids }}",
+        "from_date": "{{ config.from_date }}",
+        "to_date": "{{ config.to_date }}"
+      },
+      "records": { "path": "results.events" },
+      "schema": "schemas/activity_stream.json"
+    },
+    {
+      "name": "top_events",
+      "path": "https://mixpanel.com/api/query/events/top",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "type": "{{ config.analysis_type }}",
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "records": { "path": "events" },
+      "schema": "schemas/top_events.json"
+    },
+    {
+      "name": "event_property_names",
+      "path": "https://mixpanel.com/api/query/events/properties/top",
+      "query": {
+        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
+        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "event": "{{ config.event_name }}",
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "keyed_object": true, "key_field": "name" },
+      "schema": "schemas/event_property_names.json"
+    },
+    {
+      "name": "project_annotations",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations",
+      "query": {
+        "fromDate": { "template": "{{ config.from_date }}", "omit_when_absent": true },
+        "toDate": { "template": "{{ config.to_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/project_annotations.json"
+    },
+    {
+      "name": "project_annotation",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/{{ config.annotation_id }}",
+      "records": { "path": "results", "single_object": true },
+      "schema": "schemas/project_annotation.json"
+    },
+    {
+      "name": "annotation_tags",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/tags",
+      "records": { "path": "." },
+      "schema": "schemas/annotation_tags.json"
+    }
+  ]
+}

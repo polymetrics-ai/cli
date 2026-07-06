@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "contact_fixture_1", "firstName": "Fixture", "lastName": "One" },
+        { "id": "contact_fixture_2", "firstName": "Fixture", "lastName": "Two" }
+      ]
+    }
+  }
+}

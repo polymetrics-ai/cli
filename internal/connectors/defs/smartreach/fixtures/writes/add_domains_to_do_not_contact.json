@@ -1,0 +1,20 @@
+{
+  "record": {
+    "domains": [
+      { "domain": "blocked-fixture.example.com", "excluded_emails": [] }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/do-not-contact/domain",
+    "body": {
+      "domains": [
+        { "domain": "blocked-fixture.example.com", "excluded_emails": [] }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "added_count": 1 }
+  }
+}

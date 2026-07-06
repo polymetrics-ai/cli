@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        { "id": 1, "name": "Fixture Newsletter", "listType": "Standard", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" },
+        { "id": 2, "name": "Fixture Buyers", "listType": "Standard", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" }
+      ],
+      "nextPageToken": "fixture-page-2-token"
+    }
+  }
+}

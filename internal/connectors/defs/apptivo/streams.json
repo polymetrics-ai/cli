@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apiKey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "numRecords",
+      "offset_param": "startIndex",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/app/dao/v6/customers",
+      "query": { "a": "getAll", "numRecords": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "apptivo api_key/access_key is missing or invalid; re-run pm credentials add apptivo" },
+      { "status": 403, "hint": "apptivo credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "apptivo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/app/dao/v6/customers",
+      "query": { "a": "getAll", "accessKey": "{{ secrets.access_key }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/app/dao/v6/contacts",
+      "query": { "a": "getAll", "accessKey": "{{ secrets.access_key }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "leads",
+      "path": "/app/dao/v6/leads",
+      "query": { "a": "getAll", "accessKey": "{{ secrets.access_key }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/app/dao/v6/opportunities",
+      "query": { "a": "getAll", "accessKey": "{{ secrets.access_key }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/opportunities.json"
+    }
+  ]
+}

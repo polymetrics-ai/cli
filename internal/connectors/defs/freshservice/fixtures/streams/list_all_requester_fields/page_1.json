@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/requester_fields",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requester_fields": [
+        {
+          "id": "list_all_requester_fields",
+          "name": "Fixture list_all_requester_fields",
+          "subject": "Fixture list_all_requester_fields",
+          "description": "Fixture list_all_requester_fields record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

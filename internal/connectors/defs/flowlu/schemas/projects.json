@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "projects",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "stage_id": { "type": ["integer", "null"] },
+    "manager_id": { "type": ["integer", "null"] },
+    "owner_id": { "type": ["integer", "null"] },
+    "active": { "type": ["integer", "null"] },
+    "created_date": { "type": ["string", "null"] },
+    "updated_date": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "uuid": "client_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/clients/client_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "deleted"
+    }
+  }
+}

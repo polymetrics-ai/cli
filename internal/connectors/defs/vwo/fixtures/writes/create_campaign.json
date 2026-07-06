@@ -1,0 +1,22 @@
+{
+  "record": {
+    "type": "ab",
+    "urls": [{ "type": "url", "value": "https://example.com" }],
+    "primaryUrl": "https://example.com",
+    "goals": [{ "name": "Fixture Goal", "type": "visitPage", "urls": [{ "type": "url", "value": "https://example.com/thank-you" }] }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/campaigns",
+    "body": {
+      "type": "ab",
+      "urls": [{ "type": "url", "value": "https://example.com" }],
+      "primaryUrl": "https://example.com",
+      "goals": [{ "name": "Fixture Goal", "type": "visitPage", "urls": [{ "type": "url", "value": "https://example.com/thank-you" }] }]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "_data": { "id": 701, "status": "NOT_STARTED" } }
+  }
+}

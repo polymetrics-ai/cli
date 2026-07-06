@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/templates", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "templates": [
+        { "id": 201, "name": "Fixture Welcome Template", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

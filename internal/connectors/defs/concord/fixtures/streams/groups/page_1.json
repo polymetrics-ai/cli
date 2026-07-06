@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/groups"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        {
+          "id": 69,
+          "name": "Fixture Group",
+          "description": "Deterministic fixture record.",
+          "users": [],
+          "invitations": [],
+          "organization": { "id": 42 }
+        }
+      ]
+    }
+  }
+}

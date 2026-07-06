@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["account_id"],
+  "x-cursor-field": "updateDateTime",
+  "required": ["account_id"],
+  "properties": {
+    "account_id": { "type": "string" },
+    "ownerId": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "targeted": { "type": ["boolean", "null"] },
+    "createDateTime": { "type": ["integer", "null"] },
+    "updateDateTime": { "type": ["integer", "null"] },
+    "customProperties": { "type": ["array", "null"] }
+  }
+}

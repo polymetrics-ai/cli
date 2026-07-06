@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/fields/person" },
+    "error_map": [
+      { "status": 401, "hint": "just-sift api_token is missing or invalid; re-run pm credentials add just-sift" },
+      { "status": 403, "hint": "just-sift account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "just-sift rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "peoples",
+      "path": "/search/people",
+      "query": {
+        "limit": "100"
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "computed_fields": {
+        "connector": "just-sift"
+      },
+      "schema": "schemas/peoples.json"
+    },
+    {
+      "name": "fields",
+      "path": "/fields/person",
+      "query": {
+        "limit": "100"
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "links.next"
+      },
+      "computed_fields": {
+        "connector": "just-sift"
+      },
+      "schema": "schemas/fields.json"
+    }
+  ]
+}

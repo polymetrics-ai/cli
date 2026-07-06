@@ -1,0 +1,13 @@
+{
+  "record": {
+    "qrcode_id": "qr_fixture_1",
+    "title": "Updated Fixture QR Code"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/qr-codes/qr_fixture_1",
+    "body": {
+      "title": "Updated Fixture QR Code"
+    }
+  }
+}

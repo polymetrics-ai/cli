@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/2024-11-01/automotive/vehicles",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "vehicleType": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "vehicles": [
+        {
+          "make": "make-fixture-1",
+          "model": "model-fixture-1",
+          "variantName": "variantName-fixture-1",
+          "bodyStyle": "bodyStyle-fixture-1",
+          "driveType": "driveType-fixture-1",
+          "energy": "energy-fixture-1",
+          "engineOutput": [],
+          "manufacturingStartDate": {},
+          "manufacturingStopDate": {},
+          "lastProcessedDate": "lastProcessedDate-fixture-1",
+          "status": "status-fixture-1",
+          "identifiers": []
+        }
+      ]
+    }
+  }
+}

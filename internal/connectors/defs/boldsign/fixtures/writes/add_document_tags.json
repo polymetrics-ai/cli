@@ -1,0 +1,8 @@
+{
+  "record": { "documentId": "doc_fixture_1", "tags": ["contract", "urgent"] },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/document/addTags",
+    "body": { "documentId": "doc_fixture_1", "tags": ["contract", "urgent"] }
+  }
+}

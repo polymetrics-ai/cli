@@ -1,0 +1,21 @@
+{
+  "name": "breezy-hr",
+  "display_name": "Breezy HR",
+  "description": "Reads Breezy HR positions, hiring pipelines, per-position candidates, departments, categories, custom attribute definitions, questionnaires, and message templates; writes position create/update/state-change and candidate create/update/pipeline-stage-move mutations, through the Breezy v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.breezy.hr/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Breezy HR API read of company position, hiring pipeline, candidate, department, category, custom-attribute, questionnaire, and template metadata",
+    "write": "external mutation of Breezy HR positions and candidates; update_position_state can publish a position to the company's public careers page and job boards, and move_candidate_stage to a terminal stage (hired/disqualified) may trigger configured stage-action auto-emails/webhooks — every write ships with an explicit per-action risk string",
+    "approval": "none required by default; review update_position_state (publishes job postings) and move_candidate_stage (may trigger candidate-facing communications) before use in an automated pipeline"
+  }
+}

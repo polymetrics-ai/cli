@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/people.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "people": [
+        { "id": "1", "first-name": "Fixture", "last-name": "Admin", "email-address": "fixture-admin@example.com", "user-name": "fixture-admin", "company-id": "1", "administrator": true },
+        { "id": "2", "first-name": "Fixture", "last-name": "Member", "email-address": "fixture-member@example.com", "user-name": "fixture-member", "company-id": "1", "administrator": false }
+      ]
+    }
+  }
+}

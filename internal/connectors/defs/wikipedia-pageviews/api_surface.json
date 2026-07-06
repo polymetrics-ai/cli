@@ -1,0 +1,46 @@
+{
+  "api": "Wikimedia Pageviews REST API (https://wikimedia.org/api/rest_v1)",
+  "docs": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams (per-article pageviews, top-per-country articles) only; the broader Pageviews API surface (per-project totals, top-per-project, mediarequests, mediacounts) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{article}/daily/{start}/{end}",
+      "covered_by": {
+        "stream": "pageviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/pageviews/top-per-country/{project}/{country}/{access}/{year}/{month}/{day}",
+      "covered_by": {
+        "stream": "top_articles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/pageviews/top/{project}/{access}/{year}/{month}/{day}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      }
+    }
+  ]
+}

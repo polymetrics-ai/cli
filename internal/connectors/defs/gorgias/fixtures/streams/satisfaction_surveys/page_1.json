@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/satisfaction-surveys", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 401,
+          "ticket_id": 1,
+          "customer_id": 201,
+          "score": 5,
+          "scale_range": 5,
+          "body_text": "Great support!",
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "sent_datetime": "2026-01-01T00:00:01Z",
+          "scored_datetime": "2026-01-03T00:00:01Z"
+        },
+        {
+          "id": 402,
+          "ticket_id": 2,
+          "customer_id": 202,
+          "score": 4,
+          "scale_range": 5,
+          "body_text": "Good support",
+          "created_datetime": "2026-01-01T00:00:02Z",
+          "sent_datetime": "2026-01-01T00:00:02Z",
+          "scored_datetime": "2026-01-03T00:00:02Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

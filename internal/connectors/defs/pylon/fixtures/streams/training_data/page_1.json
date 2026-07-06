@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/training-data"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "name": "fixture-training_data",
+          "created_at": "fixture-training_data",
+          "updated_at": "fixture-training_data"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/user/folders" },
+  "response": {
+    "status": 200,
+    "body": {
+      "responseCode": 200,
+      "content": [
+        {
+          "id": "folder_fixture_1",
+          "name": "Fixture Folder 1",
+          "parent": "",
+          "owner": "fixture_user",
+          "color": "#ffffff",
+          "forms": { "form_fixture_1": true },
+          "subfolders": {}
+        }
+      ]
+    }
+  }
+}

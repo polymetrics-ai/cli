@@ -1,0 +1,818 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customer",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "1",
+          "entityId": "CUST-1",
+          "companyName": "Fixture Customer 1",
+          "email": "fixture1@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "2",
+          "entityId": "CUST-2",
+          "companyName": "Fixture Customer 2",
+          "email": "fixture2@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "3",
+          "entityId": "CUST-3",
+          "companyName": "Fixture Customer 3",
+          "email": "fixture3@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "4",
+          "entityId": "CUST-4",
+          "companyName": "Fixture Customer 4",
+          "email": "fixture4@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "5",
+          "entityId": "CUST-5",
+          "companyName": "Fixture Customer 5",
+          "email": "fixture5@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "6",
+          "entityId": "CUST-6",
+          "companyName": "Fixture Customer 6",
+          "email": "fixture6@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "7",
+          "entityId": "CUST-7",
+          "companyName": "Fixture Customer 7",
+          "email": "fixture7@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "8",
+          "entityId": "CUST-8",
+          "companyName": "Fixture Customer 8",
+          "email": "fixture8@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "9",
+          "entityId": "CUST-9",
+          "companyName": "Fixture Customer 9",
+          "email": "fixture9@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "10",
+          "entityId": "CUST-10",
+          "companyName": "Fixture Customer 10",
+          "email": "fixture10@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "11",
+          "entityId": "CUST-11",
+          "companyName": "Fixture Customer 11",
+          "email": "fixture11@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "12",
+          "entityId": "CUST-12",
+          "companyName": "Fixture Customer 12",
+          "email": "fixture12@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "13",
+          "entityId": "CUST-13",
+          "companyName": "Fixture Customer 13",
+          "email": "fixture13@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "14",
+          "entityId": "CUST-14",
+          "companyName": "Fixture Customer 14",
+          "email": "fixture14@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "15",
+          "entityId": "CUST-15",
+          "companyName": "Fixture Customer 15",
+          "email": "fixture15@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "16",
+          "entityId": "CUST-16",
+          "companyName": "Fixture Customer 16",
+          "email": "fixture16@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "17",
+          "entityId": "CUST-17",
+          "companyName": "Fixture Customer 17",
+          "email": "fixture17@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "18",
+          "entityId": "CUST-18",
+          "companyName": "Fixture Customer 18",
+          "email": "fixture18@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "19",
+          "entityId": "CUST-19",
+          "companyName": "Fixture Customer 19",
+          "email": "fixture19@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "20",
+          "entityId": "CUST-20",
+          "companyName": "Fixture Customer 20",
+          "email": "fixture20@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "21",
+          "entityId": "CUST-21",
+          "companyName": "Fixture Customer 21",
+          "email": "fixture21@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "22",
+          "entityId": "CUST-22",
+          "companyName": "Fixture Customer 22",
+          "email": "fixture22@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "23",
+          "entityId": "CUST-23",
+          "companyName": "Fixture Customer 23",
+          "email": "fixture23@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "24",
+          "entityId": "CUST-24",
+          "companyName": "Fixture Customer 24",
+          "email": "fixture24@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "25",
+          "entityId": "CUST-25",
+          "companyName": "Fixture Customer 25",
+          "email": "fixture25@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "26",
+          "entityId": "CUST-26",
+          "companyName": "Fixture Customer 26",
+          "email": "fixture26@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "27",
+          "entityId": "CUST-27",
+          "companyName": "Fixture Customer 27",
+          "email": "fixture27@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "28",
+          "entityId": "CUST-28",
+          "companyName": "Fixture Customer 28",
+          "email": "fixture28@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "29",
+          "entityId": "CUST-29",
+          "companyName": "Fixture Customer 29",
+          "email": "fixture29@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "30",
+          "entityId": "CUST-30",
+          "companyName": "Fixture Customer 30",
+          "email": "fixture30@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "31",
+          "entityId": "CUST-31",
+          "companyName": "Fixture Customer 31",
+          "email": "fixture31@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "32",
+          "entityId": "CUST-32",
+          "companyName": "Fixture Customer 32",
+          "email": "fixture32@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "33",
+          "entityId": "CUST-33",
+          "companyName": "Fixture Customer 33",
+          "email": "fixture33@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "34",
+          "entityId": "CUST-34",
+          "companyName": "Fixture Customer 34",
+          "email": "fixture34@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "35",
+          "entityId": "CUST-35",
+          "companyName": "Fixture Customer 35",
+          "email": "fixture35@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "36",
+          "entityId": "CUST-36",
+          "companyName": "Fixture Customer 36",
+          "email": "fixture36@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "37",
+          "entityId": "CUST-37",
+          "companyName": "Fixture Customer 37",
+          "email": "fixture37@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "38",
+          "entityId": "CUST-38",
+          "companyName": "Fixture Customer 38",
+          "email": "fixture38@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "39",
+          "entityId": "CUST-39",
+          "companyName": "Fixture Customer 39",
+          "email": "fixture39@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "40",
+          "entityId": "CUST-40",
+          "companyName": "Fixture Customer 40",
+          "email": "fixture40@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "41",
+          "entityId": "CUST-41",
+          "companyName": "Fixture Customer 41",
+          "email": "fixture41@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "42",
+          "entityId": "CUST-42",
+          "companyName": "Fixture Customer 42",
+          "email": "fixture42@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "43",
+          "entityId": "CUST-43",
+          "companyName": "Fixture Customer 43",
+          "email": "fixture43@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "44",
+          "entityId": "CUST-44",
+          "companyName": "Fixture Customer 44",
+          "email": "fixture44@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "45",
+          "entityId": "CUST-45",
+          "companyName": "Fixture Customer 45",
+          "email": "fixture45@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "46",
+          "entityId": "CUST-46",
+          "companyName": "Fixture Customer 46",
+          "email": "fixture46@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "47",
+          "entityId": "CUST-47",
+          "companyName": "Fixture Customer 47",
+          "email": "fixture47@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "48",
+          "entityId": "CUST-48",
+          "companyName": "Fixture Customer 48",
+          "email": "fixture48@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "49",
+          "entityId": "CUST-49",
+          "companyName": "Fixture Customer 49",
+          "email": "fixture49@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "50",
+          "entityId": "CUST-50",
+          "companyName": "Fixture Customer 50",
+          "email": "fixture50@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "51",
+          "entityId": "CUST-51",
+          "companyName": "Fixture Customer 51",
+          "email": "fixture51@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "52",
+          "entityId": "CUST-52",
+          "companyName": "Fixture Customer 52",
+          "email": "fixture52@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "53",
+          "entityId": "CUST-53",
+          "companyName": "Fixture Customer 53",
+          "email": "fixture53@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "54",
+          "entityId": "CUST-54",
+          "companyName": "Fixture Customer 54",
+          "email": "fixture54@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "55",
+          "entityId": "CUST-55",
+          "companyName": "Fixture Customer 55",
+          "email": "fixture55@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "56",
+          "entityId": "CUST-56",
+          "companyName": "Fixture Customer 56",
+          "email": "fixture56@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "57",
+          "entityId": "CUST-57",
+          "companyName": "Fixture Customer 57",
+          "email": "fixture57@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "58",
+          "entityId": "CUST-58",
+          "companyName": "Fixture Customer 58",
+          "email": "fixture58@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "59",
+          "entityId": "CUST-59",
+          "companyName": "Fixture Customer 59",
+          "email": "fixture59@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "60",
+          "entityId": "CUST-60",
+          "companyName": "Fixture Customer 60",
+          "email": "fixture60@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "61",
+          "entityId": "CUST-61",
+          "companyName": "Fixture Customer 61",
+          "email": "fixture61@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "62",
+          "entityId": "CUST-62",
+          "companyName": "Fixture Customer 62",
+          "email": "fixture62@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "63",
+          "entityId": "CUST-63",
+          "companyName": "Fixture Customer 63",
+          "email": "fixture63@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "64",
+          "entityId": "CUST-64",
+          "companyName": "Fixture Customer 64",
+          "email": "fixture64@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "65",
+          "entityId": "CUST-65",
+          "companyName": "Fixture Customer 65",
+          "email": "fixture65@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "66",
+          "entityId": "CUST-66",
+          "companyName": "Fixture Customer 66",
+          "email": "fixture66@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "67",
+          "entityId": "CUST-67",
+          "companyName": "Fixture Customer 67",
+          "email": "fixture67@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "68",
+          "entityId": "CUST-68",
+          "companyName": "Fixture Customer 68",
+          "email": "fixture68@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "69",
+          "entityId": "CUST-69",
+          "companyName": "Fixture Customer 69",
+          "email": "fixture69@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "70",
+          "entityId": "CUST-70",
+          "companyName": "Fixture Customer 70",
+          "email": "fixture70@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "71",
+          "entityId": "CUST-71",
+          "companyName": "Fixture Customer 71",
+          "email": "fixture71@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "72",
+          "entityId": "CUST-72",
+          "companyName": "Fixture Customer 72",
+          "email": "fixture72@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "73",
+          "entityId": "CUST-73",
+          "companyName": "Fixture Customer 73",
+          "email": "fixture73@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "74",
+          "entityId": "CUST-74",
+          "companyName": "Fixture Customer 74",
+          "email": "fixture74@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "75",
+          "entityId": "CUST-75",
+          "companyName": "Fixture Customer 75",
+          "email": "fixture75@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "76",
+          "entityId": "CUST-76",
+          "companyName": "Fixture Customer 76",
+          "email": "fixture76@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "77",
+          "entityId": "CUST-77",
+          "companyName": "Fixture Customer 77",
+          "email": "fixture77@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "78",
+          "entityId": "CUST-78",
+          "companyName": "Fixture Customer 78",
+          "email": "fixture78@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "79",
+          "entityId": "CUST-79",
+          "companyName": "Fixture Customer 79",
+          "email": "fixture79@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "80",
+          "entityId": "CUST-80",
+          "companyName": "Fixture Customer 80",
+          "email": "fixture80@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "81",
+          "entityId": "CUST-81",
+          "companyName": "Fixture Customer 81",
+          "email": "fixture81@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "82",
+          "entityId": "CUST-82",
+          "companyName": "Fixture Customer 82",
+          "email": "fixture82@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "83",
+          "entityId": "CUST-83",
+          "companyName": "Fixture Customer 83",
+          "email": "fixture83@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "84",
+          "entityId": "CUST-84",
+          "companyName": "Fixture Customer 84",
+          "email": "fixture84@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "85",
+          "entityId": "CUST-85",
+          "companyName": "Fixture Customer 85",
+          "email": "fixture85@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "86",
+          "entityId": "CUST-86",
+          "companyName": "Fixture Customer 86",
+          "email": "fixture86@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "87",
+          "entityId": "CUST-87",
+          "companyName": "Fixture Customer 87",
+          "email": "fixture87@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "88",
+          "entityId": "CUST-88",
+          "companyName": "Fixture Customer 88",
+          "email": "fixture88@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "89",
+          "entityId": "CUST-89",
+          "companyName": "Fixture Customer 89",
+          "email": "fixture89@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "90",
+          "entityId": "CUST-90",
+          "companyName": "Fixture Customer 90",
+          "email": "fixture90@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "91",
+          "entityId": "CUST-91",
+          "companyName": "Fixture Customer 91",
+          "email": "fixture91@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "92",
+          "entityId": "CUST-92",
+          "companyName": "Fixture Customer 92",
+          "email": "fixture92@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "93",
+          "entityId": "CUST-93",
+          "companyName": "Fixture Customer 93",
+          "email": "fixture93@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "94",
+          "entityId": "CUST-94",
+          "companyName": "Fixture Customer 94",
+          "email": "fixture94@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "95",
+          "entityId": "CUST-95",
+          "companyName": "Fixture Customer 95",
+          "email": "fixture95@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "96",
+          "entityId": "CUST-96",
+          "companyName": "Fixture Customer 96",
+          "email": "fixture96@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "97",
+          "entityId": "CUST-97",
+          "companyName": "Fixture Customer 97",
+          "email": "fixture97@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "98",
+          "entityId": "CUST-98",
+          "companyName": "Fixture Customer 98",
+          "email": "fixture98@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "99",
+          "entityId": "CUST-99",
+          "companyName": "Fixture Customer 99",
+          "email": "fixture99@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "100",
+          "entityId": "CUST-100",
+          "companyName": "Fixture Customer 100",
+          "email": "fixture100@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "hasMore": true
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "record": {
+    "background": true,
+    "include": [
+      "code_interpreter_call.outputs"
+    ],
+    "input": "input_fixture",
+    "instructions": "instructions_fixture",
+    "max_output_tokens": 1,
+    "max_tool_calls": 1,
+    "metadata": {},
+    "model": "model_fixture",
+    "parallel_tool_calls": true,
+    "previous_response_id": "previous_response_id_fixture",
+    "prompt": {
+      "id": "id_fixture",
+      "variables": {},
+      "version": "version_fixture"
+    },
+    "reasoning": {
+      "effort": "none",
+      "generate_summary": "auto",
+      "summary": "auto"
+    },
+    "service_tier": "auto",
+    "store": true,
+    "stream": true,
+    "temperature": 1.25,
+    "text": {
+      "format": {
+        "type": "type_fixture"
+      },
+      "verbosity": "low"
+    },
+    "tool_choice": "none",
+    "tools": [
+      {
+        "name": "name_fixture",
+        "parameters": {},
+        "strict": true,
+        "type": "type_fixture",
+        "defer_loading": true,
+        "description": "description_fixture"
+      }
+    ],
+    "top_logprobs": 1,
+    "top_p": 1.25,
+    "truncation": "auto",
+    "user": "user_fixture",
+    "prompt_cache_key": "prompt_cache_key_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/responses",
+    "body": {
+      "background": true,
+      "include": [
+        "code_interpreter_call.outputs"
+      ],
+      "input": "input_fixture",
+      "instructions": "instructions_fixture",
+      "max_output_tokens": 1,
+      "max_tool_calls": 1,
+      "metadata": {},
+      "model": "model_fixture",
+      "parallel_tool_calls": true,
+      "previous_response_id": "previous_response_id_fixture",
+      "prompt": {
+        "id": "id_fixture",
+        "variables": {},
+        "version": "version_fixture"
+      },
+      "reasoning": {
+        "effort": "none",
+        "generate_summary": "auto",
+        "summary": "auto"
+      },
+      "service_tier": "auto",
+      "store": true,
+      "stream": true,
+      "temperature": 1.25,
+      "text": {
+        "format": {
+          "type": "type_fixture"
+        },
+        "verbosity": "low"
+      },
+      "tool_choice": "none",
+      "tools": [
+        {
+          "name": "name_fixture",
+          "parameters": {},
+          "strict": true,
+          "type": "type_fixture",
+          "defer_loading": true,
+          "description": "description_fixture"
+        }
+      ],
+      "top_logprobs": 1,
+      "top_p": 1.25,
+      "truncation": "auto",
+      "user": "user_fixture",
+      "prompt_cache_key": "prompt_cache_key_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

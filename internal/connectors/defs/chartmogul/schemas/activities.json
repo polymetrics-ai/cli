@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "x-cursor-field": "date",
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "activity-mrr": { "type": ["integer", "null"] },
+    "activity-mrr-movement": { "type": ["integer", "null"] },
+    "activity-arr": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "customer-uuid": { "type": ["string", "null"] },
+    "customer-name": { "type": ["string", "null"] },
+    "customer-external-id": { "type": ["string", "null"] },
+    "subscription-external-id": { "type": ["string", "null"] },
+    "plan-external-id": { "type": ["string", "null"] }
+  }
+}

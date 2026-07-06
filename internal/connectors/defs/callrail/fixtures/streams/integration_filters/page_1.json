@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/integration_triggers.json",
+    "query": {
+      "page": "1",
+      "per_page": "100",
+      "company_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "integration_criteria": [
+        {
+          "id": 1,
+          "company_id": "CMP_fixture_1",
+          "integration_id": 1,
+          "tracker_ids": ["TRK_fixture_1"],
+          "call_type": "first_call",
+          "min_duration": 1,
+          "max_duration": 60,
+          "lead_status": null,
+          "integration": { "id": 1, "type": "Webhooks" }
+        }
+      ]
+    }
+  }
+}

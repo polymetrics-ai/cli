@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/clusters",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "cluster_fixture_1",
+        "graphql_id": "gql_cluster_fixture_1",
+        "name": "Fixture Cluster",
+        "description": "Fixture cluster description",
+        "emoji": ":rocket:",
+        "color": "#6BC5F8",
+        "default_queue_id": "queue_fixture_1",
+        "url": "https://api.buildkite.com/v2/organizations/fixture-org/clusters/cluster_fixture_1",
+        "web_url": "https://buildkite.com/organizations/fixture-org/clusters/cluster_fixture_1",
+        "created_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

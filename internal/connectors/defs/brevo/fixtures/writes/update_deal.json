@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "deal_fixture_new",
+    "attributes": {
+      "amount": 500
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/crm/deals/deal_fixture_new",
+    "body": {
+      "attributes": {
+        "amount": 500
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

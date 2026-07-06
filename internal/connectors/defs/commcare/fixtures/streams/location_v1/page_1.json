@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/location/v1/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created_at": "2026-06-02T00:00:00.000000",
+      "domain": "synthetic-conformance-value",
+      "external_id": null,
+      "id": 2,
+      "last_modified": "2026-06-02T00:00:00.000000",
+      "latitude": null,
+      "location_data": {},
+      "location_id": "location_detail_fixture_1",
+      "location_type": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location_type/v1/1/",
+      "longitude": null,
+      "name": "Fixture Detail Location",
+      "parent": null,
+      "resource_uri": "https://www.commcarehq.org/a/synthetic-conformance-value/api/location/v1/location_detail_fixture_1/",
+      "site_code": "fixture_detail_location"
+    }
+  }
+}

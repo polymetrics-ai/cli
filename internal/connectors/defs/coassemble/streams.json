@@ -1,0 +1,141 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "COASSEMBLE-V1-SHA256 UserId={{ secrets.user_id }}, UserToken={{ secrets.user_token }}",
+        "prefix": ""
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "length",
+      "start_page": 1,
+      "page_size": 20
+    },
+    "check": { "method": "GET", "path": "/api/v1/headless/courses" },
+    "error_map": [
+      { "status": 401, "hint": "coassemble user_id/user_token are missing or invalid; re-run pm credentials add coassemble" },
+      { "status": 403, "hint": "coassemble account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "coassemble rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "courses",
+      "path": "/api/v1/headless/courses",
+      "records": { "path": "" },
+      "schema": "schemas/courses.json"
+    },
+    {
+      "name": "screen_types",
+      "path": "/api/v1/headless/screen/types",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/screen_types.json"
+    },
+    {
+      "name": "trackings",
+      "path": "/api/v1/headless/trackings",
+      "records": { "path": "" },
+      "schema": "schemas/trackings.json"
+    },
+    {
+      "name": "collections",
+      "path": "/api/v1/headless/collections",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "clients",
+      "path": "/api/v1/headless/clients",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v1/headless/users",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "user_trackings",
+      "path": "/api/v1/headless/user/trackings",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/users", "records_path": "", "id_field": "identifier" }
+        },
+        "into": { "query_param": "identifier" },
+        "stamp_field": "identifier"
+      },
+      "schema": "schemas/user_trackings.json"
+    },
+    {
+      "name": "collection_trackings",
+      "path": "/api/v1/headless/collection/trackings",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "length",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/collections", "records_path": "", "id_field": "id" }
+        },
+        "into": { "query_param": "id" },
+        "stamp_field": "collection_id"
+      },
+      "schema": "schemas/collection_trackings.json"
+    },
+    {
+      "name": "translations",
+      "path": "/api/v1/headless/translations/{{ fanout.id }}",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v1/headless/courses", "records_path": "", "id_field": "id" }
+        },
+        "into": { "path_var": "course_id" },
+        "stamp_field": "course_id"
+      },
+      "schema": "schemas/translations.json"
+    }
+  ]
+}

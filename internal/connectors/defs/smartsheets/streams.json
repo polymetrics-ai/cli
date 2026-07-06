@@ -1,0 +1,773 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "pageSize",
+      "start_page": 1
+    },
+    "check": {
+      "method": "GET",
+      "path": "/sheets",
+      "query": {
+        "pageSize": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "smartsheets access_token is missing, expired, or invalid; re-run pm credentials add smartsheets"
+      },
+      {
+        "status": 403,
+        "hint": "smartsheets token lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "smartsheets rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sheets",
+      "path": "/sheets",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/sheets.json"
+    },
+    {
+      "name": "sheet_rows",
+      "path": "/sheets/{{ config.spreadsheet_id }}",
+      "query": {
+        "include": "rows"
+      },
+      "records": {
+        "path": "rows"
+      },
+      "schema": "schemas/sheet_rows.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (per-row cell flattening keyed by the page sibling columns[] array, which the declarative records/computed_fields dialect cannot express); hook-covered by internal/connectors/hooks/smartsheets/hooks_test.go"
+      }
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/contact.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": {
+        "maxCount": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/events.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "streamPosition",
+        "token_path": "nextStreamPosition",
+        "stop_path": "moreAvailable"
+      }
+    },
+    {
+      "name": "favorites",
+      "path": "/favorites",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/favorites.json"
+    },
+    {
+      "name": "favorite",
+      "path": "/favorites/{{ config.favorite_type }}/{{ config.favorite_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/favorite.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "folder_metadata",
+      "path": "/folders/{{ config.folder_id }}/metadata",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/folder_metadata.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "folder_children",
+      "path": "/folders/{{ config.folder_id }}/children",
+      "query": {
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/folder_children.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    },
+    {
+      "name": "folder_path",
+      "path": "/folders/{{ config.folder_id }}/path",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/folder_path.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "home_contents",
+      "path": "/folders/personal",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/home_contents.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "group",
+      "path": "/groups/{{ config.group_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/group.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "home_folders",
+      "path": "/home/folders",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/home_folders.json"
+    },
+    {
+      "name": "reports",
+      "path": "/reports",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/reports.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "report",
+      "path": "/reports/{{ config.report_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/report.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "report_path",
+      "path": "/reports/{{ config.report_id }}/path",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/report_path.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "report_publish",
+      "path": "/reports/{{ config.report_id }}/publish",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/report_publish.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "asset_shares",
+      "path": "/shares",
+      "query": {
+        "assetType": "{{ config.asset_type }}",
+        "assetId": "{{ config.asset_id }}",
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/asset_shares.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    },
+    {
+      "name": "asset_share",
+      "path": "/shares/{{ config.share_id }}",
+      "query": {
+        "assetType": "{{ config.asset_type }}",
+        "assetId": "{{ config.asset_id }}"
+      },
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/asset_share.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet",
+      "path": "/sheets/{{ config.sheet_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_attachments",
+      "path": "/sheets/{{ config.sheet_id }}/attachments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_attachments.json"
+    },
+    {
+      "name": "sheet_attachment",
+      "path": "/sheets/{{ config.sheet_id }}/attachments/{{ config.attachment_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_attachment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_attachment_versions",
+      "path": "/sheets/{{ config.sheet_id }}/attachments/{{ config.attachment_id }}/versions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_attachment_versions.json"
+    },
+    {
+      "name": "sheet_automation_rules",
+      "path": "/sheets/{{ config.sheet_id }}/automationrules",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_automation_rules.json"
+    },
+    {
+      "name": "sheet_automation_rule",
+      "path": "/sheets/{{ config.sheet_id }}/automationrules/{{ config.automation_rule_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_automation_rule.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_columns",
+      "path": "/sheets/{{ config.sheet_id }}/columns",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_columns.json"
+    },
+    {
+      "name": "sheet_column",
+      "path": "/sheets/{{ config.sheet_id }}/columns/{{ config.column_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_column.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_comment",
+      "path": "/sheets/{{ config.sheet_id }}/comments/{{ config.comment_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_comment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_cross_sheet_references",
+      "path": "/sheets/{{ config.sheet_id }}/crosssheetreferences",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_cross_sheet_references.json"
+    },
+    {
+      "name": "sheet_cross_sheet_reference",
+      "path": "/sheets/{{ config.sheet_id }}/crosssheetreferences/{{ config.cross_sheet_reference_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_cross_sheet_reference.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_discussions",
+      "path": "/sheets/{{ config.sheet_id }}/discussions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_discussions.json"
+    },
+    {
+      "name": "sheet_discussion",
+      "path": "/sheets/{{ config.sheet_id }}/discussions/{{ config.discussion_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_discussion.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_discussion_attachments",
+      "path": "/sheets/{{ config.sheet_id }}/discussions/{{ config.discussion_id }}/attachments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_discussion_attachments.json"
+    },
+    {
+      "name": "sheet_path",
+      "path": "/sheets/{{ config.sheet_id }}/path",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_path.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_proofs",
+      "path": "/sheets/{{ config.sheet_id }}/proofs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_proofs.json"
+    },
+    {
+      "name": "sheet_proof",
+      "path": "/sheets/{{ config.sheet_id }}/proofs/{{ config.proof_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_proof.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_proof_attachments",
+      "path": "/sheets/{{ config.sheet_id }}/proofs/{{ config.proof_id }}/attachments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_proof_attachments.json"
+    },
+    {
+      "name": "sheet_proof_discussions",
+      "path": "/sheets/{{ config.sheet_id }}/proofs/{{ config.proof_id }}/discussions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_proof_discussions.json"
+    },
+    {
+      "name": "sheet_proof_request_actions",
+      "path": "/sheets/{{ config.sheet_id }}/proofs/{{ config.proof_id }}/requestactions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_proof_request_actions.json"
+    },
+    {
+      "name": "sheet_proof_versions",
+      "path": "/sheets/{{ config.sheet_id }}/proofs/{{ config.proof_id }}/versions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_proof_versions.json"
+    },
+    {
+      "name": "sheet_publish",
+      "path": "/sheets/{{ config.sheet_id }}/publish",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_publish.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_row",
+      "path": "/sheets/{{ config.sheet_id }}/rows/{{ config.row_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_row.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_row_attachments",
+      "path": "/sheets/{{ config.sheet_id }}/rows/{{ config.row_id }}/attachments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_row_attachments.json"
+    },
+    {
+      "name": "sheet_cell_history",
+      "path": "/sheets/{{ config.sheet_id }}/rows/{{ config.row_id }}/columns/{{ config.column_id }}/history",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_cell_history.json"
+    },
+    {
+      "name": "sheet_row_discussions",
+      "path": "/sheets/{{ config.sheet_id }}/rows/{{ config.row_id }}/discussions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_row_discussions.json"
+    },
+    {
+      "name": "sheet_sent_update_requests",
+      "path": "/sheets/{{ config.sheet_id }}/sentupdaterequests",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_sent_update_requests.json"
+    },
+    {
+      "name": "sheet_sent_update_request",
+      "path": "/sheets/{{ config.sheet_id }}/sentupdaterequests/{{ config.sent_update_request_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_sent_update_request.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_summary",
+      "path": "/sheets/{{ config.sheet_id }}/summary",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_summary.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_summary_fields",
+      "path": "/sheets/{{ config.sheet_id }}/summary/fields",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_summary_fields.json"
+    },
+    {
+      "name": "sheet_update_requests",
+      "path": "/sheets/{{ config.sheet_id }}/updaterequests",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/sheet_update_requests.json"
+    },
+    {
+      "name": "sheet_update_request",
+      "path": "/sheets/{{ config.sheet_id }}/updaterequests/{{ config.update_request_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_update_request.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sheet_version",
+      "path": "/sheets/{{ config.sheet_id }}/version",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/sheet_version.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "dashboards",
+      "path": "/sights",
+      "query": {
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/dashboards.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    },
+    {
+      "name": "dashboard",
+      "path": "/sights/{{ config.sight_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/dashboard.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "dashboard_path",
+      "path": "/sights/{{ config.sight_id }}/path",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/dashboard_path.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "dashboard_publish",
+      "path": "/sights/{{ config.sight_id }}/publish",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/dashboard_publish.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "current_user",
+      "path": "/users/me",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/current_user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "org_sheets",
+      "path": "/users/sheets",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/org_sheets.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_alternate_emails",
+      "path": "/users/{{ config.user_id }}/alternateemails",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/user_alternate_emails.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_alternate_email",
+      "path": "/users/{{ config.user_id }}/alternateemails/{{ config.alternate_email_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/user_alternate_email.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_plans",
+      "path": "/users/{{ config.user_id }}/plans",
+      "query": {
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/user_plans.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/webhook.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "query": {
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/workspaces.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    },
+    {
+      "name": "workspace_metadata",
+      "path": "/workspaces/{{ config.workspace_id }}/metadata",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/workspace_metadata.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "workspace_children",
+      "path": "/workspaces/{{ config.workspace_id }}/children",
+      "query": {
+        "maxItems": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/workspace_children.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "lastKey",
+        "token_path": "lastKey"
+      }
+    }
+  ]
+}

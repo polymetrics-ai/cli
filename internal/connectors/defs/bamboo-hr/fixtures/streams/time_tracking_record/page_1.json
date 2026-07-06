@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/timetracking/record/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employeeId": "fixture_id",
+      "type": "fixture_value",
+      "adjustedHours": "fixture_value",
+      "dateAdjusted": "2026-01-01T00:00:00Z",
+      "dateHoursWorked": "2026-01-01T00:00:00Z",
+      "departmentId": "fixture_id",
+      "divisionId": "fixture_id",
+      "holidayId": "fixture_id"
+    }
+  }
+}

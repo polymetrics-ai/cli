@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/business-units/synthetic-conformance-value", "query": { "perPage": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "bu_fixture_1",
+      "displayName": "Fixture Business"
+    }
+  }
+}

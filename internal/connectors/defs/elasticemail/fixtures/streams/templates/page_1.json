@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/templates", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Name": "templates_fixture_1", "Subject": "Fixture subject 1", "TemplateScope": "Personal", "DateAdded": "2026-01-01T00:00:00Z", "Body": { "Html": "<p>Fixture</p>" } }
+    ]
+  }
+}

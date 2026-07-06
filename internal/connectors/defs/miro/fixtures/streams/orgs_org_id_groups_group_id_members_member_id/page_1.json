@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/groups/synthetic-conformance-value/members/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "email": "fixture@example.invalid",
+      "type": "user-group-member"
+    }
+  }
+}

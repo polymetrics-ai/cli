@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/lists/synthetic-conformance-value/contacts", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "contact_fixture_1", "email_address": "fixture1@example.com", "status": "SUBSCRIBED", "tags": ["vip"], "fields": { "FirstName": "Fixture1" }, "created_at": "2026-01-01T00:00:00+00:00", "last_updated_at": "2026-01-01T00:00:00+00:00" }
+      ],
+      "paging": { "next": null, "previous": null }
+    }
+  }
+}

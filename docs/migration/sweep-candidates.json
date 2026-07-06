@@ -1,0 +1,700 @@
+{
+ "campaign-monitor": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=1"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "campaigns legacy_filter_hint=False"
+  }
+ ],
+ "datascope": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "cal-com": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=1"
+  }
+ ],
+ "freshservice": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "tickets legacy_filter_hint=True"
+  }
+ ],
+ "mailtrap": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "bluetally": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "assets"
+  }
+ ],
+ "elasticemail": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "jobnimbus": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "monday": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "boards legacy_filter_hint=False"
+  }
+ ],
+ "qualaroo": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "nudges legacy_filter_hint=False"
+  }
+ ],
+ "survicate": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "surveys legacy_filter_hint=False"
+  }
+ ],
+ "lob": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "addresses legacy_filter_hint=True"
+  }
+ ],
+ "workflowmax": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "spotlercrm": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "contacts"
+  }
+ ],
+ "squarespace": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "orders"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "orders legacy_filter_hint=False"
+  }
+ ],
+ "wordpress": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "posts legacy_filter_hint=True"
+  }
+ ],
+ "linkedin-ads": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "breezometer": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "air_quality_current legacy_filter_hint=False"
+  }
+ ],
+ "chameleon": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "surveys legacy_filter_hint=True"
+  }
+ ],
+ "ebay-finance": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "transactions legacy_filter_hint=True"
+  }
+ ],
+ "zonka-feedback": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "responses"
+  }
+ ],
+ "marketstack": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "criteo-marketing": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "zoho-billing": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "pendo": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "visitors"
+  }
+ ],
+ "poplar": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "orders legacy_filter_hint=False"
+  }
+ ],
+ "open-data-dc": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "units"
+  }
+ ],
+ "rentcast": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "properties legacy_filter_hint=False"
+  }
+ ],
+ "chargedesk": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "charges legacy_filter_hint=False"
+  }
+ ],
+ "launchdarkly": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "pagerduty": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "incidents"
+  }
+ ],
+ "paperform": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "forms"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "forms legacy_filter_hint=False"
+  }
+ ],
+ "circleci": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "pipelines legacy_filter_hint=True"
+  }
+ ],
+ "square": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "payments legacy_filter_hint=True"
+  }
+ ],
+ "freshsales": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "flowlu": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "convertkit": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "subscribers legacy_filter_hint=False"
+  }
+ ],
+ "callrail": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "paddle": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "transactions"
+  }
+ ],
+ "factorial": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "miro": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "fastly": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "opinion-stage": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "buzzsprout": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "episodes legacy_filter_hint=True"
+  }
+ ],
+ "partnerstack": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "partnerships"
+  }
+ ],
+ "linkrunner": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "campaigns legacy_filter_hint=False"
+  }
+ ],
+ "openaq": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "adobe-commerce-magento": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "products legacy_filter_hint=True"
+  }
+ ],
+ "deputy": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=5"
+  }
+ ],
+ "ezofficeinventory": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "pardot": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "prospects"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "prospects legacy_filter_hint=False"
+  }
+ ],
+ "codefresh": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "chargify": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "customers legacy_filter_hint=False"
+  }
+ ],
+ "openfda": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "spotify-ads": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "ad_accounts"
+  }
+ ],
+ "split-io": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "workspaces"
+  }
+ ],
+ "jira": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "github": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "pull_requests legacy_filter_hint=True"
+  }
+ ],
+ "churnkey": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "sessions legacy_filter_hint=False"
+  }
+ ],
+ "aha": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "features legacy_filter_hint=True"
+  }
+ ],
+ "partnerize": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "conversions"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "conversions legacy_filter_hint=False"
+  }
+ ],
+ "statsig": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "feature_gates"
+  }
+ ],
+ "justcall": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "calls legacy_filter_hint=True"
+  }
+ ],
+ "jotform": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "paystack": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "customers legacy_filter_hint=True"
+  }
+ ],
+ "sharepoint-lists-enterprise": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "lists legacy_filter_hint=False"
+  }
+ ],
+ "bamboo-hr": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "papersign": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "documents"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "documents legacy_filter_hint=False"
+  }
+ ],
+ "chartmogul": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "activities legacy_filter_hint=True"
+  }
+ ],
+ "retailexpress-by-maropost": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "products legacy_filter_hint=False"
+  }
+ ],
+ "rocket-chat": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "zoom": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "users"
+  }
+ ],
+ "pandadoc": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "documents"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "documents legacy_filter_hint=False"
+  }
+ ],
+ "tiktok-marketing": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "campaigns legacy_filter_hint=False"
+  }
+ ],
+ "capsule-crm": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "sharetribe": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "formbricks": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "clarif-ai": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "awin-advertiser": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "transactions legacy_filter_hint=True"
+  }
+ ],
+ "financial-modelling": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "countercyclical": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "investments"
+  }
+ ],
+ "clickup-api": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "castor-edc": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "study legacy_filter_hint=False"
+  }
+ ],
+ "referralhero": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "subscribers legacy_filter_hint=False"
+  }
+ ],
+ "stockdata": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "tickers"
+  }
+ ],
+ "rocketlane": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "cimis": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "stations"
+  }
+ ],
+ "statuspage": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "pages"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "incidents legacy_filter_hint=False"
+  }
+ ],
+ "qonto": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "transactions legacy_filter_hint=True"
+  }
+ ],
+ "auth0": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "buildkite": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "builds legacy_filter_hint=True"
+  }
+ ],
+ "missive": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "rd-station-marketing": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "contacts legacy_filter_hint=False"
+  }
+ ],
+ "survey-sparrow": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "surveys"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "responses legacy_filter_hint=False"
+  }
+ ],
+ "productive": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "projects legacy_filter_hint=False"
+  }
+ ],
+ "aviationstack": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "judge-me-reviews": [
+  {
+   "class": "C2-bare-incremental",
+   "detail": "reviews legacy_filter_hint=False"
+  }
+ ],
+ "eventzilla": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  }
+ ],
+ "defillama": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=5"
+  },
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=5"
+  }
+ ],
+ "railz": [
+  {
+   "class": "C3-tiny-page-size",
+   "detail": "page_size=2"
+  },
+  {
+   "class": "C2-bare-incremental",
+   "detail": "businesses legacy_filter_hint=False"
+  }
+ ],
+ "payfit": [
+  {
+   "class": "C1-passthrough-candidate",
+   "detail": "employees"
+  }
+ ]
+}

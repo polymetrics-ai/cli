@@ -1,0 +1,27 @@
+{
+  "name": "youtube-analytics",
+  "display_name": "YouTube Analytics",
+  "description": "Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/youtube/reporting/v1/reports",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external YouTube Reporting API read of reporting-job/report-type/report metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for youtube-analytics (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively (gmail precedent, docs/migration/conventions.md §4)."
+  }
+}

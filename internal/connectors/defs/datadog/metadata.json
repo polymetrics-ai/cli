@@ -1,0 +1,24 @@
+{
+  "name": "datadog",
+  "display_name": "Datadog",
+  "description": "Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO corrections, scheduled downtimes, notebooks, organizations, hosts, Synthetics tests/locations/variables, and API/application keys, and writes monitor/dashboard/downtime/notebook/SLO/user/event/Synthetics-test/API-key mutations, through the Datadog v1 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.datadoghq.com/api/latest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Datadog API read of monitor, dashboard, SLO, downtime, notebook, organization, host, Synthetics, and API/application key configuration data",
+    "write": "external mutation of Datadog monitors, dashboards, downtimes, notebooks, SLOs, users, events, Synthetics API tests, and API keys; create_downtime/update_downtime suppress real alerting for their scope, update_monitor/update_slo change live alerting/burn-rate thresholds, and delete_api_key immediately revokes ingest access for anything still using it, so every write ships an explicit per-action risk string",
+    "approval": "required for every delete_*/cancel_downtime action (irreversible or alerting-suppressing) and for update_monitor/update_downtime/update_slo/update_user/update_synthetics_api_test/create_downtime/create_user (live alerting or access-control side effects); create_monitor/create_dashboard/create_dashboard_list/create_notebook/create_slo/create_event/create_synthetics_api_test/update_dashboard_list/update_api_key are low-risk"
+  }
+}

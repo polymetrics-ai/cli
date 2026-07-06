@@ -1,0 +1,286 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the device was created",
+      "format": "date-time"
+    },
+    "device": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "type": "string",
+          "description": "Timestamp when the device was created",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string",
+          "description": "Unique key for the device"
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "Timestamp when the device record was last updated. Updates occur when Okta collects and saves device signals during authentication, and when the lifecycle state of the device changes.",
+          "format": "date-time"
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "diskEncryptionType": {
+              "type": "string",
+              "description": "Type of encryption used on the device\n> **Note:** The following values map to Disk Encryption ON: `FULL`, `USER`, `ALL_INTERNAL_VOLUMES`. All other values map to Disk Encryption OFF.",
+              "enum": [
+                "ALL_INTERNAL_VOLUMES",
+                "FULL",
+                "NONE",
+                "SYSTEM_VOLUME",
+                "USER"
+              ]
+            },
+            "displayName": {
+              "type": "string",
+              "description": "Display name of the device"
+            },
+            "imei": {
+              "type": "string",
+              "description": "International Mobile Equipment Identity (IMEI) of the device"
+            },
+            "integrityJailbreak": {
+              "type": "boolean",
+              "description": "Indicates if the device is jailbroken or rooted. Only applicable to `IOS` and `ANDROID` platforms"
+            },
+            "managed": {
+              "type": "boolean",
+              "description": "Indicates if the device is managed by mobile device management (MDM) software"
+            },
+            "manufacturer": {
+              "type": "string",
+              "description": "Name of the manufacturer of the device"
+            },
+            "meid": {
+              "type": "string",
+              "description": "Mobile equipment identifier of the device"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model of the device"
+            },
+            "osVersion": {
+              "type": "string",
+              "description": "Version of the device OS"
+            },
+            "platform": {
+              "type": "string",
+              "description": "OS platform of the device",
+              "enum": [
+                "ANDROID",
+                "IOS",
+                "MACOS",
+                "WINDOWS"
+              ]
+            },
+            "registered": {
+              "type": "boolean",
+              "description": "Indicates if the device is registered at Okta"
+            },
+            "secureHardwarePresent": {
+              "type": "boolean",
+              "description": "Indicates if the device contains a secure hardware functionality"
+            },
+            "serialNumber": {
+              "type": "string",
+              "description": "Serial number of the device"
+            },
+            "sid": {
+              "type": "string",
+              "description": "Windows Security identifier of the device"
+            },
+            "tpmPublicKeyHash": {
+              "type": "string",
+              "description": "Windows Trusted Platform Module hash value"
+            },
+            "udid": {
+              "type": "string",
+              "description": "macOS Unique device identifier of the device"
+            }
+          },
+          "additionalProperties": true
+        },
+        "resourceAlternateId": {
+          "type": "string"
+        },
+        "resourceDisplayName": {
+          "type": "object",
+          "description": "Display name of the device",
+          "properties": {
+            "sensitive": {
+              "type": "boolean",
+              "description": "Indicates whether the associated value is Personal Identifiable Information (PII) and requires masking"
+            },
+            "value": {
+              "type": "string",
+              "description": "Display name of the device"
+            }
+          },
+          "additionalProperties": true
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "Alternate key for the `id`"
+        },
+        "resourceType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "The state object of the device",
+          "enum": [
+            "ACTIVE",
+            "DEACTIVATED",
+            "SUSPENDED",
+            "UNSUSPENDED"
+          ]
+        },
+        "_links": {
+          "type": "object",
+          "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+          "properties": {
+            "suspend": {
+              "type": "object",
+              "description": "Link to suspend the resource",
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "description": "Describes allowed HTTP verbs for the `href`",
+                  "properties": {
+                    "allow": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "DELETE",
+                          "GET",
+                          "POST",
+                          "PUT"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Link URI"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Link name"
+                },
+                "templated": {
+                  "type": "boolean",
+                  "description": "Indicates whether the link object's `href` property is a URI template."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                }
+              },
+              "additionalProperties": true
+            },
+            "unsuspend": {
+              "type": "object",
+              "description": "Link to unsuspend the resource",
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "description": "Describes allowed HTTP verbs for the `href`",
+                  "properties": {
+                    "allow": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "DELETE",
+                          "GET",
+                          "POST",
+                          "PUT"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Link URI"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Link name"
+                },
+                "templated": {
+                  "type": "boolean",
+                  "description": "Indicates whether the link object's `href` property is a URI template."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                }
+              },
+              "additionalProperties": true
+            },
+            "users": {
+              "type": "object",
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "description": "Describes allowed HTTP verbs for the `href`",
+                  "properties": {
+                    "allow": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "DELETE",
+                          "GET",
+                          "POST",
+                          "PUT"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Link URI"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Link name"
+                },
+                "templated": {
+                  "type": "boolean",
+                  "description": "Indicates whether the link object's `href` property is a URI template."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "deviceUserId": {
+      "type": "string",
+      "description": "Unique key for the user device link"
+    }
+  },
+  "additionalProperties": true
+}

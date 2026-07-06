@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Harness Connection Specification",
+  "type": "object",
+  "required": ["account_id", "api_key"],
+  "properties": {
+    "account_id": {
+      "type": "string",
+      "description": "Harness account identifier; scopes every NextGen read via the accountIdentifier query parameter."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Harness NextGen API key, sent as the x-api-key header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.harness.io",
+      "description": "Harness platform API base URL override for tests, self-managed instances, or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

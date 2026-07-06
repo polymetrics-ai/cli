@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Goldcast Connection Specification",
+  "type": "object",
+  "required": ["access_key"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Goldcast API access key, sent as Authorization: Token <access_key>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://customapi.goldcast.io",
+      "description": "Goldcast customapi base URL override for tests or proxies."
+    }
+  }
+}

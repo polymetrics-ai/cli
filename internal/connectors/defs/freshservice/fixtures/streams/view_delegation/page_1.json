@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value/delegation"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "delegation": {
+        "id": "view_delegation",
+        "name": "Fixture view_delegation",
+        "subject": "Fixture view_delegation",
+        "description": "Fixture view_delegation record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

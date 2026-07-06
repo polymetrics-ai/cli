@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/workspaces", "query": { "limit": "100", "opt_fields": "gid,name,resource_type" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_ws_1", "name": "Fixture Workspace", "resource_type": "workspace" }
+      ],
+      "next_page": null
+    }
+  }
+}

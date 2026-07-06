@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plausible Aggregate Stats",
+  "type": "object",
+  "x-primary-key": ["site_id"],
+  "required": ["site_id"],
+  "properties": {
+    "site_id": { "type": "string" },
+    "visitors": { "type": ["integer", "null"] },
+    "visits": { "type": ["integer", "null"] },
+    "pageviews": { "type": ["integer", "null"] },
+    "events": { "type": ["integer", "null"] },
+    "bounce_rate": { "type": ["number", "null"] },
+    "visit_duration": { "type": ["number", "null"] }
+  }
+}

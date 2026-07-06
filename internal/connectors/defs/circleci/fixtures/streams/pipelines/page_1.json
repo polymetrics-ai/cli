@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/pipeline" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "pipe_fixture_1", "number": 1, "project_slug": "gh/fixture-org/fixture-repo", "state": "created", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T01:00:00Z" },
+        { "id": "pipe_fixture_2", "number": 2, "project_slug": "gh/fixture-org/fixture-repo", "state": "created", "created_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-02T01:00:00Z" }
+      ],
+      "next_page_token": "PIPE_PAGE2"
+    }
+  }
+}

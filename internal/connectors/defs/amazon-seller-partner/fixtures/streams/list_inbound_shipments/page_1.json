@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/inboundShipments",
+    "query": {
+      "maxResults": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shipments": [
+        {
+          "createdAt": "createdAt-fixture-1",
+          "externalReferenceId": "externalReferenceId-fixture-1",
+          "orderId": "orderId-fixture-1",
+          "shipmentId": "shipmentId-fixture-1",
+          "shipmentStatus": "shipmentStatus-fixture-1",
+          "updatedAt": "updatedAt-fixture-1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/c/synthetic-conformance-value/tags", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": 1, "name": "urgent" },
+        { "id": 2, "name": "senior" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "advertiserId": { "type": ["string", "null"] },
+    "objective": { "type": ["string", "null"] },
+    "spendLimit": { "type": ["object", "null"] },
+    "goal": { "type": ["string", "null"] }
+  }
+}

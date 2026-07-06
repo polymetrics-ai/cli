@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ config.auth_type in ['oauth', 'oauth2.0'] }}" },
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "", "when": "{{ secrets.api_key }}" },
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "" },
+    "error_map": [
+      { "status": 401, "hint": "linear api_key/access_token is missing or invalid; re-run pm credentials add linear" },
+      { "status": 429, "class": "rate_limited", "hint": "linear rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "issues",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.issues.nodes" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/issues.json",
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+    },
+    {
+      "name": "teams",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.teams.nodes" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/teams.json",
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+    },
+    {
+      "name": "projects",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.projects.nodes" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/projects.json",
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+    },
+    {
+      "name": "users",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "data.users.nodes" },
+      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "schema": "schemas/users.json",
+      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+    }
+  ]
+}

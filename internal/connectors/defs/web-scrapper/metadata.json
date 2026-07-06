@@ -1,0 +1,21 @@
+{
+  "name": "web-scrapper",
+  "display_name": "Web Scrapper",
+  "description": "Reads sitemap, scraping job, account, and problematic-URL metadata, and writes sitemap/scraping-job create/update/delete mutations, through the Web Scraper Cloud API.",
+  "integration_type": "api",
+  "docs_url": "https://webscraper.io/documentation/web-scraper-cloud/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Web Scraper Cloud API read of the caller's own sitemap/scraping-job/account/problematic-URL metadata",
+    "write": "external mutation of the caller's own sitemaps and scraping jobs; create_scraping_job starts a real scraping run against a target site and consumes page credits from the caller's account, and delete_sitemap/delete_scraping_job are irreversible through the API",
+    "approval": "required for create_scraping_job (consumes billable page credits and issues real outbound requests to a third-party site) and for delete_sitemap/delete_scraping_job (irreversible); create_sitemap/update_sitemap are low-risk (configuration only, no outbound scraping)"
+  }
+}

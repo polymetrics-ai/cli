@@ -1,0 +1,16 @@
+{
+  "record": {
+    "tag_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reportingtags/synthetic-conformance-value/inactive"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

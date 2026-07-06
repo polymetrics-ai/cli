@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/discounts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "di_fixture_1",
+          "code": "FIXTURE10",
+          "name": "Fixture Discount",
+          "type": "percentage",
+          "max_redemptions": 10,
+          "times_redeemed": 0
+        },
+        {
+          "id": "di_fixture_2",
+          "code": "FIXTURE20",
+          "name": "Fixture Discount 2",
+          "type": "fixed_amount",
+          "max_redemptions": 5,
+          "times_redeemed": 1
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

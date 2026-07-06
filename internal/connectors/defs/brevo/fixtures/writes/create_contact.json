@@ -1,0 +1,30 @@
+{
+  "record": {
+    "email": "fixture-new@example.com",
+    "attributes": {
+      "FIRSTNAME": "Fixture"
+    },
+    "listIds": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "email": "fixture-new@example.com",
+      "attributes": {
+        "FIRSTNAME": "Fixture"
+      },
+      "listIds": [
+        1
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 999
+    }
+  }
+}

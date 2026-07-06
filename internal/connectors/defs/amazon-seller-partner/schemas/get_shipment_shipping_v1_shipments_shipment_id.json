@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_shipping_v1_shipments_shipment_id",
+  "type": "object",
+  "properties": {
+    "shipmentId": {
+      "type": "string"
+    },
+    "clientReferenceId": {
+      "type": "string"
+    },
+    "shipFrom": {
+      "type": "object"
+    },
+    "shipTo": {
+      "type": "object"
+    },
+    "acceptedRate": {
+      "type": "object"
+    },
+    "shipper": {
+      "type": "object"
+    },
+    "containers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipmentId"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "url": "https://example.invalid/luma",
+    "event_types": [
+      "event.created"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/webhooks/create",
+    "body": {
+      "url": "https://example.invalid/luma",
+      "event_types": [
+        "event.created"
+      ]
+    }
+  }
+}

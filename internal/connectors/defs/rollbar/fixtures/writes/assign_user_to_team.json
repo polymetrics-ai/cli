@@ -1,0 +1,17 @@
+{
+  "record": {
+    "team_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/1/team/synthetic-conformance-value/user/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

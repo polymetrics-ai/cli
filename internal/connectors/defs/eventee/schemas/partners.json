@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "partners",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "code": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "web": { "type": ["string", "null"] },
+    "sponsor": { "type": ["boolean", "null"] },
+    "exhibitor": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

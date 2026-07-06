@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "referrals",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "order_id": { "type": ["integer", "null"] },
+    "order_number": { "type": ["integer", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "quantity": { "type": ["integer", "null"] },
+    "total_sales": { "type": ["string", "null"] },
+    "commission_adjustment": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "commission": { "type": ["string", "null"] },
+    "tracking_type": { "type": ["string", "null"] }
+  }
+}

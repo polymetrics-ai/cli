@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": 1, "name": "Fixture Tag 1", "color": "#FF0000" },
+        { "id": 2, "name": "Fixture Tag 2", "color": "#00FF00" }
+      ]
+    }
+  }
+}

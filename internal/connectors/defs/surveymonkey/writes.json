@@ -1,0 +1,1757 @@
+{
+  "actions": [
+    {
+      "name": "update_collector",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/collectors/{{ record.collector_id }}",
+      "path_fields": [
+        "collector_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey collector data in the connected account; approval required"
+    },
+    {
+      "name": "replace_collector",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/collectors/{{ record.collector_id }}",
+      "path_fields": [
+        "collector_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey collector data in the connected account; approval required"
+    },
+    {
+      "name": "create_collector_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages",
+      "path_fields": [
+        "collector_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey collector message data in the connected account; approval required"
+    },
+    {
+      "name": "update_collector_message",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages/{{ record.message_id }}",
+      "path_fields": [
+        "collector_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "message_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey collector message data in the connected account; approval required"
+    },
+    {
+      "name": "replace_collector_message",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages/{{ record.message_id }}",
+      "path_fields": [
+        "collector_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "message_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey collector message data in the connected account; approval required"
+    },
+    {
+      "name": "create_message_recipient",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages/{{ record.message_id }}/recipients",
+      "path_fields": [
+        "collector_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "message_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey message recipient data in the connected account; approval required"
+    },
+    {
+      "name": "create_message_recipients_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages/{{ record.message_id }}/recipients/bulk",
+      "path_fields": [
+        "collector_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "message_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey bulk message recipients data in the connected account; approval required"
+    },
+    {
+      "name": "send_collector_message",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v3/collectors/{{ record.collector_id }}/messages/{{ record.message_id }}/send",
+      "path_fields": [
+        "collector_id",
+        "message_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "message_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "message_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends or shares SurveyMonkey collector message; may notify real recipients or change access for real users; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_collector_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/collectors/{{ record.collector_id }}/responses",
+      "path_fields": [
+        "collector_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey collector response data in the connected account; approval required"
+    },
+    {
+      "name": "update_collector_response",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/collectors/{{ record.collector_id }}/responses/{{ record.response_id }}",
+      "path_fields": [
+        "collector_id",
+        "response_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "response_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "response_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey collector response data in the connected account; approval required"
+    },
+    {
+      "name": "replace_collector_response",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/collectors/{{ record.collector_id }}/responses/{{ record.response_id }}",
+      "path_fields": [
+        "collector_id",
+        "response_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "collector_id",
+          "response_id"
+        ],
+        "properties": {
+          "collector_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "response_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey collector response data in the connected account; approval required"
+    },
+    {
+      "name": "create_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contact_lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey contact list data in the connected account; approval required"
+    },
+    {
+      "name": "update_contact_list",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey contact list data in the connected account; approval required"
+    },
+    {
+      "name": "replace_contact_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey contact list data in the connected account; approval required"
+    },
+    {
+      "name": "copy_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}/copy",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey copied contact list data in the connected account; approval required"
+    },
+    {
+      "name": "merge_contact_list",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}/merge",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey contact lists through merge data in the connected account; approval required"
+    },
+    {
+      "name": "add_contact_to_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}/contacts",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey contact-list membership data in the connected account; approval required"
+    },
+    {
+      "name": "add_contacts_to_contact_list_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contact_lists/{{ record.contact_list_id }}/contacts/bulk",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_list_id"
+        ],
+        "properties": {
+          "contact_list_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey bulk contact-list memberships data in the connected account; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey contact data in the connected account; approval required"
+    },
+    {
+      "name": "create_contacts_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/contacts/bulk",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey bulk contacts data in the connected account; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/contacts/{{ record.contact_id }}",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey contact data in the connected account; approval required"
+    },
+    {
+      "name": "replace_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/contacts/{{ record.contact_id }}",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey contact data in the connected account; approval required"
+    },
+    {
+      "name": "update_contact_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/contact_fields/{{ record.contact_field_id }}",
+      "path_fields": [
+        "contact_field_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_field_id"
+        ],
+        "properties": {
+          "contact_field_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey contact field data in the connected account; approval required"
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/organizations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey organization administration/provisioning state; approval required"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/organization/{{ record.organization_id }}",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey organization administration/provisioning state; approval required"
+    },
+    {
+      "name": "create_survey_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/survey_folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey folder data in the connected account; approval required"
+    },
+    {
+      "name": "create_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/surveys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey data in the connected account; approval required"
+    },
+    {
+      "name": "update_survey",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/surveys/{{ record.survey_id }}",
+      "path_fields": [
+        "survey_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey survey data in the connected account; approval required"
+    },
+    {
+      "name": "replace_survey",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/surveys/{{ record.survey_id }}",
+      "path_fields": [
+        "survey_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey survey data in the connected account; approval required"
+    },
+    {
+      "name": "share_survey",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v3/surveys/{{ record.survey_id }}/share",
+      "path_fields": [
+        "survey_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends or shares SurveyMonkey survey access; may notify real recipients or change access for real users; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_survey_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/surveys/{{ record.survey_id }}/pages",
+      "path_fields": [
+        "survey_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey page data in the connected account; approval required"
+    },
+    {
+      "name": "update_survey_page",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/surveys/{{ record.survey_id }}/pages/{{ record.page_id }}",
+      "path_fields": [
+        "survey_id",
+        "page_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "page_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "page_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey survey page data in the connected account; approval required"
+    },
+    {
+      "name": "replace_survey_page",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/surveys/{{ record.survey_id }}/pages/{{ record.page_id }}",
+      "path_fields": [
+        "survey_id",
+        "page_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "page_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "page_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey survey page data in the connected account; approval required"
+    },
+    {
+      "name": "create_survey_question",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/surveys/{{ record.survey_id }}/pages/{{ record.page_id }}/questions",
+      "path_fields": [
+        "survey_id",
+        "page_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "page_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "page_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey question data in the connected account; approval required"
+    },
+    {
+      "name": "create_survey_language",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/surveys/{{ record.survey_id }}/languages/{{ record.language_code }}",
+      "path_fields": [
+        "survey_id",
+        "language_code"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "language_code"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "language_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey language/translation data in the connected account; approval required"
+    },
+    {
+      "name": "update_survey_language",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/surveys/{{ record.survey_id }}/languages/{{ record.language_code }}",
+      "path_fields": [
+        "survey_id",
+        "language_code"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "language_code"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "language_code": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey survey language/translation data in the connected account; approval required"
+    },
+    {
+      "name": "create_survey_collector",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/surveys/{{ record.survey_id }}/collectors",
+      "path_fields": [
+        "survey_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey survey collector data in the connected account; approval required"
+    },
+    {
+      "name": "update_survey_response",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/surveys/{{ record.survey_id }}/responses/{{ record.response_id }}",
+      "path_fields": [
+        "survey_id",
+        "response_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "response_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "response_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey survey response data in the connected account; approval required"
+    },
+    {
+      "name": "replace_survey_response",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/surveys/{{ record.survey_id }}/responses/{{ record.response_id }}",
+      "path_fields": [
+        "survey_id",
+        "response_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "survey_id",
+          "response_id"
+        ],
+        "properties": {
+          "survey_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "response_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey survey response data in the connected account; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "creates SurveyMonkey webhook data in the connected account; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates SurveyMonkey webhook data in the connected account; approval required"
+    },
+    {
+      "name": "replace_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v3/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "replaces SurveyMonkey webhook data in the connected account; approval required"
+    },
+    {
+      "name": "update_group_member",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/groups/{{ record.group_id }}/members/{{ record.member_id }}",
+      "path_fields": [
+        "group_id",
+        "member_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group_id",
+          "member_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "member_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey group membership administration/provisioning state; approval required"
+    },
+    {
+      "name": "create_workgroup",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/workgroups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey workgroup administration/provisioning state; approval required"
+    },
+    {
+      "name": "update_workgroup",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}",
+      "path_fields": [
+        "workgroup_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey workgroup administration/provisioning state; approval required"
+    },
+    {
+      "name": "create_workgroup_share",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}/shares",
+      "path_fields": [
+        "workgroup_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends or shares SurveyMonkey workgroup share; may notify real recipients or change access for real users; approval required"
+    },
+    {
+      "name": "create_workgroup_shares_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}/shares/bulk",
+      "path_fields": [
+        "workgroup_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends or shares SurveyMonkey bulk workgroup shares; may notify real recipients or change access for real users; approval required"
+    },
+    {
+      "name": "create_workgroup_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}/members",
+      "path_fields": [
+        "workgroup_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey workgroup membership administration/provisioning state; approval required"
+    },
+    {
+      "name": "create_workgroup_members_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}/members/bulk",
+      "path_fields": [
+        "workgroup_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey bulk workgroup membership administration/provisioning state; approval required"
+    },
+    {
+      "name": "update_workgroup_member",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v3/workgroups/{{ record.workgroup_id }}/members/{{ record.member_id }}",
+      "path_fields": [
+        "workgroup_id",
+        "member_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workgroup_id",
+          "member_id"
+        ],
+        "properties": {
+          "workgroup_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "member_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey workgroup membership administration/provisioning state; approval required"
+    },
+    {
+      "name": "create_scim_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scim/v2/Users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required"
+    },
+    {
+      "name": "replace_scim_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/scim/v2/Users/{{ record.scim_user_id }}",
+      "path_fields": [
+        "scim_user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "scim_user_id"
+        ],
+        "properties": {
+          "scim_user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required"
+    },
+    {
+      "name": "update_scim_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/scim/v2/Users/{{ record.scim_user_id }}",
+      "path_fields": [
+        "scim_user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "scim_user_id"
+        ],
+        "properties": {
+          "scim_user_id": {
+            "type": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required"
+    }
+  ]
+}

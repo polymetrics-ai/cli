@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "Fixture create catalog collection",
+    "visibility": "private",
+    "metadata": {
+      "source": "fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/catalog/collections",
+    "body": {
+      "name": "Fixture create catalog collection",
+      "visibility": "private",
+      "metadata": {
+        "source": "fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

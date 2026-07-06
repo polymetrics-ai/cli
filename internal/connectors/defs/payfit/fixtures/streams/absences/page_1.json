@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/absences",
+    "query": {
+      "maxResults": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "absences": [
+        {
+          "id": "absences_1",
+          "name": "Fixture absences"
+        }
+      ],
+      "meta": {
+        "nextPageToken": "",
+        "count": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "n8n",
+  "display_name": "n8n",
+  "description": "Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.",
+  "integration_type": "api",
+  "docs_url": "https://docs.n8n.io/connect/n8n-api/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 100
+  },
+  "risk": {
+    "read": "external n8n instance API read of workflow, execution, tag, user, variable, project, data table, and credential metadata",
+    "write": "external n8n instance API mutation of workflows, executions, tags, variables, projects, data tables, source-control pull, audit generation, and credential tests/transfers",
+    "approval": "required for all write actions"
+  }
+}

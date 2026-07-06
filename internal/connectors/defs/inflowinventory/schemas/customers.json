@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["customerId"],
+  "required": ["customerId"],
+  "properties": {
+    "customerId": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "contactName": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "fax": { "type": ["string", "null"] },
+    "isActive": { "type": ["boolean", "null"] },
+    "remarks": { "type": ["string", "null"] },
+    "pricingSchemeId": { "type": ["string", "null"] },
+    "taxingSchemeId": { "type": ["string", "null"] },
+    "timestamp": { "type": ["string", "null"] }
+  }
+}

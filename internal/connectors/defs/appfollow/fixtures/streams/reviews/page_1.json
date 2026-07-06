@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews",
+    "query": {
+      "from": "synthetic-conformance-value",
+      "to": "synthetic-conformance-value",
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "review_id": "rev_fixture_1",
+        "ext_id": "ios:1001",
+        "app_id": 1001,
+        "store": "itunes",
+        "title": "Fixture review title 1",
+        "content": "Fixture review content 1",
+        "author": "Fixture Author 1",
+        "user_id": "user_fixture_1",
+        "rating": 5,
+        "rating_prev": 4,
+        "app_version": "1.0.0",
+        "locale": "us",
+        "date": "2026-01-01T00:00:00Z",
+        "dt": "2026-01-01T00:00:00Z",
+        "time": "2026-01-01T00:00:00Z",
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:00:00Z",
+        "is_answer": false,
+        "was_changed": false
+      },
+      {
+        "id": 2,
+        "review_id": "rev_fixture_2",
+        "ext_id": "ios:1001",
+        "app_id": 1001,
+        "store": "itunes",
+        "title": "Fixture review title 2",
+        "content": "Fixture review content 2",
+        "author": "Fixture Author 2",
+        "user_id": "user_fixture_2",
+        "rating": 3,
+        "rating_prev": null,
+        "app_version": "1.0.1",
+        "locale": "gb",
+        "date": "2026-01-02T00:00:00Z",
+        "dt": "2026-01-02T00:00:00Z",
+        "time": "2026-01-02T00:00:00Z",
+        "created": "2026-01-02T00:00:00Z",
+        "updated": "2026-01-02T00:00:00Z",
+        "is_answer": true,
+        "was_changed": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "HTTP",
+            "OAUTH"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the inline hook type. The currently supported version is `1.0.0`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Date of the inline hook creation",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the inline hook"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Date of the last inline hook update",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "The display name of the inline hook"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "One of the inline hook types",
+      "enum": [
+        "com.okta.import.transform",
+        "com.okta.oauth2.tokens.transform",
+        "com.okta.saml.tokens.transform",
+        "com.okta.telephony.provider",
+        "com.okta.user.credential.password.import",
+        "com.okta.user.pre-registration"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "description": "Version of the inline hook type. The currently supported version is `1.0.0`."
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "activate": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "deactivate": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "delete": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "execute": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

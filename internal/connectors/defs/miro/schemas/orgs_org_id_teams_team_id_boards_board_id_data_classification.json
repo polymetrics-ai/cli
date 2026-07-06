@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "color": {
+      "type": "string",
+      "description": "Label color."
+    },
+    "description": {
+      "type": "string",
+      "description": "Label description."
+    },
+    "id": {
+      "type": "string",
+      "description": "Label id."
+    },
+    "name": {
+      "type": "string",
+      "description": "Label name."
+    },
+    "sharingRecommendation": {
+      "type": "string",
+      "description": "Sharing Recommendation (one of NO_SHARING_RESTRICTIONS, ONLY_WITHIN_ORGANIZATION, ONLY_WITHIN_TEAM or ONLY_WITH_AUTHORIZED_TEAM_MEMBERS )."
+    },
+    "guidelineUrl": {
+      "type": "string",
+      "description": "Indicates the URL for the board classification label guidelines."
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

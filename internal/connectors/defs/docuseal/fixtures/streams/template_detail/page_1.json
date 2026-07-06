@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/templates/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "slug": "template_fixture_1",
+      "name": "Fixture Template",
+      "folder_id": 1,
+      "folder_name": "Default",
+      "external_id": "ext_1",
+      "source": "api",
+      "author_id": 1,
+      "archived_at": null,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z",
+      "preferences": {},
+      "schema": [
+        { "attachment_uuid": "fixture-attachment-uuid-1", "name": "document.pdf" }
+      ],
+      "fields": [
+        { "uuid": "fixture-field-uuid-1", "submitter_uuid": "fixture-submitter-uuid-1", "name": "Signature", "type": "signature", "required": true, "areas": [] }
+      ],
+      "submitters": [
+        { "name": "First Party", "uuid": "fixture-submitter-uuid-1" }
+      ],
+      "documents": [
+        { "id": 1, "uuid": "fixture-attachment-uuid-1", "url": "https://fixture.example.com/document.pdf", "preview_image_url": null, "filename": "document.pdf" }
+      ],
+      "author": { "id": 1, "first_name": "Fixture", "last_name": "Author", "email": "fixture-author@example.com" }
+    }
+  }
+}

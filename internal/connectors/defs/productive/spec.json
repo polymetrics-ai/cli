@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Productive Connection Specification",
+  "type": "object",
+  "required": ["api_key", "organization_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Productive API token, sent as the X-Auth-Token header. Never logged."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Productive organization id, sent as the X-Organization-Id header on every request. Required by Productive's API for every call."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.productive.io/api/v2",
+      "description": "Productive API base URL. Defaults to https://api.productive.io/api/v2."
+    }
+  }
+}

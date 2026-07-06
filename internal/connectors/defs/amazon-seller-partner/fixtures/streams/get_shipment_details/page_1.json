@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/brazil/v0/shipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "WarehouseId": "WarehouseId-fixture-1",
+        "AmazonOrderId": "AmazonOrderId-fixture-1",
+        "AmazonShipmentId": "AmazonShipmentId-fixture-1",
+        "PurchaseDate": "PurchaseDate-fixture-1",
+        "ShippingAddress": {},
+        "PaymentMethodDetails": [],
+        "Payments": [],
+        "MarketplaceId": "MarketplaceId-fixture-1",
+        "SellerId": "SellerId-fixture-1",
+        "BuyerName": "BuyerName-fixture-1",
+        "BuyerCounty": "BuyerCounty-fixture-1",
+        "BuyerTaxInfo": {},
+        "MarketplaceTaxInfo": {},
+        "SellerDisplayName": "SellerDisplayName-fixture-1",
+        "ShipmentItems": [],
+        "shipment_id": "shipment_id-fixture-1"
+      }
+    }
+  }
+}

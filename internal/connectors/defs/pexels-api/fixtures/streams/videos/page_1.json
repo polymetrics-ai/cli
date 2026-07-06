@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/videos/search",
+    "query": {
+      "page": "1",
+      "per_page": "40",
+      "query": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 40,
+      "videos": [
+        {
+          "id": 3001,
+          "url": "https://www.pexels.com/video/fixture-3001/",
+          "image": "https://images.pexels.example/3001.jpg",
+          "duration": 12,
+          "user": {
+            "id": 501,
+            "name": "Fixture Videographer"
+          }
+        }
+      ]
+    }
+  }
+}

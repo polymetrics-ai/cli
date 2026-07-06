@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Elasticsearch Connection Specification",
+  "type": "object",
+  "required": ["endpoint"],
+  "properties": {
+    "endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "Elasticsearch cluster base URL (e.g. https://es.example.com:9200). Legacy also accepted base_url as an alias; this bundle standardizes on endpoint (see docs.md)."
+    },
+    "index": {
+      "type": "string",
+      "description": "Index name to query for the 'documents' stream (required for that stream only)."
+    },
+    "api_key_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Elasticsearch API key id. Paired with api_key_secret to build the 'Authorization: ApiKey base64(id:secret)' header (mode:custom AuthHook -- see docs.md). Takes precedence over username/password when both are configured, matching legacy's auth-selection order."
+    },
+    "api_key_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Elasticsearch API key secret. See api_key_id."
+    },
+    "username": {
+      "type": "string",
+      "description": "Basic auth username, used when api_key_id/api_key_secret are not both set."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Basic auth password."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Documents per page for the 'documents' stream search (from/size pagination)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "100",
+      "description": "Maximum pages to read for the 'documents' stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

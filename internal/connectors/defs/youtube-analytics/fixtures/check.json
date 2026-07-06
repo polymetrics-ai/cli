@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "reportTypes": [{ "id": "channel_basic_a3", "name": "User activity" }] }
+  }
+}

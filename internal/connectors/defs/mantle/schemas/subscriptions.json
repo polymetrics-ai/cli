@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscriptions",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "createdAt",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "total": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "subtotal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "presentmentTotal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "presentmentSubtotal": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "plan": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "frozenAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "canceledAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "activatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trialStartsAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trialExpiresAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currentPeriodStart": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currentPeriodEnd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "billingCycleAnchor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

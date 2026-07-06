@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations",
+    "query": { "start": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 20,
+          "name": "Fixture Org One",
+          "owner_id": 1,
+          "people_count": 2,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00"
+        }
+      ],
+      "additional_data": {
+        "pagination": { "start": 0, "limit": 100, "more_items_in_collection": false, "next_start": null }
+      }
+    }
+  }
+}

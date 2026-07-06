@@ -1,0 +1,20 @@
+{
+  "record": {
+    "mandate_imports": {
+      "description": "Synthetic create_a_new_mandate_import fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mandate_imports",
+    "body": {
+      "mandate_imports": {
+        "description": "Synthetic create_a_new_mandate_import fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

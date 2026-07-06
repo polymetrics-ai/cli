@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/destinations", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "destinations": [
+        { "id": "dst_fixture_1", "name": "Fixture Warehouse Sink", "slug": "fixture-warehouse-sink", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

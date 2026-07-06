@@ -1,0 +1,15 @@
+{
+  "record": {
+    "display_id": 123,
+    "name": "Fixture restore_an_asset",
+    "description": "Fixture restore_an_asset record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/assets/123/restore",
+    "body": {
+      "name": "Fixture restore_an_asset",
+      "description": "Fixture restore_an_asset record"
+    }
+  }
+}

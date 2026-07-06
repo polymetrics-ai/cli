@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/users/me/history", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "history": [
+        {
+          "id": "2001",
+          "messagesAdded": [
+            { "message": { "id": "msg_fixture_1", "threadId": "thread_fixture_1" } }
+          ]
+        },
+        {
+          "id": "2002",
+          "labelsAdded": [
+            { "message": { "id": "msg_fixture_2", "threadId": "thread_fixture_2" }, "labelIds": ["IMPORTANT"] }
+          ]
+        }
+      ],
+      "nextPageToken": "page2token",
+      "historyId": "2002"
+    }
+  }
+}

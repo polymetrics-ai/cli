@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/supplySources/2020-07-01/supplySources",
+    "query": {
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "supplySources": [
+        {
+          "alias": "alias-fixture-1",
+          "supplySourceId": "supplySourceId-fixture-1",
+          "supplySourceCode": "supplySourceCode-fixture-1",
+          "address": {}
+        }
+      ]
+    }
+  }
+}

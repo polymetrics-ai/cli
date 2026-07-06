@@ -1,0 +1,15 @@
+{
+  "record": {
+    "stage": "applied",
+    "name": "Fixture Talent Candidate",
+    "email": "talent.fixture@example.test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talent_pool/applied/candidates",
+    "body": {
+      "name": "Fixture Talent Candidate",
+      "email": "talent.fixture@example.test"
+    }
+  }
+}

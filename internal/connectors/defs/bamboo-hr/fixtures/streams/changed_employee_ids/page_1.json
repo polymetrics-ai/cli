@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/changed",
+    "query": {
+      "since": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "latest": "fixture_value",
+      "employees": {}
+    }
+  }
+}

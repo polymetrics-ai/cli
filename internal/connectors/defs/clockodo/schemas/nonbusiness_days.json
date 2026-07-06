@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "nonbusiness_days",
+  "type": "object",
+  "x-primary-key": ["id", "date"],
+  "required": ["id", "date"],
+  "properties": {
+    "id": { "type": "integer" },
+    "date": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "half_day": { "type": ["integer", "null"] },
+    "nonbusinessgroups_id": { "type": ["integer", "null"] }
+  }
+}

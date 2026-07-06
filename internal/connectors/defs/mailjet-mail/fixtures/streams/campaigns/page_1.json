@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/campaign" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 1,
+      "Total": 1,
+      "Data": [
+        {
+          "ID": 4001,
+          "Subject": "Fixture Campaign",
+          "FromEmail": "sender@fixture.example.com",
+          "FromName": "Fixture Sender",
+          "CreatedAt": "2026-01-01T00:00:00Z",
+          "SendStartAt": "2026-01-01T01:00:00Z",
+          "Status": 2,
+          "IsDeleted": false,
+          "IsStarred": false
+        }
+      ]
+    }
+  }
+}

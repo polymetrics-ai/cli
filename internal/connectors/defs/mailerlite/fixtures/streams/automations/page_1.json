@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/automations", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "automation_fixture_1",
+          "name": "Fixture Automation One",
+          "enabled": true,
+          "status": "active",
+          "trigger_data": { "type": "subscriber_added" },
+          "steps": { "count": 3 },
+          "stats": { "sent": 50 },
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

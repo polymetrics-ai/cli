@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailchimp Connection Specification",
+  "type": "object",
+  "required": ["data_center"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mailchimp OAuth access token. Takes precedence over api_key when both are set. Sent as Bearer auth; never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mailchimp API key (e.g. abc123-us6). Sent as HTTP Basic auth (username \"anystring\") when access_token is unset; never logged."
+    },
+    "data_center": {
+      "type": "string",
+      "description": "Mailchimp datacenter token (e.g. \"us6\"), used to build the datacenter-scoped base URL https://<data_center>.api.mailchimp.com/3.0."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects created/sent at or after this time are read (per-stream since_* filter)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

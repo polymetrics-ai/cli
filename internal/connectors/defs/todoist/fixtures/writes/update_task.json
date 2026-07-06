@@ -1,0 +1,12 @@
+{
+  "record": { "id": "task_fixture_1", "content": "Buy coffee", "priority": 2 },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/task_fixture_1",
+    "body": { "content": "Buy coffee", "priority": 2 }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "task_fixture_1", "content": "Buy coffee", "priority": 2 }
+  }
+}

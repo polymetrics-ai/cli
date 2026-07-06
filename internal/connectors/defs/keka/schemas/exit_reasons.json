@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "exit_reasons",
+  "type": "object",
+  "properties": {
+    "exitReason": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "terminationReason": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/licenses",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "lic_fixture_1",
+        "licenseType": "ENT",
+        "orderNumber": "order_fixture_1",
+        "deviceSerial": "Q2XX-FIXTURE-0001",
+        "networkId": "N_fixture_1",
+        "state": "active",
+        "seatCount": null,
+        "totalDurationInDays": 365,
+        "durationInDays": 365,
+        "claimDate": "2026-01-01T00:00:00Z",
+        "activationDate": "2026-01-01T00:00:00Z",
+        "expirationDate": "2027-01-01T00:00:00Z",
+        "headLicenseId": null
+      }
+    ]
+  }
+}

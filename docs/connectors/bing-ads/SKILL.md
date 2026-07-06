@@ -7,7 +7,14 @@ description: Bing Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs.
+Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.
+
+## Icon
+
+- asset: icons/bingads.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://learn.microsoft.com/en-us/advertising/guides/release-notes
 
 ## Capabilities
 
@@ -48,4 +55,3 @@ pm connectors inspect bing-ads --json
 - Run pm connectors inspect bing-ads before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

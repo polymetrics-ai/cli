@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "published_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] },
+    "published_at": { "type": ["string", "null"], "format": "date-time" },
+    "lang": { "type": ["string", "null"] },
+    "source_id": { "type": ["string", "null"] },
+    "source_name": { "type": ["string", "null"] },
+    "source_url": { "type": ["string", "null"] },
+    "source_country": { "type": ["string", "null"] }
+  }
+}

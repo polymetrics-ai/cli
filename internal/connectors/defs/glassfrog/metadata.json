@@ -1,0 +1,23 @@
+{
+  "name": "glassfrog",
+  "display_name": "GlassFrog",
+  "description": "Reads GlassFrog circles, roles, people, projects, and assignments through the GlassFrog API v3 (read-only full-refresh source).",
+  "integration_type": "api",
+  "docs_url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external GlassFrog API read of circle, role, person, project, and assignment data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

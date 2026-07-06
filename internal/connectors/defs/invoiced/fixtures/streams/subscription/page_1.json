@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "subscription",
+      "created_at": 1767225600,
+      "updated_at": 1767225601
+    }
+  }
+}

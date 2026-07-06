@@ -1,0 +1,26 @@
+{
+  "record": {
+    "title": "Fixture Title",
+    "description": "Fixture description",
+    "user_id": "fixture-user@example.invalid",
+    "tags": [
+      "fixture-tag"
+    ],
+    "step": "Fixture step",
+    "amount": 123.45
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads",
+    "body": {
+      "title": "Fixture Title",
+      "description": "Fixture description",
+      "user_id": "fixture-user@example.invalid",
+      "tags": [
+        "fixture-tag"
+      ],
+      "step": "Fixture step",
+      "amount": 123.45
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "article_id": 123,
+    "name": "Fixture restore_solution_article",
+    "description": "Fixture restore_solution_article record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/solutions/articles/123/restore",
+    "body": {
+      "name": "Fixture restore_solution_article",
+      "description": "Fixture restore_solution_article record"
+    }
+  }
+}

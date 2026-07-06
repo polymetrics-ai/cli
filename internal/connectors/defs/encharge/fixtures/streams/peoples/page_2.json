@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/people/all",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "people": [
+        {
+          "id": "p_fixture_last",
+          "email": "last@example.com",
+          "name": "Fixture Last",
+          "firstName": "Fixture",
+          "lastName": "Last",
+          "phone": "",
+          "title": "Contact",
+          "company": "Example Inc",
+          "country": "US",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "userId": "u_last"
+        }
+      ]
+    }
+  }
+}

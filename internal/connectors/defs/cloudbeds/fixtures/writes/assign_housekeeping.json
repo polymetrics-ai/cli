@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "roomIDs": ["room_fixture_1"], "housekeeperID": "hk_fixture_1" },
+  "expect": { "method": "POST", "path": "/postHousekeepingAssignment" },
+  "response": { "status": 200, "body": { "success": true } }
+}

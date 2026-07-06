@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/listings/rental/long-term",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "rental_fixture_1",
+        "formattedAddress": "1 Fixture Rd, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "rent": 1800,
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "rental_fixture_2",
+        "formattedAddress": "2 Fixture Rd, Fixture City, CA 90000",
+        "propertyType": "Apartment",
+        "rent": 1500,
+        "lastSeenDate": "2026-01-02"
+      }
+    ]
+  }
+}

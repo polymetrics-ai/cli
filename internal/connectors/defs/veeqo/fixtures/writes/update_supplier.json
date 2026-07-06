@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 12345,
+    "name": "Updated Supplier"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/suppliers/12345"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/items",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "items": [
+        {
+          "item_id": "item_fixture_1",
+          "name": "Fixture Widget 1",
+          "description": "A fixture inventory item.",
+          "rate": 12.5,
+          "unit": "qty",
+          "sku": "SKU-FIXTURE-1",
+          "status": "active",
+          "created_time": "2026-01-01T00:00:00+0000",
+          "last_modified_time": "2026-01-01T00:00:00+0000"
+        },
+        {
+          "item_id": "item_fixture_2",
+          "name": "Fixture Widget 2",
+          "description": "A fixture inventory item.",
+          "rate": 25.0,
+          "unit": "qty",
+          "sku": "SKU-FIXTURE-2",
+          "status": "active",
+          "created_time": "2026-01-01T00:00:00+0000",
+          "last_modified_time": "2026-01-01T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

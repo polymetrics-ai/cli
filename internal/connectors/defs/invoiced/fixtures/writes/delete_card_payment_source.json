@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": 123,
+    "card_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customers/123/cards/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

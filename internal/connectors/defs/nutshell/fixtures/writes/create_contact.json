@@ -1,0 +1,26 @@
+{
+  "record": {
+    "contacts": [
+      {
+        "name": "Fixture create_contact"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "contacts": [
+        {
+          "name": "Fixture create_contact"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

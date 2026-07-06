@@ -1,0 +1,195 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/reports/hours_and_wages",
+    "query": {
+      "punches": "synthetic-conformance-value",
+      "company_id": "synthetic-conformance-value",
+      "from": "synthetic-conformance-value",
+      "to": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "user": {
+            "id": 12.34,
+            "employee_id": "fixture-id",
+            "first_name": "fixture first name",
+            "last_name": "fixture last name"
+          },
+          "weeks": [
+            {
+              "week": "fixture week",
+              "salaried": true,
+              "shifts": [
+                {
+                  "user_id": 12.34,
+                  "date": "2026-01-01",
+                  "week_label": "fixture week label",
+                  "day_label": "fixture day label",
+                  "label": "fixture label",
+                  "breaks": [
+                    "fixture break"
+                  ],
+                  "location_id": 12.34,
+                  "location_label": "fixture location label",
+                  "role_id": 12.34,
+                  "role_label": "fixture role label",
+                  "wage": 12.34,
+                  "status": 12.34,
+                  "salaried": true,
+                  "compliance_exceptions": [
+                    {
+                      "date": "2026-01-01",
+                      "violation_type": "fixture violation type",
+                      "cost": 12.34
+                    }
+                  ],
+                  "total": {
+                    "regular_hours": 12.34,
+                    "regular_pay": 12.34,
+                    "overtime_hours": 12.34,
+                    "overtime_pay": 12.34,
+                    "holiday_hours": 12.34,
+                    "holiday_pay": 12.34,
+                    "compliance_exceptions_pay": 12.34,
+                    "total_hours": 12.34,
+                    "total_pay": 12.34,
+                    "total_tips": 12.34,
+                    "cash_tips": 12.34,
+                    "credit_card_tips": 12.34,
+                    "total_payment_tips": 12.34,
+                    "declared_tips": 12.34,
+                    "auto_gratuity": 12.34,
+                    "withheld_cc_amount": 12.34,
+                    "tip_in": 12.34,
+                    "tip_out": 12.34,
+                    "earned_tips": 12.34,
+                    "tips_paid": 12.34,
+                    "tips_paid_on_shift": 12.34,
+                    "tips_to_be_paid": 12.34,
+                    "premium_overtime_hours": 12.34,
+                    "non_premium_overtime_hours": 12.34,
+                    "premium_overtime_pay": 12.34,
+                    "non_premium_overtime_pay": 12.34,
+                    "pos_declared_tips": 12.34,
+                    "tips_paid_on_payouts": 12.34
+                  }
+                }
+              ],
+              "lone_compliance_exceptions": [
+                {}
+              ]
+            }
+          ],
+          "roles": [
+            {
+              "role_id": 12.34,
+              "role_label": "fixture role label",
+              "total": {
+                "regular_hours": 12.34,
+                "regular_pay": 12.34,
+                "overtime_hours": 12.34,
+                "overtime_pay": 12.34,
+                "holiday_hours": 12.34,
+                "holiday_pay": 12.34,
+                "compliance_exceptions_pay": 12.34,
+                "total_hours": 12.34,
+                "total_pay": 12.34,
+                "total_tips": 12.34,
+                "cash_tips": 12.34,
+                "credit_card_tips": 12.34,
+                "total_payment_tips": 12.34,
+                "declared_tips": 12.34,
+                "auto_gratuity": 12.34,
+                "withheld_cc_amount": 12.34,
+                "tip_in": 12.34,
+                "tip_out": 12.34,
+                "earned_tips": 12.34,
+                "tips_paid": 12.34,
+                "tips_paid_on_shift": 12.34,
+                "tips_to_be_paid": 12.34,
+                "premium_overtime_hours": 12.34,
+                "non_premium_overtime_hours": 12.34,
+                "premium_overtime_pay": 12.34,
+                "non_premium_overtime_pay": 12.34,
+                "pos_declared_tips": 12.34,
+                "tips_paid_on_payouts": 12.34
+              },
+              "location_label": "fixture location label"
+            }
+          ],
+          "total": {
+            "regular_hours": 12.34,
+            "regular_pay": 12.34,
+            "overtime_hours": 12.34,
+            "overtime_pay": 12.34,
+            "holiday_hours": 12.34,
+            "holiday_pay": 12.34,
+            "compliance_exceptions_pay": 12.34,
+            "total_hours": 12.34,
+            "total_pay": 12.34,
+            "total_tips": 12.34,
+            "cash_tips": 12.34,
+            "credit_card_tips": 12.34,
+            "total_payment_tips": 12.34,
+            "declared_tips": 12.34,
+            "auto_gratuity": 12.34,
+            "withheld_cc_amount": 12.34,
+            "tip_in": 12.34,
+            "tip_out": 12.34,
+            "earned_tips": 12.34,
+            "tips_paid": 12.34,
+            "tips_paid_on_shift": 12.34,
+            "tips_to_be_paid": 12.34,
+            "premium_overtime_hours": 12.34,
+            "non_premium_overtime_hours": 12.34,
+            "premium_overtime_pay": 12.34,
+            "non_premium_overtime_pay": 12.34,
+            "pos_declared_tips": 12.34,
+            "tips_paid_on_payouts": 12.34
+          },
+          "salaried": true
+        }
+      ],
+      "show_exception_costs": true,
+      "tip_tracking_enabled": true,
+      "show_tips": true,
+      "total": {
+        "regular_hours": 12.34,
+        "regular_pay": 12.34,
+        "overtime_hours": 12.34,
+        "overtime_pay": 12.34,
+        "holiday_hours": 12.34,
+        "holiday_pay": 12.34,
+        "compliance_exceptions_pay": 12.34,
+        "total_hours": 12.34,
+        "total_pay": 12.34,
+        "total_tips": 12.34,
+        "cash_tips": 12.34,
+        "credit_card_tips": 12.34,
+        "total_payment_tips": 12.34,
+        "declared_tips": 12.34,
+        "auto_gratuity": 12.34,
+        "withheld_cc_amount": 12.34,
+        "tip_in": 12.34,
+        "tip_out": 12.34,
+        "earned_tips": 12.34,
+        "tips_paid": 12.34,
+        "tips_paid_on_shift": 12.34,
+        "tips_to_be_paid": 12.34,
+        "premium_overtime_hours": 12.34,
+        "non_premium_overtime_hours": 12.34,
+        "premium_overtime_pay": 12.34,
+        "non_premium_overtime_pay": 12.34,
+        "pos_declared_tips": 12.34,
+        "tips_paid_on_payouts": 12.34
+      },
+      "start": "2026-01-01T00:00:00Z",
+      "end": "2026-01-01T00:00:00Z"
+    }
+  }
+}

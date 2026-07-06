@@ -1,0 +1,12 @@
+{
+  "record": { "displayLanguage": "en-GB" },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/settings/language",
+    "body": { "displayLanguage": "en-GB" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "displayLanguage": "en-GB" }
+  }
+}

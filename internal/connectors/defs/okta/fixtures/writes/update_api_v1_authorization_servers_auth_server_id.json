@@ -1,0 +1,223 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "accessTokenEncryptedResponseAlgorithm": "RSA-OAEP-256",
+    "audiences": [
+      "audience_fixture"
+    ],
+    "created": "2026-01-01T00:00:00Z",
+    "credentials": {
+      "signing": {
+        "kid": "kid_fixture",
+        "lastRotated": "2026-01-01T00:00:00Z",
+        "nextRotation": "2026-01-01T00:00:00Z",
+        "rotationMode": "AUTO",
+        "use": "sig"
+      }
+    },
+    "description": "description_fixture",
+    "id": "id_fixture",
+    "issuer": "issuer_fixture",
+    "issuerMode": "issuer_mode_fixture",
+    "jwks": {
+      "keys": [
+        {
+          "e": "e_fixture",
+          "kid": "kid_fixture",
+          "kty": "RSA",
+          "n": "n_fixture",
+          "status": "ACTIVE",
+          "use": "enc"
+        }
+      ]
+    },
+    "jwks_uri": "https://example.invalid/fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "status": "ACTIVE",
+    "_links": {
+      "claims": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "deactivate": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "metadata": [
+        {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      ],
+      "policies": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "rotateKey": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      },
+      "scopes": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value",
+    "body": {
+      "accessTokenEncryptedResponseAlgorithm": "RSA-OAEP-256",
+      "audiences": [
+        "audience_fixture"
+      ],
+      "created": "2026-01-01T00:00:00Z",
+      "credentials": {
+        "signing": {
+          "kid": "kid_fixture",
+          "lastRotated": "2026-01-01T00:00:00Z",
+          "nextRotation": "2026-01-01T00:00:00Z",
+          "rotationMode": "AUTO",
+          "use": "sig"
+        }
+      },
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "issuer": "issuer_fixture",
+      "issuerMode": "issuer_mode_fixture",
+      "jwks": {
+        "keys": [
+          {
+            "e": "e_fixture",
+            "kid": "kid_fixture",
+            "kty": "RSA",
+            "n": "n_fixture",
+            "status": "ACTIVE",
+            "use": "enc"
+          }
+        ]
+      },
+      "jwks_uri": "https://example.invalid/fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "_links": {
+        "claims": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "metadata": [
+          {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        ],
+        "policies": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "rotateKey": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "scopes": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

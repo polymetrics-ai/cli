@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/2024-01/marketing-solutions/campaigns/search", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cmp_fixture_1",
+          "type": "campaign",
+          "attributes": {
+            "name": "Fixture Campaign 1",
+            "advertiserId": "adv_fixture_1",
+            "objective": "Conversion",
+            "spendLimit": { "amount": 1000, "currency": "USD" },
+            "goal": "Sales"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,558 @@
+{
+  "actions": [
+    {
+      "name": "create_brand",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "from_name", "from_email", "connection_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "from_name": { "type": "string" },
+          "from_email": { "type": "string" },
+          "connection_id": { "type": "string" },
+          "bounce_danger_percent": { "type": "integer" },
+          "max_soft_bounces": { "type": "integer" },
+          "url": { "type": "string" },
+          "unsubscribe_text": { "type": "string" },
+          "contact_limit": { "type": "integer" },
+          "logo": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new BigMailer brand (sending identity); approval required"
+    },
+    {
+      "name": "update_brand",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "from_name": { "type": "string" },
+          "from_email": { "type": "string" },
+          "connection_id": { "type": "string" },
+          "bounce_danger_percent": { "type": "integer" },
+          "max_soft_bounces": { "type": "integer" },
+          "url": { "type": "string" },
+          "unsubscribe_text": { "type": "string" },
+          "contact_limit": { "type": "integer" },
+          "logo": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/contacts",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "email"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "email": { "type": "string" },
+          "field_values": { "type": "array" },
+          "list_ids": { "type": "array" },
+          "unsubscribe_all": { "type": "boolean" },
+          "unsubscribe_ids": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a contact in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/contacts/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "field_values": { "type": "array" },
+          "list_ids": { "type": "array" },
+          "unsubscribe_all": { "type": "boolean" },
+          "unsubscribe_ids": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "upsert_contact",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/contacts/upsert",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "email"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "email": { "type": "string" },
+          "field_values": { "type": "array" },
+          "list_ids": { "type": "array" },
+          "unsubscribe_all": { "type": "boolean" },
+          "unsubscribe_ids": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates the contact if the email is new, otherwise updates the existing contact; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/contacts/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a contact from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/lists",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "name"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a contact list in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/lists/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/lists/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval required"
+    },
+    {
+      "name": "create_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/fields",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "name", "type"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["date", "integer", "text"] },
+          "merge_tag_name": { "type": "string" },
+          "sample_value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a custom contact field in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_field",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/fields/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "merge_tag_name": { "type": "string" },
+          "sample_value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/fields/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a custom contact field from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_message_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/message-types",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "name"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a message type (unsubscribe category) in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_message_type",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/message-types/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_message_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/message-types/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a message type from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_segment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/segments",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "name", "operator", "conditions"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "name": { "type": "string" },
+          "operator": { "type": "string", "enum": ["all", "any"] },
+          "conditions": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a contact segment in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_segment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/segments/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "operator": { "type": "string", "enum": ["all", "any"] },
+          "conditions": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/segments/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a segment from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_sender",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/senders",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "identity"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "identity": { "type": "string" },
+          "identity_type": { "type": "string", "enum": ["domain", "email"] },
+          "share_type": { "type": "string", "enum": ["all", "none"] }
+        }
+      },
+      "risk": "external mutation; adds a sender domain/email identity to a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_sender",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/senders/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "share_type": { "type": "string", "enum": ["all", "none"] }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_sender",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/senders/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a sender identity from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/templates",
+      "path_fields": ["brand_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "name", "type", "html"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["email", "page"] },
+          "html": { "type": "string" },
+          "shared_with_account": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a campaign template in a BigMailer brand; approval required"
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/brands/{{ record.brand_id }}/templates/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["email", "page"] },
+          "html": { "type": "string" },
+          "shared_with_account": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/brands/{{ record.brand_id }}/templates/{{ record.id }}",
+      "path_fields": ["brand_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["brand_id", "id"],
+        "properties": {
+          "brand_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a template from a brand; irreversible; approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "role"],
+        "properties": {
+          "email": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "account_manager", "brand_manager", "campaign_manager", "campaign_viewer", "template_manager"]
+          },
+          "allowed_brands": { "type": "array" },
+          "invitation_message": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; invites a new user into the BigMailer account; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "account_manager", "brand_manager", "campaign_manager", "campaign_viewer", "template_manager"]
+          },
+          "allowed_brands": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a user from the BigMailer account; irreversible; approval required"
+    }
+  ]
+}

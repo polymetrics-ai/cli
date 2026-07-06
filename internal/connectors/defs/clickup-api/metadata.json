@@ -1,0 +1,24 @@
+{
+  "name": "clickup-api",
+  "display_name": "ClickUp",
+  "description": "Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space tags, and webhooks, and writes task/folder/list/space/webhook lifecycle mutations, task comments, tags, custom field values, and goal creation, through the ClickUp v2 REST API using a personal API token.",
+  "integration_type": "api",
+  "docs_url": "https://developer.clickup.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ClickUp API read of workspace, space, folder, list, task, goal, tag, and webhook data",
+    "write": "external mutation of ClickUp tasks, folders, lists, spaces, webhooks, tags, custom field values, and goals; delete_task/delete_folder/delete_list/delete_space are irreversible cascading deletes, and create_webhook/update_webhook register or repoint an outbound event-delivery URL of the caller's choosing — every write ships with an explicit per-action risk string",
+    "approval": "required for every delete_* action, every update_* action, create_webhook/update_webhook, and set_custom_field_value; create_task/create_task_comment/add_tag_to_task/remove_tag_from_task/create_goal/create_folder/create_list/create_space are low-risk (additive or non-destructive)"
+  }
+}

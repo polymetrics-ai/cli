@@ -1,0 +1,221 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (ID) of an item."
+    },
+    "data": {
+      "type": "object",
+      "description": "Contains app card item data, such as the title, description, or fields.",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "A short text description to add context about the app card."
+        },
+        "fields": {
+          "type": "array",
+          "description": "Array where each object represents a custom preview field. Preview fields are displayed on the bottom half of the app card in the compact view.",
+          "items": {
+            "type": "object",
+            "description": "Array where each object represents a custom preview field. Preview fields are displayed on the bottom half of the app card in the compact view.",
+            "properties": {
+              "fillColor": {
+                "type": "string",
+                "description": "Hex value representing the color that fills the background area of the preview field, when it's displayed on the app card."
+              },
+              "iconShape": {
+                "type": "string",
+                "description": "The shape of the icon on the preview field.",
+                "enum": [
+                  "round",
+                  "square"
+                ]
+              },
+              "iconUrl": {
+                "type": "string",
+                "description": "A valid URL pointing to an image available online.\nThe transport protocol must be HTTPS.\nPossible image file formats: JPG/JPEG, PNG, SVG."
+              },
+              "textColor": {
+                "type": "string",
+                "description": "Hex value representing the color of the text string assigned to `value`."
+              },
+              "tooltip": {
+                "type": "string",
+                "description": "A short text displayed in a tooltip when clicking or hovering over the preview field."
+              },
+              "value": {
+                "type": "string",
+                "description": "The actual data value of the custom field.\nIt can be any type of information that you want to convey."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "owned": {
+          "type": "boolean",
+          "description": "Defines whether the card is owned by the application making the call."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status indicating whether an app card is connected and in sync with the source. When the source for the app card is deleted, the status returns `disabled`.",
+          "enum": [
+            "disconnected",
+            "connected",
+            "disabled"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "A short text header to identify the app card."
+        }
+      },
+      "additionalProperties": true
+    },
+    "style": {
+      "type": "object",
+      "description": "Contains information about the style of an app card item, such as the fill color.",
+      "properties": {
+        "fillColor": {
+          "type": "string",
+          "description": "Hex value of the border color of the app card.\nDefault: `#2d9bf0`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "position": {
+      "type": "object",
+      "description": "Contains location information about the item, such as its x coordinate, y coordinate, and the origin of the x and y coordinates.",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "Area of the item that is referenced by its x and y coordinates. For example, an item with a center origin will have its x and y coordinates point to its center. The center point of the board has x: 0 and y: 0 coordinates.\nCurrently, only one option is supported.",
+          "enum": [
+            "center"
+          ]
+        },
+        "relativeTo": {
+          "type": "string",
+          "enum": [
+            "canvas_center",
+            "parent_top_left"
+          ]
+        },
+        "x": {
+          "type": "number",
+          "description": "X-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        },
+        "y": {
+          "type": "number",
+          "description": "Y-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        }
+      },
+      "additionalProperties": true
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Contains geometrical information about the item, such as its width or height.",
+      "properties": {
+        "height": {
+          "type": "number",
+          "description": "Height of the item, in pixels."
+        },
+        "rotation": {
+          "type": "number",
+          "description": "Rotation angle of an item, in degrees, relative to the board. You can rotate items clockwise (right) and counterclockwise (left) by specifying positive and negative values, respectively."
+        },
+        "width": {
+          "type": "number",
+          "description": "Width of the item, in pixels."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when the item was created. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "Contains information about the user who created the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "Date and time when the item was last modified. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "object",
+      "description": "Contains information about the user who last modified the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "parent": {
+      "type": "object",
+      "description": "Contains information about the parent frame for the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the parent frame for the item."
+        },
+        "links": {
+          "type": "object",
+          "description": "Contains applicable links for the current object.",
+          "properties": {
+            "self": {
+              "type": "string",
+              "description": "Link to obtain more information about the current object."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains applicable links for the item.",
+      "properties": {
+        "related": {
+          "type": "string",
+          "description": "Link to obtain information about the child items related to the frame."
+        },
+        "self": {
+          "type": "string",
+          "description": "Link to obtain information about the current item."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of item that is returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

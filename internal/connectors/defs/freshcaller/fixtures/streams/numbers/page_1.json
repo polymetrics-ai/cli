@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/numbers",
+    "query": { "page": "1", "page_size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "numbers": [
+        {
+          "id": 4001,
+          "phone_number": "+15550100001",
+          "name": "Fixture Number 1"
+        },
+        {
+          "id": 4002,
+          "phone_number": "+15550100002",
+          "name": "Fixture Number 2"
+        }
+      ]
+    }
+  }
+}

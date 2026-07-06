@@ -1,0 +1,11 @@
+{
+  "request": { "method": "POST", "path": "/AdGroups/QueryByCampaignId", "body": { "CampaignId": "4000001" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "AdGroups": [
+        { "Id": "5000001", "Name": "Fixture Ad Group", "Status": "Active", "AdRotation": "OptimizeForClicks", "Network": "OwnedAndOperatedAndSyndicatedSearch", "StartDate": "2026-01-01", "EndDate": null }
+      ]
+    }
+  }
+}

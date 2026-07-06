@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Goals.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "nb_conversions": 1,
+      "nb_visits_converted": 2,
+      "conversion_rate": 3,
+      "revenue": 4,
+      "revenue_subtotal": 5,
+      "revenue_tax": 6,
+      "revenue_shipping": 7,
+      "revenue_discount": 8,
+      "items": 9,
+      "avg_order_revenue": 10
+    }
+  }
+}

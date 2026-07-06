@@ -1,0 +1,9 @@
+{
+  "record": {
+    "charge_id": "chg_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gateway/charges/chg_fixture_1/void"
+  }
+}

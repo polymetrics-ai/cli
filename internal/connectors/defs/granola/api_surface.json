@@ -1,0 +1,10 @@
+{
+  "api": "Granola public API (https://public-api.granola.ai/v1)",
+  "docs": "https://docs.granola.ai/introduction",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration, completed: both legacy streams. detailed_notes' per-note GET /notes/{id} sub-resource fan-out, previously blocked (ENGINE_GAP: no declarative fan-out mechanism, would have required a StreamHook), is now expressed via streams.json's fan_out.ids_from.request dialect (S4 engine mini-wave item 2) — the same list-then-detail shape google-tasks' tasks stream uses.",
+  "endpoints": [
+    { "method": "GET", "path": "/notes", "covered_by": { "stream": "notes" } },
+    { "method": "GET", "path": "/notes/{id}", "covered_by": { "stream": "detailed_notes" } }
+  ]
+}

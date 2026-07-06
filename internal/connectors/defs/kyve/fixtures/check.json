@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/kyve/query/v1beta1/pools", "query": { "pagination.limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "pools": [], "pagination": { "next_key": "", "total": "0" } }
+  }
+}

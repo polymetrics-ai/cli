@@ -1,0 +1,29 @@
+{
+  "record": {
+    "email_server_id": "synthetic-conformance-value",
+    "alias": "alias_fixture",
+    "authType": "BASIC_SMTP_AUTH",
+    "enabled": true,
+    "host": "host_fixture",
+    "id": "id_fixture",
+    "port": 1,
+    "username": "username_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/email-servers/synthetic-conformance-value",
+    "body": {
+      "alias": "alias_fixture",
+      "authType": "BASIC_SMTP_AUTH",
+      "enabled": true,
+      "host": "host_fixture",
+      "id": "id_fixture",
+      "port": 1,
+      "username": "username_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "VisitFrequency.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "nb_visits_returning": 1,
+      "nb_actions_returning": 2,
+      "nb_uniq_visitors_returning": 3,
+      "nb_users_returning": 4,
+      "max_actions_returning": 5,
+      "nb_visits_new": 6,
+      "nb_actions_new": 7,
+      "nb_uniq_visitors_new": 8,
+      "nb_users_new": 9,
+      "max_actions_new": 10,
+      "avg_time_on_site_returning": 11,
+      "nb_actions_per_visit_returning": 12
+    }
+  }
+}

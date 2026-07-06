@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/funds_availability/synthetic-conformance-value",
+    "query": {
+      "amount": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "available": true
+    }
+  }
+}

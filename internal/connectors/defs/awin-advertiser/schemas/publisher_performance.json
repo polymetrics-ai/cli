@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "publisher_performance",
+  "type": "object",
+  "x-primary-key": ["publisherId"],
+  "required": ["publisherId"],
+  "properties": {
+    "advertiserId": { "type": ["integer", "null"] },
+    "advertiserName": { "type": ["string", "null"] },
+    "publisherId": { "type": "integer" },
+    "publisherName": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "impressions": { "type": ["integer", "null"] },
+    "clicks": { "type": ["integer", "null"] },
+    "pendingNo": { "type": ["integer", "null"] },
+    "pendingValue": { "type": ["number", "null"] },
+    "pendingComm": { "type": ["number", "null"] },
+    "confirmedNo": { "type": ["integer", "null"] },
+    "confirmedValue": { "type": ["number", "null"] },
+    "confirmedComm": { "type": ["number", "null"] },
+    "bonusNo": { "type": ["integer", "null"] },
+    "bonusValue": { "type": ["number", "null"] },
+    "bonusComm": { "type": ["number", "null"] },
+    "declinedNo": { "type": ["integer", "null"] },
+    "declinedValue": { "type": ["number", "null"] },
+    "declinedComm": { "type": ["number", "null"] },
+    "totalNo": { "type": ["integer", "null"] },
+    "totalValue": { "type": ["number", "null"] },
+    "totalComm": { "type": ["number", "null"] },
+    "tags": { "type": ["array", "null"] }
+  }
+}

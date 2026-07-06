@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/markets/list",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mkt_fixture_1",
+          "name": "Fixture Market One",
+          "ticker": "NASDAQ"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "recipient": "fixture@example.com",
+    "type": "transactional"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/suppression-list/fixture@example.com"
+  }
+}

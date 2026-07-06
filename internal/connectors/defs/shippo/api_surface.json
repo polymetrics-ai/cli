@@ -1,0 +1,76 @@
+{
+  "api": "Shippo REST API (https://docs.goshippo.com/docs/intro)",
+  "docs": "https://docs.goshippo.com/docs/intro",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (addresses, parcels, shipments, transactions); the full Shippo surface (rates, tracking, refunds, customs items, batches, orders) is out of scope outside this connector's current declared surface. Shippo is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/addresses",
+      "covered_by": {
+        "stream": "addresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/parcels",
+      "covered_by": {
+        "stream": "parcels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments",
+      "covered_by": {
+        "stream": "shipments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented shipment creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented label purchasing; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracks/{carrier}/{tracking_number}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customs/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

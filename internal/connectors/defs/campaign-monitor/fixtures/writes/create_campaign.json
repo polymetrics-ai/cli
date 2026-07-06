@@ -1,0 +1,25 @@
+{
+  "record": {
+    "Name": "Fixture Campaign",
+    "Subject": "Fixture Subject",
+    "FromName": "Fixture Sender",
+    "FromEmail": "sender@example.com",
+    "ReplyTo": "reply@example.com",
+    "HtmlUrl": "https://example.com/campaign-content/index.html",
+    "ListIDs": ["list_fixture_1"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/synthetic-conformance-value.json",
+    "body": {
+      "Name": "Fixture Campaign",
+      "Subject": "Fixture Subject",
+      "FromName": "Fixture Sender",
+      "FromEmail": "sender@example.com",
+      "ReplyTo": "reply@example.com",
+      "HtmlUrl": "https://example.com/campaign-content/index.html",
+      "ListIDs": ["list_fixture_1"]
+    }
+  },
+  "response": { "status": 201, "body": "camp_fixture_1" }
+}

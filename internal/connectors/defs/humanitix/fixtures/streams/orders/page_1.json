@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/orders" },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        {
+          "_id": "order_fixture_1",
+          "eventId": "event_fixture_1",
+          "eventDateId": "date_fixture_1",
+          "orderName": "ORDER-1",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture",
+          "lastName": "User1",
+          "mobile": "",
+          "status": "complete",
+          "financialStatus": "paid",
+          "currency": "AUD",
+          "total": 100.0,
+          "manualOrder": false,
+          "completedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

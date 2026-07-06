@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/agents" },
+  "response": {
+    "status": 200,
+    "body": { "agents": [] }
+  }
+}

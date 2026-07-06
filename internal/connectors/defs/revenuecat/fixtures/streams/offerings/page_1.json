@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/offerings",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "offering_fixture_1",
+          "object": "offering",
+          "lookup_key": "default",
+          "identifier": "default",
+          "display_name": "Default",
+          "description": "Fixture offering",
+          "created_at": 1735689600000,
+          "project_id": "synthetic-conformance-value",
+          "state": "active"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/offerings"
+    }
+  }
+}

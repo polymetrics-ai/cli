@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TikTok Ad Group",
+  "type": "object",
+  "x-primary-key": ["adgroup_id"],
+  "x-cursor-field": "modify_time",
+  "properties": {
+    "adgroup_id": { "type": "string" },
+    "adgroup_name": { "type": "string" },
+    "campaign_id": { "type": "string" },
+    "advertiser_id": { "type": "string" },
+    "placement_type": { "type": "string" },
+    "budget": { "type": "number" },
+    "budget_mode": { "type": "string" },
+    "operation_status": { "type": "string" },
+    "create_time": { "type": "string" },
+    "modify_time": { "type": "string" }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "profile": {
+      "domains": [
+        "domain_fixture"
+      ],
+      "name": "name_fixture",
+      "realmType": "PARTNER"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/realms",
+    "body": {
+      "profile": {
+        "domains": [
+          "domain_fixture"
+        ],
+        "name": "name_fixture",
+        "realmType": "PARTNER"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

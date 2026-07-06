@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "removeprospecttags",
+      "attributes": {
+        "name": "Fixture Remove Prospect Tags"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsRemoveTags",
+    "body": {
+      "data": {
+        "type": "removeprospecttags",
+        "attributes": {
+          "name": "Fixture Remove Prospect Tags"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

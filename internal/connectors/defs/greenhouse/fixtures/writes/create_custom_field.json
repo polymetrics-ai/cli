@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/custom_fields"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/alerts/synthetic-conformance-value/tags" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": "tag_fixture_1", "name": "Positive", "color": "#00ff00" },
+        { "id": "tag_fixture_2", "name": "Negative", "color": "#ff0000" }
+      ]
+    }
+  }
+}

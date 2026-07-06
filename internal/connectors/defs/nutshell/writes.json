@@ -1,0 +1,1424 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "accounts"
+        ],
+        "properties": {
+          "accounts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates company/account records in Nutshell"
+    },
+    {
+      "name": "delete_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell account/company; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_account",
+      "kind": "update",
+      "method": "POST",
+      "path": "/accounts/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell account/company"
+    },
+    {
+      "name": "create_account_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/customfield",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "isMultiple": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates an account custom field definition"
+    },
+    {
+      "name": "create_activity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/activities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "activities"
+        ],
+        "properties": {
+          "activities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates Nutshell activity records"
+    },
+    {
+      "name": "update_activity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/activities/{{ record.id }}",
+      "body_type": "json",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "activities"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "activities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Nutshell activity"
+    },
+    {
+      "name": "create_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/audiences",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "emAudiences"
+        ],
+        "properties": {
+          "emAudiences": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Nutshell email marketing audience"
+    },
+    {
+      "name": "delete_competitor_map",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/competitormaps/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a lead-competitor relationship"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "contacts"
+        ],
+        "properties": {
+          "contacts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates person/contact records in Nutshell"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell contact/person; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_contact",
+      "kind": "update",
+      "method": "POST",
+      "path": "/contacts/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell contact/person"
+    },
+    {
+      "name": "create_contact_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/customfield",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "isMultiple": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a contact custom field definition"
+    },
+    {
+      "name": "create_lead",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "leads"
+        ],
+        "properties": {
+          "leads": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates Nutshell lead records"
+    },
+    {
+      "name": "delete_lead",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell lead; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "reopen_lead",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/reopen",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "reopens a previously closed Nutshell lead"
+    },
+    {
+      "name": "set_lead_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/stageset",
+      "body_type": "json",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "stageset"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "stageset": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "changes the pipeline/stageset assigned to a lead"
+    },
+    {
+      "name": "update_lead_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/status",
+      "body_type": "json",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "outcomeId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "competitorMaps": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "productMaps": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates a lead status/outcome and optional competitor/product maps"
+    },
+    {
+      "name": "undelete_lead",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell lead"
+    },
+    {
+      "name": "watch_lead",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/watch",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "toggles watch notifications for the authenticated user on a lead"
+    },
+    {
+      "name": "create_lead_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads/customfield",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "isMultiple": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a lead custom field definition"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a note attached to a Nutshell entity"
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notes/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell note; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_note",
+      "kind": "update",
+      "method": "POST",
+      "path": "/notes/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell note"
+    },
+    {
+      "name": "create_product_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/productcategories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "productCategories"
+        ],
+        "properties": {
+          "productCategories": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Nutshell product category"
+    },
+    {
+      "name": "delete_product_map",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/productMaps/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a product mapping from a lead"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell product; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_product",
+      "kind": "update",
+      "method": "POST",
+      "path": "/products/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell product"
+    },
+    {
+      "name": "create_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sources",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "sources"
+        ],
+        "properties": {
+          "sources": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a lead source in Nutshell"
+    },
+    {
+      "name": "delete_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sources/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a lead source; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_source",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sources/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted lead source"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "tags"
+        ],
+        "properties": {
+          "tags": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Nutshell tag and optionally links entities"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell tag; recoverable only through the undelete endpoint for a limited period"
+    },
+    {
+      "name": "undelete_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tags/{{ record.id }}/undelete",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "restores a deleted Nutshell tag"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "dueTime": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "recurrenceRule": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "links": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a task in Nutshell"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "body_type": "none",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Nutshell task"
+    }
+  ]
+}

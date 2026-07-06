@@ -1,0 +1,11 @@
+{
+  "api": "Opinion Stage Public Result API (https://api.opinionstage.com; https://api.opinionstage.com/api-docs/api/v2/openapi.yaml)",
+  "docs": "https://www.opinionstage.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Declarative migration of legacy internal/connectors/opinion-stage read streams. The responses/questions substreams use stream.fan_out to list item ids from /api/v2/items, then read each per-item child endpoint and stamp item_id.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v2/items", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "/api/v2/items/{id}/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "/api/v2/items/{id}/questions", "covered_by": { "stream": "questions" } }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/internal/api/v2/workspaces", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        { "id": "ws_fixture_101", "name": "Fixture Workspace 101", "status": "ARCHIVED" }
+      ],
+      "offset": 100,
+      "limit": 100,
+      "totalCount": 101
+    }
+  }
+}

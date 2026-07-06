@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/opportunities",
+    "query": {
+      "page": "1",
+      "perPage": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "opportunities": [
+        {
+          "id": 10,
+          "name": "Fixture Opportunity 1",
+          "description": "conformance fixture opportunity",
+          "party": {
+            "id": 1
+          },
+          "milestone": {
+            "id": 100,
+            "name": "Lead"
+          },
+          "value": {
+            "amount": 5000,
+            "currency": "USD"
+          },
+          "probability": 40,
+          "expectedCloseOn": "2026-02-01",
+          "closedOn": null,
+          "lostReason": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

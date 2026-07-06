@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tickets/synthetic-conformance-value/loops"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "loops": {
+        "id": "id_fixture",
+        "question": "fixture",
+        "status": "open",
+        "categoryId": "category_id_fixture",
+        "category": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "openedAt": "2026-01-01T00:00:00Z",
+        "openedByMessageId": "opened_by_message_id_fixture",
+        "closedAt": "2026-01-01T00:00:00Z",
+        "closedByMessageId": "closed_by_message_id_fixture",
+        "closedReason": "fixture"
+      }
+    }
+  }
+}

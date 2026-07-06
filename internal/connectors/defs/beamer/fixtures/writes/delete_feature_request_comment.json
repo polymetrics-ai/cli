@@ -1,0 +1,10 @@
+{
+  "record": {
+    "feature_request_id": "fr_fixture_1",
+    "id": "comment_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/feature-requests/fr_fixture_1/comments/comment_fixture_1"
+  }
+}

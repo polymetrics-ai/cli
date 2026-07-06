@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "page": "2", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "task_fixture_101", "title": "Fixture Task 101 (final short page)", "updatedDate": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

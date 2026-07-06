@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "customerNumber": 1,
+          "name": "Acme A/S",
+          "currency": "DKK",
+          "email": "fixture1@example.com",
+          "city": "Copenhagen",
+          "zip": "1000",
+          "country": "Denmark",
+          "address": "1 Test Street",
+          "balance": 100,
+          "barred": false,
+          "creditLimit": 10000,
+          "vatZone": { "vatZoneNumber": 1 },
+          "customerGroup": { "customerGroupNumber": 1 },
+          "self": "https://restapi.e-conomic.com/customers/1"
+        },
+        {
+          "customerNumber": 2,
+          "name": "Beta ApS",
+          "currency": "DKK",
+          "email": "fixture2@example.com",
+          "city": "Copenhagen",
+          "zip": "1000",
+          "country": "Denmark",
+          "address": "2 Test Street",
+          "balance": 200,
+          "barred": false,
+          "creditLimit": 10000,
+          "vatZone": { "vatZoneNumber": 1 },
+          "customerGroup": { "customerGroupNumber": 1 },
+          "self": "https://restapi.e-conomic.com/customers/2"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

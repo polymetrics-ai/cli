@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tv/season/123/changes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture tv_season_changes_by_id",
+      "name": "Fixture tv_season_changes_by_id",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v2/organizations", "query": { "pageSize": "synthetic-conformance-value", "after": "2" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

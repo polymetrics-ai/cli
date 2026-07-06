@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/tags/all" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "_id": "tag_fixture_1", "title": "Fixture tag 1", "color": "#00aaff", "field": "custom" },
+        { "_id": "tag_fixture_2", "title": "Fixture tag 2", "color": "#ff0000", "field": "custom" }
+      ]
+    }
+  }
+}

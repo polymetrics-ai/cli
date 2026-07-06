@@ -1,0 +1,73 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}", "when": "{{ config.username }}" },
+      { "mode": "basic", "username": "{{ secrets.password }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/charges" },
+    "error_map": [
+      { "status": 401, "hint": "chargedesk password (API key) is missing or invalid; re-run pm credentials add chargedesk" },
+      { "status": 403, "hint": "chargedesk credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chargedesk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "charges",
+      "path": "/charges",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/charges.json"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "log_activity",
+      "path": "/log/activity",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/log_activity.json"
+    },
+    {
+      "name": "log_cancellations",
+      "path": "/log/cancellations",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "occurred" },
+      "schema": "schemas/log_cancellations.json"
+    },
+    {
+      "name": "webhook_notifications",
+      "path": "/webhooks/notifications",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_notifications.json"
+    }
+  ]
+}

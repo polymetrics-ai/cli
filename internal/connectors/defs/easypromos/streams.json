@@ -1,0 +1,84 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "next_cursor",
+      "token_path": "paging.next_cursor"
+    },
+    "check": { "method": "GET", "path": "/promotions" },
+    "error_map": [
+      { "status": 401, "hint": "easypromos bearer_token is missing or invalid; re-run pm credentials add easypromos" },
+      { "status": 403, "hint": "easypromos account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "easypromos rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "promotions",
+      "path": "/promotions",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "title": "{{ record.title }}",
+        "description": "{{ record.description }}",
+        "promotion_type": "{{ record.promotion_type }}",
+        "status": "{{ record.status }}",
+        "default_language": "{{ record.default_language }}",
+        "timezone": "{{ record.timezone }}",
+        "url": "{{ record.url }}",
+        "start_date": "{{ record.start_date }}",
+        "end_date": "{{ record.end_date }}",
+        "created": "{{ record.created }}",
+        "organizing_brand_id": "{{ record.organizing_brand.id }}",
+        "organizing_brand_name": "{{ record.organizing_brand.name }}"
+      },
+      "schema": "schemas/promotions.json"
+    },
+    {
+      "name": "organizing_brands",
+      "path": "/organizing_brands",
+      "records": { "path": "items" },
+      "schema": "schemas/organizing_brands.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages/{{ config.promotion_id }}",
+      "records": { "path": "items" },
+      "schema": "schemas/stages.json"
+    },
+    {
+      "name": "users",
+      "path": "/users/{{ config.promotion_id }}",
+      "records": { "path": "items" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "participations",
+      "path": "/participations/{{ config.promotion_id }}",
+      "records": { "path": "items" },
+      "schema": "schemas/participations.json"
+    },
+    {
+      "name": "prizes",
+      "path": "/prizes/{{ config.promotion_id }}",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "participation_id": "{{ record.participation_id }}",
+        "stage_id": "{{ record.stage_id }}",
+        "code": "{{ record.code }}",
+        "redeem_url": "{{ record.redeem_url }}",
+        "download_url": "{{ record.download_url }}",
+        "created": "{{ record.created }}",
+        "prize_type_id": "{{ record.prize_type.id }}",
+        "prize_type_name": "{{ record.prize_type.name }}"
+      },
+      "schema": "schemas/prizes.json"
+    }
+  ]
+}

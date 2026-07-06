@@ -1,0 +1,717 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/responses",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "responses": [
+        {
+          "id": "resp_fixture_1",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 1",
+          "rating": 9,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_2",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 2",
+          "rating": 8,
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_3",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 3",
+          "rating": 9,
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_4",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 4",
+          "rating": 8,
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_5",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 5",
+          "rating": 9,
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_6",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 6",
+          "rating": 8,
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_7",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 7",
+          "rating": 9,
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_8",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 8",
+          "rating": 8,
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_9",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 9",
+          "rating": 9,
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_10",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 10",
+          "rating": 8,
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_11",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 11",
+          "rating": 9,
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_12",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 12",
+          "rating": 8,
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_13",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 13",
+          "rating": 9,
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_14",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 14",
+          "rating": 8,
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_15",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 15",
+          "rating": 9,
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_16",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 16",
+          "rating": 8,
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_17",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 17",
+          "rating": 9,
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_18",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 18",
+          "rating": 8,
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_19",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 19",
+          "rating": 9,
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_20",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 20",
+          "rating": 8,
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_21",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 21",
+          "rating": 9,
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_22",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 22",
+          "rating": 8,
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_23",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 23",
+          "rating": 9,
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_24",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 24",
+          "rating": 8,
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_25",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 25",
+          "rating": 9,
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_26",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 26",
+          "rating": 8,
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_27",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 27",
+          "rating": 9,
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_28",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 28",
+          "rating": 8,
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_29",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 29",
+          "rating": 9,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_30",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 30",
+          "rating": 8,
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_31",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 31",
+          "rating": 9,
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_32",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 32",
+          "rating": 8,
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_33",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 33",
+          "rating": 9,
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_34",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 34",
+          "rating": 8,
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_35",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 35",
+          "rating": 9,
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_36",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 36",
+          "rating": 8,
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_37",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 37",
+          "rating": 9,
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_38",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 38",
+          "rating": 8,
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_39",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 39",
+          "rating": 9,
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_40",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 40",
+          "rating": 8,
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_41",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 41",
+          "rating": 9,
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_42",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 42",
+          "rating": 8,
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_43",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 43",
+          "rating": 9,
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_44",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 44",
+          "rating": 8,
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_45",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 45",
+          "rating": 9,
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_46",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 46",
+          "rating": 8,
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_47",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 47",
+          "rating": 9,
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_48",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 48",
+          "rating": 8,
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_49",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 49",
+          "rating": 9,
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_50",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 50",
+          "rating": 8,
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_51",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 51",
+          "rating": 9,
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_52",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 52",
+          "rating": 8,
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_53",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 53",
+          "rating": 9,
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_54",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 54",
+          "rating": 8,
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_55",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 55",
+          "rating": 9,
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_56",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 56",
+          "rating": 8,
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_57",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 57",
+          "rating": 9,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_58",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 58",
+          "rating": 8,
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_59",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 59",
+          "rating": 9,
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_60",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 60",
+          "rating": 8,
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_61",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 61",
+          "rating": 9,
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_62",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 62",
+          "rating": 8,
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_63",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 63",
+          "rating": 9,
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_64",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 64",
+          "rating": 8,
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_65",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 65",
+          "rating": 9,
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_66",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 66",
+          "rating": 8,
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_67",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 67",
+          "rating": 9,
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_68",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 68",
+          "rating": 8,
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_69",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 69",
+          "rating": 9,
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_70",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 70",
+          "rating": 8,
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_71",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 71",
+          "rating": 9,
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_72",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 72",
+          "rating": 8,
+          "updated_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_73",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 73",
+          "rating": 9,
+          "updated_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_74",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 74",
+          "rating": 8,
+          "updated_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_75",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 75",
+          "rating": 9,
+          "updated_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_76",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 76",
+          "rating": 8,
+          "updated_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_77",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 77",
+          "rating": 9,
+          "updated_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_78",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 78",
+          "rating": 8,
+          "updated_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_79",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 79",
+          "rating": 9,
+          "updated_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_80",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 80",
+          "rating": 8,
+          "updated_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_81",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 81",
+          "rating": 9,
+          "updated_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_82",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 82",
+          "rating": 8,
+          "updated_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_83",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 83",
+          "rating": 9,
+          "updated_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_84",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 84",
+          "rating": 8,
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_85",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 85",
+          "rating": 9,
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_86",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 86",
+          "rating": 8,
+          "updated_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_87",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 87",
+          "rating": 9,
+          "updated_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_88",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 88",
+          "rating": 8,
+          "updated_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_89",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 89",
+          "rating": 9,
+          "updated_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_90",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 90",
+          "rating": 8,
+          "updated_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_91",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 91",
+          "rating": 9,
+          "updated_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_92",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 92",
+          "rating": 8,
+          "updated_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_93",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 93",
+          "rating": 9,
+          "updated_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_94",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 94",
+          "rating": 8,
+          "updated_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_95",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 95",
+          "rating": 9,
+          "updated_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_96",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 96",
+          "rating": 8,
+          "updated_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_97",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 97",
+          "rating": 9,
+          "updated_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_98",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 98",
+          "rating": 8,
+          "updated_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_99",
+          "survey_id": "survey_fixture_1",
+          "respondent_name": "Fixture Respondent 99",
+          "rating": 9,
+          "updated_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_100",
+          "survey_id": "survey_fixture_2",
+          "respondent_name": "Fixture Respondent 100",
+          "rating": 8,
+          "updated_at": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

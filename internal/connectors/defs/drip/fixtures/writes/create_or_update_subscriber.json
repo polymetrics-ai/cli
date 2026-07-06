@@ -1,0 +1,30 @@
+{
+  "record": {
+    "subscribers": [
+      {
+        "email": "fixture.new@example.com",
+        "tags": ["vip"],
+        "custom_fields": { "plan": "pro" },
+        "time_zone": "Etc/UTC"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/subscribers",
+    "body": {
+      "subscribers": [
+        {
+          "email": "fixture.new@example.com",
+          "tags": ["vip"],
+          "custom_fields": { "plan": "pro" },
+          "time_zone": "Etc/UTC"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscribers": [{ "id": "sub_fixture_new", "email": "fixture.new@example.com" }] }
+  }
+}

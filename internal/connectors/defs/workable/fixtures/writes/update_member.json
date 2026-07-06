@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "member_fixture",
+    "name": "Fixture Member Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/members",
+    "body": {
+      "id": "member_fixture",
+      "name": "Fixture Member Updated"
+    }
+  }
+}

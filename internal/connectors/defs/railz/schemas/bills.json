@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bills",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "business_id": { "type": ["string", "null"] },
+    "vendor_id": { "type": ["string", "null"] },
+    "total_amount": { "type": ["number", "string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

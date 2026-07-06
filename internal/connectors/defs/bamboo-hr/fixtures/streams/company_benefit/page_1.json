@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/benefit/company_benefit/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "benefitVendorId": "fixture_id",
+      "description": "fixture_value",
+      "benefitType": "health",
+      "deductionTypeId": 1001,
+      "endDate": "2026-01-01T00:00:00Z",
+      "meetAcaMin": "fixture_value",
+      "minEssentialCoverage": "fixture_value",
+      "name": "Fixture Name"
+    }
+  }
+}

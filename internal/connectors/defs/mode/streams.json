@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "spaces",
+      "method": "GET",
+      "path": "/__legacy_hook/spaces",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/spaces.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "reports",
+      "method": "GET",
+      "path": "/__legacy_hook/reports",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/reports.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "data_sources",
+      "method": "GET",
+      "path": "/__legacy_hook/data_sources",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/data_sources.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "groups",
+      "method": "GET",
+      "path": "/__legacy_hook/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/groups.json",
+      "incremental": {
+        "cursor_field": "updated_at",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "memberships",
+      "method": "GET",
+      "path": "/__legacy_hook/memberships",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/memberships.json",
+      "incremental": {
+        "cursor_field": "created_at",
+        "client_filtered": true
+      }
+    }
+  ]
+}

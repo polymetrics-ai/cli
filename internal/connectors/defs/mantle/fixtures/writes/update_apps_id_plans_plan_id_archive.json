@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "plan_id": "plan_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/apps/id_fixture/plans/plan_id_fixture/archive"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

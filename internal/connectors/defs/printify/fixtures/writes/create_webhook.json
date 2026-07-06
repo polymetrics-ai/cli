@@ -1,0 +1,13 @@
+{
+  "record": {
+    "topic": "order:created",
+    "url": "https://example.com/webhooks/order-created"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/webhooks.json",
+    "body": {
+      "topic": "order:created"
+    }
+  }
+}

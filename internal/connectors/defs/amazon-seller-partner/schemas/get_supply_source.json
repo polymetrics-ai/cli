@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_supply_source",
+  "type": "object",
+  "properties": {
+    "supplySourceId": {
+      "type": "string"
+    },
+    "supplySourceCode": {
+      "type": "string"
+    },
+    "alias": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object"
+    },
+    "configuration": {
+      "type": "object"
+    },
+    "capabilities": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "supply_source_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "supplySourceId"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "webhook",
+      "attributes": {
+        "name": "Fixture Create Webhook"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "data": {
+        "type": "webhook",
+        "attributes": {
+          "name": "Fixture Create Webhook"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

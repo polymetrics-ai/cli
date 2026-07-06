@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/work_types",
+    "query": {
+      "page_index": "1",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "work_type_fixture_1",
+            "name": "Fixture work types",
+            "payroll_info_id": "payroll_fixture_1"
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

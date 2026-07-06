@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customer_segments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customField": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "filters": [
+          {
+            "id": "filter_fixture_id"
+          }
+        ]
+      }
+    }
+  }
+}

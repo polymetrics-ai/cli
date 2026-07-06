@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "taxonomy_events",
+  "type": "object",
+  "x-primary-key": ["event_type"],
+  "required": ["event_type"],
+  "properties": {
+    "event_type": { "type": "string" },
+    "category": { "type": ["object", "null"] },
+    "description": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_hidden_from_dropdowns": { "type": ["boolean", "null"] },
+    "is_hidden_from_persona_results": { "type": ["boolean", "null"] },
+    "is_hidden_from_pathfinder": { "type": ["boolean", "null"] },
+    "is_hidden_from_timeline": { "type": ["boolean", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "owner": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/unpublish"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "unpublish_site_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/calendars", "query": { "limit": "synthetic-conformance-value", "page_token": "cursor_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_2",
+      "data": [
+        {
+          "id": "cal_fixture_3",
+          "grant_id": "me",
+          "name": "Fixture Calendar 3",
+          "description": "Tertiary fixture calendar",
+          "timezone": "UTC",
+          "object": "calendar",
+          "is_primary": false,
+          "read_only": false,
+          "hex_color": "#4C4C4C"
+        }
+      ],
+      "next_cursor": ""
+    }
+  }
+}

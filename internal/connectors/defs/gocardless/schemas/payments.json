@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "created_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "charge_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "amount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "amount_refunded": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mandate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payout": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

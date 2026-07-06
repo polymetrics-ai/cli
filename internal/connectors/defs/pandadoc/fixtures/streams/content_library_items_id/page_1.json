@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/content-library-items/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "content_library_items_id_fixture_1",
+      "name": "Fixture content_library_items_id",
+      "status": "fixture",
+      "date_created": "2026-01-01T00:00:00Z"
+    }
+  }
+}

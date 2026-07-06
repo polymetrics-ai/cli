@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Asana Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Asana personal access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.asana.com/api/1.0",
+      "description": "Asana API base URL override for tests or proxies."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Optional Asana workspace gid; scopes the 'projects' and 'tasks' streams to this workspace when set."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional Asana project gid; scopes the 'tasks' stream to this project when set."
+    },
+    "assignee": {
+      "type": "string",
+      "description": "Optional Asana assignee gid; scopes the 'tasks' stream to this assignee when set."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Optional Asana team gid; scopes the 'team_memberships' stream to this team when set (Asana requires either team, or workspace+user, on that endpoint)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

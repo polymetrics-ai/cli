@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "array",
+      "description": "List of domains and their disaster recovery status",
+      "items": {
+        "type": "object",
+        "description": "Status whether a domain has been failed over or not",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "Domain for your org"
+          },
+          "isFailedOver": {
+            "type": "boolean",
+            "description": "Indicates if the domain has been failed over"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "campaign_id": "cmp_fixture_1",
+    "prospect_ids": ["prs_fixture_1", "prs_fixture_2"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/cmp_fixture_1/prospects",
+    "body": {
+      "prospect_ids": ["prs_fixture_1", "prs_fixture_2"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "assigned_count": 2 }
+  }
+}

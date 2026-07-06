@@ -1,0 +1,20 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "query": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/ask",
+    "body": {
+      "query": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "ask_in_organization_fixture_1"
+    }
+  }
+}

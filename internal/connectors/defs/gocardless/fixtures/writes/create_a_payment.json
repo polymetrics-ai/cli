@@ -1,0 +1,20 @@
+{
+  "record": {
+    "payments": {
+      "description": "Synthetic create_a_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payments",
+    "body": {
+      "payments": {
+        "description": "Synthetic create_a_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

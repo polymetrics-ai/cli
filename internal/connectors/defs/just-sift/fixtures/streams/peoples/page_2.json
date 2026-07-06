@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search/people"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "person_fixture_101",
+          "displayName": "Fixture Person 101",
+          "firstName": "Fixture",
+          "lastName": "Person 101",
+          "email": "fixture101@example.com",
+          "phone": "+1-555-0100",
+          "title": "Engineer",
+          "department": "Engineering",
+          "companyName": "Example Co",
+          "officeCity": "Boston",
+          "officeState": "MA",
+          "directoryId": "dir_fixture",
+          "isTeamLeader": false,
+          "directReportCount": 101,
+          "pictureUrl": "https://example.com/fixture.png"
+        }
+      ]
+    }
+  }
+}

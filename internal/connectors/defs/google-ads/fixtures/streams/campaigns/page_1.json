@@ -1,0 +1,12 @@
+{
+  "request": { "method": "POST", "path": "/customers/synthetic-conformance-value/googleAds:search" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "campaign": { "id": "111", "name": "Fixture Brand Campaign", "status": "ENABLED", "resourceName": "customers/1000000001/campaigns/111" } },
+        { "campaign": { "id": "222", "name": "Fixture Demand Campaign", "status": "PAUSED", "resourceName": "customers/1000000001/campaigns/222" } }
+      ]
+    }
+  }
+}

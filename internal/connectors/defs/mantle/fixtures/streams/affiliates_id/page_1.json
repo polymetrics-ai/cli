@@ -1,0 +1,79 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/affiliates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "affiliate": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "paypalEmail": "fixture@example.com",
+        "lastTransactionDate": "2026-01-01T00:00:00Z",
+        "lastAppInstallationDate": "2026-01-01T00:00:00Z",
+        "agreedToTermsAt": "2026-01-01T00:00:00Z",
+        "startCountingCommissionFrom": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "user": {
+          "type": "fixture",
+          "addressLine1": "fixture",
+          "addressLine2": "fixture",
+          "city": "fixture",
+          "state": "fixture",
+          "postalCode": "fixture",
+          "countryCode": "fixture"
+        },
+        "tags": [
+          "fixture"
+        ],
+        "memberships": [
+          {
+            "affiliateLink": "fixture",
+            "affiliateProgramId": "affiliate_program_id_fixture",
+            "rules": {
+              "id": "rules_fixture_id"
+            },
+            "rulesOverride": "fixture",
+            "status": "fixture",
+            "handle": "fixture",
+            "invitedAt": "2026-01-01T00:00:00Z",
+            "inviteAcceptedAt": "2026-01-01T00:00:00Z",
+            "inviteRejectedAt": "2026-01-01T00:00:00Z",
+            "approvalRequestedAt": "2026-01-01T00:00:00Z",
+            "approvedAt": "2026-01-01T00:00:00Z",
+            "rejectedAt": "2026-01-01T00:00:00Z",
+            "agreedToTermsAt": "2026-01-01T00:00:00Z",
+            "group": {
+              "id": "group_fixture_id"
+            },
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "outstandingCommission": 1.23,
+        "totalCommission": 1.23,
+        "affiliateAttributionsCount": 1,
+        "revenue": 1.23,
+        "pendingPayouts": [
+          {
+            "id": "id_fixture",
+            "amount": 1.23,
+            "status": "fixture",
+            "periodStart": "fixture",
+            "periodEnd": "fixture",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "attributions": [
+        {
+          "id": "attribution_fixture_id"
+        }
+      ]
+    }
+  }
+}

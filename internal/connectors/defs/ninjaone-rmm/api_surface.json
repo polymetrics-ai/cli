@@ -1,0 +1,13 @@
+{
+  "api": "NinjaOne RMM API v2 (https://app.ninjarmm.com/v2)",
+  "docs": "https://developer.ninjarmm.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; NinjaOne RMM is exposed read-only, matching legacy's Write=false.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v2/devices", "covered_by": { "stream": "devices" } },
+    { "method": "GET", "path": "/v2/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/v2/activities", "covered_by": { "stream": "activities" } },
+    { "method": "GET", "path": "/v2/policies", "covered_by": { "stream": "policies" } }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "device_integration_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/device-integrations/synthetic-conformance-value/lifecycle/activate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

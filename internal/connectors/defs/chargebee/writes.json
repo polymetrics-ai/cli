@@ -1,0 +1,708 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "company": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "company": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/customers/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/items",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "type", "item_family_id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "item_family_id": { "type": "string" },
+          "description": { "type": "string" },
+          "unit": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_item",
+      "kind": "update",
+      "method": "POST",
+      "path": "/items/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/items/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_item_price",
+      "kind": "create",
+      "method": "POST",
+      "path": "/item_prices",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "item_id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "item_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "currency_code": { "type": "string" },
+          "price": { "type": "integer" },
+          "period": { "type": "integer" },
+          "period_unit": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_item_price",
+      "kind": "update",
+      "method": "POST",
+      "path": "/item_prices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "status": { "type": "string" },
+          "price": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_item_price",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/item_prices/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_item_family",
+      "kind": "create",
+      "method": "POST",
+      "path": "/item_families",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_item_family",
+      "kind": "update",
+      "method": "POST",
+      "path": "/item_families/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_item_family",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/item_families/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/subscription_for_items",
+      "path_fields": ["customer_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "id": { "type": "string" },
+          "po_number": { "type": "string" },
+          "auto_collection": { "type": "string" },
+          "start_date": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation with billing side effects; approval required"
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.id }}/update_for_items",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "po_number": { "type": "string" },
+          "auto_collection": { "type": "string" },
+          "invoice_date": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation with billing side effects; approval required"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.id }}/cancel_for_items",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "cancel_option": { "type": "string" },
+          "end_of_term": { "type": "boolean" },
+          "cancel_reason_code": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation (subscription cancellation) with billing side effects; approval required"
+    },
+    {
+      "name": "create_credit_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/credit_notes",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string" },
+          "customer_id": { "type": "string" },
+          "reference_invoice_id": { "type": "string" },
+          "reason_code": { "type": "string" },
+          "total": { "type": "integer" },
+          "currency_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation with accounting/billing side effects; approval required"
+    },
+    {
+      "name": "void_credit_note",
+      "kind": "update",
+      "method": "POST",
+      "path": "/credit_notes/{{ record.id }}/void",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation; approval required"
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupons/create_for_items",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "apply_on"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "apply_on": { "type": "string" },
+          "discount_type": { "type": "string" },
+          "discount_amount": { "type": "integer" },
+          "discount_percentage": { "type": "number" },
+          "duration_type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation with billing/discount side effects; approval required"
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "POST",
+      "path": "/coupons/{{ record.id }}/update_for_items",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "valid_till": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation with billing/discount side effects; approval required"
+    },
+    {
+      "name": "delete_coupon",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/coupons/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orders",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["invoice_id"],
+        "properties": {
+          "id": { "type": "string" },
+          "invoice_id": { "type": "string" },
+          "status": { "type": "string" },
+          "reference_id": { "type": "string" },
+          "tracking_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string" },
+          "tracking_id": { "type": "string" },
+          "tracking_url": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "cancel_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "cancellation_reason"],
+        "properties": {
+          "id": { "type": "string" },
+          "cancellation_reason": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation (order cancellation); approval required"
+    },
+    {
+      "name": "void_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/invoices/{{ record.id }}/void",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation with accounting side effects; approval required"
+    },
+    {
+      "name": "collect_payment_for_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/invoices/{{ record.id }}/collect_payment",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "amount": { "type": "integer" },
+          "payment_source_id": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "external mutation that attempts to charge a payment method; approval required"
+    },
+    {
+      "name": "create_webhook_endpoint",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook_endpoints",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "url"],
+        "properties": {
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "disabled": { "type": "boolean" },
+          "api_version": { "type": "string" }
+        }
+      },
+      "risk": "external mutation exposing business data to a third-party URL; approval required"
+    },
+    {
+      "name": "update_webhook_endpoint",
+      "kind": "update",
+      "method": "POST",
+      "path": "/webhook_endpoints/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "disabled": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation exposing business data to a third-party URL; approval required"
+    },
+    {
+      "name": "delete_webhook_endpoint",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/webhook_endpoints/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/comments",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["entity_type", "entity_id", "notes"],
+        "properties": {
+          "entity_type": { "type": "string" },
+          "entity_id": { "type": "string" },
+          "notes": { "type": "string" },
+          "added_by": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/comments/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "add_promotional_credit",
+      "kind": "update",
+      "method": "POST",
+      "path": "/promotional_credits/add",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "description"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "amount": { "type": "integer" },
+          "currency_code": { "type": "string" },
+          "description": { "type": "string" },
+          "credit_type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation with a direct billing-credit financial effect; approval required"
+    },
+    {
+      "name": "deduct_promotional_credit",
+      "kind": "update",
+      "method": "POST",
+      "path": "/promotional_credits/deduct",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "description"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "amount": { "type": "integer" },
+          "currency_code": { "type": "string" },
+          "description": { "type": "string" },
+          "credit_type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation with a direct billing-credit financial effect; approval required"
+    },
+    {
+      "name": "create_virtual_bank_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/virtual_bank_accounts",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "email": { "type": "string" },
+          "gateway_account_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_virtual_bank_account",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/virtual_bank_accounts/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_card_payment_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payment_sources/create_card",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "card[first_name]": { "type": "string" },
+          "card[last_name]": { "type": "string" },
+          "card[number]": { "type": "string" },
+          "card[expiry_month]": { "type": "integer" },
+          "card[expiry_year]": { "type": "integer" },
+          "card[cvv]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation carrying raw payment-card data; approval required"
+    },
+    {
+      "name": "delete_payment_source",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/payment_sources/{{ record.id }}/delete",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "name": "Fixture Network",
+    "productTypes": ["appliance"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/org_1/networks"
+  }
+}

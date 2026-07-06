@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "meta.next_page",
+      "max_pages": 3
+    },
+    "check": { "method": "GET", "path": "/campaigns", "query": { "page": "1", "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "poplar API token is missing or invalid; re-run pm credentials add poplar" },
+      { "status": 429, "class": "rate_limited", "hint": "poplar rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "page": "1", "per_page": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": { "page": "1", "per_page": "100" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.campaign_id }}",
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/orders.json"
+    }
+  ]
+}

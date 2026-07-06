@@ -1,0 +1,7 @@
+{
+  "record": { "environment_name": "production" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/environments/production"
+  }
+}

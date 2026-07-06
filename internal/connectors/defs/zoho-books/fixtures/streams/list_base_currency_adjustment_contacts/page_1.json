@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/basecurrencyadjustment/contacts",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "currency_id": "synthetic-conformance-value",
+      "account_id": "synthetic-conformance-value",
+      "adjustment_date": "synthetic-conformance-value",
+      "exchange_rate": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "contacts": [
+        {
+          "contact_id": "list_base_currency_adjustment_contacts_fixture_1",
+          "contact_name": "list_base_currency_adjustment_contacts fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "list_base_currency_adjustment_contacts_fixture_1",
+          "name": "list_base_currency_adjustment_contacts fixture 1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

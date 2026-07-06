@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customer_fields",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idcustomerfield": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "values": { "type": ["array", "null"] },
+    "required": { "type": ["boolean", "null"] }
+  }
+}

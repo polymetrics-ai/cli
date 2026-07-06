@@ -1,0 +1,2525 @@
+{
+  "api": "GitBook API v1 (https://api.gitbook.com/v1)",
+  "docs": "https://gitbook.com/docs/developers/gitbook-api/api-reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion generated from the official OpenAPI spec at https://api.gitbook.com/openapi.json. 185 streams cover JSON GET operations; 170 write actions cover JSON or no-body POST/PUT/PATCH/DELETE operations. Streaming text/event-stream GETs and a root-array write body are excluded with specific closed-vocabulary reasons.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/",
+      "covered_by": {
+        "stream": "get_api_information"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/notifications/token",
+      "covered_by": {
+        "write": "create_user_notifications_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}",
+      "covered_by": {
+        "stream": "get_user_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/{userId}",
+      "covered_by": {
+        "write": "update_user_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}",
+      "covered_by": {
+        "stream": "get_space_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}",
+      "covered_by": {
+        "write": "update_space_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}",
+      "covered_by": {
+        "write": "delete_space_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/duplicate",
+      "covered_by": {
+        "write": "duplicate_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/restore",
+      "covered_by": {
+        "write": "restore_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/move",
+      "covered_by": {
+        "write": "move_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/embed",
+      "covered_by": {
+        "stream": "get_embed_by_url_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/search",
+      "covered_by": {
+        "stream": "search_space_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/git/import",
+      "covered_by": {
+        "write": "import_git_repository"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/git/export",
+      "covered_by": {
+        "write": "export_to_git_repository"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/git/info",
+      "covered_by": {
+        "stream": "get_space_git_info"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/git/legacy-installation",
+      "covered_by": {
+        "write": "delete_legacy_git_installation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/permissions",
+      "covered_by": {
+        "write": "invite_to_space"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "update_team_permission_in_space"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "remove_team_from_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/permissions/users",
+      "covered_by": {
+        "stream": "list_user_permissions_in_space"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "update_user_permission_in_space"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "remove_user_from_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/permissions/teams",
+      "covered_by": {
+        "stream": "list_team_permissions_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content",
+      "covered_by": {
+        "stream": "get_current_revision"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/content/template",
+      "covered_by": {
+        "write": "apply_template_to_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/pages",
+      "covered_by": {
+        "stream": "content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/files",
+      "covered_by": {
+        "stream": "list_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/files/{fileId}",
+      "covered_by": {
+        "stream": "get_file_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/files/{fileId}/backlinks",
+      "covered_by": {
+        "stream": "list_space_file_backlinks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/page/{pageId}",
+      "covered_by": {
+        "stream": "get_page_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/page/{pageId}/links",
+      "covered_by": {
+        "stream": "list_page_links_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/page/{pageId}/backlinks",
+      "covered_by": {
+        "stream": "list_space_page_backlinks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/page/{pageId}/meta-links",
+      "covered_by": {
+        "stream": "list_space_page_meta_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/path/{pagePath}",
+      "covered_by": {
+        "stream": "get_page_by_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/content/reusable-contents/{reusableContentId}",
+      "covered_by": {
+        "stream": "get_reusable_content_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/content/computed/document",
+      "covered_by": {
+        "write": "get_computed_document"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/content/computed/revision",
+      "covered_by": {
+        "write": "get_computed_revision"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/documents/{documentId}",
+      "covered_by": {
+        "stream": "get_document_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests",
+      "covered_by": {
+        "stream": "list_change_requests_for_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests",
+      "covered_by": {
+        "write": "create_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}",
+      "covered_by": {
+        "stream": "get_change_request_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}",
+      "covered_by": {
+        "write": "update_change_request_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/merge",
+      "covered_by": {
+        "write": "merge_change_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/update",
+      "covered_by": {
+        "write": "update_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/reviews",
+      "covered_by": {
+        "stream": "get_reviews_by_change_request_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/reviews",
+      "covered_by": {
+        "write": "submit_change_request_review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/reviews/{reviewId}",
+      "covered_by": {
+        "stream": "get_change_request_review_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers",
+      "covered_by": {
+        "stream": "get_requested_reviewers_by_change_request_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers",
+      "covered_by": {
+        "write": "request_reviewers_for_change_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers/{userId}",
+      "covered_by": {
+        "write": "remove_requested_reviewer_from_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/conversations",
+      "covered_by": {
+        "stream": "list_change_request_conversations"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId}",
+      "covered_by": {
+        "write": "update_change_request_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId}",
+      "covered_by": {
+        "write": "delete_change_request_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/links",
+      "covered_by": {
+        "stream": "list_change_request_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments",
+      "covered_by": {
+        "stream": "list_comments_in_change_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments",
+      "covered_by": {
+        "write": "post_comment_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}",
+      "covered_by": {
+        "stream": "get_comment_in_change_request"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}",
+      "covered_by": {
+        "write": "update_comment_in_change_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}",
+      "covered_by": {
+        "write": "delete_comment_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies",
+      "covered_by": {
+        "stream": "list_comment_replies_in_change_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies",
+      "covered_by": {
+        "write": "post_comment_reply_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "stream": "get_comment_reply_in_change_request"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "write": "update_comment_reply_in_change_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "write": "delete_comment_reply_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/contributors",
+      "covered_by": {
+        "stream": "get_contributors_by_change_request_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content",
+      "covered_by": {
+        "stream": "get_revision_of_change_request_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content",
+      "covered_by": {
+        "write": "update_change_request_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/pages",
+      "covered_by": {
+        "stream": "list_pages_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/files",
+      "covered_by": {
+        "stream": "list_files_in_change_request_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/files/{fileId}",
+      "covered_by": {
+        "stream": "get_file_in_change_request_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/files/{fileId}/backlinks",
+      "covered_by": {
+        "stream": "list_change_request_file_backlinks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/page/{pageId}",
+      "covered_by": {
+        "stream": "get_page_in_change_request_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/page/{pageId}/links",
+      "covered_by": {
+        "stream": "list_page_links_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/page/{pageId}/backlinks",
+      "covered_by": {
+        "stream": "list_change_request_page_backlinks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/page/{pageId}/meta-links",
+      "covered_by": {
+        "stream": "list_change_request_page_meta_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/reusable-contents/{reusableContentId}",
+      "covered_by": {
+        "stream": "get_reusable_content_in_change_request_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/changes",
+      "covered_by": {
+        "stream": "get_change_request_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/pdf",
+      "covered_by": {
+        "stream": "get_change_request_pdf"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}",
+      "covered_by": {
+        "stream": "get_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/changes",
+      "covered_by": {
+        "stream": "get_revision_semantic_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/pages",
+      "covered_by": {
+        "stream": "list_pages_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/files",
+      "covered_by": {
+        "stream": "list_files_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/files/{fileId}",
+      "covered_by": {
+        "stream": "get_file_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/page/{pageId}",
+      "covered_by": {
+        "stream": "get_page_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/page/{pageId}/document",
+      "covered_by": {
+        "stream": "get_page_document_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/path/{pagePath}",
+      "covered_by": {
+        "stream": "get_page_in_revision_by_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/page/{pageId}/meta-links",
+      "covered_by": {
+        "stream": "list_revision_page_meta_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/content/path/{pagePath}",
+      "covered_by": {
+        "stream": "get_page_in_change_request_by_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/reusable-contents/{reusableContentId}",
+      "covered_by": {
+        "stream": "get_reusable_content_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/revisions/{revisionId}/reusable-contents/{reusableContentId}/document",
+      "covered_by": {
+        "stream": "get_reusable_content_document_in_revision_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/comments",
+      "covered_by": {
+        "stream": "list_comments_in_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/comments",
+      "covered_by": {
+        "write": "post_comment_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/comments/{commentId}",
+      "covered_by": {
+        "stream": "get_comment_in_space"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spaces/{spaceId}/comments/{commentId}",
+      "covered_by": {
+        "write": "update_comment_in_space"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/comments/{commentId}",
+      "covered_by": {
+        "write": "delete_comment_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/comments/{commentId}/replies",
+      "covered_by": {
+        "stream": "list_comment_replies_in_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/comments/{commentId}/replies",
+      "covered_by": {
+        "write": "post_comment_reply_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "stream": "get_comment_reply_in_space"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spaces/{spaceId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "write": "update_comment_reply_in_space"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/comments/{commentId}/replies/{commentReplyId}",
+      "covered_by": {
+        "write": "delete_comment_reply_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/commenters",
+      "covered_by": {
+        "stream": "list_commenters_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/change-requests/{changeRequestId}/commenters",
+      "covered_by": {
+        "stream": "list_commenters_in_change_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/permissions/aggregate",
+      "covered_by": {
+        "stream": "list_permissions_aggregate_in_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/integrations",
+      "covered_by": {
+        "stream": "list_space_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/integration-blocks",
+      "covered_by": {
+        "stream": "list_space_integrations_blocks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/pdf",
+      "covered_by": {
+        "stream": "get_space_pdf"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/links",
+      "covered_by": {
+        "stream": "list_space_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collectionId}",
+      "covered_by": {
+        "stream": "get_collection_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/collections/{collectionId}",
+      "covered_by": {
+        "write": "update_collection_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{collectionId}",
+      "covered_by": {
+        "write": "delete_collection_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collectionId}/spaces",
+      "covered_by": {
+        "stream": "list_spaces_in_collection_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{collectionId}/move",
+      "covered_by": {
+        "write": "move_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{collectionId}/transfer",
+      "covered_by": {
+        "write": "transfer_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{collectionId}/permissions",
+      "covered_by": {
+        "write": "invite_to_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collectionId}/permissions/teams",
+      "covered_by": {
+        "stream": "list_team_permissions_in_collection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/collections/{collectionId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "update_team_permission_in_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{collectionId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "remove_team_from_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collectionId}/permissions/users",
+      "covered_by": {
+        "stream": "list_user_permissions_in_collection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/collections/{collectionId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "update_user_permission_in_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{collectionId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "remove_user_from_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{collectionId}/permissions/aggregate",
+      "covered_by": {
+        "stream": "list_permissions_aggregate_in_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations",
+      "covered_by": {
+        "stream": "list_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}",
+      "covered_by": {
+        "stream": "get_integration_by_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}",
+      "covered_by": {
+        "write": "publish_integration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integrationName}",
+      "covered_by": {
+        "write": "unpublish_integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations",
+      "covered_by": {
+        "stream": "list_integration_installations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/installations",
+      "covered_by": {
+        "write": "install_integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/events",
+      "covered_by": {
+        "stream": "list_integration_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/events/{eventId}",
+      "covered_by": {
+        "stream": "get_integration_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/spaces",
+      "covered_by": {
+        "stream": "list_integration_space_installations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/sites",
+      "covered_by": {
+        "stream": "list_integration_site_installations"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integrations/{integrationName}/dev",
+      "covered_by": {
+        "write": "set_integration_development_mode"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integrationName}/dev",
+      "covered_by": {
+        "write": "disable_integration_development_mode"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/render",
+      "covered_by": {
+        "stream": "render_integration_ui_with_get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/render",
+      "covered_by": {
+        "write": "render_integration_ui_with_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/tasks",
+      "covered_by": {
+        "write": "queue_integration_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations/{installationId}",
+      "covered_by": {
+        "stream": "get_integration_installation_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/integrations/{integrationName}/installations/{installationId}",
+      "covered_by": {
+        "write": "update_integration_installation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integrationName}/installations/{installationId}",
+      "covered_by": {
+        "write": "uninstall_integration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/installations/{installationId}/tokens",
+      "covered_by": {
+        "write": "create_integration_installation_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations/{installationId}/spaces",
+      "covered_by": {
+        "stream": "list_integration_installation_spaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/installations/{installationId}/spaces",
+      "covered_by": {
+        "write": "install_integration_on_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations/{installationId}/spaces/{spaceId}",
+      "covered_by": {
+        "stream": "get_integration_space_installation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/integrations/{integrationName}/installations/{installationId}/spaces/{spaceId}",
+      "covered_by": {
+        "write": "update_integration_space_installation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integrationName}/installations/{installationId}/spaces/{spaceId}",
+      "covered_by": {
+        "write": "uninstall_integration_from_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations/{installationId}/sites",
+      "covered_by": {
+        "stream": "list_integration_installation_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/{integrationName}/installations/{installationId}/sites",
+      "covered_by": {
+        "write": "install_integration_on_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{integrationName}/installations/{installationId}/sites/{siteId}",
+      "covered_by": {
+        "stream": "get_integration_site_installation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/integrations/{integrationName}/installations/{installationId}/sites/{siteId}",
+      "covered_by": {
+        "write": "update_integration_site_installation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{integrationName}/installations/{installationId}/sites/{siteId}",
+      "covered_by": {
+        "write": "uninstall_integration_from_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}",
+      "covered_by": {
+        "stream": "get_organization_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}",
+      "covered_by": {
+        "write": "update_organization_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/members",
+      "covered_by": {
+        "stream": "org_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/members/{userId}",
+      "covered_by": {
+        "stream": "get_member_in_organization_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/members/{userId}",
+      "covered_by": {
+        "write": "update_member_in_organization_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/members/{userId}",
+      "covered_by": {
+        "write": "remove_member_from_organization_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/ping",
+      "covered_by": {
+        "write": "update_organization_member_last_seen_at"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/members/{userId}/sso",
+      "covered_by": {
+        "write": "set_user_as_sso_member_for_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/members/{userId}/spaces",
+      "covered_by": {
+        "stream": "list_spaces_for_organization_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/members/{userId}/teams",
+      "covered_by": {
+        "stream": "list_teams_for_organization_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/teams",
+      "covered_by": {
+        "stream": "list_teams_in_organization_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/teams",
+      "covered_by": {
+        "write": "create_organization_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/teams/{teamId}",
+      "covered_by": {
+        "stream": "get_team_in_organization_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/teams/{teamId}",
+      "covered_by": {
+        "write": "update_team_in_organization_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/teams/{teamId}",
+      "covered_by": {
+        "write": "remove_team_from_organization_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/teams/{teamId}/members",
+      "covered_by": {
+        "stream": "list_team_members_in_organization_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/teams/{teamId}/members",
+      "covered_by": {
+        "write": "update_members_in_organization_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/teams/{teamId}/members/{userId}",
+      "covered_by": {
+        "write": "add_member_to_organization_team_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/teams/{teamId}/members/{userId}",
+      "covered_by": {
+        "write": "delete_member_from_organization_team_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/invites",
+      "covered_by": {
+        "write": "invite_users_to_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/invites/{inviteId}",
+      "covered_by": {
+        "write": "join_organization_with_invite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/link-invites",
+      "covered_by": {
+        "stream": "list_organization_invite_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/link-invites",
+      "covered_by": {
+        "write": "create_organization_invite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/link-invites/{inviteId}",
+      "covered_by": {
+        "stream": "get_organization_invite_link"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/link-invites/{inviteId}",
+      "covered_by": {
+        "write": "update_organization_invite_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/link-invites/{inviteId}",
+      "covered_by": {
+        "write": "delete_organization_invite_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/join",
+      "covered_by": {
+        "write": "join_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/search",
+      "covered_by": {
+        "stream": "search_organization_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/change-requests",
+      "covered_by": {
+        "stream": "list_change_requests_for_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/spaces",
+      "covered_by": {
+        "stream": "list_spaces_in_organization_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/spaces",
+      "covered_by": {
+        "write": "create_space"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/collections",
+      "covered_by": {
+        "stream": "list_collections_in_organization_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/collections",
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/integrations",
+      "covered_by": {
+        "stream": "list_organization_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/integrations/{integrationName}/installation_status",
+      "covered_by": {
+        "stream": "get_organization_integration_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/installations",
+      "covered_by": {
+        "stream": "list_organization_installations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/integrations/installations-status",
+      "covered_by": {
+        "stream": "list_organization_integrations_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/saml",
+      "covered_by": {
+        "stream": "list_saml_providers_in_organization_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/saml",
+      "covered_by": {
+        "write": "create_organization_saml_provider"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/saml/{samlProviderId}",
+      "covered_by": {
+        "stream": "get_organization_saml_provider_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/saml/{samlProviderId}",
+      "covered_by": {
+        "write": "update_organization_saml_provider"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/saml/{samlProviderId}",
+      "covered_by": {
+        "write": "delete_organization_saml_provider"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sso",
+      "covered_by": {
+        "stream": "list_sso_provider_logins_in_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/ask",
+      "covered_by": {
+        "write": "ask_in_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/ask/questions",
+      "covered_by": {
+        "stream": "get_recommended_questions_in_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/ask/questions/stream",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "response media type is text/event-stream; the declarative reader extracts JSON records only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/ask/stream",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "response media type is text/event-stream; the declarative reader extracts JSON records only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi",
+      "covered_by": {
+        "stream": "list_open_api_specs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/openapi",
+      "covered_by": {
+        "write": "create_open_api_spec"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}",
+      "covered_by": {
+        "stream": "get_open_api_spec_by_slug"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}",
+      "covered_by": {
+        "write": "create_or_update_open_api_spec_by_slug"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}",
+      "covered_by": {
+        "write": "update_open_api_spec_by_slug"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}",
+      "covered_by": {
+        "write": "delete_open_api_spec_by_slug"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}/versions",
+      "covered_by": {
+        "stream": "list_open_api_spec_versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}/versions/latest",
+      "covered_by": {
+        "stream": "get_latest_open_api_spec_version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}/versions/latest/content",
+      "covered_by": {
+        "stream": "get_latest_open_api_spec_version_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}/versions/{versionId}",
+      "covered_by": {
+        "stream": "get_open_api_spec_version_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/openapi/{specSlug}/versions/{versionId}/content",
+      "covered_by": {
+        "stream": "get_open_api_spec_version_content_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/agent-instructions",
+      "covered_by": {
+        "stream": "get_organization_agent_instructions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/agent-instructions",
+      "covered_by": {
+        "write": "update_organization_agent_instructions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/translations",
+      "covered_by": {
+        "stream": "list_translations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/translations",
+      "covered_by": {
+        "write": "create_translation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/translations/{translationId}",
+      "covered_by": {
+        "stream": "get_translation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/translations/{translationId}",
+      "covered_by": {
+        "write": "update_translation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/translations/{translationId}",
+      "covered_by": {
+        "write": "delete_translation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/translations/{translationId}/run",
+      "covered_by": {
+        "write": "run_translation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/translations-glossary",
+      "covered_by": {
+        "stream": "list_glossary_entries"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/translations-glossary",
+      "covered_by": {
+        "write": "update_glossary_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/translations-glossary/{glossaryEntryId}",
+      "covered_by": {
+        "stream": "get_glossary_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/storage/upload",
+      "covered_by": {
+        "write": "generate_storage_upload_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/fonts",
+      "covered_by": {
+        "stream": "list_custom_fonts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/fonts",
+      "covered_by": {
+        "write": "create_custom_font"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/fonts/{fontId}",
+      "covered_by": {
+        "stream": "get_custom_font"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/fonts/{fontId}",
+      "covered_by": {
+        "write": "update_custom_font"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/fonts/{fontId}",
+      "covered_by": {
+        "write": "delete_custom_font"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/org/{organizationId}/imports",
+      "covered_by": {
+        "write": "start_import_run"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/org/{organizationId}/imports/{importRunId}/cancel",
+      "covered_by": {
+        "write": "cancel_import_run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites",
+      "covered_by": {
+        "stream": "list_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites",
+      "covered_by": {
+        "write": "create_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}",
+      "covered_by": {
+        "stream": "get_site_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}",
+      "covered_by": {
+        "write": "update_site_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}",
+      "covered_by": {
+        "write": "delete_site_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/spaces/git/installations",
+      "covered_by": {
+        "stream": "list_site_git_sync_installations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/adaptive-schema",
+      "covered_by": {
+        "stream": "get_site_adaptive_schema"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/sites/{siteId}/adaptive-schema",
+      "covered_by": {
+        "write": "update_site_adaptive_schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/adaptive-schema/template-conditions",
+      "covered_by": {
+        "stream": "list_site_adaptive_template_conditions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/published",
+      "covered_by": {
+        "stream": "get_published_content_site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/publish",
+      "covered_by": {
+        "write": "publish_site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/unpublish",
+      "covered_by": {
+        "write": "unpublish_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/share-links",
+      "covered_by": {
+        "stream": "list_site_share_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/share-links",
+      "covered_by": {
+        "write": "create_site_share_link"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/share-links/{shareLinkId}",
+      "covered_by": {
+        "write": "update_site_share_link_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/share-links/{shareLinkId}",
+      "covered_by": {
+        "write": "delete_site_share_link_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/structure",
+      "covered_by": {
+        "stream": "get_site_structure"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/structure/sort",
+      "covered_by": {
+        "write": "sort_site_structure"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/publishing/auth",
+      "covered_by": {
+        "stream": "get_site_publishing_auth_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/publishing/auth",
+      "covered_by": {
+        "write": "update_site_publishing_auth_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/publishing/auth/regenerate",
+      "covered_by": {
+        "write": "regenerate_site_publishing_auth_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/publishing/preview",
+      "covered_by": {
+        "stream": "get_site_publishing_preview_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/customization",
+      "covered_by": {
+        "stream": "get_site_customization_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/sites/{siteId}/customization",
+      "covered_by": {
+        "write": "update_site_customization_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/integration-scripts",
+      "covered_by": {
+        "stream": "list_site_integration_scripts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/integrations",
+      "covered_by": {
+        "stream": "list_site_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces",
+      "covered_by": {
+        "stream": "list_site_spaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces",
+      "covered_by": {
+        "write": "add_space_to_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/section-groups",
+      "covered_by": {
+        "stream": "list_site_section_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/section-groups",
+      "covered_by": {
+        "write": "add_section_group_to_site"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId}",
+      "covered_by": {
+        "write": "update_site_section_group_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId}",
+      "covered_by": {
+        "write": "delete_site_section_group_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/sections",
+      "covered_by": {
+        "stream": "list_site_sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/sections",
+      "covered_by": {
+        "write": "add_section_to_site"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId}",
+      "covered_by": {
+        "write": "update_site_section_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId}",
+      "covered_by": {
+        "write": "delete_site_section_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/search",
+      "covered_by": {
+        "write": "search_site_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/ask",
+      "covered_by": {
+        "write": "stream_ask_in_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/ask/questions",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "response media type is text/event-stream; the declarative reader extracts JSON records only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-records",
+      "covered_by": {
+        "stream": "list_site_context_records"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-records",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "request body is a root JSON array; the declarative write engine builds object bodies from record fields and cannot emit an array root"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-records/{siteContextRecordId}",
+      "covered_by": {
+        "stream": "get_site_context_record_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/scans",
+      "covered_by": {
+        "stream": "list_site_scans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/scans",
+      "covered_by": {
+        "write": "create_site_scan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/scans/{siteScanId}",
+      "covered_by": {
+        "stream": "get_site_scan_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings",
+      "covered_by": {
+        "stream": "list_site_findings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}",
+      "covered_by": {
+        "stream": "get_site_finding_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}",
+      "covered_by": {
+        "write": "update_site_finding_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/change-requests",
+      "covered_by": {
+        "stream": "list_change_requests_for_site_finding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/change-requests",
+      "covered_by": {
+        "write": "trigger_change_requests_for_site_finding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/pages",
+      "covered_by": {
+        "stream": "list_pages_for_site_finding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/questions",
+      "covered_by": {
+        "stream": "list_questions_for_site_finding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/records",
+      "covered_by": {
+        "stream": "list_records_for_site_finding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections",
+      "covered_by": {
+        "stream": "list_site_context_connections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections",
+      "covered_by": {
+        "write": "create_site_context_connection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}",
+      "covered_by": {
+        "stream": "get_site_context_connection_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}",
+      "covered_by": {
+        "write": "update_site_context_connection_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}",
+      "covered_by": {
+        "write": "delete_site_context_connection_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}/sync",
+      "covered_by": {
+        "write": "sync_site_context_connection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/topics",
+      "covered_by": {
+        "stream": "list_site_topics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId}",
+      "covered_by": {
+        "stream": "get_site_topic_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId}",
+      "covered_by": {
+        "write": "update_site_topic_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId}/findings",
+      "covered_by": {
+        "write": "delete_site_topic_findings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/questions",
+      "covered_by": {
+        "stream": "list_site_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/questions/{siteQuestionId}",
+      "covered_by": {
+        "stream": "get_site_question_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/questions/{siteQuestionId}/sources",
+      "covered_by": {
+        "stream": "list_site_question_sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/question-stats",
+      "covered_by": {
+        "stream": "get_site_question_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/answers",
+      "covered_by": {
+        "stream": "list_site_question_answers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/answers/{siteQuestionAnswerId}",
+      "covered_by": {
+        "stream": "get_site_question_answer_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/answers/{siteQuestionAnswerId}/thread",
+      "covered_by": {
+        "stream": "get_site_question_answer_thread_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/answers/{siteQuestionAnswerId}/sources",
+      "covered_by": {
+        "stream": "list_site_question_answer_sources"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}",
+      "covered_by": {
+        "write": "update_site_space_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}",
+      "covered_by": {
+        "write": "delete_site_space_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/customization",
+      "covered_by": {
+        "stream": "get_site_space_customization_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/customization",
+      "covered_by": {
+        "write": "override_site_space_customization_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/customization",
+      "covered_by": {
+        "write": "delete_site_space_customization_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId}/move",
+      "covered_by": {
+        "write": "move_site_section_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId}/move",
+      "covered_by": {
+        "write": "move_site_section"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/move",
+      "covered_by": {
+        "write": "move_site_space"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions",
+      "covered_by": {
+        "write": "invite_to_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/aggregate",
+      "covered_by": {
+        "stream": "list_permissions_aggregate_in_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/users",
+      "covered_by": {
+        "stream": "list_user_permissions_in_site"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "update_user_permission_in_site"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/users/{userId}",
+      "covered_by": {
+        "write": "remove_user_from_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/teams",
+      "covered_by": {
+        "stream": "list_team_permissions_in_site"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "update_team_permission_in_site"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/permissions/teams/{teamId}",
+      "covered_by": {
+        "write": "remove_team_from_site"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/ai/response",
+      "covered_by": {
+        "write": "stream_ai_response_in_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/agent-settings",
+      "covered_by": {
+        "stream": "get_site_agent_settings_by_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/sites/{siteId}/agent-settings",
+      "covered_by": {
+        "write": "update_site_agent_settings_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/styleguide",
+      "covered_by": {
+        "write": "create_site_styleguide_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/insights/events",
+      "covered_by": {
+        "write": "track_events_in_site_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/insights/events/aggregate",
+      "covered_by": {
+        "write": "aggregate_site_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/insights/visitor-segments",
+      "covered_by": {
+        "stream": "list_site_visitor_segments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/ads",
+      "covered_by": {
+        "write": "update_site_ads_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirects",
+      "covered_by": {
+        "stream": "list_site_redirects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirects",
+      "covered_by": {
+        "write": "create_site_redirect"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirects",
+      "covered_by": {
+        "write": "bulk_upsert_site_redirects"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirects/{siteRedirectId}",
+      "covered_by": {
+        "write": "update_site_redirect_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirects/{siteRedirectId}",
+      "covered_by": {
+        "write": "delete_site_redirect_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/redirect",
+      "covered_by": {
+        "stream": "get_site_redirect_by_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/mcp-servers",
+      "covered_by": {
+        "stream": "list_site_mcp_servers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/mcp-servers",
+      "covered_by": {
+        "write": "create_site_mcp_server"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/mcp-servers/{siteMcpServerId}",
+      "covered_by": {
+        "stream": "get_site_mcp_server_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/mcp-servers/{siteMcpServerId}",
+      "covered_by": {
+        "write": "update_site_mcp_server_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/mcp-servers/{siteMcpServerId}",
+      "covered_by": {
+        "write": "delete_site_mcp_server_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/channels",
+      "covered_by": {
+        "stream": "list_site_channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{organizationId}/sites/{siteId}/channels",
+      "covered_by": {
+        "write": "create_site_channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{organizationId}/sites/{siteId}/channels/{siteChannelId}",
+      "covered_by": {
+        "stream": "get_site_channel_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orgs/{organizationId}/sites/{siteId}/channels/{siteChannelId}",
+      "covered_by": {
+        "write": "update_site_channel_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orgs/{organizationId}/sites/{siteId}/channels/{siteChannelId}",
+      "covered_by": {
+        "write": "delete_site_channel_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subdomains/{subdomain}",
+      "covered_by": {
+        "stream": "get_subdomain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-hostnames/{hostname}",
+      "covered_by": {
+        "stream": "get_custom_hostname"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/custom-hostnames/{hostname}",
+      "covered_by": {
+        "write": "dns_revalidate_custom_hostname"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom-hostnames/{hostname}",
+      "covered_by": {
+        "write": "remove_custom_hostname"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-domains/{emailDomain}/orgs",
+      "covered_by": {
+        "stream": "get_organizations_for_email_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ads/sites",
+      "covered_by": {
+        "stream": "ads_list_sites"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ads/sites/{siteId}",
+      "covered_by": {
+        "write": "ads_update_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/urls/content",
+      "covered_by": {
+        "stream": "get_content_by_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/urls/embed",
+      "covered_by": {
+        "stream": "get_embed_by_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/urls/published",
+      "covered_by": {
+        "stream": "get_published_content_by_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/urls/published",
+      "covered_by": {
+        "write": "resolve_published_content_by_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/git/installations",
+      "covered_by": {
+        "write": "install_git_sync_provider_on_target"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/git/installations/{installationId}",
+      "covered_by": {
+        "stream": "get_git_sync_installation_by_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/git/installations/{installationId}",
+      "covered_by": {
+        "write": "update_git_sync_installation_by_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/git/installations/{installationId}",
+      "covered_by": {
+        "write": "uninstall_git_sync_installation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/git/installations/{installationId}/github/repos",
+      "covered_by": {
+        "stream": "list_git_hub_repositories_for_git_sync_installation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/git/installations/{installationId}/github/repos/{accountName}/{repositoryName}/branches",
+      "covered_by": {
+        "stream": "list_git_hub_repo_branches_for_git_sync_installation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/git/installations/{installationId}/gitlab/projects",
+      "covered_by": {
+        "stream": "list_git_lab_projects_for_git_sync_installation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/git/installations/{installationId}/gitlab/projects/{projectId}/branches",
+      "covered_by": {
+        "stream": "list_git_lab_project_branches_for_git_sync_installation"
+      }
+    }
+  ]
+}

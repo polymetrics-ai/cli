@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Key ", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/users/{{ config.user_id }}/apps" },
+    "error_map": [
+      { "status": 401, "hint": "clarif-ai api_key is missing or invalid; re-run pm credentials add clarif-ai" },
+      { "status": 403, "hint": "clarif-ai account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "clarif-ai rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "applications",
+      "path": "/users/{{ config.user_id }}/apps",
+      "records": { "path": "apps" },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "datasets",
+      "path": "/users/{{ config.user_id }}/datasets",
+      "records": { "path": "datasets" },
+      "schema": "schemas/datasets.json"
+    },
+    {
+      "name": "models",
+      "path": "/users/{{ config.user_id }}/models",
+      "records": { "path": "models" },
+      "schema": "schemas/models.json"
+    },
+    {
+      "name": "model_versions",
+      "path": "/users/{{ config.user_id }}/models/versions",
+      "records": { "path": "model_versions" },
+      "schema": "schemas/model_versions.json"
+    },
+    {
+      "name": "workflows",
+      "path": "/users/{{ config.user_id }}/workflows",
+      "records": { "path": "workflows" },
+      "schema": "schemas/workflows.json"
+    }
+  ]
+}

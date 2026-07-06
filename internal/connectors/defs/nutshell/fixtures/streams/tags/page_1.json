@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "id": "1",
+          "name": "Fixture tags",
+          "href": "https://app.nutshell.com/rest/tags/1",
+          "htmlUrl": "https://app.nutshell.com/tags/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture tags",
+          "href": "https://app.nutshell.com/rest/tags/2",
+          "htmlUrl": "https://app.nutshell.com/tags/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

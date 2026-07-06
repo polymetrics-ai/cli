@@ -1,0 +1,29 @@
+{
+  "note": "wave1-pilot actual per-connector executor costs (Sonnet 5 subagent usage; tokens = total subagent tokens incl. reads). Recorded by the coordinator from harness usage stats, 2026-07-02.",
+  "pilots": [
+    {"name": "xkcd", "bucket": "S", "tier": 1, "tokens": 172392, "tool_uses": 125, "duration_s": 1040, "status": "migrated"},
+    {"name": "vitally", "bucket": "S", "tier": 1, "tokens": 146815, "tool_uses": 98, "duration_s": 902, "status": "migrated"},
+    {"name": "bitly", "bucket": "M", "tier": 1, "tokens": 217307, "tool_uses": 117, "duration_s": 984, "status": "migrated"},
+    {"name": "calendly", "bucket": "M", "tier": 1, "tokens": 279610, "tool_uses": 155, "duration_s": 1110, "status": "migrated"},
+    {"name": "sentry", "bucket": "M", "tier": 2, "tokens": 260630, "tool_uses": 149, "duration_s": 1212, "status": "migrated"},
+    {"name": "chargebee", "bucket": "M", "tier": 1, "tokens": 229550, "tool_uses": 140, "duration_s": 997, "status": "migrated"},
+    {"name": "zendesk-support", "bucket": "M", "tier": 1, "tokens": 256517, "tool_uses": 140, "duration_s": 1157, "status": "migrated"},
+    {"name": "monday", "bucket": "L", "tier": 2, "tokens": 323020, "tool_uses": 142, "duration_s": 1091, "status": "migrated"},
+    {"name": "github", "bucket": "XL", "tier": 2, "tokens": 503147, "tool_uses": 307, "duration_s": 2568, "status": "migrated"},
+    {"name": "gmail", "bucket": "M", "tier": 2, "tokens": 332537, "tool_uses": 218, "duration_s": 1724, "status": "migrated"}
+  ],
+  "summary": {
+    "migrated": 10, "blocked": 0, "quarantined": 0,
+    "total_executor_tokens": 2721525,
+    "avg_per_connector_tokens": 272153,
+    "by_shape": {"tier1_S": 159604, "tier1_M": 245746, "tier2_hooked": 354834, "XL_github": 503147},
+    "overheads": {"r3_hook_conformance_repair_tools": 202, "p0_followups_tokens": 184456, "planner_tokens": 136472, "plan_checker_tokens": 95133},
+    "wall_clock_wave": "~45 min for the 10-way parallel fan-out (long pole github 43 min)"
+  },
+  "pass_a_projection": {
+    "remaining_connectors": 544,
+    "note": "Solo-agent pilot cost is the UPPER bound; fan-out bundles S=12/M=7/L=4/XL=1 amortize context loading. Naive per-connector extrapolation: 544 x ~270k = ~147M subagent tokens; bundled estimate with shared-context amortization (~40-50% savings observed wave0): ~75-90M. Wave0 orchestration-plan estimate of 30M for Pass A was optimistic; revise to 75-90M.",
+    "revised_bundle_agent_count": 77
+  },
+  "pass_b_consideration": "Pilot migrated at PARITY only. Full-surface expansion (Pass B) per-connector cost unmeasured in this wave; the api_surface research+implement flow adds doc-fetching. Recommend measuring on 3-5 connectors early in wave5 before committing the full ~350-agent roster."
+}

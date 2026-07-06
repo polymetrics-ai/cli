@@ -1,0 +1,22 @@
+{
+  "record": {
+    "product_id": 1,
+    "name": "name_fixture",
+    "content": "content_fixture",
+    "rating": "rating_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/reviews",
+    "body": {
+      "name": "name_fixture",
+      "content": "content_fixture",
+      "rating": "rating_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

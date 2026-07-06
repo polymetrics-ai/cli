@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/v1/workers" },
+    "error_map": [
+      { "status": 401, "hint": "sap-fieldglass access_token is missing or invalid; re-run pm credentials add sap-fieldglass" },
+      { "status": 403, "hint": "sap-fieldglass account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sap-fieldglass rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workers",
+      "path": "/api/v1/workers",
+      "query": { "page": "1", "limit": "2" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "id": "{{ record.worker_id }}", "stream": "workers" },
+      "projection": "passthrough",
+      "schema": "schemas/workers.json"
+    },
+    {
+      "name": "job_postings",
+      "path": "/api/v1/job_postings",
+      "query": { "page": "1", "limit": "2" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "id": "{{ record.job_posting_id }}", "stream": "job_postings" },
+      "projection": "passthrough",
+      "schema": "schemas/job_postings.json"
+    },
+    {
+      "name": "time_sheets",
+      "path": "/api/v1/time_sheets",
+      "query": { "page": "1", "limit": "2" },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "id": "{{ record.time_sheet_id }}", "stream": "time_sheets" },
+      "projection": "passthrough",
+      "schema": "schemas/time_sheets.json"
+    }
+  ]
+}

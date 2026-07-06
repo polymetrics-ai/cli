@@ -1,0 +1,23 @@
+{
+  "name": "secoda",
+  "display_name": "Secoda",
+  "description": "Reads Secoda catalog metadata (tables, documents, collections, questions) through the Secoda API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.secoda.co/api.md",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Secoda API read of data-catalog metadata",
+    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+  }
+}

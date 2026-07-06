@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/apps" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "apps_fixture_1",
+        "name": "Fixture apps 1",
+        "players": 100,
+        "messageable_players": 90,
+        "organization_id": "org_fixture",
+        "created_at": "2026-01-01T00:00:01Z",
+        "updated_at": "2026-01-01T00:00:01Z"
+      },
+      {
+        "id": "apps_fixture_2",
+        "name": "Fixture apps 2",
+        "players": 200,
+        "messageable_players": 180,
+        "organization_id": "org_fixture",
+        "created_at": "2026-01-01T00:00:02Z",
+        "updated_at": "2026-01-01T00:00:02Z"
+      }
+    ]
+  }
+}

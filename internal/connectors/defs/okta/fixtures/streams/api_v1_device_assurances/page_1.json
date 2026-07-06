@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/device-assurances",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "createdBy": "2026-01-01T00:00:00Z",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "devicePostureChecks": {
+          "include": [
+            {
+              "variableName": "variable_name_fixture",
+              "value": "value_fixture"
+            }
+          ]
+        },
+        "displayRemediationMode": "HIDE",
+        "gracePeriod": {
+          "expiry": "2026-01-01T00:00:00Z",
+          "type": "BY_DATE_TIME"
+        },
+        "id": "id_fixture",
+        "lastUpdate": "2026-01-01T00:00:00Z",
+        "lastUpdatedBy": "2026-01-01T00:00:00Z",
+        "name": "name_fixture",
+        "platform": "ANDROID",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

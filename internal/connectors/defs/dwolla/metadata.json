@@ -1,0 +1,27 @@
+{
+  "name": "dwolla",
+  "display_name": "Dwolla",
+  "description": "Reads Dwolla customers, events, exchange partners, and business classifications, and writes customer/funding-source/transfer/webhook-subscription/beneficial-owner lifecycle mutations, via the Dwolla HAL+JSON REST API using OAuth2 client-credentials.",
+  "integration_type": "api",
+  "docs_url": "https://developers.dwolla.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Dwolla API read of customer, event, exchange-partner, and business-classification data",
+    "write": "external mutation of Dwolla customers, funding sources, transfers (cancel only, never create/send), webhook subscriptions, and beneficial owners; several actions are destructive/not reversible (remove_funding_source, cancel_transfer, delete_webhook_subscription, remove_beneficial_owner) and beneficial-owner actions carry SSN/PII; approval required"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.base_url ({{ config.base_url }}/token); conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"base_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value/token\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively, INCLUDING every write_request_shape/delete_semantics check added in Pass B (same underlying auth-resolution failure, not a new gap; matches gmail's identical bundle-level-marker-plus-writes.json precedent). Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction, surface_complete, write_schemas_valid) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/dwolla package for this wave; the read/pagination/schema-projection shape and the Pass B write actions' request shapes (method/path/body construction) are proven by structural review against the real Dwolla API (github.com/kolanos/dwolla-v2-go's request/response structs, developers.dwolla.com) instead, since legacy internal/connectors/dwolla shipped zero writes to compare against. Matches clazar's and sendpulse's identical documented precedent for the read side."
+  }
+}

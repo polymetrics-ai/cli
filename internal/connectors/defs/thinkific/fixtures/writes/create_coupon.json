@@ -1,0 +1,12 @@
+{
+  "record": {
+    "code": "FIXTURE10"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/coupons",
+    "body": {
+      "code": "FIXTURE10"
+    }
+  }
+}

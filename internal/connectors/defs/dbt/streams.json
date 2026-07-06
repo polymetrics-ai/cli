@@ -1,0 +1,84 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Token ", "value": "{{ secrets.api_key_2 }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/accounts/{{ config.account_id }}/projects/", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "dbt Cloud service token is missing or invalid; re-run pm credentials add dbt" },
+      { "status": 403, "hint": "dbt Cloud service token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "dbt Cloud rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/accounts/{{ config.account_id }}/projects/",
+      "records": { "path": "data" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "runs",
+      "path": "/accounts/{{ config.account_id }}/runs/",
+      "records": { "path": "data" },
+      "schema": "schemas/runs.json"
+    },
+    {
+      "name": "repositories",
+      "path": "/accounts/{{ config.account_id }}/repositories/",
+      "records": { "path": "data" },
+      "schema": "schemas/repositories.json"
+    },
+    {
+      "name": "users",
+      "path": "/accounts/{{ config.account_id }}/users/",
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "environments",
+      "path": "/accounts/{{ config.account_id }}/environments/",
+      "records": { "path": "data" },
+      "schema": "schemas/environments.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/accounts/{{ config.account_id }}/jobs/",
+      "records": { "path": "data" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "invites",
+      "path": "/accounts/{{ config.account_id }}/invites/",
+      "records": { "path": "data" },
+      "schema": "schemas/invites.json"
+    },
+    {
+      "name": "licenses",
+      "path": "/accounts/{{ config.account_id }}/licenses/",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/licenses.json"
+    },
+    {
+      "name": "notifications",
+      "path": "/accounts/{{ config.account_id }}/notifications/",
+      "records": { "path": "data" },
+      "schema": "schemas/notifications.json"
+    },
+    {
+      "name": "ssh_tunnels",
+      "path": "/accounts/{{ config.account_id }}/encryptions/",
+      "records": { "path": "data" },
+      "schema": "schemas/ssh_tunnels.json"
+    }
+  ]
+}

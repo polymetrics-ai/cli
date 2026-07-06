@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "programs",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "is_default": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "rule": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "commission_type": { "type": ["string", "null"] },
+    "commission_amount": { "type": ["string", "null"] },
+    "exclude_product_tax": { "type": ["boolean", "null"] },
+    "exclude_shipping": { "type": ["boolean", "null"] },
+    "exclude_shipping_tax": { "type": ["boolean", "null"] },
+    "exclude_tip": { "type": ["boolean", "null"] },
+    "exclude_self_referral": { "type": ["boolean", "null"] },
+    "payment_methods": { "type": ["array", "null"], "items": { "type": "string" } },
+    "payment_default": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

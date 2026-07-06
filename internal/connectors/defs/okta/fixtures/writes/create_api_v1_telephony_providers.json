@@ -1,0 +1,38 @@
+{
+  "record": {
+    "providerAuthToken": "fixture",
+    "providerCapability": "ALL",
+    "providerName": "TWILIO",
+    "providerSettings": {
+      "call": {
+        "twilioVerifySid": "twilio_verify_sid_fixture"
+      },
+      "sms": {
+        "twilioVerifySid": "twilio_verify_sid_fixture"
+      }
+    },
+    "providerSid": "provider_sid_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/telephony-providers",
+    "body": {
+      "providerAuthToken": "fixture",
+      "providerCapability": "ALL",
+      "providerName": "TWILIO",
+      "providerSettings": {
+        "call": {
+          "twilioVerifySid": "twilio_verify_sid_fixture"
+        },
+        "sms": {
+          "twilioVerifySid": "twilio_verify_sid_fixture"
+        }
+      },
+      "providerSid": "provider_sid_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

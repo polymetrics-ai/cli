@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "User group ID."
+    },
+    "role": {
+      "type": [
+        "object",
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "object",
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

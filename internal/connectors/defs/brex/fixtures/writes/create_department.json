@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Department"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/departments",
+    "body": {
+      "name": "Fixture Department"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "dept_fixture_new",
+      "name": "Fixture Department"
+    }
+  }
+}

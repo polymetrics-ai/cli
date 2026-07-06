@@ -1,0 +1,71 @@
+{
+  "base": {
+    "url": "https://{{ config.data_center }}.api.mailchimp.com/3.0",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "basic", "username": "anystring", "password": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/lists", "query": { "count": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "mailchimp credentials are missing or invalid; re-run pm credentials add mailchimp" },
+      { "status": 429, "class": "rate_limited", "hint": "mailchimp rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/lists",
+      "records": { "path": "lists" },
+      "incremental": {
+        "cursor_field": "date_created",
+        "request_param": "since_date_created",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "campaigns" },
+      "incremental": {
+        "cursor_field": "create_time",
+        "request_param": "since_create_time",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "reports",
+      "path": "/reports",
+      "records": { "path": "reports" },
+      "incremental": {
+        "cursor_field": "send_time",
+        "request_param": "since_send_time",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/reports.json"
+    },
+    {
+      "name": "automations",
+      "path": "/automations",
+      "records": { "path": "automations" },
+      "incremental": {
+        "cursor_field": "create_time",
+        "request_param": "since_create_time",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/automations.json"
+    }
+  ]
+}

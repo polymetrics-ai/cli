@@ -1,0 +1,13 @@
+{
+  "record": {
+    "credit_balance_adjustment_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/credit_balance_adjustments/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,918 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/entries",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 101,
+      "entries": [
+        {
+          "API": "Fixture API 1",
+          "Description": "Deterministic fixture entry 1",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/1",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 2",
+          "Description": "Deterministic fixture entry 2",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/2",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 3",
+          "Description": "Deterministic fixture entry 3",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/3",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 4",
+          "Description": "Deterministic fixture entry 4",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/4",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 5",
+          "Description": "Deterministic fixture entry 5",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/5",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 6",
+          "Description": "Deterministic fixture entry 6",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/6",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 7",
+          "Description": "Deterministic fixture entry 7",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/7",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 8",
+          "Description": "Deterministic fixture entry 8",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/8",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 9",
+          "Description": "Deterministic fixture entry 9",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/9",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 10",
+          "Description": "Deterministic fixture entry 10",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/10",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 11",
+          "Description": "Deterministic fixture entry 11",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/11",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 12",
+          "Description": "Deterministic fixture entry 12",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/12",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 13",
+          "Description": "Deterministic fixture entry 13",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/13",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 14",
+          "Description": "Deterministic fixture entry 14",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/14",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 15",
+          "Description": "Deterministic fixture entry 15",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/15",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 16",
+          "Description": "Deterministic fixture entry 16",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/16",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 17",
+          "Description": "Deterministic fixture entry 17",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/17",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 18",
+          "Description": "Deterministic fixture entry 18",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/18",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 19",
+          "Description": "Deterministic fixture entry 19",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/19",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 20",
+          "Description": "Deterministic fixture entry 20",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/20",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 21",
+          "Description": "Deterministic fixture entry 21",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/21",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 22",
+          "Description": "Deterministic fixture entry 22",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/22",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 23",
+          "Description": "Deterministic fixture entry 23",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/23",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 24",
+          "Description": "Deterministic fixture entry 24",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/24",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 25",
+          "Description": "Deterministic fixture entry 25",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/25",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 26",
+          "Description": "Deterministic fixture entry 26",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/26",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 27",
+          "Description": "Deterministic fixture entry 27",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/27",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 28",
+          "Description": "Deterministic fixture entry 28",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/28",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 29",
+          "Description": "Deterministic fixture entry 29",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/29",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 30",
+          "Description": "Deterministic fixture entry 30",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/30",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 31",
+          "Description": "Deterministic fixture entry 31",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/31",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 32",
+          "Description": "Deterministic fixture entry 32",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/32",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 33",
+          "Description": "Deterministic fixture entry 33",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/33",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 34",
+          "Description": "Deterministic fixture entry 34",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/34",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 35",
+          "Description": "Deterministic fixture entry 35",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/35",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 36",
+          "Description": "Deterministic fixture entry 36",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/36",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 37",
+          "Description": "Deterministic fixture entry 37",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/37",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 38",
+          "Description": "Deterministic fixture entry 38",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/38",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 39",
+          "Description": "Deterministic fixture entry 39",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/39",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 40",
+          "Description": "Deterministic fixture entry 40",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/40",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 41",
+          "Description": "Deterministic fixture entry 41",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/41",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 42",
+          "Description": "Deterministic fixture entry 42",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/42",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 43",
+          "Description": "Deterministic fixture entry 43",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/43",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 44",
+          "Description": "Deterministic fixture entry 44",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/44",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 45",
+          "Description": "Deterministic fixture entry 45",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/45",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 46",
+          "Description": "Deterministic fixture entry 46",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/46",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 47",
+          "Description": "Deterministic fixture entry 47",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/47",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 48",
+          "Description": "Deterministic fixture entry 48",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/48",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 49",
+          "Description": "Deterministic fixture entry 49",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/49",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 50",
+          "Description": "Deterministic fixture entry 50",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/50",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 51",
+          "Description": "Deterministic fixture entry 51",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/51",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 52",
+          "Description": "Deterministic fixture entry 52",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/52",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 53",
+          "Description": "Deterministic fixture entry 53",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/53",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 54",
+          "Description": "Deterministic fixture entry 54",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/54",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 55",
+          "Description": "Deterministic fixture entry 55",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/55",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 56",
+          "Description": "Deterministic fixture entry 56",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/56",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 57",
+          "Description": "Deterministic fixture entry 57",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/57",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 58",
+          "Description": "Deterministic fixture entry 58",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/58",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 59",
+          "Description": "Deterministic fixture entry 59",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/59",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 60",
+          "Description": "Deterministic fixture entry 60",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/60",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 61",
+          "Description": "Deterministic fixture entry 61",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/61",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 62",
+          "Description": "Deterministic fixture entry 62",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/62",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 63",
+          "Description": "Deterministic fixture entry 63",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/63",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 64",
+          "Description": "Deterministic fixture entry 64",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/64",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 65",
+          "Description": "Deterministic fixture entry 65",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/65",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 66",
+          "Description": "Deterministic fixture entry 66",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/66",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 67",
+          "Description": "Deterministic fixture entry 67",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/67",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 68",
+          "Description": "Deterministic fixture entry 68",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/68",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 69",
+          "Description": "Deterministic fixture entry 69",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/69",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 70",
+          "Description": "Deterministic fixture entry 70",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/70",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 71",
+          "Description": "Deterministic fixture entry 71",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/71",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 72",
+          "Description": "Deterministic fixture entry 72",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/72",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 73",
+          "Description": "Deterministic fixture entry 73",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/73",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 74",
+          "Description": "Deterministic fixture entry 74",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/74",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 75",
+          "Description": "Deterministic fixture entry 75",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/75",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 76",
+          "Description": "Deterministic fixture entry 76",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/76",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 77",
+          "Description": "Deterministic fixture entry 77",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/77",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 78",
+          "Description": "Deterministic fixture entry 78",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/78",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 79",
+          "Description": "Deterministic fixture entry 79",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/79",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 80",
+          "Description": "Deterministic fixture entry 80",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/80",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 81",
+          "Description": "Deterministic fixture entry 81",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/81",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 82",
+          "Description": "Deterministic fixture entry 82",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/82",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 83",
+          "Description": "Deterministic fixture entry 83",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/83",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 84",
+          "Description": "Deterministic fixture entry 84",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/84",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 85",
+          "Description": "Deterministic fixture entry 85",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/85",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 86",
+          "Description": "Deterministic fixture entry 86",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/86",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 87",
+          "Description": "Deterministic fixture entry 87",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/87",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 88",
+          "Description": "Deterministic fixture entry 88",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/88",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 89",
+          "Description": "Deterministic fixture entry 89",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/89",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 90",
+          "Description": "Deterministic fixture entry 90",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/90",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 91",
+          "Description": "Deterministic fixture entry 91",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/91",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 92",
+          "Description": "Deterministic fixture entry 92",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/92",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 93",
+          "Description": "Deterministic fixture entry 93",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/93",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 94",
+          "Description": "Deterministic fixture entry 94",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/94",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 95",
+          "Description": "Deterministic fixture entry 95",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/95",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 96",
+          "Description": "Deterministic fixture entry 96",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/96",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 97",
+          "Description": "Deterministic fixture entry 97",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/97",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 98",
+          "Description": "Deterministic fixture entry 98",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/98",
+          "Category": "Fixture"
+        },
+        {
+          "API": "Fixture API 99",
+          "Description": "Deterministic fixture entry 99",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/99",
+          "Category": "Development"
+        },
+        {
+          "API": "Fixture API 100",
+          "Description": "Deterministic fixture entry 100",
+          "Auth": "",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/100",
+          "Category": "Fixture"
+        }
+      ]
+    }
+  }
+}

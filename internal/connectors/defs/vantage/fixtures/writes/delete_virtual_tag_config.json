@@ -1,0 +1,9 @@
+{
+  "record": {
+    "token": "vtc_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/virtual_tag_configs/vtc_fixture_1"
+  }
+}

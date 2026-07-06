@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/batches",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "batches_fixture_1",
+          "type": "batch",
+          "attributes": {
+            "name": "Fixture Batches",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/batches"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

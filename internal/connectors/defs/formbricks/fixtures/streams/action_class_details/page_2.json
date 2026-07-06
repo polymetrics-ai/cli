@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/management/action-classes/act_fixture_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "act_fixture_1",
+        "name": "Fixture Action One",
+        "description": "conformance fixture action class",
+        "type": "code",
+        "workspaceId": "wrk_fixture_1",
+        "noCodeConfig": null,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      }
+    }
+  }
+}

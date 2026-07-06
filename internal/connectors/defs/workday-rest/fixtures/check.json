@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/ccx/api/hcm/v1/synthetic-conformance-value/workers", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

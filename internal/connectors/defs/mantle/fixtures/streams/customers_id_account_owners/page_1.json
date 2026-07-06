@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers/synthetic-conformance-value/account_owners"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accountOwners": [
+        {
+          "id": "id_fixture",
+          "type": "account_manager",
+          "hasCommission": true,
+          "commissionPercentage": 1.23,
+          "commissionEndsAt": "2026-01-01T00:00:00Z",
+          "managementFeePercentage": 1.23,
+          "appCommissions": [
+            {
+              "id": "app_commission_fixture_id"
+            }
+          ],
+          "user": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

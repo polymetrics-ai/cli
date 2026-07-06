@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/manufacturers", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "page": 1, "limit": 100, "found": 1 },
+      "results": [
+        { "id": 3, "name": "Fixture Instruments Co", "instruments": [{ "id": 7, "name": "Fixture Sensor Model" }] }
+      ]
+    }
+  }
+}

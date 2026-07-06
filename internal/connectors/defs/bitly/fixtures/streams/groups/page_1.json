@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        {
+          "guid": "grp_fixture_1",
+          "name": "Fixture Group",
+          "organization_guid": "org_fixture_1",
+          "bsds": ["bit.ly"],
+          "is_active": true,
+          "role": "admin",
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

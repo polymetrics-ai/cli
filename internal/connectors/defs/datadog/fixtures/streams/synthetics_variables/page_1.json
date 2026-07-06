@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/synthetics/variables" },
+  "response": {
+    "status": 200,
+    "body": {
+      "variables": [
+        {
+          "id": "fixture-var-1",
+          "name": "FIXTURE_VAR",
+          "description": "fixture global variable",
+          "tags": ["fixture"],
+          "is_totp": false,
+          "is_fido": false,
+          "parse_test_public_id": null
+        }
+      ]
+    }
+  }
+}

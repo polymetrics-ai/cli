@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "carrier_types",
+  "type": "object",
+  "x-primary-key": ["type"],
+  "required": ["type"],
+  "properties": {
+    "object": { "type": ["string", "null"] },
+    "type": { "type": "string" },
+    "readable": { "type": ["string", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "fields": { "type": ["object", "null"] }
+  }
+}

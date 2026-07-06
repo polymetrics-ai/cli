@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ocean/shipment_containers"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/ocean/shipment_containers",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/ocean/shipment_container",
+            "id": 289140,
+            "metadata": { "container_group": ["fixture"] },
+            "container_type": "dry",
+            "container_number": "ABCD1234567",
+            "reference_code": "REF-FIXTURE-1",
+            "container_size": "40HC",
+            "seal_number": "SEAL123",
+            "estimated_departure_date": "2026-01-15T12:00:00Z",
+            "estimated_arrival_date": "2026-02-01T12:00:00Z",
+            "shipment": {
+              "_object": "/api/refs/object",
+              "ref_type": "/shipment",
+              "link": "https://api.flexport.com/shipments/2983",
+              "id": 2983
+            }
+          }
+        ]
+      }
+    }
+  }
+}

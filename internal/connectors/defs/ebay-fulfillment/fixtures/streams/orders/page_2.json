@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/sell/fulfillment/v1/order", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 3,
+      "limit": 2,
+      "offset": 2,
+      "orders": [
+        {
+          "orderId": "03-00003",
+          "legacyOrderId": "1000000003",
+          "creationDate": "2026-01-03T00:00:00.000Z",
+          "lastModifiedDate": "2026-01-03T00:00:00.000Z",
+          "orderFulfillmentStatus": "NOT_STARTED",
+          "orderPaymentStatus": "PAID",
+          "sellerId": "fixture_seller",
+          "salesRecordReference": "103",
+          "buyer": { "username": "buyer_3" },
+          "pricingSummary": { "total": { "value": "30.00", "currency": "USD" } },
+          "lineItems": [
+            { "lineItemId": "li_3", "legacyItemId": "item_3", "sku": "SKU-3", "title": "Fixture Product 3", "quantity": 1, "lineItemFulfillmentStatus": "NOT_STARTED", "total": { "value": "30.00", "currency": "USD" } }
+          ],
+          "fulfillmentStartInstructions": [
+            {
+              "fulfillmentInstructionsType": "SHIP_TO",
+              "shippingStep": {
+                "shipTo": {
+                  "fullName": "Buyer Three",
+                  "contactAddress": { "city": "Denver", "stateOrProvince": "CO", "postalCode": "80014", "countryCode": "US" }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

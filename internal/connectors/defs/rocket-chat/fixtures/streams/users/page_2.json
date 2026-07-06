@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users.list",
+    "query": {
+      "count": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "_id": "user_fixture_101",
+          "username": "fixture.user101",
+          "name": "Fixture User 101",
+          "emails": [
+            {
+              "address": "fixture.user101@example.com",
+              "verified": true
+            }
+          ],
+          "status": "offline",
+          "active": true,
+          "_updatedAt": "2026-01-01T00:41:00.000Z"
+        }
+      ],
+      "count": 1,
+      "offset": 100,
+      "total": 101,
+      "success": true
+    }
+  }
+}

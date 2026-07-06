@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_transaction_vendor_transactions_v1_transactions_transaction_id",
+  "type": "object",
+  "properties": {
+    "transactionStatus": {
+      "type": "object"
+    },
+    "transaction_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "transaction_id"
+  ]
+}

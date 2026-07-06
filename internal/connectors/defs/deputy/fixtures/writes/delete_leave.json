@@ -1,0 +1,11 @@
+{
+  "record": { "Id": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/resource/Leave/1"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

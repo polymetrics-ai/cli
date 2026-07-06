@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Amplitude Connection Specification",
+  "type": "object",
+  "required": ["api_key", "secret_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Amplitude project API key. Used as the HTTP Basic auth username; never logged."
+    },
+    "secret_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Amplitude project secret key. Used as the HTTP Basic auth password; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://amplitude.com",
+      "description": "Amplitude Analytics REST API base URL. Defaults to the Standard-server host; set explicitly to https://analytics.eu.amplitude.com for EU-residency projects (see docs.md Known limits)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "taxonomy_show_deleted": {
+      "type": "string",
+      "description": "Optional 'true'/'false' string forwarded as the showDeleted query parameter on the taxonomy_events and taxonomy_user_properties streams. Left unset, the parameter is omitted and Amplitude applies its own default (deleted items excluded)."
+    }
+  }
+}

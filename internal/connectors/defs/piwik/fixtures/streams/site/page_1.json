@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "SitesManager.getSiteFromId",
+      "idSite": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "idSite": "1",
+      "name": "Fixture Site One",
+      "mainUrl": "https://fixture1.example.com",
+      "timezone": "UTC",
+      "currency": "USD"
+    }
+  }
+}

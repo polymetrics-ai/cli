@@ -1,0 +1,24 @@
+{
+  "record": {
+    "type": "fixed_amount",
+    "affiliate_email": "fixture1@example.com",
+    "comment": "Fixture referral",
+    "commission": 24,
+    "total_sale": 245
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/referrals",
+    "body": {
+      "type": "fixed_amount",
+      "affiliate_email": "fixture1@example.com",
+      "comment": "Fixture referral",
+      "commission": 24,
+      "total_sale": 245
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "id": 17567132 } }
+  }
+}

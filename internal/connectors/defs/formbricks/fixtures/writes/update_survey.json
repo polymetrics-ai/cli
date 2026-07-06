@@ -1,0 +1,15 @@
+{
+  "record": {
+    "surveyId": "srv_fixture_1",
+    "name": "Updated Fixture Survey",
+    "status": "paused"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/management/surveys/srv_fixture_1",
+    "body": {
+      "name": "Updated Fixture Survey",
+      "status": "paused"
+    }
+  }
+}

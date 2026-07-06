@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_series_intraday",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "open": {
+      "type": "number"
+    },
+    "high": {
+      "type": "number"
+    },
+    "low": {
+      "type": "number"
+    },
+    "close": {
+      "type": "number"
+    },
+    "volume": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "symbol",
+    "date"
+  ],
+  "x-cursor-field": "date"
+}

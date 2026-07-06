@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contact_fields", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "field_fixture_1", "slug": "phone_number", "type": "string" },
+        { "id": "field_fixture_2", "slug": "country", "type": "string" }
+      ]
+    }
+  }
+}

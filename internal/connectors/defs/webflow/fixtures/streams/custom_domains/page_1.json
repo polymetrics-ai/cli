@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/sites/synthetic-conformance-value/custom_domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "customDomains": [
+        { "id": "domain_fixture_1", "url": "fixture-one.example.test", "lastPublished": "2026-01-01T00:00:00.000Z" },
+        { "id": "domain_fixture_2", "url": "fixture-two.example.test", "lastPublished": null }
+      ]
+    }
+  }
+}

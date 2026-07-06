@@ -1,0 +1,59 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "{{ secrets.api_secret }}", "when": "{{ secrets.api_secret }}" },
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Token token=\"", "value": "{{ secrets.api_key }}\"" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/nudges", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "qualaroo api_key is missing or invalid; re-run pm credentials add qualaroo" },
+      { "status": 403, "hint": "qualaroo account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "qualaroo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "nudges",
+      "path": "/nudges",
+      "records": { "path": "nudges" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/nudges.json"
+    },
+    {
+      "name": "responses",
+      "path": "/responses",
+      "records": { "path": "responses" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "survey_responses",
+      "path": "/nudges/{{ config.survey_id }}/responses.json",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 500
+      },
+      "incremental": {
+        "cursor_field": "time"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/survey_responses.json"
+    }
+  ]
+}

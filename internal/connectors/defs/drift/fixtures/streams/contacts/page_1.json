@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/contacts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 301,
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601,
+          "attributes": { "email": "fixture1@example.com" }
+        },
+        {
+          "id": 302,
+          "createdAt": 1767225602,
+          "updatedAt": 1767225602,
+          "attributes": { "email": "fixture2@example.com" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,5280 @@
+{
+  "actions": [
+    {
+      "name": "create_currency",
+      "kind": "create",
+      "method": "POST",
+      "path": "/settings/currencies",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "currency_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_symbol": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "price_precision": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_format": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_currency; approval required"
+    },
+    {
+      "name": "update_currency",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/settings/currencies/{{ record.currency_id }}",
+      "path_fields": [
+        "currency_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "currency_id"
+        ],
+        "properties": {
+          "currency_id": {
+            "type": "string"
+          },
+          "currency_symbol": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "price_precision": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_format": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_currency; approval required"
+    },
+    {
+      "name": "delete_currency",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/settings/currencies/{{ record.currency_id }}",
+      "path_fields": [
+        "currency_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "currency_id"
+        ],
+        "properties": {
+          "currency_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_currency; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "contact_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "company_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "mobile": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "twitter": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "facebook": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "billing_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "shipping_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "contact_persons": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_customer; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.customer_id }}",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "contact_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "company_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "facebook": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "mobile": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "billing_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_customer; approval required"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.customer_id }}",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_customer; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_advance_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/advancepayments",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "exchange_rate": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "rcy_exchange_rate": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "reference_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "account_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "trip_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "location_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_advance_payment; approval required"
+    },
+    {
+      "name": "update_advance_payment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/advancepayments/{{ record.advance_payment_id }}",
+      "path_fields": [
+        "advance_payment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "advance_payment_id"
+        ],
+        "properties": {
+          "advance_payment_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "exchange_rate": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "rcy_exchange_rate": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "reference_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "account_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "trip_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "location_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_advance_payment; approval required"
+    },
+    {
+      "name": "delete_advance_payment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/advancepayments/{{ record.advance_payment_id }}",
+      "path_fields": [
+        "advance_payment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "advance_payment_id"
+        ],
+        "properties": {
+          "advance_payment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_advance_payment; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_expense_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expensecategories",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "category_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "gl_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "maximum_allowed_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "receipt_required_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "flat_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "parent_account_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_expense_category; approval required"
+    },
+    {
+      "name": "update_expense_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/expensecategories/{{ record.expense_category_id }}",
+      "path_fields": [
+        "expense_category_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_category_id"
+        ],
+        "properties": {
+          "expense_category_id": {
+            "type": "string"
+          },
+          "category_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "gl_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "maximum_allowed_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "receipt_required_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "flat_amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_expense_category; approval required"
+    },
+    {
+      "name": "delete_expense_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expensecategories/{{ record.expense_category_id }}",
+      "path_fields": [
+        "expense_category_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_category_id"
+        ],
+        "properties": {
+          "expense_category_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_expense_category; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "enable_expense_category",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensecategories/{{ record.expense_category_id }}/show",
+      "path_fields": [
+        "expense_category_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_category_id"
+        ],
+        "properties": {
+          "expense_category_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through enable_expense_category; approval required"
+    },
+    {
+      "name": "disable_expense_category",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensecategories/{{ record.expense_category_id }}/hide",
+      "path_fields": [
+        "expense_category_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_category_id"
+        ],
+        "properties": {
+          "expense_category_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through disable_expense_category; approval required"
+    },
+    {
+      "name": "create_expense_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expensereports",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "start_date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "expenses": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_expense_report; approval required"
+    },
+    {
+      "name": "bulk_delete_expense_reports",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expensereports",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through bulk_delete_expense_reports; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_expense_report",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/expensereports/{{ record.expense_report_id }}",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "report_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "start_date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "expenses": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "expense_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customfield_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tag_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tag_option_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_expense_report; approval required"
+    },
+    {
+      "name": "delete_expense_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expensereports/{{ record.expense_report_id }}",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_expense_report; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "submit_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/submit",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "approver_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "cc_mail_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through submit_expense_report; approval required"
+    },
+    {
+      "name": "approve_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/approve",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through approve_expense_report; approval required"
+    },
+    {
+      "name": "reject_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/reject",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reject_expense_report; approval required"
+    },
+    {
+      "name": "reimburse_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/reimburse",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "reference_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reimburse_expense_report; approval required"
+    },
+    {
+      "name": "takeback_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/takeback",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through takeback_expense_report; approval required"
+    },
+    {
+      "name": "archive_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/archive",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through archive_expense_report; approval required"
+    },
+    {
+      "name": "unarchive_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/unarchive",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through unarchive_expense_report; approval required"
+    },
+    {
+      "name": "share_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/share",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through share_expense_report; approval required"
+    },
+    {
+      "name": "forward_approval_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/forwardapproval",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "approver_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approval_reason": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through forward_approval_expense_report; approval required"
+    },
+    {
+      "name": "reject_expense_in_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/expense/{{ record.expense_id }}/reject",
+      "path_fields": [
+        "expense_report_id",
+        "expense_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id",
+          "expense_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "expense_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reject_expense_in_report; approval required"
+    },
+    {
+      "name": "bulk_reject_expenses_in_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/expensebulkreject",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "expense_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_reject_expenses_in_report; approval required"
+    },
+    {
+      "name": "add_comment_to_expense_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/comments",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "expense_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through add_comment_to_expense_report; approval required"
+    },
+    {
+      "name": "delete_comment_of_expense_report",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expensereports/{{ record.expense_report_id }}/comments/{{ record.comment_id }}",
+      "path_fields": [
+        "expense_report_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id",
+          "comment_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_comment_of_expense_report; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "associate_tags_to_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/tags",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "tags": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through associate_tags_to_expense_report; approval required"
+    },
+    {
+      "name": "add_expenses_to_expense_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/addexpenses",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "expense_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through add_expenses_to_expense_report; approval required"
+    },
+    {
+      "name": "remove_expenses_from_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/removeexpenses",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "expense_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through remove_expenses_from_expense_report; approval required"
+    },
+    {
+      "name": "delete_expense_report_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/expensereports/{{ record.expense_report_id }}/documents/{{ record.document_id }}",
+      "path_fields": [
+        "expense_report_id",
+        "document_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id",
+          "document_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "document_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_expense_report_attachment; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reupload_expense_report_attachment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/documents/{{ record.document_id }}/upload",
+      "path_fields": [
+        "expense_report_id",
+        "document_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id",
+          "document_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "document_id": {
+            "type": "string"
+          },
+          "folderId": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "docName": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "doc": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reupload_expense_report_attachment; approval required"
+    },
+    {
+      "name": "remove_advance_payment_from_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/removeadvancepayment",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "advance_payment_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through remove_advance_payment_from_expense_report; approval required"
+    },
+    {
+      "name": "change_status_of_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/status/{{ record.action }}",
+      "path_fields": [
+        "expense_report_id",
+        "action"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id",
+          "action"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through change_status_of_expense_report; approval required"
+    },
+    {
+      "name": "export_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/export",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through export_expense_report; approval required"
+    },
+    {
+      "name": "cancel_reimbursement_of_expense_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/{{ record.expense_report_id }}/reimburse/cancel",
+      "path_fields": [
+        "expense_report_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_report_id"
+        ],
+        "properties": {
+          "expense_report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through cancel_reimbursement_of_expense_report; approval required"
+    },
+    {
+      "name": "add_expense_to_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expenses/{{ record.expense_id }}/addtoreport",
+      "path_fields": [
+        "expense_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_id"
+        ],
+        "properties": {
+          "expense_id": {
+            "type": "string"
+          },
+          "report_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through add_expense_to_report; approval required"
+    },
+    {
+      "name": "bulk_submit_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/submit",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approver_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_submit_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_approve_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/approve",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_approve_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_reject_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/reject",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_reject_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_reimburse_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/reimburse",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "reimbursed_date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "reference_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_reimburse_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_archive_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/archive",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_archive_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_unarchive_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/unarchive",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_unarchive_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_forward_approval_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/forwardapproval",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approver_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_forward_approval_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_change_status_of_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/status/{{ record.action }}",
+      "path_fields": [
+        "action"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_change_status_of_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_reset_substatus_of_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/substatus/reset",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_reset_substatus_of_expense_reports; approval required"
+    },
+    {
+      "name": "bulk_field_update_expense_reports",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expensereports/bulkfieldupdate",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "report_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through bulk_field_update_expense_reports; approval required"
+    },
+    {
+      "name": "create_expense",
+      "kind": "create",
+      "method": "POST",
+      "path": "/expenses",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_reimbursable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "paid_through_account_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "distance": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "merchant_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "report_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "payment_mode": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_billable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_inclusive_tax": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "attendees": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "line_items": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_expense; approval required"
+    },
+    {
+      "name": "update_expense",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/expenses/{{ record.expense_id }}",
+      "path_fields": [
+        "expense_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_id"
+        ],
+        "properties": {
+          "expense_id": {
+            "type": "string"
+          },
+          "paid_through_account_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_reimbursable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "merchant_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "report_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "payment_mode": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_billable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_inclusive_tax": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "attendees": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "line_items": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_expense; approval required"
+    },
+    {
+      "name": "merge_expenses",
+      "kind": "update",
+      "method": "POST",
+      "path": "/expenses/{{ record.expense_id }}/merge?duplicate_expense_id={{ record.duplicate_expense_id }}",
+      "path_fields": [
+        "expense_id",
+        "duplicate_expense_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "expense_id",
+          "duplicate_expense_id"
+        ],
+        "properties": {
+          "expense_id": {
+            "type": "string"
+          },
+          "duplicate_expense_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through merge_expenses; approval required"
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "fiscal_year_start_month": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "time_zone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date_format": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "field_separator": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "language_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "industry_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "industry_size": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "portal_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "org_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "remit_to_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_organization; approval required"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/organizations/{{ record.organization_id }}",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "fiscal_year_start_month": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_logo_uploaded": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "time_zone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date_format": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "field_separator": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "language_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "org_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "remit_to_address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "contact_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "fax": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "currency_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "companyid_label": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "companyid_value": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "taxid_label": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "taxid_value": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_organization; approval required"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "project_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "billing_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "show_to_all_users": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_head_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "users": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_project; approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.project_id }}",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "project_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "billing_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_project; approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_project; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "activate_project",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/active",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through activate_project; approval required"
+    },
+    {
+      "name": "deactivate_project",
+      "kind": "update",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/inactive",
+      "path_fields": [
+        "project_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through deactivate_project; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reportingtags?organization_id={{ config.organization_id }}",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "tag_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_mandatory": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "entities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "multi_preference_entities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_tag; approval required"
+    },
+    {
+      "name": "mark_default_option",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}&default_option_id={{ record.default_option_id }}",
+      "path_fields": [
+        "tag_id",
+        "default_option_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id",
+          "default_option_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "default_option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through mark_default_option; approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "tag_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_mandatory": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "entities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "multi_preference_entities": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_tag; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reportingtags/{{ record.tag_id }}?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_tag; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_tag_options",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reportingtags/{{ record.tag_id }}/options?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "options": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_tag_options; approval required"
+    },
+    {
+      "name": "update_tag_criteria",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reportingtags/{{ record.tag_id }}/criteria?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "criteria_tags": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "options": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_tag_criteria; approval required"
+    },
+    {
+      "name": "active_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reportingtags/{{ record.tag_id }}/active?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through active_tag; approval required"
+    },
+    {
+      "name": "inactive_tag",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reportingtags/{{ record.tag_id }}/inactive?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through inactive_tag; approval required"
+    },
+    {
+      "name": "active_tag_option",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reportingtags/{{ record.tag_id }}/option/{{ record.option_id }}/active?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id",
+        "option_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id",
+          "option_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through active_tag_option; approval required"
+    },
+    {
+      "name": "inactive_tag_option",
+      "kind": "update",
+      "method": "POST",
+      "path": "/reportingtags/{{ record.tag_id }}/option/{{ record.option_id }}/inactive?organization_id={{ config.organization_id }}",
+      "path_fields": [
+        "tag_id",
+        "option_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag_id",
+          "option_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "option_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through inactive_tag_option; approval required"
+    },
+    {
+      "name": "reorder_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reportingtags/reorder?organization_id={{ config.organization_id }}",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "tag_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reorder_tags; approval required"
+    },
+    {
+      "name": "create_tax",
+      "kind": "create",
+      "method": "POST",
+      "path": "/settings/taxes",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "tax_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tax_percentage": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tax_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_value_added": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tax_authority_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_tax; approval required"
+    },
+    {
+      "name": "update_tax",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/settings/taxes/{{ record.tax_id }}",
+      "path_fields": [
+        "tax_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tax_id"
+        ],
+        "properties": {
+          "tax_id": {
+            "type": "string"
+          },
+          "tax_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tax_percentage": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "tax_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_value_added": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_tax; approval required"
+    },
+    {
+      "name": "delete_tax",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/settings/taxes/{{ record.tax_id }}",
+      "path_fields": [
+        "tax_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tax_id"
+        ],
+        "properties": {
+          "tax_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_tax; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_trip",
+      "kind": "create",
+      "method": "POST",
+      "path": "/trips",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "policy_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "trip_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "travel_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "destination_country_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_visa_required": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "business_purpose": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "budget": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "other_travellers": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_billable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_trip; approval required"
+    },
+    {
+      "name": "update_trip",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/trips/{{ record.trip_id }}",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          },
+          "policy_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "trip_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "travel_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "destination_country_code": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_visa_required": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "business_purpose": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "budget": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "other_travellers": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "customer_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "is_billable": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "itineraries": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_trip; approval required"
+    },
+    {
+      "name": "delete_trip",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/trips/{{ record.trip_id }}",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_trip; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "approve_trip",
+      "kind": "update",
+      "method": "POST",
+      "path": "/trips/{{ record.trip_id }}/approve",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through approve_trip; approval required"
+    },
+    {
+      "name": "reject_trip",
+      "kind": "update",
+      "method": "POST",
+      "path": "/trips/{{ record.trip_id }}/reject",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through reject_trip; approval required"
+    },
+    {
+      "name": "cancel_trip",
+      "kind": "update",
+      "method": "POST",
+      "path": "/trips/{{ record.trip_id }}/cancel",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          },
+          "comments": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through cancel_trip; approval required"
+    },
+    {
+      "name": "close_trip",
+      "kind": "update",
+      "method": "POST",
+      "path": "/trips/{{ record.trip_id }}/close",
+      "path_fields": [
+        "trip_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trip_id"
+        ],
+        "properties": {
+          "trip_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through close_trip; approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "user_role": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "default_approver_email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approves_to_email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "submission_amount_limit": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approval_amount_limit": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "employee_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "department_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "designation_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date_of_birth": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "date_of_joining": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "mobile": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "gender": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "policy_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Zoho Expense resources through create_user; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "user_role": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "approval_amount_limit": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "submission_amount_limit": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "department_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "department_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "designation_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "mobile": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through update_user; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Zoho Expense resources through delete_user; approval required",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "deactivate_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/inactive",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through deactivate_user; approval required"
+    },
+    {
+      "name": "activate_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/active",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through activate_user; approval required"
+    },
+    {
+      "name": "assign_role_to_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/role/{{ record.role_id }}",
+      "path_fields": [
+        "user_id",
+        "role_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id",
+          "role_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Zoho Expense resources through assign_role_to_user; approval required"
+    }
+  ]
+}

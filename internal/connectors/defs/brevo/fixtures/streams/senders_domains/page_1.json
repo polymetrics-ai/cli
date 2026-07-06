@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/senders/domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        { "id": 1, "domain_name": "fixture-mail.example.com", "authenticated": true, "verified": true, "ip": "203.0.113.10" },
+        { "id": 2, "domain_name": "fixture-alt.example.com", "authenticated": false, "verified": true, "ip": null }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/context-connections/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_site_context_connection_by_id_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_site_context_connection_by_id",
+      "name": "Fixture get_site_context_connection_by_id",
+      "status": "active",
+      "operation_id": "getSiteContextConnectionById"
+    }
+  }
+}

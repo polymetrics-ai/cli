@@ -1,0 +1,7 @@
+{
+  "record": { "project_id": 100, "id": 300 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/synthetic-conformance-value/projects/100/tasks/300"
+  }
+}

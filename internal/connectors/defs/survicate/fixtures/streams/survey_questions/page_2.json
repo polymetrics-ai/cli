@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys/survey_fixture_1/questions",
+    "query": { "items_per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination_data": { "has_more": false, "next_url": null },
+      "data": [
+        {
+          "id": 372624,
+          "type": "single",
+          "question": "Would you recommend us to your friend?",
+          "introduction": "One more quick question.",
+          "answer_choices": [
+            { "id": 0, "content": "Very happy" },
+            { "id": 1, "content": "Not happy" }
+          ]
+        }
+      ]
+    }
+  }
+}

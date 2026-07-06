@@ -1,0 +1,105 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Algolia-Application-Id": "{{ config.application_id }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Algolia-API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/1/indexes" },
+    "error_map": [
+      { "status": 401, "hint": "algolia api_key is missing or invalid; re-run pm credentials add algolia" },
+      { "status": 403, "hint": "algolia api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "algolia rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "indices",
+      "path": "/1/indexes",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 0,
+        "page_size": 100,
+        "max_pages": 100
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "data_size": "{{ record.dataSize }}",
+        "file_size": "{{ record.fileSize }}",
+        "last_build_time_s": "{{ record.lastBuildTimeS }}",
+        "number_of_pending_tasks": "{{ record.numberOfPendingTasks }}",
+        "pending_task": "{{ record.pendingTask }}"
+      },
+      "schema": "schemas/indices.json"
+    },
+    {
+      "name": "api_keys",
+      "path": "/1/keys",
+      "records": { "path": "keys" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "max_hits_per_query": "{{ record.maxHitsPerQuery }}",
+        "max_queries_per_ip_per_hour": "{{ record.maxQueriesPerIPPerHour }}"
+      },
+      "schema": "schemas/api_keys.json"
+    },
+    {
+      "name": "index_settings",
+      "path": "/1/indexes/{{ config.index_name }}/settings",
+      "records": { "path": "." },
+      "computed_fields": {
+        "index_name": "{{ config.index_name }}",
+        "searchable_attributes": "{{ record.searchableAttributes }}",
+        "attributes_for_faceting": "{{ record.attributesForFaceting }}",
+        "custom_ranking": "{{ record.customRanking }}",
+        "hits_per_page": "{{ record.hitsPerPage }}",
+        "pagination_limited_to": "{{ record.paginationLimitedTo }}"
+      },
+      "schema": "schemas/index_settings.json"
+    },
+    {
+      "name": "vault_sources",
+      "path": "/1/security/sources",
+      "records": { "path": "." },
+      "schema": "schemas/vault_sources.json"
+    },
+    {
+      "name": "dictionary_settings",
+      "path": "/1/dictionaries/*/settings",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "dictionary_settings",
+        "disable_standard_entries": "{{ record.disableStandardEntries }}"
+      },
+      "schema": "schemas/dictionary_settings.json"
+    },
+    {
+      "name": "dictionary_languages",
+      "path": "/1/dictionaries/*/languages",
+      "records": { "path": ".", "keyed_object": true, "key_field": "language" },
+      "schema": "schemas/dictionary_languages.json"
+    },
+    {
+      "name": "logs",
+      "path": "/1/logs",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "length",
+        "page_size": 10
+      },
+      "records": { "path": "logs" },
+      "computed_fields": {
+        "id": "{{ record.sha1 }}"
+      },
+      "schema": "schemas/logs.json"
+    }
+  ]
+}

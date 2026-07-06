@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deals_id_events",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the deal event."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of event (stage_progression, deal_activity, note, etc.)."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes or description for the event."
+    },
+    "occurredAt": {
+      "type": "string",
+      "description": "When the event occurred.",
+      "format": "date-time"
+    },
+    "previousDealStage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "dealStage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "dealActivity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the deal activity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the deal activity."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the deal activity."
+        },
+        "icon": {
+          "type": "string",
+          "description": "The icon identifier for the activity."
+        },
+        "timelineTitleTemplate": {
+          "type": "string",
+          "description": "Template for the timeline title when this activity is used."
+        },
+        "timelineDescriptionTemplate": {
+          "type": "string",
+          "description": "Template for the timeline description when this activity is used."
+        },
+        "defaultWeight": {
+          "type": "number",
+          "description": "The default weight/probability impact of this activity (0-100).",
+          "format": "float"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The creation timestamp of the deal activity.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The last update timestamp of the deal activity.",
+          "format": "date-time"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "description": "The associated task.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "description": "The user who created/performed the event.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "timelineComment": {},
+    "createdAt": {
+      "type": "string",
+      "description": "When the event was created.",
+      "format": "date-time"
+    }
+  }
+}

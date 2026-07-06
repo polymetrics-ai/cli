@@ -103,6 +103,24 @@ CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
 
 </Tabs>
 
+## Binary size profile
+
+The default CGO-free `pm` build is still a single local binary. After the connector architecture v2 cleanup, production builds embed only runtime connector bundle files: metadata, connection specs, read/write declarations, schemas, and connector docs.
+
+| Build mode | Measured size | Use |
+|---|---:|---|
+| Default local build | 74,255,760 bytes (71 MiB) | Developer builds with normal Go symbol/debug data. |
+| Release-style stripped build | 59,172,752 bytes (56 MiB) | Recommended release profile: `go build -trimpath -ldflags="-s -w" ./cmd/pm`. |
+
+Conformance-only files are intentionally left out of the shipping binary:
+
+| Excluded artifact | Raw size | Why it is not embedded |
+|---|---:|---|
+| `fixtures/**` | 22,496,157 bytes | Used only by connector replay/conformance tests. |
+| `api_surface.json` | 7,045,880 bytes | Used only by authoring and conformance coverage checks. |
+
+`connectorgen validate` and conformance tests still read the full on-disk definition tree, so the smaller production binary does not weaken connector validation. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
+
 ## Release cadence
 
 Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer for a major release.

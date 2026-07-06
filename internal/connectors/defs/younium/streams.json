@@ -1,0 +1,107 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Younium-Legal-Entity": "{{ config.legal_entity }}"
+    },
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "check": { "method": "GET", "path": "/Accounts" },
+    "error_map": [
+      { "status": 401, "hint": "younium username/password is missing or invalid; re-run pm credentials add younium" },
+      { "status": 403, "hint": "younium account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "younium rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/Accounts",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.accountId }}",
+        "name": "{{ coalesce record.name record.accountName }}",
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/Subscriptions",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/Invoices",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.invoiceId }}",
+        "name": "{{ coalesce record.invoiceNumber record.number record.name }}",
+        "account_id": "{{ coalesce record.accountId record.account_id }}",
+        "updated_at": "{{ coalesce record.updated record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "products",
+      "path": "/Products",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.modified }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "payment_terms",
+      "path": "/PaymentTerms",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}"
+      },
+      "schema": "schemas/payment_terms.json"
+    },
+    {
+      "name": "currencies",
+      "path": "/Currency",
+      "pagination": { "type": "offset_limit", "limit_param": "Take", "offset_param": "Skip", "page_size": 100 },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.code }}"
+      },
+      "schema": "schemas/currencies.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/Webhooks",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.url }}"
+      },
+      "schema": "schemas/webhooks.json"
+    }
+  ]
+}

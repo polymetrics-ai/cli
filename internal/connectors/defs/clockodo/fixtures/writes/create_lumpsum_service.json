@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Lump Sum Service", "price": 100.0 },
+  "expect": { "method": "POST", "path": "/v2/lumpsumservices" }
+}

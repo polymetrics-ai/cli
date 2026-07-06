@@ -1,0 +1,23 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "amount": 12.34,
+    "date": "2026-01-01T00:00:00Z",
+    "timeOffTypeId": 1001,
+    "note": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employees/fixture_id/time_off/balance_adjustment",
+    "body": {
+      "amount": 12.34,
+      "date": "2026-01-01T00:00:00Z",
+      "timeOffTypeId": 1001,
+      "note": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

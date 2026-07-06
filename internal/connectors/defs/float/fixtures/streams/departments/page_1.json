@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/departments",
+    "query": {
+      "page": "1",
+      "per-page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "department_id": 1,
+        "name": "Engineering",
+        "parent_id": null
+      }
+    ]
+  }
+}

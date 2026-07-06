@@ -1,0 +1,26 @@
+{
+  "record": {
+    "purchase_order_line_item_id": 9988,
+    "booking_id": 2983,
+    "units": 10
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/booking_line_items",
+    "body": {
+      "purchase_order_line_item_id": 9988,
+      "booking_id": 2983,
+      "units": 10
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/purchase_orders/booking_line_item",
+        "id": 1234
+      }
+    }
+  }
+}

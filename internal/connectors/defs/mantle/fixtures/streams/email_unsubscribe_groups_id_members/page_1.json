@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/unsubscribe_groups/synthetic-conformance-value/members"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": {
+        "id": "id_fixture",
+        "email": "fixture@example.com",
+        "dateAdded": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

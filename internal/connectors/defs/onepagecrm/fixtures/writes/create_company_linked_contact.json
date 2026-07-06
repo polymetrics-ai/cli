@@ -1,0 +1,13 @@
+{
+  "record": {
+    "company_id": "fixture_id",
+    "contact_id": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/fixture_id/linked_contacts",
+    "body": {
+      "contact_id": "fixture_value"
+    }
+  }
+}

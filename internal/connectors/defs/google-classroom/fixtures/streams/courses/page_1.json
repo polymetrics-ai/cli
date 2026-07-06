@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "name": "fixture",
+      "section": "fixture",
+      "descriptionHeading": "fixture",
+      "description": "fixture",
+      "room": "fixture",
+      "ownerId": "fixture",
+      "creationTime": "fixture",
+      "updateTime": "fixture",
+      "enrollmentCode": "fixture",
+      "courseState": "fixture",
+      "alternateLink": "fixture",
+      "teacherGroupEmail": "fixture",
+      "courseGroupEmail": "fixture",
+      "guardiansEnabled": true,
+      "calendarId": "fixture"
+    }
+  ]
+}

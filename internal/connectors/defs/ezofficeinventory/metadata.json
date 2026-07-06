@@ -1,0 +1,24 @@
+{
+  "name": "ezofficeinventory",
+  "display_name": "EZOfficeInventory",
+  "description": "Reads and writes EZOfficeInventory assets, inventory items, stock assets, members, locations, groups, vendors, and purchase orders through the EZOfficeInventory REST API.",
+  "integration_type": "api",
+  "docs_url": "https://ezofficeinventory.com/developers",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external EZOfficeInventory API read of asset, inventory, member, location, group, vendor, and purchase order data",
+    "write": "external mutation of asset, member, location, group, vendor, and purchase order records; create/update only, no delete actions implemented",
+    "approval": "writes require approval; reads are unrestricted"
+  }
+}

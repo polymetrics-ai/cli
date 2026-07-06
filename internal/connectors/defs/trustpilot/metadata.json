@@ -1,0 +1,23 @@
+{
+  "name": "trustpilot",
+  "display_name": "Trustpilot",
+  "description": "Reads Trustpilot business-unit reviews, invitations, and business-unit profile metadata.",
+  "integration_type": "api",
+  "docs_url": "https://developers.trustpilot.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Trustpilot API read of business-unit reviews, invitations, and profile metadata",
+    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+  }
+}

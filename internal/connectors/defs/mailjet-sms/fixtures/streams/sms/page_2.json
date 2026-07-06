@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms",
+    "query": {
+      "Offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 1,
+      "Data": [
+        {
+          "ID": "sms_fixture_101",
+          "From": "MAILJETSMS",
+          "To": "+15550000101",
+          "MessageId": "msg_fixture_101",
+          "CreationTS": 1767225701,
+          "SentTS": 1767225702,
+          "SMSCount": 1,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        }
+      ]
+    }
+  }
+}

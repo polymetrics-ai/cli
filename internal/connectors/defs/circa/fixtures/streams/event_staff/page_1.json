@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ev_fixture_1", "name": "Fixture Event 1" }
+      ]
+    }
+  }
+}

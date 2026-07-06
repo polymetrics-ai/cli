@@ -7,26 +7,687 @@ description: Xero connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Xero accounting data (invoices, contacts, accounts, bank transactions, items, and payments) from the Xero Accounting API.
+Reads and writes Xero Accounting API resources through declarative JSON bundle streams and typed write actions.
+
+## Icon
+
+- asset: icons/xero.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.xero.com/documentation/
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- account_id
+- bank_transaction_id
+- bank_transfer_id
+- base_url
+- batch_payment_id
+- branding_theme_id
+- budget_id
+- contact_group_id
+- contact_id
+- contact_number
+- credit_note_id
+- expense_claim_id
+- invoice_id
+- item_id
+- journal_id
+- journal_number
+- linked_transaction_id
+- manual_journal_id
+- organisation_id
+- overpayment_id
+- payment_id
+- prepayment_id
+- purchase_order_id
+- purchase_order_number
+- quote_id
+- receipt_id
+- repeating_invoice_id
+- report_id
+- tax_type
+- tracking_category_id
+- user_id
+- access_token (secret)
+- tenant_id (secret)
+
+## ETL Streams
+
+- invoices:
+  - primary key: InvoiceID
+  - cursor: UpdatedDateUTC
+  - fields: AmountDue(), AmountPaid(), ContactID(), CurrencyCode(), Date(), DueDate(), InvoiceID(), InvoiceNumber(), LineAmountTypes(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), id(), status(), type(), updated_at()
+- contacts:
+  - primary key: ContactID
+  - cursor: UpdatedDateUTC
+  - fields: AccountNumber(), ContactID(), ContactStatus(), EmailAddress(), FirstName(), IsCustomer(), IsSupplier(), LastName(), Name(), UpdatedDateUTC(), id(), status(), updated_at()
+- accounts:
+  - primary key: AccountID
+  - cursor: UpdatedDateUTC
+  - fields: AccountID(), Class(), Code(), EnablePaymentsToAccount(), Name(), Status(), TaxType(), Type(), UpdatedDateUTC(), id(), status(), type(), updated_at()
+- bank_transactions:
+  - primary key: BankTransactionID
+  - cursor: UpdatedDateUTC
+  - fields: BankTransactionID(), ContactID(), CurrencyCode(), Date(), IsReconciled(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), id(), status(), type(), updated_at()
+- items:
+  - primary key: ItemID
+  - cursor: UpdatedDateUTC
+  - fields: Code(), Description(), IsPurchased(), IsSold(), IsTrackedAsInventory(), ItemID(), Name(), QuantityOnHand(), UpdatedDateUTC(), id(), updated_at()
+- payments:
+  - primary key: PaymentID
+  - cursor: UpdatedDateUTC
+  - fields: Amount(), CurrencyRate(), Date(), PaymentID(), PaymentType(), Reference(), Status(), UpdatedDateUTC(), id(), status(), updated_at()
+- account:
+  - primary key: AccountID
+  - fields: AccountID(), AddToWatchlist(), BankAccountNumber(), BankAccountType(), Class(), Code(), CurrencyCode(), Description(), EnablePaymentsToAccount(), HasAttachments(), Name(), ReportingCode(), ReportingCodeName(), ShowInExpenseClaims(), Status(), SystemAccount(), TaxType(), Type(), UpdatedDateUTC(), ValidationErrors(), account_id()
+- account_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), account_id()
+- bank_transaction:
+  - primary key: BankTransactionID
+  - fields: BankAccount(), BankTransactionID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), HasAttachments(), IsReconciled(), LineAmountTypes(), LineItems(), OverpaymentID(), PrepaymentID(), Reference(), Status(), StatusAttributeString(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), Url(), ValidationErrors(), bank_transaction_id()
+- bank_transaction_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), bank_transaction_id()
+- bank_transactions_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- bank_transfer:
+  - primary key: BankTransferID
+  - fields: Amount(), BankTransferID(), CreatedDateUTC(), CurrencyRate(), Date(), FromBankAccount(), FromBankTransactionID(), FromIsReconciled(), HasAttachments(), Reference(), ToBankAccount(), ToBankTransactionID(), ToIsReconciled(), ValidationErrors(), bank_transfer_id()
+- bank_transfer_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), bank_transfer_id()
+- bank_transfer_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- bank_transfers:
+  - primary key: BankTransferID
+  - fields: Amount(), BankTransferID(), CreatedDateUTC(), CurrencyRate(), Date(), FromBankAccount(), FromBankTransactionID(), FromIsReconciled(), HasAttachments(), Reference(), ToBankAccount(), ToBankTransactionID(), ToIsReconciled(), ValidationErrors()
+- batch_payment:
+  - primary key: BatchPaymentID
+  - fields: Account(), Amount(), BatchPaymentID(), Code(), Date(), DateString(), Details(), IsReconciled(), Narrative(), Particulars(), Payments(), Reference(), Status(), TotalAmount(), Type(), UpdatedDateUTC(), ValidationErrors(), batch_payment_id()
+- batch_payment_history:
+  - primary key: DateUTC
+  - fields: Changes(), DateUTC(), Details(), User()
+- batch_payments:
+  - primary key: BatchPaymentID
+  - fields: Account(), Amount(), BatchPaymentID(), Code(), Date(), DateString(), Details(), IsReconciled(), Narrative(), Particulars(), Payments(), Reference(), Status(), TotalAmount(), Type(), UpdatedDateUTC(), ValidationErrors()
+- branding_theme:
+  - primary key: BrandingThemeID
+  - fields: BrandingThemeID(), CreatedDateUTC(), LogoUrl(), Name(), SortOrder(), Type(), branding_theme_id()
+- branding_theme_payment_services:
+  - primary key: PaymentServiceID
+  - fields: PayNowText(), PaymentServiceID(), PaymentServiceName(), PaymentServiceType(), PaymentServiceUrl(), ValidationErrors(), branding_theme_id()
+- branding_themes:
+  - primary key: BrandingThemeID
+  - fields: BrandingThemeID(), CreatedDateUTC(), LogoUrl(), Name(), SortOrder(), Type()
+- budget:
+  - primary key: BudgetID
+  - fields: BudgetID(), BudgetLines(), Description(), Tracking(), Type(), UpdatedDateUTC(), budget_id()
+- budgets:
+  - primary key: BudgetID
+  - fields: BudgetID(), BudgetLines(), Description(), Tracking(), Type(), UpdatedDateUTC()
+- contact:
+  - primary key: ContactID
+  - fields: AccountNumber(), AccountsPayableTaxType(), AccountsReceivableTaxType(), Addresses(), Attachments(), Balances(), BankAccountDetails(), BatchPayments(), BrandingTheme(), CompanyNumber(), ContactGroups(), ContactID(), ContactNumber(), ContactPersons(), ContactStatus(), DefaultCurrency(), Discount(), EmailAddress(), FirstName(), HasAttachments(), HasValidationErrors(), IsCustomer(), IsSupplier(), LastName(), MergedToContactID(), Name(), PaymentTerms(), Phones(), PurchasesDefaultAccountCode(), PurchasesDefaultLineAmountType(), PurchasesTrackingCategories(), SalesDefaultAccountCode(), SalesDefaultLineAmountType(), SalesTrackingCategories(), StatusAttributeString(), TaxNumber(), TaxNumberType(), TrackingCategoryName(), TrackingCategoryOption(), UpdatedDateUTC(), ValidationErrors(), Website(), XeroNetworkKey(), contact_id()
+- contact_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), contact_id()
+- contact_by_contact_number:
+  - primary key: ContactID
+  - fields: AccountNumber(), AccountsPayableTaxType(), AccountsReceivableTaxType(), Addresses(), Attachments(), Balances(), BankAccountDetails(), BatchPayments(), BrandingTheme(), CompanyNumber(), ContactGroups(), ContactID(), ContactNumber(), ContactPersons(), ContactStatus(), DefaultCurrency(), Discount(), EmailAddress(), FirstName(), HasAttachments(), HasValidationErrors(), IsCustomer(), IsSupplier(), LastName(), MergedToContactID(), Name(), PaymentTerms(), Phones(), PurchasesDefaultAccountCode(), PurchasesDefaultLineAmountType(), PurchasesTrackingCategories(), SalesDefaultAccountCode(), SalesDefaultLineAmountType(), SalesTrackingCategories(), StatusAttributeString(), TaxNumber(), TaxNumberType(), TrackingCategoryName(), TrackingCategoryOption(), UpdatedDateUTC(), ValidationErrors(), Website(), XeroNetworkKey(), contact_number()
+- contact_cis_settings:
+  - primary key: contact_id
+  - fields: CISEnabled(), Rate(), contact_id()
+- contact_group:
+  - primary key: ContactGroupID
+  - fields: ContactGroupID(), Contacts(), Name(), Status(), contact_group_id()
+- contact_groups:
+  - primary key: ContactGroupID
+  - fields: ContactGroupID(), Contacts(), Name(), Status()
+- contact_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- credit_note:
+  - primary key: CreditNoteID
+  - fields: Allocations(), AppliedAmount(), BrandingThemeID(), CISDeduction(), CISRate(), Contact(), CreditNoteID(), CreditNoteNumber(), CurrencyCode(), CurrencyRate(), Date(), DueDate(), FullyPaidOnDate(), HasAttachments(), HasErrors(), InvoiceAddresses(), LineAmountTypes(), LineItems(), Payments(), Reference(), RemainingCredit(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), ValidationErrors(), Warnings(), credit_note_id()
+- credit_note_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), credit_note_id()
+- credit_note_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- credit_notes:
+  - primary key: CreditNoteID
+  - fields: Allocations(), AppliedAmount(), BrandingThemeID(), CISDeduction(), CISRate(), Contact(), CreditNoteID(), CreditNoteNumber(), CurrencyCode(), CurrencyRate(), Date(), DueDate(), FullyPaidOnDate(), HasAttachments(), HasErrors(), InvoiceAddresses(), LineAmountTypes(), LineItems(), Payments(), Reference(), RemainingCredit(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), ValidationErrors(), Warnings()
+- currencies:
+  - primary key: Code
+  - fields: Code(), Description()
+- expense_claim:
+  - primary key: ExpenseClaimID
+  - fields: AmountDue(), AmountPaid(), ExpenseClaimID(), PaymentDueDate(), Payments(), ReceiptID(), Receipts(), ReportingDate(), Status(), Total(), UpdatedDateUTC(), User(), expense_claim_id()
+- expense_claim_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- expense_claims:
+  - primary key: ExpenseClaimID
+  - fields: AmountDue(), AmountPaid(), ExpenseClaimID(), PaymentDueDate(), Payments(), ReceiptID(), Receipts(), ReportingDate(), Status(), Total(), UpdatedDateUTC(), User()
+- invoice:
+  - primary key: InvoiceID
+  - fields: AmountCredited(), AmountDue(), AmountPaid(), Attachments(), BrandingThemeID(), CISDeduction(), CISRate(), Contact(), CreditNotes(), CurrencyCode(), CurrencyRate(), Date(), DueDate(), ExpectedPaymentDate(), FullyPaidOnDate(), HasAttachments(), HasErrors(), InvoiceAddresses(), InvoiceID(), InvoiceNumber(), IsDiscounted(), LineAmountTypes(), LineItems(), Overpayments(), Payments(), PlannedPaymentDate(), Prepayments(), Reference(), RepeatingInvoiceID(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Total(), TotalDiscount(), TotalTax(), Type(), UpdatedDateUTC(), Url(), ValidationErrors(), Warnings(), invoice_id()
+- invoice_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), invoice_id()
+- invoice_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- invoice_reminders:
+  - primary key: Enabled
+  - fields: Enabled()
+- item:
+  - primary key: ItemID
+  - fields: Code(), Description(), InventoryAssetAccountCode(), IsPurchased(), IsSold(), IsTrackedAsInventory(), ItemID(), Name(), PurchaseDescription(), PurchaseDetails(), QuantityOnHand(), SalesDetails(), StatusAttributeString(), TotalCostPool(), UpdatedDateUTC(), ValidationErrors(), item_id()
+- item_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- journal:
+  - primary key: JournalID
+  - fields: CreatedDateUTC(), JournalDate(), JournalID(), JournalLines(), JournalNumber(), Reference(), SourceID(), SourceType(), journal_id()
+- journal_by_number:
+  - primary key: JournalID
+  - fields: CreatedDateUTC(), JournalDate(), JournalID(), JournalLines(), JournalNumber(), Reference(), SourceID(), SourceType(), journal_number()
+- journals:
+  - primary key: JournalID
+  - fields: CreatedDateUTC(), JournalDate(), JournalID(), JournalLines(), JournalNumber(), Reference(), SourceID(), SourceType()
+- linked_transaction:
+  - primary key: ContactID
+  - fields: ContactID(), LinkedTransactionID(), SourceLineItemID(), SourceTransactionID(), SourceTransactionTypeCode(), Status(), TargetLineItemID(), TargetTransactionID(), Type(), UpdatedDateUTC(), ValidationErrors(), linked_transaction_id()
+- linked_transactions:
+  - primary key: ContactID
+  - fields: ContactID(), LinkedTransactionID(), SourceLineItemID(), SourceTransactionID(), SourceTransactionTypeCode(), Status(), TargetLineItemID(), TargetTransactionID(), Type(), UpdatedDateUTC(), ValidationErrors()
+- manual_journal:
+  - primary key: ManualJournalID
+  - fields: Attachments(), Date(), HasAttachments(), JournalLines(), LineAmountTypes(), ManualJournalID(), Narration(), ShowOnCashBasisReports(), Status(), StatusAttributeString(), UpdatedDateUTC(), Url(), ValidationErrors(), Warnings(), manual_journal_id()
+- manual_journal_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), manual_journal_id()
+- manual_journals:
+  - primary key: ManualJournalID
+  - fields: Attachments(), Date(), HasAttachments(), JournalLines(), LineAmountTypes(), ManualJournalID(), Narration(), ShowOnCashBasisReports(), Status(), StatusAttributeString(), UpdatedDateUTC(), Url(), ValidationErrors(), Warnings()
+- manual_journals_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- online_invoice:
+  - primary key: invoice_id
+  - fields: OnlineInvoiceUrl(), invoice_id()
+- organisation_actions:
+  - primary key: Name
+  - fields: Name(), Status()
+- organisation_cis_settings:
+  - primary key: organisation_id
+  - fields: CISContractorEnabled(), CISSubContractorEnabled(), Rate(), organisation_id()
+- organisations:
+  - primary key: OrganisationID
+  - fields: APIKey(), Addresses(), BaseCurrency(), Class(), CountryCode(), CreatedDateUTC(), DefaultPurchasesTax(), DefaultSalesTax(), Edition(), EmployerIdentificationNumber(), EndOfYearLockDate(), ExternalLinks(), FinancialYearEndDay(), FinancialYearEndMonth(), IsDemoCompany(), LegalName(), LineOfBusiness(), Name(), OrganisationEntityType(), OrganisationID(), OrganisationStatus(), OrganisationType(), PaymentTerms(), PaysTax(), PeriodLockDate(), Phones(), RegistrationNumber(), SalesTaxBasis(), SalesTaxPeriod(), ShortCode(), TaxNumber(), Timezone(), Version()
+- overpayment:
+  - primary key: CurrencyCode
+  - fields: Allocations(), AppliedAmount(), Attachments(), Contact(), CurrencyCode(), CurrencyRate(), Date(), HasAttachments(), LineAmountTypes(), LineItems(), OverpaymentID(), Payments(), Reference(), RemainingCredit(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), overpayment_id()
+- overpayment_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- overpayments:
+  - primary key: CurrencyCode
+  - fields: Allocations(), AppliedAmount(), Attachments(), Contact(), CurrencyCode(), CurrencyRate(), Date(), HasAttachments(), LineAmountTypes(), LineItems(), OverpaymentID(), Payments(), Reference(), RemainingCredit(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC()
+- payment:
+  - primary key: PaymentID
+  - fields: Account(), Amount(), BankAccountNumber(), BankAmount(), BatchPayment(), BatchPaymentID(), Code(), CreditNote(), CreditNoteNumber(), CurrencyRate(), Date(), Details(), HasAccount(), HasValidationErrors(), Invoice(), InvoiceNumber(), IsReconciled(), Overpayment(), Particulars(), PaymentID(), PaymentType(), Prepayment(), Reference(), Status(), StatusAttributeString(), UpdatedDateUTC(), ValidationErrors(), Warnings(), payment_id()
+- payment_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- payment_services:
+  - primary key: PaymentServiceID
+  - fields: PayNowText(), PaymentServiceID(), PaymentServiceName(), PaymentServiceType(), PaymentServiceUrl(), ValidationErrors()
+- prepayment:
+  - primary key: BrandingThemeID
+  - fields: Allocations(), AppliedAmount(), Attachments(), BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), HasAttachments(), InvoiceNumber(), LineAmountTypes(), LineItems(), Payments(), PrepaymentID(), Reference(), RemainingCredit(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC(), prepayment_id()
+- prepayment_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- prepayments:
+  - primary key: BrandingThemeID
+  - fields: Allocations(), AppliedAmount(), Attachments(), BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), HasAttachments(), InvoiceNumber(), LineAmountTypes(), LineItems(), Payments(), PrepaymentID(), Reference(), RemainingCredit(), Status(), SubTotal(), Total(), TotalTax(), Type(), UpdatedDateUTC()
+- purchase_order:
+  - primary key: PurchaseOrderID
+  - fields: Attachments(), AttentionTo(), BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), DeliveryAddress(), DeliveryDate(), DeliveryInstructions(), ExpectedArrivalDate(), HasAttachments(), LineAmountTypes(), LineItems(), PurchaseOrderID(), PurchaseOrderNumber(), Reference(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Telephone(), Total(), TotalDiscount(), TotalTax(), UpdatedDateUTC(), ValidationErrors(), Warnings(), purchase_order_id()
+- purchase_order_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), purchase_order_id()
+- purchase_order_by_number:
+  - primary key: PurchaseOrderID
+  - fields: Attachments(), AttentionTo(), BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), DeliveryAddress(), DeliveryDate(), DeliveryInstructions(), ExpectedArrivalDate(), HasAttachments(), LineAmountTypes(), LineItems(), PurchaseOrderID(), PurchaseOrderNumber(), Reference(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Telephone(), Total(), TotalDiscount(), TotalTax(), UpdatedDateUTC(), ValidationErrors(), Warnings(), purchase_order_number()
+- purchase_order_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- purchase_orders:
+  - primary key: PurchaseOrderID
+  - fields: Attachments(), AttentionTo(), BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), DeliveryAddress(), DeliveryDate(), DeliveryInstructions(), ExpectedArrivalDate(), HasAttachments(), LineAmountTypes(), LineItems(), PurchaseOrderID(), PurchaseOrderNumber(), Reference(), SentToContact(), Status(), StatusAttributeString(), SubTotal(), Telephone(), Total(), TotalDiscount(), TotalTax(), UpdatedDateUTC(), ValidationErrors(), Warnings()
+- quote:
+  - primary key: QuoteID
+  - fields: BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), DateString(), ExpiryDate(), ExpiryDateString(), LineAmountTypes(), LineItems(), QuoteID(), QuoteNumber(), Reference(), Status(), StatusAttributeString(), SubTotal(), Summary(), Terms(), Title(), Total(), TotalDiscount(), TotalTax(), UpdatedDateUTC(), ValidationErrors(), quote_id()
+- quote_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), quote_id()
+- quote_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- quotes:
+  - primary key: QuoteID
+  - fields: BrandingThemeID(), Contact(), CurrencyCode(), CurrencyRate(), Date(), DateString(), ExpiryDate(), ExpiryDateString(), LineAmountTypes(), LineItems(), QuoteID(), QuoteNumber(), Reference(), Status(), StatusAttributeString(), SubTotal(), Summary(), Terms(), Title(), Total(), TotalDiscount(), TotalTax(), UpdatedDateUTC(), ValidationErrors()
+- receipt:
+  - primary key: ReceiptID
+  - fields: Attachments(), Contact(), Date(), HasAttachments(), LineAmountTypes(), LineItems(), ReceiptID(), ReceiptNumber(), Reference(), Status(), SubTotal(), Total(), TotalTax(), UpdatedDateUTC(), Url(), User(), ValidationErrors(), Warnings(), receipt_id()
+- receipt_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), receipt_id()
+- receipt_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- receipts:
+  - primary key: ReceiptID
+  - fields: Attachments(), Contact(), Date(), HasAttachments(), LineAmountTypes(), LineItems(), ReceiptID(), ReceiptNumber(), Reference(), Status(), SubTotal(), Total(), TotalTax(), UpdatedDateUTC(), Url(), User(), ValidationErrors(), Warnings()
+- repeating_invoice:
+  - primary key: ID
+  - fields: ApprovedForSending(), Attachments(), BrandingThemeID(), Contact(), CurrencyCode(), HasAttachments(), ID(), IncludePDF(), LineAmountTypes(), LineItems(), MarkAsSent(), Reference(), RepeatingInvoiceID(), Schedule(), SendCopy(), Status(), SubTotal(), Total(), TotalTax(), Type(), repeating_invoice_id()
+- repeating_invoice_attachments:
+  - primary key: AttachmentID
+  - fields: AttachmentID(), ContentLength(), FileName(), IncludeOnline(), MimeType(), Url(), repeating_invoice_id()
+- repeating_invoice_history:
+  - primary key: DateUTC
+  - fields: DateUTC()
+- repeating_invoices:
+  - primary key: ID
+  - fields: ApprovedForSending(), Attachments(), BrandingThemeID(), Contact(), CurrencyCode(), HasAttachments(), ID(), IncludePDF(), LineAmountTypes(), LineItems(), MarkAsSent(), Reference(), RepeatingInvoiceID(), Schedule(), SendCopy(), Status(), SubTotal(), Total(), TotalTax(), Type()
+- report_aged_payables_by_contact:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_aged_receivables_by_contact:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_balance_sheet:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_bank_summary:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_budget_summary:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_executive_summary:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_from_id:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC(), report_id()
+- report_profit_and_loss:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- report_ten_ninety_nine:
+  - primary key: ReportName
+  - fields: Contacts(), ReportDate(), ReportName(), ReportTitle(), ReportType(), UpdatedDateUTC()
+- report_trial_balance:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- reports_list:
+  - primary key: ReportID
+  - fields: Fields(), ReportDate(), ReportID(), ReportName(), ReportTitle(), ReportTitles(), ReportType(), Rows(), UpdatedDateUTC()
+- tax_rate_by_tax_type:
+  - primary key: TaxType
+  - fields: CanApplyToAssets(), CanApplyToEquity(), CanApplyToExpenses(), CanApplyToLiabilities(), CanApplyToRevenue(), DisplayTaxRate(), EffectiveRate(), Name(), ReportTaxType(), Status(), TaxComponents(), TaxType(), tax_type()
+- tax_rates:
+  - primary key: TaxType
+  - fields: CanApplyToAssets(), CanApplyToEquity(), CanApplyToExpenses(), CanApplyToLiabilities(), CanApplyToRevenue(), DisplayTaxRate(), EffectiveRate(), Name(), ReportTaxType(), Status(), TaxComponents(), TaxType()
+- tracking_categories:
+  - primary key: TrackingCategoryID
+  - fields: Name(), Option(), Options(), Status(), TrackingCategoryID(), TrackingOptionID()
+- tracking_category:
+  - primary key: TrackingCategoryID
+  - fields: Name(), Option(), Options(), Status(), TrackingCategoryID(), TrackingOptionID(), tracking_category_id()
+- user:
+  - primary key: UserID
+  - fields: EmailAddress(), FirstName(), IsSubscriber(), LastName(), OrganisationRole(), UpdatedDateUTC(), UserID(), user_id()
+- users:
+  - primary key: UserID
+  - fields: EmailAddress(), FirstName(), IsSubscriber(), LastName(), OrganisationRole(), UpdatedDateUTC(), UserID()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Reverse ETL Actions
+
+- create_account:
+  - endpoint: PUT Accounts
+  - risk: creates Xero account resources in the connected tenant; approval required
+- delete_account:
+  - endpoint: DELETE Accounts/{{ record.account_id }}
+  - required fields: account_id
+  - risk: deletes Xero account resources in the connected tenant; approval required
+- update_account:
+  - endpoint: POST Accounts/{{ record.account_id }}
+  - required fields: account_id
+  - risk: mutates Xero account resources in the connected tenant; approval required
+- upsert_bank_transactions:
+  - endpoint: POST BankTransactions
+  - risk: mutates Xero bank transactions resources in the connected tenant; approval required
+- create_bank_transactions:
+  - endpoint: PUT BankTransactions
+  - risk: creates Xero bank transactions resources in the connected tenant; approval required
+- update_bank_transaction:
+  - endpoint: POST BankTransactions/{{ record.bank_transaction_id }}
+  - required fields: bank_transaction_id
+  - risk: mutates Xero bank transaction resources in the connected tenant; approval required
+- create_bank_transaction_history_record:
+  - endpoint: PUT BankTransactions/{{ record.bank_transaction_id }}/History
+  - required fields: bank_transaction_id
+  - risk: creates Xero bank transaction history record resources in the connected tenant; approval required
+- create_bank_transfer:
+  - endpoint: PUT BankTransfers
+  - risk: creates Xero bank transfer resources in the connected tenant; approval required
+- create_bank_transfer_history_record:
+  - endpoint: PUT BankTransfers/{{ record.bank_transfer_id }}/History
+  - required fields: bank_transfer_id
+  - risk: creates Xero bank transfer history record resources in the connected tenant; approval required
+- delete_batch_payment:
+  - endpoint: POST BatchPayments
+  - risk: deletes Xero batch payment resources in the connected tenant; approval required
+- create_batch_payment:
+  - endpoint: PUT BatchPayments
+  - risk: creates Xero batch payment resources in the connected tenant; approval required
+- delete_batch_payment_by_url_param:
+  - endpoint: POST BatchPayments/{{ record.batch_payment_id }}
+  - required fields: batch_payment_id
+  - risk: deletes Xero batch payment by url param resources in the connected tenant; approval required
+- create_batch_payment_history_record:
+  - endpoint: PUT BatchPayments/{{ record.batch_payment_id }}/History
+  - required fields: batch_payment_id
+  - risk: creates Xero batch payment history record resources in the connected tenant; approval required
+- create_branding_theme_payment_services:
+  - endpoint: POST BrandingThemes/{{ record.branding_theme_id }}/PaymentServices
+  - required fields: branding_theme_id
+  - risk: creates Xero branding theme payment services resources in the connected tenant; approval required
+- create_contact_group:
+  - endpoint: PUT ContactGroups
+  - risk: creates Xero contact group resources in the connected tenant; approval required
+- update_contact_group:
+  - endpoint: POST ContactGroups/{{ record.contact_group_id }}
+  - required fields: contact_group_id
+  - risk: mutates Xero contact group resources in the connected tenant; approval required
+- delete_contact_group_contacts:
+  - endpoint: DELETE ContactGroups/{{ record.contact_group_id }}/Contacts
+  - required fields: contact_group_id
+  - risk: deletes Xero contact group contacts resources in the connected tenant; approval required
+- create_contact_group_contacts:
+  - endpoint: PUT ContactGroups/{{ record.contact_group_id }}/Contacts
+  - required fields: contact_group_id
+  - risk: creates Xero contact group contacts resources in the connected tenant; approval required
+- delete_contact_group_contact:
+  - endpoint: DELETE ContactGroups/{{ record.contact_group_id }}/Contacts/{{ record.contact_id }}
+  - required fields: contact_group_id, contact_id
+  - risk: deletes Xero contact group contact resources in the connected tenant; approval required
+- upsert_contacts:
+  - endpoint: POST Contacts
+  - risk: mutates Xero contacts resources in the connected tenant; approval required
+- create_contacts:
+  - endpoint: PUT Contacts
+  - risk: creates Xero contacts resources in the connected tenant; approval required
+- update_contact:
+  - endpoint: POST Contacts/{{ record.contact_id }}
+  - required fields: contact_id
+  - risk: mutates Xero contact resources in the connected tenant; approval required
+- create_contact_history:
+  - endpoint: PUT Contacts/{{ record.contact_id }}/History
+  - required fields: contact_id
+  - risk: creates Xero contact history resources in the connected tenant; approval required
+- upsert_credit_notes:
+  - endpoint: POST CreditNotes
+  - risk: mutates Xero credit notes resources in the connected tenant; approval required
+- create_credit_notes:
+  - endpoint: PUT CreditNotes
+  - risk: creates Xero credit notes resources in the connected tenant; approval required
+- update_credit_note:
+  - endpoint: POST CreditNotes/{{ record.credit_note_id }}
+  - required fields: credit_note_id
+  - risk: mutates Xero credit note resources in the connected tenant; approval required
+- create_credit_note_allocation:
+  - endpoint: PUT CreditNotes/{{ record.credit_note_id }}/Allocations
+  - required fields: credit_note_id
+  - risk: creates Xero credit note allocation resources in the connected tenant; approval required
+- delete_credit_note_allocations:
+  - endpoint: DELETE CreditNotes/{{ record.credit_note_id }}/Allocations/{{ record.allocation_id }}
+  - required fields: credit_note_id, allocation_id
+  - risk: deletes Xero credit note allocations resources in the connected tenant; approval required
+- create_credit_note_history:
+  - endpoint: PUT CreditNotes/{{ record.credit_note_id }}/History
+  - required fields: credit_note_id
+  - risk: creates Xero credit note history resources in the connected tenant; approval required
+- create_currency:
+  - endpoint: PUT Currencies
+  - risk: creates Xero currency resources in the connected tenant; approval required
+- create_expense_claims:
+  - endpoint: PUT ExpenseClaims
+  - risk: creates Xero expense claims resources in the connected tenant; approval required
+- update_expense_claim:
+  - endpoint: POST ExpenseClaims/{{ record.expense_claim_id }}
+  - required fields: expense_claim_id
+  - risk: mutates Xero expense claim resources in the connected tenant; approval required
+- create_expense_claim_history:
+  - endpoint: PUT ExpenseClaims/{{ record.expense_claim_id }}/History
+  - required fields: expense_claim_id
+  - risk: creates Xero expense claim history resources in the connected tenant; approval required
+- upsert_invoices:
+  - endpoint: POST Invoices
+  - risk: mutates Xero invoices resources in the connected tenant; approval required
+- create_invoices:
+  - endpoint: PUT Invoices
+  - risk: creates Xero invoices resources in the connected tenant; approval required
+- update_invoice:
+  - endpoint: POST Invoices/{{ record.invoice_id }}
+  - required fields: invoice_id
+  - risk: mutates Xero invoice resources in the connected tenant; approval required
+- email_invoice:
+  - endpoint: POST Invoices/{{ record.invoice_id }}/Email
+  - required fields: invoice_id
+  - risk: executes Xero email invoice resources in the connected tenant; approval required
+- create_invoice_history:
+  - endpoint: PUT Invoices/{{ record.invoice_id }}/History
+  - required fields: invoice_id
+  - risk: creates Xero invoice history resources in the connected tenant; approval required
+- upsert_items:
+  - endpoint: POST Items
+  - risk: mutates Xero items resources in the connected tenant; approval required
+- create_items:
+  - endpoint: PUT Items
+  - risk: creates Xero items resources in the connected tenant; approval required
+- delete_item:
+  - endpoint: DELETE Items/{{ record.item_id }}
+  - required fields: item_id
+  - risk: deletes Xero item resources in the connected tenant; approval required
+- update_item:
+  - endpoint: POST Items/{{ record.item_id }}
+  - required fields: item_id
+  - risk: mutates Xero item resources in the connected tenant; approval required
+- create_item_history:
+  - endpoint: PUT Items/{{ record.item_id }}/History
+  - required fields: item_id
+  - risk: creates Xero item history resources in the connected tenant; approval required
+- create_linked_transaction:
+  - endpoint: PUT LinkedTransactions
+  - risk: creates Xero linked transaction resources in the connected tenant; approval required
+- delete_linked_transaction:
+  - endpoint: DELETE LinkedTransactions/{{ record.linked_transaction_id }}
+  - required fields: linked_transaction_id
+  - risk: deletes Xero linked transaction resources in the connected tenant; approval required
+- update_linked_transaction:
+  - endpoint: POST LinkedTransactions/{{ record.linked_transaction_id }}
+  - required fields: linked_transaction_id
+  - risk: mutates Xero linked transaction resources in the connected tenant; approval required
+- upsert_manual_journals:
+  - endpoint: POST ManualJournals
+  - risk: mutates Xero manual journals resources in the connected tenant; approval required
+- create_manual_journals:
+  - endpoint: PUT ManualJournals
+  - risk: creates Xero manual journals resources in the connected tenant; approval required
+- update_manual_journal:
+  - endpoint: POST ManualJournals/{{ record.manual_journal_id }}
+  - required fields: manual_journal_id
+  - risk: mutates Xero manual journal resources in the connected tenant; approval required
+- create_manual_journal_history_record:
+  - endpoint: PUT ManualJournals/{{ record.manual_journal_id }}/History
+  - required fields: manual_journal_id
+  - risk: creates Xero manual journal history record resources in the connected tenant; approval required
+- create_overpayment_allocations:
+  - endpoint: PUT Overpayments/{{ record.overpayment_id }}/Allocations
+  - required fields: overpayment_id
+  - risk: creates Xero overpayment allocations resources in the connected tenant; approval required
+- delete_overpayment_allocations:
+  - endpoint: DELETE Overpayments/{{ record.overpayment_id }}/Allocations/{{ record.allocation_id }}
+  - required fields: overpayment_id, allocation_id
+  - risk: deletes Xero overpayment allocations resources in the connected tenant; approval required
+- create_overpayment_history:
+  - endpoint: PUT Overpayments/{{ record.overpayment_id }}/History
+  - required fields: overpayment_id
+  - risk: creates Xero overpayment history resources in the connected tenant; approval required
+- create_payment:
+  - endpoint: POST Payments
+  - risk: creates Xero payment resources in the connected tenant; approval required
+- create_payments:
+  - endpoint: PUT Payments
+  - risk: creates Xero payments resources in the connected tenant; approval required
+- delete_payment:
+  - endpoint: POST Payments/{{ record.payment_id }}
+  - required fields: payment_id
+  - risk: deletes Xero payment resources in the connected tenant; approval required
+- create_payment_history:
+  - endpoint: PUT Payments/{{ record.payment_id }}/History
+  - required fields: payment_id
+  - risk: creates Xero payment history resources in the connected tenant; approval required
+- create_payment_service:
+  - endpoint: PUT PaymentServices
+  - risk: creates Xero payment service resources in the connected tenant; approval required
+- create_prepayment_allocations:
+  - endpoint: PUT Prepayments/{{ record.prepayment_id }}/Allocations
+  - required fields: prepayment_id
+  - risk: creates Xero prepayment allocations resources in the connected tenant; approval required
+- delete_prepayment_allocations:
+  - endpoint: DELETE Prepayments/{{ record.prepayment_id }}/Allocations/{{ record.allocation_id }}
+  - required fields: prepayment_id, allocation_id
+  - risk: deletes Xero prepayment allocations resources in the connected tenant; approval required
+- create_prepayment_history:
+  - endpoint: PUT Prepayments/{{ record.prepayment_id }}/History
+  - required fields: prepayment_id
+  - risk: creates Xero prepayment history resources in the connected tenant; approval required
+- upsert_purchase_orders:
+  - endpoint: POST PurchaseOrders
+  - risk: mutates Xero purchase orders resources in the connected tenant; approval required
+- create_purchase_orders:
+  - endpoint: PUT PurchaseOrders
+  - risk: creates Xero purchase orders resources in the connected tenant; approval required
+- update_purchase_order:
+  - endpoint: POST PurchaseOrders/{{ record.purchase_order_id }}
+  - required fields: purchase_order_id
+  - risk: mutates Xero purchase order resources in the connected tenant; approval required
+- create_purchase_order_history:
+  - endpoint: PUT PurchaseOrders/{{ record.purchase_order_id }}/History
+  - required fields: purchase_order_id
+  - risk: creates Xero purchase order history resources in the connected tenant; approval required
+- upsert_quotes:
+  - endpoint: POST Quotes
+  - risk: mutates Xero quotes resources in the connected tenant; approval required
+- create_quotes:
+  - endpoint: PUT Quotes
+  - risk: creates Xero quotes resources in the connected tenant; approval required
+- update_quote:
+  - endpoint: POST Quotes/{{ record.quote_id }}
+  - required fields: quote_id
+  - risk: mutates Xero quote resources in the connected tenant; approval required
+- create_quote_history:
+  - endpoint: PUT Quotes/{{ record.quote_id }}/History
+  - required fields: quote_id
+  - risk: creates Xero quote history resources in the connected tenant; approval required
+- create_receipt:
+  - endpoint: PUT Receipts
+  - risk: creates Xero receipt resources in the connected tenant; approval required
+- update_receipt:
+  - endpoint: POST Receipts/{{ record.receipt_id }}
+  - required fields: receipt_id
+  - risk: mutates Xero receipt resources in the connected tenant; approval required
+- create_receipt_history:
+  - endpoint: PUT Receipts/{{ record.receipt_id }}/History
+  - required fields: receipt_id
+  - risk: creates Xero receipt history resources in the connected tenant; approval required
+- upsert_repeating_invoices:
+  - endpoint: POST RepeatingInvoices
+  - risk: mutates Xero repeating invoices resources in the connected tenant; approval required
+- create_repeating_invoices:
+  - endpoint: PUT RepeatingInvoices
+  - risk: creates Xero repeating invoices resources in the connected tenant; approval required
+- update_repeating_invoice:
+  - endpoint: POST RepeatingInvoices/{{ record.repeating_invoice_id }}
+  - required fields: repeating_invoice_id
+  - risk: mutates Xero repeating invoice resources in the connected tenant; approval required
+- create_repeating_invoice_history:
+  - endpoint: PUT RepeatingInvoices/{{ record.repeating_invoice_id }}/History
+  - required fields: repeating_invoice_id
+  - risk: creates Xero repeating invoice history resources in the connected tenant; approval required
+- setup_organisation:
+  - endpoint: POST Setup
+  - risk: mutates Xero setup resources in the connected tenant; approval required
+- update_tax_rate:
+  - endpoint: POST TaxRates
+  - risk: mutates Xero tax rate resources in the connected tenant; approval required
+- create_tax_rates:
+  - endpoint: PUT TaxRates
+  - risk: creates Xero tax rates resources in the connected tenant; approval required
+- create_tracking_category:
+  - endpoint: PUT TrackingCategories
+  - risk: creates Xero tracking category resources in the connected tenant; approval required
+- delete_tracking_category:
+  - endpoint: DELETE TrackingCategories/{{ record.tracking_category_id }}
+  - required fields: tracking_category_id
+  - risk: deletes Xero tracking category resources in the connected tenant; approval required
+- update_tracking_category:
+  - endpoint: POST TrackingCategories/{{ record.tracking_category_id }}
+  - required fields: tracking_category_id
+  - risk: mutates Xero tracking category resources in the connected tenant; approval required
+- create_tracking_options:
+  - endpoint: PUT TrackingCategories/{{ record.tracking_category_id }}/Options
+  - required fields: tracking_category_id
+  - risk: creates Xero tracking options resources in the connected tenant; approval required
+- delete_tracking_options:
+  - endpoint: DELETE TrackingCategories/{{ record.tracking_category_id }}/Options/{{ record.tracking_option_id }}
+  - required fields: tracking_category_id, tracking_option_id
+  - risk: deletes Xero tracking options resources in the connected tenant; approval required
+- update_tracking_options:
+  - endpoint: POST TrackingCategories/{{ record.tracking_category_id }}/Options/{{ record.tracking_option_id }}
+  - required fields: tracking_category_id, tracking_option_id
+  - risk: mutates Xero tracking options resources in the connected tenant; approval required
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Xero Accounting API read of financial, contact, report, attachment-metadata, history, and organisation data
+- write risk: creates, updates, emails, sets up, and deletes Xero Accounting API resources in the connected tenant
+- approval: reverse ETL writes require plan preview and approval token; delete actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +709,4 @@ pm connectors inspect xero --json
 - Run pm connectors inspect xero before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

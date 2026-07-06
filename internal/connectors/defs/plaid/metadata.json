@@ -1,0 +1,27 @@
+{
+  "name": "plaid",
+  "display_name": "Plaid",
+  "description": "Reads Plaid institutions and category metadata through read-only POST endpoints. All credentials and pagination/filter state travel in the JSON request body (Plaid's own convention), driven by a StreamHook.",
+  "integration_type": "api",
+  "docs_url": "https://plaid.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Plaid API read of institution/category metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "StreamHook-driven, in-body pagination and credentials (AUTH_COMPLEX, quarantine.json: 'Plaid's entire API is POST-only with ALL credentials ... and ALL pagination/filter state ... carried in the JSON request body, never in headers or query params'); the engine's declarative read path (engine/read.go's readDeclarative) always calls Requester.Do with a nil body, so a fixture replay keyed on query-string/header matching cannot represent a body-carried request at all -- hook-covered, proven live by internal/connectors/hooks/plaid's own unit tests (real httptest.Server driving the StreamHook's POST body construction and pagination) and internal/connectors/plaid_test.go's pre-existing legacy parity coverage"
+  }
+}

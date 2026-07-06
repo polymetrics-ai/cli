@@ -1,0 +1,8 @@
+{
+  "name": "acme",
+  "display_name": "Acme",
+  "description": "conformance v2 self-test control bundle (synthetic, not a real API)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false }
+}

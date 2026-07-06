@@ -1,0 +1,23 @@
+{
+  "name": "aircall",
+  "display_name": "Aircall",
+  "description": "Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and writes user/team/contact/tag/webhook mutations plus call archive/comment/tag actions, through the Aircall REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.aircall.io/api-references/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Aircall API read of call, contact, and directory data",
+    "write": "external Aircall API mutation of agents, teams, contacts, tags, webhooks, and call archive/comment/tag state; approval required for user/team/contact/webhook create-update-delete, low-risk for additive call tagging/commenting"
+  }
+}

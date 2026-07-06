@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "org_1",
+        "name": "Fixture Org 1",
+        "url": "https://dashboard.meraki.com/o/fixture_1",
+        "api": { "enabled": true },
+        "cloud": { "region": { "name": "North America" } },
+        "licensing": { "model": "co-term" },
+        "management": { "details": [] }
+      },
+      {
+        "id": "org_2",
+        "name": "Fixture Org 2",
+        "url": "https://dashboard.meraki.com/o/fixture_2",
+        "api": { "enabled": true },
+        "cloud": { "region": { "name": "North America" } },
+        "licensing": { "model": "co-term" },
+        "management": { "details": [] }
+      }
+    ]
+  }
+}

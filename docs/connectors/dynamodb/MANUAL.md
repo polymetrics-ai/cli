@@ -10,11 +10,17 @@ SYNOPSIS
   pm credentials add <name> --connector dynamodb [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads DynamoDB table items through the AWS JSON HTTP API without an SDK.
+  Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.
+
+ICON
+  asset: icons/dynamodb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
-  Integration type: api
+  Integration type: database
 
 AUTHENTICATION
   No secret authentication is required for this connector.

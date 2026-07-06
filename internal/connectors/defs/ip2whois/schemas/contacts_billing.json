@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts_billing",
+  "type": "object",
+  "x-primary-key": ["domain", "role"],
+  "required": ["domain", "role"],
+  "properties": {
+    "domain": { "type": "string" },
+    "role": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "organization": { "type": ["string", "null"] },
+    "street_address": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "zip_code": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "fax": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] }
+  }
+}

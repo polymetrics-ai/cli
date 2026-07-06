@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/locations", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idlocation": 1,
+        "idwarehouse": 501,
+        "parent_idlocation": null,
+        "type": "location",
+        "name": "A1",
+        "remarks": null,
+        "unlink_on_empty": false,
+        "location_type": { "idlocation_type": 1, "name": "Standard", "default": true, "color": "#1E90FF" },
+        "is_bulk_location": false,
+        "is_exclusive_location": false
+      }
+    ]
+  }
+}

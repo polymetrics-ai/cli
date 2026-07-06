@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture create_lead_custom_field",
+    "type": "text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/customfield",
+    "body": {
+      "name": "Fixture create_lead_custom_field",
+      "type": "text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

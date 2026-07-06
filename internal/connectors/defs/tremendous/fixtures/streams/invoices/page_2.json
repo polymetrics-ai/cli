@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/invoices",
+    "query": {
+      "offset": "100",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        {
+          "id": "INV-0101",
+          "po_number": "123-PO-FIXTURE",
+          "amount": 75.5,
+          "currency_code": "USD",
+          "international": false,
+          "status": "OPEN",
+          "orders": [],
+          "rewards": [],
+          "created_at": "2026-01-02T00:00:00Z",
+          "paid_at": null
+        }
+      ],
+      "total_count": 101
+    }
+  }
+}

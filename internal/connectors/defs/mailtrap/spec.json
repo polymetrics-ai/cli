@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailtrap Connection Specification",
+  "type": "object",
+  "required": ["api_token"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mailtrap API token, sent as a Bearer token (Authorization: Bearer <api_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://mailtrap.io/api",
+      "description": "Mailtrap API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Mailtrap account id; required for account-scoped streams (inboxes, projects, sending_domains), substituted into the account-scoped path."
+    }
+  }
+}

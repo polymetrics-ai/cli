@@ -1,0 +1,129 @@
+{
+  "api": "StockData API v1 (https://api.stockdata.org/v1)",
+  "docs": "https://www.stockdata.org/documentation",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B reviewed the live HTML documentation and found 16 documented GET endpoints, all read-only. The bundle covers every object/list GET endpoint plus the legacy-only /v1/data/tickers stream; scalar reference-list endpoints are excluded as non-data/reference endpoints. No documented POST/PUT/PATCH/DELETE endpoints are present.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/data/tickers",
+      "covered_by": {
+        "stream": "tickers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/eod",
+      "covered_by": {
+        "stream": "eod_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/intraday",
+      "covered_by": {
+        "stream": "intraday_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/all",
+      "covered_by": {
+        "stream": "news"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/quote",
+      "covered_by": {
+        "stream": "quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/intraday/adjusted",
+      "covered_by": {
+        "stream": "intraday_adjusted_prices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/splits",
+      "covered_by": {
+        "stream": "splits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data/dividends",
+      "covered_by": {
+        "stream": "dividends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/similar/{uuid}",
+      "covered_by": {
+        "stream": "news_similar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/uuid/{uuid}",
+      "covered_by": {
+        "stream": "news_by_uuid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/stats/intraday",
+      "covered_by": {
+        "stream": "news_stats_intraday"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/stats/aggregation",
+      "covered_by": {
+        "stream": "news_stats_aggregation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/stats/trending",
+      "covered_by": {
+        "stream": "news_stats_trending"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/entity/search",
+      "covered_by": {
+        "stream": "entity_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/entity/type/list",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static scalar reference list of supported entity types; not an account data stream and the records dialect does not fan out scalar arrays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/entity/industry/list",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static scalar reference list of supported industries; not an account data stream and the records dialect does not fan out scalar arrays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/news/sources",
+      "covered_by": {
+        "stream": "news_sources"
+      }
+    }
+  ]
+}

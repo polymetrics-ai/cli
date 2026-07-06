@@ -1,0 +1,20 @@
+{
+  "record": {
+    "avatar_id": "av_fixture_1",
+    "first_name": "Fixture",
+    "last_name": "One",
+    "email": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscribers/add"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "sub_fixture_1",
+      "avatar_id": "av_fixture_1",
+      "email": "fixture1@example.com"
+    }
+  }
+}

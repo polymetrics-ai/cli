@@ -1,0 +1,18 @@
+{
+  "record": {
+    "catalog_name": "fixture_catalog",
+    "items": [
+      { "id": "item_fixture_1", "Name": "Fixture Item 1" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/catalogs/fixture_catalog/items",
+    "body": {
+      "items": [
+        { "id": "item_fixture_1", "Name": "Fixture Item 1" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

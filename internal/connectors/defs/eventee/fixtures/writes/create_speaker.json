@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "Fixture Speaker",
+    "email": "speaker@example.test",
+    "photo": "https://example.com/speaker.png",
+    "phone": "(555) 010-0103",
+    "bio": "Sanitized fixture speaker bio.",
+    "web": "https://example.com",
+    "facebook": "https://example.com/facebook",
+    "twitter": "https://example.com/twitter",
+    "linkedIn": "https://example.com/linkedin",
+    "position": "Presenter",
+    "company": "Fixture Co",
+    "country": "US",
+    "language": "English"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/speaker",
+    "body": { "name": "Fixture Speaker", "phone": "(555) 010-0103" }
+  },
+  "response": { "status": 200, "body": { "id": 444, "name": "Fixture Speaker" } }
+}

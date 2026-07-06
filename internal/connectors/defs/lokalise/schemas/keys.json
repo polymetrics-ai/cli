@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "keys",
+  "type": "object",
+  "properties": {
+    "key_id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "created_at_timestamp": {
+      "type": "integer"
+    },
+    "modified_at": {
+      "type": "string"
+    },
+    "modified_at_timestamp": {
+      "type": "integer"
+    },
+    "key_name": {
+      "type": "object"
+    },
+    "description": {
+      "type": "string"
+    },
+    "platforms": {
+      "type": "array"
+    },
+    "tags": {
+      "type": "array"
+    },
+    "is_plural": {
+      "type": "boolean"
+    },
+    "is_hidden": {
+      "type": "boolean"
+    },
+    "is_archived": {
+      "type": "boolean"
+    }
+  },
+  "x-primary-key": [
+    "key_id"
+  ],
+  "x-cursor-field": "modified_at_timestamp"
+}

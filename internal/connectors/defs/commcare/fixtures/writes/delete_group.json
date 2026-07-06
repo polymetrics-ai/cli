@@ -1,0 +1,9 @@
+{
+  "record": {
+    "group_id": "group_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/api/group/v1/group_fixture_1/"
+  }
+}

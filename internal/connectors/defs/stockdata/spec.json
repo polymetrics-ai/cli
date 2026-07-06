@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StockData Connection Specification",
+  "type": "object",
+  "required": [
+    "api_token"
+  ],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "StockData API access token, sent as the api_token query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.stockdata.org/v1",
+      "description": "StockData API base URL override for tests or proxies."
+    },
+    "symbols": {
+      "type": "string",
+      "description": "Comma-separated ticker symbols. Required for quote and market data streams; optional for news filter streams."
+    },
+    "date_from": {
+      "type": "string",
+      "description": "Optional lower-bound date filter (YYYY-MM-DD) sent on legacy StockData read requests when set."
+    },
+    "date_to": {
+      "type": "string",
+      "description": "Optional upper-bound date filter (YYYY-MM-DD) sent on legacy StockData read requests when set."
+    },
+    "news_uuids": {
+      "type": "string",
+      "description": "Comma-separated news UUIDs for news_similar and news_by_uuid fan-out streams."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional language filter for news and source endpoints."
+    },
+    "published_after": {
+      "type": "string",
+      "description": "Optional lower-bound publication timestamp for news/stat endpoints."
+    },
+    "published_before": {
+      "type": "string",
+      "description": "Optional upper-bound publication timestamp for news/stat endpoints."
+    },
+    "published_on": {
+      "type": "string",
+      "description": "Optional publication date filter for news/stat endpoints."
+    },
+    "countries": {
+      "type": "string",
+      "description": "Optional country filter for entity stats endpoints."
+    },
+    "interval": {
+      "type": "string",
+      "description": "Optional interval for entity stats time-series requests."
+    },
+    "group_by": {
+      "type": "string",
+      "description": "Optional grouping field for entity stats requests."
+    },
+    "sentiment_gte": {
+      "type": "string",
+      "description": "Optional minimum sentiment filter for news/stat endpoints."
+    },
+    "sentiment_lte": {
+      "type": "string",
+      "description": "Optional maximum sentiment filter for news/stat endpoints."
+    },
+    "entity_search": {
+      "type": "string",
+      "description": "Search term required by the entity_search stream."
+    },
+    "entity_types": {
+      "type": "string",
+      "description": "Optional comma-separated entity type filter for the entity_search stream."
+    },
+    "group_domains": {
+      "type": "string",
+      "description": "Optional group-domain flag for the news_sources stream."
+    }
+  }
+}

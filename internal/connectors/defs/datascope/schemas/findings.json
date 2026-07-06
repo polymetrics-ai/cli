@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "findings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "code": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "creation_date": { "type": ["string", "null"] },
+    "expiration_date": { "type": ["string", "null"] },
+    "closure_date": { "type": ["string", "null"] },
+    "closure_message": { "type": ["string", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "location_name": { "type": ["string", "null"] },
+    "location_code": { "type": ["string", "null"] },
+    "creator_id": { "type": ["integer", "null"] },
+    "creator_email": { "type": ["string", "null"] },
+    "creator_name": { "type": ["string", "null"] },
+    "last_updated_by": { "type": ["string", "null"] },
+    "form_answer_id": { "type": ["integer", "null"] },
+    "form_answer_code": { "type": ["string", "null"] },
+    "task_form_title": { "type": ["string", "null"] },
+    "task_form_question": { "type": ["string", "null"] }
+  }
+}

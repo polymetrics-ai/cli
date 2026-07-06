@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchase_orders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "destination_warehouse_id": { "type": ["integer", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

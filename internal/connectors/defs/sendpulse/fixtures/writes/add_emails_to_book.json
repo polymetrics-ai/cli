@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "1",
+    "emails": [{ "email": "new-subscriber@example.com" }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/addressbooks/1/emails"
+  }
+}

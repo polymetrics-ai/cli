@@ -1,0 +1,20 @@
+{
+  "record": {
+    "affiliate_email": "fixture1@example.com",
+    "referral_ids": "17567131",
+    "note": "Fixture manual payout"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/payments/mark-as-paid",
+    "body": {
+      "affiliate_email": "fixture1@example.com",
+      "referral_ids": "17567131",
+      "note": "Fixture manual payout"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": {} }
+  }
+}

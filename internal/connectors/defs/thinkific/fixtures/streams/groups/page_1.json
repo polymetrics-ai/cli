@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/groups",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Fixture Group 1",
+          "token": "tok_fixture_1",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Group 2",
+          "token": "tok_fixture_2",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Group 3",
+          "token": "tok_fixture_3",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Group 4",
+          "token": "tok_fixture_4",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Group 5",
+          "token": "tok_fixture_5",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Group 6",
+          "token": "tok_fixture_6",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Group 7",
+          "token": "tok_fixture_7",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Group 8",
+          "token": "tok_fixture_8",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Group 9",
+          "token": "tok_fixture_9",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Group 10",
+          "token": "tok_fixture_10",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Group 11",
+          "token": "tok_fixture_11",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Group 12",
+          "token": "tok_fixture_12",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Group 13",
+          "token": "tok_fixture_13",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Group 14",
+          "token": "tok_fixture_14",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Group 15",
+          "token": "tok_fixture_15",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Group 16",
+          "token": "tok_fixture_16",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Group 17",
+          "token": "tok_fixture_17",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Group 18",
+          "token": "tok_fixture_18",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Group 19",
+          "token": "tok_fixture_19",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Group 20",
+          "token": "tok_fixture_20",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Group 21",
+          "token": "tok_fixture_21",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Group 22",
+          "token": "tok_fixture_22",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Group 23",
+          "token": "tok_fixture_23",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Group 24",
+          "token": "tok_fixture_24",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Group 25",
+          "token": "tok_fixture_25",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Group 26",
+          "token": "tok_fixture_26",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Group 27",
+          "token": "tok_fixture_27",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Group 28",
+          "token": "tok_fixture_28",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Group 29",
+          "token": "tok_fixture_29",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Group 30",
+          "token": "tok_fixture_30",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Group 31",
+          "token": "tok_fixture_31",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Group 32",
+          "token": "tok_fixture_32",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Group 33",
+          "token": "tok_fixture_33",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Group 34",
+          "token": "tok_fixture_34",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Group 35",
+          "token": "tok_fixture_35",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Group 36",
+          "token": "tok_fixture_36",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Group 37",
+          "token": "tok_fixture_37",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Group 38",
+          "token": "tok_fixture_38",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Group 39",
+          "token": "tok_fixture_39",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Group 40",
+          "token": "tok_fixture_40",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Group 41",
+          "token": "tok_fixture_41",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Group 42",
+          "token": "tok_fixture_42",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Group 43",
+          "token": "tok_fixture_43",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Group 44",
+          "token": "tok_fixture_44",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Group 45",
+          "token": "tok_fixture_45",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Group 46",
+          "token": "tok_fixture_46",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Group 47",
+          "token": "tok_fixture_47",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Group 48",
+          "token": "tok_fixture_48",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Group 49",
+          "token": "tok_fixture_49",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Group 50",
+          "token": "tok_fixture_50",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "name": "Fixture Group 51",
+          "token": "tok_fixture_51",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "name": "Fixture Group 52",
+          "token": "tok_fixture_52",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "name": "Fixture Group 53",
+          "token": "tok_fixture_53",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "name": "Fixture Group 54",
+          "token": "tok_fixture_54",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "name": "Fixture Group 55",
+          "token": "tok_fixture_55",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "name": "Fixture Group 56",
+          "token": "tok_fixture_56",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "name": "Fixture Group 57",
+          "token": "tok_fixture_57",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "name": "Fixture Group 58",
+          "token": "tok_fixture_58",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "name": "Fixture Group 59",
+          "token": "tok_fixture_59",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "name": "Fixture Group 60",
+          "token": "tok_fixture_60",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "name": "Fixture Group 61",
+          "token": "tok_fixture_61",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "name": "Fixture Group 62",
+          "token": "tok_fixture_62",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "name": "Fixture Group 63",
+          "token": "tok_fixture_63",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "name": "Fixture Group 64",
+          "token": "tok_fixture_64",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "name": "Fixture Group 65",
+          "token": "tok_fixture_65",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "name": "Fixture Group 66",
+          "token": "tok_fixture_66",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "name": "Fixture Group 67",
+          "token": "tok_fixture_67",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "name": "Fixture Group 68",
+          "token": "tok_fixture_68",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "name": "Fixture Group 69",
+          "token": "tok_fixture_69",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "name": "Fixture Group 70",
+          "token": "tok_fixture_70",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "name": "Fixture Group 71",
+          "token": "tok_fixture_71",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "name": "Fixture Group 72",
+          "token": "tok_fixture_72",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "name": "Fixture Group 73",
+          "token": "tok_fixture_73",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "name": "Fixture Group 74",
+          "token": "tok_fixture_74",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "name": "Fixture Group 75",
+          "token": "tok_fixture_75",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "name": "Fixture Group 76",
+          "token": "tok_fixture_76",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "name": "Fixture Group 77",
+          "token": "tok_fixture_77",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "name": "Fixture Group 78",
+          "token": "tok_fixture_78",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "name": "Fixture Group 79",
+          "token": "tok_fixture_79",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "name": "Fixture Group 80",
+          "token": "tok_fixture_80",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "name": "Fixture Group 81",
+          "token": "tok_fixture_81",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "name": "Fixture Group 82",
+          "token": "tok_fixture_82",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "name": "Fixture Group 83",
+          "token": "tok_fixture_83",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "name": "Fixture Group 84",
+          "token": "tok_fixture_84",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "name": "Fixture Group 85",
+          "token": "tok_fixture_85",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "name": "Fixture Group 86",
+          "token": "tok_fixture_86",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "name": "Fixture Group 87",
+          "token": "tok_fixture_87",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "name": "Fixture Group 88",
+          "token": "tok_fixture_88",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "name": "Fixture Group 89",
+          "token": "tok_fixture_89",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "name": "Fixture Group 90",
+          "token": "tok_fixture_90",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "name": "Fixture Group 91",
+          "token": "tok_fixture_91",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "name": "Fixture Group 92",
+          "token": "tok_fixture_92",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "name": "Fixture Group 93",
+          "token": "tok_fixture_93",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "name": "Fixture Group 94",
+          "token": "tok_fixture_94",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "name": "Fixture Group 95",
+          "token": "tok_fixture_95",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "name": "Fixture Group 96",
+          "token": "tok_fixture_96",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "name": "Fixture Group 97",
+          "token": "tok_fixture_97",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "name": "Fixture Group 98",
+          "token": "tok_fixture_98",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "name": "Fixture Group 99",
+          "token": "tok_fixture_99",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "name": "Fixture Group 100",
+          "token": "tok_fixture_100",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

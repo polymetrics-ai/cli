@@ -1,0 +1,14 @@
+{
+  "api": "Hellobaton REST API (customer-derived subdomain; no public API reference URL — legacy code is ground truth)",
+  "docs": "manual intervention needed",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (projects, milestones, tasks, phases, companies, users); Hellobaton exposes no write endpoints in the legacy connector (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/milestones", "covered_by": { "stream": "milestones" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/phases", "covered_by": { "stream": "phases" } },
+    { "method": "GET", "path": "/companies", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Category"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/categories"
+  }
+}

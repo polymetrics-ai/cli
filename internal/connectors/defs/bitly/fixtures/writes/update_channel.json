@@ -1,0 +1,13 @@
+{
+  "record": {
+    "guid": "chn_fixture_1",
+    "name": "Updated Fixture Channel"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/channels/chn_fixture_1",
+    "body": {
+      "name": "Updated Fixture Channel"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "Fixture Contact",
+    "email": "fixture.create@example.com",
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "name": "Fixture Contact",
+      "email": "fixture.create@example.com",
+      "tags": ["fixture"]
+    }
+  },
+  "response": { "status": 200, "body": { "uuid": "contact_create_fixture_1" } }
+}

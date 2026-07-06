@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/members", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "_id": "mem_fixture_1", "email": "fixture1@example.com", "firstName": "Fixture", "lastName": "One", "role": "reader", "_pendingInvite": false }
+      ],
+      "totalCount": 1
+    }
+  }
+}

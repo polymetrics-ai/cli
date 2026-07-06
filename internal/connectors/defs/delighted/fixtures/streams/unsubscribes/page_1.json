@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/unsubscribes.json",
+    "query": { "page": "1", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "person_id": "person_fixture_1",
+        "email": "fixture1@example.com",
+        "name": "Fixture One",
+        "unsubscribed_at": 1767225601
+      },
+      {
+        "person_id": "person_fixture_2",
+        "email": "fixture2@example.com",
+        "name": "Fixture Two",
+        "unsubscribed_at": 1767225602
+      }
+    ]
+  }
+}

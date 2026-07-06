@@ -1,0 +1,16 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/join"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "join_organization_fixture_1"
+    }
+  }
+}

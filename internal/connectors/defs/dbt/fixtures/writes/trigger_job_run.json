@@ -1,0 +1,10 @@
+{
+  "record": {
+    "job_id": 1,
+    "cause": "fixture-triggered run"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/jobs/1/run/"
+  }
+}

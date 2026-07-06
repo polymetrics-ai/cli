@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/docs", "query": { "pageToken": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "IjKlMnOp",
+          "type": "doc",
+          "name": "Engineering Handbook",
+          "href": "https://coda.io/apis/v1/docs/IjKlMnOp",
+          "browserLink": "https://coda.io/d/Engineering-Handbook_dIjKlMnOp",
+          "owner": "fixture2@example.com",
+          "ownerName": "Fixture Owner Two",
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "updatedAt": "2026-01-04T00:00:00.000Z",
+          "workspaceId": "ws-fixture-1",
+          "folderId": "fl-fixture-2"
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs?limit=25&pageToken=fixture_cursor_2"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_statuses": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "passed", "label": "Passed", "is_system": true, "is_untested": false, "is_final": true },
+      { "id": 5, "name": "failed", "label": "Failed", "is_system": true, "is_untested": false, "is_final": true }
+    ]
+  }
+}

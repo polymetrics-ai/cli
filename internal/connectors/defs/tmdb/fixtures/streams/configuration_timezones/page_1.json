@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/configuration/timezones"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 123,
+        "title": "Fixture configuration_timezones",
+        "name": "Fixture configuration_timezones",
+        "overview": "Deterministic TMDb fixture",
+        "release_date": "2026-01-01",
+        "vote_average": 7.5
+      }
+    ]
+  }
+}

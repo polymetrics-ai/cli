@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1", "name": "Fixture Report", "description": "Deterministic fixture record.", "filters": {} },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/reports/1"
+  }
+}

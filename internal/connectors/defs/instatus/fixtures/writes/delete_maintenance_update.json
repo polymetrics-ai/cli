@@ -1,0 +1,17 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "maintenance_id": "maintenance_id_fixture_1",
+    "maintenance_update_id": "maintenance_update_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/page_id_fixture_1/maintenances/maintenance_id_fixture_1/maintenance-updates/maintenance_update_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_maintenance_update_fixture_response"
+    }
+  }
+}

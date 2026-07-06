@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/payments", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "payments_fixture_1",
+          "number": "0001",
+          "client_id": "clients_fixture_1",
+          "amount": 100,
+          "applied": 100,
+          "refunded": 0,
+          "status_id": "4",
+          "transaction_reference": "ref_1",
+          "date": "2026-01-01",
+          "currency_id": "1",
+          "is_deleted": false,
+          "created_at": 1767225601,
+          "updated_at": 1767225601
+        }
+      ],
+      "meta": { "pagination": { "total": 1 } }
+    }
+  }
+}

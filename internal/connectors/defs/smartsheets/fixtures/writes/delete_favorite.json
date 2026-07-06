@@ -1,0 +1,19 @@
+{
+  "record": {
+    "favorite_type": "fixture",
+    "favorite_id": "favorite_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/favorites/fixture/favorite_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

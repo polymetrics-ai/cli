@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "per_page": "2", "cursor": "fixture_cursor_page2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "uuid": "cus_fixture_3",
+          "external_id": "ext_3",
+          "name": "Fixture Three Inc",
+          "email": "fixture3@example.com",
+          "status": "Cancelled",
+          "customer-since": "2026-01-03T00:00:00Z",
+          "company": "Fixture Three Inc",
+          "country": "US",
+          "city": "Berkeley",
+          "currency": "USD",
+          "mrr": 0,
+          "arr": 0,
+          "billing-system-type": "Stripe"
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

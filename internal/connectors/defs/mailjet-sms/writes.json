@@ -1,0 +1,41 @@
+{
+  "actions": [
+    {
+      "name": "send_sms",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sms-send",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["From", "To", "Text"],
+        "properties": {
+          "From": { "type": "string" },
+          "To": { "type": "string" },
+          "Text": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; sends an SMS message; approval required"
+    },
+    {
+      "name": "request_sms_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sms/export",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["FromTS", "ToTS"],
+        "properties": {
+          "FromTS": { "type": "integer" },
+          "ToTS": { "type": "integer" }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; creates an asynchronous SMS export job; approval required"
+    }
+  ]
+}

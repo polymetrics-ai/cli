@@ -1,0 +1,51 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "nextPageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": { "method": "GET", "path": "/api/links" },
+    "error_map": [
+      { "status": 401, "hint": "shortio api_key secret is missing or invalid; re-run pm credentials add shortio" },
+      { "status": 403, "hint": "shortio account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "shortio rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "links",
+      "path": "/api/links",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "150" }
+      },
+      "records": { "path": "links" },
+      "computed_fields": {
+        "id": "{{ record.idString }}",
+        "title": "{{ record.title }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/links.json"
+    },
+    {
+      "name": "domains",
+      "path": "/api/domains",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "150" }
+      },
+      "records": { "path": "domains" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "title": "{{ record.title }}",
+        "name": "{{ record.hostname }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/domains.json"
+    }
+  ]
+}

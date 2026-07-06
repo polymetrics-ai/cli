@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ads",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modification_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "ad_group_id": { "type": ["integer", "null"] },
+    "campaign_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "creative_id": { "type": ["integer", "null"] },
+    "creative_type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "serving_status": { "type": ["string", "null"] },
+    "creation_time": { "type": ["string", "null"] },
+    "modification_time": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

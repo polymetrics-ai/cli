@@ -1,0 +1,15 @@
+{
+  "record": {
+    "issue_number": 101,
+    "title": "Updated title",
+    "state": "closed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues/101",
+    "body": {
+      "title": "Updated title",
+      "state": "closed"
+    }
+  }
+}

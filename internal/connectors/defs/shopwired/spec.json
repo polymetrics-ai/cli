@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ShopWired Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ShopWired API key. Used as the legacy X-API-Key header, and as the Basic-auth username when api_secret is also provided."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ecommerceapi.uk/v1",
+      "description": "ShopWired API base URL. Current docs use https://api.ecommerceapi.uk/v1; legacy api.shopwired.co.uk can be supplied explicitly if needed."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ShopWired API secret, used as the Basic-auth password with api_key for the current documented API."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional OAuth access token for bearer authentication."
+    },
+    "count": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter count."
+    },
+    "offset": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter offset."
+    },
+    "fields": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter fields."
+    },
+    "embed": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter embed."
+    },
+    "keyword": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter keyword."
+    },
+    "sort": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter sort."
+    },
+    "active": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter active."
+    },
+    "sku": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter sku."
+    },
+    "key": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter key."
+    },
+    "topic": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter topic."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter customer_id."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter product_id."
+    },
+    "id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter id."
+    },
+    "name": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter name."
+    },
+    "trade": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter trade."
+    },
+    "email": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter email."
+    },
+    "since_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter since_id."
+    },
+    "created_before": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter created_before."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter created_after."
+    },
+    "subject_type": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter subject_type."
+    },
+    "subject_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter subject_id."
+    },
+    "from": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter from."
+    },
+    "ids": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter ids."
+    },
+    "archived": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter archived."
+    },
+    "status": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter status."
+    },
+    "to": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter to."
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter keywords."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter session_id."
+    },
+    "path": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter path."
+    },
+    "country_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter country_id."
+    },
+    "dispute_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter dispute_id."
+    },
+    "payout_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter payout_id."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter transaction_id."
+    },
+    "theme_id": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter theme_id."
+    },
+    "code": {
+      "type": "string",
+      "description": "Optional ShopWired API parameter code."
+    }
+  }
+}

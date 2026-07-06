@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/attendees/", "query": { "expand": "venue,ticket_classes", "continuation": "attendee_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": false, "continuation": "attendee_cursor_2" },
+      "attendees": [
+        {
+          "id": "attendee_fixture_3",
+          "event_id": "event_fixture_1",
+          "order_id": "order_fixture_2",
+          "ticket_class_id": "ticket_class_fixture_1",
+          "ticket_class_name": "General Admission",
+          "status": "cancelled",
+          "created": "2026-01-01T00:00:00Z",
+          "changed": "2026-01-03T00:00:00Z",
+          "quantity": 1,
+          "checked_in": false,
+          "cancelled": true,
+          "refunded": true,
+          "profile": { "name": "Fixture Attendee Three", "email": "fixture3@example.com" },
+          "cost": { "display": "$10.00" }
+        }
+      ]
+    }
+  }
+}

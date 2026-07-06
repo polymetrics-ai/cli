@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v2/organizations", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Org One", "description": "Fixture organization 1", "nodeApprovalMode": "AUTOMATIC" },
+      { "id": 2, "name": "Org Two", "description": "Fixture organization 2", "nodeApprovalMode": "MANUAL" }
+    ]
+  }
+}

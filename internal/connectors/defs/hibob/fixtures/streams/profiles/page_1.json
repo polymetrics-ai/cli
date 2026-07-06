@@ -1,0 +1,917 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/profiles",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employees": [
+        {
+          "id": "1",
+          "email": "fixture1@example.com",
+          "displayName": "Fixture 1",
+          "firstName": "Fixture",
+          "surname": "1",
+          "fullName": "Fixture 1",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "2",
+          "email": "fixture2@example.com",
+          "displayName": "Fixture 2",
+          "firstName": "Fixture",
+          "surname": "2",
+          "fullName": "Fixture 2",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "3",
+          "email": "fixture3@example.com",
+          "displayName": "Fixture 3",
+          "firstName": "Fixture",
+          "surname": "3",
+          "fullName": "Fixture 3",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "4",
+          "email": "fixture4@example.com",
+          "displayName": "Fixture 4",
+          "firstName": "Fixture",
+          "surname": "4",
+          "fullName": "Fixture 4",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "5",
+          "email": "fixture5@example.com",
+          "displayName": "Fixture 5",
+          "firstName": "Fixture",
+          "surname": "5",
+          "fullName": "Fixture 5",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "6",
+          "email": "fixture6@example.com",
+          "displayName": "Fixture 6",
+          "firstName": "Fixture",
+          "surname": "6",
+          "fullName": "Fixture 6",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "7",
+          "email": "fixture7@example.com",
+          "displayName": "Fixture 7",
+          "firstName": "Fixture",
+          "surname": "7",
+          "fullName": "Fixture 7",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "8",
+          "email": "fixture8@example.com",
+          "displayName": "Fixture 8",
+          "firstName": "Fixture",
+          "surname": "8",
+          "fullName": "Fixture 8",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "9",
+          "email": "fixture9@example.com",
+          "displayName": "Fixture 9",
+          "firstName": "Fixture",
+          "surname": "9",
+          "fullName": "Fixture 9",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "10",
+          "email": "fixture10@example.com",
+          "displayName": "Fixture 10",
+          "firstName": "Fixture",
+          "surname": "10",
+          "fullName": "Fixture 10",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "11",
+          "email": "fixture11@example.com",
+          "displayName": "Fixture 11",
+          "firstName": "Fixture",
+          "surname": "11",
+          "fullName": "Fixture 11",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "12",
+          "email": "fixture12@example.com",
+          "displayName": "Fixture 12",
+          "firstName": "Fixture",
+          "surname": "12",
+          "fullName": "Fixture 12",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "13",
+          "email": "fixture13@example.com",
+          "displayName": "Fixture 13",
+          "firstName": "Fixture",
+          "surname": "13",
+          "fullName": "Fixture 13",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "14",
+          "email": "fixture14@example.com",
+          "displayName": "Fixture 14",
+          "firstName": "Fixture",
+          "surname": "14",
+          "fullName": "Fixture 14",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "15",
+          "email": "fixture15@example.com",
+          "displayName": "Fixture 15",
+          "firstName": "Fixture",
+          "surname": "15",
+          "fullName": "Fixture 15",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "16",
+          "email": "fixture16@example.com",
+          "displayName": "Fixture 16",
+          "firstName": "Fixture",
+          "surname": "16",
+          "fullName": "Fixture 16",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "17",
+          "email": "fixture17@example.com",
+          "displayName": "Fixture 17",
+          "firstName": "Fixture",
+          "surname": "17",
+          "fullName": "Fixture 17",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "18",
+          "email": "fixture18@example.com",
+          "displayName": "Fixture 18",
+          "firstName": "Fixture",
+          "surname": "18",
+          "fullName": "Fixture 18",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "19",
+          "email": "fixture19@example.com",
+          "displayName": "Fixture 19",
+          "firstName": "Fixture",
+          "surname": "19",
+          "fullName": "Fixture 19",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "20",
+          "email": "fixture20@example.com",
+          "displayName": "Fixture 20",
+          "firstName": "Fixture",
+          "surname": "20",
+          "fullName": "Fixture 20",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "21",
+          "email": "fixture21@example.com",
+          "displayName": "Fixture 21",
+          "firstName": "Fixture",
+          "surname": "21",
+          "fullName": "Fixture 21",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "22",
+          "email": "fixture22@example.com",
+          "displayName": "Fixture 22",
+          "firstName": "Fixture",
+          "surname": "22",
+          "fullName": "Fixture 22",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "23",
+          "email": "fixture23@example.com",
+          "displayName": "Fixture 23",
+          "firstName": "Fixture",
+          "surname": "23",
+          "fullName": "Fixture 23",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "24",
+          "email": "fixture24@example.com",
+          "displayName": "Fixture 24",
+          "firstName": "Fixture",
+          "surname": "24",
+          "fullName": "Fixture 24",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "25",
+          "email": "fixture25@example.com",
+          "displayName": "Fixture 25",
+          "firstName": "Fixture",
+          "surname": "25",
+          "fullName": "Fixture 25",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "26",
+          "email": "fixture26@example.com",
+          "displayName": "Fixture 26",
+          "firstName": "Fixture",
+          "surname": "26",
+          "fullName": "Fixture 26",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "27",
+          "email": "fixture27@example.com",
+          "displayName": "Fixture 27",
+          "firstName": "Fixture",
+          "surname": "27",
+          "fullName": "Fixture 27",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "28",
+          "email": "fixture28@example.com",
+          "displayName": "Fixture 28",
+          "firstName": "Fixture",
+          "surname": "28",
+          "fullName": "Fixture 28",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "29",
+          "email": "fixture29@example.com",
+          "displayName": "Fixture 29",
+          "firstName": "Fixture",
+          "surname": "29",
+          "fullName": "Fixture 29",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "30",
+          "email": "fixture30@example.com",
+          "displayName": "Fixture 30",
+          "firstName": "Fixture",
+          "surname": "30",
+          "fullName": "Fixture 30",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "31",
+          "email": "fixture31@example.com",
+          "displayName": "Fixture 31",
+          "firstName": "Fixture",
+          "surname": "31",
+          "fullName": "Fixture 31",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "32",
+          "email": "fixture32@example.com",
+          "displayName": "Fixture 32",
+          "firstName": "Fixture",
+          "surname": "32",
+          "fullName": "Fixture 32",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "33",
+          "email": "fixture33@example.com",
+          "displayName": "Fixture 33",
+          "firstName": "Fixture",
+          "surname": "33",
+          "fullName": "Fixture 33",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "34",
+          "email": "fixture34@example.com",
+          "displayName": "Fixture 34",
+          "firstName": "Fixture",
+          "surname": "34",
+          "fullName": "Fixture 34",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "35",
+          "email": "fixture35@example.com",
+          "displayName": "Fixture 35",
+          "firstName": "Fixture",
+          "surname": "35",
+          "fullName": "Fixture 35",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "36",
+          "email": "fixture36@example.com",
+          "displayName": "Fixture 36",
+          "firstName": "Fixture",
+          "surname": "36",
+          "fullName": "Fixture 36",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "37",
+          "email": "fixture37@example.com",
+          "displayName": "Fixture 37",
+          "firstName": "Fixture",
+          "surname": "37",
+          "fullName": "Fixture 37",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "38",
+          "email": "fixture38@example.com",
+          "displayName": "Fixture 38",
+          "firstName": "Fixture",
+          "surname": "38",
+          "fullName": "Fixture 38",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "39",
+          "email": "fixture39@example.com",
+          "displayName": "Fixture 39",
+          "firstName": "Fixture",
+          "surname": "39",
+          "fullName": "Fixture 39",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "40",
+          "email": "fixture40@example.com",
+          "displayName": "Fixture 40",
+          "firstName": "Fixture",
+          "surname": "40",
+          "fullName": "Fixture 40",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "41",
+          "email": "fixture41@example.com",
+          "displayName": "Fixture 41",
+          "firstName": "Fixture",
+          "surname": "41",
+          "fullName": "Fixture 41",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "42",
+          "email": "fixture42@example.com",
+          "displayName": "Fixture 42",
+          "firstName": "Fixture",
+          "surname": "42",
+          "fullName": "Fixture 42",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "43",
+          "email": "fixture43@example.com",
+          "displayName": "Fixture 43",
+          "firstName": "Fixture",
+          "surname": "43",
+          "fullName": "Fixture 43",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "44",
+          "email": "fixture44@example.com",
+          "displayName": "Fixture 44",
+          "firstName": "Fixture",
+          "surname": "44",
+          "fullName": "Fixture 44",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "45",
+          "email": "fixture45@example.com",
+          "displayName": "Fixture 45",
+          "firstName": "Fixture",
+          "surname": "45",
+          "fullName": "Fixture 45",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "46",
+          "email": "fixture46@example.com",
+          "displayName": "Fixture 46",
+          "firstName": "Fixture",
+          "surname": "46",
+          "fullName": "Fixture 46",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "47",
+          "email": "fixture47@example.com",
+          "displayName": "Fixture 47",
+          "firstName": "Fixture",
+          "surname": "47",
+          "fullName": "Fixture 47",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "48",
+          "email": "fixture48@example.com",
+          "displayName": "Fixture 48",
+          "firstName": "Fixture",
+          "surname": "48",
+          "fullName": "Fixture 48",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "49",
+          "email": "fixture49@example.com",
+          "displayName": "Fixture 49",
+          "firstName": "Fixture",
+          "surname": "49",
+          "fullName": "Fixture 49",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        },
+        {
+          "id": "50",
+          "email": "fixture50@example.com",
+          "displayName": "Fixture 50",
+          "firstName": "Fixture",
+          "surname": "50",
+          "fullName": "Fixture 50",
+          "work": {
+            "title": "Engineer",
+            "department": "R&D",
+            "site": "Remote",
+            "startDate": "2026-01-01",
+            "isManager": false
+          },
+          "personal": {
+            "pronouns": "they/them"
+          }
+        }
+      ]
+    }
+  }
+}

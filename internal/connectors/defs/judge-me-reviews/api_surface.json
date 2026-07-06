@@ -1,0 +1,260 @@
+{
+  "api": "Judge.me API v1 (https://api.judge.me/api/v1)",
+  "docs": "https://judge.me/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion from the current Judge.me OpenAPI document at /api/docs.yaml. All documented GET endpoints are covered as streams, all dialect-expressible POST/PUT/DELETE endpoints are covered as write actions, and the legacy products/widgets streams are retained because internal/connectors/judge-me-reviews still emits those record sets.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/reviews",
+      "covered_by": {
+        "stream": "reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets",
+      "covered_by": {
+        "stream": "widgets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/product_review",
+      "covered_by": {
+        "stream": "product_review_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/preview_badge",
+      "covered_by": {
+        "stream": "preview_badge_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/featured_carousel",
+      "covered_by": {
+        "stream": "featured_carousel_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/reviews_tab",
+      "covered_by": {
+        "stream": "reviews_tab_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/all_reviews_page",
+      "covered_by": {
+        "stream": "all_reviews_page_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/verified_badge",
+      "covered_by": {
+        "stream": "verified_badge_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/all_reviews_count",
+      "covered_by": {
+        "stream": "all_reviews_count_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/all_reviews_rating",
+      "covered_by": {
+        "stream": "all_reviews_rating_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/shop_reviews_count",
+      "covered_by": {
+        "stream": "shop_reviews_count_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/shop_reviews_rating",
+      "covered_by": {
+        "stream": "shop_reviews_rating_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/settings",
+      "covered_by": {
+        "stream": "widget_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/html_miracle",
+      "covered_by": {
+        "stream": "html_miracle_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/widgets/checkout_comments_widget",
+      "covered_by": {
+        "stream": "checkout_comments_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/count",
+      "covered_by": {
+        "stream": "reviews_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/{id}",
+      "covered_by": {
+        "stream": "review"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviewers/{id}",
+      "covered_by": {
+        "stream": "reviewer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/{id}",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/info",
+      "covered_by": {
+        "stream": "shop_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/settings",
+      "covered_by": {
+        "stream": "settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/reviews",
+      "covered_by": {
+        "write": "create_review"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/reviews/{id}",
+      "covered_by": {
+        "write": "update_review"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/reviewers/{id}",
+      "covered_by": {
+        "write": "update_reviewer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/reviewers/data_request",
+      "covered_by": {
+        "write": "request_reviewer_data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/webhooks/{id}",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/bulk_create",
+      "covered_by": {
+        "write": "bulk_create_webhooks"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/shops",
+      "covered_by": {
+        "write": "update_shop"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/shops",
+      "covered_by": {
+        "write": "uninstall_shop"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops",
+      "covered_by": {
+        "write": "create_checkout_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/replies",
+      "covered_by": {
+        "write": "create_reply"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private_replies",
+      "covered_by": {
+        "write": "create_private_reply"
+      }
+    }
+  ]
+}

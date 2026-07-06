@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreement",
+  "type": "object",
+  "x-primary-key": ["uid"],
+  "required": ["uid"],
+  "properties": {
+    "uid": { "type": "string" },
+    "folderId": { "type": ["integer", "null"] },
+    "lastPublicVersion": { "type": ["object", "null"] },
+    "lock": { "type": ["object", "null"] },
+    "metadata": { "type": ["object", "null"] },
+    "permission": { "type": ["string", "null"] },
+    "creation": { "type": ["object", "null"] }
+  }
+}

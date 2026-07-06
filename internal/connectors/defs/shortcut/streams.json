@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Shortcut-Token", "value": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "next",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/api/v3/stories" },
+    "error_map": [
+      { "status": 401, "hint": "shortcut api_token secret is missing or invalid; re-run pm credentials add shortcut" },
+      { "status": 403, "hint": "shortcut account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "shortcut rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "stories",
+      "path": "/api/v3/stories",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/stories.json",
+      "computed_fields": {
+        "state": "{{ record.workflow_state_id }}"
+      }
+    },
+    {
+      "name": "epics",
+      "path": "/api/v3/epics",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/epics.json"
+    },
+    {
+      "name": "projects",
+      "path": "/api/v3/projects",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "iterations",
+      "path": "/api/v3/iterations",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/iterations.json"
+    }
+  ]
+}

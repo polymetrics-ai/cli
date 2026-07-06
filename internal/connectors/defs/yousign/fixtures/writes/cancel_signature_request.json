@@ -1,0 +1,8 @@
+{
+  "record": { "id": "sr_fixture_1", "reason": "errors_in_document" },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_requests/sr_fixture_1/cancel",
+    "body": { "reason": "errors_in_document" }
+  }
+}

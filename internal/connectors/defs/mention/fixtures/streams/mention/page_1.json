@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/alerts/synthetic-conformance-value/mentions", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "mentions": [
+        {
+          "id": "mention_fixture_1",
+          "title": "Fixture mention 1",
+          "description": "fixture record",
+          "url": "https://example.com/m/1",
+          "language": "en",
+          "source_name": "example.com",
+          "source_type": "web",
+          "tone": 0,
+          "favorite": false,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "mention_fixture_2",
+          "title": "Fixture mention 2",
+          "description": "fixture record",
+          "url": "https://example.com/m/2",
+          "language": "en",
+          "source_name": "example.com",
+          "source_type": "web",
+          "tone": 1,
+          "favorite": true,
+          "published_at": "2026-01-02T00:00:00Z",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "_links": {
+        "more": {
+          "href": "https://api.mention.net/api/accounts/synthetic-conformance-value/alerts/synthetic-conformance-value/mentions?cursor=cursor_fixture_page2",
+          "params": { "cursor": "cursor_fixture_page2" }
+        }
+      }
+    }
+  }
+}

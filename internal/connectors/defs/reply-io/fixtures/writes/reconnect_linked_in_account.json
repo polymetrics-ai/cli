@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/linkedin-accounts/synthetic-conformance-value/reconnect"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

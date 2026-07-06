@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "signature_requests",
+  "type": "object",
+  "x-primary-key": ["signature_request_id"],
+  "x-cursor-field": "created_at",
+  "required": ["signature_request_id"],
+  "properties": {
+    "signature_request_id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "is_complete": { "type": ["boolean", "null"] },
+    "is_declined": { "type": ["boolean", "null"] },
+    "has_error": { "type": ["boolean", "null"] },
+    "test_mode": { "type": ["boolean", "null"] },
+    "requester_email_address": { "type": ["string", "null"] },
+    "created_at": { "type": ["integer", "null"] }
+  }
+}

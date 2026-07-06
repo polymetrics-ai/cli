@@ -1,0 +1,11 @@
+{
+  "api": "Qualaroo REST Reporting API v1 (https://api.qualaroo.com/api/v1) plus legacy-observed v1 read endpoints",
+  "docs": "https://help.qualaroo.com/the-rest-reporting-api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Covers the current documented REST Reporting API response endpoint and keeps the two read endpoints emitted by the legacy Go connector. The current public Reporting API documentation does not document REST writes.",
+  "endpoints": [
+    { "method": "GET", "path": "/nudges", "covered_by": { "stream": "nudges" } },
+    { "method": "GET", "path": "/responses", "covered_by": { "stream": "responses" } },
+    { "method": "GET", "path": "/nudges/{survey_id}/responses.json", "covered_by": { "stream": "survey_responses" } }
+  ]
+}

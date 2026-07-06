@@ -1,0 +1,18 @@
+{
+  "record": {
+    "projectName": "fixture-project",
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "projectName": "fixture-project",
+      "tags": ["fixture"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "5f8a1c2b3d4e5f6a7b8c9d99", "projectName": "fixture-project", "tags": ["fixture"] }
+  }
+}

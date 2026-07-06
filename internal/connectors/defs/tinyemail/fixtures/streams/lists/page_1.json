@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "list_fixture_1",
+          "name": "Fixture List 1",
+          "subscriber_count": "42",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_fixture_2",
+          "name": "Fixture List 2",
+          "subscriber_count": "17",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

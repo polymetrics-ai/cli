@@ -1,0 +1,73 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "candidates",
+      "method": "GET",
+      "path": "/__legacy_hook/candidates",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/candidates.json",
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "jobs",
+      "method": "GET",
+      "path": "/__legacy_hook/jobs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/jobs.json",
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "applications",
+      "method": "GET",
+      "path": "/__legacy_hook/applications",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/applications.json",
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "users",
+      "method": "GET",
+      "path": "/__legacy_hook/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json",
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "client_filtered": true
+      }
+    }
+  ]
+}

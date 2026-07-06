@@ -1,0 +1,22 @@
+{
+  "record": {
+    "url": "https://example.com/fixture",
+    "method": "post",
+    "event": "schedule.published"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/webhooks",
+    "body": {
+      "url": "https://example.com/fixture",
+      "method": "post",
+      "event": "schedule.published"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/collaborators",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "collab_fixture_1",
+          "object": "collaborator",
+          "name": "Fixture User",
+          "email": "fixture@example.invalid",
+          "role": "admin",
+          "accepted_at": 1735689600000,
+          "has_mfa": true
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/collaborators"
+    }
+  }
+}

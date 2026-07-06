@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/admin/projects/synthetic-conformance-value/features", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "features": [
+        { "name": "checkout", "project": "default", "enabled": true, "type": "release" },
+        { "name": "new-nav", "project": "default", "enabled": false, "type": "experiment" }
+      ]
+    }
+  }
+}

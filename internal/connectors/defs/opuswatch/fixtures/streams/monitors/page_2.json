@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/monitors",
+    "query": {
+      "per_page": "synthetic-conformance-value",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mon_fixture_3",
+          "name": "Background Jobs Monitor",
+          "status": "down",
+          "message": "connection timeout",
+          "created_at": "2026-01-01T00:00:02Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

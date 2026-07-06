@@ -1,0 +1,26 @@
+{
+  "record": {
+    "eventType": "fixture_eventType",
+    "url": "https://example.com/reply-fixture",
+    "scope": "fixture_scope",
+    "enabled": true,
+    "payloadConfig": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/webhooks",
+    "body": {
+      "eventType": "fixture_eventType",
+      "url": "https://example.com/reply-fixture",
+      "scope": "fixture_scope",
+      "enabled": true,
+      "payloadConfig": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

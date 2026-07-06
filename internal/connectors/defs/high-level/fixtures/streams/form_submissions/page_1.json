@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/upstream/form-submissions", "query": { "locationId": "synthetic-conformance-value", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "submissions": [
+        { "id": "fs_fixture_1", "formId": "form_fixture_1", "contactId": "ct_fixture_1", "locationId": "synthetic-conformance-value", "name": "Fixture Contact 1", "email": "fixture1@example.com", "createdAt": "2026-01-01T00:00:00Z" },
+        { "id": "fs_fixture_2", "formId": "form_fixture_1", "contactId": "ct_fixture_2", "locationId": "synthetic-conformance-value", "name": "Fixture Contact 2", "email": "fixture2@example.com", "createdAt": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "nextPageUrl": null }
+    }
+  }
+}

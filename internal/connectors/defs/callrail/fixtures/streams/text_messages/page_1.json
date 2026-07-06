@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/text-messages.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "text_messages": [
+        {
+          "id": "TXT_fixture_1",
+          "company_id": "CMP_fixture_1",
+          "initial_tracker_id": "TRK_fixture_1",
+          "customer_name": "Fixture Texter",
+          "customer_phone_number": "+15550000009",
+          "tracking_phone_number": "+15555550000",
+          "last_message_at": "2026-01-01T00:00:00Z",
+          "state": "active"
+        }
+      ]
+    }
+  }
+}

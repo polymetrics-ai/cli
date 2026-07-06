@@ -1,0 +1,10 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "tag_name": "fixture-tag"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id/unassign_tag/fixture-tag"
+  }
+}

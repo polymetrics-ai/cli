@@ -1,0 +1,15 @@
+{
+  "api": "Plaid API",
+  "docs": "https://plaid.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 (StreamHook) migration of internal/connectors/plaid: the 2 legacy-parity read streams that require no end-user access_token (institutions, categories). Legacy is read-only and conservative by design (its own package doc: \"covers Plaid catalog endpoints that do not require an end-user access_token\"); the full Plaid API surface (Item/Auth/Transactions/Identity/Balance/Liabilities/Investments, all of which need a Link-issued access_token per end user) is out of scope, matching legacy exactly. Every covered/excluded entry below is declared method GET (not the literal wire HTTP verb, which is always POST for Plaid's entire API, reads and mutations alike) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4; monday's api_surface.json documents the identical convention for its POST-only GraphQL transport) -- Plaid's wire verb alone cannot distinguish a read from a write the way REST's verb convention does.",
+  "endpoints": [
+    { "method": "GET", "path": "/institutions/get", "covered_by": { "stream": "institutions" } },
+    { "method": "GET", "path": "/categories/get", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/item/get", "excluded": { "category": "out_of_scope", "reason": "requires a Link-issued end-user access_token, not modeled by legacy" } },
+    { "method": "GET", "path": "/accounts/get", "excluded": { "category": "out_of_scope", "reason": "requires a Link-issued end-user access_token, not modeled by legacy" } },
+    { "method": "GET", "path": "/transactions/sync", "excluded": { "category": "out_of_scope", "reason": "requires a Link-issued end-user access_token, not modeled by legacy" } },
+    { "method": "GET", "path": "/identity/get", "excluded": { "category": "out_of_scope", "reason": "requires a Link-issued end-user access_token, not modeled by legacy" } },
+    { "method": "POST", "path": "/link/token/create", "excluded": { "category": "out_of_scope", "reason": "Link token issuance is a client-side onboarding flow, not a syncable record stream" } }
+  ]
+}

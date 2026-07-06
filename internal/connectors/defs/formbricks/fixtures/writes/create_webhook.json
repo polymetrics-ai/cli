@@ -1,0 +1,16 @@
+{
+  "record": {
+    "url": "https://example.com/formbricks-webhook",
+    "triggers": ["responseCreated", "responseUpdated"],
+    "surveyIds": ["srv_fixture_1"],
+    "name": "Fixture webhook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "url": "https://example.com/formbricks-webhook",
+      "name": "Fixture webhook"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "api": "eBay Sell Finances API v1 (https://developer.ebay.com/api-docs/sell/finances/overview.html)",
+  "docs": "https://developer.ebay.com/api-docs/sell/finances/overview.html",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: the Finances API's entire documented surface is exactly 8 endpoints across 4 resources (transaction, transfer, payout, seller_funds_summary) — this IS the full surface, not a subset. The 4 legacy-parity streams (transactions, payouts, transfers, seller_funds_summary) remain the only streams; the other 4 endpoints are aggregate-summary or single-object-by-id shapes that either duplicate an already-covered list stream's record shape or are not syncable object lists at all. The API is read-only for a seller's own monetary records by design — eBay publishes no POST/PUT/PATCH/DELETE method anywhere in this resource group (money movement happens through eBay's own payout/transfer processing, never a caller-initiated write) — so capabilities.write stays false and no writes.json is added.",
+  "endpoints": [
+    { "method": "GET", "path": "/transaction", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/transaction_summary", "excluded": { "category": "out_of_scope", "reason": "getTransactionSummary returns one cumulative-aggregate object (counts/totals matching the filter), not a syncable per-record list; the transactions stream already covers every underlying record this would summarize" } },
+    { "method": "GET", "path": "/payout", "covered_by": { "stream": "payouts" } },
+    { "method": "GET", "path": "/payout/{payout_id}", "excluded": { "category": "duplicate_of", "reason": "getPayout returns a single-payout detail object; identical record shape to the payouts list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/payout_summary", "excluded": { "category": "out_of_scope", "reason": "getPayoutSummary returns one cumulative-aggregate object (total payouts/transaction count/dollar value for a state or all states), not a syncable per-record list; the payouts stream already covers every underlying payout record this would summarize" } },
+    { "method": "GET", "path": "/transfer", "covered_by": { "stream": "transfers" } },
+    { "method": "GET", "path": "/transfer/{transfer_id}", "excluded": { "category": "duplicate_of", "reason": "getTransfer is a single-transfer detail-by-id lookup with no corresponding list/discovery endpoint of its own in the real API; this bundle's transfers stream already surfaces the same records via the transaction/transfer date-range filter, matching the legacy connector's own parity shape (see docs.md Streams notes) — a bare detail-by-id endpoint with no id-enumeration path is not independently syncable" } },
+    { "method": "GET", "path": "/seller_funds_summary", "covered_by": { "stream": "seller_funds_summary" } }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/attendees",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "attendee_fixture_1",
+          "name": "Fixture Attendee",
+          "email": "fixture2@example.com",
+          "status": "checked_in",
+          "starts_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "total": null
+        }
+      ]
+    }
+  }
+}

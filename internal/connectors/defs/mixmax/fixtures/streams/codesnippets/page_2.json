@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/codesnippets", "query": { "next": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "_id": "cs_fixture_3", "title": "Fixture Snippet Three", "language": "javascript", "theme": "default", "html": "<div>fixture</div>", "background": "#ffffff", "userId": "usr_fixture_1", "createdAt": "2026-01-03T00:00:00Z" }
+      ],
+      "next": null,
+      "hasNext": false
+    }
+  }
+}

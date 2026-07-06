@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/inboundroute" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "PublicId": "route_fixture_1", "Name": "fixture-route-1", "FilterType": "MatchTo", "Filter": "support@example.com", "ActionType": "Url", "ActionParameter": "https://example.com/inbound", "SortOrder": 1 }
+    ]
+  }
+}

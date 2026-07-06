@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/email_templates", "query": { "page": "1", "page_size": "125" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "email_templates": [
+        { "uuid": "tmpl_fixture_1", "name": "Fixture Template One", "created_at": "2026-01-01T00:00:00Z" },
+        { "uuid": "tmpl_fixture_2", "name": "Fixture Template Two", "created_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

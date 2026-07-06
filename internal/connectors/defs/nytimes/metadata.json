@@ -1,0 +1,19 @@
+{
+  "name": "nytimes",
+  "display_name": "New York Times",
+  "description": "Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.",
+  "integration_type": "api",
+  "docs_url": "https://developer.nytimes.com/apis",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external NYTimes API read of published article metadata (no PII)"
+  }
+}

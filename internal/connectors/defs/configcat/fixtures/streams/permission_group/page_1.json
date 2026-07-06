@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v1/permissions/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "permissionGroupId": 1,
+      "name": "Fixture Permission Group",
+      "accessType": "readOnly",
+      "canManageMembers": false,
+      "canCreateOrUpdateConfig": false,
+      "canDeleteConfig": false,
+      "canCreateOrUpdateEnvironment": false,
+      "canDeleteEnvironment": false,
+      "canCreateOrUpdateSetting": false,
+      "canDeleteSetting": false,
+      "product": { "productId": "prod_fixture_1" }
+    }
+  }
+}

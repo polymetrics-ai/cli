@@ -1,0 +1,403 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-com-zoho-expense-organizationid": "{{ config.organization_id }}"
+    },
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "prefix": "Zoho-oauthtoken ",
+        "value": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 200
+    },
+    "check": {
+      "method": "GET",
+      "path": "/expensereports"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "zoho-expense access_token is missing, expired, or invalid; re-run pm credentials add zoho-expense"
+      },
+      {
+        "status": 403,
+        "hint": "zoho-expense organization_id is missing or the connected account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "zoho-expense rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reports",
+      "path": "/expensereports",
+      "records": {
+        "path": "expense_reports"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.report_id record.expense_report_id }}",
+        "name": "{{ coalesce record.name record.report_name }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
+      },
+      "schema": "schemas/reports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expenses",
+      "path": "/expenses",
+      "records": {
+        "path": "expenses"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.expense_id }}",
+        "name": "{{ coalesce record.name record.merchant_name record.description }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time record.last_modified_time }}"
+      },
+      "schema": "schemas/expenses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "users"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.user_id }}",
+        "name": "{{ coalesce record.name record.email }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_time }}"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "currencies",
+      "path": "/settings/currencies",
+      "records": {
+        "path": "currencies"
+      },
+      "schema": "schemas/currencies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "currency",
+      "path": "/settings/currencies/{{ config.currency_id }}",
+      "records": {
+        "path": "currency",
+        "single_object": true
+      },
+      "schema": "schemas/currency.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customers",
+      "path": "/contacts",
+      "records": {
+        "path": "customers"
+      },
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "customer",
+      "path": "/contacts/{{ config.customer_id }}",
+      "records": {
+        "path": "contact",
+        "single_object": true
+      },
+      "schema": "schemas/customer.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "advance_payments",
+      "path": "/advancepayments",
+      "records": {
+        "path": "advance_payments"
+      },
+      "schema": "schemas/advance_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "advance_payment",
+      "path": "/advancepayments/{{ config.advance_payment_id }}",
+      "records": {
+        "path": "advance_payment",
+        "single_object": true
+      },
+      "schema": "schemas/advance_payment.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_categories",
+      "path": "/expensecategories",
+      "records": {
+        "path": "expense_categories"
+      },
+      "schema": "schemas/expense_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_category",
+      "path": "/expensecategories/{{ config.expense_category_id }}",
+      "records": {
+        "path": "expense_category",
+        "single_object": true
+      },
+      "schema": "schemas/expense_category.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_report",
+      "path": "/expensereports/{{ config.expense_report_id }}",
+      "records": {
+        "path": "expense_report",
+        "single_object": true
+      },
+      "schema": "schemas/expense_report.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_report_approval_history",
+      "path": "/expensereports/{{ config.expense_report_id }}/approvalhistory",
+      "records": {
+        "path": "approval_history"
+      },
+      "schema": "schemas/expense_report_approval_history.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_report_validation",
+      "path": "/expensereports/{{ config.expense_report_id }}/validate",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/expense_report_validation.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_report_budget_summary",
+      "path": "/expensereports/{{ config.expense_report_id }}/budgetsummary",
+      "records": {
+        "path": "budget_summary",
+        "single_object": true
+      },
+      "schema": "schemas/expense_report_budget_summary.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_report_reimbursement",
+      "path": "/expensereports/{{ config.expense_report_id }}/reimbursement",
+      "records": {
+        "path": "reimbursement",
+        "single_object": true
+      },
+      "schema": "schemas/expense_report_reimbursement.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/organizations.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "organization",
+      "path": "/organizations/{{ config.organization_id }}",
+      "records": {
+        "path": "organization",
+        "single_object": true
+      },
+      "schema": "schemas/organization.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": {
+        "path": "projects"
+      },
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project",
+      "path": "/projects/{{ config.project_id }}",
+      "records": {
+        "path": "project",
+        "single_object": true
+      },
+      "schema": "schemas/project.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "reporting_tags",
+      "path": "/reportingtags",
+      "records": {
+        "path": "reporting_tags"
+      },
+      "schema": "schemas/reporting_tags.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "organization_id": "{{ config.organization_id }}"
+      }
+    },
+    {
+      "name": "tag_options",
+      "path": "/reportingtags/options",
+      "records": {
+        "path": "options"
+      },
+      "schema": "schemas/tag_options.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "organization_id": "{{ config.organization_id }}",
+        "tag_id": "{{ config.tag_id }}"
+      }
+    },
+    {
+      "name": "reporting_tag_options_all",
+      "path": "/reportingtags/{{ config.tag_id }}/options/all",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/reporting_tag_options_all.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "organization_id": "{{ config.organization_id }}",
+        "tag_id": "{{ config.tag_id }}"
+      }
+    },
+    {
+      "name": "taxes",
+      "path": "/settings/taxes",
+      "records": {
+        "path": "taxes"
+      },
+      "schema": "schemas/taxes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tax",
+      "path": "/settings/taxes/{{ config.tax_id }}",
+      "records": {
+        "path": "tax",
+        "single_object": true
+      },
+      "schema": "schemas/tax.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tax_group",
+      "path": "/settings/taxgroups/{{ config.tax_group_id }}",
+      "records": {
+        "path": "tax_group",
+        "single_object": true
+      },
+      "schema": "schemas/tax_group.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "trips",
+      "path": "/trips",
+      "records": {
+        "path": "trips"
+      },
+      "schema": "schemas/trips.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "trip",
+      "path": "/trips/{{ config.trip_id }}",
+      "records": {
+        "path": "trip",
+        "single_object": true
+      },
+      "schema": "schemas/trip.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "user",
+        "single_object": true
+      },
+      "schema": "schemas/user.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

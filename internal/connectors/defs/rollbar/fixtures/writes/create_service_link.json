@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "template": "https://example.com/items/{{id}}"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/1/service_links",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "template": "https://example.com/items/{{id}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

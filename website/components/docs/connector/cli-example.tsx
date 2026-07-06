@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { AlertTriangle, Check, Clipboard, Terminal } from 'lucide-react';
 import type { ConnectorMeta } from '@/lib/connectors.catalog.generated';
-import { Badge, statusVariant } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -18,80 +18,60 @@ interface CommandRow {
   note?: string;
 }
 
-function envName(slug: string, field: string): string {
-  const prefix = slug
-    .replace(/^(source|destination)-/, '')
-    .replace(/[^a-z0-9]+/gi, '_')
-    .replace(/^_+|_+$/g, '')
-    .toUpperCase();
-  const suffix = field
-    .replace(/[^a-z0-9]+/gi, '_')
-    .replace(/^_+|_+$/g, '')
-    .toUpperCase();
-
-  return `PM_${prefix}_${suffix}`;
-}
-
 function connectionName(connector: ConnectorMeta): string {
-  return `${connector.pmName || connector.slug}-connection`;
-}
-
-function inspectName(connector: ConnectorMeta): string {
-  return connector.pmName || connector.slug;
-}
-
-function buildCredentialArgs(connector: ConnectorMeta): string {
-  const secretArgs = connector.secrets
-    .slice(0, 3)
-    .map((field) => `--from-env ${field}=${envName(connector.slug, field)}`);
-  const configArgs = connector.config
-    .filter((field) => field.required && !field.secret && !connector.secrets.includes(field.name))
-    .slice(0, 2)
-    .map((field) => `--config ${field.name}=<value>`);
-
-  const args = [...secretArgs, ...configArgs];
-  return args.length > 0 ? args.join(' ') : '--config <field>=<value>';
+  return `${connector.slug}-connection`;
 }
 
 function buildRows(connector: ConnectorMeta): CommandRow[] {
-  const name = inspectName(connector);
-
-  if (connector.status !== 'enabled' || !connector.capabilities.etl) {
-    return [
-      {
-        label: 'Inspect catalog metadata',
-        command: `pm connectors inspect ${connector.slug} --json`,
-      },
-      {
-        label: 'Review native-port plan',
-        command: `pm connectors port-plan ${connector.slug} --json`,
-      },
-      {
-        label: 'Runtime note',
-        note: 'ETL and credential checks are unavailable until this catalog connector is enabled.',
-      },
-    ];
-  }
-
   const conn = connectionName(connector);
-  return [
+  const rows: CommandRow[] = [
     {
       label: 'Inspect connector metadata',
-      command: `pm connectors inspect ${name} --json`,
-    },
-    {
-      label: 'Store config and secrets',
-      command: `pm credentials add ${conn} --connector ${name} ${buildCredentialArgs(connector)}`,
-    },
-    {
-      label: 'Validate stored credentials',
-      command: `pm credentials test ${conn} --json`,
-    },
-    {
-      label: 'Run bounded ETL',
-      command: `pm etl run --connection ${conn} --stream <stream_name> --batch-size 500 --json`,
+      command: `pm connectors inspect ${connector.slug} --json`,
     },
   ];
+
+  if (connector.capabilities.check) {
+    rows.push({
+      label: 'Run a credential check',
+      command: `pm etl check --connector ${connector.slug} --config <field>=<value> --json`,
+    });
+  }
+
+  if (connector.capabilities.read) {
+    rows.push(
+      {
+        label: 'Read a bounded stream',
+        command: `pm etl read --connector ${connector.slug} --stream <stream_name> --limit 100 --json`,
+      },
+      {
+        label: 'Run bounded ETL',
+        command: `pm etl run --connection ${conn} --stream <stream_name> --batch-size 500 --json`,
+      },
+    );
+  }
+
+  if (connector.capabilities.write && connector.writeActions.length > 0) {
+    rows.push(
+      {
+        label: 'Plan a reverse-ETL write',
+        command: `pm reverse plan <plan_name> --destination ${connector.slug}:<credential_name> --action <action_name> --map <column>:<field> --json`,
+      },
+      {
+        label: 'Approval gate',
+        note: 'Preview the plan and execute only with an explicit approval token.',
+      },
+    );
+  }
+
+  if (rows.length === 1) {
+    rows.push({
+      label: 'Runtime note',
+      note: 'This bundle exposes metadata but no read or write capability.',
+    });
+  }
+
+  return rows;
 }
 
 function rowsToText(rows: CommandRow[]): string {
@@ -124,14 +104,12 @@ export function CliExample({ connector }: CliExampleProps) {
               pm CLI
             </p>
             <p className="mt-0.5 text-[12px] leading-snug text-text-tertiary">
-              Commands reflect this connector&apos;s current runtime status.
+              Commands reflect this connector&apos;s declared bundle capabilities.
             </p>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <Badge variant={statusVariant(connector.status)}>
-            {connector.status === 'enabled' ? 'Enabled' : 'Catalog only'}
-          </Badge>
+          <Badge variant="capability">Bundle</Badge>
           <Button aria-label="Copy CLI commands" variant="quiet" onClick={handleCopy}>
             {copied ? (
               <Check className="h-3.5 w-3.5" aria-hidden="true" />

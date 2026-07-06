@@ -1,0 +1,118 @@
+{
+  "base": {
+    "url": "https://{{ config.subdomain }}.ezofficeinventory.com",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "token", "prefix": "", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 25
+    },
+    "check": { "method": "GET", "path": "/members.api" },
+    "error_map": [
+      { "status": 401, "hint": "ezofficeinventory api_key is missing or invalid; re-run pm credentials add ezofficeinventory" },
+      { "status": 403, "hint": "ezofficeinventory account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "ezofficeinventory rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "assets",
+      "path": "/assets.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/assets.json"
+    },
+    {
+      "name": "inventories",
+      "path": "/inventory.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/inventories.json"
+    },
+    {
+      "name": "asset_stocks",
+      "path": "/stock_assets.api",
+      "query": {
+        "show_image_urls": "true",
+        "show_document_urls": "true",
+        "include_custom_fields": "true",
+        "show_document_details": "true"
+      },
+      "records": { "path": "assets" },
+      "schema": "schemas/asset_stocks.json"
+    },
+    {
+      "name": "members",
+      "path": "/members.api",
+      "records": { "path": "members" },
+      "schema": "schemas/members.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations/get_line_item_locations.api",
+      "records": { "path": "locations" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "groups",
+      "path": "/assets/classification_view.api",
+      "query": {
+        "show_document_details": "true"
+      },
+      "records": { "path": "groups" },
+      "computed_fields": {
+        "id": "{{ record.group.id }}",
+        "name": "{{ record.group.name }}",
+        "description": "{{ record.group.description }}",
+        "active": "{{ record.group.active }}",
+        "asset_depreciation_mode": "{{ record.group.asset_depreciation_mode }}",
+        "assets_count": "{{ record.group.assets_count }}",
+        "company_id": "{{ record.group.company_id }}",
+        "hidden_on_web_store": "{{ record.group.hidden_on_web_store }}",
+        "created_at": "{{ record.group.created_at }}",
+        "updated_at": "{{ record.group.updated_at }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "vendors",
+      "path": "/assets/vendors.api",
+      "query": {
+        "include_custom_fields": "true"
+      },
+      "records": { "path": "vendors" },
+      "computed_fields": {
+        "id": "{{ record.vendor.id }}",
+        "name": "{{ record.vendor.name }}",
+        "company_id": "{{ record.vendor.company_id }}",
+        "assets_count": "{{ record.vendor.assets_count }}",
+        "services_count": "{{ record.vendor.services_count }}",
+        "status": "{{ record.vendor.status }}",
+        "created_at": "{{ record.vendor.created_at }}",
+        "updated_at": "{{ record.vendor.updated_at }}"
+      },
+      "schema": "schemas/vendors.json"
+    },
+    {
+      "name": "purchase_orders",
+      "path": "/purchase_orders.api",
+      "records": { "path": "purchase_orders" },
+      "schema": "schemas/purchase_orders.json"
+    }
+  ]
+}

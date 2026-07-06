@@ -1,0 +1,30 @@
+{
+  "record": {
+    "entries": [
+      {
+        "clockEntryId": 1001,
+        "date": "2026-01-01T00:00:00Z",
+        "employeeId": 1001,
+        "end": "fixture_value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/clock_entries",
+    "body": {
+      "entries": [
+        {
+          "clockEntryId": 1001,
+          "date": "2026-01-01T00:00:00Z",
+          "employeeId": 1001,
+          "end": "fixture_value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

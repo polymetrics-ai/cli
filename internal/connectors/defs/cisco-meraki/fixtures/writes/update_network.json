@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "N_fixture_1",
+    "name": "Fixture Network Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/networks/N_fixture_1"
+  }
+}

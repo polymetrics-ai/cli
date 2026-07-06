@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/broadcasts",
+    "query": {
+      "page": "2",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "total_pages": 2,
+      "broadcasts": [
+        {
+          "id": 51,
+          "subject": "Broadcast 51",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

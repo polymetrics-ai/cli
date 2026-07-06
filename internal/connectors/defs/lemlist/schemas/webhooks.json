@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "targetUrl": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "campaignId": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "zapId": { "type": ["integer", "null"] }
+  }
+}

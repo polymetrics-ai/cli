@@ -1,0 +1,2042 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "{{ secrets.api_secret }}",
+        "when": "{{ secrets.api_secret }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "api_key_header",
+        "header": "X-API-Key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/products",
+      "query": {
+        "count": "1",
+        "offset": "0"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "shopwired credentials are missing or invalid; re-run pm credentials add shopwired"
+      },
+      {
+        "status": 403,
+        "hint": "shopwired credentials lack access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "shopwired rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "app",
+      "path": "/app",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/app.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "data",
+      "path": "/app/data",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/data.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blog_categories",
+      "path": "/blog-categories",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_categories.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "blog_category",
+      "path": "/blog-categories/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_category.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blog_posts",
+      "path": "/blog-posts",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_posts.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "blog_post",
+      "path": "/blog-posts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_post.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blog_tags",
+      "path": "/blog-tags",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_tags.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "blog_tag",
+      "path": "/blog-tags/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/blog_tag.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "brands",
+      "path": "/brands",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/brands.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "brand",
+      "path": "/brands/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/brand.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "business",
+      "path": "/business",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/business.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "features",
+      "path": "/business/features",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/features.json",
+      "query": {
+        "name": {
+          "template": "{{ config.name }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": {
+        "path": "."
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
+      },
+      "schema": "schemas/categories.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "category",
+      "path": "/categories/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/category.json",
+      "query": {
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "choice_sets",
+      "path": "/choice-sets",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/choice_sets.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "choice_set",
+      "path": "/choice-sets/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/choice_set.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "collect_locations",
+      "path": "/collect-locations",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/collect_locations.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "collect_location",
+      "path": "/collect-locations/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/collect_location.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom-fields",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "custom_field",
+      "path": "/custom-fields/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/custom_field.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": {
+        "path": "."
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
+      },
+      "schema": "schemas/customers.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "trade": {
+          "template": "{{ config.trade }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.email }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "customer",
+      "path": "/customers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/customer.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "digital_files",
+      "path": "/digital-files",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/digital_files.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "since_id": {
+          "template": "{{ config.since_id }}",
+          "omit_when_absent": true
+        },
+        "created_before": {
+          "template": "{{ config.created_before }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "digital_file",
+      "path": "/digital-files/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/digital_file.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/events.json",
+      "query": {
+        "topic": {
+          "template": "{{ config.topic }}",
+          "omit_when_absent": true
+        },
+        "since_id": {
+          "template": "{{ config.since_id }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "created_before": {
+          "template": "{{ config.created_before }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "subject_type": {
+          "template": "{{ config.subject_type }}",
+          "omit_when_absent": true
+        },
+        "subject_id": {
+          "template": "{{ config.subject_id }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/event.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "filter_groups",
+      "path": "/filter-groups",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/filter_groups.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "filter_group",
+      "path": "/filter-groups/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/filter_group.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "gift_vouchers",
+      "path": "/gift-vouchers",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/gift_vouchers.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "gift_voucher",
+      "path": "/gift-vouchers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/gift_voucher.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "incomplete_orders",
+      "path": "/incomplete-orders",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/incomplete_orders.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "from": {
+          "template": "{{ config.from }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "incomplete_order",
+      "path": "/incomplete-orders/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/incomplete_order.json",
+      "query": {
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "newsletter_subscribers",
+      "path": "/newsletter-subscribers",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/newsletter_subscribers.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "newsletter_subscriber",
+      "path": "/newsletter-subscribers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/newsletter_subscriber.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "nexuses",
+      "path": "/nexuses",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/nexuses.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "offers",
+      "path": "/offers",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/offers.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "offer",
+      "path": "/offers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/offer.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "order_statuses",
+      "path": "/order-statuses",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/order_statuses.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": {
+        "path": "."
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
+      },
+      "schema": "schemas/orders.json",
+      "query": {
+        "ids": {
+          "template": "{{ config.ids }}",
+          "omit_when_absent": true
+        },
+        "archived": {
+          "template": "{{ config.archived }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        },
+        "from": {
+          "template": "{{ config.from }}",
+          "omit_when_absent": true
+        },
+        "to": {
+          "template": "{{ config.to }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "search",
+      "path": "/orders/search",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/search.json",
+      "query": {
+        "keywords": {
+          "template": "{{ config.keywords }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "order",
+      "path": "/orders/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/order.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "pages",
+      "path": "/pages",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/pages.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "page",
+      "path": "/pages/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/page.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payment_methods",
+      "path": "/payment-methods",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/payment_methods.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": {
+        "path": "."
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.order_id }}",
+        "name": "{{ coalesce record.name record.title }}",
+        "updated_at": "{{ coalesce record.updated_at record.modified_at }}"
+      },
+      "schema": "schemas/products.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "active": {
+          "template": "{{ config.active }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "search_2",
+      "path": "/products/search",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/search_2.json",
+      "query": {
+        "keywords": {
+          "template": "{{ config.keywords }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "product",
+      "path": "/products/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/product.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bulk_prices",
+      "path": "/products/{{ config.id }}/bulk-prices",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/bulk_prices.json"
+    },
+    {
+      "name": "bulk_price",
+      "path": "/products/{{ config.product_id }}/bulk-prices/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/bulk_price.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "choices",
+      "path": "/products/{{ config.product_id }}/choices",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/choices.json"
+    },
+    {
+      "name": "choice",
+      "path": "/products/{{ config.product_id }}/choices/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/choice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customization_fields",
+      "path": "/products/{{ config.product_id }}/customization-fields",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/customization_fields.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "extras",
+      "path": "/products/{{ config.product_id }}/extras",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/extras.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "images",
+      "path": "/products/{{ config.product_id }}/images",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/images.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "options",
+      "path": "/products/{{ config.product_id }}/options",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/options.json",
+      "query": {
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "option",
+      "path": "/products/{{ config.product_id }}/options/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/option.json",
+      "query": {
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "reviews",
+      "path": "/products/{{ config.product_id }}/reviews",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/reviews.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "variations",
+      "path": "/products/{{ config.product_id }}/variations",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/variations.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "variation",
+      "path": "/products/{{ config.product_id }}/variations/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/variation.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "redirects",
+      "path": "/redirects",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/redirects.json",
+      "query": {
+        "path": {
+          "template": "{{ config.path }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "redirect",
+      "path": "/redirects/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/redirect.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sales",
+      "path": "/sales",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/sales.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "sale",
+      "path": "/sales/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/sale.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "shipping_rates",
+      "path": "/shipping-rates",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/shipping_rates.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "shipping_rate",
+      "path": "/shipping-rates/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/shipping_rate.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "shipping_zones",
+      "path": "/shipping-zones",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/shipping_zones.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "shipping_zone",
+      "path": "/shipping-zones/{{ config.country_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "country_id": "{{ config.country_id }}"
+      },
+      "schema": "schemas/shipping_zone.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "disputes",
+      "path": "/shopwired-payments/disputes",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/disputes.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "dispute",
+      "path": "/shopwired-payments/disputes/{{ config.dispute_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "dispute_id": "{{ config.dispute_id }}"
+      },
+      "schema": "schemas/dispute.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payouts",
+      "path": "/shopwired-payments/payouts",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/payouts.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "payout",
+      "path": "/shopwired-payments/payouts/{{ config.payout_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "payout_id": "{{ config.payout_id }}"
+      },
+      "schema": "schemas/payout.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "transactions",
+      "path": "/shopwired-payments/transactions",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/transactions.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "transaction",
+      "path": "/shopwired-payments/transactions/{{ config.transaction_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "transaction_id": "{{ config.transaction_id }}"
+      },
+      "schema": "schemas/transaction.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stock",
+      "path": "/stock",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/stock.json",
+      "query": {
+        "sku": {
+          "template": "{{ config.sku }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stock_requests",
+      "path": "/stock-requests",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/stock_requests.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "theme_assets",
+      "path": "/theme-assets/{{ config.theme_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "theme_id": "{{ config.theme_id }}"
+      },
+      "schema": "schemas/theme_assets.json",
+      "query": {
+        "key": {
+          "template": "{{ config.key }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "themes",
+      "path": "/themes",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/themes.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "theme",
+      "path": "/themes/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/theme.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "trade_customer_product_prices",
+      "path": "/trade-customer-product-prices",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/trade_customer_product_prices.json",
+      "query": {
+        "customer_id": {
+          "template": "{{ config.customer_id }}",
+          "omit_when_absent": true
+        },
+        "product_id": {
+          "template": "{{ config.product_id }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "trade_customer_product_price",
+      "path": "/trade-customer-product-prices/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/trade_customer_product_price.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "trade_groups",
+      "path": "/trade-groups",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/trade_groups.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "trade_group",
+      "path": "/trade-groups/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/trade_group.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "vouchers",
+      "path": "/vouchers",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/vouchers.json",
+      "query": {
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "code": {
+          "template": "{{ config.code }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "voucher",
+      "path": "/vouchers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/voucher.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/webhooks.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/webhook.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "wishlists",
+      "path": "/wishlists",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/wishlists.json",
+      "query": {
+        "customer_id": {
+          "template": "{{ config.customer_id }}",
+          "omit_when_absent": true
+        },
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "wishlist",
+      "path": "/wishlists/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/wishlist.json",
+      "query": {
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "embed": {
+          "template": "{{ config.embed }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

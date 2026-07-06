@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/getTaxesAndFees" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "type": "tax",
+          "feeID": null,
+          "taxID": "tax_fixture_1",
+          "name": "Fixture Occupancy Tax",
+          "code": "OCC-TAX",
+          "kind": "percentage",
+          "amount": 8.5,
+          "amountAdult": null,
+          "amountChild": null,
+          "amountRateBased": true,
+          "amountType": "percentage",
+          "availableFor": ["reservation"],
+          "feesCharged": [],
+          "taxesCharged": [],
+          "inclusiveOrExclusive": "exclusive",
+          "isDeleted": false,
+          "childId": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "expiredAt": null,
+          "roomTypes": [],
+          "dateRanges": [],
+          "lengthOfStaySettings": null
+        }
+      ],
+      "count": 1
+    }
+  }
+}

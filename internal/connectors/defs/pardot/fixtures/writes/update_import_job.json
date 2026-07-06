@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "status": "Ready"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/imports/101",
+    "body": {
+      "name": "Fixture Pardot record",
+      "status": "Ready"
+    }
+  }
+}

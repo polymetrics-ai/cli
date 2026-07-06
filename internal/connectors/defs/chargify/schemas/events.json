@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "events",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "key": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "customer_id": { "type": ["integer", "null"] },
+    "subscription_id": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

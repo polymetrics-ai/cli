@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tag_detail",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "repository": { "type": ["integer", "null"] },
+    "full_size": { "type": ["integer", "null"] },
+    "creator": { "type": ["integer", "null"] },
+    "last_updater": { "type": ["integer", "null"] },
+    "last_updater_username": { "type": ["string", "null"] },
+    "v2": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "last_updated": { "type": ["string", "null"] },
+    "tag_last_pulled": { "type": ["string", "null"] },
+    "tag_last_pushed": { "type": ["string", "null"] }
+  }
+}

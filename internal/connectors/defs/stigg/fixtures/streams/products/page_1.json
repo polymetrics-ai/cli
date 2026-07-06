@@ -1,0 +1,8 @@
+{
+  "data": {
+    "products": [
+      { "id": "product_fixture_1", "refId": "starter-fixture", "displayName": "Starter Fixture", "status": "ACTIVE" },
+      { "id": "product_fixture_2", "refId": "pro-fixture", "displayName": "Pro Fixture", "status": "ACTIVE" }
+    ]
+  }
+}

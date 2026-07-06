@@ -1,0 +1,31 @@
+{
+  "record": {
+    "assetConditionId": "fixture_asset_condition_id_1",
+    "note": "fixture_note_1",
+    "assignedOn": "fixture_assigned_on_1",
+    "assignedTo": "fixture_assigned_to_1",
+    "asset_id": "fixture_asset_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/assets/fixture_asset_id/allocation",
+    "body": {
+      "assetConditionId": "fixture_asset_condition_id_1",
+      "note": "fixture_note_1",
+      "assignedOn": "fixture_assigned_on_1",
+      "assignedTo": "fixture_assigned_to_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_asset_assignment_fixture_1",
+        "name": "Fixture update asset assignment"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

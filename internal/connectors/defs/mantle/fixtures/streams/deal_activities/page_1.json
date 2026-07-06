@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/deal_activities"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": "",
+      "dealActivities": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "description": "fixture",
+        "icon": "fixture",
+        "timelineTitleTemplate": "fixture",
+        "timelineDescriptionTemplate": "fixture",
+        "defaultWeight": 1.23,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

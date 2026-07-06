@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "destroyallprospects",
+      "attributes": {
+        "name": "Fixture Destroy All Prospects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsDestroyAll",
+    "body": {
+      "data": {
+        "type": "destroyallprospects",
+        "attributes": {
+          "name": "Fixture Destroy All Prospects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

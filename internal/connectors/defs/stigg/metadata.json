@@ -1,0 +1,23 @@
+{
+  "name": "stigg",
+  "display_name": "Stigg",
+  "description": "Reads Stigg products, plans, customers, and subscriptions through the Stigg GraphQL-over-HTTP API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://docs.stigg.io/reference/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Stigg GraphQL API read of product/plan/customer/subscription entitlement metadata",
+    "approval": "none; read-only source connector"
+  }
+}

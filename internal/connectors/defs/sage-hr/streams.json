@@ -1,0 +1,127 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Auth-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/employees" },
+    "error_map": [
+      { "status": 401, "hint": "sage-hr API key is missing or invalid; re-run pm credentials add sage-hr" },
+      { "status": 429, "class": "rate_limited", "hint": "sage-hr rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "/employees",
+      "records": { "path": "data" },
+      "schema": "schemas/employees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "timeoff_requests",
+      "path": "/leave-management/requests",
+      "records": { "path": "data" },
+      "schema": "schemas/timeoff_requests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "terminated_employees",
+      "path": "/terminated-employees",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/terminated_employees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "positions",
+      "path": "/positions",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/positions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "termination_reasons",
+      "path": "/termination-reasons",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/termination_reasons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "leave_policies",
+      "path": "/leave-management/policies",
+      "records": { "path": "data" },
+      "schema": "schemas/leave_policies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "out_of_office_today",
+      "path": "/leave-management/out-of-office-today",
+      "records": { "path": "data" },
+      "schema": "schemas/out_of_office_today.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "individual_allowances",
+      "path": "/leave-management/reports/individual-allowances",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/individual_allowances.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recruitment_positions",
+      "path": "/recruitment/positions",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "schema": "schemas/recruitment_positions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recruitment_applicants",
+      "path": "/recruitment/positions/{{ fanout.id }}/applicants",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 2 },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/recruitment/positions", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "position_id"
+      },
+      "schema": "schemas/recruitment_applicants.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "onboarding_categories",
+      "path": "/onboarding/categories",
+      "records": { "path": "data" },
+      "schema": "schemas/onboarding_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "offboarding_categories",
+      "path": "/offboarding/categories",
+      "records": { "path": "data" },
+      "schema": "schemas/offboarding_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "document_categories",
+      "path": "/documents/categories",
+      "records": { "path": "data" },
+      "schema": "schemas/document_categories.json",
+      "projection": "passthrough"
+    }
+  ]
+}

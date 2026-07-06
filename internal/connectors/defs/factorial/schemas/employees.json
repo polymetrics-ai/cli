@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employees",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company_id": { "type": ["integer", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "full_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "manager_id": { "type": ["integer", "null"] },
+    "legal_entity_id": { "type": ["integer", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "team_ids": { "type": ["array", "null"] },
+    "gender": { "type": ["string", "null"] },
+    "birthday_on": { "type": ["string", "null"] },
+    "terminated_on": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

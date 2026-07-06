@@ -1,0 +1,14 @@
+{
+  "record": {
+    "custom_field_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/custom-fields/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Keka Connection Specification",
+  "type": "object",
+  "required": [
+    "base_url",
+    "client_id",
+    "client_secret"
+  ],
+  "properties": {
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Keka OAuth2 client secret. Used only in the token exchange body; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Company-specific Keka API base URL (e.g. https://<company>.keka.com/api/v1). No default: Keka has no global base URL."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.keka.com/connect/token",
+      "description": "Keka OAuth2 token endpoint override for tests or proxies."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Keka OAuth2 client ID."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Keka API key, sent as the api_key form field in the token exchange alongside client_id/client_secret. Marked x-secret for its credential-shaped nature even though it is a token-exchange input, not a Bearer credential itself."
+    },
+    "grant_type": {
+      "type": "string",
+      "default": "kekaapi",
+      "description": "Keka's custom OAuth2 grant_type value for the token exchange (not the standard client_credentials grant)."
+    },
+    "scope": {
+      "type": "string",
+      "default": "kekaapi",
+      "description": "OAuth2 scope requested in the token exchange."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference attachment_id."
+    },
+    "bgv_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference bgv_id."
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference candidate_id."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference document_id."
+    },
+    "document_type_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference document_type_id."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference employee_id."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference job_id."
+    },
+    "pay_batch_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_batch_id."
+    },
+    "pay_cycle_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_cycle_id."
+    },
+    "pay_group_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference pay_group_id."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference project_id."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional Keka resource identifier used by path-scoped streams that reference task_id."
+    }
+  }
+}

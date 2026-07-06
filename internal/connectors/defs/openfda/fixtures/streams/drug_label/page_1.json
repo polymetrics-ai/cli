@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/drug/label.json", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 100, "total": 1 } },
+      "results": [
+        {
+          "id": "drug_label_fixture_1",
+          "set_id": "set_fixture_1",
+          "version": "1",
+          "effective_time": "20260101",
+          "indications_and_usage": ["For the relief of fixture symptoms."],
+          "purpose": ["Fixture analgesic"],
+          "warnings": ["Do not exceed recommended fixture dosage."],
+          "openfda": { "brand_name": ["Fixture Brand"], "manufacturer_name": ["Fixture Pharma"] }
+        }
+      ]
+    }
+  }
+}

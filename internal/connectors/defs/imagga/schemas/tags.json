@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tags",
+  "type": "object",
+  "x-primary-key": ["image_url", "tag"],
+  "required": ["image_url", "tag"],
+  "properties": {
+    "image_url": { "type": "string" },
+    "tag": { "type": ["string", "null"] },
+    "confidence": { "type": ["number", "null"] }
+  }
+}

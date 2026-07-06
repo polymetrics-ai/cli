@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Amazon SQS Connection Specification",
+  "type": "object",
+  "required": ["queue_url", "region", "access_key", "secret_key"],
+  "properties": {
+    "queue_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full SQS queue URL (e.g. https://sqs.us-east-1.amazonaws.com/123456789012/my-queue)."
+    },
+    "region": {
+      "type": "string",
+      "description": "AWS region the queue lives in (e.g. us-east-1), used for SigV4 request signing."
+    },
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AWS access key id used for SigV4 request signing. Never logged."
+    },
+    "secret_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AWS secret access key used for SigV4 request signing. Never logged."
+    },
+    "session_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional AWS session token for temporary/STS credentials, sent as X-Amz-Security-Token when set."
+    },
+    "max_batch_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Messages requested per ReceiveMessage call (MaxNumberOfMessages), clamped to 1-10."
+    },
+    "max_wait_time": {
+      "type": "string",
+      "default": "0",
+      "description": "SQS long-poll WaitTimeSeconds, clamped to 0-20."
+    },
+    "visibility_timeout": {
+      "type": "string",
+      "description": "Optional VisibilityTimeout override in seconds, clamped to 0-43200. Uses the queue's own default when unset."
+    },
+    "attributes_to_return": {
+      "type": "string",
+      "default": "All",
+      "description": "Comma-separated list of MessageAttributeName values to request. Defaults to All."
+    },
+    "max_polls": {
+      "type": "string",
+      "default": "1",
+      "description": "Maximum number of ReceiveMessage calls per Read, clamped to 1-100. A poll returning zero messages stops early."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

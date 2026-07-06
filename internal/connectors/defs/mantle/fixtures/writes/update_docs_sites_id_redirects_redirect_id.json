@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "redirect_id": "redirect_id_fixture",
+    "fromPath": "fixture",
+    "toPath": "fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/sites/id_fixture/redirects/redirect_id_fixture",
+    "body": {
+      "fromPath": "fixture",
+      "toPath": "fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

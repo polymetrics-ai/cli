@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "addprospectassignments",
+      "attributes": {
+        "name": "Fixture Add Prospect Assignments"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAddAssignments",
+    "body": {
+      "data": {
+        "type": "addprospectassignments",
+        "attributes": {
+          "name": "Fixture Add Prospect Assignments"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

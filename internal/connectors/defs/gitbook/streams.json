@@ -1,0 +1,2135 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next.page",
+      "page_size": 50
+    },
+    "check": {
+      "method": "GET",
+      "path": "/user"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "gitbook access_token is missing or invalid; re-run pm credentials add gitbook"
+      },
+      {
+        "status": 403,
+        "hint": "gitbook token lacks access for this organization/space"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "gitbook rate limit exceeded; the connector will retry with backoff"
+      }
+    ],
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/user",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "display_name": "{{ coalesce record.displayName record.display_name }}",
+        "photo_url": "{{ coalesce record.photoURL record.photo_url }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/orgs",
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.createdAt record.created_at }}",
+        "url": "{{ record.urls }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "org_members",
+      "path": "/orgs/{{ config.organization_id }}/members",
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.user.id }}",
+        "display_name": "{{ coalesce record.displayName record.display_name record.user.displayName record.user.display_name }}",
+        "email": "{{ coalesce record.email record.user.email }}"
+      },
+      "schema": "schemas/org_members.json"
+    },
+    {
+      "name": "content",
+      "path": "/spaces/{{ config.space_id }}/content/pages",
+      "query": {
+        "limit": "50"
+      },
+      "records": {
+        "path": "pages"
+      },
+      "schema": "schemas/content.json"
+    },
+    {
+      "name": "get_api_information",
+      "path": "/",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_api_information.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_user_by_id",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_user_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_space_by_id",
+      "path": "/spaces/{{ config.space_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_space_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_embed_by_url_in_space",
+      "path": "/spaces/{{ config.space_id }}/embed",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_embed_by_url_in_space.json",
+      "query": {
+        "url": "{{ config.url }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "search_space_content",
+      "path": "/spaces/{{ config.space_id }}/search",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_space_content.json",
+      "query": {
+        "query": "{{ config.query }}",
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_space_git_info",
+      "path": "/spaces/{{ config.space_id }}/git/info",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_space_git_info.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_user_permissions_in_space",
+      "path": "/spaces/{{ config.space_id }}/permissions/users",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_user_permissions_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_team_permissions_in_space",
+      "path": "/spaces/{{ config.space_id }}/permissions/teams",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_team_permissions_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_current_revision",
+      "path": "/spaces/{{ config.space_id }}/content",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_current_revision.json"
+    },
+    {
+      "name": "list_files",
+      "path": "/spaces/{{ config.space_id }}/content/files",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_files.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_file_by_id",
+      "path": "/spaces/{{ config.space_id }}/content/files/{{ config.file_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_file_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_space_file_backlinks",
+      "path": "/spaces/{{ config.space_id }}/content/files/{{ config.file_id }}/backlinks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_file_backlinks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_page_by_id",
+      "path": "/spaces/{{ config.space_id }}/content/page/{{ config.page_id }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_by_id.json"
+    },
+    {
+      "name": "list_page_links_in_space",
+      "path": "/spaces/{{ config.space_id }}/content/page/{{ config.page_id }}/links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_page_links_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_space_page_backlinks",
+      "path": "/spaces/{{ config.space_id }}/content/page/{{ config.page_id }}/backlinks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_page_backlinks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_space_page_meta_links",
+      "path": "/spaces/{{ config.space_id }}/content/page/{{ config.page_id }}/meta-links",
+      "records": {
+        "path": "alternates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_page_meta_links.json"
+    },
+    {
+      "name": "get_page_by_path",
+      "path": "/spaces/{{ config.space_id }}/content/path/{{ config.page_path }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_by_path.json"
+    },
+    {
+      "name": "get_reusable_content_by_id",
+      "path": "/spaces/{{ config.space_id }}/content/reusable-contents/{{ config.reusable_content_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reusable_content_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_document_by_id",
+      "path": "/spaces/{{ config.space_id }}/documents/{{ config.document_id }}",
+      "records": {
+        "path": "nodes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_document_by_id.json"
+    },
+    {
+      "name": "list_change_requests_for_space",
+      "path": "/spaces/{{ config.space_id }}/change-requests",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_requests_for_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}",
+      "records": {
+        "path": "links"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_change_request_by_id.json"
+    },
+    {
+      "name": "get_reviews_by_change_request_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/reviews",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reviews_by_change_request_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_change_request_review_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/reviews/{{ config.review_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_change_request_review_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_requested_reviewers_by_change_request_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/requested-reviewers",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_requested_reviewers_by_change_request_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_change_request_conversations",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/conversations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_request_conversations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_change_request_links",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_request_links.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_comments_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/comments",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_comments_in_change_request.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_comment_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/comments/{{ config.comment_id }}",
+      "records": {
+        "path": "reactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_comment_in_change_request.json"
+    },
+    {
+      "name": "list_comment_replies_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/comments/{{ config.comment_id }}/replies",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_comment_replies_in_change_request.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_comment_reply_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/comments/{{ config.comment_id }}/replies/{{ config.comment_reply_id }}",
+      "records": {
+        "path": "reactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_comment_reply_in_change_request.json"
+    },
+    {
+      "name": "get_contributors_by_change_request_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/contributors",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contributors_by_change_request_id.json"
+    },
+    {
+      "name": "get_revision_of_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_revision_of_change_request_by_id.json"
+    },
+    {
+      "name": "list_pages_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/pages",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_pages_in_change_request.json"
+    },
+    {
+      "name": "list_files_in_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/files",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_files_in_change_request_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_file_in_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/files/{{ config.file_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_file_in_change_request_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_change_request_file_backlinks",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/files/{{ config.file_id }}/backlinks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_request_file_backlinks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_page_in_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/page/{{ config.page_id }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_in_change_request_by_id.json"
+    },
+    {
+      "name": "list_page_links_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/page/{{ config.page_id }}/links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_page_links_in_change_request.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_change_request_page_backlinks",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/page/{{ config.page_id }}/backlinks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_request_page_backlinks.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_change_request_page_meta_links",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/page/{{ config.page_id }}/meta-links",
+      "records": {
+        "path": "alternates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_request_page_meta_links.json"
+    },
+    {
+      "name": "get_reusable_content_in_change_request_by_id",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/reusable-contents/{{ config.reusable_content_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reusable_content_in_change_request_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_change_request_changes",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/changes",
+      "records": {
+        "path": "changes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_change_request_changes.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_change_request_pdf",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/pdf",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_change_request_pdf.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_revision_by_id.json"
+    },
+    {
+      "name": "get_revision_semantic_changes",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/changes",
+      "records": {
+        "path": "changes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_revision_semantic_changes.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_pages_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/pages",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_pages_in_revision_by_id.json"
+    },
+    {
+      "name": "list_files_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/files",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_files_in_revision_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_file_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/files/{{ config.file_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_file_in_revision_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_page_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/page/{{ config.page_id }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_in_revision_by_id.json"
+    },
+    {
+      "name": "get_page_document_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/page/{{ config.page_id }}/document",
+      "records": {
+        "path": "nodes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_document_in_revision_by_id.json"
+    },
+    {
+      "name": "get_page_in_revision_by_path",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/path/{{ config.page_path }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_in_revision_by_path.json"
+    },
+    {
+      "name": "list_revision_page_meta_links",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/page/{{ config.page_id }}/meta-links",
+      "records": {
+        "path": "alternates"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_revision_page_meta_links.json"
+    },
+    {
+      "name": "get_page_in_change_request_by_path",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/content/path/{{ config.page_path }}",
+      "records": {
+        "path": "pages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_page_in_change_request_by_path.json"
+    },
+    {
+      "name": "get_reusable_content_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/reusable-contents/{{ config.reusable_content_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reusable_content_in_revision_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_reusable_content_document_in_revision_by_id",
+      "path": "/spaces/{{ config.space_id }}/revisions/{{ config.revision_id }}/reusable-contents/{{ config.reusable_content_id }}/document",
+      "records": {
+        "path": "nodes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reusable_content_document_in_revision_by_id.json"
+    },
+    {
+      "name": "list_comments_in_space",
+      "path": "/spaces/{{ config.space_id }}/comments",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_comments_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_comment_in_space",
+      "path": "/spaces/{{ config.space_id }}/comments/{{ config.comment_id }}",
+      "records": {
+        "path": "reactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_comment_in_space.json"
+    },
+    {
+      "name": "list_comment_replies_in_space",
+      "path": "/spaces/{{ config.space_id }}/comments/{{ config.comment_id }}/replies",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_comment_replies_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_comment_reply_in_space",
+      "path": "/spaces/{{ config.space_id }}/comments/{{ config.comment_id }}/replies/{{ config.comment_reply_id }}",
+      "records": {
+        "path": "reactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_comment_reply_in_space.json"
+    },
+    {
+      "name": "list_commenters_in_space",
+      "path": "/spaces/{{ config.space_id }}/commenters",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_commenters_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_commenters_in_change_request",
+      "path": "/spaces/{{ config.space_id }}/change-requests/{{ config.change_request_id }}/commenters",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_commenters_in_change_request.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_permissions_aggregate_in_space",
+      "path": "/spaces/{{ config.space_id }}/permissions/aggregate",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_permissions_aggregate_in_space.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_space_integrations",
+      "path": "/spaces/{{ config.space_id }}/integrations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_integrations.json"
+    },
+    {
+      "name": "list_space_integrations_blocks",
+      "path": "/spaces/{{ config.space_id }}/integration-blocks",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_integrations_blocks.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_space_pdf",
+      "path": "/spaces/{{ config.space_id }}/pdf",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_space_pdf.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_space_links",
+      "path": "/spaces/{{ config.space_id }}/links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_space_links.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_collection_by_id",
+      "path": "/collections/{{ config.collection_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_collection_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_spaces_in_collection_by_id",
+      "path": "/collections/{{ config.collection_id }}/spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_spaces_in_collection_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_team_permissions_in_collection",
+      "path": "/collections/{{ config.collection_id }}/permissions/teams",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_team_permissions_in_collection.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_user_permissions_in_collection",
+      "path": "/collections/{{ config.collection_id }}/permissions/users",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_user_permissions_in_collection.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_permissions_aggregate_in_collection",
+      "path": "/collections/{{ config.collection_id }}/permissions/aggregate",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_permissions_aggregate_in_collection.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_integrations",
+      "path": "/integrations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integrations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_integration_by_name",
+      "path": "/integrations/{{ config.integration_name }}",
+      "records": {
+        "path": "previewImages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_integration_by_name.json"
+    },
+    {
+      "name": "list_integration_installations",
+      "path": "/integrations/{{ config.integration_name }}/installations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_installations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_integration_events",
+      "path": "/integrations/{{ config.integration_name }}/events",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_events.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_integration_event",
+      "path": "/integrations/{{ config.integration_name }}/events/{{ config.event_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_integration_event.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_integration_space_installations",
+      "path": "/integrations/{{ config.integration_name }}/spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_space_installations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_integration_site_installations",
+      "path": "/integrations/{{ config.integration_name }}/sites",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_site_installations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "render_integration_ui_with_get",
+      "path": "/integrations/{{ config.integration_name }}/render",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/render_integration_ui_with_get.json",
+      "query": {
+        "request": "{{ config.request }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_integration_installation_by_id",
+      "path": "/integrations/{{ config.integration_name }}/installations/{{ config.installation_id }}",
+      "records": {
+        "path": "externalIds"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_integration_installation_by_id.json"
+    },
+    {
+      "name": "list_integration_installation_spaces",
+      "path": "/integrations/{{ config.integration_name }}/installations/{{ config.installation_id }}/spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_installation_spaces.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_integration_space_installation",
+      "path": "/integrations/{{ config.integration_name }}/installations/{{ config.installation_id }}/spaces/{{ config.space_id }}",
+      "records": {
+        "path": "externalIds"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_integration_space_installation.json"
+    },
+    {
+      "name": "list_integration_installation_sites",
+      "path": "/integrations/{{ config.integration_name }}/installations/{{ config.installation_id }}/sites",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_integration_installation_sites.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_integration_site_installation",
+      "path": "/integrations/{{ config.integration_name }}/installations/{{ config.installation_id }}/sites/{{ config.site_id }}",
+      "records": {
+        "path": "externalIds"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_integration_site_installation.json"
+    },
+    {
+      "name": "get_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}",
+      "records": {
+        "path": "emailDomains"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organization_by_id.json"
+    },
+    {
+      "name": "get_member_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/members/{{ config.user_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_member_in_organization_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_spaces_for_organization_member",
+      "path": "/orgs/{{ config.organization_id }}/members/{{ config.user_id }}/spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_spaces_for_organization_member.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_teams_for_organization_member",
+      "path": "/orgs/{{ config.organization_id }}/members/{{ config.user_id }}/teams",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_teams_for_organization_member.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_teams_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/teams",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_teams_in_organization_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_team_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/teams/{{ config.team_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_team_in_organization_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_team_members_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/teams/{{ config.team_id }}/members",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_team_members_in_organization_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_organization_invite_links",
+      "path": "/orgs/{{ config.organization_id }}/link-invites",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_organization_invite_links.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_organization_invite_link",
+      "path": "/orgs/{{ config.organization_id }}/link-invites/{{ config.invite_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organization_invite_link.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "search_organization_content",
+      "path": "/orgs/{{ config.organization_id }}/search",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_organization_content.json",
+      "query": {
+        "query": "{{ config.query }}",
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_change_requests_for_organization",
+      "path": "/orgs/{{ config.organization_id }}/change-requests",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_requests_for_organization.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_spaces_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_spaces_in_organization_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_collections_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/collections",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_collections_in_organization_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_organization_integrations",
+      "path": "/orgs/{{ config.organization_id }}/integrations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_organization_integrations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_organization_integration_status",
+      "path": "/orgs/{{ config.organization_id }}/integrations/{{ config.integration_name }}/installation_status",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organization_integration_status.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_organization_installations",
+      "path": "/orgs/{{ config.organization_id }}/installations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_organization_installations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_organization_integrations_status",
+      "path": "/orgs/{{ config.organization_id }}/integrations/installations-status",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_organization_integrations_status.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_saml_providers_in_organization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/saml",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_saml_providers_in_organization_by_id.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_organization_saml_provider_by_id",
+      "path": "/orgs/{{ config.organization_id }}/saml/{{ config.saml_provider_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organization_saml_provider_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_sso_provider_logins_in_organization",
+      "path": "/orgs/{{ config.organization_id }}/sso",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_sso_provider_logins_in_organization.json"
+    },
+    {
+      "name": "get_recommended_questions_in_organization",
+      "path": "/orgs/{{ config.organization_id }}/ask/questions",
+      "records": {
+        "path": "questions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_recommended_questions_in_organization.json"
+    },
+    {
+      "name": "list_open_api_specs",
+      "path": "/orgs/{{ config.organization_id }}/openapi",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_open_api_specs.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_open_api_spec_by_slug",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}",
+      "records": {
+        "path": "lastProcessedErrors"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_open_api_spec_by_slug.json"
+    },
+    {
+      "name": "list_open_api_spec_versions",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}/versions",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_open_api_spec_versions.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_latest_open_api_spec_version",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}/versions/latest",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_latest_open_api_spec_version.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_latest_open_api_spec_version_content",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}/versions/latest/content",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_latest_open_api_spec_version_content.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_open_api_spec_version_by_id",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}/versions/{{ config.version_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_open_api_spec_version_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_open_api_spec_version_content_by_id",
+      "path": "/orgs/{{ config.organization_id }}/openapi/{{ config.spec_slug }}/versions/{{ config.version_id }}/content",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_open_api_spec_version_content_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_organization_agent_instructions",
+      "path": "/orgs/{{ config.organization_id }}/agent-instructions",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organization_agent_instructions.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_translations",
+      "path": "/orgs/{{ config.organization_id }}/translations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_translations.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_translation",
+      "path": "/orgs/{{ config.organization_id }}/translations/{{ config.translation_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_translation.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_glossary_entries",
+      "path": "/orgs/{{ config.organization_id }}/translations-glossary",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_glossary_entries.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_glossary_entry",
+      "path": "/orgs/{{ config.organization_id }}/translations-glossary/{{ config.glossary_entry_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_glossary_entry.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_custom_fonts",
+      "path": "/orgs/{{ config.organization_id }}/fonts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_custom_fonts.json"
+    },
+    {
+      "name": "get_custom_font",
+      "path": "/orgs/{{ config.organization_id }}/fonts/{{ config.font_id }}",
+      "records": {
+        "path": "fontFaces"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_custom_font.json"
+    },
+    {
+      "name": "list_sites",
+      "path": "/orgs/{{ config.organization_id }}/sites",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_sites.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}",
+      "records": {
+        "path": "features"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_by_id.json"
+    },
+    {
+      "name": "list_site_git_sync_installations",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/spaces/git/installations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_git_sync_installations.json"
+    },
+    {
+      "name": "get_site_adaptive_schema",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/adaptive-schema",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_adaptive_schema.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_adaptive_template_conditions",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/adaptive-schema/template-conditions",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_adaptive_template_conditions.json"
+    },
+    {
+      "name": "get_published_content_site",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/published",
+      "records": {
+        "path": "scripts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_published_content_site.json"
+    },
+    {
+      "name": "list_site_share_links",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/share-links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_share_links.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_structure",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/structure",
+      "records": {
+        "path": "structure"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_structure.json"
+    },
+    {
+      "name": "get_site_publishing_auth_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/publishing/auth",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_publishing_auth_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_site_publishing_preview_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/publishing/preview",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_publishing_preview_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_site_customization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/customization",
+      "records": {
+        "path": "socialAccounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_customization_by_id.json"
+    },
+    {
+      "name": "list_site_integration_scripts",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/integration-scripts",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_integration_scripts.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_integrations",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/integrations",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_integrations.json"
+    },
+    {
+      "name": "list_site_spaces",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/site-spaces",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_spaces.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_site_section_groups",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/section-groups",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_section_groups.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_site_sections",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/sections",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_sections.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_site_context_records",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/context-records",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_context_records.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_context_record_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/context-records/{{ config.site_context_record_id }}",
+      "records": {
+        "path": "topics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_context_record_by_id.json"
+    },
+    {
+      "name": "list_site_scans",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/scans",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_scans.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_scan_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/scans/{{ config.site_scan_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_scan_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_findings",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_findings.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_finding_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings/{{ config.site_finding_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_finding_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_change_requests_for_site_finding",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings/{{ config.site_finding_id }}/change-requests",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_change_requests_for_site_finding.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_pages_for_site_finding",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings/{{ config.site_finding_id }}/pages",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_pages_for_site_finding.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_questions_for_site_finding",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings/{{ config.site_finding_id }}/questions",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_questions_for_site_finding.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_records_for_site_finding",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/findings/{{ config.site_finding_id }}/records",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_records_for_site_finding.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_site_context_connections",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/context-connections",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_context_connections.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_context_connection_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/context-connections/{{ config.site_context_connection_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_context_connection_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_topics",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/topics",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_topics.json"
+    },
+    {
+      "name": "get_site_topic_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/topics/{{ config.site_topic_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_topic_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_questions",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/questions",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_questions.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_question_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/questions/{{ config.site_question_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_question_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_question_sources",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/questions/{{ config.site_question_id }}/sources",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_question_sources.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_question_stats",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/question-stats",
+      "records": {
+        "path": "weeklyPulse"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_question_stats.json"
+    },
+    {
+      "name": "list_site_question_answers",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/answers",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_question_answers.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_question_answer_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/answers/{{ config.site_question_answer_id }}",
+      "records": {
+        "path": "topics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_question_answer_by_id.json"
+    },
+    {
+      "name": "get_site_question_answer_thread_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/answers/{{ config.site_question_answer_id }}/thread",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_question_answer_thread_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_question_answer_sources",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/answers/{{ config.site_question_answer_id }}/sources",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_question_answer_sources.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_space_customization_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/site-spaces/{{ config.site_space_id }}/customization",
+      "records": {
+        "path": "socialAccounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_space_customization_by_id.json"
+    },
+    {
+      "name": "list_permissions_aggregate_in_site",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/permissions/aggregate",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_permissions_aggregate_in_site.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_user_permissions_in_site",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/permissions/users",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_user_permissions_in_site.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "list_team_permissions_in_site",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/permissions/teams",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_team_permissions_in_site.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_agent_settings_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/agent-settings",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_agent_settings_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_visitor_segments",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/insights/visitor-segments",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_visitor_segments.json"
+    },
+    {
+      "name": "list_site_redirects",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/redirects",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_redirects.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_redirect_by_source",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/redirect",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_redirect_by_source.json",
+      "query": {
+        "source": "{{ config.source }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_mcp_servers",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/mcp-servers",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_mcp_servers.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_mcp_server_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/mcp-servers/{{ config.site_mcp_server_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_mcp_server_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_site_channels",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/channels",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_site_channels.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_site_channel_by_id",
+      "path": "/orgs/{{ config.organization_id }}/sites/{{ config.site_id }}/channels/{{ config.site_channel_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_site_channel_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_subdomain",
+      "path": "/subdomains/{{ config.subdomain }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_subdomain.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_custom_hostname",
+      "path": "/custom-hostnames/{{ config.hostname }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_custom_hostname.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_organizations_for_email_domain",
+      "path": "/email-domains/{{ config.email_domain }}/orgs",
+      "records": {
+        "path": "organizations"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_organizations_for_email_domain.json"
+    },
+    {
+      "name": "ads_list_sites",
+      "path": "/ads/sites",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/ads_list_sites.json",
+      "query": {
+        "limit": "50"
+      }
+    },
+    {
+      "name": "get_content_by_url",
+      "path": "/urls/content",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_content_by_url.json",
+      "query": {
+        "url": "{{ config.url }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_embed_by_url",
+      "path": "/urls/embed",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_embed_by_url.json",
+      "query": {
+        "url": "{{ config.url }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_published_content_by_url",
+      "path": "/urls/published",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_published_content_by_url.json",
+      "query": {
+        "url": "{{ config.url }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_git_sync_installation_by_id",
+      "path": "/git/installations/{{ config.installation_id }}",
+      "records": {
+        "path": "."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_git_sync_installation_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_git_hub_repositories_for_git_sync_installation",
+      "path": "/git/installations/{{ config.installation_id }}/github/repos",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_git_hub_repositories_for_git_sync_installation.json"
+    },
+    {
+      "name": "list_git_hub_repo_branches_for_git_sync_installation",
+      "path": "/git/installations/{{ config.installation_id }}/github/repos/{{ config.account_name }}/{{ config.repository_name }}/branches",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_git_hub_repo_branches_for_git_sync_installation.json"
+    },
+    {
+      "name": "list_git_lab_projects_for_git_sync_installation",
+      "path": "/git/installations/{{ config.installation_id }}/gitlab/projects",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_git_lab_projects_for_git_sync_installation.json"
+    },
+    {
+      "name": "list_git_lab_project_branches_for_git_sync_installation",
+      "path": "/git/installations/{{ config.installation_id }}/gitlab/projects/{{ config.project_id }}/branches",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_git_lab_project_branches_for_git_sync_installation.json"
+    }
+  ]
+}

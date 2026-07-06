@@ -1,0 +1,47 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "data": {
+      "title": "title_fixture",
+      "url": "https://miro.com/static/images/page/mr-index/localization/en/slider/ideation_brainstorming.png"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "geometry": {
+      "height": 1.25,
+      "width": 1.25,
+      "rotation": 1.25
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/images",
+    "body": {
+      "data": {
+        "title": "title_fixture",
+        "url": "https://miro.com/static/images/page/mr-index/localization/en/slider/ideation_brainstorming.png"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "geometry": {
+        "height": 1.25,
+        "width": 1.25,
+        "rotation": 1.25
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

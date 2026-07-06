@@ -1,0 +1,15 @@
+{
+  "record": {
+    "tag_id": "tag_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tags/tag_id_fixture_1"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "not_found"
+    }
+  }
+}

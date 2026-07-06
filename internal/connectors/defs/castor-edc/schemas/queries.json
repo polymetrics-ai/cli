@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "queries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "record_id": { "type": ["string", "null"] },
+    "field_id": { "type": ["string", "null"] },
+    "instance_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "query_text": { "type": ["string", "null"] },
+    "created_by": { "type": ["string", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] }
+  }
+}

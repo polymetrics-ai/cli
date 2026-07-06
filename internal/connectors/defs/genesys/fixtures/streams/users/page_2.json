@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "pageSize": "100",
+      "pageNumber": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entities": [
+        {
+          "id": "u101",
+          "name": "Fixture User 101",
+          "email": "fixture.user101@example.com",
+          "state": "active"
+        }
+      ]
+    }
+  }
+}

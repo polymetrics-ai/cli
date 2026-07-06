@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_custom_fields",
+  "type": "object",
+  "x-primary-key": ["ListID", "Key"],
+  "required": ["ListID", "Key"],
+  "properties": {
+    "ListID": { "type": "string" },
+    "FieldName": { "type": ["string", "null"] },
+    "Key": { "type": "string" },
+    "DataType": { "type": ["string", "null"] },
+    "FieldOptions": { "type": ["array", "null"] },
+    "VisibleInPreferenceCenter": { "type": ["boolean", "null"] }
+  }
+}

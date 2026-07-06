@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/scheduling/shifts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "scheduleId": "fixture_id",
+      "status": "planned",
+      "color": "fixture_value",
+      "start": "fixture_value",
+      "end": "fixture_value",
+      "timezone": "fixture_value",
+      "capacity": 1001
+    }
+  }
+}

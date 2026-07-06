@@ -1,0 +1,19 @@
+{
+  "record": {
+    "collection": {
+      "external_id": "col-fixture-new",
+      "name": "Fixture New Collection"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/collections",
+    "body": {
+      "collection": {
+        "external_id": "col-fixture-new",
+        "name": "Fixture New Collection"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "collection": { "yotpo_id": 555555 } } }
+}

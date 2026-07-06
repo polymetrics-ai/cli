@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/members" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "user": {
+          "id": "usr_fixture_1",
+          "email": "fixture1@example.com",
+          "firstName": "Fixture",
+          "lastName": "User1"
+        },
+        "status": "ACTIVE",
+        "dateCreated": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "user": {
+          "id": "usr_fixture_2",
+          "email": "fixture2@example.com",
+          "firstName": "Fixture",
+          "lastName": "User2"
+        },
+        "status": "ACTIVE",
+        "dateCreated": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

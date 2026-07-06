@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "month": "7",
+      "num": 2999,
+      "link": "",
+      "year": "2026",
+      "news": "",
+      "safe_title": "Fixture Comic",
+      "transcript": "fixture transcript text",
+      "alt": "fixture alt text",
+      "img": "https://imgs.xkcd.com/comics/fixture_comic.png",
+      "title": "Fixture Comic",
+      "day": "2"
+    }
+  }
+}

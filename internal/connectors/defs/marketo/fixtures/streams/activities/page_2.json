@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/activities.json", "query": { "batchSize": "synthetic-conformance-value", "activityTypeIds": "synthetic-conformance-value", "nextPageToken": "fixture-token-1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        { "id": 303, "activityTypeId": 12, "activityDate": "2026-01-02T00:00:00Z", "leadId": 103 }
+      ],
+      "moreResult": false
+    }
+  }
+}

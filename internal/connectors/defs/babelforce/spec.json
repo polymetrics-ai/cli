@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Babelforce Connection Specification",
+  "type": "object",
+  "required": [
+    "access_key_id",
+    "access_token",
+    "region"
+  ],
+  "properties": {
+    "access_key_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The Babelforce access key ID"
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "The Babelforce access token"
+    },
+    "date_created_from": {
+      "type": "string",
+      "description": "Timestamp in Unix the replication from Babelforce API will start from. For example 1651363200 which corresponds to 2022-05-01 00:00:00."
+    },
+    "date_created_to": {
+      "type": "string",
+      "description": "Timestamp in Unix the replication from Babelforce will be up to. For example 1651363200 which corresponds to 2022-05-01 00:00:00."
+    },
+    "region": {
+      "type": "string",
+      "description": "Babelforce region"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

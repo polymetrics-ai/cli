@@ -1,0 +1,85 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Auth-Token", "value": "{{ secrets.token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "api/v2.0/devices/" },
+    "error_map": [
+      { "status": 401, "hint": "ubidots token is missing or invalid; re-run pm credentials add ubidots" },
+      { "status": 429, "class": "rate_limited", "hint": "ubidots rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "devices",
+      "path": "api/v2.0/devices/",
+      "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/devices.json"
+    },
+    {
+      "name": "variables",
+      "path": "api/v2.0/variables/",
+      "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/variables.json"
+    },
+    {
+      "name": "dashboards",
+      "path": "api/v2.0/dashboards/",
+      "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "events",
+      "path": "api/v2.0/events/",
+      "records": { "path": "results" },
+      "computed_fields": {
+        "created_at": "{{ coalesce record.created_at record.createdAt }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "device_groups",
+      "path": "api/v2.0/device_groups/",
+      "records": { "path": "results" },
+      "schema": "schemas/device_groups.json"
+    },
+    {
+      "name": "device_types",
+      "path": "api/v2.0/device_types/",
+      "records": { "path": "results" },
+      "schema": "schemas/device_types.json"
+    },
+    {
+      "name": "variable_values",
+      "path": "api/v1.6/variables/{{ fanout.id }}/values/",
+      "records": { "path": "results" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "api/v2.0/variables/", "records_path": "results", "id_field": "id" }
+        },
+        "into": { "path_var": "variable_id" },
+        "stamp_field": "variable_id"
+      },
+      "schema": "schemas/variable_values.json"
+    }
+  ]
+}

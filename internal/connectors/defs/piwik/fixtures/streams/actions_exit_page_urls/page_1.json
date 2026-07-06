@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Actions.getExitPageUrls",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "exit_nb_visits": 1,
+        "nb_visits": 2,
+        "exit_rate": 3,
+        "avg_time_generation": 4,
+        "avg_time_on_page": 5,
+        "bounce_rate": 6
+      },
+      {
+        "label": "Fixture row 2",
+        "exit_nb_visits": 1,
+        "nb_visits": 2,
+        "exit_rate": 3,
+        "avg_time_generation": 4,
+        "avg_time_on_page": 5,
+        "bounce_rate": 6
+      }
+    ]
+  }
+}

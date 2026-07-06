@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/video/v1/live-streams", "query": { "page": "1", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ls_fixture_1",
+          "status": "active",
+          "created_at": "1767225601",
+          "stream_key": "sk_fixture_1",
+          "latency_mode": "low",
+          "reconnect_window": 60,
+          "max_continuous_duration": 43200,
+          "test": true
+        },
+        {
+          "id": "ls_fixture_2",
+          "status": "idle",
+          "created_at": "1767225602",
+          "stream_key": "sk_fixture_2",
+          "latency_mode": "low",
+          "reconnect_window": 60,
+          "max_continuous_duration": 43200,
+          "test": true
+        }
+      ]
+    }
+  }
+}

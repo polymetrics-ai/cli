@@ -1,0 +1,15 @@
+{
+  "record": {
+    "user_id": "user_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/user_fixture_1"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "USER_NOT_FOUND"
+    }
+  }
+}

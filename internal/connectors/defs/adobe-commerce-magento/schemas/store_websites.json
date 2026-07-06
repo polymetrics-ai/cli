@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Store Website",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": "string" },
+    "name": { "type": "string" },
+    "default_group_id": { "type": "integer" },
+    "is_default": { "type": "boolean" }
+  }
+}

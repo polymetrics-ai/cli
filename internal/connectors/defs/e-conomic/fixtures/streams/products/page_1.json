@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "productNumber": "1",
+          "name": "Fixture Product 1",
+          "description": "fixture product 1",
+          "salesPrice": 50,
+          "costPrice": 25,
+          "recommendedPrice": 60,
+          "barred": false,
+          "unit": { "unitNumber": 1 },
+          "productGroup": { "productGroupNumber": 1 },
+          "self": "https://restapi.e-conomic.com/products/1"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 1 }
+    }
+  }
+}

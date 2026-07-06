@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/headless/trackings", "query": { "page": "1", "length": "20" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 5001,
+        "course_id": 1001,
+        "identifier": "learner_1@example.com",
+        "status": "in_progress",
+        "progress": 45,
+        "completed": false
+      },
+      {
+        "id": 5002,
+        "course_id": 1002,
+        "identifier": "learner_2@example.com",
+        "status": "completed",
+        "progress": 100,
+        "completed": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders/v0/orders",
+    "query": {
+      "MarketplaceIds": "synthetic-conformance-value",
+      "MaxResultsPerPage": "synthetic-conformance-value",
+      "LastUpdatedAfter": "synthetic-conformance-value",
+      "NextToken": "PAGE2_FIXTURE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "Orders": [
+          {
+            "AmazonOrderId": "111-fixture-3",
+            "SellerOrderId": "so-fixture-3",
+            "PurchaseDate": "2026-01-03T00:00:00Z",
+            "LastUpdateDate": "2026-01-03T00:00:00Z",
+            "OrderStatus": "Shipped",
+            "FulfillmentChannel": "AFN",
+            "SalesChannel": "Amazon.com",
+            "OrderType": "StandardOrder",
+            "NumberOfItemsShipped": 3,
+            "NumberOfItemsUnshipped": 0,
+            "MarketplaceId": "ATVPDKIKX0DER",
+            "OrderTotal": { "CurrencyCode": "USD", "Amount": "30.00" },
+            "IsBusinessOrder": false,
+            "IsPrime": true
+          }
+        ]
+      }
+    }
+  }
+}

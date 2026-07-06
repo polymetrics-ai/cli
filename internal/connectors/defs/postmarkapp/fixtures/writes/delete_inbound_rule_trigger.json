@@ -1,0 +1,15 @@
+{
+  "record": {
+    "trigger_id": "trigger_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/triggers/inboundrules/trigger_id_fixture"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "carrier_accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "clone": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "description": { "type": ["string", "null"] },
+    "reference": { "type": ["string", "null"] },
+    "billing_type": { "type": ["string", "null"] },
+    "readable": { "type": ["string", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "fields": { "type": ["object", "null"] }
+  }
+}

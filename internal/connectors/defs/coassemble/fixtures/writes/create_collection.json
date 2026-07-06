@@ -1,0 +1,9 @@
+{
+  "record": { "title": "Fixture New Collection", "courseIds": [1001, 1002] },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/headless/collection",
+    "body": { "title": "Fixture New Collection", "courseIds": [1001, 1002] }
+  },
+  "response": { "status": 200, "body": { "id": 2050, "title": "Fixture New Collection" } }
+}

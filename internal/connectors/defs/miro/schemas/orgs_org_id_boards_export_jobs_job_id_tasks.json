@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the board export task."
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates the status of the individual board export task.\nPossible values:\n`SUCCESS`: the board export task was completed successfully and the results are available.\n`ERROR`: the board export task encountered an error and failed to complete. The `errorMessage` field provides more information on the error.\n`CANCELLED`: the board export task was cancelled.\n`SCHEDULED`: the board export task has been scheduled and is waiting to be processed.\n`CREATED`: the board export task was created."
+    },
+    "artifactExpiredAt": {
+      "type": "string",
+      "description": "The date and time when the artifact will no longer be available in the S3 storage. After this time, the link will no longer be valid and the exported files will not be accessible.\nFormat: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "sizeInBytes": {
+      "type": "integer",
+      "description": "Size of the exported artifact in bytes."
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "Contains the description of the error that occurred during a board export task."
+    },
+    "errorType": {
+      "type": "string",
+      "description": "Indicates the type of error encountered during the board export task.\nPossible values:\n`TEMPORARY`: the board export task encountered a temporary error. Retry the board export task after some time.\n`FATAL`: the board export failed and cannot be retried. This export will never succeed due to issues such as board corruption, non-existence, or other unrecoverable errors. Please verify the board's state or contact support if assistance is needed.\n`UNKNOWN`: the board export task encountered an unexp"
+    },
+    "board": {
+      "type": "object",
+      "description": "Information about a board in the board export task.",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique identifier of the board."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

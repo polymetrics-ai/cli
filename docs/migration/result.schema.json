@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://polymetrics.ai/schemas/migration/result.schema.json",
+  "title": "Migration executor result",
+  "description": "Structured result a migration executor agent reports per docs/migration/orchestration-plan.md 'Per-agent task spec'. One report may cover multiple assigned connectors.",
+  "type": "object",
+  "required": ["connectors"],
+  "additionalProperties": false,
+  "properties": {
+    "connectors": {
+      "type": "array",
+      "description": "One entry per connector this agent was assigned, in the order assigned.",
+      "items": { "$ref": "#/definitions/connectorResult" }
+    }
+  },
+  "definitions": {
+    "connectorResult": {
+      "type": "object",
+      "required": [
+        "name",
+        "status",
+        "files_changed",
+        "streams_before",
+        "streams_after",
+        "write_actions_added",
+        "escape_hatches",
+        "fixtures_added",
+        "conformance",
+        "blockers",
+        "notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Connector name; matches the defs/ directory name and metadata.json name."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["migrated", "partial", "blocked"],
+          "description": "migrated: fully ported, self-verify passes clean. partial: some streams/writes ported, at least one blocker remains (connector keeps its legacy implementation for the unported parts). blocked: no usable progress; legacy implementation stays authoritative."
+        },
+        "files_changed": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Repo-relative paths created or modified for this connector (defs/<name>/**, hooks/<name>/** if any; never a path outside the assigned connector's dirs)."
+        },
+        "streams_before": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Stream count in the legacy connector before migration."
+        },
+        "streams_after": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Stream count declared in the new bundle's streams.json (0 for a capabilities.dynamic_schema Tier-3 connector with no static streams.json)."
+        },
+        "write_actions_added": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of write actions declared in the new bundle's writes.json (0 when capabilities.write is false or writes.json is absent)."
+        },
+        "escape_hatches": {
+          "type": "array",
+          "description": "Every Tier-2 hook file or Tier-3 escalation used, with justification. Empty for a pure Tier-1 (declarative-only) migration.",
+          "items": {
+            "type": "object",
+            "required": ["file", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "file": {
+                "type": "string",
+                "description": "Repo-relative path of the escape-hatch file (e.g. internal/connectors/hooks/<name>/hooks.go, or the native/<name>/ package root for a Tier-3 escalation)."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Which named hook point / Tier-2 trigger / Tier-3 justification this satisfies, per conventions.md section 1 and section 6's decision tree."
+              }
+            }
+          }
+        },
+        "fixtures_added": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of fixture files added under defs/<name>/fixtures/ (check.json + streams/**/page_N.json + writes/*.json)."
+        },
+        "conformance": {
+          "type": "object",
+          "required": ["passed", "failing_tests"],
+          "additionalProperties": false,
+          "properties": {
+            "passed": {
+              "type": "boolean",
+              "description": "Whether `go test ./internal/connectors/conformance -run 'TestConformance/<name>'` passed cleanly at report time."
+            },
+            "failing_tests": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Named failing conformance (sub)test identifiers, e.g. 'TestConformance/<name>/pagination_terminates'. Empty when passed is true."
+            }
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "description": "Typed blockers preventing full migration. Empty for status: migrated.",
+          "items": { "$ref": "#/definitions/blocker" }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text context: parity-deviation ledger entries reported for this connector (mirrors docs/migration/conventions.md section 5's meta-rule), anything a reviewer or repair agent needs that doesn't fit the typed fields above."
+        },
+        "parity_deviations": {
+          "type": "array",
+          "description": "Optional; populate whenever this migration introduces a documented, ACCEPTABLE deviation from legacy behavior per conventions.md section 5's meta-rule (never data-changing for any legacy-accepted input). Every entry here must also be added to conventions.md's parity-deviation ledger by the reporting agent or a follow-up doc patch.",
+          "items": {
+            "type": "object",
+            "required": ["description", "verdict"],
+            "additionalProperties": false,
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "What differs from legacy and why (which engine limitation forced it)."
+              },
+              "verdict": {
+                "type": "string",
+                "enum": ["ACCEPTABLE", "ENGINE_GAP"],
+                "description": "ACCEPTABLE per the meta-rule (never diverges for a legacy-accepted input); otherwise ENGINE_GAP, which must also appear in blockers[]."
+              }
+            }
+          }
+        },
+        "api_surface_endpoints_total": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Pass B only: total documented endpoints for this API (from the vendor's own API reference), independent of what api_surface.json currently covers."
+        },
+        "endpoints_implemented": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Pass B only: count of api_surface_endpoints_total actually implemented as a stream or write action by this migration."
+        },
+        "endpoints_skipped": {
+          "type": "array",
+          "description": "Pass B only: documented endpoints deliberately not implemented, with reasons (feeds docs/migration/coverage-report.json).",
+          "items": {
+            "type": "object",
+            "required": ["path", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "The documented endpoint path (and, where useful, method), e.g. 'POST /v1/payment_intents'."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Why this endpoint is skipped (e.g. an api_surface.json excluded.category + reason, or a Pass B scoping decision)."
+              }
+            }
+          }
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "required": ["type", "reason", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "AUTH_COMPLEX",
+            "NON_REST",
+            "DOCS_UNREACHABLE",
+            "SCHEMA_AMBIGUOUS",
+            "NEEDS_NEW_DEP",
+            "ENGINE_GAP",
+            "OTHER"
+          ],
+          "description": "Per conventions.md section 6's escape-hatch decision tree taxonomy."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Human-readable explanation of the blocker."
+        },
+        "evidence": {
+          "type": "string",
+          "description": "Concrete grounding: a file:line reference, an engine grep result, a doc excerpt, an error message — never an unsubstantiated claim."
+        }
+      }
+    }
+  }
+}

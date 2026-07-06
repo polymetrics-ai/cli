@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TikTok Marketing Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "TikTok Business API access token, sent as the Access-Token header (not Bearer). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://business-api.tiktok.com/open_api/v1.3",
+      "description": "TikTok Business API base URL override for tests or proxies."
+    },
+    "advertiser_id": {
+      "type": "string",
+      "description": "Optional TikTok advertiser id filter. Sent as advertiser_id on campaigns/adgroups/ads streams, and as a JSON-array advertiser_ids on the advertisers stream."
+    }
+  }
+}

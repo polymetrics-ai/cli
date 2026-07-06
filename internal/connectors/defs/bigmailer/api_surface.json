@@ -1,0 +1,103 @@
+{
+  "api": "BigMailer REST API v1 (https://api.bigmailer.io/v1)",
+  "docs": "https://docs.bigmailer.io/reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, researched directly against the connector's published OpenAPI/swagger spec (docs.bigmailer.io/llms.txt index + embedded swagger.json). Every read-oriented resource collection is now a stream: the original 5 (brands, users, contacts, lists, fields) plus 9 new brand-scoped/account-scoped resources (connections, message_types, segments, senders, templates, suppression_lists, bulk_campaigns, rss_campaigns, transactional_campaigns, test_campaigns). Every JSON-bodied CRUD mutation on a covered resource is now a writes.json action (create/update/delete for brands, contacts [+upsert], lists, fields, message_types, segments, senders, templates, users) -- capabilities.write flips to true. Campaign SEND/lifecycle actions (send a transactional email, send a test campaign, pause/unpause an RSS campaign) are excluded as destructive_admin (each dispatches real outbound email to real recipients; not a safe reverse-ETL data mutation). Contact-batch upload, suppression-list upload, and sender/bounce-domain DNS verification are excluded as requires_elevated_scope (binary/CSV file upload or external DNS-record verification side effects the declarative dialect has no multipart/verification-polling mechanism for). RSS campaign 'updates' sub-resources (auto-generated per-issue records, not directly authored) are excluded as non_data_endpoint.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/brands", "covered_by": { "stream": "brands" } },
+    { "method": "POST", "path": "/v1/brands", "covered_by": { "write": "create_brand" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}", "excluded": { "category": "duplicate_of", "reason": "single-brand lookup by id; fully covered by the brands list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}", "covered_by": { "write": "update_brand" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/properties", "excluded": { "category": "out_of_scope", "reason": "brand properties are an account-configuration namespace (arbitrary key/value settings), not a contact/CRM data resource meaningfully synced alongside brands/contacts; not part of this pass's scope" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/properties", "excluded": { "category": "out_of_scope", "reason": "see GET /properties" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/properties/{brand_property_id}", "excluded": { "category": "out_of_scope", "reason": "see GET /properties" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/properties/{brand_property_id}", "excluded": { "category": "out_of_scope", "reason": "see GET /properties" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/properties/{brand_property_id}", "excluded": { "category": "out_of_scope", "reason": "see GET /properties" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/contacts", "covered_by": { "write": "create_contact" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/contacts/{contact_id}", "excluded": { "category": "duplicate_of", "reason": "single-contact lookup by id/email; fully covered by the contacts list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/contacts/{contact_id}", "covered_by": { "write": "update_contact" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/contacts/{contact_id}", "covered_by": { "write": "delete_contact" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/contacts/upsert", "covered_by": { "write": "upsert_contact" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/contacts/batches", "excluded": { "category": "requires_elevated_scope", "reason": "uploads a batch file of up to 1,000 contacts processed asynchronously; the declarative write dialect has no multipart/file-upload body construction and no async job-polling mechanism (a single writes.json action is a synchronous per-record HTTP request)" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/contacts/batches/{batch_id}", "excluded": { "category": "requires_elevated_scope", "reason": "polls the status of an async contact-batch upload job; meaningless without the batch-upload write action itself, which is excluded above" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/lists", "covered_by": { "stream": "lists" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/lists", "covered_by": { "write": "create_list" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/lists/{list_id}", "excluded": { "category": "duplicate_of", "reason": "single-list lookup by id; fully covered by the lists list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/lists/{list_id}", "covered_by": { "write": "update_list" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/lists/{list_id}", "covered_by": { "write": "delete_list" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/fields", "covered_by": { "stream": "fields" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/fields", "covered_by": { "write": "create_field" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/fields/{field_id}", "excluded": { "category": "duplicate_of", "reason": "single-field lookup by id; fully covered by the fields list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/fields/{field_id}", "covered_by": { "write": "update_field" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/fields/{field_id}", "covered_by": { "write": "delete_field" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/message-types", "covered_by": { "stream": "message_types" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/message-types", "covered_by": { "write": "create_message_type" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/message-types/{message_type_id}", "excluded": { "category": "duplicate_of", "reason": "single-message-type lookup by id; fully covered by the message_types list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/message-types/{message_type_id}", "covered_by": { "write": "update_message_type" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/message-types/{message_type_id}", "covered_by": { "write": "delete_message_type" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/segments", "covered_by": { "stream": "segments" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/segments", "covered_by": { "write": "create_segment" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/segments/{segment_id}", "excluded": { "category": "duplicate_of", "reason": "single-segment lookup by id; fully covered by the segments list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/segments/{segment_id}", "covered_by": { "write": "update_segment" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/segments/{segment_id}", "covered_by": { "write": "delete_segment" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/senders", "covered_by": { "stream": "senders" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/senders", "covered_by": { "write": "create_sender" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/senders/{sender_id}", "excluded": { "category": "duplicate_of", "reason": "single-sender lookup by id; fully covered by the senders list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/senders/{sender_id}", "covered_by": { "write": "update_sender" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/senders/{sender_id}", "covered_by": { "write": "delete_sender" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains", "excluded": { "category": "requires_elevated_scope", "reason": "adds a bounce (MAIL FROM) DNS domain to a sender; a DNS-infrastructure side effect, not a BigMailer data resource mutation the declarative write dialect models" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains/verify", "excluded": { "category": "requires_elevated_scope", "reason": "triggers external DNS record verification; a polling/side-effect action with no data record to write, not a fit for the create/update/delete write shape" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/senders/{sender_id}/verify", "excluded": { "category": "requires_elevated_scope", "reason": "triggers external DNS record verification for the sender identity itself; same reasoning as bounce-domains/verify" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/templates", "covered_by": { "stream": "templates" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/templates", "covered_by": { "write": "create_template" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/templates/{template_id}", "excluded": { "category": "duplicate_of", "reason": "single-template lookup by id; fully covered by the templates list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/templates/{template_id}", "covered_by": { "write": "update_template" } },
+    { "method": "DELETE", "path": "/v1/brands/{brand_id}/templates/{template_id}", "covered_by": { "write": "delete_template" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/suppression-lists", "covered_by": { "stream": "suppression_lists" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/suppression-lists", "excluded": { "category": "requires_elevated_scope", "reason": "uploads a suppression list as a file; the declarative write dialect has no multipart/file-upload body construction" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/suppression-lists/{suppression_list_id}", "excluded": { "category": "duplicate_of", "reason": "single-suppression-list lookup by id; fully covered by the suppression_lists list stream" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/bulk-campaigns", "covered_by": { "stream": "bulk_campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/bulk-campaigns", "excluded": { "category": "destructive_admin", "reason": "creates a bulk email campaign that (once scheduled/sent) dispatches real outbound email to real contacts; read-only sync of campaign metadata is in scope, authoring/scheduling sends is not" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-bulk-campaign lookup by id; fully covered by the bulk_campaigns list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}", "excluded": { "category": "destructive_admin", "reason": "updates a bulk campaign that may already be scheduled/sending; see POST /bulk-campaigns" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/rss-campaigns", "covered_by": { "stream": "rss_campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/rss-campaigns", "excluded": { "category": "destructive_admin", "reason": "creates a recurring RSS-triggered email campaign that dispatches real outbound email on every feed update; see POST /bulk-campaigns" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-RSS-campaign lookup by id; fully covered by the rss_campaigns list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}", "excluded": { "category": "destructive_admin", "reason": "updates an active/recurring RSS campaign; see POST /rss-campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/pause", "excluded": { "category": "destructive_admin", "reason": "pauses a live recurring send schedule; a lifecycle-control action, not a data-record mutation" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/unpause", "excluded": { "category": "destructive_admin", "reason": "resumes a live recurring send schedule (immediately re-enables real outbound email dispatch); see pause" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates", "excluded": { "category": "non_data_endpoint", "reason": "auto-generated per-feed-update campaign instances derived from the parent RSS campaign, not an independently authored data resource" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates/{campaign_id}", "excluded": { "category": "non_data_endpoint", "reason": "single auto-generated RSS-update-campaign lookup; see the list form" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/transactional-campaigns", "covered_by": { "stream": "transactional_campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/transactional-campaigns", "excluded": { "category": "destructive_admin", "reason": "creates a transactional campaign template that a later send action dispatches to real recipients; see POST /bulk-campaigns" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-transactional-campaign lookup by id; fully covered by the transactional_campaigns list stream" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}", "excluded": { "category": "destructive_admin", "reason": "updates a live transactional campaign; see POST /transactional-campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}/send", "excluded": { "category": "destructive_admin", "reason": "sends a real transactional email to a real recipient immediately; the archetypal unsafe reverse-ETL action for an email platform" } },
+
+    { "method": "GET", "path": "/v1/brands/{brand_id}/test-campaigns", "covered_by": { "stream": "test_campaigns" } },
+    { "method": "POST", "path": "/v1/brands/{brand_id}/test-campaigns", "excluded": { "category": "destructive_admin", "reason": "sends a real test email to real recipient addresses immediately (this endpoint both creates AND sends in one call); not a safe data mutation" } },
+    { "method": "GET", "path": "/v1/brands/{brand_id}/test-campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-test-campaign lookup by id; fully covered by the test_campaigns list stream" } },
+
+    { "method": "GET", "path": "/v1/connections", "covered_by": { "stream": "connections" } },
+    { "method": "GET", "path": "/v1/connections/{connection_id}", "excluded": { "category": "duplicate_of", "reason": "single-connection lookup by id; fully covered by the connections list stream" } },
+
+    { "method": "GET", "path": "/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "POST", "path": "/v1/users", "covered_by": { "write": "create_user" } },
+    { "method": "GET", "path": "/v1/users/{user_id}", "excluded": { "category": "duplicate_of", "reason": "single-user lookup by id; fully covered by the users list stream" } },
+    { "method": "POST", "path": "/v1/users/{user_id}", "covered_by": { "write": "update_user" } },
+    { "method": "DELETE", "path": "/v1/users/{user_id}", "covered_by": { "write": "delete_user" } }
+  ]
+}

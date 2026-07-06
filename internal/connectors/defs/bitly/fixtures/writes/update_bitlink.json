@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "bit.ly/fixture1",
+    "title": "Updated Fixture Bitlink",
+    "archived": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/bitlinks/bit.ly/fixture1",
+    "body": {
+      "title": "Updated Fixture Bitlink",
+      "archived": false
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/checks", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "checks": [
+        { "id": 100101, "name": "Fixture Check 101", "status": "up", "hostname": "fixture101.example.com", "type": { "http": {} }, "lasterrortime": null, "lasttesttime": 1767225701, "lastresponsetime": 190, "resolution": 1, "tags": [] }
+      ]
+    }
+  }
+}

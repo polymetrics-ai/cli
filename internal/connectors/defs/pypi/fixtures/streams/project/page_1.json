@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/pypi/synthetic-conformance-value/json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "info": {
+        "name": "fixtureproject",
+        "version": "1.0.0",
+        "summary": "Fixture PyPI project",
+        "description": "A fixture project used for conformance testing.",
+        "author": "Fixture Author",
+        "author_email": "fixture1@example.com",
+        "license": "MIT",
+        "home_page": "https://example.com/fixtureproject",
+        "project_url": "https://pypi.org/project/fixtureproject/",
+        "requires_python": ">=3.8",
+        "classifiers": ["Programming Language :: Python :: 3"],
+        "keywords": "fixture,test",
+        "project_urls": { "Homepage": "https://example.com/fixtureproject" },
+        "yanked": false
+      },
+      "releases": {},
+      "urls": []
+    }
+  }
+}

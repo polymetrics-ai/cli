@@ -1,0 +1,67 @@
+{
+  "actions": [
+    {
+      "name": "create_episode",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/{{ config.podcast_id }}/episodes.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "summary": { "type": "string" },
+          "artist": { "type": "string" },
+          "tags": { "type": "string" },
+          "published_at": { "type": "string" },
+          "duration": { "type": "integer" },
+          "guid": { "type": "string" },
+          "inactive_at": { "type": ["string", "null"] },
+          "episode_number": { "type": "integer" },
+          "season_number": { "type": "integer" },
+          "explicit": { "type": "boolean" },
+          "private": { "type": "boolean" },
+          "email_user_after_audio_processed": { "type": "boolean" },
+          "audio_url": { "type": "string" },
+          "artwork_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new episode (and can trigger audio processing/publication) on the configured podcast; approval required"
+    },
+    {
+      "name": "update_episode",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/{{ config.podcast_id }}/episodes/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "summary": { "type": "string" },
+          "artist": { "type": "string" },
+          "tags": { "type": "string" },
+          "published_at": { "type": "string" },
+          "duration": { "type": "integer" },
+          "guid": { "type": "string" },
+          "inactive_at": { "type": ["string", "null"] },
+          "episode_number": { "type": "integer" },
+          "season_number": { "type": "integer" },
+          "explicit": { "type": "boolean" },
+          "private": { "type": "boolean" },
+          "audio_url": { "type": "string" },
+          "artwork_url": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites episode metadata on the configured podcast; approval required"
+    }
+  ]
+}

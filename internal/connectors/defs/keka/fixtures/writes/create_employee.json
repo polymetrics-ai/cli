@@ -1,0 +1,46 @@
+{
+  "record": {
+    "EmployeeNumber": "FIX-1",
+    "DisplayName": "Fixture DisplayName",
+    "FirstName": "Fixture FirstName",
+    "LastName": "Fixture LastName",
+    "Email": "fixture1@example.invalid",
+    "Gender": "fixture_gender_1",
+    "DateOfBirth": "2026-01-01T00:00:00Z",
+    "DateJoined": "2026-01-01T00:00:00Z",
+    "department": "fixture_department_1",
+    "BusinessUnit": "fixture_business_unit_1",
+    "JobTitle": "Fixture JobTitle",
+    "Location": "fixture_location_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hris/employees",
+    "body": {
+      "EmployeeNumber": "FIX-1",
+      "DisplayName": "Fixture DisplayName",
+      "FirstName": "Fixture FirstName",
+      "LastName": "Fixture LastName",
+      "Email": "fixture1@example.invalid",
+      "Gender": "fixture_gender_1",
+      "DateOfBirth": "2026-01-01T00:00:00Z",
+      "DateJoined": "2026-01-01T00:00:00Z",
+      "department": "fixture_department_1",
+      "BusinessUnit": "fixture_business_unit_1",
+      "JobTitle": "Fixture JobTitle",
+      "Location": "fixture_location_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "create_employee_fixture_1",
+        "name": "Fixture create employee"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

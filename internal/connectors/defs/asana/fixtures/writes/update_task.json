@@ -1,0 +1,15 @@
+{
+  "record": {
+    "gid": "fixture_task_1",
+    "data": {
+      "completed": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/fixture_task_1",
+    "body": {
+      "data": { "completed": true }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "record": { "email": "sender@example.com" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/senders"
+  }
+}

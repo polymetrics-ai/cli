@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "room_fixture_1",
+    "enabled": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rooms/room_fixture_1",
+    "body": {
+      "enabled": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "room_fixture_1", "enabled": false }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ext_id": "ios:1001",
+    "review_id": "rev_fixture_1",
+    "content": "Escalated to support, fixture note."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reviews/notes",
+    "body": {
+      "ext_id": "ios:1001",
+      "review_id": "rev_fixture_1",
+      "content": "Escalated to support, fixture note."
+    }
+  }
+}

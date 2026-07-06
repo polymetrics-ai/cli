@@ -1,0 +1,23 @@
+{
+  "name": "pokeapi",
+  "display_name": "PokeAPI",
+  "description": "Reads the documented public PokeAPI v2 resource catalog, including list and detail endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://pokeapi.co/docs/v2",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PokeAPI read of public Pokemon reference data",
+    "approval": "none; read-only public reference API"
+  }
+}

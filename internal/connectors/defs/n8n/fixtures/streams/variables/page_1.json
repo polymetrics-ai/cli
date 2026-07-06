@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/variables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "var_fixture_1",
+          "key": "FIXTURE_KEY",
+          "value": "fixture-value",
+          "type": "string",
+          "projectId": "project_fixture_1"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

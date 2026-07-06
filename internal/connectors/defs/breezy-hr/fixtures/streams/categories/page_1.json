@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/categories" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "cat_fixture_1", "name": "Engineering" },
+      { "_id": "cat_fixture_2", "name": "Sales" }
+    ]
+  }
+}

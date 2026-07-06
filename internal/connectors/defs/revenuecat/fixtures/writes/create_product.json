@@ -1,0 +1,23 @@
+{
+  "record": {
+    "store_identifier": "com.fixture.monthly",
+    "type": "subscription",
+    "app_id": "app_fixture_1",
+    "display_name": "Fixture Display Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/products",
+    "body": {
+      "store_identifier": "com.fixture.monthly",
+      "type": "subscription",
+      "app_id": "app_fixture_1",
+      "display_name": "Fixture Display Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

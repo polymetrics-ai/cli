@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tracktype"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "trk_fixture_1",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "kind": "TrackType"
+      }
+    ]
+  }
+}

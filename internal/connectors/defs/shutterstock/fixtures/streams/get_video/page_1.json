@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/videos/get-video-fixture-1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get-video-fixture-1",
+      "name": "Fixture get video",
+      "media_type": "get",
+      "updated_time": "2026-01-01T00:00:00Z"
+    }
+  }
+}

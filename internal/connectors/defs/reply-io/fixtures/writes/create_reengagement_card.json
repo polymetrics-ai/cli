@@ -1,0 +1,33 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "name": "fixture_name",
+    "instructions": "fixture_instructions",
+    "sendAfter": 1,
+    "sampleAnswer": "fixture_sampleAnswer",
+    "toneOfVoice": "fixture_toneOfVoice",
+    "responseLength": "fixture_responseLength",
+    "links": [],
+    "isEnabled": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/reengagement-cards",
+    "body": {
+      "name": "fixture_name",
+      "instructions": "fixture_instructions",
+      "sendAfter": 1,
+      "sampleAnswer": "fixture_sampleAnswer",
+      "toneOfVoice": "fixture_toneOfVoice",
+      "responseLength": "fixture_responseLength",
+      "links": [],
+      "isEnabled": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

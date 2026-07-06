@@ -1,0 +1,9 @@
+{
+  "record": { "refund": { "carrier": "USPS", "tracking_codes": ["TRACK1"] } },
+  "expect": {
+    "method": "POST",
+    "path": "/refunds",
+    "body": { "refund": { "carrier": "USPS", "tracking_codes": ["TRACK1"] } }
+  },
+  "response": { "status": 201, "body": { "refunds": [ { "id": "rfnd_fixture_new", "object": "Refund" } ] } }
+}

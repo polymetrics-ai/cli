@@ -1,0 +1,15 @@
+{
+  "record": {
+    "announcement_id": 123,
+    "name": "Fixture edit_an_announcement",
+    "description": "Fixture edit_an_announcement record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/announcements/123",
+    "body": {
+      "name": "Fixture edit_an_announcement",
+      "description": "Fixture edit_an_announcement record"
+    }
+  }
+}

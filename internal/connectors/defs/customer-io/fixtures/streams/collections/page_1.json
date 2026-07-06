@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/collections" },
+  "response": {
+    "status": 200,
+    "body": {
+      "collections": [
+        { "id": 1, "name": "fixture_collection_one", "bytes": 296, "rows": 10, "created_at": 1767225601, "updated_at": 1767225602 },
+        { "id": 2, "name": "fixture_collection_two", "bytes": 512, "rows": 25, "created_at": 1767225603, "updated_at": 1767225604 }
+      ]
+    }
+  }
+}

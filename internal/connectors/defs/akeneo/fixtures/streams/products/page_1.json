@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/products", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "identifier": "product_fixture_1",
+            "uuid": "00000000-0000-0000-0000-000000000001",
+            "enabled": true,
+            "family": "fixture_family",
+            "parent": null,
+            "categories": ["fixture_category"],
+            "groups": [],
+            "values": {},
+            "created": "2026-01-01T00:00:00+00:00",
+            "updated": "2026-01-01T00:00:00+00:00"
+          },
+          {
+            "identifier": "product_fixture_2",
+            "uuid": "00000000-0000-0000-0000-000000000002",
+            "enabled": false,
+            "family": "fixture_family",
+            "parent": "product_fixture_1",
+            "categories": ["fixture_category"],
+            "groups": [],
+            "values": {},
+            "created": "2026-01-02T00:00:00+00:00",
+            "updated": "2026-01-02T00:00:00+00:00"
+          }
+        ]
+      }
+    }
+  }
+}

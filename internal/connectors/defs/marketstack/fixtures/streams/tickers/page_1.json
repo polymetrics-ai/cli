@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tickers",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "count": 1,
+        "total": 1
+      },
+      "data": [
+        {
+          "symbol": "AAPL",
+          "name": "Apple Inc",
+          "has_eod": true,
+          "has_intraday": false,
+          "stock_exchange": {
+            "mic": "XNAS",
+            "name": "NASDAQ Stock Exchange"
+          }
+        }
+      ]
+    }
+  }
+}

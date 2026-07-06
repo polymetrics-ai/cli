@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_hosts",
+  "type": "object",
+  "x-primary-key": [
+    "api_id"
+  ],
+  "required": [
+    "api_id"
+  ],
+  "properties": {
+    "api_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "avatar_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "access_level": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

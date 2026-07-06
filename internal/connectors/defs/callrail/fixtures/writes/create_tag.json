@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Tag", "company_id": "CMP_fixture_1", "color": "gray1" },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/tags.json",
+    "body": { "name": "Fixture Tag", "company_id": "CMP_fixture_1", "color": "gray1" }
+  },
+  "response": { "status": 201, "body": { "id": "TAG_fixture_1", "name": "Fixture Tag" } }
+}

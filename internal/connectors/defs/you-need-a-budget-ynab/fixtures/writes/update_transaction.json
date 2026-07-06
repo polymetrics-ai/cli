@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "txn_fixture_1",
+    "transaction": {
+      "memo": "fixture updated memo",
+      "approved": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/budgets/synthetic-conformance-value/transactions/txn_fixture_1",
+    "body": {
+      "transaction": {
+        "memo": "fixture updated memo",
+        "approved": true
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "data": { "transaction": { "id": "txn_fixture_1" } } } }
+}

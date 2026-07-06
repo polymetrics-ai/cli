@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/inbox/threads/synthetic-conformance-value/messages",
+    "query": {
+      "top": "100",
+      "skip": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "fixture_id_1",
+          "name": "Fixture Record",
+          "status": "active",
+          "created": "2026-01-01T00:00:00+00:00",
+          "updated": "2026-01-02T00:00:00+00:00"
+        }
+      ],
+      "hasMore": false
+    }
+  }
+}

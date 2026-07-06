@@ -1,0 +1,18 @@
+{
+  "record": {
+    "journal_id": "synthetic-conformance-value",
+    "reversal_date": "synthetic-conformance-value",
+    "is_reversal_scheduled": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journals/synthetic-conformance-value/reverse"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

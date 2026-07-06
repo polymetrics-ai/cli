@@ -1,0 +1,20 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "item_id": "synthetic-conformance-value",
+    "x": 0,
+    "y": 0
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2-experimental/boards/synthetic-conformance-value/code_widgets/synthetic-conformance-value/position",
+    "body": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

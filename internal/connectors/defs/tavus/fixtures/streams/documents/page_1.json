@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/documents",
+    "query": { "page": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "document_id": "document_fixture_1", "document_name": "Fixture Docs", "document_url": "https://docs.example.com/fixture", "status": "ready", "progress": null, "error_message": null }
+      ]
+    }
+  }
+}

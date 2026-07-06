@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "firstName": "Fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/users/update_profile",
+    "body": {
+      "id": "user_fixture_1",
+      "firstName": "Fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "user_fixture_1", "type": "user" } }
+  }
+}

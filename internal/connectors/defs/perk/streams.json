@@ -1,0 +1,85 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Api-Version": "1"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "ApiKey ", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/trips" },
+    "error_map": [
+      { "status": 401, "hint": "perk/travelperk api key is missing or invalid; re-run pm credentials add perk" },
+      { "status": 429, "class": "rate_limited", "hint": "perk/travelperk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "trips",
+      "path": "/trips",
+      "records": { "path": "trips" },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_gte",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/trips.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": { "path": "invoices" },
+      "incremental": {
+        "cursor_field": "issuing_date",
+        "request_param": "issuing_date_gte",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_lines",
+      "path": "/invoices/lines",
+      "records": { "path": "invoice_lines" },
+      "incremental": {
+        "cursor_field": "issuing_date",
+        "request_param": "issuing_date_gte",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/invoice_lines.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_profiles",
+      "path": "/profiles",
+      "records": { "path": "profiles" },
+      "schema": "schemas/invoice_profiles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "trip_custom_fields",
+      "path": "/trips/{{ fanout.id }}/custom-fields",
+      "records": { "path": ".", "single_object": true },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/trips", "records_path": "trips", "id_field": "id" }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "trip_id"
+      },
+      "schema": "schemas/trip_custom_fields.json",
+      "projection": "passthrough"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["CampaignID"],
+  "x-cursor-field": "SentDate",
+  "required": ["CampaignID"],
+  "properties": {
+    "CampaignID": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Subject": { "type": ["string", "null"] },
+    "FromName": { "type": ["string", "null"] },
+    "FromEmail": { "type": ["string", "null"] },
+    "ReplyTo": { "type": ["string", "null"] },
+    "WebVersionURL": { "type": ["string", "null"] },
+    "WebVersionTextURL": { "type": ["string", "null"] },
+    "SentDate": { "type": ["string", "null"] },
+    "TotalRecipients": { "type": ["integer", "null"] }
+  }
+}

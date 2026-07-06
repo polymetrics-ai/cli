@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/content/pages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pages": [
+        {
+          "id": "list_pages_in_change_request_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_pages_in_change_request",
+          "name": "Fixture list_pages_in_change_request",
+          "status": "active",
+          "operation_id": "listPagesInChangeRequest"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time_off/requests",
+    "query": {
+      "start": "synthetic-conformance-value",
+      "end": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "type": {
+          "icon": "fixture_value",
+          "id": "fixture_id",
+          "name": "Fixture Name"
+        },
+        "actions": {
+          "approve": true,
+          "bypass": true,
+          "cancel": true,
+          "deny": true
+        },
+        "amount": {
+          "amount": 12.34,
+          "unit": "hours"
+        },
+        "created": "fixture_value",
+        "dates": {},
+        "employeeId": "fixture_id",
+        "end": "fixture_value"
+      }
+    ]
+  }
+}

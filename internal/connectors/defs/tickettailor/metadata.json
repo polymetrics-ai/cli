@@ -1,0 +1,24 @@
+{
+  "name": "tickettailor",
+  "display_name": "Ticket Tailor",
+  "description": "Reads and writes events, orders, issued tickets, event series, holds, discounts, memberships, products, stores, and vouchers through the Ticket Tailor API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.tickettailor.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Ticket Tailor API read of event, order, issued ticket, event series, hold, discount, membership, product, store, and voucher data",
+    "write": "external Ticket Tailor API mutations covering event series/hold/discount/membership/voucher/product lifecycle, ticket issuance/voiding/check-in, and order payment confirmation; delete_event_series is destructive/confirm-gated",
+    "approval": "required for delete_event_series (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required"
+  }
+}

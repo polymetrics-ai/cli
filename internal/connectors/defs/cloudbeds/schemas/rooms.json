@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rooms",
+  "type": "object",
+  "x-primary-key": ["propertyID"],
+  "required": ["propertyID"],
+  "properties": {
+    "propertyID": { "type": "string" },
+    "roomBlocks": { "type": ["array", "null"] }
+  }
+}

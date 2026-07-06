@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/visitor/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "visitor_fixture",
+      "name": "Fixture",
+      "lastUpdatedAt": 1760000000000,
+      "accountIds": [
+        "account_fixture"
+      ],
+      "metadata": {
+        "auto": {
+          "id": "visitor_fixture"
+        }
+      }
+    }
+  }
+}

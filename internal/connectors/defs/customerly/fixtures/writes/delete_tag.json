@@ -1,0 +1,11 @@
+{
+  "record": { "tag": "fixture-tag" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tags",
+    "body": {
+      "tag": "fixture-tag"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

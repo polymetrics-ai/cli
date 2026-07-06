@@ -1,0 +1,22 @@
+{
+  "name": "gong",
+  "display_name": "Gong",
+  "description": "Reads Gong users, calls, and scorecards through the Gong REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Gong API read of call, user, and scorecard data"
+  }
+}

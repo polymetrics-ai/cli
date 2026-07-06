@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "templates",
+  "type": "object",
+  "x-primary-key": ["Name"],
+  "required": ["Name"],
+  "properties": {
+    "Name": { "type": "string" },
+    "Subject": { "type": ["string", "null"] },
+    "TemplateScope": { "type": ["string", "null"] },
+    "DateAdded": { "type": ["string", "null"] },
+    "Body": { "type": ["object", "null"] }
+  }
+}

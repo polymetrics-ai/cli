@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/position/pos_fixture_1/candidates",
+    "query": { "sort": "updated_date", "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "cand_fixture_1",
+        "name": "Fixture Candidate 1",
+        "email_address": "candidate1@example.com",
+        "phone_number": "+15550100",
+        "headline": "Senior Engineer",
+        "origin": "job_board",
+        "stage": { "name": "Applied" },
+        "creation_date": "2026-01-01T00:00:00Z",
+        "updated_date": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

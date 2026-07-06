@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/senders"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "senders": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "from": "fixture",
+        "replyTo": "fixture",
+        "address": {
+          "id": "address_fixture_id"
+        },
+        "appId": "app_id_fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

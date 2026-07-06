@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "recruitment_positions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "team": { "type": ["string", "null"] },
+    "applicants_required": { "type": ["integer", "null"] },
+    "applicants_count": { "type": ["integer", "null"] },
+    "employment_type": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "group": { "type": ["string", "null"] },
+    "group_id": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stats"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "bucket-1",
+          "bucket": "fixture-bucket-1",
+          "date": "2026-01-01T00:00:00Z",
+          "storage_bytes": 1073741824
+        },
+        {
+          "bucket": "fixture-bucket-2",
+          "date": "2026-01-02T00:00:00Z",
+          "storage_bytes": 2147483648
+        }
+      ]
+    }
+  }
+}

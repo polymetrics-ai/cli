@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/api/3/cohorts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "cohorts": [
+        {
+          "id": "coh_fixture_1",
+          "name": "Fixture Cohort",
+          "description": "conformance fixture cohort",
+          "size": 10,
+          "archived": false,
+          "published": true,
+          "owners": ["fixture1@example.com"],
+          "type": "static",
+          "lastComputed": 1767225600,
+          "lastMod": 1767225600,
+          "createdAt": 1767225000
+        }
+      ]
+    }
+  }
+}

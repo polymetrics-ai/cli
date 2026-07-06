@@ -1,0 +1,9 @@
+{
+  "record": { "guardrail_name": "fixture_new_guardrail", "guardrail_prompt": "Never discuss competitor products.", "modality": "verbal" },
+  "expect": {
+    "method": "POST",
+    "path": "/guardrails",
+    "body": { "guardrail_name": "fixture_new_guardrail", "guardrail_prompt": "Never discuss competitor products.", "modality": "verbal" }
+  },
+  "response": { "status": 201, "body": { "uuid": "guardrail_fixture_new" } }
+}

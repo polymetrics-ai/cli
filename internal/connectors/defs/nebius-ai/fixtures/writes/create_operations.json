@@ -1,0 +1,78 @@
+{
+  "record": {
+    "type": "type_fixture",
+    "params": {
+      "query": "query_fixture"
+    },
+    "src": [
+      {
+        "id": "id_fixture",
+        "version": "version_fixture",
+        "mapping": {
+          "type": "type_fixture",
+          "messages": {
+            "type": "type_fixture",
+            "value": "value_fixture"
+          },
+          "max_tokens": {
+            "type": "type_fixture",
+            "value": 1
+          },
+          "custom_id": {
+            "type": "type_fixture",
+            "name": "name_fixture"
+          }
+        }
+      }
+    ],
+    "dst": [
+      {
+        "id": "id_fixture",
+        "version": "version_fixture"
+      }
+    ],
+    "ai_project_id": "ai_project_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/operations",
+    "body": {
+      "type": "type_fixture",
+      "params": {
+        "query": "query_fixture"
+      },
+      "src": [
+        {
+          "id": "id_fixture",
+          "version": "version_fixture",
+          "mapping": {
+            "type": "type_fixture",
+            "messages": {
+              "type": "type_fixture",
+              "value": "value_fixture"
+            },
+            "max_tokens": {
+              "type": "type_fixture",
+              "value": 1
+            },
+            "custom_id": {
+              "type": "type_fixture",
+              "name": "name_fixture"
+            }
+          }
+        }
+      ],
+      "dst": [
+        {
+          "id": "id_fixture",
+          "version": "version_fixture"
+        }
+      ],
+      "ai_project_id": "ai_project_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

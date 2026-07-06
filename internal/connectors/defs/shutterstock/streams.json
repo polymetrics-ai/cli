@@ -1,0 +1,1214 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v2/images/search"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "shutterstock access_token secret is missing or invalid; re-run pm credentials add shutterstock"
+      },
+      {
+        "status": 403,
+        "hint": "shutterstock account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "shutterstock rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "images",
+      "path": "/v2/images/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
+      },
+      "schema": "schemas/images.json"
+    },
+    {
+      "name": "videos",
+      "path": "/v2/videos/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
+      },
+      "schema": "schemas/videos.json"
+    },
+    {
+      "name": "audio",
+      "path": "/v2/audio/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "description": "{{ coalesce record.description record.title }}",
+        "media_type": "{{ coalesce record.media_type record.asset_type }}",
+        "updated_at": "{{ coalesce record.updated_time record.updated_at }}"
+      },
+      "schema": "schemas/audio.json"
+    },
+    {
+      "name": "list_similar_images",
+      "path": "/v2/images/{{ fanout.id }}/similar",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/list_similar_images.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_recommendations",
+      "path": "/v2/images/recommendations",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_image_recommendations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_updated_images",
+      "path": "/v2/images/updated",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_updated_images.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_list",
+      "path": "/v2/images",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_image_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image",
+      "path": "/v2/images/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_image.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_license_list",
+      "path": "/v2/images/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_image_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_collection_list",
+      "path": "/v2/images/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_image_collection_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_collection",
+      "path": "/v2/images/collections/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_image_collection.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_image_collection_items",
+      "path": "/v2/images/collections/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "image_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_image_collection_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "find_similar_videos",
+      "path": "/v2/videos/{{ fanout.id }}/similar",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "video_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "video_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/find_similar_videos.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_updated_videos",
+      "path": "/v2/videos/updated",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_updated_videos.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video_list",
+      "path": "/v2/videos",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "video_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "video_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_video_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video",
+      "path": "/v2/videos/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "video_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "video_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_video.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video_license_list",
+      "path": "/v2/videos/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_video_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video_collection_list",
+      "path": "/v2/videos/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_video_collection_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video_collection",
+      "path": "/v2/videos/collections/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "video_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_video_collection.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_video_collection_items",
+      "path": "/v2/videos/collections/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "video_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_video_collection_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track_list",
+      "path": "/v2/audio",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "audio_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "audio_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_track_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track",
+      "path": "/v2/audio/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "audio_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "audio_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_track.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track_license_list",
+      "path": "/v2/audio/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_track_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track_collection_list",
+      "path": "/v2/audio/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_track_collection_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track_collection",
+      "path": "/v2/audio/collections/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "audio_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_track_collection.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_track_collection_items",
+      "path": "/v2/audio/collections/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "audio_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_track_collection_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "search_sfx",
+      "path": "/v2/sfx/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/search_sfx.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sfx",
+      "path": "/v2/sfx/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "sfx_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "sfx_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_sfx.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sfx_list",
+      "path": "/v2/sfx",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "sfx_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "sfx_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_sfx_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_sfx_license_list",
+      "path": "/v2/sfx/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_sfx_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "search_editorial_images",
+      "path": "/v2/editorial/images/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/search_editorial_images.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_updated_editorial_images",
+      "path": "/v2/editorial/images/updated",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_updated_editorial_images.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image",
+      "path": "/v2/editorial/images/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_image_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "editorial_image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_image.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image_list",
+      "path": "/v2/editorial/images",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_image_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "editorial_image_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_image_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image_license_list",
+      "path": "/v2/editorial/images/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_editorial_image_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image_livefeeds",
+      "path": "/v2/editorial/images/livefeeds",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_editorial_image_livefeeds.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image_livefeed",
+      "path": "/v2/editorial/images/livefeeds/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_image_livefeed_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "livefeed_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_image_livefeed.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_image_livefeed_items",
+      "path": "/v2/editorial/images/livefeeds/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_image_livefeed_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "livefeed_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_image_livefeed_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial",
+      "path": "/v2/editorial/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "editorial_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_livefeeds",
+      "path": "/v2/editorial/livefeeds",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_editorial_livefeeds.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_livefeed",
+      "path": "/v2/editorial/livefeeds/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_livefeed_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "livefeed_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_livefeed.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_livefeed_items",
+      "path": "/v2/editorial/livefeeds/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_livefeed_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "livefeed_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_livefeed_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "search_editorial",
+      "path": "/v2/editorial/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/search_editorial.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_updated_editorial",
+      "path": "/v2/editorial/updated",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_updated_editorial.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "search_editorial_videos",
+      "path": "/v2/editorial/videos/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/search_editorial_videos.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_video",
+      "path": "/v2/editorial/videos/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_video_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "editorial_video_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_video.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_video_list",
+      "path": "/v2/editorial/videos",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "editorial_video_ids"
+        },
+        "into": {
+          "query_param": "id"
+        },
+        "stamp_field": "editorial_video_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_editorial_video_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_editorial_video_license_list",
+      "path": "/v2/editorial/videos/licenses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_editorial_video_license_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_similar_cv_images",
+      "path": "/v2/cv/similar/images",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "visual_asset_ids"
+        },
+        "into": {
+          "query_param": "asset_id"
+        },
+        "stamp_field": "asset_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_similar_cv_images.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_similar_cv_videos",
+      "path": "/v2/cv/similar/videos",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "visual_asset_ids"
+        },
+        "into": {
+          "query_param": "asset_id"
+        },
+        "stamp_field": "asset_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_similar_cv_videos.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "search_catalog",
+      "path": "/v2/catalog/search",
+      "query": {
+        "query": {
+          "template": "{{ config.query }}",
+          "omit_when_absent": true
+        },
+        "sort": {
+          "template": "{{ config.sort }}",
+          "omit_when_absent": true
+        },
+        "orientation": {
+          "template": "{{ config.orientation }}",
+          "omit_when_absent": true
+        },
+        "category": {
+          "template": "{{ config.category }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/search_catalog.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_collections",
+      "path": "/v2/catalog/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_collections.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contributors",
+      "path": "/v2/contributors",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_contributors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contributor",
+      "path": "/v2/contributors/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "contributor_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "contributor_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_contributor.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contributor_collections",
+      "path": "/v2/contributors/{{ fanout.id }}/collections",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "contributor_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "contributor_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_contributor_collections.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contributor_collection",
+      "path": "/v2/contributors/{{ config.contributor_id }}/collections/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "contributor_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_contributor_collection.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_contributor_collection_items",
+      "path": "/v2/contributors/{{ config.contributor_id }}/collections/{{ fanout.id }}/items",
+      "records": {
+        "path": "data"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "contributor_collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "schema": "schemas/get_contributor_collection_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_user_subscriptions",
+      "path": "/v2/user/subscriptions",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/get_user_subscriptions.json",
+      "projection": "passthrough"
+    }
+  ]
+}

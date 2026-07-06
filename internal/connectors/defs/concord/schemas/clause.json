@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "clause",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "version": { "type": ["integer", "null"] },
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "presignedUrl": { "type": ["string", "null"] },
+    "numberOfTemplatesLinked": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Board export task results.",
+  "properties": {
+    "boardId": {
+      "type": "string",
+      "description": "Unique identifier of the board."
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "Contains the description of the error that occurred during a board export task."
+    },
+    "exportLink": {
+      "type": "string",
+      "description": "URL of the S3 bucket that contains the exported files."
+    },
+    "status": {
+      "type": "string",
+      "description": "Indicates the status of the individual board export task.\nPossible values:\n`SUCCESS`: the board export task was completed successfully and the results are available.\n`ERROR`: the board export task encountered an error and failed to complete. The `errorMessage` field provides more information on the error.\n`CANCELLED`: the board export task was cancelled.\n`SCHEDULED`: the board export task has been scheduled and is waiting to be processed.\n`CREATED`: the board export task was created."
+    },
+    "errorType": {
+      "type": "string",
+      "description": "Indicates the type of error encountered during the board export task.\nPossible values:\n`TEMPORARY`: the board export task encountered a temporary error. Retry the board export task after some time.\n`FATAL`: the board export failed and cannot be retried. This export will never succeed due to issues such as board corruption, non-existence, or other unrecoverable errors. Please verify the board's state or contact support if assistance is needed.\n`UNKNOWN`: the board export task encountered an unexp"
+    }
+  },
+  "additionalProperties": true
+}

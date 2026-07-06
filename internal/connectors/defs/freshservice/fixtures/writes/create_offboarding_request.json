@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_offboarding_request",
+    "description": "Fixture create_offboarding_request record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/offboarding_requests",
+    "body": {
+      "name": "Fixture create_offboarding_request",
+      "description": "Fixture create_offboarding_request record"
+    }
+  }
+}

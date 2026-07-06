@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "indices",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "entries": { "type": ["integer", "null"] },
+    "data_size": { "type": ["integer", "null"] },
+    "file_size": { "type": ["integer", "null"] },
+    "last_build_time_s": { "type": ["integer", "null"] },
+    "number_of_pending_tasks": { "type": ["integer", "null"] },
+    "pending_task": { "type": ["boolean", "null"] },
+    "primary": { "type": ["string", "null"] },
+    "replicas": { "type": ["array", "null"] }
+  }
+}

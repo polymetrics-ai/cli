@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/edit/surveys",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "surveys": [
+        {
+          "id": "s_fixture_1",
+          "title": "Fixture Survey 1",
+          "type": "survey",
+          "state": "published",
+          "is_live": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "s_fixture_2",
+          "title": "Fixture Survey 2",
+          "type": "survey",
+          "state": "draft",
+          "is_live": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "cursor": {
+        "limit": 50,
+        "before": "s_fixture_2"
+      }
+    }
+  }
+}

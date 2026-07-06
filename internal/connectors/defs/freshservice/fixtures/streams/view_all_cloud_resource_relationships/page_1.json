@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/itam/resource_relationships",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": [
+        {
+          "id": "view_all_cloud_resource_relationships",
+          "name": "Fixture view_all_cloud_resource_relationships",
+          "subject": "Fixture view_all_cloud_resource_relationships",
+          "description": "Fixture view_all_cloud_resource_relationships record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

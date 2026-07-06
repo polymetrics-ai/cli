@@ -1,0 +1,43 @@
+{
+  "api": "Clarifai API v2 (https://api.clarifai.com/v2)",
+  "docs": "https://docs.clarifai.com/api-guide/api-overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. Clarifai's public documentation site (docs.clarifai.com) is a gRPC-first SDK-usage guide with no single browsable REST endpoint index (unlike bitly/clickup's OpenAPI-backed reference sites) -- its REST surface had to be reconstructed from Clarifai's own published REST convention article (clarifai.com/blog/clarifai-api-conventions), its dataset/app lifecycle guides (docs.clarifai.com/api-guide/data/*, docs.clarifai.com/create/applications/*), and confirmed curl examples for the specific endpoints implemented below. New in this pass: create_application, update_application, create_dataset, delete_dataset write actions (each grounded in a directly-confirmed request-body example, cited in docs.md); capabilities.write flips true. Every other resource category (models, model versions, workflows, inputs, concepts, predictions, training, annotations) is excluded below with a specific reason -- prediction/training/annotation endpoints require deep per-resource body shapes (image/text payload encoding, concept-vector bodies) this pass did not independently re-verify to the same confidence bar as the 4 implemented actions, so they are excluded as out_of_scope/requires_elevated_scope rather than guessed at.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/users/{user_id}/apps", "covered_by": { "stream": "applications" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps", "covered_by": { "write": "create_application" } },
+    { "method": "PATCH", "path": "/v2/users/{user_id}/apps", "covered_by": { "write": "update_application" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}", "excluded": { "category": "duplicate_of", "reason": "single-application detail; identical record shape to the applications list stream's per-item object, already covered by that stream" } },
+    { "method": "DELETE", "path": "/v2/users/{user_id}/apps", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes an application and every dataset/model/workflow/input it contains; no independently-confirmed exact request-body shape (ids vs app_ids vs delete_all) was found to the same confidence bar as this pass's 4 implemented writes, and the blast radius (whole-app data loss) makes a best-guess shape unacceptable to ship" } },
+
+    { "method": "GET", "path": "/v2/users/{user_id}/datasets", "covered_by": { "stream": "datasets" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/datasets", "covered_by": { "write": "create_dataset" } },
+    { "method": "DELETE", "path": "/v2/users/{user_id}/apps/{app_id}/datasets", "covered_by": { "write": "delete_dataset" } },
+    { "method": "PATCH", "path": "/v2/users/{user_id}/apps/{app_id}/datasets", "excluded": { "category": "out_of_scope", "reason": "dataset PATCH (rename/re-describe/set default_filter_id via action=merge|overwrite) is a lower-value near-duplicate of update_application's already-covered action+plural-array PATCH convention; deferred as breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/datasets/{dataset_id}", "excluded": { "category": "duplicate_of", "reason": "single-dataset detail; identical record shape to the datasets list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/datasets/{dataset_id}/versions", "excluded": { "category": "out_of_scope", "reason": "dataset version history (snapshot metadata for training), not part of legacy's parity surface; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/datasets/{dataset_id}/versions", "excluded": { "category": "out_of_scope", "reason": "creates a dataset training snapshot, not a plain data-object mutation; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/datasets/{dataset_id}/inputs", "excluded": { "category": "requires_elevated_scope", "reason": "input/annotation ingestion requires an image/text/video payload (URL, base64, or raw bytes) and concept-label bodies with a shape this pass did not independently re-verify to the same confidence bar as the 4 implemented writes; not modeled by legacy either" } },
+
+    { "method": "GET", "path": "/v2/users/{user_id}/models", "covered_by": { "stream": "models" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/models/versions", "covered_by": { "stream": "model_versions" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/models/{model_id}", "excluded": { "category": "duplicate_of", "reason": "single-model detail; identical record shape to the models list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/models", "excluded": { "category": "out_of_scope", "reason": "legacy connector never implemented model creation; the real body (model_type_id, output_info.data.concepts) was not independently re-verified this pass; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v2/models/{model_id}/outputs", "excluded": { "category": "non_data_endpoint", "reason": "prediction/inference endpoint (runs a model against an input and returns scores), not a syncable object stream or plain data mutation" } },
+    { "method": "POST", "path": "/v2/models/{model_id}/versions/{version_id}/outputs", "excluded": { "category": "non_data_endpoint", "reason": "prediction/inference endpoint pinned to a specific model version, not a syncable object stream or plain data mutation" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/models/{model_id}/versions", "excluded": { "category": "out_of_scope", "reason": "kicks off asynchronous model training, not a plain data mutation; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/models/{model_id}/versions/{version_id}/status", "excluded": { "category": "non_data_endpoint", "reason": "async training-status polling, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/v2/users/{user_id}/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/workflows/{workflow_id}", "excluded": { "category": "duplicate_of", "reason": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/v2/users/{user_id}/apps/{app_id}/workflows", "excluded": { "category": "out_of_scope", "reason": "workflow creation requires a nodes/model-linking DSL body this pass did not independently re-verify; legacy never implemented it; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/v2/workflows/{workflow_id}/results", "excluded": { "category": "non_data_endpoint", "reason": "workflow inference endpoint (runs a workflow's chained models against an input), not a syncable object stream or plain data mutation" } },
+
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/concepts", "excluded": { "category": "out_of_scope", "reason": "concept (label taxonomy) listing, not part of legacy's parity surface; Pass B breadth-vs-cost triage" } },
+    { "method": "PATCH", "path": "/v2/users/{user_id}/apps/{app_id}/concepts", "excluded": { "category": "out_of_scope", "reason": "concept create/update via action=merge|overwrite, not part of legacy's parity surface; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/v2/users/{user_id}/apps/{app_id}/inputs", "excluded": { "category": "out_of_scope", "reason": "raw uploaded-input listing (images/text/video), not part of legacy's parity surface; Pass B breadth-vs-cost triage" } },
+    { "method": "PATCH", "path": "/v2/users/{user_id}/apps/{app_id}/inputs", "excluded": { "category": "requires_elevated_scope", "reason": "bulk input/annotation update requires the same payload/concept-body shape as input creation, not independently re-verified this pass" } },
+    { "method": "DELETE", "path": "/v2/users/{user_id}/apps/{app_id}/inputs", "excluded": { "category": "destructive_admin", "reason": "bulk deletion of uploaded inputs and their annotations; exact request-body shape (ids vs delete_all) not independently re-verified to the confidence bar this pass requires for a destructive action" } }
+  ]
+}

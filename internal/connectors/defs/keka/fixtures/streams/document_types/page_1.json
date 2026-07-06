@@ -1,0 +1,76 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/documents/types",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "document_types_fixture_1",
+          "name": "Fixture document types 1",
+          "documentFields": [
+            {
+              "id": "document_types_fixture_1",
+              "fieldName": "Fixture document types 1",
+              "required": true,
+              "fieldType": 10,
+              "isSystemDefined": true,
+              "fieldOptions": [],
+              "countryCode": null
+            },
+            {
+              "id": "document_types_fixture_2",
+              "fieldName": "Fixture document types 2",
+              "required": true,
+              "fieldType": 10,
+              "isSystemDefined": true,
+              "fieldOptions": [],
+              "countryCode": null
+            }
+          ]
+        },
+        {
+          "id": "document_types_fixture_2",
+          "name": "Fixture document types 2",
+          "documentFields": [
+            {
+              "id": "document_types_fixture_1",
+              "fieldName": "Fixture document types 1",
+              "required": true,
+              "fieldType": 10,
+              "isSystemDefined": true,
+              "fieldOptions": [],
+              "countryCode": null
+            },
+            {
+              "id": "document_types_fixture_2",
+              "fieldName": "Fixture document types 2",
+              "required": true,
+              "fieldType": 10,
+              "isSystemDefined": true,
+              "fieldOptions": [],
+              "countryCode": null
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/document_types",
+      "lastPage": "https://example.invalid/keka/document_types",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

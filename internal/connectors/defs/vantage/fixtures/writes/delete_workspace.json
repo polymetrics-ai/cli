@@ -1,0 +1,9 @@
+{
+  "record": {
+    "workspace_token": "wrkspc_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/workspaces/wrkspc_fixture_1"
+  }
+}

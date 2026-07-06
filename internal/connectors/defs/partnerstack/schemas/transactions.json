@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "customer_id": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

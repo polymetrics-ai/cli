@@ -10,22 +10,44 @@ SYNOPSIS
   pm credentials add <name> --connector qonto [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Qonto transactions, memberships, and accounts through the Qonto API. Read-only.
+  Reads Qonto bank transactions, memberships, and accounts through the Qonto REST API (read-only).
+
+ICON
+  asset: icons/qonto.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api-doc.qonto.com/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  iban
+  start_date
+  api_key (secret)
+
+ETL STREAMS
+  transactions:
+    primary key: id
+    cursor: settled_at
+    fields: amount(), id(), settled_at(), side(), updated_at()
+  memberships:
+    primary key: id
+    fields: amount(), id(), settled_at(), side(), updated_at()
+  accounts:
+    primary key: id
+    fields: amount(), id(), settled_at(), side(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Qonto API read of bank transaction and account data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

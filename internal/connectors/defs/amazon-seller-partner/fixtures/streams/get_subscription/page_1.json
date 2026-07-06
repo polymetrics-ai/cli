@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/notifications/v1/subscriptions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "subscriptionId": "subscriptionId-fixture-1",
+        "payloadVersion": "payloadVersion-fixture-1",
+        "destinationId": "destinationId-fixture-1",
+        "processingDirective": {},
+        "notification_type": "notification_type-fixture-1"
+      }
+    }
+  }
+}

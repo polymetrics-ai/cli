@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/receipts", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idreceipt": 901,
+        "idwarehouse": 501,
+        "version": 2,
+        "supplier": { "idsupplier": 501, "name": "Fixture Supplier" },
+        "purchaseorder": { "idpurchaseorder": 701, "purchaseorderid": "20260001" },
+        "receiptid": "RC2026-1001",
+        "status": "processing",
+        "remarks": null,
+        "completed_by": null,
+        "amount_received": 0,
+        "completed_at": null,
+        "created": "2026-01-02T00:00:00Z",
+        "updated": "2026-01-02T00:00:00Z",
+        "products": []
+      }
+    ]
+  }
+}

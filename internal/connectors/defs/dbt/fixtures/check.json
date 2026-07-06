@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/projects/", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 1, "offset": 0 }, "pagination": { "count": 0, "total_count": 0 } }
+    }
+  }
+}

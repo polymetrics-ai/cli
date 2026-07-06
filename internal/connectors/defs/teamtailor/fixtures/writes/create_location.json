@@ -1,0 +1,19 @@
+{
+  "record": {
+    "data": {
+      "type": "locations",
+      "attributes": { "name": "Fixture New HQ", "city": "Fixtureville", "country": "Fixtureland" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/locations",
+    "body": {
+      "data": {
+        "type": "locations",
+        "attributes": { "name": "Fixture New HQ", "city": "Fixtureville", "country": "Fixtureland" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "location_fixture_new", "type": "locations" } } }
+}

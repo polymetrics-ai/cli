@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "synthetic-conformance-value", "start": "cio_fixture_cursor_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        { "id": 3, "name": "Fixture Campaign Three", "type": "triggered", "state": "draft", "active": false, "created": 1767225605, "updated": 1767225606 }
+      ],
+      "next": null
+    }
+  }
+}

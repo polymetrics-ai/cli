@@ -1,0 +1,24 @@
+{
+  "name": "buzzsprout",
+  "display_name": "Buzzsprout",
+  "description": "Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play counts) and creates/updates episodes through the Buzzsprout REST API.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/Buzzsprout/buzzsprout-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Buzzsprout API read of podcast and episode data",
+    "write": "external mutation of episode metadata/audio (create_episode, update_episode) on the configured podcast; can trigger audio processing and publish/unpublish an episode",
+    "approval": "required for create_episode/update_episode"
+  }
+}

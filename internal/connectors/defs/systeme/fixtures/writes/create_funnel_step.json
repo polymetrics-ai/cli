@@ -1,0 +1,7 @@
+{
+  "record": { "funnel_id": "funnel_fixture_1", "name": "Fixture Step" },
+  "expect": {
+    "method": "POST",
+    "path": "/funnels/funnel_fixture_1/steps"
+  }
+}

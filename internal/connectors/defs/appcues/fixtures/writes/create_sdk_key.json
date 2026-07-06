@@ -1,0 +1,12 @@
+{
+  "record": { "name": "Fixture SDK Key", "tag_field": "version" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/sdk_keys",
+    "body": { "name": "Fixture SDK Key", "tag_field": "version" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "key_fixture_created", "name": "Fixture SDK Key", "tag_field": "version" }
+  }
+}

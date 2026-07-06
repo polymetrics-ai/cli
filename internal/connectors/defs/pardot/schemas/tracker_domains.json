@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tracker_domains",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "domain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isPrimary": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isDeleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "defaultCampaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "httpsStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sslStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "validationStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "validatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

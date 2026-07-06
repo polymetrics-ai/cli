@@ -10,22 +10,987 @@ SYNOPSIS
   pm credentials add <name> --connector mantle [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Mantle customers and subscriptions through the Mantle (heymantle.com) REST API.
+  Reads and writes Mantle Core API resources through the heymantle.com REST API.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  agent_id
+  app_event_id
+  app_id
+  base_url
+  checklist_id
+  collection_id
+  event_name
+  feature_id
+  filter_id
+  id
+  item_id
+  job_key
+  loop_id
+  message_id
+  page_id
+  plan_id
+  reply_id
+  repository_id
+  resource_id
+  resource_type
+  review_id
+  run_id
+  skill_id
+  usage_metric_id
+  api_key (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: updatedAt
+    fields: averageMonthlyRevenue(), countryCode(), createdAt(), domain(), email(), firstInteractionAt(), id(), industry(), last30Revenue(), lifetimeValue(), name(), shopifyDomain(), shopifyShopId(), tags(), test(), updatedAt()
+  subscriptions:
+    primary key: id
+    cursor: createdAt
+    fields: activatedAt(), active(), billingCycleAnchor(), canceledAt(), createdAt(), currentPeriodEnd(), currentPeriodStart(), frozenAt(), id(), lineItems(), plan(), presentmentSubtotal(), presentmentTotal(), subtotal(), total(), trialExpiresAt(), trialStartsAt()
+  affiliate_commissions:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), affiliateReferralId(), amount(), appInstallationId(), cancelReason(), cancelled(), createdAt(), date(), id(), name(), notes(), payoutId(), transactionId(), type(), updatedAt()
+  affiliate_commissions_id:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), affiliateReferralId(), amount(), appInstallationId(), cancelReason(), cancelled(), createdAt(), date(), id(), name(), notes(), payoutId(), transactionId(), type(), updatedAt()
+  affiliate_payouts:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), amount(), amountPaid(), createdAt(), id(), notes(), number(), paidAt(), paymentMethod(), paymentMethodData(), paymentRequestedAt(), periodEnd(), periodStart(), status(), updatedAt()
+  affiliate_payouts_id:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), amount(), amountPaid(), createdAt(), id(), notes(), number(), paidAt(), paymentMethod(), paymentMethodData(), paymentRequestedAt(), periodEnd(), periodStart(), status(), updatedAt()
+  affiliate_programs:
+    primary key: id
+    fields: affiliatesCount(), allowAffiliateDashboardAccess(), appId(), createdAt(), customAffiliateLink(), groups(), id(), name(), removeOnUninstallDays(), requireApprovalToJoin(), requireTermsAcceptance(), requiredAffiliateFields(), rules(), showInMarketplace(), signupLink(), startCountingCommissionFrom(), termsUrl(), updatedAt()
+  affiliate_programs_id:
+    primary key: id
+    fields: affiliatesCount(), allowAffiliateDashboardAccess(), appId(), createdAt(), customAffiliateLink(), groups(), id(), name(), removeOnUninstallDays(), requireApprovalToJoin(), requireTermsAcceptance(), requiredAffiliateFields(), rules(), showInMarketplace(), signupLink(), startCountingCommissionFrom(), termsUrl(), updatedAt()
+  affiliate_referrals:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), appId(), appInstallationId(), appListingPageViewId(), createdAt(), customerId(), date(), id(), rules(), updatedAt()
+  affiliate_referrals_id:
+    primary key: id
+    fields: affiliateId(), affiliateProgramId(), appId(), appInstallationId(), appListingPageViewId(), createdAt(), customerId(), date(), id(), rules(), updatedAt()
+  affiliates:
+    primary key: id
+    fields: agreedToTermsAt(), createdAt(), email(), id(), lastAppInstallationDate(), lastTransactionDate(), memberships(), name(), paypalEmail(), startCountingCommissionFrom(), tags(), updatedAt(), user()
+  affiliates_id:
+    fields: affiliate(), attributions()
+  agents:
+    primary key: id
+    fields: createdAt(), email(), id(), name(), organizationId(), updatedAt(), userId()
+  ai_agents_agent_id_runs_run_id:
+    primary key: id
+    fields: agentId(), completedAt(), createdAt(), error(), id(), response(), status(), structuredResponse(), tokenUsage()
+  api_core_v1_metrics_active_installs:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_active_subscriptions:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_arpu:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_arr:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_logo_churn:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_mrr:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_net_installs:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_net_revenue:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_net_revenue_retention:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_payout:
+    fields: billedUsageTotal(), credits(), dueTotal(), fees(), format(), grossAmount(), netAmount(), period(), periodEnd(), periodStart(), refunds(), taxes(), timeSeries(), timeSeriesInterval(), upcomingTotal()
+  api_core_v1_metrics_predicted_ltv:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_revenue_churn:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_revenue_retention:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_subscription_churn:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_usage_event:
+    fields: format(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  api_core_v1_metrics_usage_metric:
+    fields: format(), method(), period(), periodEnd(), periodStart(), timeSeries(), timeSeriesInterval(), value()
+  apps:
+    primary key: id
+    fields: apiClientId(), createdAt(), development(), displayName(), iconUrl(), id(), name(), platform(), slug()
+  apps_app_id_checklists:
+    primary key: id
+    fields: createdAt(), description(), handle(), id(), name(), status(), steps(), title(), updatedAt()
+  apps_app_id_checklists_checklist_id:
+    primary key: id
+    fields: createdAt(), description(), handle(), id(), name(), status(), steps(), title(), updatedAt()
+  apps_app_id_plans_features:
+    primary key: id
+    fields: allowedValues(), createdAt(), defaultValue(), description(), id(), key(), name(), type(), updatedAt(), usageMetric()
+  apps_app_id_plans_features_feature_id:
+    primary key: id
+    fields: allowedValues(), createdAt(), defaultValue(), description(), id(), key(), name(), type(), updatedAt(), usageMetric()
+  apps_id:
+    primary key: id
+    fields: apiClientId(), createdAt(), development(), displayName(), iconUrl(), id(), name(), platform(), slug()
+  apps_id_app_events:
+    primary key: id
+    fields: appId(), appInstallationId(), createdAt(), customerId(), id(), occurredAt(), previousSubscriptionId(), subscriptionId(), transactionId(), type(), updatedAt()
+  apps_id_app_events_app_event_id:
+    primary key: id
+    fields: appId(), appInstallationId(), createdAt(), customerId(), id(), occurredAt(), previousSubscriptionId(), subscriptionId(), transactionId(), type(), updatedAt()
+  apps_id_plans:
+    primary key: id
+    fields: activeTrialCount(), amount(), averageLifetimeValue(), createdAt(), currencyCode(), customFields(), customerExcludeTags(), customerId(), customerTags(), deprecatedAt(), description(), features(), flexBilling(), flexBillingTerms(), id(), interval(), lifetimeValue(), monthlyRevenue(), name(), public(), shopifyPlans(), subscriberCount(), trialDays(), type(), updatedAt(), visible()
+  apps_id_plans_plan_id:
+    primary key: id
+    fields: activeTrialCount(), amount(), averageLifetimeValue(), createdAt(), currencyCode(), customFields(), customerExcludeTags(), customerId(), customerTags(), deprecatedAt(), description(), features(), flexBilling(), flexBillingTerms(), id(), interval(), lifetimeValue(), monthlyRevenue(), name(), public(), shopifyPlans(), subscriberCount(), trialDays(), type(), updatedAt(), visible()
+  apps_id_reviews:
+    primary key: id
+    fields: archivedAt(), content(), createdAt(), date(), id(), location(), rating(), updatedAt()
+  apps_id_reviews_review_id:
+    primary key: id
+    fields: archivedAt(), content(), createdAt(), date(), id(), location(), rating(), updatedAt()
+  apps_id_skills_skill_id:
+    fields: id(), value()
+  apps_id_usage_metrics:
+    primary key: id
+    fields: calculation(), eventName(), id(), name(), params()
+  apps_id_usage_metrics_usage_metric_id:
+    primary key: id
+    fields: calculation(), eventName(), id(), name(), params()
+  assistant_conversations_id:
+    primary key: id
+    fields: agent(), createdAt(), customData(), id(), messages(), sessionId(), summary(), updatedAt(), user()
+  channels:
+    primary key: id
+    fields: createdAt(), enabled(), id(), name(), type(), updatedAt()
+  charges:
+    primary key: id
+    fields: amount(), appName(), billedOn(), currencyCode(), customerDomain(), customerName(), id(), name(), paidOn(), status(), test(), type()
+  companies:
+    primary key: id
+    fields: createdAt(), customerIds(), id(), name(), parentCustomerId(), updatedAt()
+  companies_id:
+    primary key: id
+    fields: createdAt(), customerIds(), id(), name(), parentCustomerId(), updatedAt()
+  contacts:
+    primary key: id
+    fields: createdAt(), customers(), email(), id(), jobTitle(), label(), name(), notes(), phone(), secondaryEmails(), socialProfiles(), tags(), updatedAt()
+  contacts_id:
+    primary key: id
+    fields: createdAt(), customers(), email(), id(), jobTitle(), label(), name(), notes(), phone(), secondaryEmails(), socialProfiles(), tags(), updatedAt()
+  custom_data:
+    fields: customData()
+  customer_segments:
+    primary key: id
+    fields: filters(), id(), name()
+  customer_segments_id:
+    primary key: id
+    fields: filters(), id(), name()
+  customers_custom_fields:
+    primary key: id
+    fields: appId(), appLevel(), defaultValue(), filterable(), id(), name(), options(), private(), showOnCustomerDetail(), type()
+  customers_custom_fields_id:
+    primary key: id
+    fields: appId(), appLevel(), defaultValue(), filterable(), id(), name(), options(), private(), showOnCustomerDetail(), type()
+  customers_id:
+    primary key: id
+    fields: accountOwners(), appInstallations(), billingAddress(), companyId(), contacts(), createdAt(), customFields(), deals(), domain(), email(), firstInteractionAt(), id(), industry(), name(), shopifyDomain(), tags(), updatedAt()
+  customers_id_account_owners:
+    fields: accountOwners()
+  customers_id_timeline:
+    primary key: id
+    fields: affiliateAttribution(), appCharge(), appInstallationId(), createdAt(), customerId(), email(), id(), metadata(), netChange(), occurredAt(), planAmount(), planChanges(), planCurrencyCode(), planInterval(), previousSubscription(), source(), subscription(), type(), uninstallEvent(), updatedAt(), utm()
+  deal_activities:
+    primary key: id
+    fields: createdAt(), defaultWeight(), description(), icon(), id(), name(), timelineDescriptionTemplate(), timelineTitleTemplate(), updatedAt()
+  deal_activities_id:
+    primary key: id
+    fields: createdAt(), defaultWeight(), description(), icon(), id(), name(), timelineDescriptionTemplate(), timelineTitleTemplate(), updatedAt()
+  deal_flows:
+    primary key: id
+    fields: acquirer(), affiliate(), createdAt(), dealStages(), defaultAcquisitionChannel(), defaultAcquisitionSource(), defaultDealOwner(), deletedAt(), description(), displayOrder(), id(), name(), partnership(), updatedAt()
+  deal_flows_id:
+    primary key: id
+    fields: acquirer(), affiliate(), createdAt(), dealStages(), defaultAcquisitionChannel(), defaultAcquisitionSource(), defaultDealOwner(), deletedAt(), description(), displayOrder(), id(), name(), partnership(), updatedAt()
+  deals:
+    primary key: id
+    fields: acquirer(), acquisitionChannel(), acquisitionSource(), affiliate(), amount(), amountCurrencyCode(), app(), archivedAt(), closedAt(), closingAt(), contacts(), createdAt(), currentAmount(), customData(), customer(), dealFlow(), dealStage(), firstInteractionAt(), id(), name(), notes(), owners(), partnership(), plan(), updatedAt()
+  deals_id:
+    primary key: id
+    fields: acquirer(), acquisitionChannel(), acquisitionSource(), affiliate(), amount(), amountCurrencyCode(), app(), archivedAt(), closedAt(), closingAt(), contacts(), createdAt(), currentAmount(), customData(), customer(), dealFlow(), dealStage(), firstInteractionAt(), id(), name(), notes(), owners(), partnership(), plan(), updatedAt()
+  deals_id_events:
+    primary key: id
+    fields: createdAt(), dealActivity(), dealStage(), id(), notes(), occurredAt(), previousDealStage(), task(), timelineComment(), type(), user()
+  deals_id_timeline:
+    primary key: id
+    fields: createdAt(), dealActivity(), dealStage(), id(), notes(), occurredAt(), previousDealStage(), task(), timelineComment(), type(), user()
+  docs_collections:
+    primary key: id
+    fields: createdAt(), description(), displayOrder(), groups(), handles(), id(), status(), title(), updatedAt()
+  docs_groups:
+    primary key: id
+    fields: createdAt(), displayOrder(), handle(), id(), pages(), status(), title(), updatedAt()
+  docs_pages:
+    primary key: id
+    fields: children(), depth(), displayOrder(), handle(), id(), path(), publishedAt(), title()
+  docs_pages_generate_status_job_key:
+    fields: id(), status()
+  docs_pages_page_id:
+    primary key: id
+    fields: allLocales(), children(), collection(), content(), createdAt(), depth(), displayOrder(), faqs(), files(), group(), handle(), id(), locale(), openGraphImage(), path(), publishedAt(), seoDescription(), seoTitle(), title(), updatedAt()
+  docs_repositories:
+    primary key: id
+    fields: collections(), config(), createdAt(), customDomain(), defaultLocale(), handle(), id(), locales(), shortDescription(), supportedLocales(), title(), updatedAt(), url(), useCustomDomain(), visibility()
+  docs_repositories_id:
+    primary key: id
+    fields: collections(), config(), createdAt(), customDomain(), defaultLocale(), handle(), id(), locales(), shortDescription(), supportedLocales(), title(), updatedAt(), url(), useCustomDomain(), visibility()
+  docs_sites:
+    primary key: id
+    fields: config(), createdAt(), customDomain(), customDomainVerifiedAt(), defaultLocale(), handle(), id(), locales(), repositories(), shortDescription(), supportedLocales(), title(), updatedAt(), url(), useCustomDomain(), visibility(), widgetId()
+  docs_sites_id:
+    primary key: id
+    fields: config(), createdAt(), customDomain(), customDomainVerifiedAt(), defaultLocale(), handle(), id(), locales(), repositories(), shortDescription(), supportedLocales(), title(), updatedAt(), url(), useCustomDomain(), visibility(), widgetId()
+  docs_sites_id_redirects:
+    primary key: id
+    fields: createdAt(), enabled(), fromPath(), id(), notes(), redirectType(), toPath(), updatedAt()
+  docs_sites_id_repositories:
+    primary key: id
+    fields: createdAt(), id(), position(), repository(), repositoryId()
+  docs_tree:
+    primary key: id
+    fields: collections(), config(), createdAt(), customDomain(), defaultLocale(), handle(), id(), locales(), shortDescription(), supportedLocales(), title(), updatedAt(), url(), useCustomDomain(), visibility()
+  email_campaigns:
+    primary key: id
+    fields: appId(), clickCount(), createdAt(), deliveredCount(), format(), html(), id(), layout(), layoutId(), name(), openCount(), plainText(), previewText(), sender(), senderId(), sentCount(), status(), subject(), thumbnail(), type(), unsubscribeGroup(), unsubscribeGroupId(), updatedAt()
+  email_campaigns_id:
+    primary key: id
+    fields: appId(), clickCount(), createdAt(), deliveredCount(), format(), html(), id(), layout(), layoutId(), name(), openCount(), plainText(), previewText(), sender(), senderId(), sentCount(), status(), subject(), thumbnail(), type(), unsubscribeGroup(), unsubscribeGroupId(), updatedAt()
+  email_campaigns_id_preview:
+    fields: customerId(), emailId(), html(), previewText(), subject(), warning()
+  email_deliveries:
+    primary key: id
+    fields: audienceSize(), createdAt(), email(), emailId(), id(), stats(), status()
+  email_deliveries_id:
+    primary key: id
+    fields: audienceCriteria(), audienceSize(), createdAt(), email(), emailId(), error(), id(), recentDeliveries(), recentEvents(), stats(), status(), updatedAt()
+  email_layouts:
+    primary key: id
+    fields: appId(), createdAt(), defaultLayout(), format(), id(), name(), thumbnail(), updatedAt()
+  email_senders:
+    primary key: id
+    fields: address(), appId(), createdAt(), from(), id(), name(), replyTo(), updatedAt()
+  email_unsubscribe_groups:
+    primary key: id
+    fields: createdAt(), description(), id(), name()
+  email_unsubscribe_groups_id_members:
+    primary key: id
+    fields: dateAdded(), email(), id()
+  entities:
+  flow_extensions_actions:
+    primary key: id
+    fields: address(), createdAt(), description(), handle(), id(), name(), organizationId(), settingsSchema(), updatedAt()
+  flows:
+    primary key: id
+    fields: allowRepeatRuns(), blockRepeatsTimeUnit(), blockRepeatsTimeValue(), createdAt(), id(), name(), status(), stepsCount(), updatedAt()
+  flows_id:
+    primary key: id
+    fields: allowRepeatRuns(), blockRepeatsTimeUnit(), blockRepeatsTimeValue(), createdAt(), firstStepId(), id(), name(), status(), steps(), stepsCount(), updatedAt()
+  journal_entries:
+    primary key: id
+    fields: app(), appId(), createdAt(), date(), description(), emoji(), files(), id(), tags(), title(), updatedAt(), url()
+  journal_entries_id:
+    primary key: id
+    fields: app(), appId(), createdAt(), date(), description(), emoji(), files(), id(), tags(), title(), updatedAt(), url()
+  lists:
+    primary key: id
+    fields: contactCount(), createdAt(), customerCount(), description(), id(), name(), updatedAt()
+  lists_id:
+  meetings:
+    primary key: id
+    fields: aiDealInsights(), aiDecisions(), aiEnrichedAt(), aiEnrichmentStatus(), aiKeyPoints(), aiOpenQuestions(), aiSummary(), aiTopics(), attendees(), createdAt(), createdBy(), customer(), deal(), duration(), endTime(), externalId(), id(), meetingUrl(), overallSentiment(), platform(), platformMeetingId(), recordingStatus(), recordingUrl(), sentimentTrend(), startTime(), summary(), taskSuggestions(), title(), transcript(), updatedAt()
+  meetings_id:
+    primary key: id
+    fields: aiDealInsights(), aiDecisions(), aiEnrichedAt(), aiEnrichmentStatus(), aiKeyPoints(), aiOpenQuestions(), aiSummary(), aiTopics(), attendees(), createdAt(), createdBy(), customer(), deal(), duration(), endTime(), externalId(), id(), meetingUrl(), overallSentiment(), platform(), platformMeetingId(), recordingStatus(), recordingUrl(), sentimentTrend(), startTime(), summary(), taskSuggestions(), title(), transcript(), updatedAt()
+  meetings_id_permissions:
+    primary key: id
+    fields: createdAt(), grantedBy(), id(), user(), userId()
+  meetings_id_recording_url:
+    fields: expiresIn(), recordingUrl()
+  meetings_id_transcribe:
+    primary key: id
+    fields: externalId(), id(), status()
+  metrics_sales:
+    fields: id(), value()
+  notification_preferences:
+    fields: configured(), id()
+  organization:
+    primary key: id
+    fields: contactTags(), currentInstallation(), customerTags(), id(), name()
+  subscriptions_id:
+    primary key: id
+    fields: activatedAt(), active(), appliedDiscount(), billingCycleAnchor(), cancelOn(), canceledAt(), confirmationUrl(), createdAt(), currentPeriodEnd(), currentPeriodStart(), features(), featuresOrder(), frozenAt(), id(), lineItems(), plan(), presentmentSubtotal(), presentmentTotal(), shopifySubscription(), subtotal(), total(), trialExpiresAt(), trialStartsAt(), usageBalanceUsed(), usageCappedAmount()
+  synced_emails:
+    primary key: id
+    fields: contact(), createdAt(), customer(), deal(), externalId(), id(), lastMessageAt(), messageCount(), messages(), snippet(), source(), subject(), syncedBy(), updatedAt()
+  synced_emails_id:
+    primary key: id
+    fields: contact(), createdAt(), customer(), deal(), externalId(), id(), lastMessageAt(), messageCount(), messages(), snippet(), source(), subject(), syncedBy(), updatedAt()
+  synced_emails_id_messages:
+    fields: messages()
+  tasks:
+    primary key: id
+    fields: assignee(), completedAt(), contact(), contactId(), createdAt(), createdBy(), customer(), customerId(), deal(), dealActivity(), dealActivityId(), dealId(), description(), descriptionHtml(), dueDate(), hasComments(), id(), priority(), status(), tags(), title(), todoItems(), updatedAt()
+  tasks_id:
+    primary key: id
+    fields: assignee(), completedAt(), contact(), contactId(), createdAt(), createdBy(), customer(), customerId(), deal(), dealActivity(), dealActivityId(), dealId(), description(), descriptionHtml(), dueDate(), hasComments(), id(), priority(), status(), tags(), title(), todoItems(), updatedAt()
+  tasks_id_comments:
+    primary key: id
+    fields: comment(), commentHtml(), createdAt(), createdBy(), id(), taggedUsers(), taskId(), updatedAt()
+  tasks_id_todo_items:
+    primary key: id
+    fields: completed(), completedAt(), content(), displayOrder(), id()
+  tasks_id_todo_items_item_id:
+    primary key: id
+    fields: completed(), completedAt(), content(), displayOrder(), id()
+  tickets:
+    primary key: id
+    fields: app(), assignedTo(), channel(), closedAt(), contact(), createdAt(), customer(), cxEmailAddressId(), firstResponseAt(), id(), inboxId(), lastMessage(), lastMessageAt(), messageCount(), priority(), resolvedAt(), sourceId(), sourceType(), status(), subject(), tags(), ticketNumber(), updatedAt()
+  tickets_id:
+    primary key: id
+    fields: app(), assignedTo(), channel(), closedAt(), contact(), createdAt(), customer(), cxEmailAddressId(), firstResponseAt(), id(), inboxId(), lastMessage(), lastMessageAt(), messageCount(), priority(), resolvedAt(), sourceId(), sourceType(), status(), subject(), tags(), ticketNumber(), updatedAt()
+  tickets_id_events:
+    primary key: id
+    fields: actorType(), agent(), contact(), createdAt(), id(), newValue(), occurredAt(), oldValue(), threadMessageId(), type()
+  tickets_id_loops:
+    primary key: id
+    fields: category(), categoryId(), closedAt(), closedByMessageId(), closedReason(), id(), openedAt(), openedByMessageId(), question(), status()
+  tickets_id_loops_loop_id:
+    primary key: id
+    fields: category(), categoryId(), closedAt(), closedByMessageId(), closedReason(), id(), openedAt(), openedByMessageId(), question(), status()
+  tickets_id_messages:
+    primary key: id
+    fields: actorType(), agent(), attachments(), contact(), content(), contentType(), createdAt(), fullContent(), id(), inReplyToId(), isInternal(), messageId(), occurredAt(), referencesIds()
+  tickets_id_messages_message_id:
+    primary key: id
+    fields: actorType(), agent(), attachments(), contact(), content(), contentType(), createdAt(), fullContent(), id(), inReplyToId(), isInternal(), messageId(), occurredAt(), referencesIds()
+  tickets_saved_filters:
+    primary key: id
+    fields: createdAt(), displayOrder(), filters(), id(), name(), updatedAt(), userId()
+  tickets_saved_filters_filter_id:
+    primary key: id
+    fields: createdAt(), displayOrder(), filters(), id(), name(), updatedAt(), userId()
+  tickets_saved_replies:
+    primary key: id
+    fields: appId(), category(), categoryId(), content(), createdAt(), defaultLocale(), handle(), id(), roles(), status(), tags(), title(), updatedAt(), user(), userId()
+  tickets_saved_replies_reply_id:
+    primary key: id
+    fields: appId(), category(), categoryId(), content(), createdAt(), defaultLocale(), handle(), id(), roles(), status(), tags(), title(), updatedAt(), user(), userId()
+  timeline_comments:
+    primary key: id
+    fields: appInstallationId(), attachments(), comment(), commentHtml(), createdAt(), customerId(), dealId(), id(), originalCommentId(), taggedUsers(), updatedAt(), user(), userId()
+  timeline_comments_id:
+    primary key: id
+    fields: appInstallationId(), attachments(), comment(), commentHtml(), createdAt(), customerId(), dealId(), id(), originalCommentId(), taggedUsers(), updatedAt(), user(), userId()
+  transactions:
+    primary key: id
+    fields: appId(), appInstallationId(), billingProvider(), billingProviderId(), createdAt(), customerId(), date(), grossAmount(), grossAmountCurrencyCode(), id(), netAmount(), netAmountCurrencyCode(), processingFee(), processingFeeCurrencyCode(), subscriptionId(), type(), updatedAt()
+  transactions_id:
+    primary key: id
+    fields: appId(), appInstallationId(), billingProvider(), billingProviderId(), createdAt(), customerId(), date(), grossAmount(), grossAmountCurrencyCode(), id(), netAmount(), netAmountCurrencyCode(), processingFee(), processingFeeCurrencyCode(), subscriptionId(), type(), updatedAt()
+  usage_events:
+    fields: eventId(), eventName(), properties(), timestamp()
+  users:
+    primary key: id
+    fields: email(), id(), jobTitle(), name(), roles()
+  users_id:
+    primary key: id
+    fields: email(), id(), jobTitle(), name(), roles()
+  webhooks:
+    primary key: id
+    fields: address(), appIds(), createdAt(), filter(), id(), topic(), updatedAt()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  create_agents:
+    endpoint: POST /v1/agents
+    risk: medium: external Mantle mutation; approval required
+  create_ai_agents_agent_id_runs:
+    endpoint: POST /v1/ai/agents/{{ record.agent_id }}/runs
+    required fields: agent_id
+    risk: medium: external Mantle side effect; approval required
+  create_apps_app_id_checklists:
+    endpoint: POST /v1/apps/{{ record.app_id }}/checklists
+    required fields: app_id
+    risk: medium: external Mantle mutation; approval required
+  create_apps_app_id_plans_features:
+    endpoint: POST /v1/apps/{{ record.app_id }}/plans/features
+    required fields: app_id
+    risk: medium: external Mantle mutation; approval required
+  create_apps_id_app_events:
+    endpoint: POST /v1/apps/{{ record.id }}/app_events
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_apps_id_plans:
+    endpoint: POST /v1/apps/{{ record.id }}/plans
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_apps_id_usage_metrics:
+    endpoint: POST /v1/apps/{{ record.id }}/usage_metrics
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_attachments:
+    endpoint: POST /v1/attachments
+    risk: medium: external Mantle mutation; approval required
+  create_channels:
+    endpoint: POST /v1/channels
+    risk: medium: external Mantle mutation; approval required
+  create_companies:
+    endpoint: POST /v1/companies
+    risk: medium: external Mantle mutation; approval required
+  create_customers:
+    endpoint: POST /v1/customers
+    risk: medium: external Mantle mutation; approval required
+  create_customers_custom_fields:
+    endpoint: POST /v1/customers/custom_fields
+    risk: medium: external Mantle mutation; approval required
+  create_deal_activities:
+    endpoint: POST /v1/deal_activities
+    risk: medium: external Mantle mutation; approval required
+  create_deal_flows:
+    endpoint: POST /v1/deal_flows
+    risk: medium: external Mantle side effect; approval required
+  create_deals:
+    endpoint: POST /v1/deals
+    risk: medium: external Mantle mutation; approval required
+  create_deals_id_events:
+    endpoint: POST /v1/deals/{{ record.id }}/events
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_docs_collections:
+    endpoint: POST /v1/docs/collections
+    risk: medium: external Mantle mutation; approval required
+  create_docs_groups:
+    endpoint: POST /v1/docs/groups
+    risk: medium: external Mantle mutation; approval required
+  create_docs_pages:
+    endpoint: POST /v1/docs/pages
+    risk: medium: external Mantle mutation; approval required
+  create_docs_sites:
+    endpoint: POST /v1/docs/sites
+    risk: medium: external Mantle mutation; approval required
+  create_docs_sites_id_redirects:
+    endpoint: POST /v1/docs/sites/{{ record.id }}/redirects
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_email_campaigns:
+    endpoint: POST /v1/email/campaigns
+    risk: medium: external Mantle side effect; approval required
+  create_flow_extensions_actions:
+    endpoint: POST /v1/flow/extensions/actions
+    risk: medium: external Mantle side effect; approval required
+  create_flows:
+    endpoint: POST /v1/flows
+    risk: medium: external Mantle side effect; approval required
+  create_journal_entries:
+    endpoint: POST /v1/journal_entries
+    risk: medium: external Mantle mutation; approval required
+  create_lists:
+    endpoint: POST /v1/lists
+    risk: medium: external Mantle mutation; approval required
+  create_meetings:
+    endpoint: POST /v1/meetings
+    risk: medium: external Mantle mutation; approval required
+  create_meetings_id_transcribe_upload:
+    endpoint: POST /v1/meetings/{{ record.id }}/transcribe/upload
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_tasks:
+    endpoint: POST /v1/tasks
+    risk: medium: external Mantle mutation; approval required
+  create_tasks_id_comments:
+    endpoint: POST /v1/tasks/{{ record.id }}/comments
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_tasks_id_todo_items:
+    endpoint: POST /v1/tasks/{{ record.id }}/todo-items
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_tickets:
+    endpoint: POST /v1/tickets
+    risk: medium: external Mantle mutation; approval required
+  create_tickets_id_events:
+    endpoint: POST /v1/tickets/{{ record.id }}/events
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_tickets_id_messages:
+    endpoint: POST /v1/tickets/{{ record.id }}/messages
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  create_tickets_saved_filters:
+    endpoint: POST /v1/tickets/saved_filters
+    risk: medium: external Mantle mutation; approval required
+  create_tickets_saved_replies:
+    endpoint: POST /v1/tickets/saved_replies
+    risk: medium: external Mantle mutation; approval required
+  create_timeline_comments:
+    endpoint: POST /v1/timeline_comments
+    risk: medium: external Mantle mutation; approval required
+  create_usage_events:
+    endpoint: POST /v1/usage_events
+    risk: medium: external Mantle mutation; approval required
+  create_webhooks:
+    endpoint: POST /v1/webhooks
+    risk: medium: external Mantle side effect; approval required
+  delete_apps_app_id_checklists_checklist_id:
+    endpoint: DELETE /v1/apps/{{ record.app_id }}/checklists/{{ record.checklist_id }}
+    required fields: app_id, checklist_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_apps_app_id_plans_features_feature_id:
+    endpoint: DELETE /v1/apps/{{ record.app_id }}/plans/features/{{ record.feature_id }}
+    required fields: app_id, feature_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_apps_id_usage_metrics_usage_metric_id:
+    endpoint: DELETE /v1/apps/{{ record.id }}/usage_metrics/{{ record.usage_metric_id }}
+    required fields: id, usage_metric_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_companies_id:
+    endpoint: DELETE /v1/companies/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_contacts_id:
+    endpoint: DELETE /v1/contacts/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_customers_custom_fields_id:
+    endpoint: DELETE /v1/customers/custom_fields/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_customers_id_account_owners_owner_id:
+    endpoint: DELETE /v1/customers/{{ record.id }}/account_owners/{{ record.owner_id }}
+    required fields: id, owner_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_deal_activities_id:
+    endpoint: DELETE /v1/deal_activities/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_deal_flows_id:
+    endpoint: DELETE /v1/deal_flows/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_deals_id:
+    endpoint: DELETE /v1/deals/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_collections_collection_id:
+    endpoint: DELETE /v1/docs/collections/{{ record.collection_id }}
+    required fields: collection_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_groups_group_id:
+    endpoint: DELETE /v1/docs/groups/{{ record.group_id }}
+    required fields: group_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_pages_page_id:
+    endpoint: DELETE /v1/docs/pages/{{ record.page_id }}
+    required fields: page_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_pages_page_id_archive:
+    endpoint: DELETE /v1/docs/pages/{{ record.page_id }}/archive
+    required fields: page_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_pages_page_id_publish:
+    endpoint: DELETE /v1/docs/pages/{{ record.page_id }}/publish
+    required fields: page_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_sites_id:
+    endpoint: DELETE /v1/docs/sites/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_sites_id_redirects_redirect_id:
+    endpoint: DELETE /v1/docs/sites/{{ record.id }}/redirects/{{ record.redirect_id }}
+    required fields: id, redirect_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_docs_sites_id_repositories:
+    endpoint: DELETE /v1/docs/sites/{{ record.id }}/repositories
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_email_campaigns_id:
+    endpoint: DELETE /v1/email/campaigns/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_email_unsubscribe_groups_id_members:
+    endpoint: DELETE /v1/email/unsubscribe_groups/{{ record.id }}/members
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_email_unsubscribe_groups_id_members_member_id:
+    endpoint: DELETE /v1/email/unsubscribe_groups/{{ record.id }}/members/{{ record.member_id }}
+    required fields: id, member_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_flow_extensions_actions_id:
+    endpoint: DELETE /v1/flow/extensions/actions/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_flow_extensions_triggers_handle:
+    endpoint: DELETE /v1/flow/extensions/triggers/{{ record.handle }}
+    required fields: handle
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_flows_id:
+    endpoint: DELETE /v1/flows/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_journal_entries_id:
+    endpoint: DELETE /v1/journal_entries/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_lists_id:
+    endpoint: DELETE /v1/lists/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_meetings_id:
+    endpoint: DELETE /v1/meetings/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_meetings_id_permissions:
+    endpoint: DELETE /v1/meetings/{{ record.id }}/permissions
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_synced_emails_id:
+    endpoint: DELETE /v1/synced_emails/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_tasks_id:
+    endpoint: DELETE /v1/tasks/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_tasks_id_comments_comment_id:
+    endpoint: DELETE /v1/tasks/{{ record.id }}/comments/{{ record.comment_id }}
+    required fields: id, comment_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_tasks_id_todo_items_item_id:
+    endpoint: DELETE /v1/tasks/{{ record.id }}/todo-items/{{ record.item_id }}
+    required fields: id, item_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_tickets_saved_filters_filter_id:
+    endpoint: DELETE /v1/tickets/saved_filters/{{ record.filter_id }}
+    required fields: filter_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_tickets_saved_replies_reply_id:
+    endpoint: DELETE /v1/tickets/saved_replies/{{ record.reply_id }}
+    required fields: reply_id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_timeline_comments_id:
+    endpoint: DELETE /v1/timeline_comments/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  delete_webhooks_id:
+    endpoint: DELETE /v1/webhooks/{{ record.id }}
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_affiliates_id_add_tags:
+    endpoint: POST /v1/affiliates/{{ record.id }}/addTags
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_affiliates_id_remove_tags:
+    endpoint: POST /v1/affiliates/{{ record.id }}/removeTags
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_apps_id_analyze:
+    endpoint: POST /v1/apps/{{ record.id }}/analyze
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_apps_id_skills_skill_id:
+    endpoint: POST /v1/apps/{{ record.id }}/skills/{{ record.skill_id }}
+    required fields: id, skill_id
+    risk: medium: external Mantle mutation; approval required
+  execute_contacts_id_add_tags:
+    endpoint: POST /v1/contacts/{{ record.id }}/addTags
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_contacts_id_remove_tags:
+    endpoint: POST /v1/contacts/{{ record.id }}/removeTags
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_customers_id_account_owners:
+    endpoint: POST /v1/customers/{{ record.id }}/account_owners
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_customers_id_add_tags:
+    endpoint: POST /v1/customers/{{ record.id }}/addTags
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_customers_id_remove_tags:
+    endpoint: POST /v1/customers/{{ record.id }}/removeTags
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_devices:
+    endpoint: POST /v1/devices
+    risk: medium: external Mantle mutation; approval required
+  execute_docs_pages_generate:
+    endpoint: POST /v1/docs/pages/generate
+    risk: medium: external Mantle side effect; approval required
+  execute_docs_pages_page_id_archive:
+    endpoint: POST /v1/docs/pages/{{ record.page_id }}/archive
+    required fields: page_id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_docs_pages_page_id_generate:
+    endpoint: POST /v1/docs/pages/{{ record.page_id }}/generate
+    required fields: page_id
+    risk: medium: external Mantle side effect; approval required
+  execute_docs_pages_page_id_publish:
+    endpoint: POST /v1/docs/pages/{{ record.page_id }}/publish
+    required fields: page_id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_docs_sites_id_repositories:
+    endpoint: POST /v1/docs/sites/{{ record.id }}/repositories
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_email_campaigns_id_cancel:
+    endpoint: POST /v1/email/campaigns/{{ record.id }}/cancel
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_email_campaigns_id_deliver:
+    endpoint: POST /v1/email/campaigns/{{ record.id }}/deliver
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_email_campaigns_id_send:
+    endpoint: POST /v1/email/campaigns/{{ record.id }}/send
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_email_campaigns_id_test:
+    endpoint: POST /v1/email/campaigns/{{ record.id }}/test
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_email_unsubscribe_groups_id_members:
+    endpoint: POST /v1/email/unsubscribe_groups/{{ record.id }}/members
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  execute_lists_id_add:
+    endpoint: POST /v1/lists/{{ record.id }}/add
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_lists_id_remove:
+    endpoint: POST /v1/lists/{{ record.id }}/remove
+    required fields: id
+    risk: high: external Mantle mutation or side effect; approval required
+  execute_meetings_id_permissions:
+    endpoint: POST /v1/meetings/{{ record.id }}/permissions
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_meetings_id_task_suggestions_suggestion_id_accept:
+    endpoint: POST /v1/meetings/{{ record.id }}/task-suggestions/{{ record.suggestion_id }}/accept
+    required fields: id, suggestion_id
+    risk: medium: external Mantle side effect; approval required
+  execute_meetings_id_task_suggestions_suggestion_id_dismiss:
+    endpoint: POST /v1/meetings/{{ record.id }}/task-suggestions/{{ record.suggestion_id }}/dismiss
+    required fields: id, suggestion_id
+    risk: medium: external Mantle side effect; approval required
+  execute_meetings_id_transcribe:
+    endpoint: POST /v1/meetings/{{ record.id }}/transcribe
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  execute_synced_emails:
+    endpoint: POST /v1/synced_emails
+    risk: medium: external Mantle side effect; approval required
+  execute_synced_emails_id_messages:
+    endpoint: POST /v1/synced_emails/{{ record.id }}/messages
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  execute_tickets_id_ai_replies:
+    endpoint: POST /v1/tickets/{{ record.id }}/ai-replies
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_apps_app_id_checklists_checklist_id:
+    endpoint: PUT /v1/apps/{{ record.app_id }}/checklists/{{ record.checklist_id }}
+    required fields: app_id, checklist_id
+    risk: medium: external Mantle mutation; approval required
+  update_apps_app_id_plans_features_feature_id:
+    endpoint: PUT /v1/apps/{{ record.app_id }}/plans/features/{{ record.feature_id }}
+    required fields: app_id, feature_id
+    risk: medium: external Mantle mutation; approval required
+  update_apps_id_plans_plan_id:
+    endpoint: PUT /v1/apps/{{ record.id }}/plans/{{ record.plan_id }}
+    required fields: id, plan_id
+    risk: medium: external Mantle mutation; approval required
+  update_apps_id_plans_plan_id_archive:
+    endpoint: PUT /v1/apps/{{ record.id }}/plans/{{ record.plan_id }}/archive
+    required fields: id, plan_id
+    risk: high: external Mantle mutation or side effect; approval required
+  update_apps_id_plans_plan_id_unarchive:
+    endpoint: PUT /v1/apps/{{ record.id }}/plans/{{ record.plan_id }}/unarchive
+    required fields: id, plan_id
+    risk: high: external Mantle mutation or side effect; approval required
+  update_apps_id_usage_metrics_usage_metric_id:
+    endpoint: PUT /v1/apps/{{ record.id }}/usage_metrics/{{ record.usage_metric_id }}
+    required fields: id, usage_metric_id
+    risk: medium: external Mantle mutation; approval required
+  update_companies_id:
+    endpoint: PUT /v1/companies/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_contacts_id:
+    endpoint: PUT /v1/contacts/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_custom_data:
+    endpoint: PUT /v1/custom_data
+    risk: medium: external Mantle mutation; approval required
+  update_customers_custom_fields_id:
+    endpoint: PUT /v1/customers/custom_fields/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_customers_id:
+    endpoint: PUT /v1/customers/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_customers_id_account_owners_owner_id:
+    endpoint: PUT /v1/customers/{{ record.id }}/account_owners/{{ record.owner_id }}
+    required fields: id, owner_id
+    risk: medium: external Mantle mutation; approval required
+  update_deal_activities_id:
+    endpoint: PUT /v1/deal_activities/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_deal_flows_id:
+    endpoint: PUT /v1/deal_flows/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_deals_id:
+    endpoint: PUT /v1/deals/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_collections_collection_id:
+    endpoint: PUT /v1/docs/collections/{{ record.collection_id }}
+    required fields: collection_id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_groups_group_id:
+    endpoint: PUT /v1/docs/groups/{{ record.group_id }}
+    required fields: group_id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_pages_page_id:
+    endpoint: PUT /v1/docs/pages/{{ record.page_id }}
+    required fields: page_id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_repositories_id:
+    endpoint: PUT /v1/docs/repositories/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_sites_id:
+    endpoint: PUT /v1/docs/sites/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_sites_id_redirects_redirect_id:
+    endpoint: PUT /v1/docs/sites/{{ record.id }}/redirects/{{ record.redirect_id }}
+    required fields: id, redirect_id
+    risk: medium: external Mantle mutation; approval required
+  update_docs_sites_id_repositories:
+    endpoint: PUT /v1/docs/sites/{{ record.id }}/repositories
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_email_campaigns_id:
+    endpoint: PUT /v1/email/campaigns/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_flow_actions_runs_id:
+    endpoint: PUT /v1/flow/actions/runs/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_flow_extensions_actions_id:
+    endpoint: PUT /v1/flow/extensions/actions/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_flows_id:
+    endpoint: PATCH /v1/flows/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_journal_entries_id:
+    endpoint: PUT /v1/journal_entries/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_lists_id:
+    endpoint: PUT /v1/lists/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_meetings_id:
+    endpoint: PUT /v1/meetings/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_meetings_id_attendees_attendee_id:
+    endpoint: PUT /v1/meetings/{{ record.id }}/attendees/{{ record.attendee_id }}
+    required fields: id, attendee_id
+    risk: medium: external Mantle mutation; approval required
+  update_meetings_id_visibility:
+    endpoint: PUT /v1/meetings/{{ record.id }}/visibility
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_notification_preferences:
+    endpoint: PUT /v1/notification_preferences
+    risk: medium: external Mantle mutation; approval required
+  update_synced_emails_id:
+    endpoint: PUT /v1/synced_emails/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  update_tasks_id:
+    endpoint: PUT /v1/tasks/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_tasks_id_comments_comment_id:
+    endpoint: PUT /v1/tasks/{{ record.id }}/comments/{{ record.comment_id }}
+    required fields: id, comment_id
+    risk: medium: external Mantle mutation; approval required
+  update_tasks_id_todo_items_item_id:
+    endpoint: PUT /v1/tasks/{{ record.id }}/todo-items/{{ record.item_id }}
+    required fields: id, item_id
+    risk: medium: external Mantle mutation; approval required
+  update_tickets_id:
+    endpoint: PUT /v1/tickets/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_tickets_id_events:
+    endpoint: PUT /v1/tickets/{{ record.id }}/events
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_tickets_id_messages:
+    endpoint: PUT /v1/tickets/{{ record.id }}/messages
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_tickets_saved_filters_filter_id:
+    endpoint: PUT /v1/tickets/saved_filters/{{ record.filter_id }}
+    required fields: filter_id
+    risk: medium: external Mantle mutation; approval required
+  update_tickets_saved_replies_reply_id:
+    endpoint: PUT /v1/tickets/saved_replies/{{ record.reply_id }}
+    required fields: reply_id
+    risk: medium: external Mantle mutation; approval required
+  update_timeline_comments_id:
+    endpoint: PUT /v1/timeline_comments/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle mutation; approval required
+  update_webhooks_id:
+    endpoint: PUT /v1/webhooks/{{ record.id }}
+    required fields: id
+    risk: medium: external Mantle side effect; approval required
+  upsert_contacts:
+    endpoint: POST /v1/contacts
+    risk: medium: external Mantle mutation; approval required
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mantle API read of customer, billing, CRM, docs, email, helpdesk, and workflow data
+  write risk: external Mantle API mutation of customer, billing, CRM, docs, email, helpdesk, webhook, and workflow resources; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +1004,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect mantle before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

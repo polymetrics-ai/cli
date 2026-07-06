@@ -1,0 +1,22 @@
+{
+  "name": "klaviyo",
+  "display_name": "Klaviyo",
+  "description": "Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Klaviyo API read of customer profile, event, and campaign data"
+  }
+}

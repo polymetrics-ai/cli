@@ -1,0 +1,7 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/shops/synthetic-conformance-value/connection.json"
+  }
+}

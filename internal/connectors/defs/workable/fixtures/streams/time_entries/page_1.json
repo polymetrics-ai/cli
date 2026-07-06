@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time-tracking/time-entries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "time_entries": [
+        {
+          "uuid": "time-entry-fixture-1",
+          "employee_id": "employee_fixture_1",
+          "type": "time-entry",
+          "worked_minutes": 480
+        }
+      ],
+      "total_count": 1
+    }
+  }
+}

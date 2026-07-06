@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "subtitle": { "type": ["string", "null"] },
+    "href": { "type": ["string", "null"] },
+    "browserLink": { "type": ["string", "null"] },
+    "contentType": { "type": ["string", "null"] },
+    "doc_id": { "type": ["string", "null"] }
+  }
+}

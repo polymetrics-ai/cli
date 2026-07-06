@@ -1,0 +1,8 @@
+{
+  "record": { "id": 42 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/segments/42"
+  },
+  "response": { "status": 200, "body": {} }
+}

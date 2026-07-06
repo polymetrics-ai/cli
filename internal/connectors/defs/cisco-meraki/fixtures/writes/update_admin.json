@@ -1,0 +1,11 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "id": "admin_fixture_1",
+    "orgAccess": "full"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/org_1/admins/admin_fixture_1"
+  }
+}

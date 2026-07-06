@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/states",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "HH": {
+          "id": 2,
+          "name": "Hamburg",
+          "population": 1892122,
+          "cases": 828126,
+          "deaths": 4380,
+          "recovered": 823738,
+          "abbreviation": "HH",
+          "weekIncidence": 0.15
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "payer_authorisation_id": "payer_authorisation_id_fixture",
+    "payer_authorisations": {
+      "description": "Synthetic update_a_payer_authorisation fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/payer_authorisations/payer_authorisation_id_fixture",
+    "body": {
+      "payer_authorisations": {
+        "description": "Synthetic update_a_payer_authorisation fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

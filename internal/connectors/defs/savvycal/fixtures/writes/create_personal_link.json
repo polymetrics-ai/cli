@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Intro Call", "slug": "fixture-intro-call", "duration": 30 },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/links",
+    "body": { "name": "Fixture Intro Call", "slug": "fixture-intro-call", "duration": 30 }
+  },
+  "response": { "status": 201, "body": { "id": "lnk_fixture_new", "name": "Fixture Intro Call" } }
+}

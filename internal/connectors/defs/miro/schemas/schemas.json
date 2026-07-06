@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "Schema(s) that define the structure of this resource.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the resource."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the resource."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the resource."
+    },
+    "attributes": {
+      "type": "array",
+      "description": "Attributes that are currently supported.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the attribute."
+          },
+          "type": {
+            "type": "string",
+            "description": "Data type of the attribute."
+          },
+          "multiValued": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is multi-valued."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the attribute."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is required."
+          },
+          "caseExact": {
+            "type": "boolean",
+            "description": "Indicates whether the attribute is case exact."
+          },
+          "mutability": {
+            "type": "string",
+            "description": "Indicates the mutability of the attribute."
+          },
+          "returned": {
+            "type": "string",
+            "description": "Indicates when the attribute is returned in a response."
+          },
+          "uniqueness": {
+            "type": "string",
+            "description": "Indicates the uniqueness of the attribute."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the resource.",
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "description": "Type of the resource."
+        },
+        "location": {
+          "type": "string",
+          "description": "The URI of the resource."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

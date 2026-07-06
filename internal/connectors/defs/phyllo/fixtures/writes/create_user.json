@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Creator", "external_id": "ext_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/users",
+    "body": { "name": "Fixture Creator", "external_id": "ext_fixture_1" }
+  },
+  "response": { "status": 200, "body": { "id": "user_fixture_1", "name": "Fixture Creator", "external_id": "ext_fixture_1" } }
+}

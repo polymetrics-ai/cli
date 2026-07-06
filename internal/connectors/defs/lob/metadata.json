@@ -1,0 +1,25 @@
+{
+  "name": "lob",
+  "display_name": "Lob",
+  "description": "Reads Lob addresses, postcards, letters, checks, and bank accounts through the Lob print & mail REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.lob.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "rate_limit": {
+    "requests_per_minute": 150
+  },
+  "risk": {
+    "read": "external Lob API read of address book, mailpiece, and bank account data"
+  }
+}

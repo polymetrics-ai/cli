@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": ["Fixture Feature Request"],
+    "content": ["Fixture content"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feature-requests",
+    "body": {
+      "title": ["Fixture Feature Request"],
+      "content": ["Fixture content"]
+    }
+  }
+}

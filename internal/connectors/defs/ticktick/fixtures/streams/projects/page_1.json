@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/project" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "proj_fixture_1",
+        "name": "Fixture Project 1",
+        "color": "#FF0000",
+        "sortOrder": -1099511627776,
+        "closed": "false",
+        "groupId": "grp_fixture_1",
+        "viewMode": "list",
+        "permission": "write",
+        "kind": "TASK"
+      },
+      {
+        "id": "proj_fixture_2",
+        "name": "Fixture Project 2",
+        "color": "#00FF00",
+        "sortOrder": -2199023255552,
+        "closed": "false",
+        "groupId": "grp_fixture_1",
+        "viewMode": "kanban",
+        "permission": "write",
+        "kind": "TASK"
+      }
+    ]
+  }
+}

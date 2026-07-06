@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "Fixture put_templates_folders_id",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/public/v1/templates/folders/id_fixture",
+    "body": {
+      "name": "Fixture put_templates_folders_id",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "put_templates_folders_id_response",
+      "status": "ok"
+    }
+  }
+}

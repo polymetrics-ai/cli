@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Buzzsprout Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Buzzsprout API key. Sent as 'Authorization: Token token=<api_key>'. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.buzzsprout.com",
+      "description": "Buzzsprout API base URL override for tests or proxies."
+    },
+    "podcast_id": {
+      "type": "string",
+      "description": "Buzzsprout podcast id. Required for the 'episodes' stream (substituted into its path); not used by the account-level 'podcasts' stream."
+    }
+  }
+}

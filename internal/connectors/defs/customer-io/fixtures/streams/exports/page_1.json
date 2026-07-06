@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/exports" },
+  "response": {
+    "status": 200,
+    "body": {
+      "exports": [
+        { "id": 1, "user_id": 100, "user_email": "admin@example.com", "total": 500, "type": "customers", "failed": false, "description": "Fixture export one", "downloads": 1, "created_at": 1767225601, "updated_at": 1767225602, "status": "complete" },
+        { "id": 2, "user_id": 100, "user_email": "admin@example.com", "total": 50, "type": "deliveries", "failed": false, "description": "Fixture export two", "downloads": 0, "created_at": 1767225603, "updated_at": 1767225604, "status": "in_progress" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "api": "Intruder API v1 (https://api.intruder.io/v1)",
+  "docs": "https://developers.intruder.io/docs/welcome",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration, COMPLETE: all 4 legacy streams are now migrated at Tier 1. The occurrences sub-resource fan-out (list /issues, then GET /issues/{id}/occurrences per issue) uses the S4 engine mini-wave's stream.fan_out primitive (ids_from.request + into.path_var), closing the gap that previously required a Tier-2 StreamHook.",
+  "endpoints": [
+    { "method": "GET", "path": "/issues", "covered_by": { "stream": "issues" } },
+    { "method": "GET", "path": "/scans", "covered_by": { "stream": "scans" } },
+    { "method": "GET", "path": "/targets", "covered_by": { "stream": "targets" } },
+    { "method": "GET", "path": "/issues/{id}/occurrences", "covered_by": { "stream": "occurrences" } }
+  ]
+}

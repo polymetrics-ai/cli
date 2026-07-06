@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/activities", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        { "id": "act_fixture_1", "customer_id": "cust_fixture_1", "type": "sent_email", "delivery_id": "dgo_fixture_1", "delivery_type": "email", "timestamp": 1767225601, "data": {} },
+        { "id": "act_fixture_2", "customer_id": "cust_fixture_1", "type": "opened_email", "delivery_id": "dgo_fixture_1", "delivery_type": "email", "timestamp": 1767225602, "data": {} }
+      ],
+      "next": "cio_fixture_activities_cursor_1"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": "fixture_id",
+    "first_name": "Fixture Name",
+    "last_name": "Fixture Name",
+    "company_name": "Fixture Name",
+    "bcc_email": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/fixture_id",
+    "body": {
+      "first_name": "Fixture Name",
+      "last_name": "Fixture Name",
+      "company_name": "Fixture Name",
+      "bcc_email": true
+    }
+  }
+}

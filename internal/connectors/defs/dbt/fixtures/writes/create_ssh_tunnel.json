@@ -1,0 +1,13 @@
+{
+  "record": {
+    "connection_id": 1,
+    "username": "fixture_tunnel_user",
+    "port": 22,
+    "hostname": "bastion.fixture.example.com",
+    "state": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/encryptions/"
+  }
+}

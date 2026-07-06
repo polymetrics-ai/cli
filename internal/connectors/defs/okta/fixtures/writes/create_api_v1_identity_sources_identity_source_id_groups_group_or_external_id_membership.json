@@ -1,0 +1,18 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "group_or_external_id": "synthetic-conformance-value",
+    "memberExternalId": "member_external_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/groups/synthetic-conformance-value/membership",
+    "body": {
+      "memberExternalId": "member_external_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,524 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "X-Postmark-Server-Token",
+        "value": "{{ secrets.X-Postmark-Server-Token }}"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/messages/outbound",
+      "query": {
+        "count": "1",
+        "offset": "0"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "postmarkapp server token is missing or invalid; re-run pm credentials add postmarkapp"
+      },
+      {
+        "status": 422,
+        "hint": "postmarkapp request parameters are invalid"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "postmarkapp rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "outbound_messages",
+      "path": "/messages/outbound",
+      "records": {
+        "path": "Messages"
+      },
+      "computed_fields": {
+        "id": "{{ record.MessageID }}",
+        "subject": "{{ record.Subject }}",
+        "from": "{{ record.From }}",
+        "to": "{{ record.To }}",
+        "status": "{{ record.Status }}",
+        "received_at": "{{ record.ReceivedAt }}"
+      },
+      "schema": "schemas/outbound_messages.json"
+    },
+    {
+      "name": "inbound_messages",
+      "path": "/messages/inbound",
+      "records": {
+        "path": "InboundMessages"
+      },
+      "computed_fields": {
+        "id": "{{ record.MessageID }}",
+        "subject": "{{ record.Subject }}",
+        "from": "{{ record.From }}",
+        "to": "{{ record.To }}",
+        "status": "{{ record.Status }}"
+      },
+      "schema": "schemas/inbound_messages.json"
+    },
+    {
+      "name": "current_server",
+      "path": "/server",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/current_server.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bulk_email_status",
+      "path": "/email/bulk/{{ config.bulk_request_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/bulk_email_status.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "delivery_stats",
+      "path": "/deliverystats",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/delivery_stats.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bounces",
+      "path": "/bounces",
+      "records": {
+        "path": "Bounces"
+      },
+      "schema": "schemas/bounces.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "bounce",
+      "path": "/bounces/{{ config.bounce_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/bounce.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bounce_dump",
+      "path": "/bounces/{{ config.bounce_id }}/dump",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/bounce_dump.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": {
+        "path": "Templates"
+      },
+      "schema": "schemas/templates.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "template",
+      "path": "/templates/{{ config.template_id_or_alias }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/template.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "message_streams",
+      "path": "/message-streams",
+      "records": {
+        "path": "MessageStreams"
+      },
+      "schema": "schemas/message_streams.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "message_stream",
+      "path": "/message-streams/{{ config.message_stream_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/message_stream.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_message_details",
+      "path": "/messages/outbound/{{ config.message_id }}/details",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/outbound_message_details.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_message_dump",
+      "path": "/messages/outbound/{{ config.message_id }}/dump",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/outbound_message_dump.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "inbound_message_details",
+      "path": "/messages/inbound/{{ config.message_id }}/details",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/inbound_message_details.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "outbound_message_opens",
+      "path": "/messages/outbound/opens",
+      "records": {
+        "path": "Opens"
+      },
+      "schema": "schemas/outbound_message_opens.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "outbound_message_opens_by_message",
+      "path": "/messages/outbound/opens/{{ config.message_id }}",
+      "records": {
+        "path": "Opens"
+      },
+      "schema": "schemas/outbound_message_opens_by_message.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "outbound_message_clicks",
+      "path": "/messages/outbound/clicks",
+      "records": {
+        "path": "Clicks"
+      },
+      "schema": "schemas/outbound_message_clicks.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "outbound_message_clicks_by_message",
+      "path": "/messages/outbound/clicks/{{ config.message_id }}",
+      "records": {
+        "path": "Clicks"
+      },
+      "schema": "schemas/outbound_message_clicks_by_message.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "stats_outbound",
+      "path": "/stats/outbound",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_sends",
+      "path": "/stats/outbound/sends",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_sends.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_bounces",
+      "path": "/stats/outbound/bounces",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_bounces.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_spam",
+      "path": "/stats/outbound/spam",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_spam.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_tracked",
+      "path": "/stats/outbound/tracked",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_tracked.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_opens",
+      "path": "/stats/outbound/opens",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_opens.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_open_platforms",
+      "path": "/stats/outbound/opens/platforms",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_open_platforms.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_email_clients",
+      "path": "/stats/outbound/opens/emailclients",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_email_clients.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_clicks",
+      "path": "/stats/outbound/clicks",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_clicks.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_click_browser_families",
+      "path": "/stats/outbound/clicks/browserfamilies",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_click_browser_families.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_click_platforms",
+      "path": "/stats/outbound/clicks/platforms",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_click_platforms.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stats_outbound_click_location",
+      "path": "/stats/outbound/clicks/location",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/stats_outbound_click_location.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "inbound_rule_triggers",
+      "path": "/triggers/inboundrules",
+      "records": {
+        "path": "InboundRules"
+      },
+      "schema": "schemas/inbound_rule_triggers.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "Webhooks"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/webhook.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "suppressions",
+      "path": "/message-streams/{{ config.message_stream_id }}/suppressions/dump",
+      "records": {
+        "path": "Suppressions"
+      },
+      "schema": "schemas/suppressions.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "count",
+        "offset_param": "offset",
+        "page_size": 100
+      }
+    }
+  ]
+}

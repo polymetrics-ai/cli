@@ -1,0 +1,13 @@
+{
+  "record": {
+    "instalment_schedule_id": "instalment_schedule_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/instalment_schedules/instalment_schedule_id_fixture/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "picklist_batches",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idpicklist_batch": { "type": "integer" },
+    "idwarehouse": { "type": ["integer", "null"] },
+    "picklist_batchid": { "type": ["integer", "null"] },
+    "title": { "type": ["string", "null"] },
+    "display_title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "assigned_to": { "type": ["object", "null"] },
+    "completed_by": { "type": ["object", "null"] },
+    "total_products": { "type": ["integer", "null"] },
+    "total_picklists": { "type": ["integer", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "missive",
+  "display_name": "Missive",
+  "description": "Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.",
+  "integration_type": "api",
+  "docs_url": "https://missiveapp.com/help/api-documentation",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Missive API read of contact, user, team, and label data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

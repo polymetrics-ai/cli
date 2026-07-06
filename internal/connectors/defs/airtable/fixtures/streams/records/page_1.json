@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/synthetic-conformance-value", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "rec_fixture_1",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "fields": { "Name": "Fixture 1", "Score": 10 }
+        }
+      ]
+    }
+  }
+}

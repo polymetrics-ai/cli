@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "terminal_list",
+  "type": "object",
+  "x-primary-key": ["terminalId"],
+  "required": ["terminalId"],
+  "properties": {
+    "terminalId": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "merchantId": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

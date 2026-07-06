@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "status": "certified"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1/beneficial-ownership",
+    "body": {
+      "status": "certified"
+    }
+  }
+}

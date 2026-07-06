@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchase_list",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "order_number": { "type": ["string", "null"] },
+    "supplier": { "type": ["string", "null"] },
+    "supplier_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "order_status": { "type": ["string", "null"] },
+    "invoice_amount": { "type": ["number", "null"] },
+    "order_date": { "type": ["string", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

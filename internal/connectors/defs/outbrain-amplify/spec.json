@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outbrain Amplify Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.outbrain.com/amplify/v0.1",
+      "description": "Outbrain Amplify API base URL override for tests or proxies."
+    },
+    "username": {
+      "type": "string",
+      "description": "Outbrain Amplify username; used with the password secret for HTTP Basic auth when access_token is not set."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Outbrain Amplify API access token. Takes precedence over username/password when set; sent as a Bearer token."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Outbrain Amplify password; used with the username config value for HTTP Basic auth when access_token is not set."
+    },
+    "marketer_id": {
+      "type": "string",
+      "description": "Optional marketer ID. Reserved for a future Pass B capability: legacy scopes campaigns and performance_reports to /marketers/{marketer_id}/... when set, but this bundle currently reads only the unscoped /campaigns and /reports endpoints and does NOT consume this value — see Known limits in docs.md."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Date in the format YYYY-MM-DD; sent as the start_date report filter. Any data before this date will not be replicated."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Date in the format YYYY-MM-DD; sent as the end_date report filter."
+    },
+    "report_granularity": {
+      "type": "string",
+      "description": "Granularity used for periodic data in performance reports (e.g. daily, weekly, monthly, all)."
+    },
+    "conversion_count": {
+      "type": "string",
+      "description": "Definition of conversion count in performance reports (e.g. view, click, viewAndClick)."
+    },
+    "geo_location_breakdown": {
+      "type": "string",
+      "description": "Granularity used for geo location data in performance reports (e.g. country, region, dma)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

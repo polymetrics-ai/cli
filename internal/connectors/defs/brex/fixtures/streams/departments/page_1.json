@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/departments",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "dept_fixture_1",
+          "name": "Engineering",
+          "description": "Fixture engineering department"
+        },
+        {
+          "id": "dept_fixture_2",
+          "name": "Sales",
+          "description": null
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

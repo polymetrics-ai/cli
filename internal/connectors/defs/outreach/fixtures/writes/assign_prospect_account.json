@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "assignprospectaccount",
+      "attributes": {
+        "name": "Fixture Assign Prospect Account"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAssignAccount",
+    "body": {
+      "data": {
+        "type": "assignprospectaccount",
+        "attributes": {
+          "name": "Fixture Assign Prospect Account"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

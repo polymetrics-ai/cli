@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "usage_metric_id": "usage_metric_id_fixture",
+    "name": "fixture",
+    "eventName": "fixture",
+    "calculation": "fixture",
+    "params": {
+      "id": "params_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/apps/id_fixture/usage_metrics/usage_metric_id_fixture",
+    "body": {
+      "name": "fixture",
+      "eventName": "fixture",
+      "calculation": "fixture",
+      "params": {
+        "id": "params_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

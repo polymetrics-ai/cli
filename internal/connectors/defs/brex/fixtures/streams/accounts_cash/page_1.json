@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/accounts/cash",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "cash_fixture_1",
+          "name": "Fixture Cash Account",
+          "status": "ACTIVE",
+          "current_balance": {
+            "amount": 500000,
+            "currency": "USD"
+          },
+          "available_balance": {
+            "amount": 500000,
+            "currency": "USD"
+          },
+          "account_number": "0000001234",
+          "routing_number": "021000021",
+          "primary": true
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

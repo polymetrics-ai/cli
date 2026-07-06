@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "template_fixture_1",
+    "name": "Updated Fixture Template"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/templates/template_fixture_1",
+    "body": {
+      "name": "Updated Fixture Template"
+    }
+  }
+}

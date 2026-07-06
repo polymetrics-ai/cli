@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/tags",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "count": 7,
+          "name": "fixture_name",
+          "id": 1
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

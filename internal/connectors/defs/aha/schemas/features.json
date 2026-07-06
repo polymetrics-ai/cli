@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aha! Feature",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "id": { "type": "string" },
+    "reference_num": { "type": "string" },
+    "name": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "start_date": { "type": ["string", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "workflow_status": { "type": ["object", "null"] },
+    "url": { "type": "string" },
+    "resource": { "type": "string" }
+  }
+}

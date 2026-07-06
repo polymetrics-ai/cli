@@ -1,0 +1,19 @@
+{
+  "record": {
+    "data": {
+      "type": "todos",
+      "attributes": { "value": "Fixture to-do reminder" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/todos",
+    "body": {
+      "data": {
+        "type": "todos",
+        "attributes": { "value": "Fixture to-do reminder" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "todo_fixture_new", "type": "todos" } } }
+}

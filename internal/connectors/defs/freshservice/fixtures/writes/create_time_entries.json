@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture create_time_entries",
+    "description": "Fixture create_time_entries record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes/123/time_entries",
+    "body": {
+      "name": "Fixture create_time_entries",
+      "description": "Fixture create_time_entries record"
+    }
+  }
+}

@@ -1,0 +1,597 @@
+{
+  "actions": [
+    {
+      "name": "disconnect_shop",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/shops/{{ config.shop_id }}/connection.json",
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "disconnects the configured shop from the Printify account",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/products.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "title",
+          "blueprint_id",
+          "print_provider_id"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "blueprint_id": {
+            "type": "integer"
+          },
+          "print_provider_id": {
+            "type": "integer"
+          },
+          "variants": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "print_areas": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "tags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a product in the configured shop"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "variants": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "print_areas": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "tags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates an existing product in the configured shop"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes a product from the configured shop",
+      "confirm": "destructive"
+    },
+    {
+      "name": "publish_product",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publish.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "boolean"
+          },
+          "images": {
+            "type": "boolean"
+          },
+          "variants": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "boolean"
+          },
+          "keyFeatures": {
+            "type": "boolean"
+          },
+          "shipping_template": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "publishes a product to the connected sales channel"
+    },
+    {
+      "name": "mark_product_publishing_succeeded",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_succeeded.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id",
+          "external"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "external": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "marks product publishing as succeeded and stores an external handle"
+    },
+    {
+      "name": "mark_product_publishing_failed",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_failed.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id",
+          "reason"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "marks product publishing as failed"
+    },
+    {
+      "name": "unpublish_product",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/unpublish.json",
+      "path_fields": [
+        "product_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "product_id"
+        ],
+        "properties": {
+          "product_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "notifies Printify that a product has been unpublished",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/orders.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "line_items",
+          "address_to"
+        ],
+        "properties": {
+          "external_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "line_items": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "address_to": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "shipping_method": {
+            "type": "integer"
+          },
+          "send_shipping_notification": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "submits an order to Printify"
+    },
+    {
+      "name": "submit_express_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/orders/express.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "line_items",
+          "address_to"
+        ],
+        "properties": {
+          "external_id": {
+            "type": "string"
+          },
+          "line_items": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "address_to": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "shipping_method": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "submits a Printify Express order"
+    },
+    {
+      "name": "send_order_to_production",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/send_to_production.json",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "sends an existing order to production",
+      "confirm": "destructive"
+    },
+    {
+      "name": "calculate_order_shipping",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/orders/shipping.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "line_items",
+          "address_to"
+        ],
+        "properties": {
+          "line_items": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "address_to": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "calculates shipping costs for a prospective order without submitting it"
+    },
+    {
+      "name": "cancel_order",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/cancel.json",
+      "path_fields": [
+        "order_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "cancels an unpaid order",
+      "confirm": "destructive"
+    },
+    {
+      "name": "upload_image",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/uploads/images.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "file_name"
+        ],
+        "properties": {
+          "file_name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "contents": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "uploads an image into the Printify media library"
+    },
+    {
+      "name": "archive_uploaded_image",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/uploads/{{ record.image_id }}/archive.json",
+      "path_fields": [
+        "image_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "image_id"
+        ],
+        "properties": {
+          "image_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "archives an uploaded image",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/webhooks.json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "topic",
+          "url"
+        ],
+        "properties": {
+          "topic": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a webhook subscription for the configured shop"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/shops/{{ config.shop_id }}/webhooks/{{ record.webhook_id }}.json",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates an existing webhook subscription"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/shops/{{ config.shop_id }}/webhooks/{{ record.webhook_id }}.json?host={{ record.host }}",
+      "path_fields": [
+        "webhook_id",
+        "host"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id",
+          "host"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes a webhook subscription after host safeguard matching",
+      "confirm": "destructive"
+    },
+    {
+      "name": "simulate_webhook",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/shops/{{ config.shop_id }}/webhooks/{{ record.webhook_id }}/simulate",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          },
+          "resource": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "anything": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "sends a webhook simulation event for testing"
+    }
+  ]
+}

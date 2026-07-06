@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "conv_fixture_1",
+    "subject": "Thanks for the heads up!"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/conversations/conv_fixture_1",
+    "body": {
+      "subject": "Thanks for the heads up!"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "conv_fixture_1", "subject": "Thanks for the heads up!" }
+  }
+}

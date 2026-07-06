@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stock_recommendations",
+  "type": "object",
+  "x-primary-key": ["symbol", "period"],
+  "required": ["symbol", "period"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "buy": { "type": ["integer", "null"] },
+    "hold": { "type": ["integer", "null"] },
+    "sell": { "type": ["integer", "null"] },
+    "strongBuy": { "type": ["integer", "null"] },
+    "strongSell": { "type": ["integer", "null"] }
+  }
+}

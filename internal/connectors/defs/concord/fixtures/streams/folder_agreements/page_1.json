@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/folders/synthetic-conformance-value/agreements"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "agr_fixture_1",
+        "title": "Fixture Agreement 1",
+        "status": "DRAFT",
+        "folderId": 1,
+        "organizationId": 42,
+        "createdAt": 1735689600000,
+        "modifiedAt": 1735776000000
+      },
+      {
+        "uuid": "agr_fixture_2",
+        "title": "Fixture Agreement 2",
+        "status": "SIGNED",
+        "folderId": 1,
+        "organizationId": 42,
+        "createdAt": 1735689600000,
+        "modifiedAt": 1735776000000
+      }
+    ]
+  }
+}

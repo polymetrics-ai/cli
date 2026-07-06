@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_vendor",
+    "description": "Fixture create_a_vendor record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vendors",
+    "body": {
+      "name": "Fixture create_a_vendor",
+      "description": "Fixture create_a_vendor record"
+    }
+  }
+}

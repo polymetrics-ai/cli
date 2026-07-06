@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sales",
+  "type": "object",
+  "properties": {
+    "date": { "type": ["string", "null"] },
+    "downloads": { "type": ["integer", "null"] },
+    "updates": { "type": ["integer", "null"] },
+    "revenue": { "type": ["string", "null"] },
+    "returns": { "type": ["integer", "null"] },
+    "net_downloads": { "type": ["integer", "null"] },
+    "promos": { "type": ["integer", "null"] }
+  }
+}

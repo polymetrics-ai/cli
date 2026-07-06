@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/catalog/print_providers.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3,
+        "title": "Fixture Print Co",
+        "location": {
+          "city": "Brooklyn",
+          "country": "US"
+        }
+      }
+    ]
+  }
+}

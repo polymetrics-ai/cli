@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/guilds/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "guild_fixture_1",
+      "name": "Fixture Guild",
+      "owner_id": "user_fixture_1",
+      "description": "A fixture guild for conformance testing",
+      "icon": "fixture_icon_hash",
+      "approximate_member_count": 2,
+      "approximate_presence_count": 1,
+      "premium_tier": 0,
+      "preferred_locale": "en-US"
+    }
+  }
+}

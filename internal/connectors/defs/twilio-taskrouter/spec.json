@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twilio TaskRouter Connection Specification",
+  "type": "object",
+  "required": ["account_sid", "auth_token", "workspace_sid"],
+  "properties": {
+    "account_sid": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twilio account SID, used as the Basic auth username. Never logged."
+    },
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Twilio auth token, used as the Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://taskrouter.twilio.com",
+      "description": "Twilio TaskRouter API base URL override for tests or proxies."
+    },
+    "workspace_sid": {
+      "type": "string",
+      "description": "TaskRouter workspace SID every stream is scoped to; substituted into each stream's workspace-scoped path."
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "status": 2 },
+  "expect": { "method": "PUT", "path": "/tickets/1" }
+}

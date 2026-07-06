@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/posts/post_fixture_1/reactions", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "reaction_fixture_1",
+        "date": "2026-01-01T00:00:01Z",
+        "reaction": "positive",
+        "postTitle": "Fixture Post 1",
+        "userId": "user_1",
+        "userEmail": "fixture1@example.com",
+        "userFirstName": "First1",
+        "userLastName": "Last1",
+        "url": "https://app.example.com/posts/1"
+      }
+    ]
+  }
+}

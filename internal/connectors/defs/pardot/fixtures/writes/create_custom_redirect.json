@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture custom_redirect",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/custom-redirects",
+    "body": {
+      "name": "Fixture custom_redirect",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

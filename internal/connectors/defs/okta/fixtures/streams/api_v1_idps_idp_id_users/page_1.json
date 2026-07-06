@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/idps/synthetic-conformance-value/users",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "externalId": "external_id_fixture",
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "profile": {},
+        "_embedded": {},
+        "_links": {
+          "idp": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "user": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

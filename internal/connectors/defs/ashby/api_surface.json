@@ -1,0 +1,36 @@
+{
+  "api": "Ashby legacy connector hook surface",
+  "docs": "https://developers.ashbyhq.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy ashby connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/ashby, which delegates to internal/connectors/ashby until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/ashby candidates read path",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/ashby jobs read path",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/ashby applications read path",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/ashby users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
+  ]
+}

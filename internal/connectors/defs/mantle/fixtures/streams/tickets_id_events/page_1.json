@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/tickets/synthetic-conformance-value/events"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": {
+        "id": "id_fixture",
+        "type": "contact_added",
+        "oldValue": {
+          "id": "old_value_fixture_id"
+        },
+        "newValue": {
+          "id": "new_value_fixture_id"
+        },
+        "actorType": "customer",
+        "agent": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "user": {
+            "id": "id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com"
+          }
+        },
+        "contact": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "threadMessageId": "thread_message_id_fixture",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

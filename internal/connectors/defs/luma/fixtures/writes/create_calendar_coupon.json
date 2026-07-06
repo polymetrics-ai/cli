@@ -1,0 +1,20 @@
+{
+  "record": {
+    "code": "fixture",
+    "discount": {
+      "discount_type": "percent",
+      "percent_off": 10
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/coupons/create",
+    "body": {
+      "code": "fixture",
+      "discount": {
+        "discount_type": "percent",
+        "percent_off": 10
+      }
+    }
+  }
+}

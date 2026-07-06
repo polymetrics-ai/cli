@@ -1,0 +1,25 @@
+{
+  "record": {
+    "event_type": "https://api.calendly.com/event_types/fixture_type_1",
+    "start_time": "2026-02-01T09:00:00Z",
+    "invitee": {
+      "name": "Fixture Invitee",
+      "email": "fixture-invitee@example.com",
+      "timezone": "UTC"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invitees"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/scheduled_events/fixture_event_new/invitees/fixture_invitee_new",
+        "email": "fixture-invitee@example.com",
+        "status": "active"
+      }
+    }
+  }
+}

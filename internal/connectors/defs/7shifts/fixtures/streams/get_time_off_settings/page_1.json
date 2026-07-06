@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/time_off_settings/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "company_id": 1001,
+      "time_off_request_comment": true,
+      "time_off_request_notice": 12.34,
+      "categories": [
+        {
+          "label": "fixture label",
+          "value": "fixture value",
+          "require_hours": true,
+          "active": true
+        }
+      ]
+    }
+  }
+}

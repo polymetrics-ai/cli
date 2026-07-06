@@ -1,0 +1,69 @@
+{
+  "api": "Wrike REST API v4 (https://developers.wrike.com/api/v4/)",
+  "docs": "https://developers.wrike.com/api/v4/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only, matching internal/connectors/wrike's exact endpoint set; the full Wrike surface (task/folder/contact mutation, comments, timelogs, attachments) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/tasks is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tasks/{taskId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/tasks/{taskId} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/comments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timelogs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/timelogs is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attachments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/attachments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

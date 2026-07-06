@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vaccinations/history",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "history": [
+          {
+            "date": "2021-01-01T00:00:00.000Z",
+            "vaccinated": 100,
+            "firstVaccination": 100,
+            "totalVacciantionOfTheDay": 100
+          }
+        ]
+      }
+    }
+  }
+}

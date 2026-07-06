@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "pr_fixture_1",
+    "price": 2000
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/pr_fixture_1"
+  }
+}

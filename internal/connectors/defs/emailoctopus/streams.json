@@ -1,0 +1,79 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "paging.next"
+    },
+    "check": { "method": "GET", "path": "/lists" },
+    "error_map": [
+      { "status": 401, "hint": "emailoctopus api_key is missing or invalid; re-run pm credentials add emailoctopus" },
+      { "status": 429, "class": "rate_limited", "hint": "emailoctopus rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/lists",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "pending_count": "{{ record.counts.pending }}",
+        "subscribed_count": "{{ record.counts.subscribed }}",
+        "unsubscribed_count": "{{ record.counts.unsubscribed }}"
+      },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "from_name": "{{ record.from.name }}",
+        "from_email_address": "{{ record.from.email_address }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "list_contacts",
+      "path": "/lists/{{ config.list_id }}/contacts",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/list_contacts.json"
+    },
+    {
+      "name": "list_tags",
+      "path": "/lists/{{ config.list_id }}/tags",
+      "query": { "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/list_tags.json"
+    },
+    {
+      "name": "campaign_summary_reports",
+      "path": "/campaigns/{{ fanout.id }}/reports/summary",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/campaigns", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "computed_fields": {
+        "bounced_hard": "{{ record.bounced.hard }}",
+        "bounced_soft": "{{ record.bounced.soft }}",
+        "opened_total": "{{ record.opened.total }}",
+        "opened_unique": "{{ record.opened.unique }}",
+        "clicked_total": "{{ record.clicked.total }}",
+        "clicked_unique": "{{ record.clicked.unique }}"
+      },
+      "schema": "schemas/campaign_summary_reports.json"
+    }
+  ]
+}

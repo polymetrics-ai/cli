@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/quotes/drafts",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "quoteNumber": 8001,
+          "date": "2026-01-09",
+          "currency": "DKK",
+          "netAmount": 200.0,
+          "grossAmount": 250.0,
+          "vatAmount": 50.0,
+          "lastUpdated": "2026-01-09T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

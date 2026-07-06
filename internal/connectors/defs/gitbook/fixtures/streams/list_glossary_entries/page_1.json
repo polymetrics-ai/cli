@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/translations-glossary",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_glossary_entries_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_glossary_entries",
+          "name": "Fixture list_glossary_entries",
+          "status": "active",
+          "operation_id": "listGlossaryEntries"
+        }
+      ]
+    }
+  }
+}

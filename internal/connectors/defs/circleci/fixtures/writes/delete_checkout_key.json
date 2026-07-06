@@ -1,0 +1,9 @@
+{
+  "record": {
+    "fingerprint": "aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/checkout-key/aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99"
+  }
+}

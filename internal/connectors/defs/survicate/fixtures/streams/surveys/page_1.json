@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys",
+    "query": {
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination_data": {
+        "has_more": false,
+        "next_url": null
+      },
+      "data": [
+        {
+          "id": "survey_fixture_1",
+          "type": "PageSurvey",
+          "name": "Fixture Survey 1",
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "enabled": true,
+          "responses": 12,
+          "launch": {
+            "start_at": "2026-01-01T00:00:00.000000Z",
+            "end_at": null,
+            "responses_limit": null
+          }
+        },
+        {
+          "id": "survey_fixture_2",
+          "type": "WidgetSurvey",
+          "name": "Fixture Survey 2",
+          "created_at": "2026-01-02T00:00:00.000000Z",
+          "enabled": false,
+          "responses": 0,
+          "launch": null
+        }
+      ]
+    }
+  }
+}

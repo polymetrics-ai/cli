@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/targets", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "count": 0 }
+  }
+}

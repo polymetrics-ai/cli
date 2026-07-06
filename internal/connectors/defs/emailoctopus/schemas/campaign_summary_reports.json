@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_summary_reports",
+  "type": "object",
+  "x-primary-key": ["campaign_id"],
+  "required": ["campaign_id"],
+  "properties": {
+    "campaign_id": { "type": "string" },
+    "id": { "type": ["string", "null"] },
+    "sent": { "type": ["integer", "null"] },
+    "bounced_hard": { "type": ["integer", "null"] },
+    "bounced_soft": { "type": ["integer", "null"] },
+    "opened_total": { "type": ["integer", "null"] },
+    "opened_unique": { "type": ["integer", "null"] },
+    "clicked_total": { "type": ["integer", "null"] },
+    "clicked_unique": { "type": ["integer", "null"] },
+    "complained": { "type": ["integer", "null"] },
+    "unsubscribed": { "type": ["integer", "null"] }
+  }
+}

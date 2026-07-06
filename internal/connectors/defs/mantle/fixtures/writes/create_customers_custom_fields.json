@@ -1,0 +1,36 @@
+{
+  "record": {
+    "appId": "app_id_fixture",
+    "name": "fixture",
+    "type": "string",
+    "defaultValue": "fixture",
+    "options": [
+      "fixture"
+    ],
+    "appLevel": true,
+    "showOnCustomerDetail": true,
+    "private": true,
+    "filterable": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/customers/custom_fields",
+    "body": {
+      "appId": "app_id_fixture",
+      "name": "fixture",
+      "type": "string",
+      "defaultValue": "fixture",
+      "options": [
+        "fixture"
+      ],
+      "appLevel": true,
+      "showOnCustomerDetail": true,
+      "private": true,
+      "filterable": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

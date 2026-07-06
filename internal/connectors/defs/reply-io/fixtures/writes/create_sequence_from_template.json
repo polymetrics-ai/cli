@@ -1,0 +1,20 @@
+{
+  "record": {
+    "templateId": "synthetic-conformance-value",
+    "sequenceFolderId": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequences/create-from-template",
+    "body": {
+      "templateId": "synthetic-conformance-value",
+      "sequenceFolderId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

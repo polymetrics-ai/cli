@@ -1,0 +1,29 @@
+{
+  "record": {
+    "workflow_id": "wf_fixture_1",
+    "versionId": "ver_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workflows/wf_fixture_1/activate",
+    "body": {
+      "versionId": "ver_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "wf_fixture_1",
+      "name": "Fixture workflow",
+      "active": false,
+      "isArchived": false,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z",
+      "versionId": "ver_fixture_1",
+      "triggerCount": 0,
+      "nodes": [],
+      "connections": {},
+      "settings": {}
+    }
+  }
+}

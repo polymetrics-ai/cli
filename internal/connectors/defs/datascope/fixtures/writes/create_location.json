@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture New Location",
+    "city": "Lisbon",
+    "country": "PT"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/locations"
+  }
+}

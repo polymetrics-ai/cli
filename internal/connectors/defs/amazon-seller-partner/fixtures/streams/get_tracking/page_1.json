@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/tracking",
+    "query": {
+      "trackingId": "synthetic-conformance-value",
+      "carrierId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "summary": {
+          "trackingDetailCodes": {
+            "returns": [
+              {
+                "id": "fixture-1"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

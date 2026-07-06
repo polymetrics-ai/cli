@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "hotspots",
+  "type": "object",
+  "x-primary-key": ["key"],
+  "required": ["key"],
+  "properties": {
+    "key": { "type": "string" },
+    "component": { "type": ["string", "null"] },
+    "project": { "type": ["string", "null"] },
+    "securityCategory": { "type": ["string", "null"] },
+    "vulnerabilityProbability": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "line": { "type": ["integer", "null"] },
+    "message": { "type": ["string", "null"] },
+    "assignee": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+    "creationDate": { "type": ["string", "null"] },
+    "updateDate": { "type": ["string", "null"] }
+  }
+}

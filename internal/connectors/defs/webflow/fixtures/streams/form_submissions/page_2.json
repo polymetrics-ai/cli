@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/form_submissions",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "formSubmissions": [
+        {
+          "id": "submission_fixture_101",
+          "formId": "form_fixture_1",
+          "displayName": "Fixture Form One",
+          "siteId": "synthetic-conformance-value",
+          "workspaceId": "workspace_fixture_1",
+          "formResponse": {
+            "Name": "Fixture Person 101"
+          },
+          "dateSubmitted": "2026-01-01T00:00:00.000Z",
+          "localeId": null
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "total": 101
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page_size": "synthetic-conformance-value",
+      "created_after": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "count": 2,
+      "customers": [
+        {
+          "id": 401,
+          "external_id": "fixture-ext-401",
+          "name": "Fixture Customer 1",
+          "email": "fixture1@example.com",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 402,
+          "external_id": "fixture-ext-402",
+          "name": "Fixture Customer 2",
+          "email": "fixture2@example.com",
+          "created": "2026-01-02T00:00:00Z",
+          "modified": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

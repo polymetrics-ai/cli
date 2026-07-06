@@ -1,0 +1,8 @@
+{
+  "record": { "id": "key_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/sdk_keys/key_fixture_1/enforcement_mode/disable"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

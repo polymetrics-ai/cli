@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Zoho Invoice customers, invoices, and payments through the Zoho Invoice REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  organization_id
+  page_size
+  access_token (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: company_name(), created_time(), currency_code(), customer_id(), customer_name(), customer_type(), email(), id(), last_modified_time(), outstanding_receivable_amount(), phone(), status(), updated_at()
+  invoices:
+    primary key: id
+    cursor: updated_at
+    fields: balance(), created_time(), currency_code(), customer_id(), customer_name(), date(), due_date(), id(), invoice_id(), invoice_number(), last_modified_time(), status(), total(), updated_at()
+  payments:
+    primary key: id
+    cursor: updated_at
+    fields: amount(), created_time(), currency_code(), customer_id(), customer_name(), date(), id(), invoice_numbers(), last_modified_time(), payment_id(), payment_mode(), payment_number(), reference_number(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoho Invoice API read of customer/invoice/payment data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

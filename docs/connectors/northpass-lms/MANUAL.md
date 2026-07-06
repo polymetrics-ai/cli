@@ -10,22 +10,44 @@ SYNOPSIS
   pm credentials add <name> --connector northpass-lms [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API.
+  Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API. Read-only.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  people:
+    primary key: id
+    fields: created_at(), email(), first_name(), id(), last_name(), status(), type(), updated_at()
+  courses:
+    primary key: id
+    fields: created_at(), id(), name(), slug(), status(), type(), updated_at()
+  course_enrollments:
+    primary key: id
+    fields: completed_at(), course_id(), created_at(), id(), learner_id(), percentage(), status(), type(), updated_at()
+  groups:
+    primary key: id
+    fields: created_at(), id(), name(), slug(), type(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Northpass LMS API read of learner and course data
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

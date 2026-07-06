@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [
+        {
+          "id": 420,
+          "name": "Fixture Product Session",
+          "description": "Sanitized fixture lecture.",
+          "start": "2026-06-01 09:00:00",
+          "end": "2026-06-01 10:00:00",
+          "hall_id": 42,
+          "speakers": [],
+          "discussion": true,
+          "moderating": true,
+          "polling": true,
+          "capacity": 100,
+          "type": 0,
+          "stream": { "url": "https://example.com/live", "type": "youtube" },
+          "virtual_meeting": { "url": "https://example.com/meeting", "service": "Fixture Meet" },
+          "tracks": [],
+          "booking_info": [{ "available": 25, "capacity": 100 }],
+          "created_at": "2026-05-01 00:00:00",
+          "updated_at": "2026-05-02 00:00:00"
+        }
+      ],
+      "speakers": [],
+      "days": [],
+      "halls": [],
+      "tracks": [],
+      "workshops": [],
+      "pauses": []
+    }
+  }
+}

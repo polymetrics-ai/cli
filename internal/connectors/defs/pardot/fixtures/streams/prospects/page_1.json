@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/prospects",
+    "query": {
+      "limit": "200",
+      "fields": "id,email,firstName,lastName,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "email": "email_fixture",
+          "firstName": "firstName_fixture",
+          "lastName": "lastName_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

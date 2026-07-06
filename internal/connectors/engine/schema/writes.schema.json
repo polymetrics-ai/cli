@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "writes.json",
+  "type": "object",
+  "required": ["actions"],
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "kind", "method", "path", "record_schema", "risk"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "kind": { "type": "string", "enum": ["create", "update", "upsert", "delete", "custom"] },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "path_fields": { "type": "array", "items": { "type": "string" } },
+          "body_type": { "type": "string", "enum": ["json", "form", "none"] },
+          "body_fields": { "type": "array", "items": { "type": "string" } },
+          "record_schema": { "type": "object" },
+          "delete": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "idempotent": { "type": "boolean" },
+              "missing_ok_status": { "type": "array", "items": { "type": "integer" } }
+            }
+          },
+          "risk": { "type": "string" },
+          "confirm": { "type": "string", "enum": ["", "destructive"] },
+          "hook": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v3/domains" },
+  "response": {
+    "status": 200,
+    "body": { "total_count": 0, "items": [] }
+  }
+}

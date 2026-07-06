@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "opt_fields": "gid,name,resource_type,email" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_user_1", "name": "Fixture User One", "resource_type": "user", "email": "fixture1@example.com" },
+        { "gid": "fixture_user_2", "name": "Fixture User Two", "resource_type": "user", "email": "fixture2@example.com" }
+      ],
+      "next_page": null
+    }
+  }
+}

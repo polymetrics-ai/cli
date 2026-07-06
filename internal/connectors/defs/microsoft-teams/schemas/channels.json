@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "display_name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "membership_type": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "created_date_time": { "type": ["string", "null"] }
+  }
+}

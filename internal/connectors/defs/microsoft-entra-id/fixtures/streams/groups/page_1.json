@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/groups", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_group_1", "displayName": "Fixture Group 1", "description": "Engineering team", "mail": "group1@example.com", "mailNickname": "group1", "mailEnabled": true, "securityEnabled": true, "visibility": "Private", "createdDateTime": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

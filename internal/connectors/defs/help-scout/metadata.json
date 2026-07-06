@@ -1,0 +1,27 @@
+{
+  "name": "help-scout",
+  "display_name": "Help Scout",
+  "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
+  "integration_type": "api",
+  "docs_url": "https://developer.helpscout.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/help-scout (this bundle has no Tier-2 hook, so there is no paritytest package for this wave). Matches sendpulse's and dwolla's identical documented precedent."
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "method": "GET",
+      "path": "/__legacy_hook/customers",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/customers.json",
+      "incremental": {
+        "cursor_field": "date_upd",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "orders",
+      "method": "GET",
+      "path": "/__legacy_hook/orders",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/orders.json",
+      "incremental": {
+        "cursor_field": "date_upd",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "products",
+      "method": "GET",
+      "path": "/__legacy_hook/products",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/products.json",
+      "incremental": {
+        "cursor_field": "date_upd",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "addresses",
+      "method": "GET",
+      "path": "/__legacy_hook/addresses",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/addresses.json",
+      "incremental": {
+        "cursor_field": "date_upd",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "carts",
+      "method": "GET",
+      "path": "/__legacy_hook/carts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/carts.json",
+      "incremental": {
+        "cursor_field": "date_upd",
+        "client_filtered": true
+      }
+    }
+  ]
+}

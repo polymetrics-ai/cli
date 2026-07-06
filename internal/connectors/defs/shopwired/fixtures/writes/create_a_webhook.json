@@ -1,0 +1,19 @@
+{
+  "record": {
+    "topic": 1,
+    "url": "https://example.invalid/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "topic": 1,
+      "url": "https://example.invalid/fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

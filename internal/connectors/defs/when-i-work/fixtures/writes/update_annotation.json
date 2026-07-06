@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "title": "Fixture Annotation Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/2/annotations/1"
+  }
+}

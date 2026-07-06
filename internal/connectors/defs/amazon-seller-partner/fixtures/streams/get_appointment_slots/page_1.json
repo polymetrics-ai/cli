@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/service/v1/appointmentSlots",
+    "query": {
+      "asin": "synthetic-conformance-value",
+      "storeId": "synthetic-conformance-value",
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "appointmentSlots": [
+          {
+            "startTime": "startTime-fixture-1",
+            "endTime": "endTime-fixture-1",
+            "capacity": 1
+          }
+        ]
+      }
+    }
+  }
+}

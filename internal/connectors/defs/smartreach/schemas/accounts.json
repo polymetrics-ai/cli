@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "object": { "type": ["string", "null"] },
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "custom_id": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "industry": { "type": ["string", "null"] },
+    "linkedin_url": { "type": ["string", "null"] },
+    "custom_fields": { "type": ["object", "null"] },
+    "created_at": { "type": ["number", "null"] },
+    "updated_at": { "type": ["number", "null"] }
+  }
+}

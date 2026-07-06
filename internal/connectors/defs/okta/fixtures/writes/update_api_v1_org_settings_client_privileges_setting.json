@@ -1,0 +1,16 @@
+{
+  "record": {
+    "clientPrivilegesSetting": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/org/settings/clientPrivilegesSetting",
+    "body": {
+      "clientPrivilegesSetting": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

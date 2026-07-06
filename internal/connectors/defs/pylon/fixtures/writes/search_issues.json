@@ -1,0 +1,19 @@
+{
+  "record": {
+    "filter": {
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issues/search",
+    "body": {
+      "filter": {
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

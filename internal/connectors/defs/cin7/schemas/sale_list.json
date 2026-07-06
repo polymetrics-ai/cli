@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sale_list",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "order_number": { "type": ["string", "null"] },
+    "customer": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "order_status": { "type": ["string", "null"] },
+    "invoice_status": { "type": ["string", "null"] },
+    "order_date": { "type": ["string", "null"] },
+    "invoice_amount": { "type": ["number", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

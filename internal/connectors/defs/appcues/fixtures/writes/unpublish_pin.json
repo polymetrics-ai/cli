@@ -1,0 +1,8 @@
+{
+  "record": { "id": "pin_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/pins/pin_fixture_1/unpublish"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

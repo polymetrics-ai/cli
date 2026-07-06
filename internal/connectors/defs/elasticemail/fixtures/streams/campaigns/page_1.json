@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "Name": "campaigns_fixture_1", "Status": "Active", "Content": { "Subject": "Fixture subject 1" }, "Recipients": { "ListNames": ["List 1"] }, "Options": { "TrackOpens": true } }
+    ]
+  }
+}

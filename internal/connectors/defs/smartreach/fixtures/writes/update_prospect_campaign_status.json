@@ -1,0 +1,20 @@
+{
+  "record": {
+    "prospect_ids": ["prs_fixture_1"],
+    "campaign_ids": ["cmp_fixture_1"],
+    "prospect_status": "pause"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/prospects/prospect_status_change",
+    "body": {
+      "prospect_ids": ["prs_fixture_1"],
+      "campaign_ids": ["cmp_fixture_1"],
+      "prospect_status": "pause"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "updated_count": 1 }
+  }
+}

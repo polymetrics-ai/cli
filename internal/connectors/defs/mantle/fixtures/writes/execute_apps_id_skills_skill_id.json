@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "skill_id": "skill_id_fixture",
+    "targets": [
+      {
+        "eventName": "fixture",
+        "filePath": "fixture",
+        "recommendationId": "recommendation_id_fixture",
+        "featureContext": {
+          "id": "feature_context_fixture_id"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/apps/id_fixture/skills/skill_id_fixture",
+    "body": {
+      "targets": [
+        {
+          "eventName": "fixture",
+          "filePath": "fixture",
+          "recommendationId": "recommendation_id_fixture",
+          "featureContext": {
+            "id": "feature_context_fixture_id"
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

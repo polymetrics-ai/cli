@@ -1,0 +1,13 @@
+{
+  "record": {
+    "Name": "Fixture Segment",
+    "Rule": "Status = Engaged"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/segments/Fixture Segment",
+    "body": {
+      "Rule": "Status = Engaged"
+    }
+  }
+}

@@ -10,22 +10,49 @@ SYNOPSIS
   pm credentials add <name> --connector google-forms [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth2 refresh token.
+  Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth 2.0 refresh-token grant.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  form_id
+  mode
+  page_size
+  start_date
+  token_url
+  client_id (secret)
+  client_refresh_token (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  forms:
+    primary key: form_id
+    fields: description(), document_title(), form_id(), item_count(), responder_uri(), revision_id(), title()
+  form_items:
+    primary key: form_id, item_id
+    fields: description(), form_id(), item_id(), question_id(), title()
+  responses:
+    primary key: response_id
+    cursor: last_submitted_time
+    fields: answers(), create_time(), form_id(), last_submitted_time(), respondent_email(), response_id(), total_score()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Google Forms API read of form metadata, form items, and submitted responses
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

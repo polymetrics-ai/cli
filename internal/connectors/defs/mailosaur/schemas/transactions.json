@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["timestamp"],
+  "x-cursor-field": "timestamp",
+  "properties": {
+    "timestamp": { "type": ["string", "null"] },
+    "email": { "type": ["integer", "null"] },
+    "sms": { "type": ["integer", "null"] },
+    "previews": { "type": ["integer", "null"] }
+  }
+}

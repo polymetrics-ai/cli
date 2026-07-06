@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "providers",
+  "type": "object",
+  "x-primary-key": ["providerId"],
+  "required": ["providerId"],
+  "properties": {
+    "providerId": { "type": "string" },
+    "providerName": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/v1/integrations/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "integrationId": "int_fixture_1",
+      "product": { "productId": "prod_fixture_1" },
+      "name": "Fixture Integration",
+      "integrationType": "slack",
+      "parameters": {},
+      "environmentIds": ["env_fixture_1"],
+      "configIds": ["config_fixture_1"]
+    }
+  }
+}

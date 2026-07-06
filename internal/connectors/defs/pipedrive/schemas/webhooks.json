@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company_id": { "type": ["integer", "null"] },
+    "owner_id": { "type": ["integer", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "event_action": { "type": ["string", "null"] },
+    "event_object": { "type": ["string", "null"] },
+    "subscription_url": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "remove_time": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "http_auth_user": { "type": ["string", "null"] },
+    "remove_reason": { "type": ["string", "null"] },
+    "last_delivery_time": { "type": ["string", "null"] },
+    "last_http_status": { "type": ["integer", "null"] },
+    "admin_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] }
+  }
+}

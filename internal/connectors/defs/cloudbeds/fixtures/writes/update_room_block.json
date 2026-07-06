@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "roomBlockID": "block_fixture_1", "endDate": "2026-02-06" },
+  "expect": { "method": "PUT", "path": "/putRoomBlock" },
+  "response": { "status": 200, "body": { "success": true } }
+}

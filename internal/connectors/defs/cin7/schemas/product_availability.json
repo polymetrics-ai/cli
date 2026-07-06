@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_availability",
+  "type": "object",
+  "x-primary-key": ["id", "location", "bin"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "bin": { "type": ["string", "null"] },
+    "on_hand": { "type": ["number", "null"] },
+    "allocated": { "type": ["number", "null"] },
+    "available": { "type": ["number", "null"] },
+    "on_order": { "type": ["number", "null"] },
+    "stock_on_hand": { "type": ["number", "null"] },
+    "in_transit": { "type": ["number", "null"] }
+  }
+}

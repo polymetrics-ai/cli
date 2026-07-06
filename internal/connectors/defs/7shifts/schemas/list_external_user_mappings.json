@@ -1,0 +1,78 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Mapping ID"
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "User ID in 7Shifts"
+    },
+    "external_user_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "User ID in External System"
+    },
+    "company_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Company ID"
+    },
+    "location_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Location ID"
+    },
+    "application_name": {
+      "type": "string",
+      "description": "Name key of the application this mapping is connected with"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ISO8601 date and time in UTC when the mapping was created",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The ISO8601 date and time in UTC when the mapping was modified",
+      "format": "date-time"
+    },
+    "user_active": {
+      "type": "boolean",
+      "description": "Boolean indicating whether the mapped 7Shift user is currently active"
+    }
+  },
+  "required": [
+    "id",
+    "user_id",
+    "external_user_id",
+    "company_id",
+    "location_id",
+    "application_name",
+    "created",
+    "modified",
+    "user_active"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_external_user_mappings",
+  "x-primary-key": [
+    "id"
+  ]
+}

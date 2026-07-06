@@ -1,0 +1,16 @@
+{
+  "record": {
+    "coupon_id": "coupon_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/coupons/coupon_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

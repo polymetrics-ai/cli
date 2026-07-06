@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "Product_Name": { "type": ["string", "null"] },
+    "Product_Code": { "type": ["string", "null"] },
+    "Unit_Price": { "type": ["number", "null"] },
+    "Owner": { "type": ["object", "null"] },
+    "Created_Time": { "type": ["string", "null"] },
+    "Modified_Time": { "type": ["string", "null"] },
+    "display_value": { "type": ["string", "null"] }
+  }
+}

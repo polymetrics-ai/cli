@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/ratios/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "date": "2025-12-31",
+        "period": "FY",
+        "calendarYear": "2025",
+        "currentRatio": 1.6,
+        "quickRatio": 1.2,
+        "grossProfitMargin": 0.6,
+        "netProfitMargin": 0.3,
+        "returnOnEquity": 0.18,
+        "returnOnAssets": 0.09,
+        "debtRatio": 0.4,
+        "priceEarningsRatio": 20.2,
+        "dividendYield": 0.01
+      }
+    ]
+  }
+}

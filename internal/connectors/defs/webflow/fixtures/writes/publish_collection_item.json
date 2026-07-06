@@ -1,0 +1,20 @@
+{
+  "record": {
+    "collection_id": "collection_fixture_1",
+    "itemIds": ["item_fixture_1", "item_fixture_2"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/collections/collection_fixture_1/items/publish",
+    "body": {
+      "itemIds": ["item_fixture_1", "item_fixture_2"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "publishedItemIds": ["item_fixture_1", "item_fixture_2"],
+      "errors": []
+    }
+  }
+}

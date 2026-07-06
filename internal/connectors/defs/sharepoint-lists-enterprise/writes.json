@@ -1,0 +1,76 @@
+{
+  "actions": [
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sites/{{ config.site_id }}/lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["displayName"],
+        "properties": {
+          "displayName": { "type": "string" },
+          "description": { "type": "string" },
+          "columns": { "type": "array", "items": { "type": "object" } },
+          "list": { "type": "object" }
+        }
+      },
+      "risk": "creates a new SharePoint list (and any custom columns/template declared in the request) on the configured site; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sites/{{ config.site_id }}/lists/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "displayName": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing list's display name/description by id; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_list_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/items",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["fields"],
+        "properties": {
+          "fields": { "type": "object" }
+        }
+      },
+      "risk": "creates a new item (row) in the configured list, with the submitted column values; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sites/{{ config.site_id }}/lists/{{ config.list_id }}/items/{{ record.id }}/fields",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates an existing list item's column values by id, via the fields sub-resource (Graph's fieldValueSet update); only the submitted column names are changed, matching Graph's own partial-update semantics for this endpoint"
+    }
+  ]
+}

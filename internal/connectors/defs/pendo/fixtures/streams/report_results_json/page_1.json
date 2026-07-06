@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/report/synthetic-conformance-value/results.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "visitorId": "visitor_fixture",
+        "visitor_agent_name": "Fixture Visitor"
+      }
+    ]
+  }
+}

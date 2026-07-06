@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/v1/configs/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "configId": "config_fixture_1",
+      "product": { "productId": "prod_fixture_1" },
+      "name": "Fixture Config 1",
+      "description": "fixture config",
+      "order": 0,
+      "migratedConfigId": null,
+      "evaluationVersion": "v2"
+    }
+  }
+}

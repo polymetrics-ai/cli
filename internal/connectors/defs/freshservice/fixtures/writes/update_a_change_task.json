@@ -1,0 +1,16 @@
+{
+  "record": {
+    "change_id": 123,
+    "task_id": 123,
+    "name": "Fixture update_a_change_task",
+    "description": "Fixture update_a_change_task record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/tasks/123",
+    "body": {
+      "name": "Fixture update_a_change_task",
+      "description": "Fixture update_a_change_task record"
+    }
+  }
+}

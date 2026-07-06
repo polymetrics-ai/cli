@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/getTransactions", "query": { "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "transactionID": "txn_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "reservationID": "res_fixture_1",
+          "guestID": "guest_fixture_1",
+          "guestName": "Fixture Guest 1",
+          "amount": 50,
+          "currency": "USD",
+          "category": "room",
+          "transactionCategory": "charge",
+          "transactionType": "charge",
+          "transactionCode": "ROOM",
+          "description": "Fixture transaction",
+          "transactionDateTime": "2026-01-01T12:00:00",
+          "transactionDateTimeUTC": "2026-01-01T17:00:00Z"
+        }
+      ],
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RepairShopr Connection Specification",
+  "type": "object",
+  "required": ["api_token", "base_url"],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RepairShopr API token, sent as a Bearer token (Authorization: Bearer <api_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "RepairShopr API base URL, e.g. https://<subdomain>.repairshopr.com/api/v1. This bundle requires the full base URL directly (see docs.md Known limits: legacy's subdomain-only derivation is not modeled, since the engine's default-materialization mechanism only supports a fixed literal default, not one derived from another config value)."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records created at or after this value."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records updated at or after this value."
+    },
+    "query": {
+      "type": "string",
+      "description": "Optional free-text search query passed through to RepairShopr's list endpoints."
+    }
+  }
+}

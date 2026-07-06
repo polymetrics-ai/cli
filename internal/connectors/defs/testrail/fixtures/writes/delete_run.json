@@ -1,0 +1,8 @@
+{
+  "record": { "id": 1 },
+  "expect": {
+    "method": "POST",
+    "path": "/index.php"
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "survey_responses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "time",
+  "required": ["id"],
+  "additionalProperties": true,
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "time": { "type": ["string", "null"] },
+    "token": { "type": ["string", "null"] },
+    "ip_address": { "type": ["string", "null"] },
+    "identity": { "type": ["string", "null"] },
+    "page": { "type": ["string", "null"] },
+    "referrer": { "type": ["string", "null"] },
+    "user_agent": { "type": ["string", "null"] },
+    "answered_questions": { "type": ["object", "null"] },
+    "properties": { "type": ["object", "null"] }
+  }
+}

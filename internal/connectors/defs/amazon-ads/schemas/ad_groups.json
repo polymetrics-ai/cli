@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ad_groups",
+  "type": "object",
+  "x-primary-key": ["ad_group_id"],
+  "required": ["ad_group_id"],
+  "properties": {
+    "ad_group_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "campaign_id": { "type": ["integer", "null"] },
+    "default_bid": { "type": ["number", "null"] },
+    "state": { "type": ["string", "null"] }
+  }
+}

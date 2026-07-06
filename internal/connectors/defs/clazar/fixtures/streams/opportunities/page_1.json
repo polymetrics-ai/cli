@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/opportunities", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "opportunity_fixture_1",
+          "cloud": "aws",
+          "stage": "identified",
+          "title": "Fixture Opportunity 1",
+          "status": "open",
+          "cloud_id": "opp-fixture-1",
+          "accept_by": "2026-02-01T00:00:00.000000Z",
+          "customer_company": "Fixture Customer Inc.",
+          "customer_website": "https://fixture-customer.example.com",
+          "target_close_date": "2026-03-01T00:00:00.000000Z",
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "last_modified_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 1
+    }
+  }
+}

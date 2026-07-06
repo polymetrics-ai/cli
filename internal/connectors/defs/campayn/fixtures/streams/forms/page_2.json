@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/lists/list_fixture_1/forms.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "form_fixture_1",
+        "contact_list_id": "list_fixture_1",
+        "form_title": "Fixture Signup Form 1",
+        "form_type": "signup",
+        "form_html": "<form action=\"https://app.campayn.com/subscribe\"></form>",
+        "signup_count": "12"
+      }
+    ]
+  }
+}

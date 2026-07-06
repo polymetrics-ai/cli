@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "start_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "string"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "sport_type": { "type": ["string", "null"] },
+    "distance": { "type": ["number", "null"] },
+    "moving_time": { "type": ["integer", "null"] },
+    "elapsed_time": { "type": ["integer", "null"] },
+    "total_elevation_gain": { "type": ["number", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "start_date_local": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "average_speed": { "type": ["number", "null"] },
+    "max_speed": { "type": ["number", "null"] },
+    "kudos_count": { "type": ["integer", "null"] },
+    "achievement_count": { "type": ["integer", "null"] }
+  }
+}

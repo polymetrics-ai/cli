@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "booking_line_items",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "_object": { "type": ["string", "null"] },
+    "units": { "type": ["integer", "null"] }
+  },
+  "additionalProperties": true
+}

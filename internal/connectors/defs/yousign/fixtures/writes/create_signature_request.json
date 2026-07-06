@@ -1,0 +1,8 @@
+{
+  "record": { "name": "Fixture Signature Request", "delivery_mode": "email" },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_requests",
+    "body": { "name": "Fixture Signature Request", "delivery_mode": "email" }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/size", "query": { "dataset": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "size": {
+        "dataset": {
+          "dataset": "synthetic-conformance-value",
+          "num_bytes_original_files": 2048,
+          "num_bytes_parquet_files": 1024,
+          "num_bytes_memory": 4096,
+          "num_rows": 200
+        },
+        "splits": [
+          {
+            "dataset": "synthetic-conformance-value",
+            "config": "default",
+            "split": "train",
+            "num_bytes_parquet_files": 1024,
+            "num_bytes_memory": 4096,
+            "num_rows": 100,
+            "num_columns": 3
+          },
+          {
+            "dataset": "synthetic-conformance-value",
+            "config": "default",
+            "split": "test",
+            "num_bytes_parquet_files": 512,
+            "num_bytes_memory": 2048,
+            "num_rows": 100,
+            "num_columns": 3
+          }
+        ]
+      },
+      "pending": [],
+      "failed": []
+    }
+  }
+}

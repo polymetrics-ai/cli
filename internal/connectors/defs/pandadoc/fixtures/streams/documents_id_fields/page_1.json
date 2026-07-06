@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/documents/synthetic-conformance-value/fields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "documents_id_fields_fixture_1",
+          "name": "Fixture documents_id_fields",
+          "status": "fixture",
+          "date_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

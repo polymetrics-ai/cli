@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "bo_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/beneficial-owners/bo_fixture_1"
+  }
+}

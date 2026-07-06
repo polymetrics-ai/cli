@@ -1,0 +1,20 @@
+{
+  "record": {
+    "billing_requests": {
+      "description": "Synthetic create_a_billing_request_with_actions fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/billing_requests/create_with_actions",
+    "body": {
+      "billing_requests": {
+        "description": "Synthetic create_a_billing_request_with_actions fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

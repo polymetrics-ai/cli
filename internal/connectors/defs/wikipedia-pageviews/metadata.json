@@ -1,0 +1,22 @@
+{
+  "name": "wikipedia-pageviews",
+  "display_name": "Wikipedia Pageviews",
+  "description": "Reads Wikimedia pageview metrics for articles and top-article reports through the public Wikimedia REST API.",
+  "integration_type": "api",
+  "docs_url": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Wikimedia public API read of aggregate pageview metrics; no authentication, no PII"
+  }
+}

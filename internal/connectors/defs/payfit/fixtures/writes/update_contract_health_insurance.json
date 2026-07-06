@@ -1,0 +1,23 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "contract_id": "synthetic-conformance-value",
+    "healthInsuranceContractIds": [
+      "contract_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/companies/synthetic-conformance-value/contracts-fr/synthetic-conformance-value/health-insurance",
+    "body": {
+      "healthInsuranceContractIds": [
+        "contract_fixture_1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outlook Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID (Azure AD) application (client) ID for the OAuth 2.0 refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID application client secret. Used only in the token-request form; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Microsoft Graph OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.microsoft.com/v1.0",
+      "description": "Microsoft Graph API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Microsoft identity platform token endpoint override. When unset, it is derived from tenant_id (https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token, tenant_id defaulting to \"common\"). MUST be an https URL with a host; the hook fails closed on an invalid value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "tenant_id": {
+      "type": "string",
+      "default": "common",
+      "description": "Microsoft Entra ID tenant ID (or \"common\"/\"organizations\"/\"consumers\"), used to derive token_url when token_url is not set directly."
+    },
+    "scope": {
+      "type": "string",
+      "description": "OAuth 2.0 scope(s) requested in the token exchange (space-separated). Optional; omitted from the token request entirely when unset."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page ($top), 1-999."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

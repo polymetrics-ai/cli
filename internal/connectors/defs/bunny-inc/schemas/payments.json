@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "accountId": {
+      "type": "string"
+    },
+    "currencyId": {
+      "type": "string"
+    },
+    "baseCurrencyId": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "amountUnapplied": {
+      "type": "number"
+    },
+    "baseCurrencyCash": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "memo": {
+      "type": "string"
+    },
+    "isLegacy": {
+      "type": "boolean"
+    },
+    "receivedAt": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt"
+}

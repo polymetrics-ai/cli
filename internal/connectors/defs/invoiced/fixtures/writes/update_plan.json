@@ -1,0 +1,20 @@
+{
+  "record": {
+    "plan_id": 123,
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/plans/123",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

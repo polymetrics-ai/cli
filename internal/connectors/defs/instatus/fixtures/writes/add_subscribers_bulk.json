@@ -1,0 +1,31 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture add subscribers bulk",
+    "email": "subscriber@example.test",
+    "subscribers": [
+      {
+        "email": "bulk@example.test"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/subscribers/bulk",
+    "body": {
+      "name": "Fixture add subscribers bulk",
+      "email": "subscriber@example.test",
+      "subscribers": [
+        {
+          "email": "bulk@example.test"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_subscribers_bulk_fixture_response"
+    }
+  }
+}

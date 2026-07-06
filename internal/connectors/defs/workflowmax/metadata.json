@@ -1,0 +1,24 @@
+{
+  "name": "workflowmax",
+  "display_name": "WorkflowMax",
+  "description": "Reads and writes WorkflowMax jobs, clients, and client contacts through the real WorkflowMax API v2 (api.workflowmax2.com/v2).",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.workflowmax.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external WorkflowMax API v2 read of job, client, and client-contact data",
+    "write": "external mutation of WorkflowMax jobs, clients, and client contacts (create/update/delete); approval required",
+    "approval": "writes require approval; reads are none"
+  }
+}

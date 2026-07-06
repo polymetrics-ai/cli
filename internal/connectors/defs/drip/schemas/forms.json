@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "href": { "type": ["string", "null"] },
+    "headline": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "button_text": { "type": ["string", "null"] },
+    "confirmation_heading": { "type": ["string", "null"] },
+    "confirmation_text": { "type": ["string", "null"] }
+  }
+}

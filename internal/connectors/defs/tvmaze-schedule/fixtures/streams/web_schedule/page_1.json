@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/web/schedule" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 201,
+        "name": "Fixture web episode 1",
+        "airdate": "2026-01-01",
+        "airtime": "19:00",
+        "show": { "id": 3, "name": "Fixture Web Show" }
+      },
+      {
+        "id": 202,
+        "name": "Fixture web episode 2",
+        "airdate": "2026-01-02",
+        "airtime": "18:00",
+        "show": { "id": 4, "name": "Fixture Web Show 2" }
+      }
+    ]
+  }
+}

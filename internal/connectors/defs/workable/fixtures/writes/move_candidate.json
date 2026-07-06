@@ -1,0 +1,13 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "target_stage": "phone-screen"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_fixture/move",
+    "body": {
+      "target_stage": "phone-screen"
+    }
+  }
+}

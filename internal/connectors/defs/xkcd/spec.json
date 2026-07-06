@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XKCD Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "XKCD API base URL. Defaults to https://xkcd.com when unset (legacy xkcd.go's defaultBaseURL)."
+    },
+    "comic_number": {
+      "type": "string",
+      "description": "Specific comic number to read for the 'comic' stream (required for that stream only). Interpolated into the request path as a single, urlencoded path segment; a value containing a path-traversal or separator character (e.g. '..', '/', '?', '#') is rejected outright, matching legacy's own comic_number guard (xkcd.go:83-87)."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "approval_flow_id": "approval_flow_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/approval_flows/approval_flow_id_fixture/request_approvals"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

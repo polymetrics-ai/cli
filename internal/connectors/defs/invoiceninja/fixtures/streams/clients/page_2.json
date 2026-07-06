@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients",
+    "query": {
+      "page": "2",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "clients_fixture_101",
+          "name": "Fixture 101",
+          "display_name": "Fixture 101",
+          "number": "0101",
+          "balance": 1010,
+          "paid_to_date": 0,
+          "currency_id": "1",
+          "vat_number": "",
+          "phone": "",
+          "website": "",
+          "is_deleted": false,
+          "created_at": 1767225701,
+          "updated_at": 1767225701,
+          "archived_at": 0
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "total": 101
+        }
+      }
+    }
+  }
+}

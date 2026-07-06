@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "1-fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tasks/1-fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "deleted": true
+    }
+  }
+}

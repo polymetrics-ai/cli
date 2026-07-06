@@ -1,0 +1,18 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "goal_id": "fixture_id",
+    "comment": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/performance/employees/fixture_id/goals/fixture_id/close",
+    "body": {
+      "comment": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

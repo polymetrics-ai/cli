@@ -1,5 +1,16 @@
 # AGENTS.md
 
+## Active program: connector-architecture-v2
+
+An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
+interpreted by a declarative engine (`internal/connectors/engine/`). If you are continuing this
+work, read **`docs/migration/HANDOFF-CODEX.md`** first (parallel workstreams + collision rules),
+then `docs/migration/conventions.md` (the connector authoring recipe) and
+`docs/architecture/connector-architecture-v2-design.md`. Custom Codex agents for this program live
+in `.codex/agents/`. Do NOT push directly — the branch history is scrubbed of fake secret-format
+fixtures; pushes route through the coordinator (see HANDOFF §Pushing). Legacy connector Go under
+`internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
+
 ## Project
 
 Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, connector inspection, credential management, local warehouse queries, and optional runtime-backed execution.

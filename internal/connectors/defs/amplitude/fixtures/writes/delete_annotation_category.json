@@ -1,0 +1,11 @@
+{
+  "record": { "id": 6001 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/3/annotation-categories/6001"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Webhooks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "wh_fixture_1", "url": "https://example.com/hooks/fixture1" },
+        { "id": "wh_fixture_2", "url": "https://example.com/hooks/fixture2" }
+      ]
+    }
+  }
+}

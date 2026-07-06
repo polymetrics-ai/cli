@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "current_user",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "activeWorkspace": { "type": ["string", "null"] },
+    "defaultWorkspace": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "profilePicture": { "type": ["string", "null"] },
+    "settings": { "type": ["object", "null"] },
+    "customFields": { "type": ["array", "null"] },
+    "memberships": { "type": ["array", "null"] }
+  }
+}

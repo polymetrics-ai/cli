@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Subaccount"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subaccounts"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerFeedback/2024-06-01/items/synthetic-conformance-value/reviews/topics",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "sortBy": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "topics": {
+        "positiveTopics": [
+          {
+            "topic": "topic-fixture-1",
+            "asinMetrics": {},
+            "parentAsinMetrics": {},
+            "browseNodeMetrics": {},
+            "childAsinMetrics": {},
+            "reviewSnippets": [],
+            "subtopics": [],
+            "asin": "asin-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

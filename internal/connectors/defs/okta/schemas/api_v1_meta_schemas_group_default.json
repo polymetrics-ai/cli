@@ -1,0 +1,509 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON schema version identifier"
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the schema was created"
+    },
+    "definitions": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The subschema name"
+            },
+            "properties": {
+              "type": "object",
+              "description": "All Okta-defined profile properties are defined in a profile subschema with the resolution scope `#base`. These properties can't be removed or edited, regardless of any attempt to do so.",
+              "properties": {
+                "description": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "description": "Description of the property"
+                    },
+                    "enum": {
+                      "type": "array",
+                      "description": "Enumerated value of the property.\n\nThe value of the property is limited to one of the values specified in the enum definition. The list of values for the enum must consist of unique elements.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "externalName": {
+                      "type": "string",
+                      "description": "Name of the property as it exists in an external application"
+                    },
+                    "externalNamespace": {
+                      "type": "string",
+                      "description": "Namespace from the external application"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": [
+                        "country-code",
+                        "date-time",
+                        "email",
+                        "encrypted",
+                        "hashed",
+                        "language-code",
+                        "locale",
+                        "ref-id",
+                        "timezone",
+                        "uri"
+                      ]
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "enum": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "oneOf": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "master": {
+                      "type": "object",
+                      "properties": {
+                        "priority": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "OKTA",
+                            "OVERRIDE",
+                            "PROFILE_MASTER"
+                          ]
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "maxLength": {
+                      "type": "integer",
+                      "description": "Maximum character length of a string property"
+                    },
+                    "minLength": {
+                      "type": "integer",
+                      "description": "Minimum character length of a string property"
+                    },
+                    "mutability": {
+                      "type": "string",
+                      "enum": [
+                        "IMMUTABLE",
+                        "READ_ONLY",
+                        "READ_WRITE",
+                        "WRITE_ONLY"
+                      ]
+                    },
+                    "oneOf": {
+                      "type": "array",
+                      "description": "Non-empty array of valid JSON schemas.\n\nThe `oneOf` key is only supported in conjunction with `enum` and provides a mechanism to return a display name for the `enum` value.<br>\nEach schema has the following format:\n\n```\n{\n  \"const\": \"enumValue\",\n  \"title\": \"display name\"\n}\n```\n\nWhen `enum` is used in conjunction with `oneOf`, you must keep the set of enumerated values and their order.<br>\nFor exam",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "const": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "title": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "permissions": {
+                      "type": "array",
+                      "description": "Access control permissions for the property",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "action": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "principal": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Determines whether the property is required"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "enum": [
+                        "NONE",
+                        "SELF"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "User-defined display name for the property"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "array",
+                        "boolean",
+                        "integer",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    "unique": {
+                      "type": "boolean",
+                      "description": "Determines whether property values must be unique"
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "name": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "description": "Description of the property"
+                    },
+                    "enum": {
+                      "type": "array",
+                      "description": "Enumerated value of the property.\n\nThe value of the property is limited to one of the values specified in the enum definition. The list of values for the enum must consist of unique elements.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "externalName": {
+                      "type": "string",
+                      "description": "Name of the property as it exists in an external application"
+                    },
+                    "externalNamespace": {
+                      "type": "string",
+                      "description": "Namespace from the external application"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": [
+                        "country-code",
+                        "date-time",
+                        "email",
+                        "encrypted",
+                        "hashed",
+                        "language-code",
+                        "locale",
+                        "ref-id",
+                        "timezone",
+                        "uri"
+                      ]
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "enum": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "oneOf": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "master": {
+                      "type": "object",
+                      "properties": {
+                        "priority": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "OKTA",
+                            "OVERRIDE",
+                            "PROFILE_MASTER"
+                          ]
+                        }
+                      },
+                      "additionalProperties": true
+                    },
+                    "maxLength": {
+                      "type": "integer",
+                      "description": "Maximum character length of a string property"
+                    },
+                    "minLength": {
+                      "type": "integer",
+                      "description": "Minimum character length of a string property"
+                    },
+                    "mutability": {
+                      "type": "string",
+                      "enum": [
+                        "IMMUTABLE",
+                        "READ_ONLY",
+                        "READ_WRITE",
+                        "WRITE_ONLY"
+                      ]
+                    },
+                    "oneOf": {
+                      "type": "array",
+                      "description": "Non-empty array of valid JSON schemas.\n\nThe `oneOf` key is only supported in conjunction with `enum` and provides a mechanism to return a display name for the `enum` value.<br>\nEach schema has the following format:\n\n```\n{\n  \"const\": \"enumValue\",\n  \"title\": \"display name\"\n}\n```\n\nWhen `enum` is used in conjunction with `oneOf`, you must keep the set of enumerated values and their order.<br>\nFor exam",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "const": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "title": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "permissions": {
+                      "type": "array",
+                      "description": "Access control permissions for the property",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "action": {
+                            "type": "object",
+                            "additionalProperties": true
+                          },
+                          "principal": {
+                            "type": "object",
+                            "additionalProperties": true
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Determines whether the property is required"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "enum": [
+                        "NONE",
+                        "SELF"
+                      ]
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "User-defined display name for the property"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "array",
+                        "boolean",
+                        "integer",
+                        "number",
+                        "string"
+                      ]
+                    },
+                    "unique": {
+                      "type": "boolean",
+                      "description": "Determines whether property values must be unique"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "required": {
+              "type": "array",
+              "description": "A collection indicating required property names",
+              "items": {
+                "type": "string"
+              }
+            },
+            "type": {
+              "type": "string",
+              "description": "The object type"
+            }
+          },
+          "additionalProperties": true
+        },
+        "custom": {
+          "type": "object",
+          "description": "All custom profile properties are defined in a profile subschema with the resolution scope `#custom`",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The subschema name"
+            },
+            "properties": {
+              "type": "object",
+              "description": "The `#custom` object properties",
+              "properties": {},
+              "additionalProperties": true
+            },
+            "required": {
+              "type": "array",
+              "description": "A collection indicating required property names",
+              "items": {
+                "type": "string"
+              }
+            },
+            "type": {
+              "type": "string",
+              "description": "The object type"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Description for the schema"
+    },
+    "id": {
+      "type": "string",
+      "description": "URI of group schema"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the schema was last updated"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the schema"
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "object",
+          "properties": {
+            "allOf": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "$ref": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "title": {
+      "type": "string",
+      "description": "User-defined display name for the schema"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of [root schema](https://tools.ietf.org/html/draft-zyp-json-schema-04#section-3.4)"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

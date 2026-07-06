@@ -1,0 +1,21 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "subscriptions": {
+      "description": "Synthetic pause_a_subscription fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/subscription_id_fixture/actions/pause",
+    "body": {
+      "subscriptions": {
+        "description": "Synthetic pause_a_subscription fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

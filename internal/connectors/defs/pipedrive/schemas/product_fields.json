@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_fields",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_nr": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "field_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "add_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "update_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_updated_by_user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_by_user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "active_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "edit_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "index_visible_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "details_visible_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "add_visible_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "important_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "bulk_edit_allowed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "searchable_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "filtering_allowed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sortable_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "mandatory_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "options": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "options_deleted": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "is_subfield": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subfields": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

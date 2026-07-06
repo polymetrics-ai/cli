@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "contact_fixture_1",
+          "email": "fixture1@example.com",
+          "first_name": "Fixture",
+          "last_name": "One",
+          "company": { "id": "co_fixture_1", "name": "Fixture Co" },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "contact_fixture_2",
+          "email": "fixture2@example.com",
+          "first_name": "Fixture",
+          "last_name": "Two",
+          "company": { "id": "co_fixture_1", "name": "Fixture Co" },
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

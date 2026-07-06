@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/sessions/data_series", "query": { "length": "14" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "data": [
+        { "time": "2026-01-01T00:00:00Z", "sessions": 15000 },
+        { "time": "2026-01-02T00:00:00Z", "sessions": 15200 }
+      ]
+    }
+  }
+}

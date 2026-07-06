@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/emails.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "email_fixture_1",
+        "name": "Fixture Campaign 1",
+        "status": "sent",
+        "send_count": "100",
+        "send_now": false,
+        "unique_views": 5,
+        "percent_views": 1.2,
+        "unique_responses": 2,
+        "percent_responses": 0.5,
+        "preview_url": "https://example.com/preview/1",
+        "preview_thumb": "https://example.com/thumb/1.png"
+      }
+    ]
+  }
+}

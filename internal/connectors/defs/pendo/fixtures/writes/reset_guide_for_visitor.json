@@ -1,0 +1,10 @@
+{
+  "record": {
+    "guideId": "guideId_fixture",
+    "visitorId": "visitorId_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/guide/guideId_fixture/visitor/visitorId_fixture/reset"
+  }
+}

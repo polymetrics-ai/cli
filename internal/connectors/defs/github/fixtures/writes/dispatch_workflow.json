@@ -1,0 +1,13 @@
+{
+  "record": {
+    "workflow_id": "ci.yml",
+    "ref": "main"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/actions/workflows/ci.yml/dispatches",
+    "body": {
+      "ref": "main"
+    }
+  }
+}

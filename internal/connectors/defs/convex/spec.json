@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convex Connection Specification",
+  "type": "object",
+  "required": ["access_key", "deployment_url"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Convex deployment access key. Used only for Bearer auth (Authorization: Bearer <access_key>); never logged."
+    },
+    "deployment_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the Convex deployment to read from (e.g. https://my-deployment.convex.cloud)."
+    },
+    "table": {
+      "type": "string",
+      "default": "data",
+      "description": "Convex table name to read documents from (the 'documents' stream). Not used by the 'tables' stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

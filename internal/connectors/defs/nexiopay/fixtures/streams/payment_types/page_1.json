@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/transaction/v3/paymentTypes" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "pt_fixture_1", "name": "visa", "displayName": "Visa", "enabled": true },
+      { "id": "pt_fixture_2", "name": "mastercard", "displayName": "Mastercard", "enabled": true }
+    ]
+  }
+}

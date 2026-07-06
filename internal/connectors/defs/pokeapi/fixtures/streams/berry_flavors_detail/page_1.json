@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/berry-flavor/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "fixture-berry-flavor-detail",
+      "names": [
+
+      ]
+    }
+  }
+}

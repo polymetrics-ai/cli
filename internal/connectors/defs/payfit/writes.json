@@ -1,0 +1,278 @@
+{
+  "actions": [
+    {
+      "name": "create_absence",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/absences",
+      "path_fields": [
+        "company_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contractId",
+          "type",
+          "startDate",
+          "endDate"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "contractId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "object"
+          },
+          "endDate": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; create absence; approval required"
+    },
+    {
+      "name": "cancel_absence",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.company_id }}/absences/{{ record.absence_id }}",
+      "path_fields": [
+        "company_id",
+        "absence_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "absence_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "absence_id": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation; cancels an existing PayFit absence; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_collaborator",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/collaborators",
+      "path_fields": [
+        "company_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "firstName",
+          "lastName",
+          "personalEmail"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "otherName": {
+            "type": "string"
+          },
+          "personalEmail": {
+            "type": "string"
+          },
+          "socialSecurityNumber": {
+            "type": "string"
+          },
+          "personalAddress": {
+            "type": "object"
+          },
+          "birthInformation": {
+            "type": "object"
+          },
+          "personalPhoneNumber": {
+            "type": "string"
+          },
+          "numberOfChildren": {
+            "type": "number"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "inviteCollaborator": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; create collaborator; approval required"
+    },
+    {
+      "name": "create_contract",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/collaborators/{{ record.collaborator_id }}/contracts",
+      "path_fields": [
+        "company_id",
+        "collaborator_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "collaborator_id",
+          "jobTitle",
+          "startDate"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "collaborator_id": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; create contract; approval required"
+    },
+    {
+      "name": "update_contract_health_insurance",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/health-insurance",
+      "path_fields": [
+        "company_id",
+        "contract_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contract_id",
+          "healthInsuranceContractIds"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "contract_id": {
+            "type": "string"
+          },
+          "healthInsuranceContractIds": {
+            "type": "array"
+          },
+          "employeeIsExempted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; update contract health insurance; approval required"
+    },
+    {
+      "name": "update_contract_provident_fund",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/provident-fund",
+      "path_fields": [
+        "company_id",
+        "contract_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contract_id",
+          "providentFundContractIds"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "contract_id": {
+            "type": "string"
+          },
+          "providentFundContractIds": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; update contract provident fund; approval required"
+    },
+    {
+      "name": "request_health_insurance_regularization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/regularization",
+      "path_fields": [
+        "company_id",
+        "contract_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contract_id",
+          "healthInsuranceContractIds",
+          "effectiveDate"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string"
+          },
+          "contract_id": {
+            "type": "string"
+          },
+          "healthInsuranceContractIds": {
+            "type": "array"
+          },
+          "effectiveDate": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external PayFit mutation; request health insurance regularization; approval required"
+    }
+  ]
+}

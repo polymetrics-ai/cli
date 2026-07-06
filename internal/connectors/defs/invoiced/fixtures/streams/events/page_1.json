@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 9001,
+        "object": "event",
+        "created_at": 1767225600,
+        "updated_at": 1767225601,
+        "type": "invoice.created",
+        "data": {
+          "object": {
+            "id": 2001
+          }
+        }
+      }
+    ]
+  }
+}

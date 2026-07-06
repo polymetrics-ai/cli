@@ -1,0 +1,28 @@
+{
+  "record": {
+    "title": "Fixture issue",
+    "body": "Fixture body",
+    "labels": [
+      "bug"
+    ],
+    "assignees": [
+      "octocat"
+    ],
+    "milestone": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/issues",
+    "body": {
+      "title": "Fixture issue",
+      "body": "Fixture body",
+      "labels": [
+        "bug"
+      ],
+      "assignees": [
+        "octocat"
+      ],
+      "milestone": 1
+    }
+  }
+}

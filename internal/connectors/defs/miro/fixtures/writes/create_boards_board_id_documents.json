@@ -1,0 +1,37 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "data": {
+      "title": "title_fixture",
+      "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/documents",
+    "body": {
+      "data": {
+        "title": "title_fixture",
+        "url": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

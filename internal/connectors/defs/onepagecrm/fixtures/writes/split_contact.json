@@ -1,0 +1,13 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "company_name": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id/split",
+    "body": {
+      "company_name": "Fixture Name"
+    }
+  }
+}

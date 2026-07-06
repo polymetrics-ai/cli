@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "accounts": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employee_direct_deposit_accounts/fixture_id",
+    "body": {
+      "accounts": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

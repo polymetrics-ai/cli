@@ -1,0 +1,7 @@
+{
+  "record": { "id": "field_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contact_fields/field_fixture_1"
+  }
+}

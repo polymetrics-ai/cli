@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1001, "identifier": "fixture-user-1" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/headless/course/1001/duplicate",
+    "body": { "identifier": "fixture-user-1" }
+  },
+  "response": { "status": 200, "body": { "id": 1050 } }
+}

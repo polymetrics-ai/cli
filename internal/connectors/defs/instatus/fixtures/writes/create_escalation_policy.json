@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture create escalation policy"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/escalation-policies",
+    "body": {
+      "name": "Fixture create escalation policy"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_escalation_policy_fixture_response"
+    }
+  }
+}

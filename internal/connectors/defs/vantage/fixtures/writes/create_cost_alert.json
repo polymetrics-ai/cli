@@ -1,0 +1,11 @@
+{
+  "record": {
+    "title": "Fixture Cost Alert",
+    "filter": "costs.provider = 'aws'",
+    "threshold": "500.0"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/cost_alerts"
+  }
+}

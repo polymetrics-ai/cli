@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/transaction" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 99, "reference": "ref_fixture_99", "amount": 50000, "currency": "NGN", "status": "success", "domain": "test", "gateway_response": "Successful", "channel": "card", "paid_at": "2026-02-01T00:00:00.000Z", "createdAt": "2026-02-01T00:00:00.000Z" }
+      ],
+      "meta": { "total": 1, "perPage": 100, "page": 1, "pageCount": 1, "next": null, "previous": null }
+    }
+  }
+}

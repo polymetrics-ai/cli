@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/emails/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "1",
+      "name": "Fixture email",
+      "href": "https://app.nutshell.com/rest/email/1",
+      "htmlUrl": "https://app.nutshell.com/email/1",
+      "createdTime": "2026-01-01T00:00:00+0000",
+      "modifiedTime": "2026-01-01T00:00:01+0000"
+    }
+  }
+}

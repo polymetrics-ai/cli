@@ -1,0 +1,19 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "start-date-free-form-string/1.0",
+    "headers": {},
+    "auth": [ { "mode": "none", "when": "{{ config.base_url }}" } ],
+    "pagination": { "type": "none" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "created", "request_param": "created_range", "param_format": "github_date_range", "start_config_key": "start_date" },
+      "schema": "schemas/events.json"
+    }
+  ]
+}

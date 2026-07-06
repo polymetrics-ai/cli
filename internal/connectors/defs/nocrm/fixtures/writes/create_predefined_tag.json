@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/predefined_tags",
+    "body": {
+      "name": "Fixture Name"
+    }
+  }
+}

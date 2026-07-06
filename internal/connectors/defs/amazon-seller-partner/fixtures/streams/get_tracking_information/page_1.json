@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v1/tracking/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "trackingId": "trackingId-fixture-1",
+        "summary": {},
+        "promisedDeliveryDate": "promisedDeliveryDate-fixture-1",
+        "eventHistory": [],
+        "tracking_id": "tracking_id-fixture-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "contact_id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_id/google_contacts"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/businesses", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "businessUuid": "biz_fixture_101",
+          "businessName": "Fixture Business 101",
+          "status": "inactive",
+          "createdAt": "2026-01-03T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

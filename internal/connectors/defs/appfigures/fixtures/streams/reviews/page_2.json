@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews",
+    "query": {
+      "page": "2",
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 101,
+      "pages": 2,
+      "this_page": 2,
+      "reviews": [
+        {
+          "id": "review_fixture_101",
+          "product": 100,
+          "title": "Fixture title 101",
+          "original_title": null,
+          "review": "Great app, fixture review.",
+          "author": "fixture_author_101",
+          "version": "1.0.0",
+          "date": "2026-01-01T00:00:00",
+          "stars": 4,
+          "iso": "US",
+          "has_response": false,
+          "weight": 101
+        }
+      ]
+    }
+  }
+}

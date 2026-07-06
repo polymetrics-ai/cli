@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/stock/symbol", "query": { "exchange": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "AAPL", "displaySymbol": "AAPL", "description": "APPLE INC", "type": "Common Stock", "currency": "USD", "figi": "BBG000B9XRY4", "mic": "XNAS" },
+      { "symbol": "MSFT", "displaySymbol": "MSFT", "description": "MICROSOFT CORP", "type": "Common Stock", "currency": "USD", "figi": "BBG000BPH459", "mic": "XNAS" }
+    ]
+  }
+}

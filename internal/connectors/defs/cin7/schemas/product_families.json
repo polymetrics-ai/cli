@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_families",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "brand": { "type": ["string", "null"] },
+    "uom": { "type": ["string", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

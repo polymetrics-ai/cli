@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/files/query", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "file_1",
+          "type": "file",
+          "attributes": { "name": "fixture-document.pdf", "size": 1024, "state": "available", "deleted": false },
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

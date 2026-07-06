@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/analytics/funnel" },
+  "response": {
+    "status": 200,
+    "body": {
+      "account_id": 1001,
+      "query_date": { "start_date": "2026-01-01", "end_date": "2026-01-31" },
+      "grouped_by": "daily",
+      "funnel": [
+        {
+          "reference_day": "2026-01-15",
+          "visitors_count": 1000,
+          "contacts_count": 100,
+          "qualified_contacts_count": 85,
+          "opportunities_count": 50,
+          "sales_count": 10
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "appsessions_logfiles",
+  "type": "object",
+  "properties": {
+    "Id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

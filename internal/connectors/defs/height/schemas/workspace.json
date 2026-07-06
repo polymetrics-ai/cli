@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "workspace",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "model": { "type": ["string", "null"] },
+    "key": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "urlType": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "createdUserId": { "type": ["string", "null"] },
+    "frozen": { "type": ["boolean", "null"] }
+  }
+}

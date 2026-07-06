@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/items",
+    "query": {
+      "page[number]": "2",
+      "page[size]": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "item_fixture_51",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Form Three",
+            "status": "published",
+            "embed": {
+              "kind": "form"
+            },
+            "timestamps": {
+              "created": "2026-01-05T00:00:00Z",
+              "modified": "2026-01-06T00:00:00Z"
+            }
+          },
+          "links": {
+            "self": "https://api.opinionstage.com/api/v2/items/item_fixture_51"
+          },
+          "relationships": {}
+        }
+      ]
+    }
+  }
+}

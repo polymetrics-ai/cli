@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Auth-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/circles" },
+    "error_map": [
+      { "status": 401, "hint": "glassfrog api key is missing or invalid; re-run pm credentials add glassfrog" },
+      { "status": 403, "hint": "glassfrog account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "glassfrog rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "assignments",
+      "path": "/assignments",
+      "records": { "path": "assignments" },
+      "computed_fields": {
+        "person_id": "{{ record.links.person }}",
+        "role_id": "{{ record.links.role }}"
+      },
+      "schema": "schemas/assignments.json"
+    },
+    {
+      "name": "circles",
+      "path": "/circles",
+      "records": { "path": "circles" },
+      "computed_fields": {
+        "supported_role_id": "{{ record.links.supported_role }}"
+      },
+      "schema": "schemas/circles.json"
+    },
+    {
+      "name": "people",
+      "path": "/people",
+      "records": { "path": "people" },
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "projects" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "records": { "path": "roles" },
+      "schema": "schemas/roles.json"
+    }
+  ]
+}

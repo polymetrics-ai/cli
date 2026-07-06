@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Referrers.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Referrers_visitorsFromSearchEngines": 1,
+      "Referrers_visitorsFromSearchEngines_percent": 2,
+      "Referrers_visitorsFromSocialNetworks": 3,
+      "Referrers_visitorsFromSocialNetworks_percent": 4,
+      "Referrers_visitorsFromAIAssistants": 5,
+      "Referrers_visitorsFromAIAssistants_percent": 6,
+      "Referrers_visitorsFromDirectEntry": 7,
+      "Referrers_visitorsFromDirectEntry_percent": 8,
+      "Referrers_visitorsFromWebsites": 9,
+      "Referrers_visitorsFromWebsites_percent": 10,
+      "Referrers_visitorsFromCampaigns": 11,
+      "Referrers_visitorsFromCampaigns_percent": 12
+    }
+  }
+}

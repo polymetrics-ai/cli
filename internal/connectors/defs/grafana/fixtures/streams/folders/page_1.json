@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": { "type": "dash-folder", "page": "1", "limit": "1000" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 10,
+        "uid": "folder_fixture_1",
+        "orgId": 1,
+        "title": "Fixture Folder 1",
+        "url": "/dashboards/f/folder_fixture_1",
+        "type": "dash-folder",
+        "tags": []
+      },
+      {
+        "id": 11,
+        "uid": "folder_fixture_2",
+        "orgId": 1,
+        "title": "Fixture Folder 2",
+        "url": "/dashboards/f/folder_fixture_2",
+        "type": "dash-folder",
+        "tags": []
+      }
+    ]
+  }
+}

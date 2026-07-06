@@ -1,0 +1,17 @@
+{
+  "record": {
+    "alias_updates": [
+      { "alias_label": "fixture_label", "old_alias_name": "fixture_alias_old", "new_alias_name": "fixture_alias_new" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/alias/update",
+    "body": {
+      "alias_updates": [
+        { "alias_label": "fixture_label", "old_alias_name": "fixture_alias_old", "new_alias_name": "fixture_alias_new" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

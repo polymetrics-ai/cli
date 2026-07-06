@@ -1,0 +1,28 @@
+{
+  "record": {
+    "repositoryId": "repository_id_fixture",
+    "collectionId": "collection_id_fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "icon": "fixture",
+    "locale": "fixture",
+    "displayOrder": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/groups",
+    "body": {
+      "repositoryId": "repository_id_fixture",
+      "collectionId": "collection_id_fixture",
+      "handle": "fixture",
+      "title": "fixture",
+      "icon": "fixture",
+      "locale": "fixture",
+      "displayOrder": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

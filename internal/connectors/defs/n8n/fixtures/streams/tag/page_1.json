@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tags/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "tag_fixture_1",
+      "name": "Fixture tag",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

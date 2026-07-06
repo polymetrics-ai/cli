@@ -1,0 +1,20 @@
+{
+  "record": {
+    "product_id": 1,
+    "label": "label_fixture",
+    "type": "type_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/1/customization-fields",
+    "body": {
+      "label": "label_fixture",
+      "type": "type_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

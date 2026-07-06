@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/versions"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "v1",
+        "date": 1735689600000,
+        "version": 1,
+        "displayVersion": 1.0,
+        "comment": "Initial version",
+        "type": "MAJOR",
+        "visibility": "COMPANY",
+        "organization": { "id": 42 },
+        "user": { "id": 7 }
+      }
+    ]
+  }
+}

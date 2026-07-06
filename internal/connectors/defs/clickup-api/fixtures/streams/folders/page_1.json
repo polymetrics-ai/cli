@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/space/synthetic-conformance-value/folder", "query": { "archived": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "folders": [
+        {
+          "id": "folder_fixture_1",
+          "name": "Fixture Folder",
+          "orderindex": 1,
+          "hidden": false,
+          "archived": false,
+          "task_count": "3",
+          "space": { "id": "space_fixture_1" }
+        }
+      ]
+    }
+  }
+}

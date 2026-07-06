@@ -1,0 +1,204 @@
+{
+  "type": "object",
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "The id of the company"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "The id of the location where this receipt was created"
+    },
+    "pos_id": {
+      "type": "integer",
+      "description": "The ID of the POS system that generated the receipt"
+    },
+    "receipt_id": {
+      "type": "string",
+      "description": "ID available to the client in the POS UI. Be it a GUID, a receipt number, a composite of date and ID and terminal, etc"
+    },
+    "receipt_date": {
+      "type": "string",
+      "description": "ISO8601 date and time in UTC when receipt was created",
+      "format": "date-time"
+    },
+    "receipt_close_date": {
+      "type": "string",
+      "description": "ISO8601 date and time in UTC when receipt was closed",
+      "format": "date-time"
+    },
+    "net_total": {
+      "type": "integer",
+      "description": "Net total of the receipt in cents, pre tax, post-discounts, pre tips"
+    },
+    "gross_total": {
+      "type": "integer",
+      "description": "Gross total of the receipt in cents"
+    },
+    "tips": {
+      "type": "integer",
+      "description": "Total tips in cents"
+    },
+    "total_receipt_discounts": {
+      "type": "integer",
+      "description": "Total receipt discounts in cents"
+    },
+    "total_item_discounts": {
+      "type": "integer",
+      "description": "Item discounts in cents"
+    },
+    "external_user_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID available to the client in the POS UI. Representing the user responsible for creation of receipt."
+    },
+    "revenue_center": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the revenue center"
+    },
+    "receipt_lines": {
+      "type": "array",
+      "description": "Receipt line items",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Internal UUID of the receipt"
+          },
+          "location_id": {
+            "type": "integer",
+            "description": "The id of the location where this receipt was created"
+          },
+          "external_item_id": {
+            "type": "string",
+            "description": "The item ID available to the client"
+          },
+          "external_category_ids": {
+            "type": "array",
+            "description": "The list of category IDs available to the client",
+            "items": {
+              "type": "string"
+            }
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity of this item"
+          },
+          "price": {
+            "type": "integer",
+            "description": "Price in cents"
+          },
+          "gross_item_price": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The item gross price in cents"
+          },
+          "net_item_price": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The item net price pre-tax, post-discounts, pre-tips. In cents"
+          },
+          "item_discount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The item discount in cents"
+          },
+          "created_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ISO8601 date and time in UTC when receipt was created in 7shifts system",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "location_id",
+          "external_item_id",
+          "external_category_ids",
+          "quantity",
+          "price"
+        ]
+      }
+    },
+    "tip_details": {
+      "type": "array",
+      "description": "Tip line items",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Tip type",
+            "enum": [
+              "cc",
+              "cash",
+              "declared",
+              "net",
+              "total",
+              "gratuity"
+            ]
+          },
+          "value": {
+            "type": "integer",
+            "description": "Tip value. In cents"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the receipt",
+      "enum": [
+        "open",
+        "closed",
+        "voided",
+        "deleted"
+      ]
+    },
+    "created_date": {
+      "type": "string",
+      "description": "ISO8601 date and time in UTC when receipt was created in 7shifts system",
+      "format": "date-time"
+    },
+    "modified_date": {
+      "type": "string",
+      "description": "ISO8601 date and time in UTC when receipt was last updated in 7shifts system",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "uuid",
+    "receipt_id",
+    "location_id",
+    "net_total"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_receipt",
+  "x-primary-key": [
+    "uuid"
+  ]
+}

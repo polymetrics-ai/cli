@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/v1.6/variables/var_fixture_1/values/", "query": { "page_size": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        { "value": 21.5, "timestamp": 1767225600000, "context": {} }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads/synthetic-conformance-value/stages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stages": [
+        {
+          "id": "1",
+          "name": "Fixture lead_stages",
+          "href": "https://app.nutshell.com/rest/lead_stages/1",
+          "htmlUrl": "https://app.nutshell.com/lead_stages/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture lead_stages",
+          "href": "https://app.nutshell.com/rest/lead_stages/2",
+          "htmlUrl": "https://app.nutshell.com/lead_stages/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

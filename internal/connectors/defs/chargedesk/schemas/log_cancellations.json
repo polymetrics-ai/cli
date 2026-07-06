@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "log_cancellations",
+  "type": "object",
+  "x-cursor-field": "occurred",
+  "properties": {
+    "subscription_id": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "action": { "type": ["string", "null"] },
+    "method": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] },
+    "ip": { "type": ["string", "null"] },
+    "occurred": { "type": "integer" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/event",
+    "query": { "page": "0", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "event_fixture_1",
+        "name": "Fixture Event 1",
+        "type": "MEETING",
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-01-08T00:00:00Z",
+        "note": "fixture record"
+      }
+    ]
+  }
+}

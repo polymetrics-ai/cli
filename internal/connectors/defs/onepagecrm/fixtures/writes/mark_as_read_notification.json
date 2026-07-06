@@ -1,0 +1,9 @@
+{
+  "record": {
+    "notification_id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/notifications/fixture_id/mark_as_read"
+  }
+}

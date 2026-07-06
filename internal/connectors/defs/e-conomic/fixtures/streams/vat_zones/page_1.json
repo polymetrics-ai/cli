@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/vat-zones", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "vatZoneNumber": 1, "name": "Domestic", "self": "https://restapi.e-conomic.com/vat-zones/1" },
+        { "vatZoneNumber": 2, "name": "EU", "self": "https://restapi.e-conomic.com/vat-zones/2" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

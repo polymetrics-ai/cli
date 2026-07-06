@@ -1,0 +1,28 @@
+{
+  "record": {
+    "content": "Fixture checkout comment",
+    "external_product_id": 999999,
+    "create_from": "checkout_page",
+    "customer": {
+      "first_name": "Fixture",
+      "last_name": "Customer",
+      "email": "customer@example.com",
+      "external_id": 123
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shops",
+    "body": {
+      "content": "Fixture checkout comment",
+      "external_product_id": 999999,
+      "create_from": "checkout_page",
+      "customer": {
+        "first_name": "Fixture",
+        "last_name": "Customer",
+        "email": "customer@example.com",
+        "external_id": 123
+      }
+    }
+  }
+}

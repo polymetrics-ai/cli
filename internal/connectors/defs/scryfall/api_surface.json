@@ -1,0 +1,54 @@
+{
+  "api": "Scryfall REST API (https://api.scryfall.com)",
+  "docs": "https://scryfall.com/docs/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2-fan-out migration: the 2 legacy-parity read streams only (cards, sets); Scryfall's public catalog endpoints beyond card search and set listing are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/cards/search",
+      "covered_by": {
+        "stream": "cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sets",
+      "covered_by": {
+        "stream": "sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-card lookup not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/symbology",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mana symbology reference data not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk-data",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk data export not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/card-names",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static reference catalog, not a syncable object stream"
+      }
+    }
+  ]
+}

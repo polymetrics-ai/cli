@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/forms"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "forms_fixture_1",
+          "name": "Fixture forms",
+          "status": "fixture",
+          "date_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

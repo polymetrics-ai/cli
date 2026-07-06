@@ -1,0 +1,12 @@
+{
+  "record": {
+    "party": { "type": "person", "firstName": "Fixture", "lastName": "Contact" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/parties",
+    "body": {
+      "party": { "type": "person", "firstName": "Fixture", "lastName": "Contact" }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/getItems" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "itemID": "item_fixture_1",
+          "itemType": "product",
+          "sku": "sku-1",
+          "itemCode": "code-1",
+          "name": "Fixture Item",
+          "categoryID": "cat_fixture_1",
+          "categoryName": "Fixture Category",
+          "description": "Deterministic fixture item.",
+          "price": 25.0,
+          "stockInventory": true,
+          "itemQuantity": 10,
+          "reorderThreshold": 2,
+          "reorderNeeded": false,
+          "stopSell": false,
+          "stopSellMet": false,
+          "taxes": [],
+          "totalTaxes": 0,
+          "fees": [],
+          "totalFees": 0,
+          "priceWithoutFeesAndTaxes": 25.0,
+          "grandTotal": 25.0
+        }
+      ],
+      "count": 1
+    }
+  }
+}

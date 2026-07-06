@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "prj_fixture_1",
+    "name": "updated-project"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v9/projects/prj_fixture_1"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "conversation_id": 101,
+    "type": "chat",
+    "body": "Fixture message body",
+    "userId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/101/messages",
+    "body": {
+      "type": "chat",
+      "body": "Fixture message body",
+      "userId": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 9001, "type": "chat", "body": "Fixture message body" } }
+  }
+}

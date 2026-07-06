@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the contact for this customer. Only set in customer API objects."
+    },
+    "customers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The customer ID"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "socialProfiles": {
+      "type": "array",
+      "description": "Array of JSON objects containing social links or profiles.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The type of social profile.",
+            "enum": [
+              "linkedin",
+              "x",
+              "facebook",
+              "instagram",
+              "website"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "The URL of the social profile."
+          }
+        }
+      }
+    },
+    "secondaryEmails": {
+      "type": "array",
+      "description": "Array of secondary email addresses for the contact.",
+      "items": {
+        "type": "string",
+        "format": "email"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  }
+}

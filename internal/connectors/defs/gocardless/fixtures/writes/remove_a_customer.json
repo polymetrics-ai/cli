@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "customer_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customers/customer_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

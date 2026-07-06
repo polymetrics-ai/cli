@@ -1,0 +1,557 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "first_name", "last_name"],
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "password": { "type": "string" },
+          "roles": { "type": "array", "items": { "type": "string" } },
+          "bio": { "type": "string" },
+          "company": { "type": "string" },
+          "headline": { "type": "string" },
+          "send_welcome_email": { "type": "boolean" },
+          "external_id": { "type": "string" }
+        }
+      },
+      "risk": "creates a new Thinkific user account; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "roles": { "type": "array", "items": { "type": "string" } },
+          "bio": { "type": "string" },
+          "company": { "type": "string" },
+          "headline": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing user's profile, email, password, or role assignment; a role change can grant or revoke site-admin/course-admin access"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a Thinkific user account and revokes their access to every enrolled course; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_enrollment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/enrollments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "course_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "activated_at": { "type": "string" },
+          "expiry_date": { "type": "string" }
+        }
+      },
+      "risk": "grants a user access to a course; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_enrollment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/enrollments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "activated_at": { "type": "string" },
+          "expiry_date": { "type": "string" }
+        }
+      },
+      "risk": "changes an enrollment's activation or expiry date, which can extend or revoke a user's access window to a course"
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/coupons",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string" },
+          "note": { "type": "string" },
+          "quantity": { "type": "integer" }
+        }
+      },
+      "risk": "creates a discount coupon code redeemable at checkout; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/coupons/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "code"],
+        "properties": {
+          "id": { "type": "integer" },
+          "code": { "type": "string" },
+          "note": { "type": "string" },
+          "quantity_used": { "type": "string" },
+          "quantity": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing coupon's code, quantity, or usage counter; can change a customer-facing discount code that has already been shared"
+    },
+    {
+      "name": "delete_coupon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/coupons/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a coupon; any customer relying on the code at checkout will see it rejected"
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/collections",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description", "slug"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "creates a new course category (Collection); low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_collection",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/collections/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "renames or re-slugs an existing category, which changes its public landing-page URL"
+    },
+    {
+      "name": "delete_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/collections/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a course category; any public page linking to it will 404"
+    },
+    {
+      "name": "add_products_to_collection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/public/v1/collection_memberships/{{ record.collection_id }}",
+      "path_fields": ["collection_id"],
+      "body_type": "json",
+      "body_fields": ["product_ids"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "product_ids"],
+        "properties": {
+          "collection_id": { "type": "integer" },
+          "product_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "adds one or more products (courses/bundles) to a public category, changing what appears on that category's landing page"
+    },
+    {
+      "name": "remove_products_from_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/collection_memberships/{{ record.collection_id }}",
+      "path_fields": ["collection_id"],
+      "body_type": "json",
+      "body_fields": ["product_ids"],
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "product_ids"],
+        "properties": {
+          "collection_id": { "type": "integer" },
+          "product_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "removes one or more products from a public category, which can hide previously-listed courses from that category's landing page"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/groups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": { "name": { "type": "string" } }
+      },
+      "risk": "creates a new Group (used for bulk enrollment/organization management); low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/groups/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes a Group; members lose any group-scoped access/reporting association"
+    },
+    {
+      "name": "add_user_to_groups",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/public/v1/group_users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_names", "user_id"],
+        "properties": {
+          "user_id": { "type": "integer" },
+          "group_names": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "adds a user to one or more existing Groups by name; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "create_instructor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/instructors",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name", "slug"],
+        "properties": {
+          "user_id": { "type": "integer" },
+          "title": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "bio": { "type": "string" },
+          "slug": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "creates a new public Instructor profile; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_instructor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/instructors/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "first_name", "last_name", "slug"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "bio": { "type": "string" },
+          "slug": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "mutates a public Instructor profile's name, bio, or slug, changing what's shown on every course page that credits them"
+    },
+    {
+      "name": "delete_instructor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/instructors/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes an Instructor profile; any course crediting them loses that attribution"
+    },
+    {
+      "name": "create_promotion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/promotions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "discount_type", "amount"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "starts_at": { "type": "string" },
+          "expires_at": { "type": "string" },
+          "discount_type": { "type": "string", "enum": ["fixed", "percentage"] },
+          "amount": { "type": "number" },
+          "product_ids": { "type": "array", "items": { "type": "integer" } },
+          "coupon_ids": { "type": "array", "items": { "type": "integer" } },
+          "duration": { "type": "number" }
+        }
+      },
+      "risk": "creates a discount promotion applied automatically at checkout for the targeted products; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_promotion",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/promotions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "discount_type", "amount"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "starts_at": { "type": "string" },
+          "expires_at": { "type": "string" },
+          "discount_type": { "type": "string", "enum": ["fixed", "percentage"] },
+          "amount": { "type": "number" },
+          "product_ids": { "type": "array", "items": { "type": "integer" } },
+          "coupon_ids": { "type": "array", "items": { "type": "integer" } },
+          "duration": { "type": "number" }
+        }
+      },
+      "risk": "mutates an active discount promotion's amount, type, or eligible products, directly changing checkout pricing"
+    },
+    {
+      "name": "delete_promotion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/promotions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "permanently deletes an active discount promotion; checkout pricing reverts to full price immediately"
+    },
+    {
+      "name": "create_site_script",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/site_scripts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description", "page_scopes", "category"],
+        "properties": {
+          "src": { "type": "string" },
+          "content": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "page_scopes": { "type": "array", "items": { "type": "string" } },
+          "location": { "type": "string", "enum": ["head", "footer"] },
+          "load_method": { "type": "string", "enum": ["async", "defer", "default"] },
+          "category": { "type": "string", "enum": ["functional", "analytics", "marketing"] }
+        }
+      },
+      "risk": "injects arbitrary third-party HTML/JavaScript into every scoped page of the public site; high-risk external mutation (site-wide script injection), approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_site_script",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/public/v1/site_scripts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name", "description", "page_scopes", "category"],
+        "properties": {
+          "id": { "type": "integer" },
+          "src": { "type": "string" },
+          "content": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "page_scopes": { "type": "array", "items": { "type": "string" } },
+          "location": { "type": "string", "enum": ["head", "footer"] },
+          "load_method": { "type": "string", "enum": ["async", "defer", "default"] },
+          "category": { "type": "string", "enum": ["functional", "analytics", "marketing"] }
+        }
+      },
+      "risk": "changes the injected third-party HTML/JavaScript payload site-wide; high-risk external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_site_script",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/public/v1/site_scripts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "removes an injected site script from every scoped page immediately"
+    },
+    {
+      "name": "create_course_review",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/public/v1/course_reviews",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["approved", "rating", "review_text", "title", "user_id"],
+        "properties": {
+          "rating": { "type": "number" },
+          "title": { "type": "string" },
+          "review_text": { "type": "string" },
+          "user_id": { "type": "integer" },
+          "course_id": { "type": "integer" },
+          "approved": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a course review that, once approved, is publicly visible on the course landing page; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "approve_product_publish_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/public/v1/product_publish_requests/{{ record.id }}/approve",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "user_id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "response_text": { "type": "string" },
+          "notify_requester": { "type": "boolean" }
+        }
+      },
+      "risk": "approves a pending course-publish request, making the course publicly visible/purchasable; approval required"
+    },
+    {
+      "name": "deny_product_publish_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/public/v1/product_publish_requests/{{ record.id }}/deny",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "user_id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "response_text": { "type": "string" },
+          "notify_requester": { "type": "boolean" }
+        }
+      },
+      "risk": "denies a pending course-publish request, blocking the course from going live"
+    }
+  ]
+}

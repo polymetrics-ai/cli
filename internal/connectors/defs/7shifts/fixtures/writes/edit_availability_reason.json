@@ -1,0 +1,21 @@
+{
+  "record": {
+    "availability_reason_id": 1001,
+    "reason": "fixture reason",
+    "comments_required": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/availability_reasons/1001",
+    "body": {
+      "reason": "fixture reason",
+      "comments_required": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

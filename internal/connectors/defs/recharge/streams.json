@@ -1,0 +1,47 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Recharge-Version": "{{ config.api_version }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Recharge-Access-Token", "value": "{{ secrets.access_token }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "next_cursor",
+      "page_size": 250
+    },
+    "check": { "method": "GET", "path": "/customers", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "recharge access_token is missing or invalid; re-run pm credentials add recharge" },
+      { "status": 403, "hint": "recharge account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "recharge rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": { "limit": "250" },
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": { "limit": "250" },
+      "records": { "path": "subscriptions" },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "query": { "limit": "250" },
+      "records": { "path": "orders" },
+      "schema": "schemas/orders.json"
+    }
+  ]
+}

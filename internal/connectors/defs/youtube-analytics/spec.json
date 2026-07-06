@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "YouTube Analytics Connection Specification",
+  "type": "object",
+  "required": ["client_id", "refresh_token"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client ID for the refresh-token grant. Used only in the token-request form; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 client secret (optional for some client types). Used only in the token-request form; never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Long-lived Google OAuth 2.0 refresh token. Exchanged for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is out of scope for this connector (credentials layer already owns it)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://youtubereporting.googleapis.com/v1",
+      "description": "YouTube Reporting API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://oauth2.googleapis.com/token",
+      "description": "Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
+    },
+    "scopes": {
+      "type": "string",
+      "default": "https://www.googleapis.com/auth/yt-analytics.readonly",
+      "description": "OAuth scope requested on the token-refresh grant."
+    },
+    "content_owner_id": {
+      "type": "string",
+      "description": "Optional content-owner ID; sent as the onBehalfOfContentOwner query parameter for content-owner-scoped accounts."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Reporting job ID the 'reports' stream is scoped to (required only when reading the reports stream)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

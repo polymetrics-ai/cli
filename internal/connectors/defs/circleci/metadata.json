@@ -1,0 +1,23 @@
+{
+  "name": "circleci",
+  "display_name": "CircleCI",
+  "description": "Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedules, environment variables, checkout keys, and workflow insights through the CircleCI v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://circleci.com/docs/api/v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external CircleCI API read of CI project, pipeline, workflow, job, context, schedule, environment-variable, checkout-key, and workflow-insight metadata",
+    "write": "external mutation of CircleCI project configuration: schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a live CI run"
+  }
+}

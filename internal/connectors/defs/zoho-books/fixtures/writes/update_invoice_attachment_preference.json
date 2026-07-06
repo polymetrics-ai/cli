@@ -1,0 +1,17 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value",
+    "can_send_in_mail": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/synthetic-conformance-value/attachment"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

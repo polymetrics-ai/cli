@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/edit/tours",
+    "query": {
+      "limit": "50",
+      "before": "t_fixture_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tours": [
+        {
+          "id": "t_fixture_3",
+          "name": "Fixture Tour 3",
+          "style": "auto",
+          "position": 2,
+          "segment_ids": [],
+          "tag_ids": [],
+          "published_at": null,
+          "dashboard_url": "https://app.chameleon.io/data/tours/t_fixture_3",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-04T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

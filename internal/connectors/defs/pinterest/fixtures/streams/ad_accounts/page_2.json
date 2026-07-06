@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts", "query": { "bookmark": "fixture-bookmark-page2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "act_fixture_3",
+          "name": "Fixture Ad Account Three",
+          "owner": { "username": "fixture_user" },
+          "country": "US",
+          "currency": "USD"
+        }
+      ],
+      "bookmark": null
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/timeoff/leave_types", "query": { "page": "1", "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "company_id": 1,
+          "name": "Holiday",
+          "identifier": "holiday",
+          "color": "#00FF00",
+          "approval_required": true,
+          "active": true
+        }
+      ]
+    }
+  }
+}

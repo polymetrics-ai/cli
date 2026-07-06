@@ -1,0 +1,22 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value",
+    "role": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/members/synthetic-conformance-value",
+    "body": {
+      "role": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "add_member_to_organization_team_by_id_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/projects/{{ config.project_id }}/events/", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "posthog api_key is missing or invalid; re-run pm credentials add posthog" },
+      { "status": 403, "hint": "posthog api_key lacks access for this project" },
+      { "status": 429, "class": "rate_limited", "hint": "posthog rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/api/projects/{{ config.project_id }}/events/",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "persons",
+      "path": "/api/projects/{{ config.project_id }}/persons/",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "schema": "schemas/persons.json",
+      "projection": "passthrough"
+    }
+  ]
+}

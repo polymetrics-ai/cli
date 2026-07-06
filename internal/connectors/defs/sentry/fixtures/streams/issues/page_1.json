@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/api/0/projects/synthetic-conformance-value/synthetic-conformance-value/issues/", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "fixture_issue_1", "shortId": "FIX-1", "title": "NullPointerException in handler", "culprit": "fixture.module in handler", "level": "error", "status": "unresolved", "type": "error", "count": "3", "userCount": 2, "firstSeen": "2026-01-01T00:00:00Z", "lastSeen": "2026-01-02T00:00:00Z" }
+    ]
+  }
+}

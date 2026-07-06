@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/buyers", "query": { "response_format": "common", "page": "2", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "buyer_fixture_3",
+          "name": "Fixture Buyer 3",
+          "cloud": "gcp",
+          "domain": "fixture3.example.com",
+          "status": "pending",
+          "listing_id": "listing_fixture_1",
+          "cloud_account_id": "333333333333",
+          "latest_contract_id": null,
+          "last_modified_at": "2026-01-01T00:00:02.000000Z"
+        }
+      ],
+      "next": null,
+      "count": 3
+    }
+  }
+}

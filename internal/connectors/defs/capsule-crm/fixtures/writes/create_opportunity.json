@@ -1,0 +1,20 @@
+{
+  "record": {
+    "opportunity": {
+      "name": "Fixture Opportunity",
+      "party": { "id": 1 },
+      "milestone": { "id": 100 }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/opportunities",
+    "body": {
+      "opportunity": {
+        "name": "Fixture Opportunity",
+        "party": { "id": 1 },
+        "milestone": { "id": 100 }
+      }
+    }
+  }
+}

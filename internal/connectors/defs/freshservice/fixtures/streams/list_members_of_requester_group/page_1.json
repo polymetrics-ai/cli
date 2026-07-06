@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/requester_groups/synthetic-conformance-value/members",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requesters": [
+        {
+          "id": "list_members_of_requester_group",
+          "name": "Fixture list_members_of_requester_group",
+          "subject": "Fixture list_members_of_requester_group",
+          "description": "Fixture list_members_of_requester_group record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

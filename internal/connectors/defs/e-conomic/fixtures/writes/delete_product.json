@@ -1,0 +1,11 @@
+{
+  "record": { "productNumber": "P-101" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/products/P-101"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

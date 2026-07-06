@@ -1,0 +1,5 @@
+{
+  "record": { "idcustomer": 401 },
+  "expect": { "method": "DELETE", "path": "/customers/401" },
+  "response": { "status": 200, "body": {} }
+}

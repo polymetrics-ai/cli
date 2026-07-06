@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Eventbrite Connection Specification",
+  "type": "object",
+  "required": ["private_token"],
+  "properties": {
+    "private_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Eventbrite private OAuth token, sent as a Bearer credential. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.eventbriteapi.com/v3",
+      "description": "Eventbrite API base URL override for tests or proxies."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Eventbrite organization id the 'events' stream is scoped to (required for that stream; substituted into the organization-scoped path)."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Eventbrite event id the 'attendees', 'orders', and 'ticket_classes' streams are scoped to (required for those streams; substituted into the event-scoped path)."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects changed at or after this time are read (events, attendees, orders, ticket_classes)."
+    }
+  }
+}

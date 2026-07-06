@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "journalists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "fullName": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "headline": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "imageUrl": { "type": ["string", "null"] },
+    "twitterHandle": { "type": ["string", "null"] },
+    "twitterBio": { "type": ["string", "null"] },
+    "linkedinUrl": { "type": ["string", "null"] },
+    "facebookUrl": { "type": ["string", "null"] },
+    "instagramUrl": { "type": ["string", "null"] },
+    "websiteUrl": { "type": ["string", "null"] },
+    "avgMonthlyPosts": { "type": ["integer", "null"] },
+    "topSources": { "type": ["array", "null"] },
+    "topTopics": { "type": ["array", "null"] },
+    "topCategories": { "type": ["array", "null"] },
+    "topCountries": { "type": ["array", "null"] },
+    "topLabels": { "type": ["array", "null"] },
+    "locations": { "type": ["array", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

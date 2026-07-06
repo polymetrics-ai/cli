@@ -1,0 +1,12 @@
+{
+  "record": {
+    "pr_url": "https://github.com/fixture-owner/fixture-repo/pull/123"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/organizations/synthetic-conformance-value/pr-reviews",
+    "body": {
+      "pr_url": "https://github.com/fixture-owner/fixture-repo/pull/123"
+    }
+  }
+}

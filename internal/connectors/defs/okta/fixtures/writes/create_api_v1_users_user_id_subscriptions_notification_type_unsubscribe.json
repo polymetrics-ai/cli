@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "notification_type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/users/synthetic-conformance-value/subscriptions/synthetic-conformance-value/unsubscribe"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

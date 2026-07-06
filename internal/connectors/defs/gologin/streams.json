@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/browser/v2", "query": { "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "gologin api_key is missing or invalid; re-run pm credentials add gologin" },
+      { "status": 403, "hint": "gologin api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "gologin rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "profiles",
+      "path": "/browser/v2",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 30
+      },
+      "records": { "path": "profiles" },
+      "incremental": { "cursor_field": "updatedAt" },
+      "schema": "schemas/profiles.json"
+    },
+    {
+      "name": "folders",
+      "path": "/folders",
+      "records": { "path": "" },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "user",
+      "path": "/user",
+      "records": { "path": "" },
+      "incremental": { "cursor_field": "createdAt" },
+      "schema": "schemas/user.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags/all",
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    }
+  ]
+}

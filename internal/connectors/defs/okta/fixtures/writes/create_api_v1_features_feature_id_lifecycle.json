@@ -1,0 +1,14 @@
+{
+  "record": {
+    "feature_id": "synthetic-conformance-value",
+    "lifecycle": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/features/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

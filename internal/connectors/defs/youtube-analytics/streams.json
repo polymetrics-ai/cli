@@ -1,0 +1,78 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "youtube-analytics",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}",
+        "scopes": "{{ config.scopes }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": { "method": "GET", "path": "/reportTypes" },
+    "error_map": [
+      { "status": 401, "hint": "youtube-analytics OAuth refresh grant failed or access token expired; re-run pm credentials add youtube-analytics" },
+      { "status": 403, "hint": "youtube-analytics account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "youtube-analytics API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "jobs" },
+      "computed_fields": {
+        "report_type_id": "{{ record.reportTypeId }}",
+        "create_time": "{{ record.createTime }}",
+        "expire_time": "{{ record.expireTime }}",
+        "system_managed": "{{ record.systemManaged }}"
+      },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "report_types",
+      "path": "/reportTypes",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "reportTypes" },
+      "computed_fields": {
+        "deprecate_time": "{{ record.deprecateTime }}",
+        "system_managed": "{{ record.systemManaged }}"
+      },
+      "schema": "schemas/report_types.json"
+    },
+    {
+      "name": "reports",
+      "path": "/jobs/{{ config.job_id }}/reports",
+      "query": {
+        "pageSize": "{{ config.page_size }}",
+        "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "reports" },
+      "computed_fields": {
+        "job_id": "{{ record.jobId }}",
+        "start_time": "{{ record.startTime }}",
+        "end_time": "{{ record.endTime }}",
+        "create_time": "{{ record.createTime }}",
+        "job_expire_time": "{{ record.jobExpireTime }}",
+        "download_url": "{{ record.downloadUrl }}"
+      },
+      "schema": "schemas/reports.json"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "company_id": "co_fixture_1",
+    "company_name": "Fixture Co",
+    "user_id": "1001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/add-to-company",
+    "body": {
+      "company_id": "co_fixture_1"
+    }
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

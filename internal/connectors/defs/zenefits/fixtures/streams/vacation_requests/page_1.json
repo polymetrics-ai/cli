@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/time_off/vacation_requests" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "vacation_request_fixture_1",
+            "status": "requested",
+            "start_date": "2026-01-01",
+            "end_date": "2026-01-03",
+            "hours": "24.00",
+            "reason": "Fixture reason",
+            "created_date": "2025-12-20",
+            "approved_date": null,
+            "deny_reason": null,
+            "vacation_type": { "object": "/meta/ref/detail", "ref_object": "/time_off/vacation_types", "url": "https://api.zenefits.com/time_off/vacation_types/vacation_type_fixture_1" },
+            "person": { "object": "/meta/ref/detail", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/people/person_fixture_1" },
+            "creator": { "object": "/meta/ref/detail", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/people/person_fixture_1" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/time_off/vacation_requests"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

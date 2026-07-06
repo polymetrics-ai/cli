@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "popular_videos",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "url": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "user": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "record": {
+    "date": "2026-01-10T00:00:00Z",
+    "currency": "DKK",
+    "customer": { "customerNumber": 1 },
+    "paymentTerms": { "paymentTermsNumber": 1 },
+    "layout": { "layoutNumber": 1 },
+    "lines": [
+      { "lineNumber": 1, "description": "Fixture line item", "quantity": 1, "unitNetPrice": 500 }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/drafts",
+    "body": {
+      "date": "2026-01-10T00:00:00Z",
+      "currency": "DKK",
+      "customer": { "customerNumber": 1 },
+      "paymentTerms": { "paymentTermsNumber": 1 },
+      "layout": { "layoutNumber": 1 },
+      "lines": [
+        { "lineNumber": 1, "description": "Fixture line item", "quantity": 1, "unitNetPrice": 500 }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "draftInvoiceNumber": 3, "self": "https://restapi.e-conomic.com/invoices/drafts/3" }
+  }
+}

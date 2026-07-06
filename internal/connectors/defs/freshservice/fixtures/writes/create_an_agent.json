@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_an_agent",
+    "description": "Fixture create_an_agent record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/agents",
+    "body": {
+      "name": "Fixture create_an_agent",
+      "description": "Fixture create_an_agent record"
+    }
+  }
+}

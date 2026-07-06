@@ -1,0 +1,12 @@
+{
+  "record": {
+    "start": "2026-01-01T09:00:00Z",
+    "duration": 3600,
+    "created_with": "polymetrics-fixture",
+    "description": "Fixture time entry"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workspaces/synthetic-conformance-value/time_entries"
+  }
+}

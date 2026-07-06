@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "branding_themes",
+  "type": "object",
+  "x-primary-key": [
+    "BrandingThemeID"
+  ],
+  "properties": {
+    "BrandingThemeID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LogoUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SortOrder": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "CreatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

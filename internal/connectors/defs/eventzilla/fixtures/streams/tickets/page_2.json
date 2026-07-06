@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/events/1/tickets", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tickets": [
+        {
+          "id": 201,
+          "event_id": 1,
+          "title": "General Admission",
+          "ticket_type": "general",
+          "price": 25.0,
+          "quantity_total": 100,
+          "is_visible": true,
+          "sales_start_date": "2025-12-01",
+          "sales_end_date": "2026-01-01"
+        }
+      ]
+    }
+  }
+}

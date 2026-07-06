@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/sessions", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "session_fixture_1",
+          "room_id": "room_fixture_1",
+          "customer_id": "cust_fixture",
+          "active": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "last": ""
+    }
+  }
+}

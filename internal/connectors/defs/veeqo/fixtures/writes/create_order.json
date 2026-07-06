@@ -1,0 +1,19 @@
+{
+  "record": {
+    "order": {
+      "channel_id": 1,
+      "number": "fixture-order-1",
+      "line_items_attributes": [
+        {
+          "sellable_id": 1,
+          "quantity": "1",
+          "price_per_unit": "10.00"
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders"
+  }
+}

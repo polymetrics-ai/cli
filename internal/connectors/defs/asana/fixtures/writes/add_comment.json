@@ -1,0 +1,15 @@
+{
+  "record": {
+    "task_gid": "fixture_task_1",
+    "data": {
+      "text": "Fixture comment text"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/fixture_task_1/stories",
+    "body": {
+      "data": { "text": "Fixture comment text" }
+    }
+  }
+}

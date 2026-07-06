@@ -1,0 +1,11 @@
+{
+  "record": {
+    "start_time": "2026-01-01T09:00:00Z",
+    "end_time": "2026-01-01T17:00:00Z",
+    "location_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/shifts"
+  }
+}

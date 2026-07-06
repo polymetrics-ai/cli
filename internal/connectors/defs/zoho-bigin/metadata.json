@@ -1,0 +1,28 @@
+{
+  "name": "zoho-bigin",
+  "display_name": "Zoho Bigin",
+  "description": "Reads and writes Zoho Bigin pipelines, contacts, companies, products, tasks, events, calls, notes, users, tags, module metadata, and generic module records via the Zoho OAuth 2.0 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://www.bigin.com/developer/docs/apis/v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Zoho Bigin API read of pipeline, contact, company, product, task, event, call, note, user, tag, module-metadata, and generic module-record data",
+    "write": "external mutation of Zoho Bigin CRM records (create/update/upsert/delete on the configured module, plus note create/delete); moves real business data, approval required",
+    "approval": "required for all write actions; reads require no approval"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven by internal/connectors/hooks/zoho-bigin's hooks_test.go (the AuthHook's real OAuth2 refresh-grant path, gmail precedent) -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

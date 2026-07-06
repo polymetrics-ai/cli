@@ -1,0 +1,28 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "session_id": "synthetic-conformance-value",
+    "entityType": "USERS",
+    "profiles": [
+      {
+        "externalId": "external_id_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/sessions/synthetic-conformance-value/bulk-delete",
+    "body": {
+      "entityType": "USERS",
+      "profiles": [
+        {
+          "externalId": "external_id_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "salesorder_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/salesorders/synthetic-conformance-value/attachment"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

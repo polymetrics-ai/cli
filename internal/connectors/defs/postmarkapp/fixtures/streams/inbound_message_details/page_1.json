@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages/inbound/synthetic-conformance-value/details"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "MessageID": "inbound-fixture-detail",
+      "Subject": "Fixture Inbound",
+      "Status": "Processed"
+    }
+  }
+}

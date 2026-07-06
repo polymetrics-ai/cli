@@ -1,0 +1,140 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.merchant_id }}", "password": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "xsolla merchant_id/api_key are missing or invalid; re-run pm credentials add xsolla" },
+      { "status": 403, "hint": "xsolla merchant account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "xsolla rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/projects.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "orders",
+      "path": "/projects/{{ config.project_id }}/orders",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transactions",
+      "path": "/projects/{{ config.project_id }}/transactions",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transactions_search",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transactions/search.json",
+      "records": { "path": "" },
+      "query": {
+        "datetime_from": { "template": "{{ config.datetime_from }}", "omit_when_absent": true },
+        "datetime_to": { "template": "{{ config.datetime_to }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "offset",
+        "limit_param": "limit",
+        "page_size": 100
+      },
+      "schema": "schemas/transactions_search.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "transaction_id": "{{ record.transaction.id }}",
+        "transaction_create_date": "{{ record.transaction.create_date }}"
+      }
+    },
+    {
+      "name": "transactions_registry",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transactions/registry.json",
+      "records": { "path": "" },
+      "query": {
+        "datetime_from": { "template": "{{ config.datetime_from }}", "omit_when_absent": true },
+        "datetime_to": { "template": "{{ config.datetime_to }}", "omit_when_absent": true },
+        "in_transfer_currency": "0"
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/transactions_registry.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "transaction_id": "{{ record.transaction.id }}",
+        "transaction_transfer_date": "{{ record.transaction.transfer_date }}"
+      }
+    },
+    {
+      "name": "payouts",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transfers",
+      "records": { "path": "" },
+      "query": {
+        "datetime_from": { "template": "{{ config.datetime_from }}", "omit_when_absent": true },
+        "datetime_to": { "template": "{{ config.datetime_to }}", "omit_when_absent": true }
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payouts.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "payout_id": "{{ record.payout.id }}",
+        "payout_date": "{{ record.payout.date }}"
+      }
+    },
+    {
+      "name": "payout_currency_breakdown",
+      "path": "/merchants/{{ config.merchant_id }}/reports/transactions/summary/transfer",
+      "records": { "path": "" },
+      "query": {
+        "datetime_from": { "template": "{{ config.datetime_from }}", "omit_when_absent": true },
+        "datetime_to": { "template": "{{ config.datetime_to }}", "omit_when_absent": true }
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payout_currency_breakdown.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "financial_reports",
+      "path": "/merchants/{{ config.merchant_id }}/reports",
+      "records": { "path": "" },
+      "query": {
+        "datetime_from": "{{ config.datetime_from }}",
+        "datetime_to": "{{ config.datetime_to }}"
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/financial_reports.json",
+      "projection": "passthrough"
+    }
+  ]
+}

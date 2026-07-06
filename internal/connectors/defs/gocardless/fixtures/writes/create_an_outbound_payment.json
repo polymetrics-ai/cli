@@ -1,0 +1,20 @@
+{
+  "record": {
+    "outbound_payments": {
+      "description": "Synthetic create_an_outbound_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/outbound_payments",
+    "body": {
+      "outbound_payments": {
+        "description": "Synthetic create_an_outbound_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

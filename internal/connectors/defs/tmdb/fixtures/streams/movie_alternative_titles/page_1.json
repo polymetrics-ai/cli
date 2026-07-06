@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/movie/synthetic-conformance-value/alternative_titles"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture movie_alternative_titles",
+      "name": "Fixture movie_alternative_titles",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

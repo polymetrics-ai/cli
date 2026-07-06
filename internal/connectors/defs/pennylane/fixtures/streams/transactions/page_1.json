@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/transactions",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": 1, "label": "Fixture Transaction 1", "attachment_required": false, "date": "2026-01-01", "outstanding_balance": "0.0" }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

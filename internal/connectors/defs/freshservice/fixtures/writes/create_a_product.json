@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_product",
+    "description": "Fixture create_a_product record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products",
+    "body": {
+      "name": "Fixture create_a_product",
+      "description": "Fixture create_a_product record"
+    }
+  }
+}

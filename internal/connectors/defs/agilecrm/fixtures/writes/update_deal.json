@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1", "milestone": "Won" },
+  "expect": {
+    "method": "PUT",
+    "path": "/opportunity/partial-update"
+  }
+}

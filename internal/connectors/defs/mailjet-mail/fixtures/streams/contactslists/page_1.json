@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/contactslist" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Count": 2,
+      "Total": 2,
+      "Data": [
+        {
+          "ID": 2001,
+          "Name": "Fixture List 1",
+          "Address": "fixture-list-1",
+          "CreatedAt": "2026-01-01T00:00:00Z",
+          "IsDeleted": false,
+          "SubscriberCount": 42
+        },
+        {
+          "ID": 2002,
+          "Name": "Fixture List 2",
+          "Address": "fixture-list-2",
+          "CreatedAt": "2026-01-01T00:01:00Z",
+          "IsDeleted": false,
+          "SubscriberCount": 7
+        }
+      ]
+    }
+  }
+}

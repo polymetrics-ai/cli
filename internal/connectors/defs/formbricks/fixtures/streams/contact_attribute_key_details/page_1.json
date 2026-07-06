@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/management/contact-attribute-keys" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cak_fixture_1",
+          "key": "email",
+          "name": "email",
+          "type": "default",
+          "workspaceId": "wrk_fixture_1"
+        }
+      ]
+    }
+  }
+}

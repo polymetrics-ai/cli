@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/Leads", "query": { "top": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "LEAD_ID": 301,
+        "FIRST_NAME": "Fixture301",
+        "LAST_NAME": "Example",
+        "EMAIL": "lead1@example.com",
+        "ORGANISATION_NAME": "Fixture Org 1",
+        "LEAD_STATUS_ID": 1,
+        "LEAD_SOURCE_ID": 1,
+        "CONVERTED": false,
+        "DATE_CREATED_UTC": "2026-01-01 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-01 00:00:00"
+      }
+    ]
+  }
+}

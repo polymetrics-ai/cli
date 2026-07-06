@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_events",
+  "type": "object",
+  "properties": {
+    "platform": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calendar_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration_interval": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description_md": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geo_address_json": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coordinate": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "meeting_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cover_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "registration_questions": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "waitlist_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "registration_open": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "feedback_email": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "api_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_api_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calendar_api_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zoom_meeting_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geo_latitude": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geo_longitude": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "managing_calendars": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

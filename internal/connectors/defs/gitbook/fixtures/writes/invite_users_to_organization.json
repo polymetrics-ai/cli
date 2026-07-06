@@ -1,0 +1,20 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "emails": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/invites",
+    "body": {
+      "emails": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "invite_users_to_organization_fixture_1"
+    }
+  }
+}

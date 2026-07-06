@@ -1,0 +1,116 @@
+{
+  "actions": [
+    {
+      "name": "create_or_update_subscriber",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "api/contact.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "is_unsubscribed": { "type": "integer" },
+          "is_deleted": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates or updates a subscriber (matched by email) on the connected Smaily account; does not trigger automation workflows; approval required"
+    },
+    {
+      "name": "create_or_update_segment",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "api/list.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "filter_type", "filter_data"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "filter_type": { "type": "string" },
+          "filter_data": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a new segment or, when id is set, overwrites an existing segment's filter definition on the connected Smaily account; approval required"
+    },
+    {
+      "name": "unsubscribe_recipient",
+      "kind": "update",
+      "method": "POST",
+      "path": "api/unsubscribe.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "campaign_id"],
+        "properties": {
+          "email": { "type": "string" },
+          "campaign_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; unsubscribes a recipient from a specific campaign (reflected in that campaign's statistics); approval required"
+    },
+    {
+      "name": "send_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/message/send.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["autoresponder_id", "to"],
+        "properties": {
+          "autoresponder_id": { "type": "integer" },
+          "to": { "type": "array", "items": { "type": "string" } },
+          "context": { "type": "object" },
+          "attachments": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; sends a real, individually-templated outbound email to real recipients using an automation workflow's template (without triggering the workflow itself); approval required"
+    },
+    {
+      "name": "trigger_automation_workflow",
+      "kind": "custom",
+      "method": "POST",
+      "path": "api/autoresponder.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["autoresponder", "addresses"],
+        "properties": {
+          "autoresponder": { "type": "integer" },
+          "addresses": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; opts in subscribers and triggers a 'form submitted' automation workflow for them, updating subscriber data before any scheduled messages send; approval required"
+    },
+    {
+      "name": "launch_ab_test",
+      "kind": "create",
+      "method": "POST",
+      "path": "api/split.php",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["splits", "list", "size", "win_at"],
+        "properties": {
+          "splits": { "type": "array" },
+          "list": { "type": "string" },
+          "size": { "type": "integer" },
+          "condition": { "type": "string" },
+          "win_at": { "type": "string" },
+          "save_as_draft": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates and, unless save_as_draft is set, immediately launches a real A/B test campaign send to a percentage of a real subscriber list, with the winning variant auto-sent to the remainder at win_at; approval required"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "gitlab",
+  "display_name": "GitLab",
+  "description": "Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.",
+  "integration_type": "api",
+  "docs_url": "https://docs.gitlab.com/ee/api/rest/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external GitLab API read of projects, groups, users, and issues"
+  }
+}

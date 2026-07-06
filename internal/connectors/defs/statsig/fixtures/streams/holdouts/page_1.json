@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/holdouts", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "holdout_fixture_1",
+          "name": "Fixture Holdout One",
+          "description": "fixture record",
+          "idType": "userID",
+          "status": "active",
+          "isEnabled": true,
+          "passPercentage": 10,
+          "gateIDs": [],
+          "experimentIDs": [],
+          "layerIDs": [],
+          "isGlobal": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "subscribers": [
+      { "email": "fixture1@example.com" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/unsubscribes",
+    "body": {
+      "subscribers": [
+        { "email": "fixture1@example.com" }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscribers": [{ "id": "sub_fixture_1", "status": "unsubscribed" }] }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "metricool",
+  "display_name": "Metricool",
+  "description": "Reads Metricool brand profiles and per-brand Instagram, Facebook, LinkedIn, and TikTok post analytics through the Metricool REST API.",
+  "integration_type": "api",
+  "docs_url": "https://help.metricool.com/en/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Metricool API read of brand-scoped social analytics for the configured user_id/blog_ids",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

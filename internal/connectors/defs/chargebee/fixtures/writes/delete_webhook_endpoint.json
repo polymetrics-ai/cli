@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "wh_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook_endpoints/wh_fixture_1/delete"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/activities"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        {
+          "id": "act_fixture_1",
+          "organization": { "id": 42 },
+          "createdAt": 1735689600000,
+          "action": "AGREEMENT_VIEW",
+          "status": "SUCCESS",
+          "userOrganization": { "id": 1 },
+          "visibility": "COMPANY",
+          "params": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys/survey_fixture_1/responses",
+    "query": { "items_per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination_data": { "has_more": false, "next_url": null },
+      "data": [
+        {
+          "uuid": "resp_fixture_1",
+          "respondent_uuid": "7232ddb7-d08a-4fcb-9de8-f77ab73f227e",
+          "collected_at": "2026-01-03T00:00:00.000000Z",
+          "url": "https://example.com/survey",
+          "device_type": "Desktop",
+          "operating_system": "macOS",
+          "language": null,
+          "questions": [
+            { "question_id": 372624, "question_type": "single", "answer": { "id": 0, "content": "Very happy" } }
+          ]
+        }
+      ]
+    }
+  }
+}

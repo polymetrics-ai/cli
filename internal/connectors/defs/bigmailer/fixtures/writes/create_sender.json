@@ -1,0 +1,15 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "identity": "example.com",
+    "identity_type": "domain"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/senders",
+    "body": {
+      "identity": "example.com",
+      "identity_type": "domain"
+    }
+  }
+}

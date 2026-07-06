@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/cadences",
+    "query": {
+      "updated_at[gte]": "2020-01-01T00:00:00Z",
+      "sort_by": "updated_at",
+      "sort_direction": "ASC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 301,
+          "name": "Fixture Cadence One",
+          "team_cadence": false,
+          "shared": true,
+          "remove_bounces_enabled": true,
+          "remove_replies_enabled": true,
+          "archived_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 302,
+          "name": "Fixture Cadence Two",
+          "team_cadence": true,
+          "shared": true,
+          "remove_bounces_enabled": true,
+          "remove_replies_enabled": false,
+          "archived_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "metadata": { "paging": { "per_page": 2, "current_page": 1, "next_page": null, "total_pages": 1 } }
+    }
+  }
+}

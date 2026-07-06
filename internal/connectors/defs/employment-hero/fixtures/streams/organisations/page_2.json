@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations",
+    "query": {
+      "page_index": "2",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "org_fixture_101",
+            "name": "Fixture Org 101",
+            "country": "AU",
+            "phone": "+61000000000",
+            "logo_url": "https://example.com/logo.png"
+          }
+        ],
+        "page_index": 2,
+        "item_per_page": 100,
+        "total_items": 101,
+        "total_pages": 2
+      }
+    }
+  }
+}

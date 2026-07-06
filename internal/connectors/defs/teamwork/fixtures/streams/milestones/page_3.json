@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/2/milestones.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "milestones": []
+    }
+  }
+}

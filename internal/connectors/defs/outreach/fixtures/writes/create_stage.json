@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "stage",
+      "attributes": {
+        "name": "Fixture Create Stage"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/stages",
+    "body": {
+      "data": {
+        "type": "stage",
+        "attributes": {
+          "name": "Fixture Create Stage"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

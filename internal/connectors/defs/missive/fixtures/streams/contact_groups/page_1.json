@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/contact_groups", "query": { "limit": "50", "offset": "0", "kind": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contact_groups": [
+        { "id": "group_fixture_1", "name": "Fixture Group One", "kind": "group" }
+      ]
+    }
+  }
+}

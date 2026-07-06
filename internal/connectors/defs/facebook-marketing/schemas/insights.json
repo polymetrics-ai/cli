@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "insights",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "campaign_id": { "type": ["string", "null"] },
+    "campaign_name": { "type": ["string", "null"] },
+    "adset_id": { "type": ["string", "null"] },
+    "adset_name": { "type": ["string", "null"] },
+    "ad_id": { "type": ["string", "null"] },
+    "ad_name": { "type": ["string", "null"] },
+    "impressions": { "type": ["string", "null"] },
+    "clicks": { "type": ["string", "null"] },
+    "spend": { "type": ["string", "null"] },
+    "reach": { "type": ["string", "null"] },
+    "frequency": { "type": ["string", "null"] },
+    "cpc": { "type": ["string", "null"] },
+    "cpm": { "type": ["string", "null"] },
+    "ctr": { "type": ["string", "null"] },
+    "date_start": { "type": ["string", "null"] },
+    "date_stop": { "type": ["string", "null"] }
+  }
+}

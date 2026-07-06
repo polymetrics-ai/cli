@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/profiles",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "profileId": 111222333,
+        "countryCode": "US",
+        "currencyCode": "USD",
+        "timezone": "America/Los_Angeles",
+        "dailyBudget": 0,
+        "accountInfo": {
+          "marketplaceStringId": "ATVPDKIKX0DER",
+          "type": "seller",
+          "name": "Fixture Account 1",
+          "id": "ENTITY_FIXTURE_1"
+        }
+      },
+      {
+        "profileId": 111222334,
+        "countryCode": "US",
+        "currencyCode": "USD",
+        "timezone": "America/Los_Angeles",
+        "dailyBudget": 0,
+        "accountInfo": {
+          "marketplaceStringId": "ATVPDKIKX0DER",
+          "type": "vendor",
+          "name": "Fixture Account 2",
+          "id": "ENTITY_FIXTURE_2"
+        }
+      }
+    ]
+  }
+}

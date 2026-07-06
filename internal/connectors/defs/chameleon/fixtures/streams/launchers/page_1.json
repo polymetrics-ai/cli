@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/edit/launchers",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "launchers": [
+        {
+          "id": "l_fixture_1",
+          "title": "Fixture Launcher 1",
+          "type": "launcher",
+          "state": "published",
+          "is_live": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

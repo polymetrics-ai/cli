@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "uuid": "cus_fixture_1",
+          "external_id": "ext_1",
+          "name": "Fixture One Inc",
+          "email": "fixture1@example.com",
+          "status": "Active",
+          "customer-since": "2026-01-01T00:00:00Z",
+          "company": "Fixture One Inc",
+          "country": "US",
+          "city": "San Francisco",
+          "currency": "USD",
+          "mrr": 1000,
+          "arr": 12000,
+          "billing-system-type": "Stripe"
+        },
+        {
+          "uuid": "cus_fixture_2",
+          "external_id": "ext_2",
+          "name": "Fixture Two Inc",
+          "email": "fixture2@example.com",
+          "status": "Active",
+          "customer-since": "2026-01-02T00:00:00Z",
+          "company": "Fixture Two Inc",
+          "country": "US",
+          "city": "Oakland",
+          "currency": "USD",
+          "mrr": 2000,
+          "arr": 24000,
+          "billing-system-type": "Stripe"
+        }
+      ],
+      "has_more": true,
+      "cursor": "fixture_cursor_page2"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "bit.ly/fixture1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/bitlinks/bit.ly/fixture1"
+  }
+}

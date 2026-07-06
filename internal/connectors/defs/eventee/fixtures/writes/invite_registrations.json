@@ -1,0 +1,29 @@
+{
+  "record": {
+    "registrations": [
+      {
+        "email": "registrant@example.test",
+        "first_name": "Fixture",
+        "last_name": "Registrant",
+        "send_email": false,
+        "group_id": 81
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/registration/invite",
+    "body": {
+      "registrations": [
+        {
+          "email": "registrant@example.test",
+          "first_name": "Fixture",
+          "last_name": "Registrant",
+          "send_email": false,
+          "group_id": 81
+        }
+      ]
+    }
+  },
+  "response": { "status": 200, "body": { "url": "https://example.com/event/fixture", "qr_code": "https://example.com/qr.png" } }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/answers/search",
+    "query": {
+      "page_size": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "count": 2,
+      "answers": [
+        {
+          "id": 101,
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z",
+          "choice": "fixture1@example.com",
+          "comment": null
+        },
+        {
+          "id": 102,
+          "created": "2026-01-02T00:00:00Z",
+          "modified": "2026-01-02T00:00:00Z",
+          "choice": "fixture2@example.com",
+          "comment": null
+        }
+      ]
+    }
+  }
+}

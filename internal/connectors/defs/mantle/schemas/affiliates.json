@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "affiliates",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "email",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "paypalEmail": {
+      "type": "string"
+    },
+    "lastTransactionDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastAppInstallationDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agreedToTermsAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "startCountingCommissionFrom": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "user": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The affiliate user's profile and location information. Will be null if the affiliate is not linked to a user account.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of user account (person or company)"
+        },
+        "addressLine1": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Primary address line"
+        },
+        "addressLine2": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Secondary address line"
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "City"
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "State or province"
+        },
+        "postalCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Postal or ZIP code"
+        },
+        "countryCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 3166-1 alpha-2 country code"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags applied to this affiliate",
+      "items": {
+        "type": "string"
+      }
+    },
+    "memberships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "affiliateLink": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The affiliate link for this membership. This link can be used by the affiliate to refer customers to the app. Will be null if affiliate link attribution is not supported for this program."
+          },
+          "affiliateProgramId": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "object"
+          },
+          "rulesOverride": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "handle": {
+            "type": "string"
+          },
+          "invitedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inviteAcceptedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "inviteRejectedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "approvalRequestedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "approvedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rejectedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "agreedToTermsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "group": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affiliateProgramId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "rules": {
+                "type": "object"
+              },
+              "createdAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "updatedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "affiliateProgramId",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    }
+  }
+}

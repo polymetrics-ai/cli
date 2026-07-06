@@ -1,0 +1,22 @@
+{
+  "record": {
+    "repositories": [
+      {
+        "repository_path": "fixture-owner/fixture-repo",
+        "branch_names": ["main"]
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3beta1/organizations/synthetic-conformance-value/repositories/indexing",
+    "body": {
+      "repositories": [
+        {
+          "repository_path": "fixture-owner/fixture-repo",
+          "branch_names": ["main"]
+        }
+      ]
+    }
+  }
+}

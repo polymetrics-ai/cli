@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/repositories/synthetic-conformance-value/", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "name": "repositories-fixture-1",
+          "namespace": "fixtureuser",
+          "repository_type": "image",
+          "status": 1,
+          "status_description": "active",
+          "description": "Fixture repositories record 1",
+          "is_private": false,
+          "star_count": 1,
+          "pull_count": 1000,
+          "storage_size": 2048,
+          "last_updated": "2026-01-01T00:00:00Z",
+          "last_modified": "2026-01-01T00:00:00Z",
+          "date_registered": "2026-01-01T00:00:00Z"
+        },
+        {
+          "name": "repositories-fixture-2",
+          "namespace": "fixtureuser",
+          "repository_type": "image",
+          "status": 1,
+          "status_description": "active",
+          "description": "Fixture repositories record 2",
+          "is_private": false,
+          "star_count": 2,
+          "pull_count": 2000,
+          "storage_size": 4096,
+          "last_updated": "2026-01-02T00:00:00Z",
+          "last_modified": "2026-01-02T00:00:00Z",
+          "date_registered": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

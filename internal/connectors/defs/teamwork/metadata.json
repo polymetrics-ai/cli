@@ -1,0 +1,24 @@
+{
+  "name": "teamwork",
+  "display_name": "Teamwork",
+  "description": "Reads Teamwork projects, people, companies, tags, time entries, tasklists, milestones, and tasks, and writes approved project/tasklist/task/milestone/company/time-entry mutations through the Teamwork API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.teamwork.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Teamwork API read of project, people, company, tag, time-entry, tasklist, milestone, and task data",
+    "write": "external Teamwork API mutation (create/update projects, tasklists, tasks, milestones, companies, time entries; complete tasks)",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Api-Version": "{{ config.x_api_version }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Token token=", "value": "{{ secrets.api }}", "when": "{{ secrets.api }}" },
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Token token=", "value": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page[number]",
+      "size_param": "page[size]",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/jobs" },
+    "error_map": [
+      { "status": 401, "hint": "teamtailor api key is missing or invalid; re-run pm credentials add teamtailor" },
+      { "status": 429, "class": "rate_limited", "hint": "teamtailor rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "title": "{{ record.attributes.title }}",
+        "created_at": "{{ record.attributes.created-at }}"
+      },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "candidates",
+      "path": "/candidates",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "first_name": "{{ record.attributes.first-name }}",
+        "last_name": "{{ record.attributes.last-name }}",
+        "email": "{{ record.attributes.email }}",
+        "created_at": "{{ record.attributes.created-at }}"
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "job_applications",
+      "path": "/job-applications",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "created_at": "{{ record.attributes.created-at }}",
+        "candidate_id": "{{ record.relationships.candidate.data.id }}",
+        "job_id": "{{ record.relationships.job.data.id }}"
+      },
+      "schema": "schemas/job_applications.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "city": "{{ record.attributes.city }}",
+        "country": "{{ record.attributes.country }}"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/stages.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}",
+        "email": "{{ record.attributes.email }}",
+        "created_at": "{{ record.attributes.created-at }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "regions",
+      "path": "/regions",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "name": "{{ record.attributes.name }}"
+      },
+      "schema": "schemas/regions.json"
+    }
+  ]
+}

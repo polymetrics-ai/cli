@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/candidates"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "id": "candidate_fixture_1",
+          "name": "Fixture Candidate",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

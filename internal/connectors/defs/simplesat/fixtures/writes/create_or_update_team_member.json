@@ -1,0 +1,20 @@
+{
+  "record": {
+    "external_id": "fixture-team-1",
+    "email": "team.fixture@example.com",
+    "name": "Fixture Team Member"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/team-members",
+    "body": {
+      "external_id": "fixture-team-1",
+      "email": "team.fixture@example.com",
+      "name": "Fixture Team Member"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 601, "external_id": "fixture-team-1" }
+  }
+}

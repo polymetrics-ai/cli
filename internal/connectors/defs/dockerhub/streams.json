@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next"
+    },
+    "check": { "method": "GET", "path": "/repositories/{{ config.docker_username }}/" },
+    "error_map": [
+      { "status": 404, "hint": "dockerhub username/organization or repository not found" },
+      { "status": 429, "class": "rate_limited", "hint": "dockerhub rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "repositories",
+      "path": "/repositories/{{ config.docker_username }}/",
+      "query": { "page": "1", "page_size": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "schema": "schemas/repositories.json"
+    },
+    {
+      "name": "tags",
+      "path": "/repositories/{{ config.docker_username }}/{{ config.repository }}/tags",
+      "query": { "page": "1", "page_size": "{{ config.page_size }}" },
+      "records": { "path": "results" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "namespace",
+      "path": "/users/{{ config.docker_username }}/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/namespace.json"
+    },
+    {
+      "name": "repository_detail",
+      "path": "/repositories/{{ config.docker_username }}/{{ config.repository }}/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/repository_detail.json"
+    },
+    {
+      "name": "tag_detail",
+      "path": "/repositories/{{ config.docker_username }}/{{ config.repository }}/tags/{{ config.tag }}/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/tag_detail.json"
+    }
+  ]
+}

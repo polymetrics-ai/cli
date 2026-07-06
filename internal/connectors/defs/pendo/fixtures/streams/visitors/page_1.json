@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/visitor",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vis_fixture_1",
+          "email": "fixture1@example.com",
+          "accountId": "acc_fixture",
+          "lastVisit": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "vis_fixture_2",
+          "email": "fixture2@example.com",
+          "accountId": "acc_fixture",
+          "lastVisit": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next": "2"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payments",
+    "query": {
+      "limit": "50",
+      "created_at[gt]": "2020-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payments": [
+        {
+          "id": "PM_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "charge_date": "2026-01-02",
+          "amount": 1000,
+          "amount_refunded": 0,
+          "currency": "GBP",
+          "status": "confirmed",
+          "description": "Fixture payment 1",
+          "reference": "REF-1",
+          "links": {
+            "mandate": "MD_fixture_1",
+            "payout": "PO_fixture_1"
+          }
+        },
+        {
+          "id": "PM_fixture_2",
+          "created_at": "2026-01-02T00:00:00Z",
+          "charge_date": "2026-01-03",
+          "amount": 2000,
+          "amount_refunded": 0,
+          "currency": "GBP",
+          "status": "confirmed",
+          "description": "Fixture payment 2",
+          "reference": "REF-2",
+          "links": {
+            "mandate": "MD_fixture_1",
+            "payout": "PO_fixture_1"
+          }
+        }
+      ],
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": "PM_fixture_2"
+        }
+      }
+    }
+  }
+}

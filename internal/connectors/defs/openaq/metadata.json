@@ -1,0 +1,23 @@
+{
+  "name": "openaq",
+  "display_name": "OpenAQ",
+  "description": "Reads OpenAQ air quality reference data (countries, parameters, locations, instruments, and manufacturers) from the OpenAQ v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.openaq.org/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external OpenAQ API read of public air-quality reference data",
+    "approval": "none; read-only public reference API"
+  }
+}

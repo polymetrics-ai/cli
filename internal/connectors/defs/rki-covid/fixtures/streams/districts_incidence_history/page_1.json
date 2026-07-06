@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/districts/history/incidence",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "02000": {
+          "ags": "02000",
+          "name": "Hamburg",
+          "history": [
+            {
+              "date": "2021-01-01T00:00:00.000Z",
+              "weekIncidence": 12.3
+            }
+          ]
+        }
+      }
+    }
+  }
+}

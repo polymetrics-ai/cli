@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metricool Connection Specification",
+  "type": "object",
+  "required": ["user_id"],
+  "properties": {
+    "user_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Metricool user token, sent as the X-Mc-Auth header on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.metricool.com/api",
+      "description": "Metricool API base URL override for tests or proxies."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Metricool account userId, sent as the userId query parameter on every request."
+    },
+    "blog_ids": {
+      "type": "string",
+      "description": "Comma-separated list of Metricool blogId values to fan out over for the instagram_posts, facebook_posts, linkedin_posts, and tiktok_posts streams (Metricool's analytics API is not paginated; each blog is a separate request). Required for those four streams (no auto-discovery fallback); the brands stream is account-wide and unaffected."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional lower bound of the analytics date range. instagram_posts/facebook_posts/linkedin_posts (Metricool's /stats/* endpoints) expect YYYYMMDD (e.g. 20260101); tiktok_posts (the /v2/analytics endpoint) expects YYYY-MM-DDTHH:MM:SS (e.g. 2026-01-01T00:00:00). Supply the value already formatted for the stream being read; the engine sends it verbatim with no reformatting."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional upper bound of the analytics date range, same per-stream format rules as start_date."
+    }
+  }
+}

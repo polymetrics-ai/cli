@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "updated": { "type": "integer", "description": "Unix seconds." }
+  }
+}

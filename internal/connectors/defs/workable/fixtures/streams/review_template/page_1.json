@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/review-cycles/templates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "Fixture Review Template"
+    }
+  }
+}

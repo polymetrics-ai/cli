@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issue_voice_calls",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration_sec": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "from_phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recordings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "to_phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

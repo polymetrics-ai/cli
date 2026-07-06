@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "table": "fixture_value",
+    "row_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/employees/fixture_id/tables/fixture_value/fixture_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

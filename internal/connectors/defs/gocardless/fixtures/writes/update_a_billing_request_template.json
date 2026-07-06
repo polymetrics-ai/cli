@@ -1,0 +1,21 @@
+{
+  "record": {
+    "billing_request_template_id": "billing_request_template_id_fixture",
+    "billing_request_templates": {
+      "description": "Synthetic update_a_billing_request_template fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/billing_request_templates/billing_request_template_id_fixture",
+    "body": {
+      "billing_request_templates": {
+        "description": "Synthetic update_a_billing_request_template fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

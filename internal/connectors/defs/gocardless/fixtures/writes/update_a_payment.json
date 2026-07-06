@@ -1,0 +1,21 @@
+{
+  "record": {
+    "payment_id": "payment_id_fixture",
+    "payments": {
+      "description": "Synthetic update_a_payment fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/payments/payment_id_fixture",
+    "body": {
+      "payments": {
+        "description": "Synthetic update_a_payment fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

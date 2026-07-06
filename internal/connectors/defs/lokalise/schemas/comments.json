@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "comments",
+  "type": "object",
+  "properties": {
+    "comment_id": {
+      "type": "integer"
+    },
+    "key_id": {
+      "type": "integer"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "added_by": {
+      "type": "integer"
+    },
+    "added_by_email": {
+      "type": "string"
+    },
+    "added_at": {
+      "type": "string"
+    },
+    "added_at_timestamp": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "comment_id"
+  ]
+}

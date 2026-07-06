@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/products",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "prod_fixture_1",
+          "object": "product",
+          "store_identifier": "com.fixture.monthly",
+          "type": "subscription",
+          "created_at": 1735689600000,
+          "app_id": "synthetic-conformance-value",
+          "display_name": "Fixture Product",
+          "state": "active"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/products"
+    }
+  }
+}

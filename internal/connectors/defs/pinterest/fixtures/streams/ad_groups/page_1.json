@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts/synthetic-conformance-value/ad_groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "adgroup_fixture_1",
+          "ad_account_id": "synthetic-conformance-value",
+          "campaign_id": "campaign_fixture_1",
+          "name": "Fixture Ad Group One",
+          "status": "ACTIVE",
+          "created_time": 1767225601,
+          "updated_time": 1767225601
+        },
+        {
+          "id": "adgroup_fixture_2",
+          "ad_account_id": "synthetic-conformance-value",
+          "campaign_id": "campaign_fixture_1",
+          "name": "Fixture Ad Group Two",
+          "status": "ACTIVE",
+          "created_time": 1767225602,
+          "updated_time": 1767225602
+        }
+      ],
+      "bookmark": null
+    }
+  }
+}

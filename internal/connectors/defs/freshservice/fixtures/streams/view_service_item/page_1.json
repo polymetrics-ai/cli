@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/service_catalog/items/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "service_item": {
+        "id": "view_service_item",
+        "name": "Fixture view_service_item",
+        "subject": "Fixture view_service_item",
+        "description": "Fixture view_service_item record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

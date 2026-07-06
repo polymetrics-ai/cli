@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/custom_profile_field_definitions",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "label": "Fixture Field 1",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 2,
+          "label": "Fixture Field 2",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 3,
+          "label": "Fixture Field 3",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 4,
+          "label": "Fixture Field 4",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 5,
+          "label": "Fixture Field 5",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 6,
+          "label": "Fixture Field 6",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 7,
+          "label": "Fixture Field 7",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 8,
+          "label": "Fixture Field 8",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 9,
+          "label": "Fixture Field 9",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 10,
+          "label": "Fixture Field 10",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 11,
+          "label": "Fixture Field 11",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 12,
+          "label": "Fixture Field 12",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 13,
+          "label": "Fixture Field 13",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 14,
+          "label": "Fixture Field 14",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 15,
+          "label": "Fixture Field 15",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 16,
+          "label": "Fixture Field 16",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 17,
+          "label": "Fixture Field 17",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 18,
+          "label": "Fixture Field 18",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 19,
+          "label": "Fixture Field 19",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 20,
+          "label": "Fixture Field 20",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 21,
+          "label": "Fixture Field 21",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 22,
+          "label": "Fixture Field 22",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 23,
+          "label": "Fixture Field 23",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 24,
+          "label": "Fixture Field 24",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 25,
+          "label": "Fixture Field 25",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 26,
+          "label": "Fixture Field 26",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 27,
+          "label": "Fixture Field 27",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 28,
+          "label": "Fixture Field 28",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 29,
+          "label": "Fixture Field 29",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 30,
+          "label": "Fixture Field 30",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 31,
+          "label": "Fixture Field 31",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 32,
+          "label": "Fixture Field 32",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 33,
+          "label": "Fixture Field 33",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 34,
+          "label": "Fixture Field 34",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 35,
+          "label": "Fixture Field 35",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 36,
+          "label": "Fixture Field 36",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 37,
+          "label": "Fixture Field 37",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 38,
+          "label": "Fixture Field 38",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 39,
+          "label": "Fixture Field 39",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 40,
+          "label": "Fixture Field 40",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 41,
+          "label": "Fixture Field 41",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 42,
+          "label": "Fixture Field 42",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 43,
+          "label": "Fixture Field 43",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 44,
+          "label": "Fixture Field 44",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 45,
+          "label": "Fixture Field 45",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 46,
+          "label": "Fixture Field 46",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 47,
+          "label": "Fixture Field 47",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 48,
+          "label": "Fixture Field 48",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 49,
+          "label": "Fixture Field 49",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 50,
+          "label": "Fixture Field 50",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 51,
+          "label": "Fixture Field 51",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 52,
+          "label": "Fixture Field 52",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 53,
+          "label": "Fixture Field 53",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 54,
+          "label": "Fixture Field 54",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 55,
+          "label": "Fixture Field 55",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 56,
+          "label": "Fixture Field 56",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 57,
+          "label": "Fixture Field 57",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 58,
+          "label": "Fixture Field 58",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 59,
+          "label": "Fixture Field 59",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 60,
+          "label": "Fixture Field 60",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 61,
+          "label": "Fixture Field 61",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 62,
+          "label": "Fixture Field 62",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 63,
+          "label": "Fixture Field 63",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 64,
+          "label": "Fixture Field 64",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 65,
+          "label": "Fixture Field 65",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 66,
+          "label": "Fixture Field 66",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 67,
+          "label": "Fixture Field 67",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 68,
+          "label": "Fixture Field 68",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 69,
+          "label": "Fixture Field 69",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 70,
+          "label": "Fixture Field 70",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 71,
+          "label": "Fixture Field 71",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 72,
+          "label": "Fixture Field 72",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 73,
+          "label": "Fixture Field 73",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 74,
+          "label": "Fixture Field 74",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 75,
+          "label": "Fixture Field 75",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 76,
+          "label": "Fixture Field 76",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 77,
+          "label": "Fixture Field 77",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 78,
+          "label": "Fixture Field 78",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 79,
+          "label": "Fixture Field 79",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 80,
+          "label": "Fixture Field 80",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 81,
+          "label": "Fixture Field 81",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 82,
+          "label": "Fixture Field 82",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 83,
+          "label": "Fixture Field 83",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 84,
+          "label": "Fixture Field 84",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 85,
+          "label": "Fixture Field 85",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 86,
+          "label": "Fixture Field 86",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 87,
+          "label": "Fixture Field 87",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 88,
+          "label": "Fixture Field 88",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 89,
+          "label": "Fixture Field 89",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 90,
+          "label": "Fixture Field 90",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 91,
+          "label": "Fixture Field 91",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 92,
+          "label": "Fixture Field 92",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 93,
+          "label": "Fixture Field 93",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 94,
+          "label": "Fixture Field 94",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 95,
+          "label": "Fixture Field 95",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 96,
+          "label": "Fixture Field 96",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 97,
+          "label": "Fixture Field 97",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 98,
+          "label": "Fixture Field 98",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 99,
+          "label": "Fixture Field 99",
+          "field_type": "text",
+          "required": false
+        },
+        {
+          "id": 100,
+          "label": "Fixture Field 100",
+          "field_type": "text",
+          "required": false
+        }
+      ]
+    }
+  }
+}

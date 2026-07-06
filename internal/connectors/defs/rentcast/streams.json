@@ -1,0 +1,137 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Api-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/properties", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "rentcast api key is missing or invalid; re-run pm credentials add rentcast" },
+      { "status": 403, "hint": "rentcast account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "rentcast rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "properties",
+      "path": "/properties",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "last_seen_date"
+      },
+      "computed_fields": {
+        "address": "{{ record.formattedAddress }}",
+        "property_type": "{{ record.propertyType }}",
+        "zip_code": "{{ record.zipCode }}",
+        "last_seen_date": "{{ record.lastSeenDate }}"
+      },
+      "schema": "schemas/properties.json"
+    },
+    {
+      "name": "sale_listings",
+      "path": "/listings/sale",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "last_seen_date"
+      },
+      "computed_fields": {
+        "address": "{{ record.formattedAddress }}",
+        "property_type": "{{ record.propertyType }}",
+        "last_seen_date": "{{ record.lastSeenDate }}"
+      },
+      "schema": "schemas/sale_listings.json"
+    },
+    {
+      "name": "rental_listings",
+      "path": "/listings/rental/long-term",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "last_seen_date"
+      },
+      "computed_fields": {
+        "address": "{{ record.formattedAddress }}",
+        "property_type": "{{ record.propertyType }}",
+        "last_seen_date": "{{ record.lastSeenDate }}"
+      },
+      "schema": "schemas/rental_listings.json"
+    },
+    {
+      "name": "markets",
+      "path": "/markets",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "zip_code": "{{ record.zipCode }}"
+      },
+      "schema": "schemas/markets.json"
+    },
+    {
+      "name": "value_estimates",
+      "path": "/avm/value",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.formattedAddress }}",
+        "address": "{{ record.formattedAddress }}"
+      },
+      "schema": "schemas/value_estimates.json"
+    },
+    {
+      "name": "rental_estimates",
+      "path": "/avm/rent/long-term",
+      "records": { "path": "" },
+      "query": {
+        "address": { "template": "{{ config.address }}", "omit_when_absent": true },
+        "city": { "template": "{{ config.city }}", "omit_when_absent": true },
+        "state": { "template": "{{ config.state }}", "omit_when_absent": true },
+        "zipCode": { "template": "{{ config.zip_code }}", "omit_when_absent": true },
+        "propertyType": { "template": "{{ config.property_type }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.formattedAddress }}",
+        "address": "{{ record.formattedAddress }}"
+      },
+      "schema": "schemas/rental_estimates.json"
+    }
+  ]
+}

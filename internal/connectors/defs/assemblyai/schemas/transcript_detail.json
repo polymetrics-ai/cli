@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transcript_detail",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "audio_url": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "error": { "type": ["string", "null"] },
+    "audio_duration": { "type": ["number", "null"] },
+    "audio_channels": { "type": ["integer", "null"] },
+    "language_code": { "type": ["string", "null"] },
+    "language_confidence": { "type": ["number", "null"] },
+    "punctuate": { "type": ["boolean", "null"] },
+    "format_text": { "type": ["boolean", "null"] },
+    "speaker_labels": { "type": ["boolean", "null"] },
+    "auto_chapters": { "type": ["boolean", "null"] },
+    "auto_highlights": { "type": ["boolean", "null"] },
+    "entity_detection": { "type": ["boolean", "null"] },
+    "sentiment_analysis": { "type": ["boolean", "null"] },
+    "summarization": { "type": ["boolean", "null"] },
+    "summary": { "type": ["string", "null"] },
+    "redact_pii": { "type": ["boolean", "null"] },
+    "confidence": { "type": ["number", "null"] },
+    "webhook_url": { "type": ["string", "null"] },
+    "webhook_status_code": { "type": ["integer", "null"] }
+  }
+}

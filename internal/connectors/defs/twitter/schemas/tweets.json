@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tweets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "text": { "type": ["string", "null"] },
+    "author_id": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "conversation_id": { "type": ["string", "null"] },
+    "lang": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "in_reply_to_user_id": { "type": ["string", "null"] },
+    "possibly_sensitive": { "type": ["boolean", "null"] },
+    "public_metrics": { "type": ["object", "null"] }
+  }
+}

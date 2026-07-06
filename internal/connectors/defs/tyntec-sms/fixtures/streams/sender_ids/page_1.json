@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/sms/v1/sender-ids", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "sender_ids": [
+        { "id": "sid_fixture_1", "name": "FIXTURE1" },
+        { "id": "sid_fixture_2", "name": "FIXTURE2" }
+      ]
+    }
+  }
+}

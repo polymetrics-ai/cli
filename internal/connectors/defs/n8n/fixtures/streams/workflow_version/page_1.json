@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workflows/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "versionId": "ver_fixture_1",
+      "workflowId": "wf_fixture_1",
+      "name": "Fixture workflow",
+      "authors": "Fixture User",
+      "nodes": [],
+      "connections": {},
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

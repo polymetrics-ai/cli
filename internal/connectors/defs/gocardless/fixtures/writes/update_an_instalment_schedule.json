@@ -1,0 +1,21 @@
+{
+  "record": {
+    "instalment_schedule_id": "instalment_schedule_id_fixture",
+    "instalment_schedules": {
+      "description": "Synthetic update_an_instalment_schedule fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/instalment_schedules/instalment_schedule_id_fixture",
+    "body": {
+      "instalment_schedules": {
+        "description": "Synthetic update_an_instalment_schedule fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

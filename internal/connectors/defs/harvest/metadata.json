@@ -1,0 +1,23 @@
+{
+  "name": "harvest",
+  "display_name": "Harvest",
+  "description": "Reads Harvest clients, contacts, company settings, projects, tasks, task assignments, users, time entries, invoices, estimates, expenses, item categories, expense categories, and roles through the Harvest v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://help.getharvest.com/api-v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Harvest API read of Harvest business, time, project, invoice, estimate, expense, role, and category metadata",
+    "approval": "none; read-only source connector"
+  }
+}

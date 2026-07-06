@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/courses",
+    "query": {
+      "page": "1",
+      "limit": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "meta": { "pagination": { "total_items": 0 } } }
+  }
+}

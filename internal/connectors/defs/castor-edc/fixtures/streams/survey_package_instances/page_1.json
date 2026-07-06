@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/surveypackageinstance",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "surveypackageinstance": [
+          {
+            "id": "spi_fixture_1",
+            "record_id": "rec_fixture_1",
+            "survey_package_id": "pkg_fixture_1",
+            "ccr_patient_id": null,
+            "email_address": "fixture1@example.com",
+            "locked": false,
+            "progress": 40,
+            "started_on": "2026-01-01T00:00:00Z",
+            "finished_on": null,
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

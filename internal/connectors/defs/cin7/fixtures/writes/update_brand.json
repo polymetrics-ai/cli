@@ -1,0 +1,8 @@
+{
+  "record": { "ID": "brand_fixture_1", "Name": "Fixture Brand Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/ref/brand",
+    "body": { "ID": "brand_fixture_1", "Name": "Fixture Brand Renamed" }
+  }
+}

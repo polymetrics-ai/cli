@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "closed": { "type": ["boolean", "null"] },
+    "idBoard": { "type": ["string", "null"] },
+    "pos": { "type": ["number", "null"] },
+    "subscribed": { "type": ["boolean", "null"] }
+  }
+}

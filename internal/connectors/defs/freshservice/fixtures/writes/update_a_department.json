@@ -1,0 +1,15 @@
+{
+  "record": {
+    "department_id": 123,
+    "name": "Fixture update_a_department",
+    "description": "Fixture update_a_department record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/departments/123",
+    "body": {
+      "name": "Fixture update_a_department",
+      "description": "Fixture update_a_department record"
+    }
+  }
+}

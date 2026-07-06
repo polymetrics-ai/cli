@@ -1,0 +1,233 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_token", "value": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "start",
+      "token_path": "additional_data.pagination.next_start"
+    },
+    "check": { "method": "GET", "path": "/users", "query": { "start": "0", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "pipedrive api_token is missing or invalid; re-run pm credentials add pipedrive" },
+      { "status": 403, "hint": "pipedrive account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pipedrive rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "deals",
+      "path": "/deals",
+      "query": {
+        "start": "0",
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/deals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "persons",
+      "path": "/persons",
+      "query": {
+        "start": "0",
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/persons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations",
+      "query": {
+        "start": "0",
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since_timestamp",
+        "start_config_key": "replication_start_date"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "query": {
+        "start": "0",
+        "limit": "100"
+      },
+      "incremental": {
+        "cursor_field": "update_time",
+        "request_param": "since",
+        "start_config_key": "replication_start_date"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "query": {
+        "start": "0",
+        "limit": "100",
+        "updated_since": { "template": "{{ config.replication_start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "leads",
+      "path": "/leads",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/leads.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "deal_fields",
+      "path": "/dealFields",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/deal_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "person_fields",
+      "path": "/personFields",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/person_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "organization_fields",
+      "path": "/organizationFields",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/organization_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "product_fields",
+      "path": "/productFields",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/product_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "lead_fields",
+      "path": "/leadFields",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/lead_fields.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "query": { "start": "0", "limit": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/roles.json",
+      "projection": "passthrough",
+      "pagination": { "type": "offset_limit", "offset_param": "start", "limit_param": "limit", "page_size": 100 }
+    },
+    {
+      "name": "filters",
+      "path": "/filters",
+      "records": { "path": "data" },
+      "schema": "schemas/filters.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "activity_types",
+      "path": "/activityTypes",
+      "records": { "path": "data" },
+      "schema": "schemas/activity_types.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "legacy_teams",
+      "path": "/legacyTeams",
+      "records": { "path": "data" },
+      "schema": "schemas/legacy_teams.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "data" },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "lead_labels",
+      "path": "/leadLabels",
+      "records": { "path": "data" },
+      "schema": "schemas/lead_labels.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "lead_sources",
+      "path": "/leadSources",
+      "records": { "path": "data" },
+      "schema": "schemas/lead_sources.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "currencies",
+      "path": "/currencies",
+      "records": { "path": "data" },
+      "schema": "schemas/currencies.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    }
+  ]
+}

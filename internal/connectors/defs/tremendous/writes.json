@@ -1,0 +1,238 @@
+{
+  "actions": [
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/orders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["payment", "reward"],
+        "properties": {
+          "external_id": { "type": "string", "description": "Caller-supplied reference; when set, makes the order creation idempotent (Tremendous returns the existing order instead of creating a duplicate for the same external_id)." },
+          "payment": {
+            "type": "object",
+            "required": ["funding_source_id"],
+            "properties": {
+              "funding_source_id": { "type": "string", "description": "Tremendous ID of the funding source to pay with, or the literal \"balance\" to use the account's Tremendous balance." }
+            }
+          },
+          "reward": {
+            "type": "object",
+            "description": "A single reward sent to a recipient; either campaign_id or products must be specified.",
+            "properties": {
+              "campaign_id": { "type": "string" },
+              "products": { "type": "array", "items": { "type": "string" } },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "denomination": { "type": "number" },
+                  "currency_code": { "type": "string" }
+                }
+              },
+              "recipient": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "phone": { "type": "string" }
+                }
+              },
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "method": { "type": "string", "description": "EMAIL, LINK, or PHONE." }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "spends real funding-source balance to issue a gift card / prepaid card / donation reward to a recipient; external mutation with real financial impact, approval required"
+    },
+    {
+      "name": "approve_order",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v2/order_approvals/{{ record.id }}/approve",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "approves an order pending admin review, releasing its rewards for delivery; real financial impact, approval required"
+    },
+    {
+      "name": "reject_order",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v2/order_approvals/{{ record.id }}/reject",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "rejects an order pending admin review; the order's rewards are never delivered"
+    },
+    {
+      "name": "cancel_reward",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v2/rewards/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "cancels and refunds a reward; only valid for non-expired rewards with a delivery failure per Tremendous's own API contract"
+    },
+    {
+      "name": "resend_reward",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v2/rewards/{{ record.id }}/resend",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["updated_email", "updated_phone"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "updated_email": { "type": "string", "description": "New recipient email; only applies to email-delivered rewards." },
+          "updated_phone": { "type": "string", "description": "New recipient phone; only applies to SMS-delivered rewards." }
+        }
+      },
+      "risk": "resends a reward to its recipient (optionally at a new email/phone); only valid for rewards with a previous delivery failure"
+    },
+    {
+      "name": "generate_reward_link",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v2/rewards/{{ record.id }}/generate_link",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "generates a new redemption link for an existing LINK-delivery reward; low-risk, does not move funds"
+    },
+    {
+      "name": "create_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/invoices",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "po_number": { "type": "string" },
+          "amount": { "type": "number" },
+          "currency_code": { "type": "string", "enum": ["USD", "EUR", "GBP"] },
+          "memo": { "type": "string" }
+        }
+      },
+      "risk": "creates an invoice that funds the organization's Tremendous balance once paid; low direct risk (a document, not a payment itself), no approval required"
+    },
+    {
+      "name": "delete_invoice",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/invoices/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "removes an invoice; per Tremendous's own docs this is a cosmetic operation with no further financial consequence (an already-paid invoice's funds are unaffected)"
+    },
+    {
+      "name": "create_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/members",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "role"],
+        "properties": {
+          "email": { "type": "string" },
+          "role": { "type": "string", "description": "Role ID within the organization, e.g. \"ADMIN\"." }
+        }
+      },
+      "risk": "invites a new user to manage the Tremendous organization (funding sources, campaigns, orders); grants organization access, approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string" }
+        }
+      },
+      "risk": "registers/replaces the organization's single webhook endpoint; a changed url redirects all future event deliveries to a different endpoint (Tremendous allows exactly one webhook per organization)"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes the organization's webhook subscription; event delivery stops immediately"
+    }
+  ]
+}

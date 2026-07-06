@@ -1,0 +1,7 @@
+{
+  "record": { "name": "user.deleted", "description": "Updated description" },
+  "expect": {
+    "method": "PUT",
+    "path": "/event-type/user.deleted"
+  }
+}

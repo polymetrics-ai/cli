@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "eBay Finance Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "client_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "eBay OAuth user access token with the sell.finances scope, sent as a Bearer token (Authorization: Bearer <client_access_token>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://apiz.ebay.com/sell/finances/v1",
+      "description": "eBay Sell Finances API base URL. Defaults to the production endpoint; override for eBay's sandbox environment or test proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for transactions/payouts/transfers, sent as a date-range filter (e.g. transactionDate:[<start_date>..]). Only used on a fresh sync with no persisted cursor."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

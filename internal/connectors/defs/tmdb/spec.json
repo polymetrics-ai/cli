@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TMDb Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "TMDb API key (v3 auth), sent as the api_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.themoviedb.org/3",
+      "description": "TMDb API base URL override for tests or proxies."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional ISO 639-1 language code applied to requests that support it."
+    },
+    "query": {
+      "type": "string",
+      "description": "Search query text required by search streams."
+    },
+    "movie_id": {
+      "type": "string",
+      "description": "TMDb movie id, required when reading the legacy movie_details stream."
+    },
+    "external_source": {
+      "type": "string",
+      "description": "External ID source required by find_by_id (for example imdb_id)."
+    },
+    "session_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional TMDb user session id for account-state endpoints."
+    },
+    "guest_session_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional TMDb guest session id for guest-session rated endpoints."
+    },
+    "include_adult": {
+      "type": "string",
+      "description": "Optional TMDb include_adult filter."
+    },
+    "region": {
+      "type": "string",
+      "description": "Optional TMDb region filter."
+    },
+    "year": {
+      "type": "string",
+      "description": "Optional TMDb year filter."
+    },
+    "primary_release_year": {
+      "type": "string",
+      "description": "Optional TMDb primary release year filter."
+    },
+    "first_air_date_year": {
+      "type": "string",
+      "description": "Optional TMDb first air date year filter."
+    },
+    "watch_region": {
+      "type": "string",
+      "description": "Optional TMDb watch region filter."
+    },
+    "with_watch_providers": {
+      "type": "string",
+      "description": "Optional TMDb watch provider filter."
+    },
+    "sort_by": {
+      "type": "string",
+      "description": "Optional TMDb sort field."
+    },
+    "account_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for account_watchlist_tv fan-out."
+    },
+    "collection_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for collection_translations fan-out."
+    },
+    "company_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for company_images fan-out."
+    },
+    "credit_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for credit_details fan-out."
+    },
+    "external_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for find_by_id fan-out."
+    },
+    "guest_session_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for guest_session_rated_tv_episodes fan-out."
+    },
+    "keyword_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for keyword_movies fan-out."
+    },
+    "list_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for list_details fan-out."
+    },
+    "network_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for alternative_names_copy fan-out."
+    },
+    "person_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for translations fan-out."
+    },
+    "review_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for review_details fan-out."
+    },
+    "series_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for tv_series_watch_providers fan-out."
+    },
+    "series_id": {
+      "type": "string",
+      "description": "Required config value for tv_season_details."
+    },
+    "season_number": {
+      "type": "string",
+      "description": "Required config value for tv_season_details."
+    },
+    "season_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for tv_season_changes_by_id fan-out."
+    },
+    "episode_number": {
+      "type": "string",
+      "description": "Required config value for tv_episode_details."
+    },
+    "episode_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for tv_episode_changes_by_id fan-out."
+    },
+    "tv_episode_group_ids": {
+      "type": "string",
+      "description": "Comma-separated IDs for tv_episode_group_details fan-out."
+    }
+  }
+}

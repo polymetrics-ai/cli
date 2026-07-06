@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/candidates/synthetic-conformance-value/offer"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "offer_fixture_1",
+      "state": "pending"
+    }
+  }
+}

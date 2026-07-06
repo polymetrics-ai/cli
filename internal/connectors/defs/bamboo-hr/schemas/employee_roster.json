@@ -1,0 +1,825 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_roster",
+  "type": "object",
+  "x-primary-key": [
+    "employeeId"
+  ],
+  "required": [
+    "_restrictedFields",
+    "employeeId",
+    "firstName",
+    "jobTitleName",
+    "lastName",
+    "photoUrl",
+    "preferredName",
+    "status"
+  ],
+  "properties": {
+    "_restrictedFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "addressLine1": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "addressLine2": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "age": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "allergies": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bestEmail": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "birthDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "birthplace": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "citizenship": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "citizenshipId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "city": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "compensationChangeReason": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "compensationChangeReasonId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "compensationComment": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "compensationEffectiveDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "compensationEndDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "contractEndDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "country": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "countryId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "departmentId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "departmentName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "dietaryRestrictions": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "displayName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "divisionId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "divisionName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "eeoJobCategory": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "eeoJobCategoryId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ein": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "eligibleForRehire": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "eligibleForRehireId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employeeId": {
+      "type": "string"
+    },
+    "employeeName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employeeNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentStatusComment": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentStatusEffectiveDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentStatusId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentStatusName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "employmentTypeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ethnicity": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ethnicityId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "facebookUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "finalDoseAdministrationDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "finalPayDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "firstName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "firstNameLastName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "firstNameMiddleInitial": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "flsaCode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "flsaCodeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "gender": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "genderIdentity": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "genderIdentityId": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "hireDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "homeEmail": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "homePhone": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "hoursPerPayCycle": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "instagramUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "isManager": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "jacketSize": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jacketSizeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jobInformationEffectiveDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jobTitleId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "jobTitleName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "lastName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "linkedinUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "locationId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "locationName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "maritalStatus": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "middleInitial": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "middleName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "mobilePhone": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nationalId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nationalInsuranceCategory": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nationalInsuranceCategoryId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nationality": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nationalityId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nickName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "nin": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "noticePeriod": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "noticePeriodId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "originalHireDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "overtime": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "overtimeRate": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "paidPer": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "payRate": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "paySchedule": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "payScheduleId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "payType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "photoUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pinterestUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "preferredName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "preferredNameLastName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "probationEndDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pronouns": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pronounsId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "proofOfVaccination": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reportsToId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "reportsToName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "secondaryLanguage": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "shirtSize": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "shirtSizeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "sin": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "skypeUsername": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ssn": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "state": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "stateId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tShirtSize": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tShirtSizeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "taxTypeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "tenure": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationDate": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationReason": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationReasonId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationRegrettable": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationRegrettableId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "terminationTypeId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "twitterUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "userId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "vaccinationStatus": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "vaccinationStatusId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "vaccineReceived": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "vaccineReceivedId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "veteranStatus": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "veteranStatusId": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "workEmail": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "workPhone": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "workPhoneExtension": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "zipcode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

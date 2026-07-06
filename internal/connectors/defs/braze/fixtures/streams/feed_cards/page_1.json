@@ -1,0 +1,817 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/feed/list",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "cards": [
+        {
+          "id": "card_fixture_1",
+          "type": "Banner",
+          "title": "Fixture Card 1",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_2",
+          "type": "Banner",
+          "title": "Fixture Card 2",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_3",
+          "type": "Banner",
+          "title": "Fixture Card 3",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_4",
+          "type": "Banner",
+          "title": "Fixture Card 4",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_5",
+          "type": "Banner",
+          "title": "Fixture Card 5",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_6",
+          "type": "Banner",
+          "title": "Fixture Card 6",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_7",
+          "type": "Banner",
+          "title": "Fixture Card 7",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_8",
+          "type": "Banner",
+          "title": "Fixture Card 8",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_9",
+          "type": "Banner",
+          "title": "Fixture Card 9",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_10",
+          "type": "Banner",
+          "title": "Fixture Card 10",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_11",
+          "type": "Banner",
+          "title": "Fixture Card 11",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_12",
+          "type": "Banner",
+          "title": "Fixture Card 12",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_13",
+          "type": "Banner",
+          "title": "Fixture Card 13",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_14",
+          "type": "Banner",
+          "title": "Fixture Card 14",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_15",
+          "type": "Banner",
+          "title": "Fixture Card 15",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_16",
+          "type": "Banner",
+          "title": "Fixture Card 16",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_17",
+          "type": "Banner",
+          "title": "Fixture Card 17",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_18",
+          "type": "Banner",
+          "title": "Fixture Card 18",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_19",
+          "type": "Banner",
+          "title": "Fixture Card 19",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_20",
+          "type": "Banner",
+          "title": "Fixture Card 20",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_21",
+          "type": "Banner",
+          "title": "Fixture Card 21",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_22",
+          "type": "Banner",
+          "title": "Fixture Card 22",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_23",
+          "type": "Banner",
+          "title": "Fixture Card 23",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_24",
+          "type": "Banner",
+          "title": "Fixture Card 24",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_25",
+          "type": "Banner",
+          "title": "Fixture Card 25",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_26",
+          "type": "Banner",
+          "title": "Fixture Card 26",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_27",
+          "type": "Banner",
+          "title": "Fixture Card 27",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_28",
+          "type": "Banner",
+          "title": "Fixture Card 28",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_29",
+          "type": "Banner",
+          "title": "Fixture Card 29",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_30",
+          "type": "Banner",
+          "title": "Fixture Card 30",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_31",
+          "type": "Banner",
+          "title": "Fixture Card 31",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_32",
+          "type": "Banner",
+          "title": "Fixture Card 32",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_33",
+          "type": "Banner",
+          "title": "Fixture Card 33",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_34",
+          "type": "Banner",
+          "title": "Fixture Card 34",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_35",
+          "type": "Banner",
+          "title": "Fixture Card 35",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_36",
+          "type": "Banner",
+          "title": "Fixture Card 36",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_37",
+          "type": "Banner",
+          "title": "Fixture Card 37",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_38",
+          "type": "Banner",
+          "title": "Fixture Card 38",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_39",
+          "type": "Banner",
+          "title": "Fixture Card 39",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_40",
+          "type": "Banner",
+          "title": "Fixture Card 40",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_41",
+          "type": "Banner",
+          "title": "Fixture Card 41",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_42",
+          "type": "Banner",
+          "title": "Fixture Card 42",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_43",
+          "type": "Banner",
+          "title": "Fixture Card 43",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_44",
+          "type": "Banner",
+          "title": "Fixture Card 44",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_45",
+          "type": "Banner",
+          "title": "Fixture Card 45",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_46",
+          "type": "Banner",
+          "title": "Fixture Card 46",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_47",
+          "type": "Banner",
+          "title": "Fixture Card 47",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_48",
+          "type": "Banner",
+          "title": "Fixture Card 48",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_49",
+          "type": "Banner",
+          "title": "Fixture Card 49",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_50",
+          "type": "Banner",
+          "title": "Fixture Card 50",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_51",
+          "type": "Banner",
+          "title": "Fixture Card 51",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_52",
+          "type": "Banner",
+          "title": "Fixture Card 52",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_53",
+          "type": "Banner",
+          "title": "Fixture Card 53",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_54",
+          "type": "Banner",
+          "title": "Fixture Card 54",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_55",
+          "type": "Banner",
+          "title": "Fixture Card 55",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_56",
+          "type": "Banner",
+          "title": "Fixture Card 56",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_57",
+          "type": "Banner",
+          "title": "Fixture Card 57",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_58",
+          "type": "Banner",
+          "title": "Fixture Card 58",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_59",
+          "type": "Banner",
+          "title": "Fixture Card 59",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_60",
+          "type": "Banner",
+          "title": "Fixture Card 60",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_61",
+          "type": "Banner",
+          "title": "Fixture Card 61",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_62",
+          "type": "Banner",
+          "title": "Fixture Card 62",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_63",
+          "type": "Banner",
+          "title": "Fixture Card 63",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_64",
+          "type": "Banner",
+          "title": "Fixture Card 64",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_65",
+          "type": "Banner",
+          "title": "Fixture Card 65",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_66",
+          "type": "Banner",
+          "title": "Fixture Card 66",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_67",
+          "type": "Banner",
+          "title": "Fixture Card 67",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_68",
+          "type": "Banner",
+          "title": "Fixture Card 68",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_69",
+          "type": "Banner",
+          "title": "Fixture Card 69",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_70",
+          "type": "Banner",
+          "title": "Fixture Card 70",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_71",
+          "type": "Banner",
+          "title": "Fixture Card 71",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_72",
+          "type": "Banner",
+          "title": "Fixture Card 72",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_73",
+          "type": "Banner",
+          "title": "Fixture Card 73",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_74",
+          "type": "Banner",
+          "title": "Fixture Card 74",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_75",
+          "type": "Banner",
+          "title": "Fixture Card 75",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_76",
+          "type": "Banner",
+          "title": "Fixture Card 76",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_77",
+          "type": "Banner",
+          "title": "Fixture Card 77",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_78",
+          "type": "Banner",
+          "title": "Fixture Card 78",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_79",
+          "type": "Banner",
+          "title": "Fixture Card 79",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_80",
+          "type": "Banner",
+          "title": "Fixture Card 80",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_81",
+          "type": "Banner",
+          "title": "Fixture Card 81",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_82",
+          "type": "Banner",
+          "title": "Fixture Card 82",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_83",
+          "type": "Banner",
+          "title": "Fixture Card 83",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_84",
+          "type": "Banner",
+          "title": "Fixture Card 84",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_85",
+          "type": "Banner",
+          "title": "Fixture Card 85",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_86",
+          "type": "Banner",
+          "title": "Fixture Card 86",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_87",
+          "type": "Banner",
+          "title": "Fixture Card 87",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_88",
+          "type": "Banner",
+          "title": "Fixture Card 88",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_89",
+          "type": "Banner",
+          "title": "Fixture Card 89",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_90",
+          "type": "Banner",
+          "title": "Fixture Card 90",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_91",
+          "type": "Banner",
+          "title": "Fixture Card 91",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_92",
+          "type": "Banner",
+          "title": "Fixture Card 92",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_93",
+          "type": "Banner",
+          "title": "Fixture Card 93",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_94",
+          "type": "Banner",
+          "title": "Fixture Card 94",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_95",
+          "type": "Banner",
+          "title": "Fixture Card 95",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_96",
+          "type": "Banner",
+          "title": "Fixture Card 96",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_97",
+          "type": "Banner",
+          "title": "Fixture Card 97",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_98",
+          "type": "Banner",
+          "title": "Fixture Card 98",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_99",
+          "type": "Banner",
+          "title": "Fixture Card 99",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "id": "card_fixture_100",
+          "type": "Banner",
+          "title": "Fixture Card 100",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

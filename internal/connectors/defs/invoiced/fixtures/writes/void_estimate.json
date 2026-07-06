@@ -1,0 +1,16 @@
+{
+  "record": {
+    "estimate_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/estimates/123/void"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

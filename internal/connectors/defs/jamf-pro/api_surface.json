@@ -1,0 +1,13 @@
+{
+  "api": "Jamf Pro modern API v1 (https://<subdomain>.jamfcloud.com/api)",
+  "docs": "https://developer.jamf.com/jamf-pro/reference/classic-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave3 unblock: the 4 legacy-parity read streams only; Jamf Pro's full documented surface (computers, mobile devices, policies, configuration profiles, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/buildings", "covered_by": { "stream": "buildings" } },
+    { "method": "GET", "path": "/v1/departments", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/v1/categories", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/v1/scripts", "covered_by": { "stream": "scripts" } },
+    { "method": "POST", "path": "/v1/auth/token", "excluded": { "category": "non_data_endpoint", "reason": "auth token exchange, not a syncable data stream; implemented by hooks/jamf-pro's AuthHook" } }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Messages.json",
+    "query": {
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        {
+          "sid": "SM_fixture_1",
+          "account_sid": "AC_fixture",
+          "messaging_service_sid": "MG_fixture",
+          "date_created": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "date_sent": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "from": "+15550100001",
+          "to": "+15550100002",
+          "body": "fixture message 1",
+          "status": "delivered",
+          "direction": "outbound-api",
+          "num_segments": "1",
+          "num_media": "0",
+          "price": "-0.0075",
+          "price_unit": "USD",
+          "error_code": null,
+          "error_message": null
+        },
+        {
+          "sid": "SM_fixture_2",
+          "account_sid": "AC_fixture",
+          "messaging_service_sid": "MG_fixture",
+          "date_created": "Mon, 01 Jan 2026 00:01:00 +0000",
+          "date_sent": "Mon, 01 Jan 2026 00:01:00 +0000",
+          "date_updated": "Mon, 01 Jan 2026 00:01:00 +0000",
+          "from": "+15550100001",
+          "to": "+15550100003",
+          "body": "fixture message 2",
+          "status": "sent",
+          "direction": "outbound-api",
+          "num_segments": "1",
+          "num_media": "0",
+          "price": "-0.0075",
+          "price_unit": "USD",
+          "error_code": null,
+          "error_message": null
+        }
+      ],
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 50
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sched_fixture_1",
+    "description": "Updated fixture schedule"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/schedule/sched_fixture_1"
+  }
+}

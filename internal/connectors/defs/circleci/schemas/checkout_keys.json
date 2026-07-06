@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "checkout_keys",
+  "type": "object",
+  "x-primary-key": ["fingerprint"],
+  "required": ["fingerprint"],
+  "properties": {
+    "fingerprint": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "public-key": { "type": ["string", "null"] },
+    "preferred": { "type": ["boolean", "null"] },
+    "created-at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stockhistory",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idproduct_stock_history": { "type": "integer" },
+    "idproduct": { "type": ["integer", "null"] },
+    "idwarehouse": { "type": ["integer", "null"] },
+    "iduser": { "type": ["integer", "null"] },
+    "idlocation": { "type": ["integer", "null"] },
+    "old_stock": { "type": ["integer", "null"] },
+    "stock_change": { "type": ["integer", "null"] },
+    "new_stock": { "type": ["integer", "null"] },
+    "reason": { "type": ["string", "null"] },
+    "change_type": { "type": ["string", "null"] },
+    "changed_at": { "type": ["string", "null"] }
+  }
+}

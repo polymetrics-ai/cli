@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/user" },
+  "response": {
+    "status": 200,
+    "body": { "_embedded": { "user": [] }, "page": 1, "page_count": 0 }
+  }
+}

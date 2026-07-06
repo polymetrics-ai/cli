@@ -1,0 +1,20 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/teams",
+    "body": {
+      "title": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "create_organization_team_fixture_1"
+    }
+  }
+}

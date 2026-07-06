@@ -1,0 +1,7 @@
+{
+  "record": { "id": "1", "title": "Fixture Clause", "content": "Updated fixture clause content." },
+  "expect": {
+    "method": "PUT",
+    "path": "/organizations/synthetic-conformance-value/clauses/1"
+  }
+}

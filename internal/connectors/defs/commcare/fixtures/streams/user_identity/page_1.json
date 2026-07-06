@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/identity/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "identity_fixture_1",
+      "username": "identity@example.test",
+      "first_name": "Identity",
+      "last_name": "User",
+      "email": "identity@example.test"
+    }
+  }
+}

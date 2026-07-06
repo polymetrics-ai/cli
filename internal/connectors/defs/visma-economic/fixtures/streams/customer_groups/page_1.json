@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customer-groups",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "customerGroupNumber": 1,
+          "name": "Fixture Retail",
+          "accountNumber": 1000
+        }
+      ]
+    }
+  }
+}

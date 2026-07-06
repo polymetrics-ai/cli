@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/fixture-site/lists/fixture-list/items", "query": { "$top": "100", "$skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "item_1", "fields": { "Title": "Fixture Item 1" }, "lastModifiedDateTime": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

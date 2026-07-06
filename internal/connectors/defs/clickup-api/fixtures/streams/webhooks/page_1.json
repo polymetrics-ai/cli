@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/team/synthetic-conformance-value/webhook" },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "webhook_fixture_1",
+          "userid": 1,
+          "team_id": 1,
+          "endpoint": "https://example.com/fixture-webhook",
+          "client_id": "fixture_client_1",
+          "events": ["taskCreated", "taskUpdated"],
+          "task_id": null,
+          "list_id": null,
+          "folder_id": null,
+          "space_id": null,
+          "health": { "status": "active", "fail_count": 0 }
+        }
+      ]
+    }
+  }
+}

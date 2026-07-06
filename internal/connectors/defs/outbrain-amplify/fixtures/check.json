@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/marketers", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "marketers": [], "totalResults": 0 }
+  }
+}

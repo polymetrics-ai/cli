@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture New Project", "announcement": "Fixture kickoff announcement", "show_announcement": true, "suite_mode": 1 },
+  "expect": {
+    "method": "POST",
+    "path": "/index.php",
+    "body": { "name": "Fixture New Project", "announcement": "Fixture kickoff announcement", "show_announcement": true, "suite_mode": 1 }
+  },
+  "response": { "status": 200, "body": { "id": 3, "name": "Fixture New Project" } }
+}

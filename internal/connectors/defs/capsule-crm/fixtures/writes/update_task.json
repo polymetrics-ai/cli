@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "30",
+    "task": { "status": "COMPLETED" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/30",
+    "body": {
+      "task": { "status": "COMPLETED" }
+    }
+  }
+}

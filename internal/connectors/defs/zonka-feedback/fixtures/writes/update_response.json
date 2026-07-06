@@ -1,0 +1,24 @@
+{
+  "record": {
+    "responseId": "response_fixture_1",
+    "response": {
+      "q_1": "10"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/responses/response_fixture_1",
+    "body": {
+      "response": {
+        "q_1": "10"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "success": true
+    }
+  }
+}

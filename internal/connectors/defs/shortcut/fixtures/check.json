@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v3/stories" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture story", "state": "started", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "next": null
+    }
+  }
+}

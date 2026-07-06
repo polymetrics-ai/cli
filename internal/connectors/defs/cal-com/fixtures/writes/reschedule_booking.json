@@ -1,0 +1,15 @@
+{
+  "record": {
+    "uid": "booking_fixture_1",
+    "start": "2026-02-02T09:00:00Z",
+    "reschedulingReason": "Fixture reschedule reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/bookings/booking_fixture_1/reschedule"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 1, "uid": "booking_fixture_2", "status": "accepted" } }
+  }
+}

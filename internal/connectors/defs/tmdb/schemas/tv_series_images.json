@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tv_series_images",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "overview": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "first_air_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "media_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "popularity": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "vote_average": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "results": {
+      "type": [
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "cast": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "crew": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

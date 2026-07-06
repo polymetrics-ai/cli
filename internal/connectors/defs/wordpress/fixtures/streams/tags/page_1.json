@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/tags", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "count": 2,
+        "description": "",
+        "link": "https://example.com/tag/fixture-tag-one/",
+        "name": "Fixture Tag One",
+        "slug": "fixture-tag-one",
+        "taxonomy": "post_tag",
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/tags/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/tags" }]
+        }
+      },
+      {
+        "id": 2,
+        "count": 1,
+        "description": "",
+        "link": "https://example.com/tag/fixture-tag-two/",
+        "name": "Fixture Tag Two",
+        "slug": "fixture-tag-two",
+        "taxonomy": "post_tag",
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/tags/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/tags" }]
+        }
+      }
+    ]
+  }
+}

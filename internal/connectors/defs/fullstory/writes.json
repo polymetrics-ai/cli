@@ -1,0 +1,64 @@
+{
+  "actions": [
+    {
+      "name": "create_user",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/v2/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid"],
+        "properties": {
+          "uid": { "type": "string" },
+          "display_name": { "type": "string" },
+          "email": { "type": "string" },
+          "properties": { "type": "object" }
+        }
+      },
+      "risk": "creates or upserts a FullStory user profile and associated custom user properties"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "display_name": { "type": "string" },
+          "email": { "type": "string" },
+          "properties": { "type": "object" }
+        }
+      },
+      "risk": "updates a FullStory user profile's display fields or custom properties"
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/events",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "user": { "type": "object" },
+          "session": { "type": "object" },
+          "properties": { "type": "object" }
+        }
+      },
+      "risk": "creates a custom FullStory event that becomes part of analytics/session context"
+    }
+  ]
+}

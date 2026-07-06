@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/adaptive-schema"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_site_adaptive_schema_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_site_adaptive_schema",
+      "name": "Fixture get_site_adaptive_schema",
+      "status": "active",
+      "operation_id": "getSiteAdaptiveSchema"
+    }
+  }
+}

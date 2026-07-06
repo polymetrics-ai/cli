@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Teams Connection Specification",
+  "type": "object",
+  "required": ["client_id"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.microsoft.com/v1.0",
+      "description": "Microsoft Graph REST API base URL override for tests or proxies. Defaults to https://graph.microsoft.com/v1.0."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Microsoft Entra ID (Azure AD) application (client) ID used for the OAuth2 client-credentials grant."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID tenant ID (GUID or verified domain), used to derive the per-tenant token endpoint. Marked secret to match legacy, which reads it from Secrets."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID application client secret, sent only in the OAuth2 client-credentials token-exchange request; never logged."
+    },
+    "login_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.microsoftonline.com",
+      "description": "Microsoft Entra ID login base URL override for tests or proxies; combined with tenant_id to form the OAuth2 token endpoint (https://login.microsoftonline.com/<tenant_id>/oauth2/v2.0/token, matching legacy's graphTokenURL derivation)."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full OAuth2 token endpoint override. When set, takes priority over the derived login_base_url/tenant_id endpoint (dual-candidate auth pattern; see docs.md Known limits and the sharepoint-lists-enterprise golden)."
+    },
+    "scope": {
+      "type": "string",
+      "default": "https://graph.microsoft.com/.default",
+      "description": "OAuth2 client-credentials scope. Defaults to the static Graph application-permission scope."
+    },
+    "period": {
+      "type": "string",
+      "default": "D7",
+      "description": "Teams device usage report aggregation period: D7, D30, D90, or D180."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of @odata.nextLink pages read per stream, consumed by hooks/microsoft-teams/hooks.go's StreamHook -- NOT a declarative streams.json field (pagination is entirely hook-driven since next_url_path cannot address the literal \"@odata.nextLink\" key; see docs.md Known limits). Permissive parse: empty, \"all\", \"unlimited\", or any non-positive-integer string means unbounded."
+    }
+  }
+}

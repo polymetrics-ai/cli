@@ -1,0 +1,9 @@
+{
+  "record": {
+    "anomaly_notification_token": "anml_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/anomaly_notifications/anml_fixture_1"
+  }
+}

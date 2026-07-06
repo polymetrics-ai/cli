@@ -1,0 +1,18 @@
+{
+  "record": {
+    "Name": "Fixture Campaign",
+    "Recipients": { "ListNames": ["Fixture List"] }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns",
+    "body": {
+      "Name": "Fixture Campaign",
+      "Recipients": { "ListNames": ["Fixture List"] }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

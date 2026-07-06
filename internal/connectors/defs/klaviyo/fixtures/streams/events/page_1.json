@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "event_fixture_1",
+          "type": "event",
+          "attributes": { "timestamp": 1767225601, "datetime": "2026-01-01T00:00:01Z", "uuid": "uuid_1" }
+        },
+        {
+          "id": "event_fixture_2",
+          "type": "event",
+          "attributes": { "timestamp": 1767225602, "datetime": "2026-01-01T00:00:02Z", "uuid": "uuid_2" }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

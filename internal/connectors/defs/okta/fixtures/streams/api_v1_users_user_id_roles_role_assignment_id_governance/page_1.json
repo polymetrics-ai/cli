@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/roles/synthetic-conformance-value/governance"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "grants": [
+        {
+          "bundleId": "bundle_id_fixture",
+          "expirationDate": "2026-01-01T00:00:00Z",
+          "grantId": "grant_id_fixture",
+          "type": "CUSTOM",
+          "_links": {
+            "self": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ],
+      "_links": {
+        "assignee": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

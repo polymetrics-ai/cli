@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/employees/{{ config.employee_id }}/documents/{{ config.document_id }}/attachment/{{ config.attachment_id }}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "fileURL": "https://example.invalid/employee_document_attachment_download_urls/fixture-1"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

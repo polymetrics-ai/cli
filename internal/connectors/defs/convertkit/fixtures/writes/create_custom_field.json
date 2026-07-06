@@ -1,0 +1,12 @@
+{
+  "record": { "label": "Fixture Field" },
+  "expect": {
+    "method": "POST",
+    "path": "/custom_fields",
+    "body": { "label": "Fixture Field" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "custom_field": { "id": 3, "name": "ck_field_3_fixture_field", "key": "fixture_field", "label": "Fixture Field" } }
+  }
+}

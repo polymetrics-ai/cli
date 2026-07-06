@@ -1,0 +1,22 @@
+{
+  "record": {
+    "externalId": "note-fixture-1",
+    "note": "<p>Fixture note body.</p>",
+    "noteDate": "2026-01-01T00:00:00Z",
+    "subject": "Fixture note"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/notes",
+    "body": {
+      "externalId": "note-fixture-1",
+      "note": "<p>Fixture note body.</p>",
+      "noteDate": "2026-01-01T00:00:00Z",
+      "subject": "Fixture note"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "note_fixture_1", "externalId": "note-fixture-1" }
+  }
+}

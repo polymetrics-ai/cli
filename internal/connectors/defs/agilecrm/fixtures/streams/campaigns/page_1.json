@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/workflows" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 501,
+        "name": "Fixture Campaign One",
+        "created_time": 1767225601,
+        "updated_time": 0,
+        "rules": "{}",
+        "domainUserId": 900001,
+        "creatorName": "fixture-user"
+      },
+      {
+        "id": 502,
+        "name": "Fixture Campaign Two",
+        "created_time": 1767225602,
+        "updated_time": 0,
+        "rules": "{}",
+        "domainUserId": 900001,
+        "creatorName": "fixture-user",
+        "cursor": "fixture_campaign_cursor"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-fields/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "slug": "fixture-custom_field",
+        "created_at": "fixture-custom_field",
+        "updated_at": "fixture-custom_field"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

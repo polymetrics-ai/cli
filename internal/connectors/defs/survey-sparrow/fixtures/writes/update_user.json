@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture User" },
+  "expect": { "method": "PATCH", "path": "/users/1" }
+}

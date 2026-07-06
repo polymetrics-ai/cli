@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/teams/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "fixture-team"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

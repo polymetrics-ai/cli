@@ -1,0 +1,12 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "name": "Fixture delete_schedule",
+    "description": "Fixture delete_schedule record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/oncall/ws/123/schedules/123"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "acct_fixture_1",
+        "account_number": "10001",
+        "status": "ACTIVE",
+        "crypto_status": "ACTIVE",
+        "currency": "USD",
+        "account_type": "trading",
+        "enabled_assets": "us_equity",
+        "created_at": "2026-01-01T00:00:00Z",
+        "kyc_results": "",
+        "last_equity": "1000.00"
+      },
+      {
+        "id": "acct_fixture_2",
+        "account_number": "10002",
+        "status": "ACTIVE",
+        "crypto_status": "ACTIVE",
+        "currency": "USD",
+        "account_type": "trading",
+        "enabled_assets": "us_equity",
+        "created_at": "2026-01-02T00:00:00Z",
+        "kyc_results": "",
+        "last_equity": "2000.00"
+      }
+    ]
+  }
+}

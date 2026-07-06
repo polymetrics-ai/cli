@@ -1,0 +1,5619 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/responses",
+    "query": {
+      "page": "1",
+      "page_size": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 201,
+      "page_count": 2,
+      "items": [
+        {
+          "response_id": "resp_fixture_1",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_1",
+          "landing_id": "landing_fixture_1",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 1"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_1"
+          },
+          "calculated": {
+            "score": 1
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_2",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_2",
+          "landing_id": "landing_fixture_2",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 2"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_2"
+          },
+          "calculated": {
+            "score": 2
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_3",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_3",
+          "landing_id": "landing_fixture_3",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 3"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_3"
+          },
+          "calculated": {
+            "score": 3
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_4",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_4",
+          "landing_id": "landing_fixture_4",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 4"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_4"
+          },
+          "calculated": {
+            "score": 4
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_5",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_5",
+          "landing_id": "landing_fixture_5",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 5"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_5"
+          },
+          "calculated": {
+            "score": 5
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_6",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_6",
+          "landing_id": "landing_fixture_6",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 6"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_6"
+          },
+          "calculated": {
+            "score": 6
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_7",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_7",
+          "landing_id": "landing_fixture_7",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 7"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_7"
+          },
+          "calculated": {
+            "score": 7
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_8",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_8",
+          "landing_id": "landing_fixture_8",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 8"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_8"
+          },
+          "calculated": {
+            "score": 8
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_9",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_9",
+          "landing_id": "landing_fixture_9",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 9"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_9"
+          },
+          "calculated": {
+            "score": 9
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_10",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_10",
+          "landing_id": "landing_fixture_10",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 10"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_10"
+          },
+          "calculated": {
+            "score": 10
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_11",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_11",
+          "landing_id": "landing_fixture_11",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 11"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_11"
+          },
+          "calculated": {
+            "score": 11
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_12",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_12",
+          "landing_id": "landing_fixture_12",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 12"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_12"
+          },
+          "calculated": {
+            "score": 12
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_13",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_13",
+          "landing_id": "landing_fixture_13",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 13"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_13"
+          },
+          "calculated": {
+            "score": 13
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_14",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_14",
+          "landing_id": "landing_fixture_14",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 14"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_14"
+          },
+          "calculated": {
+            "score": 14
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_15",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_15",
+          "landing_id": "landing_fixture_15",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 15"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_15"
+          },
+          "calculated": {
+            "score": 15
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_16",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_16",
+          "landing_id": "landing_fixture_16",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 16"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_16"
+          },
+          "calculated": {
+            "score": 16
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_17",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_17",
+          "landing_id": "landing_fixture_17",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 17"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_17"
+          },
+          "calculated": {
+            "score": 17
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_18",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_18",
+          "landing_id": "landing_fixture_18",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 18"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_18"
+          },
+          "calculated": {
+            "score": 18
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_19",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_19",
+          "landing_id": "landing_fixture_19",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 19"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_19"
+          },
+          "calculated": {
+            "score": 19
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_20",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_20",
+          "landing_id": "landing_fixture_20",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 20"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_20"
+          },
+          "calculated": {
+            "score": 20
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_21",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_21",
+          "landing_id": "landing_fixture_21",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 21"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_21"
+          },
+          "calculated": {
+            "score": 21
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_22",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_22",
+          "landing_id": "landing_fixture_22",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 22"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_22"
+          },
+          "calculated": {
+            "score": 22
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_23",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_23",
+          "landing_id": "landing_fixture_23",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 23"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_23"
+          },
+          "calculated": {
+            "score": 23
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_24",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_24",
+          "landing_id": "landing_fixture_24",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 24"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_24"
+          },
+          "calculated": {
+            "score": 24
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_25",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_25",
+          "landing_id": "landing_fixture_25",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 25"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_25"
+          },
+          "calculated": {
+            "score": 25
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_26",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_26",
+          "landing_id": "landing_fixture_26",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 26"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_26"
+          },
+          "calculated": {
+            "score": 26
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_27",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_27",
+          "landing_id": "landing_fixture_27",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 27"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_27"
+          },
+          "calculated": {
+            "score": 27
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_28",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_28",
+          "landing_id": "landing_fixture_28",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 28"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_28"
+          },
+          "calculated": {
+            "score": 28
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_29",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_29",
+          "landing_id": "landing_fixture_29",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 29"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_29"
+          },
+          "calculated": {
+            "score": 29
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_30",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_30",
+          "landing_id": "landing_fixture_30",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 30"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_30"
+          },
+          "calculated": {
+            "score": 30
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_31",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_31",
+          "landing_id": "landing_fixture_31",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 31"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_31"
+          },
+          "calculated": {
+            "score": 31
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_32",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_32",
+          "landing_id": "landing_fixture_32",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 32"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_32"
+          },
+          "calculated": {
+            "score": 32
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_33",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_33",
+          "landing_id": "landing_fixture_33",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 33"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_33"
+          },
+          "calculated": {
+            "score": 33
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_34",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_34",
+          "landing_id": "landing_fixture_34",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 34"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_34"
+          },
+          "calculated": {
+            "score": 34
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_35",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_35",
+          "landing_id": "landing_fixture_35",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 35"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_35"
+          },
+          "calculated": {
+            "score": 35
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_36",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_36",
+          "landing_id": "landing_fixture_36",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 36"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_36"
+          },
+          "calculated": {
+            "score": 36
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_37",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_37",
+          "landing_id": "landing_fixture_37",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 37"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_37"
+          },
+          "calculated": {
+            "score": 37
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_38",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_38",
+          "landing_id": "landing_fixture_38",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 38"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_38"
+          },
+          "calculated": {
+            "score": 38
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_39",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_39",
+          "landing_id": "landing_fixture_39",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 39"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_39"
+          },
+          "calculated": {
+            "score": 39
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_40",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_40",
+          "landing_id": "landing_fixture_40",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 40"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_40"
+          },
+          "calculated": {
+            "score": 40
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_41",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_41",
+          "landing_id": "landing_fixture_41",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 41"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_41"
+          },
+          "calculated": {
+            "score": 41
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_42",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_42",
+          "landing_id": "landing_fixture_42",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 42"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_42"
+          },
+          "calculated": {
+            "score": 42
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_43",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_43",
+          "landing_id": "landing_fixture_43",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 43"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_43"
+          },
+          "calculated": {
+            "score": 43
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_44",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_44",
+          "landing_id": "landing_fixture_44",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 44"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_44"
+          },
+          "calculated": {
+            "score": 44
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_45",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_45",
+          "landing_id": "landing_fixture_45",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 45"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_45"
+          },
+          "calculated": {
+            "score": 45
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_46",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_46",
+          "landing_id": "landing_fixture_46",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 46"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_46"
+          },
+          "calculated": {
+            "score": 46
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_47",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_47",
+          "landing_id": "landing_fixture_47",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 47"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_47"
+          },
+          "calculated": {
+            "score": 47
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_48",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_48",
+          "landing_id": "landing_fixture_48",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 48"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_48"
+          },
+          "calculated": {
+            "score": 48
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_49",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_49",
+          "landing_id": "landing_fixture_49",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 49"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_49"
+          },
+          "calculated": {
+            "score": 49
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_50",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_50",
+          "landing_id": "landing_fixture_50",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 50"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_50"
+          },
+          "calculated": {
+            "score": 50
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_51",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_51",
+          "landing_id": "landing_fixture_51",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 51"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_51"
+          },
+          "calculated": {
+            "score": 51
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_52",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_52",
+          "landing_id": "landing_fixture_52",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 52"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_52"
+          },
+          "calculated": {
+            "score": 52
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_53",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_53",
+          "landing_id": "landing_fixture_53",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 53"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_53"
+          },
+          "calculated": {
+            "score": 53
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_54",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_54",
+          "landing_id": "landing_fixture_54",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 54"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_54"
+          },
+          "calculated": {
+            "score": 54
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_55",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_55",
+          "landing_id": "landing_fixture_55",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 55"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_55"
+          },
+          "calculated": {
+            "score": 55
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_56",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_56",
+          "landing_id": "landing_fixture_56",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 56"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_56"
+          },
+          "calculated": {
+            "score": 56
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_57",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_57",
+          "landing_id": "landing_fixture_57",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 57"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_57"
+          },
+          "calculated": {
+            "score": 57
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_58",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_58",
+          "landing_id": "landing_fixture_58",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 58"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_58"
+          },
+          "calculated": {
+            "score": 58
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_59",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_59",
+          "landing_id": "landing_fixture_59",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 59"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_59"
+          },
+          "calculated": {
+            "score": 59
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_60",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_60",
+          "landing_id": "landing_fixture_60",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 60"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_60"
+          },
+          "calculated": {
+            "score": 60
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_61",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_61",
+          "landing_id": "landing_fixture_61",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 61"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_61"
+          },
+          "calculated": {
+            "score": 61
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_62",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_62",
+          "landing_id": "landing_fixture_62",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 62"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_62"
+          },
+          "calculated": {
+            "score": 62
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_63",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_63",
+          "landing_id": "landing_fixture_63",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 63"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_63"
+          },
+          "calculated": {
+            "score": 63
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_64",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_64",
+          "landing_id": "landing_fixture_64",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 64"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_64"
+          },
+          "calculated": {
+            "score": 64
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_65",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_65",
+          "landing_id": "landing_fixture_65",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 65"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_65"
+          },
+          "calculated": {
+            "score": 65
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_66",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_66",
+          "landing_id": "landing_fixture_66",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 66"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_66"
+          },
+          "calculated": {
+            "score": 66
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_67",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_67",
+          "landing_id": "landing_fixture_67",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 67"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_67"
+          },
+          "calculated": {
+            "score": 67
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_68",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_68",
+          "landing_id": "landing_fixture_68",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 68"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_68"
+          },
+          "calculated": {
+            "score": 68
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_69",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_69",
+          "landing_id": "landing_fixture_69",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 69"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_69"
+          },
+          "calculated": {
+            "score": 69
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_70",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_70",
+          "landing_id": "landing_fixture_70",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 70"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_70"
+          },
+          "calculated": {
+            "score": 70
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_71",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_71",
+          "landing_id": "landing_fixture_71",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 71"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_71"
+          },
+          "calculated": {
+            "score": 71
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_72",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_72",
+          "landing_id": "landing_fixture_72",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 72"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_72"
+          },
+          "calculated": {
+            "score": 72
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_73",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_73",
+          "landing_id": "landing_fixture_73",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 73"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_73"
+          },
+          "calculated": {
+            "score": 73
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_74",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_74",
+          "landing_id": "landing_fixture_74",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 74"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_74"
+          },
+          "calculated": {
+            "score": 74
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_75",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_75",
+          "landing_id": "landing_fixture_75",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 75"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_75"
+          },
+          "calculated": {
+            "score": 75
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_76",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_76",
+          "landing_id": "landing_fixture_76",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 76"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_76"
+          },
+          "calculated": {
+            "score": 76
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_77",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_77",
+          "landing_id": "landing_fixture_77",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 77"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_77"
+          },
+          "calculated": {
+            "score": 77
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_78",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_78",
+          "landing_id": "landing_fixture_78",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 78"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_78"
+          },
+          "calculated": {
+            "score": 78
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_79",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_79",
+          "landing_id": "landing_fixture_79",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 79"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_79"
+          },
+          "calculated": {
+            "score": 79
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_80",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_80",
+          "landing_id": "landing_fixture_80",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 80"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_80"
+          },
+          "calculated": {
+            "score": 80
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_81",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_81",
+          "landing_id": "landing_fixture_81",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 81"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_81"
+          },
+          "calculated": {
+            "score": 81
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_82",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_82",
+          "landing_id": "landing_fixture_82",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 82"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_82"
+          },
+          "calculated": {
+            "score": 82
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_83",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_83",
+          "landing_id": "landing_fixture_83",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 83"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_83"
+          },
+          "calculated": {
+            "score": 83
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_84",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_84",
+          "landing_id": "landing_fixture_84",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 84"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_84"
+          },
+          "calculated": {
+            "score": 84
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_85",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_85",
+          "landing_id": "landing_fixture_85",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 85"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_85"
+          },
+          "calculated": {
+            "score": 85
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_86",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_86",
+          "landing_id": "landing_fixture_86",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 86"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_86"
+          },
+          "calculated": {
+            "score": 86
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_87",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_87",
+          "landing_id": "landing_fixture_87",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 87"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_87"
+          },
+          "calculated": {
+            "score": 87
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_88",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_88",
+          "landing_id": "landing_fixture_88",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 88"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_88"
+          },
+          "calculated": {
+            "score": 88
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_89",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_89",
+          "landing_id": "landing_fixture_89",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 89"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_89"
+          },
+          "calculated": {
+            "score": 89
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_90",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_90",
+          "landing_id": "landing_fixture_90",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 90"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_90"
+          },
+          "calculated": {
+            "score": 90
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_91",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_91",
+          "landing_id": "landing_fixture_91",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 91"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_91"
+          },
+          "calculated": {
+            "score": 91
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_92",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_92",
+          "landing_id": "landing_fixture_92",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 92"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_92"
+          },
+          "calculated": {
+            "score": 92
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_93",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_93",
+          "landing_id": "landing_fixture_93",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 93"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_93"
+          },
+          "calculated": {
+            "score": 93
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_94",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_94",
+          "landing_id": "landing_fixture_94",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 94"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_94"
+          },
+          "calculated": {
+            "score": 94
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_95",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_95",
+          "landing_id": "landing_fixture_95",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 95"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_95"
+          },
+          "calculated": {
+            "score": 95
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_96",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_96",
+          "landing_id": "landing_fixture_96",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 96"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_96"
+          },
+          "calculated": {
+            "score": 96
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_97",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_97",
+          "landing_id": "landing_fixture_97",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 97"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_97"
+          },
+          "calculated": {
+            "score": 97
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_98",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_98",
+          "landing_id": "landing_fixture_98",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 98"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_98"
+          },
+          "calculated": {
+            "score": 98
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_99",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_99",
+          "landing_id": "landing_fixture_99",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 99"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_99"
+          },
+          "calculated": {
+            "score": 99
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_100",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_100",
+          "landing_id": "landing_fixture_100",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 100"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_100"
+          },
+          "calculated": {
+            "score": 100
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_101",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_101",
+          "landing_id": "landing_fixture_101",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 101"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_101"
+          },
+          "calculated": {
+            "score": 101
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_102",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_102",
+          "landing_id": "landing_fixture_102",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 102"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_102"
+          },
+          "calculated": {
+            "score": 102
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_103",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_103",
+          "landing_id": "landing_fixture_103",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 103"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_103"
+          },
+          "calculated": {
+            "score": 103
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_104",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_104",
+          "landing_id": "landing_fixture_104",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 104"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_104"
+          },
+          "calculated": {
+            "score": 104
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_105",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_105",
+          "landing_id": "landing_fixture_105",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 105"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_105"
+          },
+          "calculated": {
+            "score": 105
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_106",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_106",
+          "landing_id": "landing_fixture_106",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 106"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_106"
+          },
+          "calculated": {
+            "score": 106
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_107",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_107",
+          "landing_id": "landing_fixture_107",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 107"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_107"
+          },
+          "calculated": {
+            "score": 107
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_108",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_108",
+          "landing_id": "landing_fixture_108",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 108"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_108"
+          },
+          "calculated": {
+            "score": 108
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_109",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_109",
+          "landing_id": "landing_fixture_109",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 109"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_109"
+          },
+          "calculated": {
+            "score": 109
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_110",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_110",
+          "landing_id": "landing_fixture_110",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 110"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_110"
+          },
+          "calculated": {
+            "score": 110
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_111",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_111",
+          "landing_id": "landing_fixture_111",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 111"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_111"
+          },
+          "calculated": {
+            "score": 111
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_112",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_112",
+          "landing_id": "landing_fixture_112",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 112"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_112"
+          },
+          "calculated": {
+            "score": 112
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_113",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_113",
+          "landing_id": "landing_fixture_113",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 113"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_113"
+          },
+          "calculated": {
+            "score": 113
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_114",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_114",
+          "landing_id": "landing_fixture_114",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 114"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_114"
+          },
+          "calculated": {
+            "score": 114
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_115",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_115",
+          "landing_id": "landing_fixture_115",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 115"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_115"
+          },
+          "calculated": {
+            "score": 115
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_116",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_116",
+          "landing_id": "landing_fixture_116",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 116"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_116"
+          },
+          "calculated": {
+            "score": 116
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_117",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_117",
+          "landing_id": "landing_fixture_117",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 117"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_117"
+          },
+          "calculated": {
+            "score": 117
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_118",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_118",
+          "landing_id": "landing_fixture_118",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 118"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_118"
+          },
+          "calculated": {
+            "score": 118
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_119",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_119",
+          "landing_id": "landing_fixture_119",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 119"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_119"
+          },
+          "calculated": {
+            "score": 119
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_120",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_120",
+          "landing_id": "landing_fixture_120",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 120"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_120"
+          },
+          "calculated": {
+            "score": 120
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_121",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_121",
+          "landing_id": "landing_fixture_121",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 121"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_121"
+          },
+          "calculated": {
+            "score": 121
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_122",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_122",
+          "landing_id": "landing_fixture_122",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 122"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_122"
+          },
+          "calculated": {
+            "score": 122
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_123",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_123",
+          "landing_id": "landing_fixture_123",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 123"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_123"
+          },
+          "calculated": {
+            "score": 123
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_124",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_124",
+          "landing_id": "landing_fixture_124",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 124"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_124"
+          },
+          "calculated": {
+            "score": 124
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_125",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_125",
+          "landing_id": "landing_fixture_125",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 125"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_125"
+          },
+          "calculated": {
+            "score": 125
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_126",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_126",
+          "landing_id": "landing_fixture_126",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 126"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_126"
+          },
+          "calculated": {
+            "score": 126
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_127",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_127",
+          "landing_id": "landing_fixture_127",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 127"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_127"
+          },
+          "calculated": {
+            "score": 127
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_128",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_128",
+          "landing_id": "landing_fixture_128",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 128"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_128"
+          },
+          "calculated": {
+            "score": 128
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_129",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_129",
+          "landing_id": "landing_fixture_129",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 129"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_129"
+          },
+          "calculated": {
+            "score": 129
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_130",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_130",
+          "landing_id": "landing_fixture_130",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 130"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_130"
+          },
+          "calculated": {
+            "score": 130
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_131",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_131",
+          "landing_id": "landing_fixture_131",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 131"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_131"
+          },
+          "calculated": {
+            "score": 131
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_132",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_132",
+          "landing_id": "landing_fixture_132",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 132"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_132"
+          },
+          "calculated": {
+            "score": 132
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_133",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_133",
+          "landing_id": "landing_fixture_133",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 133"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_133"
+          },
+          "calculated": {
+            "score": 133
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_134",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_134",
+          "landing_id": "landing_fixture_134",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 134"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_134"
+          },
+          "calculated": {
+            "score": 134
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_135",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_135",
+          "landing_id": "landing_fixture_135",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 135"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_135"
+          },
+          "calculated": {
+            "score": 135
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_136",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_136",
+          "landing_id": "landing_fixture_136",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 136"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_136"
+          },
+          "calculated": {
+            "score": 136
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_137",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_137",
+          "landing_id": "landing_fixture_137",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 137"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_137"
+          },
+          "calculated": {
+            "score": 137
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_138",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_138",
+          "landing_id": "landing_fixture_138",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 138"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_138"
+          },
+          "calculated": {
+            "score": 138
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_139",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_139",
+          "landing_id": "landing_fixture_139",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 139"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_139"
+          },
+          "calculated": {
+            "score": 139
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_140",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_140",
+          "landing_id": "landing_fixture_140",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 140"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_140"
+          },
+          "calculated": {
+            "score": 140
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_141",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_141",
+          "landing_id": "landing_fixture_141",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 141"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_141"
+          },
+          "calculated": {
+            "score": 141
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_142",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_142",
+          "landing_id": "landing_fixture_142",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 142"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_142"
+          },
+          "calculated": {
+            "score": 142
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_143",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_143",
+          "landing_id": "landing_fixture_143",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 143"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_143"
+          },
+          "calculated": {
+            "score": 143
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_144",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_144",
+          "landing_id": "landing_fixture_144",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 144"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_144"
+          },
+          "calculated": {
+            "score": 144
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_145",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_145",
+          "landing_id": "landing_fixture_145",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 145"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_145"
+          },
+          "calculated": {
+            "score": 145
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_146",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_146",
+          "landing_id": "landing_fixture_146",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 146"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_146"
+          },
+          "calculated": {
+            "score": 146
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_147",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_147",
+          "landing_id": "landing_fixture_147",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 147"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_147"
+          },
+          "calculated": {
+            "score": 147
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_148",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_148",
+          "landing_id": "landing_fixture_148",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 148"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_148"
+          },
+          "calculated": {
+            "score": 148
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_149",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_149",
+          "landing_id": "landing_fixture_149",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 149"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_149"
+          },
+          "calculated": {
+            "score": 149
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_150",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_150",
+          "landing_id": "landing_fixture_150",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 150"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_150"
+          },
+          "calculated": {
+            "score": 150
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_151",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_151",
+          "landing_id": "landing_fixture_151",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 151"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_151"
+          },
+          "calculated": {
+            "score": 151
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_152",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_152",
+          "landing_id": "landing_fixture_152",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 152"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_152"
+          },
+          "calculated": {
+            "score": 152
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_153",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_153",
+          "landing_id": "landing_fixture_153",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 153"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_153"
+          },
+          "calculated": {
+            "score": 153
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_154",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_154",
+          "landing_id": "landing_fixture_154",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 154"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_154"
+          },
+          "calculated": {
+            "score": 154
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_155",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_155",
+          "landing_id": "landing_fixture_155",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 155"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_155"
+          },
+          "calculated": {
+            "score": 155
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_156",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_156",
+          "landing_id": "landing_fixture_156",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 156"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_156"
+          },
+          "calculated": {
+            "score": 156
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_157",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_157",
+          "landing_id": "landing_fixture_157",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 157"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_157"
+          },
+          "calculated": {
+            "score": 157
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_158",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_158",
+          "landing_id": "landing_fixture_158",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 158"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_158"
+          },
+          "calculated": {
+            "score": 158
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_159",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_159",
+          "landing_id": "landing_fixture_159",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 159"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_159"
+          },
+          "calculated": {
+            "score": 159
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_160",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_160",
+          "landing_id": "landing_fixture_160",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 160"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_160"
+          },
+          "calculated": {
+            "score": 160
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_161",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_161",
+          "landing_id": "landing_fixture_161",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 161"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_161"
+          },
+          "calculated": {
+            "score": 161
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_162",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_162",
+          "landing_id": "landing_fixture_162",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 162"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_162"
+          },
+          "calculated": {
+            "score": 162
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_163",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_163",
+          "landing_id": "landing_fixture_163",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 163"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_163"
+          },
+          "calculated": {
+            "score": 163
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_164",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_164",
+          "landing_id": "landing_fixture_164",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 164"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_164"
+          },
+          "calculated": {
+            "score": 164
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_165",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_165",
+          "landing_id": "landing_fixture_165",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 165"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_165"
+          },
+          "calculated": {
+            "score": 165
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_166",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_166",
+          "landing_id": "landing_fixture_166",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 166"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_166"
+          },
+          "calculated": {
+            "score": 166
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_167",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_167",
+          "landing_id": "landing_fixture_167",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 167"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_167"
+          },
+          "calculated": {
+            "score": 167
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_168",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_168",
+          "landing_id": "landing_fixture_168",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 168"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_168"
+          },
+          "calculated": {
+            "score": 168
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_169",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_169",
+          "landing_id": "landing_fixture_169",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 169"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_169"
+          },
+          "calculated": {
+            "score": 169
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_170",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_170",
+          "landing_id": "landing_fixture_170",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 170"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_170"
+          },
+          "calculated": {
+            "score": 170
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_171",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_171",
+          "landing_id": "landing_fixture_171",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 171"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_171"
+          },
+          "calculated": {
+            "score": 171
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_172",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_172",
+          "landing_id": "landing_fixture_172",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 172"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_172"
+          },
+          "calculated": {
+            "score": 172
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_173",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_173",
+          "landing_id": "landing_fixture_173",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 173"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_173"
+          },
+          "calculated": {
+            "score": 173
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_174",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_174",
+          "landing_id": "landing_fixture_174",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-07T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 174"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_174"
+          },
+          "calculated": {
+            "score": 174
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_175",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_175",
+          "landing_id": "landing_fixture_175",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-08T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 175"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_175"
+          },
+          "calculated": {
+            "score": 175
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_176",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_176",
+          "landing_id": "landing_fixture_176",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-09T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 176"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_176"
+          },
+          "calculated": {
+            "score": 176
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_177",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_177",
+          "landing_id": "landing_fixture_177",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-10T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 177"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_177"
+          },
+          "calculated": {
+            "score": 177
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_178",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_178",
+          "landing_id": "landing_fixture_178",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-11T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 178"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_178"
+          },
+          "calculated": {
+            "score": 178
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_179",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_179",
+          "landing_id": "landing_fixture_179",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-12T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 179"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_179"
+          },
+          "calculated": {
+            "score": 179
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_180",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_180",
+          "landing_id": "landing_fixture_180",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-13T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 180"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_180"
+          },
+          "calculated": {
+            "score": 180
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_181",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_181",
+          "landing_id": "landing_fixture_181",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-14T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 181"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_181"
+          },
+          "calculated": {
+            "score": 181
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_182",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_182",
+          "landing_id": "landing_fixture_182",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-15T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 182"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_182"
+          },
+          "calculated": {
+            "score": 182
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_183",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_183",
+          "landing_id": "landing_fixture_183",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-16T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 183"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_183"
+          },
+          "calculated": {
+            "score": 183
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_184",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_184",
+          "landing_id": "landing_fixture_184",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-17T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 184"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_184"
+          },
+          "calculated": {
+            "score": 184
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_185",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_185",
+          "landing_id": "landing_fixture_185",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-18T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 185"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_185"
+          },
+          "calculated": {
+            "score": 185
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_186",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_186",
+          "landing_id": "landing_fixture_186",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-19T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 186"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_186"
+          },
+          "calculated": {
+            "score": 186
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_187",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_187",
+          "landing_id": "landing_fixture_187",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-20T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 187"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_187"
+          },
+          "calculated": {
+            "score": 187
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_188",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_188",
+          "landing_id": "landing_fixture_188",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-21T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 188"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_188"
+          },
+          "calculated": {
+            "score": 188
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_189",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_189",
+          "landing_id": "landing_fixture_189",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-22T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 189"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_189"
+          },
+          "calculated": {
+            "score": 189
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_190",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_190",
+          "landing_id": "landing_fixture_190",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-23T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 190"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_190"
+          },
+          "calculated": {
+            "score": 190
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_191",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_191",
+          "landing_id": "landing_fixture_191",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-24T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 191"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_191"
+          },
+          "calculated": {
+            "score": 191
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_192",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_192",
+          "landing_id": "landing_fixture_192",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-25T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 192"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_192"
+          },
+          "calculated": {
+            "score": 192
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_193",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_193",
+          "landing_id": "landing_fixture_193",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-26T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 193"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_193"
+          },
+          "calculated": {
+            "score": 193
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_194",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_194",
+          "landing_id": "landing_fixture_194",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-27T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 194"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_194"
+          },
+          "calculated": {
+            "score": 194
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_195",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_195",
+          "landing_id": "landing_fixture_195",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-28T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 195"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_195"
+          },
+          "calculated": {
+            "score": 195
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_196",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_196",
+          "landing_id": "landing_fixture_196",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-01T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 196"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_196"
+          },
+          "calculated": {
+            "score": 196
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_197",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_197",
+          "landing_id": "landing_fixture_197",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-02T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 197"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_197"
+          },
+          "calculated": {
+            "score": 197
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_198",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_198",
+          "landing_id": "landing_fixture_198",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-03T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 198"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_198"
+          },
+          "calculated": {
+            "score": 198
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_199",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_199",
+          "landing_id": "landing_fixture_199",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-04T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 199"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_199"
+          },
+          "calculated": {
+            "score": 199
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        },
+        {
+          "response_id": "resp_fixture_200",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_200",
+          "landing_id": "landing_fixture_200",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-05T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 200"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_200"
+          },
+          "calculated": {
+            "score": 200
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/servers" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "srv_fixture_1",
+        "name": "Fixture Server 1",
+        "users": [],
+        "messages": 3
+      },
+      {
+        "id": "srv_fixture_2",
+        "name": "Fixture Server 2",
+        "users": [],
+        "messages": 0
+      }
+    ]
+  }
+}

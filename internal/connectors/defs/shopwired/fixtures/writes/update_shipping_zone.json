@@ -1,0 +1,18 @@
+{
+  "record": {
+    "country_id": 1,
+    "vat": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/shipping-zones/1",
+    "body": {
+      "vat": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

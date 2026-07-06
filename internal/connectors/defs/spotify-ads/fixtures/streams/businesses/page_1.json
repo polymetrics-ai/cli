@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/businesses" },
+  "response": {
+    "status": 200,
+    "body": {
+      "businesses": [
+        { "id": "business_fixture_1", "name": "Fixture Business One", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

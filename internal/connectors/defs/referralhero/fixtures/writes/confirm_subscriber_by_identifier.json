@@ -1,0 +1,26 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "email": "jane.fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/subscribers/confirm",
+    "body": {
+      "email": "jane.fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "subscriber_confirmed",
+        "id": "sub_fixture_1",
+        "email": "jane.fixture@example.com"
+      },
+      "calls_left": 1000,
+      "timestamp": 1487661494
+    }
+  }
+}

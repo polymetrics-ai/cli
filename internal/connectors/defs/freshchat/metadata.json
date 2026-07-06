@@ -1,0 +1,24 @@
+{
+  "name": "freshchat",
+  "display_name": "Freshchat",
+  "description": "Reads Freshchat account, user, conversation, agent, group, channel, role, outbound, report, metrics, and business-hours data through the Freshchat v2 REST API; writes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings.",
+  "integration_type": "api",
+  "docs_url": "https://developers.freshchat.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Freshchat API reads of account metadata, users, conversations, messages, agents, groups, channels, roles, outbound messages, reports, metrics, and business-hours status",
+    "write": "creates, updates, or deletes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

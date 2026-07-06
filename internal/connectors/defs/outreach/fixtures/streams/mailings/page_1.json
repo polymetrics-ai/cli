@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mailings",
+    "query": { "page[size]": "100", "filter[updatedAt]": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mailing_fixture_1",
+          "type": "mailing",
+          "attributes": {
+            "email": null,
+            "name": "Fixture Mailing One",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

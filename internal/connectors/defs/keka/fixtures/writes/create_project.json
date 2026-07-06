@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture create_project"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/psa/projects",
+    "body": {
+      "name": "Fixture create_project"
+    }
+  }
+}

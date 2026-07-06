@@ -1,0 +1,71 @@
+{
+  "actions": [
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/task",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "projectId": { "type": "string" },
+          "content": { "type": "string" },
+          "desc": { "type": "string" },
+          "isAllDay": { "type": "boolean" },
+          "startDate": { "type": "string" },
+          "dueDate": { "type": "string" },
+          "timeZone": { "type": "string" },
+          "priority": { "type": "integer" },
+          "sortOrder": { "type": "integer" },
+          "reminders": { "type": "array", "items": { "type": "string" } },
+          "repeatFlag": { "type": "string" }
+        }
+      },
+      "risk": "creates a new task in the caller's TickTick account (in the given projectId, or the default Inbox if omitted); low-risk external mutation, no approval required"
+    },
+    {
+      "name": "complete_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/project/{{ record.projectId }}/task/{{ record.id }}/complete",
+      "path_fields": ["projectId", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectId", "id"],
+        "properties": {
+          "projectId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "marks an existing task as completed; a completed task is removed from active task lists/reminders for every collaborator on the project"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ record.projectId }}/task/{{ record.id }}",
+      "path_fields": ["projectId", "id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectId", "id"],
+        "properties": {
+          "projectId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a task from the given project; irreversible, no undo via the API"
+    }
+  ]
+}

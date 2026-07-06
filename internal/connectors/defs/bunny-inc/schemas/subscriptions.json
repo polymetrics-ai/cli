@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscriptions",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "accountId": {
+      "type": "string"
+    },
+    "currencyId": {
+      "type": "string"
+    },
+    "priceListId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "period": {
+      "type": "string"
+    },
+    "rampIntervalMonths": {
+      "type": "integer"
+    },
+    "trialPeriod": {
+      "type": "integer"
+    },
+    "startDate": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "cancelationDate": {
+      "type": "string"
+    },
+    "trialStartDate": {
+      "type": "string"
+    },
+    "trialEndDate": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt"
+}

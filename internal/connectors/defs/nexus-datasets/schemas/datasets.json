@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "datasets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "dataset_name": { "type": "string" },
+    "updated_at": { "type": ["string", "null"] },
+    "raw_data": { "type": ["object", "null"] },
+    "raw_data_string": { "type": ["string", "null"] }
+  }
+}

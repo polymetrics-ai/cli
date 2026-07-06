@@ -1,0 +1,27 @@
+{
+  "record": {
+    "message_stream_id": "message_stream_id_fixture",
+    "Suppressions": [
+      {
+        "EmailAddress": "fixture@example.com"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/message-streams/message_stream_id_fixture/suppressions/delete",
+    "body": {
+      "Suppressions": [
+        {
+          "EmailAddress": "fixture@example.com"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

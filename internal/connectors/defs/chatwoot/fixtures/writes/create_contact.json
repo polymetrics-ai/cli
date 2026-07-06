@@ -1,0 +1,16 @@
+{
+  "record": {
+    "inbox_id": 1,
+    "name": "Fixture Contact",
+    "email": "fixture-contact@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "inbox_id": 1,
+      "name": "Fixture Contact",
+      "email": "fixture-contact@example.com"
+    }
+  }
+}

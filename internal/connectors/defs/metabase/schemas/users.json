@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "email": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "common_name": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "is_superuser": {
+      "type": "boolean"
+    },
+    "last_login": {
+      "type": "string"
+    },
+    "date_joined": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

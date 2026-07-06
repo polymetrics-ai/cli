@@ -1,0 +1,9 @@
+{
+  "record": {
+    "lead_source_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lead_sources/fixture_id"
+  }
+}

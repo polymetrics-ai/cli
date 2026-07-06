@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Supplier",
+    "city": "Swansea",
+    "country": "GB"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/suppliers"
+  }
+}

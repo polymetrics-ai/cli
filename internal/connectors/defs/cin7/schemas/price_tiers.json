@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "price_tiers",
+  "type": "object",
+  "x-primary-key": ["Code"],
+  "required": ["Code"],
+  "properties": {
+    "Code": { "type": "integer" },
+    "Name": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "checkqueryfield/1.0",
+    "headers": {},
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ping", "query": { "limit": "{{ config.nope_limit }}" } },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

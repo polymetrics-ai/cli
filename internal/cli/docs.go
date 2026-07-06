@@ -11,6 +11,11 @@ DESCRIPTION
   connectors, ETL, reverse ETL plans, local warehouse tables, and agent-safe
   JSON output from one Go binary.
 
+  Connectors expose ETL read streams across the catalog. Connectors whose APIs
+  support mutations also expose approval-gated reverse ETL write actions. Use
+  pm connectors inspect <name> to see a connector's streams, write=true/false,
+  and write actions.
+
   Every command group is also a manual page. Run pm connectors, pm etl,
   pm credentials, or any other command group without a subcommand to read its
   documentation. Use --json on a command group to return the same manual in a
@@ -18,13 +23,13 @@ DESCRIPTION
 
 COMMANDS
   init              create a .polymetrics project
-  connectors        list and inspect connectors
+  connectors        list and inspect connector streams and write actions
   credentials       add, test, inspect, list, and remove credentials
   connections       create and list source-to-destination connections
   catalog           refresh or show source catalogs
-  etl               run ETL and inspect run status
+  etl               run ETL stream reads and inspect run status
   query             query local warehouse tables
-  reverse           list, plan, preview, run, and inspect reverse ETL
+  reverse           list, plan, preview, run, and inspect reverse ETL writes
   flow              plan, preview, run, list, and inspect multi-step flows
   rlm               score warehouse records with deterministic or agent RLM
   schedule          create, list, install, and remove flow schedules
@@ -47,7 +52,8 @@ HUMAN QUICK START
 AGENT CONTRACT
   Use --json for machine-readable output.
   Use pm <command> to inspect command manuals before executing workflows.
-  Use pm connectors inspect <name> --json before selecting connector config.
+  Use pm connectors inspect <name> --json before selecting connector config,
+  streams, or write actions.
   Do not ask users for secret values in chat; use --from-env field=ENV or
   --value-stdin field.
   Reverse ETL external mutations require plan, preview, approval, and run.
@@ -136,36 +142,38 @@ EXIT STATUS
 `
 
 const connectorsHelp = `NAME
-  pm connectors - inspect built-in connector capabilities and native Go catalog
+  pm connectors - inspect connector definitions, streams, and write actions
 
 SYNOPSIS
   pm connectors list [--all] [--json]
-  pm connectors catalog [--type source|destination] [--stage stage] [--json]
-  pm connectors port-plan --all [--json]
-  pm connectors port-plan <catalog-slug> [--json]
-  pm connectors inspect <name-or-catalog-slug> [--json]
-  pm connectors help <name-or-catalog-slug>
+  pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
+  pm connectors inspect <name> [--json]
+  pm connectors help <name>
 
 DESCRIPTION
-  pm ships with built-in runnable connectors and a generated connector catalog.
-  Built-in connectors are compiled into the binary and expose explicit runtime
-  capabilities. Catalog connectors expose documentation, configuration schema,
-  secret field names, sync support, native implementation status, and the Go
-  runtime family used by the native binding.
+  pm ships with runnable connector definitions compiled into the binary. Most
+  connectors are declarative JSON bundles interpreted by the connector engine;
+  hooks or native components cover APIs and protocols that need custom behavior.
 
-  Catalog entries are native-Go-only. pm does not execute connector container
-  images. implementation_status=enabled means the connector has a Go runtime
-  binding and fixture-backed conformance coverage. Connector-specific live API
-  behavior is documented in each connector manual when available.
+  Each connector exposes ETL read streams. Connectors whose APIs expose
+  mutation endpoints also declare reverse ETL write actions. Run
+  pm connectors inspect <name> to see write=true/false, ETL STREAMS, and
+  REVERSE ETL ACTIONS without reading credentials.
+
+  The catalog command is generated from declarative bundles and Tier-3 native
+  connectors. pm does not execute connector container images or accept legacy
+  source-/destination-prefixed names.
 
 CATALOG
-  The generated native-Go-only catalog contains 646 validated connectors:
-  590 sources and 56 destinations. Use --all or the catalog subcommand when an
-  agent needs to discover the complete connector universe.
+  The connector catalog is generated from local connector metadata. The current
+  runtime catalog has 551 bare-name entries: 547 declarative bundles plus the
+  local sample, file, warehouse, and outbox primitives. Use --all or the catalog
+  subcommand when an agent needs to discover the complete connector universe.
+  Use --capability read, write, cdc, or query to filter by executable surface.
 
 GITHUB AUTHENTICATION
   public
-    Unauthenticated public repository reads. Configure repository=owner/repo.
+    Unauthenticated public repository reads. Configure owner and repo.
     This mode cannot execute reverse ETL writes.
 
   token
@@ -196,8 +204,18 @@ GITHUB ETL STREAMS
   Pagination defaults to one page. Set --config max_pages=0, all, or unlimited
   to read pages until the GitHub endpoint is exhausted.
 
-GITHUB REVERSE ETL ACTIONS
-  The built-in github connector can execute approved reverse ETL write actions
+REVERSE ETL WRITE ACTIONS
+  Reverse ETL writes are available for any connector whose API exposes
+  mutations and whose definition declares write actions. They are not
+  GitHub-only. Use pm connectors catalog --capability write --json to discover
+  writable connectors; the rest are read-only because their APIs expose no
+  supported mutations.
+
+  Run pm connectors inspect <name> to see a connector's write=true/false
+  capability, ETL streams, reverse ETL write actions, required fields, and risk
+  notes.
+
+  GitHub is one writable connector example. It supports approved write actions
   such as create_issue, create_pull_request, comment_issue, update_issue,
   update_pull_request, request_reviewers, merge_pull_request, labels,
   milestones, releases, workflow runs, pull request reviews, and repository
@@ -205,23 +223,17 @@ GITHUB REVERSE ETL ACTIONS
 
 ACTIONS
   list
-    Prints runnable built-in connectors by default. Use --all to print the full
-    generated catalog. Use --json when an agent needs stable structured output.
+    Prints runnable connectors by default. Use --all to print the full
+    connector catalog. Use --json when an agent needs stable structured output.
 
   catalog
-    Prints the generated connector catalog, optionally filtered by --type and
+    Prints connector catalog metadata, optionally filtered by --capability and
     --stage. Example stages include alpha, beta, and generally_available.
 
-  port-plan
-    Prints native Go implementation plans for catalog connectors. Plans include
-    runtime family, priority wave, ETL work, reverse ETL boundary, database CDC
-    requirements, and conformance tests.
-
   inspect <name>
-    Prints a man-style connector manual for built-in or catalog-only
-    connectors. Use --json to print either the structured manifest or catalog
-    definition for agents. Inspection is metadata-only and does not resolve
-    credentials.
+    Prints a man-style connector manual for a bare connector name. Use --json
+    to print structured metadata for agents. Inspection is metadata-only and
+    does not resolve credentials.
 
   help <name>
     Alias for the human connector manual.
@@ -231,18 +243,12 @@ EXAMPLES
   pm connectors --json
   pm connectors list
   pm connectors list --all --json
-  pm connectors catalog --type destination --stage generally_available --json
-  pm connectors port-plan --all --json
-  pm connectors port-plan source-postgres
-  pm connectors port-plan source-mysql
-  pm connectors port-plan source-mongodb-v2
+  pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
-  pm connectors inspect source-github
-  pm connectors inspect destination-postgres
   pm connectors inspect github --json
-  pm credentials add github-public --connector github --config repository=octocat/Hello-World
-  pm credentials add github-token --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
-  pm credentials add github-app --connector github --config repository=OWNER/REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
+  pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
+  pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
+  pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
 
 SECURITY
   Connector inspection never reads credentials.
@@ -314,15 +320,23 @@ SYNOPSIS
   pm etl status <run-id> [--json]
 
 DESCRIPTION
-  ETL can directly check, catalog, and read enabled runtime connectors by
-  catalog slug or built-in connector name. Catalog entries with
-  implementation_status=planned_native_port are inspectable through
-  pm connectors inspect and pm connectors port-plan, but cannot execute ETL
-  until a native Go port passes conformance and is enabled.
+  ETL can directly check, catalog, and read enabled connectors by name. The
+  read surface comes from connector definitions: declarative JSON bundles
+  interpreted by the connector engine, with hooks or native components where an
+  API or protocol needs custom behavior. Use pm connectors inspect <name> to
+  see available streams.
 
-  ETL runs read from a configured source connector, add Polymetrics metadata
-  fields, and write records to the destination connector. The MVP warehouse
-  destination stores tables as JSONL files.
+  Some catalog slugs remain migration metadata only. Those entries are still
+  inspectable through pm connectors inspect, but cannot execute ETL until a
+  runnable connector definition or component passes conformance and is enabled.
+
+  ETL runs read records from a configured source connector stream, add
+  Polymetrics metadata fields, and write records to the destination connector.
+  The MVP warehouse destination stores tables as JSONL files.
+
+  ETL and reverse ETL are separate first-class connector surfaces: ETL reads
+  streams, while pm reverse executes connector write actions where the upstream
+  API supports mutations.
 
   ETL writes destination records in bounded batches. Use --batch-size for large
   paginated streams when you want tighter memory bounds.
@@ -331,7 +345,7 @@ DESCRIPTION
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
-DIRECT NATIVE CONNECTOR COMMANDS
+DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.
 
@@ -524,9 +538,16 @@ USAGE
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
-  Reverse ETL reads local warehouse rows, maps fields, and writes records to a
-  destination connector. The outbox connector records writes as JSONL. The
-  github connector can execute approved issue and pull request mutations.
+  Reverse ETL reads local warehouse rows, maps fields, and writes records
+  through a connector write action. It is available for any connector that
+  declares capabilities.write=true. Use pm connectors catalog --capability
+  write --json to discover writable connectors. The remaining connectors are
+  read-only because their APIs expose no supported mutations.
+
+  Run pm connectors inspect <name> to see write=true/false, available ETL
+  streams, and reverse ETL write actions for a connector. The outbox connector
+  records writes as JSONL. GitHub is one example of an external API connector
+  with approved mutation actions.
 
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
@@ -556,13 +577,16 @@ FLAGS
   --source-table table         local warehouse table to read
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
-  --action action              destination action; GitHub writes require an explicit action
+  --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
   --approve token              approval token required by run
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 
-GITHUB ACTIONS
+GITHUB ACTION EXAMPLES
+  These are examples from one writable connector. Other connectors expose
+  different actions; pm connectors inspect <name> is the authoritative list.
+
   create_issue
     Requires title. Optional body, labels, assignees, milestone, type.
 
@@ -607,7 +631,8 @@ SECURITY
 LEARN MORE
   Run pm reverse --help for this manual.
   Run pm connectors inspect outbox --json to inspect the local outbox destination.
-  Run pm connectors inspect github --json to inspect GitHub write actions.
+  Run pm connectors inspect <name> --json to inspect streams and write actions.
+  Run pm connectors inspect github --json to inspect one connector's write actions.
   Run pm skills generate --dir docs/skills --json for agent-specific workflows.
 
 EXIT STATUS

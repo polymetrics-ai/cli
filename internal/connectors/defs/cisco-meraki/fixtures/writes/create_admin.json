@@ -1,0 +1,12 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "email": "fixture.admin@example.com",
+    "name": "Fixture Admin",
+    "orgAccess": "read-only"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/org_1/admins"
+  }
+}

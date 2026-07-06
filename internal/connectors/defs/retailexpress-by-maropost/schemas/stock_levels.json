@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Retail Express Stock Level",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "product_id": { "type": ["string", "null"] },
+    "store_id": { "type": ["string", "null"] },
+    "quantity": { "type": ["number", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

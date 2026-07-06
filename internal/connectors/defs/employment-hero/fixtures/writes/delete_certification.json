@@ -1,0 +1,15 @@
+{
+  "record": {
+    "certification_id": "cert_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/organisations/synthetic-conformance-value/certifications/cert_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_certification_fixture_response"
+    }
+  }
+}

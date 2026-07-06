@@ -1,0 +1,22 @@
+{
+  "name": "mailtrap",
+  "display_name": "Mailtrap",
+  "description": "Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mailtrap account-management REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.mailtrap.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Mailtrap API read of account-management data"
+  }
+}

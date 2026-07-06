@@ -1,0 +1,73 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/agentPools/synthetic-conformance-value/updates",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "agents": [
+          {
+            "id": "id_fixture",
+            "isHidden": true,
+            "isLatestGAedVersion": true,
+            "lastConnection": 1,
+            "name": "name_fixture",
+            "operationalStatus": "DEGRADED",
+            "poolId": "pool_id_fixture",
+            "type": "AD",
+            "updateMessage": "2026-01-01T00:00:00Z",
+            "updateStatus": "Cancelled",
+            "version": "version_fixture",
+            "_links": {
+              "self": {
+                "hints": {
+                  "allow": [
+                    {}
+                  ]
+                },
+                "href": "https://example.invalid/fixture",
+                "name": "name_fixture",
+                "templated": true,
+                "type": "type_fixture"
+              }
+            }
+          }
+        ],
+        "agentType": "AD",
+        "enabled": true,
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "notifyAdmin": true,
+        "reason": "reason_fixture",
+        "schedule": {
+          "cron": "cron_fixture",
+          "delay": 1,
+          "duration": 1,
+          "lastUpdated": "2026-01-01T00:00:00Z",
+          "timezone": "2026-01-01T00:00:00Z"
+        },
+        "sortOrder": 1,
+        "status": "Cancelled",
+        "targetVersion": "target_version_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

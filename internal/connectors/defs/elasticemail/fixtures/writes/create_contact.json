@@ -1,0 +1,22 @@
+{
+  "record": {
+    "Email": "fixture-new@example.com",
+    "Status": "Active",
+    "FirstName": "Fixture",
+    "LastName": "Contact"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "Email": "fixture-new@example.com",
+      "Status": "Active",
+      "FirstName": "Fixture",
+      "LastName": "Contact"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

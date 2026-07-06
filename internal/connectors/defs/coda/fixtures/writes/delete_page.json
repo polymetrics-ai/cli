@@ -1,0 +1,13 @@
+{
+  "record": {
+    "page_id": "canvas-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/docs/synthetic-conformance-value/pages/canvas-fixture-1"
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-8", "id": "canvas-fixture-1" }
+  }
+}

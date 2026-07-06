@@ -1,0 +1,272 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customerNumber", "name", "currency", "customerGroup", "vatZone", "paymentTerms"],
+        "properties": {
+          "customerNumber": { "type": "integer" },
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "address": { "type": "string" },
+          "customerGroup": { "type": "object" },
+          "vatZone": { "type": "object" },
+          "paymentTerms": { "type": "object" }
+        }
+      },
+      "risk": "creates a new customer record in the live e-conomic bookkeeping ledger; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customerNumber }}",
+      "path_fields": ["customerNumber"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customerNumber"],
+        "properties": {
+          "customerNumber": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "address": { "type": "string" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "overwrites an existing customer's stored details; e-conomic's PUT is a full replace of the resource, so omitted optional fields may be cleared"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customerNumber }}",
+      "path_fields": ["customerNumber"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customerNumber"],
+        "properties": {
+          "customerNumber": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a customer record; e-conomic rejects the delete (409) if the customer has any booked entries, but a customer with no bookkeeping history is removed irreversibly"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["productNumber", "name", "productGroup"],
+        "properties": {
+          "productNumber": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "salesPrice": { "type": "number" },
+          "costPrice": { "type": "number" },
+          "productGroup": { "type": "object" },
+          "unit": { "type": "object" }
+        }
+      },
+      "risk": "creates a new sellable/purchasable product in the live e-conomic catalog; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.productNumber }}",
+      "path_fields": ["productNumber"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["productNumber"],
+        "properties": {
+          "productNumber": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "salesPrice": { "type": "number" },
+          "costPrice": { "type": "number" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "overwrites an existing product's stored details, including its sales/cost price used on future invoices; e-conomic's PUT is a full replace, so omitted optional fields may be cleared"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.productNumber }}",
+      "path_fields": ["productNumber"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["productNumber"],
+        "properties": {
+          "productNumber": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a product from the catalog; e-conomic rejects the delete (409) if the product is referenced by any booked invoice line"
+    },
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/suppliers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["supplierNumber", "name", "currency", "supplierGroup", "vatZone"],
+        "properties": {
+          "supplierNumber": { "type": "integer" },
+          "name": { "type": "string" },
+          "currency": { "type": "string" },
+          "email": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "address": { "type": "string" },
+          "supplierGroup": { "type": "object" },
+          "vatZone": { "type": "object" }
+        }
+      },
+      "risk": "creates a new supplier record in the live e-conomic bookkeeping ledger; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/suppliers/{{ record.supplierNumber }}",
+      "path_fields": ["supplierNumber"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["supplierNumber"],
+        "properties": {
+          "supplierNumber": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "country": { "type": "string" },
+          "address": { "type": "string" },
+          "barred": { "type": "boolean" }
+        }
+      },
+      "risk": "overwrites an existing supplier's stored details; e-conomic's PUT is a full replace of the resource, so omitted optional fields may be cleared"
+    },
+    {
+      "name": "delete_supplier",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/suppliers/{{ record.supplierNumber }}",
+      "path_fields": ["supplierNumber"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["supplierNumber"],
+        "properties": {
+          "supplierNumber": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a supplier record; e-conomic rejects the delete (409) if the supplier has any booked entries"
+    },
+    {
+      "name": "create_draft_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/drafts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["date", "currency", "customer", "paymentTerms", "layout", "lines"],
+        "properties": {
+          "date": { "type": "string" },
+          "currency": { "type": "string" },
+          "customer": { "type": "object" },
+          "paymentTerms": { "type": "object" },
+          "layout": { "type": "object" },
+          "lines": { "type": "array" },
+          "recipient": { "type": "object" }
+        }
+      },
+      "risk": "creates a new draft (work-in-progress, not yet legally binding) invoice; not yet booked, so reversible by deleting the draft — low-risk"
+    },
+    {
+      "name": "update_draft_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/drafts/{{ record.draftInvoiceNumber }}",
+      "path_fields": ["draftInvoiceNumber"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["draftInvoiceNumber"],
+        "properties": {
+          "draftInvoiceNumber": { "type": "integer" },
+          "date": { "type": "string" },
+          "currency": { "type": "string" },
+          "customer": { "type": "object" },
+          "paymentTerms": { "type": "object" },
+          "lines": { "type": "array" }
+        }
+      },
+      "risk": "overwrites an existing draft invoice's stored details; only draft (unbooked) invoices are mutable — a booked invoice number here is rejected by e-conomic"
+    },
+    {
+      "name": "book_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/booked",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["draftInvoice"],
+        "properties": {
+          "draftInvoice": { "type": "object" },
+          "bookWithNumber": { "type": "integer" },
+          "sendBy": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly transitions a draft invoice to a legally-binding booked invoice; e-conomic core invoice fields become immutable after booking (a correction requires issuing a credit note against it, not an update/delete)"
+    }
+  ]
+}

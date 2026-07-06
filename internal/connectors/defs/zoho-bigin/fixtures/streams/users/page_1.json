@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "type": "AllUsers" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "user_fixture_1", "email": "fixture1@example.com", "first_name": "Fixture", "last_name": "Admin", "full_name": "Fixture Admin", "status": "active", "time_zone": "UTC" },
+        { "id": "user_fixture_2", "email": "fixture2@example.com", "first_name": "Fixture", "last_name": "Rep", "full_name": "Fixture Rep", "status": "active", "time_zone": "UTC" }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

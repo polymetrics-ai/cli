@@ -1,0 +1,328 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "_embedded": {
+      "type": "object",
+      "properties": {
+        "apple-app-site-association": {
+          "type": "object",
+          "description": "Contains the customized well-known URI content and links",
+          "properties": {
+            "customized": {
+              "type": "object",
+              "properties": {
+                "representation": {
+                  "type": "object",
+                  "description": "The well-known URI content in JSON format",
+                  "properties": {},
+                  "additionalProperties": true
+                },
+                "_links": {
+                  "type": "object",
+                  "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+                  "properties": {
+                    "self": {
+                      "type": "object",
+                      "properties": {
+                        "hints": {
+                          "type": "object",
+                          "description": "Describes allowed HTTP verbs for the `href`",
+                          "properties": {
+                            "allow": {
+                              "type": "object",
+                              "additionalProperties": true
+                            }
+                          },
+                          "additionalProperties": true
+                        },
+                        "href": {
+                          "type": "string",
+                          "description": "Link URI"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Link name"
+                        },
+                        "templated": {
+                          "type": "boolean",
+                          "description": "Indicates whether the link object's `href` property is a URI template."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "assetlinks.json": {
+          "type": "object",
+          "description": "Contains the customized well-known URI content and links",
+          "properties": {
+            "customized": {
+              "type": "object",
+              "properties": {
+                "representation": {
+                  "type": "array",
+                  "description": "The well-known URI content in a JSON array of objects format",
+                  "items": {
+                    "type": [
+                      "object",
+                      "string",
+                      "number",
+                      "boolean",
+                      "array",
+                      "null"
+                    ]
+                  }
+                },
+                "_links": {
+                  "type": "object",
+                  "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+                  "properties": {
+                    "self": {
+                      "type": "object",
+                      "properties": {
+                        "hints": {
+                          "type": "object",
+                          "description": "Describes allowed HTTP verbs for the `href`",
+                          "properties": {
+                            "allow": {
+                              "type": "object",
+                              "additionalProperties": true
+                            }
+                          },
+                          "additionalProperties": true
+                        },
+                        "href": {
+                          "type": "string",
+                          "description": "Link URI"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Link name"
+                        },
+                        "templated": {
+                          "type": "boolean",
+                          "description": "Indicates whether the link object's `href` property is a URI template."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "webauthn": {
+          "type": "object",
+          "description": "Contains the customized well-known URI content and links",
+          "properties": {
+            "customized": {
+              "type": "object",
+              "properties": {
+                "representation": {
+                  "type": "object",
+                  "description": "The well-known URI content in JSON format",
+                  "properties": {},
+                  "additionalProperties": true
+                },
+                "_links": {
+                  "type": "object",
+                  "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+                  "properties": {
+                    "self": {
+                      "type": "object",
+                      "properties": {
+                        "hints": {
+                          "type": "object",
+                          "description": "Describes allowed HTTP verbs for the `href`",
+                          "properties": {
+                            "allow": {
+                              "type": "object",
+                              "additionalProperties": true
+                            }
+                          },
+                          "additionalProperties": true
+                        },
+                        "href": {
+                          "type": "string",
+                          "description": "Link URI"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Link name"
+                        },
+                        "templated": {
+                          "type": "boolean",
+                          "description": "Indicates whether the link object's `href` property is a URI template."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "apple-app-site-association": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "assetlinks.json": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "webauthn": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

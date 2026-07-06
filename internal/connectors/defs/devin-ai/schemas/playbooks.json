@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "playbooks",
+  "type": "object",
+  "x-primary-key": ["playbook_id"],
+  "required": ["playbook_id"],
+  "properties": {
+    "playbook_id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "body": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "macro": { "type": ["string", "null"] },
+    "created_by": { "type": ["string", "null"] },
+    "updated_by": { "type": ["string", "null"] },
+    "access_type": { "type": ["string", "null"] },
+    "org_id": { "type": ["string", "null"] },
+    "structured_output_schema": { "type": ["object", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "actions": [
+    {
+      "name": "send_transfer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/V1/SendTransfer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["SkuCode", "SendValue", "AccountNumber", "DistributorRef"],
+        "properties": {
+          "SkuCode": { "type": "string" },
+          "SendValue": { "type": "number" },
+          "SendCurrencyIso": { "type": "string" },
+          "AccountNumber": { "type": "string" },
+          "DistributorRef": { "type": "string" },
+          "ValidateOnly": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; sends a real-money mobile top-up/airtime transfer to a live account and deducts the distributor's DingConnect balance unless ValidateOnly is set; approval required"
+    }
+  ]
+}

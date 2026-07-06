@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sigma Computing Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Sigma Computing API base URL.",
+      "default": "https://api.sigmacomputing.com"
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Sigma Computing OAuth access token, sent as a Bearer token."
+    },
+    "page_size": {
+      "type": "integer",
+      "description": "Records requested per page (legacy default 100, max 1000).",
+      "default": 100
+    }
+  }
+}

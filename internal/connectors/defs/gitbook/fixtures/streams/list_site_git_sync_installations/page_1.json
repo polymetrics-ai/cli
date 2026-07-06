@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/spaces/git/installations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_git_sync_installations_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_git_sync_installations",
+          "name": "Fixture list_site_git_sync_installations",
+          "status": "active",
+          "operation_id": "listSiteGitSyncInstallations"
+        }
+      ]
+    }
+  }
+}

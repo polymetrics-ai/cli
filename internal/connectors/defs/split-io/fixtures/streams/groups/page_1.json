@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/internal/api/v2/groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        { "id": "group_fixture_1", "name": "Fixture Group 1", "description": "Fixture description", "type": "group" },
+        { "id": "group_fixture_2", "name": "Fixture Group 2", "description": null, "type": "group" }
+      ],
+      "nextMarker": null,
+      "previousMarker": null,
+      "limit": 20,
+      "count": 2
+    }
+  }
+}

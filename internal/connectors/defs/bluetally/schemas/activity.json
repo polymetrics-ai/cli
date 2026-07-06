@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activity",
+  "type": "object",
+  "x-primary-key": ["timestamp", "item_id", "event"],
+  "x-cursor-field": "timestamp",
+  "required": ["timestamp"],
+  "properties": {
+    "timestamp": { "type": "string" },
+    "user_id": { "type": ["integer", "null"] },
+    "user_name": { "type": ["string", "null"] },
+    "user_email": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "event": { "type": ["string", "null"] },
+    "item_id": { "type": ["integer", "null"] },
+    "item_name": { "type": ["string", "null"] },
+    "checked_out_to_from_type": { "type": ["string", "null"] },
+    "checked_out_to_from_id": { "type": ["integer", "null"] },
+    "checked_out_to_from_name": { "type": ["string", "null"] },
+    "checked_out_to_from_email": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}

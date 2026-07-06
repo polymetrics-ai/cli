@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "opportunity",
+      "attributes": {
+        "name": "Fixture Update Opportunity"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/opportunities/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "opportunity",
+        "attributes": {
+          "name": "Fixture Update Opportunity"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

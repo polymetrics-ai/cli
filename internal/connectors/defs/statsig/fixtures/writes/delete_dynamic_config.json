@@ -1,0 +1,4 @@
+{
+  "record": { "id": "config_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/dynamic_configs/config_fixture_1" }
+}

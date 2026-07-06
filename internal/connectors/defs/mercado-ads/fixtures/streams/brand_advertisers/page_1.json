@@ -1,0 +1,10 @@
+{
+  "data": [
+    {
+      "advertiser_id": 1,
+      "advertiser_name": "fixture",
+      "account_name": "fixture",
+      "site_id": "fixture"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "wildfire_active_tracking",
+  "type": "object",
+  "x-primary-key": ["EventId", "latitude", "longitude"],
+  "x-cursor-field": "LastUpdated",
+  "required": ["EventId", "latitude", "longitude"],
+  "properties": {
+    "EventId": { "type": "string" },
+    "latitude": { "type": "string" },
+    "longitude": { "type": "string" },
+    "DiscoveryDateTime": { "type": ["string", "null"] },
+    "LastUpdated": { "type": ["string", "null"] },
+    "CurrentLat": { "type": ["number", "null"] },
+    "CurrentLon": { "type": ["number", "null"] },
+    "geometry": { "type": ["object", "null"] },
+    "CalculatedAcres": { "type": ["number", "null"] },
+    "MaxCalculatedAcres": { "type": ["number", "null"] },
+    "ShapeConfidence": { "type": ["integer", "null"] },
+    "ExistenceConfidence": { "type": ["integer", "null"] }
+  }
+}

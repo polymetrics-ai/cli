@@ -1,0 +1,24 @@
+{
+  "name": "datascope",
+  "display_name": "DataScope",
+  "description": "Reads DataScope locations, form answers, lists, notifications, task assignments, tickets (findings), and generated files, and writes location/list/task-assignment/form-answer mutations, through the DataScope external REST API (full-refresh).",
+  "integration_type": "api",
+  "docs_url": "https://app.mydatascope.com/api/external/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external DataScope API read of field-data-collection form submissions, location data, task assignments, tickets, and generated files",
+    "write": "external mutation of DataScope locations, lists (metadata objects/types), task assignments, and previously-submitted form answers; change_form_answer rewrites collected field data after the fact and bulk_update_metadata_objects affects many list elements in one call, so every write ships an explicit per-action risk string",
+    "approval": "required for update_location/update_metadata_object/update_metadata_type/bulk_update_metadata_objects/change_form_answer; create_location/assign_task/create_metadata_object/create_metadata_type are low-risk"
+  }
+}

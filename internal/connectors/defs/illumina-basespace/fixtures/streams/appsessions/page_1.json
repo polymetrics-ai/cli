@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/synthetic-conformance-value/appsessions",
+    "query": {
+      "Limit": "100",
+      "Offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "appsession_fixture_1",
+            "Name": "Fixture App Session One",
+            "Href": "v1pre3/appsessions/appsession_fixture_1",
+            "Status": "Complete",
+            "StatusSummary": "Completed",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateCompleted": "2026-01-01T03:00:00Z",
+            "TotalSize": 2000,
+            "Application": {
+              "Id": "app_fixture_1",
+              "Name": "Fixture App"
+            }
+          }
+        ],
+        "Offset": 0,
+        "Limit": 100,
+        "TotalCount": 1
+      }
+    }
+  }
+}

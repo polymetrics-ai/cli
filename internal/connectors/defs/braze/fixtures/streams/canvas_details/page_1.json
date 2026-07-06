@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/canvas/list", "query": { "page": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "canvases": [
+        { "id": "canvas_fixture_1", "name": "Fixture Canvas 1", "tags": ["fixture"], "last_edited": "2026-01-01T00:00:01Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "workspace_id": "ws_fixture_1",
+    "feature_flag_name": "fixture_flag",
+    "environment_id": "env_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/internal/api/v2/splits/ws/ws_fixture_1/fixture_flag/environments/env_fixture_1/kill"
+  },
+  "response": {
+    "status": 200,
+    "body": { "name": "fixture_flag" }
+  }
+}

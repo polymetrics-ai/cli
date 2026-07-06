@@ -1,0 +1,306 @@
+{
+  "actions": [
+    {
+      "name": "create_party",
+      "kind": "create",
+      "method": "POST",
+      "path": "/parties",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["party"],
+        "properties": {
+          "party": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["person", "organisation"] },
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" },
+              "name": { "type": "string" },
+              "title": { "type": "string" },
+              "jobTitle": { "type": "string" },
+              "about": { "type": "string" },
+              "emailAddresses": { "type": "array", "items": { "type": "object" } },
+              "phoneNumbers": { "type": "array", "items": { "type": "object" } },
+              "addresses": { "type": "array", "items": { "type": "object" } }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a live Capsule CRM contact; approval required. Body wraps the record under a top-level \"party\" key (Capsule's resource-envelope convention) — the record itself must carry that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive."
+    },
+    {
+      "name": "update_party",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/parties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["party"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "party"],
+        "properties": {
+          "id": { "type": "string" },
+          "party": {
+            "type": "object",
+            "properties": {
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" },
+              "name": { "type": "string" },
+              "title": { "type": "string" },
+              "jobTitle": { "type": "string" },
+              "about": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates a live Capsule CRM contact; approval required. Body wraps the record under a top-level \"party\" key; \"id\" is path-only (path_fields) and excluded from the body via body_fields."
+    },
+    {
+      "name": "delete_party",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/parties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM contact and its associated history; approval required"
+    },
+    {
+      "name": "create_opportunity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["opportunity"],
+        "properties": {
+          "opportunity": {
+            "type": "object",
+            "required": ["name", "party", "milestone"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "party": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "milestone": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "amount": { "type": "number" },
+                  "currency": { "type": "string" }
+                }
+              },
+              "probability": { "type": "number" },
+              "expectedCloseOn": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a live Capsule CRM sales opportunity; approval required. Body wraps the record under a top-level \"opportunity\" key."
+    },
+    {
+      "name": "update_opportunity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/opportunities/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["opportunity"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "opportunity"],
+        "properties": {
+          "id": { "type": "string" },
+          "opportunity": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "milestone": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "value": {
+                "type": "object",
+                "properties": {
+                  "amount": { "type": "number" },
+                  "currency": { "type": "string" }
+                }
+              },
+              "closedOn": { "type": "string" },
+              "lostReason": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates a live Capsule CRM sales opportunity (including moving pipeline stage or closing/losing it); approval required"
+    },
+    {
+      "name": "delete_opportunity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunities/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM sales opportunity; approval required"
+    },
+    {
+      "name": "create_kase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/kases",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["kase"],
+        "properties": {
+          "kase": {
+            "type": "object",
+            "required": ["name", "party"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "party": { "type": "object", "properties": { "id": { "type": "integer" } } }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a live Capsule CRM case/project; approval required. Body wraps the record under a top-level \"kase\" key (Capsule kept the \"kase\" spelling in the API after renaming Cases to Projects in the product UI, to avoid a breaking change; see docs.md)."
+    },
+    {
+      "name": "update_kase",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/kases/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["kase"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "kase"],
+        "properties": {
+          "id": { "type": "string" },
+          "kase": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "status": { "type": "string", "enum": ["OPEN", "CLOSED"] },
+              "closedOn": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates a live Capsule CRM case/project, including closing it; approval required"
+    },
+    {
+      "name": "delete_kase",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/kases/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM case/project; approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task"],
+        "properties": {
+          "task": {
+            "type": "object",
+            "required": ["description"],
+            "properties": {
+              "description": { "type": "string" },
+              "detail": { "type": "string" },
+              "dueOn": { "type": "string" },
+              "dueTime": { "type": "string" },
+              "category": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "party": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "opportunity": { "type": "object", "properties": { "id": { "type": "integer" } } },
+              "kase": { "type": "object", "properties": { "id": { "type": "integer" } } }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a live Capsule CRM task/reminder; approval required. Body wraps the record under a top-level \"task\" key."
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["task"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "task"],
+        "properties": {
+          "id": { "type": "string" },
+          "task": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "detail": { "type": "string" },
+              "dueOn": { "type": "string" },
+              "status": { "type": "string", "enum": ["OPEN", "PENDING", "COMPLETED"] }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates a live Capsule CRM task, including marking it complete; approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM task; approval required"
+    }
+  ]
+}

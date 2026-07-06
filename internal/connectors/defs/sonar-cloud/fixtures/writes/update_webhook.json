@@ -1,0 +1,7 @@
+{
+  "record": { "webhook": "webhook_fixture_1", "name": "fixture webhook renamed", "url": "https://example.com/fixture-webhook-updated" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/webhooks/update"
+  }
+}

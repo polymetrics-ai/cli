@@ -1,0 +1,27 @@
+{
+  "record": {
+    "project_id": "project_fixture_1",
+    "relations": [
+      {
+        "userId": "user_fixture_1",
+        "role": "project:editor"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/project_fixture_1/users",
+    "body": {
+      "relations": [
+        {
+          "userId": "user_fixture_1",
+          "role": "project:editor"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

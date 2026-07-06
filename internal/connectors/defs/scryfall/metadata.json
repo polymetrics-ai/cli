@@ -1,0 +1,20 @@
+{
+  "name": "scryfall",
+  "display_name": "Scryfall",
+  "description": "Reads cards and sets from the public Scryfall API. Read-only and credential-free.",
+  "integration_type": "api",
+  "docs_url": "https://scryfall.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "public, credential-free Scryfall API read of card and set data",
+    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": { "method": "GET", "path": "/sources" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "results": [
+        {
+          "id": "source_fixture_1",
+          "name": "Fixture Source 1",
+          "url": "https://example.com/source/1",
+          "icon": "https://example.com/icon.png",
+          "description": "Fixture news source.",
+          "priority": 1,
+          "language": ["english"],
+          "category": ["top"],
+          "country": ["united states of america"]
+        },
+        {
+          "id": "source_fixture_2",
+          "name": "Fixture Source 2",
+          "url": "https://example.com/source/2",
+          "icon": "https://example.com/icon.png",
+          "description": "Fixture news source.",
+          "priority": 2,
+          "language": ["english"],
+          "category": ["top"],
+          "country": ["united states of america"]
+        }
+      ]
+    }
+  }
+}

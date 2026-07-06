@@ -1,0 +1,7 @@
+{
+  "record": { "id": 3, "name": "Fixture Category Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/categories/3"
+  }
+}

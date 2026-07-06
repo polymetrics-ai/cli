@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/incidents", "query": { "per_page": "synthetic-conformance-value", "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "inc_fixture_3",
+          "name": "Cache invalidation bug",
+          "number": 103,
+          "description": "Stale cache entries served for 10 minutes",
+          "summary": "Cache invalidation bug",
+          "current_milestone": "investigating",
+          "severity": "SEV3",
+          "priority": "P3",
+          "created_at": "2026-01-03T00:00:00Z",
+          "updated_at": "2026-01-03T00:15:00Z",
+          "started_at": "2026-01-03T00:00:00Z",
+          "resolved_at": null
+        }
+      ],
+      "pagination": { "page": 2, "next": null, "prev": 1 }
+    }
+  }
+}

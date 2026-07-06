@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "U_fixture_1", "name": "Fixture User One", "email": "fixture1@example.com", "role": "admin", "created_at": "2026-01-01T00:00:00Z" }
+      ],
+      "more": false
+    }
+  }
+}

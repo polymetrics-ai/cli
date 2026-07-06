@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resource/Company",
+    "query": {
+      "max": "500",
+      "start": "500"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 501,
+        "CompanyName": "Fixture Location 501",
+        "Code": "LOC-501",
+        "Active": true,
+        "Address": 1,
+        "Country": 1,
+        "Creator": 1,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T00:05:00"
+      }
+    ]
+  }
+}

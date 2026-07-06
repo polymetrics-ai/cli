@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "settlements",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "amount": { "type": ["string", "integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

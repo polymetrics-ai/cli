@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/warehouses", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idwarehouse": 501,
+        "name": "Fixture Warehouse",
+        "active": true,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:05:00Z"
+      }
+    ]
+  }
+}

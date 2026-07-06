@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "postcards",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "carrier": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "send_date": { "type": ["string", "null"] },
+    "expected_delivery_date": { "type": ["string", "null"] },
+    "date_created": { "type": "string" },
+    "date_modified": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

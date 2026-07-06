@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/templates"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "tpl_fixture_1",
+          "name": "Fixture Sales Agreement",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "tpl_fixture_2",
+          "name": "Fixture NDA",
+          "date_created": "2026-01-02T00:00:00Z",
+          "date_modified": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

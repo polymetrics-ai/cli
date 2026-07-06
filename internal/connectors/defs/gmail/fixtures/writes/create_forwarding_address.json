@@ -1,0 +1,12 @@
+{
+  "record": { "forwardingEmail": "fixture-new-forward@example.com" },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/settings/forwardingAddresses",
+    "body": { "forwardingEmail": "fixture-new-forward@example.com" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "forwardingEmail": "fixture-new-forward@example.com", "verificationStatus": "pending" }
+  }
+}

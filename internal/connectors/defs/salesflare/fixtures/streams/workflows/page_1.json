@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/workflows", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Onboarding Workflow", "state": "active" },
+        { "id": 2, "name": "Fixture Nurture Workflow", "state": "active" }
+      ]
+    }
+  }
+}

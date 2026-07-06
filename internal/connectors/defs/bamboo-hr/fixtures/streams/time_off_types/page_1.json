@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/time_off/types"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "timeOffTypes": [
+        {
+          "id": "78",
+          "name": "Vacation",
+          "units": "days",
+          "color": "#00aa00",
+          "icon": "time-off"
+        },
+        {
+          "id": "79",
+          "name": "Sick",
+          "units": "hours",
+          "color": "#aa0000",
+          "icon": "medical"
+        }
+      ]
+    }
+  }
+}

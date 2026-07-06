@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/partners" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 420,
+        "company": "Fixture Partner",
+        "description": "Sanitized fixture partner.",
+        "web": "https://example.com",
+        "email": "partner@example.test",
+        "phone": "(555) 010-0101",
+        "address": "1 Fixture Way",
+        "exhibitor_info": {
+          "booth_number": "E42",
+          "photo": {
+            "url": "https://example.com/exhibitor.png",
+            "thumbnail": "https://example.com/exhibitor-thumbnail.png"
+          }
+        },
+        "sponsor_info": {
+          "photo": {
+            "url": "https://example.com/sponsor.png",
+            "thumbnail": "https://example.com/sponsor-thumbnail.png"
+          }
+        }
+      }
+    ]
+  }
+}

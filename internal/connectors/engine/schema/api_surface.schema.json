@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "api_surface.json",
+  "type": "object",
+  "required": ["api", "endpoints"],
+  "additionalProperties": false,
+  "properties": {
+    "api": { "type": "string" },
+    "docs": { "type": "string" },
+    "reviewed_at": { "type": "string" },
+    "scope": { "type": "string" },
+    "endpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "covered_by": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "stream": { "type": "string" },
+              "write": { "type": "string" }
+            }
+          },
+          "excluded": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "category": {
+                "type": "string",
+                "enum": [
+                  "destructive_admin",
+                  "requires_elevated_scope",
+                  "binary_payload",
+                  "deprecated",
+                  "non_data_endpoint",
+                  "duplicate_of",
+                  "out_of_scope"
+                ]
+              },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

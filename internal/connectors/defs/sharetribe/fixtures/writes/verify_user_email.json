@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/users/verify_email",
+    "body": {
+      "id": "user_fixture_1",
+      "email": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "user_fixture_1", "type": "user" } }
+  }
+}

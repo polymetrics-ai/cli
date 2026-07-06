@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "rec_fixture_1",
+    "fields": { "Score": 99 }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1",
+    "body": {
+      "fields": { "Score": 99 }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "display_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/synthetic-conformance-value",
+    "body": {
+      "display_name": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_user_by_id_fixture_1"
+    }
+  }
+}

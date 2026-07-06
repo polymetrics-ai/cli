@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DocuSeal Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "DocuSeal API key, sent as the X-Auth-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.docuseal.com",
+      "description": "DocuSeal API base URL override for self-hosted instances, tests, or proxies."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 10,
+      "description": "Page size (1-100) sent as the 'limit' query parameter on each list request."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Template ID the 'template_detail' stream reads a single template record for. Required only when reading the 'template_detail' stream."
+    }
+  }
+}

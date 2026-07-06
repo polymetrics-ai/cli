@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/git/installations/synthetic-conformance-value/github/repos"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_git_hub_repositories_for_git_sync_installation_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_git_hub_repositories_for_git_sync_installation",
+          "name": "Fixture list_git_hub_repositories_for_git_sync_installation",
+          "status": "active",
+          "operation_id": "listGitHubRepositoriesForGitSyncInstallation"
+        }
+      ]
+    }
+  }
+}

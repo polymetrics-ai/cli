@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "_id": "cnt_fixture_1",
+          "teamId": "team_fixture_1",
+          "fullName": "Fixture Contact",
+          "email": "fixture1@example.com",
+          "fields": { "firstName": "Fixture", "lastName": "Contact" },
+          "campaigns": [
+            {
+              "campaignId": "cmp_fixture_1",
+              "campaignState": "running",
+              "leadState": "active",
+              "leadId": "lead_fixture_1"
+            }
+          ],
+          "ownerId": "usr_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "createdBy": "usr_fixture_1",
+          "unsubscribed": false
+        }
+      ],
+      "total": 1,
+      "limit": 100,
+      "offset": 0
+    }
+  }
+}

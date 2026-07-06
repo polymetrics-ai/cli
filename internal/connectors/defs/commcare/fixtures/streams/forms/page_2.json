@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/v0.5/form/",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "form_fixture_101",
+          "received_on": "2026-01-31T00:00:00Z",
+          "server_modified_on": "2026-01-31T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 100,
+        "next": null,
+        "offset": 100,
+        "previous": "/a/synthetic-conformance-value/api/v0.5/form/?limit=100&offset=0",
+        "total_count": 101
+      }
+    }
+  }
+}

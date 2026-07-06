@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pollen_forecast",
+  "type": "object",
+  "x-primary-key": ["datetime", "latitude", "longitude"],
+  "x-cursor-field": "datetime",
+  "required": ["datetime", "latitude", "longitude"],
+  "properties": {
+    "datetime": { "type": "string", "description": "Computed from the raw API's `date` field (computed_fields rename) since the daily pollen endpoint has no `datetime` field of its own." },
+    "date": { "type": ["string", "null"] },
+    "latitude": { "type": "string" },
+    "longitude": { "type": "string" },
+    "data_available": { "type": ["boolean", "null"] },
+    "types": { "type": ["object", "null"] },
+    "plants": { "type": ["object", "null"] },
+    "index": { "type": ["object", "null"] }
+  }
+}

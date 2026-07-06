@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/virtual_tag_configs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "virtual_tag_configs": [
+        {
+          "token": "vtc_fixture_1",
+          "key": "team",
+          "backfill_until": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/virtual_tag_configs?page=1"
+      }
+    }
+  }
+}

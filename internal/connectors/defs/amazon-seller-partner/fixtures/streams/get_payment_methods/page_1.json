@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/2024-06-01/paymentMethods",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paymentMethods": [
+        {
+          "accountHolderName": "accountHolderName-fixture-1",
+          "paymentMethodId": "paymentMethodId-fixture-1",
+          "tail": "tail-fixture-1",
+          "expiryDate": {},
+          "countryCode": "countryCode-fixture-1",
+          "paymentMethodType": "paymentMethodType-fixture-1",
+          "assignmentType": "assignmentType-fixture-1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "accountId": "account_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/org/privacy/aerial/grant",
+    "body": {
+      "accountId": "account_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

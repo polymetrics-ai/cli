@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CoinGecko Coins Connection Specification",
+  "type": "object",
+  "required": ["coin_id", "base_url"],
+  "properties": {
+    "coin_id": {
+      "type": "string",
+      "description": "CoinGecko coin id (e.g. bitcoin) to read the metadata/market snapshot for."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional CoinGecko pro API key, sent on the x-cg-pro-api-key header. Unauthenticated calls against the public base URL are allowed; a key unlocks the pro base URL and higher limits. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "CoinGecko API base URL, e.g. https://api.coingecko.com/api/v3 (public) or https://pro-api.coingecko.com/api/v3 (pro, when api_key is set). Legacy derives this automatically from whether api_key is present; this dialect's spec.json 'default' materialization is a fixed literal only, with no api_key-conditional derivation mechanism, so base_url is required here instead -- see docs.md's Known limits."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/email-servers",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "email-servers": [
+        {
+          "alias": "alias_fixture",
+          "authType": "BASIC_SMTP_AUTH",
+          "enabled": true,
+          "host": "host_fixture",
+          "id": "id_fixture",
+          "port": 1,
+          "username": "username_fixture"
+        }
+      ]
+    }
+  }
+}

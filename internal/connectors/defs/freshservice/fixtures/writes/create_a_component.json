@@ -1,0 +1,15 @@
+{
+  "record": {
+    "display_id": 123,
+    "name": "Fixture create_a_component",
+    "description": "Fixture create_a_component record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/assets/123/components",
+    "body": {
+      "name": "Fixture create_a_component",
+      "description": "Fixture create_a_component record"
+    }
+  }
+}

@@ -1,0 +1,1044 @@
+{
+  "api": "SolarWinds ITSM (Samanage) REST API v1.1 (https://api.samanage.com)",
+  "docs": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion, verified against the real published OpenAPI 3 spec (https://apidoc.samanage.com/ renders it via ReDoc; the raw machine-readable document is served at https://apidoc.samanage.com/redoc/schema/resolved_schema.json, fetched 2026-07-03: 135 documented operations across 66 paths). The metadata.json docs_url this bundle previously carried (documentation.solarwinds.com/.../swsd-api.htm) 404s live as of this review and has been replaced with the working apidoc.samanage.com reference. 24 read streams (6 legacy-parity: incidents/users/departments/categories/problems/changes, plus 18 newly added: change_catalogs/releases/solutions/catalog_items/configuration_items/sites/roles/groups/hardwares/mobiles/other_assets/softwares/printers/contracts/purchase_orders/vendors/audits/risks) and 20 delete write actions (one per resource with a documented DELETE-by-id endpoint, excluding memberships -- see below) are covered_by a stream or write. create/update (POST/PUT) mutations on every primary resource are blocked by a single recurring ENGINE_GAP: every one of this API's create/update request bodies wraps the payload under a single resource-named root key (e.g. POST /incidents expects {\"incident\": {...}}, PUT /solutions/{id} expects {\"solution\": {...}}), and this dialect's write.go has no mechanism to nest the constructed JSON body under a declared root key (body_type 'json' sends every non-path_fields record field flush at the top level; 'form' and 'none' have no analogous namespacing either) -- this is the SAME engine gap already filed against internal/connectors/defs/statuspage/api_surface.json's mutation endpoints in this program (its own docs.md names the same two viable fixes: a Tier-1 writes.json 'body_envelope' field, or an orchestrator-approved WriteHook; this pass's constraints forbid creating a new hook package, so every affected endpoint below is excluded with category requires_elevated_scope carrying an ENGINE_GAP note, following that exact precedent). DELETE endpoints have no request body at all and are unaffected -- every resource's delete-by-id action is implemented.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/incidents",
+      "covered_by": {
+        "stream": "incidents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-incident-by-id detail; identical record shape already covered by the incidents list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/incidents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"incident\" key ({\"incident\": {...}}); this dialect's write.go has no body-envelope/namespacing mechanism (body_type json/form/none all send the record flush, never nested under a declared key) -- same gap as defs/statuspage/docs.md's Write actions & risks section; forbidden to add a new hook package this pass"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/incidents/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"incident\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/incidents/{id}",
+      "covered_by": {
+        "write": "delete_incident"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/problems",
+      "covered_by": {
+        "stream": "problems"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/problems/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-problem-by-id detail; identical record shape already covered by the problems list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/problems",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"problem\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/problems/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"problem\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/problems/{id}",
+      "covered_by": {
+        "write": "delete_problem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes",
+      "covered_by": {
+        "stream": "changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-change-by-id detail; identical record shape already covered by the changes list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/changes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"change\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/changes/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"change\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/changes/{id}",
+      "covered_by": {
+        "write": "delete_change"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/change_catalogs",
+      "covered_by": {
+        "stream": "change_catalogs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/change_catalogs/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-change-catalog-by-id detail; identical record shape already covered by the change_catalogs list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/change_catalogs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"change_catalog\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/change_catalogs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"change_catalog\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/change_catalogs/{id}",
+      "covered_by": {
+        "write": "delete_change_catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/change_catalogs/{id}/change_requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raises a new change request from a change-catalog template; a compound workflow action distinct from plain CRUD, not implemented this pass; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/releases",
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/releases/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-release-by-id detail; identical record shape already covered by the releases list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/releases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"release\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/releases/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"release\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/releases/{id}",
+      "covered_by": {
+        "write": "delete_release"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions",
+      "covered_by": {
+        "stream": "solutions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-solution-by-id detail; identical record shape already covered by the solutions list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/solutions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"solution\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/solutions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"solution\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/{id}",
+      "covered_by": {
+        "write": "delete_solution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog_items",
+      "covered_by": {
+        "stream": "catalog_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog_items/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-catalog-item-by-id detail; identical record shape already covered by the catalog_items list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalog_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"catalog_item\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalog_items/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"catalog_item\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalog_items/{id}",
+      "covered_by": {
+        "write": "delete_catalog_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalog_items/{id}/service_requests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "raises a new service request from a catalog-item template; a compound workflow action distinct from plain CRUD, not implemented this pass; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/configuration_items",
+      "covered_by": {
+        "stream": "configuration_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/configuration_items/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-configuration-item-by-id detail; identical record shape already covered by the configuration_items list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/configuration_items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"configuration_item\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/configuration_items/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"configuration_item\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/configuration_items/{id}",
+      "covered_by": {
+        "write": "delete_configuration_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/configuration_items/{id}/append_multiple_dependent_assets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "attaches multiple dependent CI records by id array; a niche relationship-management action, not core CRUD; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/asset_links/delete_asset_link_by_id",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "removes a specific asset-to-asset dependency link by its own link id, which is only obtainable via a configuration-item detail response, not any covered list stream; niche relationship-management action, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user-by-id detail; identical record shape already covered by the users list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"user\" key; see POST /incidents' reason. Also independently a user-provisioning action typically requiring elevated admin rights on the live API."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"user\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sites",
+      "covered_by": {
+        "stream": "sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sites/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-site-by-id detail; identical record shape already covered by the sites list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sites",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"site\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sites/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"site\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sites/{id}",
+      "covered_by": {
+        "write": "delete_site"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-department-by-id detail; identical record shape already covered by the departments list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/departments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"department\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/departments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"department\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/departments/{id}",
+      "covered_by": {
+        "write": "delete_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-role-by-id detail; identical record shape already covered by the roles list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"role\" key; see POST /incidents' reason. Also independently role/permission administration, typically requiring elevated admin rights."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/roles/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"role\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/roles/{id}",
+      "covered_by": {
+        "write": "delete_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-group-by-id detail; identical record shape already covered by the groups list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"group\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"group\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-category-by-id detail; identical record shape already covered by the categories list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/categories",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"category\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/categories/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"category\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/categories/{id}",
+      "covered_by": {
+        "write": "delete_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hardwares",
+      "covered_by": {
+        "stream": "hardwares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hardwares/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-hardware-asset-by-id detail; identical record shape already covered by the hardwares list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hardwares",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"hardware\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hardwares/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"hardware\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hardwares/{id}",
+      "covered_by": {
+        "write": "delete_hardware"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hardwares/{id}/warranties",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-hardware-asset warranty sub-resource listing; a drill-down detail view, not core asset data; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hardwares/{id}/warranties",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"warranty\" key (this API's uniform wrap convention); see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hardwares/{hardware_id}/warranties/{warranty_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"warranty\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hardwares/{hardware_id}/warranties/{warranty_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a specific hardware warranty sub-record; its warranty_id is only obtainable via the excluded warranties sub-resource listing, not any covered stream; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mobiles",
+      "covered_by": {
+        "stream": "mobiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mobiles/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-mobile-device-by-id detail; identical record shape already covered by the mobiles list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/mobiles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"mobile\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/mobiles/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"mobile\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/mobiles/{id}",
+      "covered_by": {
+        "write": "delete_mobile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other_assets",
+      "covered_by": {
+        "stream": "other_assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other_assets/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-other-asset-by-id detail; identical record shape already covered by the other_assets list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/other_assets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"other_asset\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/other_assets/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"other_asset\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/other_assets/{id}",
+      "covered_by": {
+        "write": "delete_other_asset"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/softwares",
+      "covered_by": {
+        "stream": "softwares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/softwares/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-software-asset-by-id detail; identical record shape already covered by the softwares list stream's full result set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/printers",
+      "covered_by": {
+        "stream": "printers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/printers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-printer-by-id detail; identical record shape already covered by the printers list stream's full result set"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/printers/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"printer\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contracts",
+      "covered_by": {
+        "stream": "contracts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contracts/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-contract-by-id detail; identical record shape already covered by the contracts list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contracts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"contract\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contracts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"contract\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contracts/{id}",
+      "covered_by": {
+        "write": "delete_contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contracts/{id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: adds a contract line-item; body-wrap shape (same recurring gap) plus a niche sub-resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contracts/{contract_id}/items/{item_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same body-wrap gap on a contract line-item sub-resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contracts/{contract_id}/items/{item_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a specific contract line item; its item_id is only obtainable via the contract's own detail response, not a covered list stream; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_orders",
+      "covered_by": {
+        "stream": "purchase_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_orders/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-purchase-order-by-id detail; identical record shape already covered by the purchase_orders list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchase_orders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"purchase_order\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/purchase_orders/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"purchase_order\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/purchase_orders/{id}",
+      "covered_by": {
+        "write": "delete_purchase_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendors",
+      "covered_by": {
+        "stream": "vendors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendors/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-vendor-by-id detail; identical record shape already covered by the vendors list stream's full result set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"vendor\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendors/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: request body must be wrapped under a root \"vendor\" key; see POST /incidents' reason"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendors/{id}",
+      "covered_by": {
+        "write": "delete_vendor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{object_type}/{id}/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: sub-resource wrapped under a root \"task\" key on a dynamic {object_type} path segment (incident/problem/change/etc.); same recurring body-wrap gap, additionally requiring a dynamic-object-type path this dialect's declarative streams/writes have no wired mechanism for across resource types"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{object_type}/{id}/tasks/{task_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST tasks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{object_type}/{id}/tasks/{task_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a task sub-record on a dynamic {object_type} parent; its task_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{object_type}/{id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: sub-resource wrapped under a root \"comment\" key on a dynamic {object_type} path segment; same recurring body-wrap gap, additionally requiring a dynamic-object-type path"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{object_type}/{id}/comments/{comment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{object_type}/{id}/comments/{comment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a comment sub-record on a dynamic {object_type} parent; its comment_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{object_type}/{id}/time_tracks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-parent-record time-tracking entries on a dynamic {object_type} path segment; a drill-down sub-resource this pass does not model per-resource; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{object_type}/{id}/time_tracks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: sub-resource wrapped under a root \"time_track\" key on a dynamic {object_type} path segment; same recurring body-wrap gap"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{object_type}/{id}/time_tracks/{time_track_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST time_tracks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{object_type}/{id}/time_tracks/{time_track_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a time-track sub-record on a dynamic {object_type} parent; its time_track_id is only reachable via the excluded time_tracks listing; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{object_type}/{id}/purchases",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: sub-resource wrapped under a root \"purchase\" key on a dynamic {object_type} path segment; same recurring body-wrap gap"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/{object_type}/{id}/purchases/{purchase_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST purchases"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{object_type}/{id}/purchases/{purchase_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a purchase sub-record on a dynamic {object_type} parent; its purchase_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/memberships",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: takes group_id/user_ids as QUERY parameters with no request body at all -- expressible in principle, but this dialect's writes.json has no declared-query-parameter mechanism (only path/path_fields/body_type/body_fields), so the write path has no field to carry group_id/user_ids into the query string; also account/access-control administration (relates a user to a group), out of remit for a data-sync connector even if it were wired"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/memberships/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "no GET/list endpoint exists for memberships at all, so there is no stream to source a valid membership id from; a lone delete-by-id with no discovery path is not implementable as a syncable write action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audits",
+      "covered_by": {
+        "stream": "audits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{object_type}/{id}/audits",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-parent-record audit-trail filter; a narrower view of the same audit-event data the audits stream already returns organization-wide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/risks",
+      "covered_by": {
+        "stream": "risks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/attachments",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "requires a multipart/form-data file upload (curl -F 'file[attachment]=@/PATH/TO/FILE'), not a JSON/form record body this dialect's write actions can express"
+      }
+    }
+  ]
+}

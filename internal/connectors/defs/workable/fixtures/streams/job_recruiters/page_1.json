@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/recruiters"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recruiters": [
+        {
+          "id": "job_recruiter_fixture_1",
+          "name": "Fixture Recruiter"
+        }
+      ]
+    }
+  }
+}

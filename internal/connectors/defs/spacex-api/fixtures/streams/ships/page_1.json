@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/ships" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "ship_fixture_1", "name": "Fixture Recovery Ship", "type": "Recovery", "active": true, "home_port": "Port Canaveral", "year_built": 2015, "roles": ["Barge Tug"], "launches": ["launch_fixture_2"] }
+    ]
+  }
+}

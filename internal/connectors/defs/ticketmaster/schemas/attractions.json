@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ticketmaster Attraction",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "url": { "type": "string" },
+    "type": { "type": "string" },
+    "locale": { "type": "string" }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "first_name": "Fixture", "last_name": "Contact", "email": "fixture-contact@example.com", "locale": "en" },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": { "first_name": "Fixture", "last_name": "Contact", "email": "fixture-contact@example.com", "locale": "en" }
+  }
+}

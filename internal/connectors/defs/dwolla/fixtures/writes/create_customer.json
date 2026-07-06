@@ -1,0 +1,18 @@
+{
+  "record": {
+    "firstName": "Fixture",
+    "lastName": "Example",
+    "email": "fixture1@example.com",
+    "type": "unverified"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "firstName": "Fixture",
+      "lastName": "Example",
+      "email": "fixture1@example.com",
+      "type": "unverified"
+    }
+  }
+}

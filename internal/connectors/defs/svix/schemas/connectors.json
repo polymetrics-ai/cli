@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "connectors",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "uid": { "type": ["string", "null"] },
+    "orgId": { "type": ["string", "null"] },
+    "name": { "type": "string" },
+    "description": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "productType": { "type": ["string", "null"] },
+    "instructions": { "type": ["string", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "transformation": { "type": ["string", "null"] },
+    "allowedEventTypes": { "type": ["array", "null"] },
+    "featureFlags": { "type": ["array", "null"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

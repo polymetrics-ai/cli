@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "jobStatus": {
+      "type": "string",
+      "description": "Indicates the current state of the board export job.\nPossible values:\n`CREATED`: the job has been created but not yet started. Retry the status call after some time.\n`IN_PROGRESS`: the job is in progress, and the results are not ready yet. Retry the status call after some time.\n`CANCELLED`: the job has been cancelled and will not produce any more results.\n`FINISHED`: the job is complete. You can now get results for the board export job.",
+      "enum": [
+        "CREATED",
+        "IN_PROGRESS",
+        "CANCELLED",
+        "FINISHED"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "Fixture Event",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "user": { "uid": "uid_fixture_1" },
+    "session": { "id": "session_fixture_1" },
+    "properties": { "source": "conformance" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/events",
+    "body": {
+      "name": "Fixture Event",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "user": { "uid": "uid_fixture_1" },
+      "session": { "id": "session_fixture_1" },
+      "properties": { "source": "conformance" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "event_fixture_created" }
+  }
+}

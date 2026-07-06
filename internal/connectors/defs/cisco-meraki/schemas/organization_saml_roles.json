@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_saml_roles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "organizationId": { "type": "string" },
+    "role": { "type": ["string", "null"] },
+    "orgAccess": { "type": ["string", "null"] },
+    "networks": { "type": ["array", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "camera": { "type": ["object", "null"] }
+  }
+}

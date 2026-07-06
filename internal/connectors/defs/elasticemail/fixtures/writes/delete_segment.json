@@ -1,0 +1,9 @@
+{
+  "record": {
+    "Name": "Fixture Segment"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/segments/Fixture Segment"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "webhookId": "9001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook/delete",
+    "body": {
+      "webhookId": "9001"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

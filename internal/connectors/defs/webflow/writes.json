@@ -1,0 +1,272 @@
+{
+  "actions": [
+    {
+      "name": "create_collection_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/collections/{{ record.collection_id }}/items",
+      "body_type": "json",
+      "body_fields": ["fieldData", "isArchived", "isDraft", "cmsLocaleId"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "fieldData"],
+        "properties": {
+          "collection_id": { "type": "string" },
+          "fieldData": { "type": "object" },
+          "isArchived": { "type": "boolean" },
+          "isDraft": { "type": "boolean" },
+          "cmsLocaleId": { "type": "string" }
+        }
+      },
+      "risk": "creates a new staged (unpublished-to-live) CMS item in the given collection; consumes the site's CMS item quota; the item is not visible on the live site until a subsequent publish_collection_item call"
+    },
+    {
+      "name": "update_collection_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/collections/{{ record.collection_id }}/items/{{ record.id }}",
+      "path_fields": ["collection_id", "id"],
+      "body_type": "json",
+      "body_fields": ["fieldData", "isArchived", "isDraft", "cmsLocaleId"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "id"],
+        "properties": {
+          "collection_id": { "type": "string" },
+          "id": { "type": "string" },
+          "fieldData": { "type": "object" },
+          "isArchived": { "type": "boolean" },
+          "isDraft": { "type": "boolean" },
+          "cmsLocaleId": { "type": "string" }
+        }
+      },
+      "risk": "overwrites staged field data on an existing CMS item (primary locale only, unless cmsLocaleId is set); changes are not visible on the live site until a subsequent publish_collection_item call"
+    },
+    {
+      "name": "delete_collection_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/collections/{{ record.collection_id }}/items/{{ record.id }}",
+      "path_fields": ["collection_id", "id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "id"],
+        "properties": {
+          "collection_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a staged CMS item from the collection; if the item was previously published live, it remains live until a subsequent unpublish, since delete only affects the staged copy per Webflow's staged/live item model"
+    },
+    {
+      "name": "publish_collection_item",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/collections/{{ record.collection_id }}/items/publish",
+      "path_fields": ["collection_id"],
+      "body_type": "json",
+      "body_fields": ["itemIds"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["collection_id", "itemIds"],
+        "properties": {
+          "collection_id": { "type": "string" },
+          "itemIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "publishes the current staged content of the named item ids live immediately, making them visible on the site's live domain(s); does not itself trigger a full site publish/build"
+    },
+    {
+      "name": "update_form_submission",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/sites/{{ config.site_id }}/form_submissions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["formSubmissionData"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "formSubmissionData"],
+        "properties": {
+          "id": { "type": "string" },
+          "formSubmissionData": { "type": "object" }
+        }
+      },
+      "risk": "overwrites the values of hidden fields already defined on the form's schema for one submission; cannot add new fields or edit visible/user-submitted answers"
+    },
+    {
+      "name": "update_asset",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/assets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["displayName", "altText"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "displayName": { "type": "string" },
+          "altText": { "type": "string" }
+        }
+      },
+      "risk": "renames or re-captions an existing site asset (display name / alt text only); does not replace the underlying file"
+    },
+    {
+      "name": "delete_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/assets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently deletes an uploaded asset from the site's asset library; any live page still referencing the asset's URL will show a broken image/file link"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/sites/{{ config.site_id }}/webhooks",
+      "body_type": "json",
+      "body_fields": ["triggerType", "url", "filter"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["triggerType", "url"],
+        "properties": {
+          "triggerType": {
+            "type": "string",
+            "enum": ["form_submission", "site_publish", "page_created", "page_metadata_updated", "page_deleted", "ecomm_new_order", "ecomm_order_changed", "ecomm_inventory_changed", "user_account_added", "user_account_updated", "user_account_deleted", "collection_item_created", "collection_item_changed", "collection_item_deleted", "collection_item_unpublished", "comment_created"]
+          },
+          "url": { "type": "string" },
+          "filter": { "type": "object" }
+        }
+      },
+      "risk": "registers a new outbound webhook subscription for the site (up to 75 per triggerType); Webflow will begin POSTing event payloads to the given url immediately for matching events"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; Webflow stops sending event payloads for it immediately"
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/sites/{{ config.site_id }}/orders/{{ record.orderId }}",
+      "path_fields": ["orderId"],
+      "body_type": "json",
+      "body_fields": ["comment", "shippingProvider", "shippingTracking", "shippingTrackingURL"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["orderId"],
+        "properties": {
+          "orderId": { "type": "string" },
+          "comment": { "type": "string" },
+          "shippingProvider": { "type": "string" },
+          "shippingTracking": { "type": "string" },
+          "shippingTrackingURL": { "type": "string" }
+        }
+      },
+      "risk": "updates internal order record-keeping fields (comment/shipping provider/tracking number/tracking URL) on a live ecommerce order; does not change order status or trigger customer notifications by itself"
+    },
+    {
+      "name": "fulfill_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/sites/{{ config.site_id }}/orders/{{ record.orderId }}/fulfill",
+      "path_fields": ["orderId"],
+      "body_type": "json",
+      "body_fields": ["sendOrderFulfilledEmail"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["orderId"],
+        "properties": {
+          "orderId": { "type": "string" },
+          "sendOrderFulfilledEmail": { "type": "boolean" }
+        }
+      },
+      "risk": "marks a real customer order as fulfilled and, unless sendOrderFulfilledEmail is explicitly set false, sends the customer a fulfillment notification email"
+    },
+    {
+      "name": "refund_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/sites/{{ config.site_id }}/orders/{{ record.orderId }}/refund",
+      "path_fields": ["orderId"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["orderId"],
+        "properties": {
+          "orderId": { "type": "string" }
+        }
+      },
+      "risk": "DESTRUCTIVE FINANCIAL ACTION: reverses the underlying Stripe charge and refunds the customer's payment in full, setting the order's status to refunded; cannot be undone through the API"
+    },
+    {
+      "name": "update_inventory",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/collections/{{ record.sku_collection_id }}/items/{{ record.sku_id }}/inventory",
+      "path_fields": ["sku_collection_id", "sku_id"],
+      "body_type": "json",
+      "body_fields": ["inventoryType", "quantity", "updateQuantity"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sku_collection_id", "sku_id", "inventoryType"],
+        "properties": {
+          "sku_collection_id": { "type": "string" },
+          "sku_id": { "type": "string" },
+          "inventoryType": { "type": "string", "enum": ["infinite", "finite"] },
+          "quantity": { "type": "number" },
+          "updateQuantity": { "type": "number" }
+        }
+      },
+      "risk": "changes live storefront stock levels for a SKU either absolutely (quantity) or incrementally (updateQuantity); an incorrect value can oversell or wrongly zero-out a product's live availability"
+    }
+  ]
+}

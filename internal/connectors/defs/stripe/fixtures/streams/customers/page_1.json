@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": true,
+      "data": [
+        {
+          "id": "cus_fixture_1",
+          "object": "customer",
+          "created": 1767225601,
+          "email": "fixture1@example.com",
+          "name": "Fixture One",
+          "description": "conformance fixture customer",
+          "phone": "+15550100",
+          "currency": "usd",
+          "balance": 0,
+          "delinquent": false,
+          "livemode": false
+        },
+        {
+          "id": "cus_fixture_2",
+          "object": "customer",
+          "created": 1767225602,
+          "email": "fixture2@example.com",
+          "name": "Fixture Two",
+          "description": "conformance fixture customer",
+          "phone": "+15550101",
+          "currency": "usd",
+          "balance": 500,
+          "delinquent": false,
+          "livemode": false
+        }
+      ]
+    }
+  }
+}

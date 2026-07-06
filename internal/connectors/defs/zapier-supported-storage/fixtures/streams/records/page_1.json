@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/records" },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "key_fixture_1",
+          "key": "key_fixture_1",
+          "value": "fixture value one",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "key_fixture_2",
+          "key": "key_fixture_2",
+          "value": "fixture value two",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

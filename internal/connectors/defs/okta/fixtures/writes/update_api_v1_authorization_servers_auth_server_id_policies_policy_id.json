@@ -1,0 +1,74 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "policy_id": "synthetic-conformance-value",
+    "id": "id_fixture",
+    "type": "OAUTH_AUTHORIZATION_POLICY",
+    "name": "name_fixture",
+    "conditions": {
+      "clients": {
+        "include": [
+          "include_fixture"
+        ]
+      }
+    },
+    "description": "description_fixture",
+    "priority": 1,
+    "status": "ACTIVE",
+    "system": true,
+    "created": "2026-01-01T00:00:00Z",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "_links": {
+      "rules": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/policies/synthetic-conformance-value",
+    "body": {
+      "id": "id_fixture",
+      "type": "OAUTH_AUTHORIZATION_POLICY",
+      "name": "name_fixture",
+      "conditions": {
+        "clients": {
+          "include": [
+            "include_fixture"
+          ]
+        }
+      },
+      "description": "description_fixture",
+      "priority": 1,
+      "status": "ACTIVE",
+      "system": true,
+      "created": "2026-01-01T00:00:00Z",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "_links": {
+        "rules": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

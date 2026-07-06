@@ -1,0 +1,21 @@
+{
+  "record": {
+    "payer_authorisation_id": "payer_authorisation_id_fixture",
+    "payer_authorisations": {
+      "description": "Synthetic submit_a_payer_authorisation fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payer_authorisations/payer_authorisation_id_fixture/actions/submit",
+    "body": {
+      "payer_authorisations": {
+        "description": "Synthetic submit_a_payer_authorisation fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

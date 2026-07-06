@@ -1,0 +1,100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}/api/v1/accounts/{{ config.account_id }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "api_access_token", "value": "{{ secrets.api_access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/agents" },
+    "error_map": [
+      { "status": 401, "hint": "chatwoot api_access_token is missing or invalid; re-run pm credentials add chatwoot" },
+      { "status": 403, "hint": "chatwoot account lacks access for this request; verify account_id matches the token's account" },
+      { "status": 404, "hint": "chatwoot account_id, conversation, or resource not found" },
+      { "status": 429, "class": "rate_limited", "hint": "chatwoot rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "conversations",
+      "path": "/conversations",
+      "query": { "status": "all" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 25
+      },
+      "records": { "path": "data.payload" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 15
+      },
+      "records": { "path": "payload" },
+      "incremental": {
+        "cursor_field": "last_activity_at"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "inboxes",
+      "path": "/inboxes",
+      "records": { "path": "payload" },
+      "schema": "schemas/inboxes.json"
+    },
+    {
+      "name": "agents",
+      "path": "/agents",
+      "records": { "path": "." },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "." },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "labels",
+      "path": "/labels",
+      "records": { "path": "payload" },
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "messages",
+      "path": "/conversations/{{ fanout.id }}/messages",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 25
+      },
+      "records": { "path": "payload" },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/conversations",
+            "records_path": "data.payload",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "conversation_id" },
+        "stamp_field": "conversation_id"
+      },
+      "schema": "schemas/messages.json"
+    }
+  ]
+}

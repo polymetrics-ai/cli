@@ -1,0 +1,329 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["firstName", "lastName", "email"],
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "type": { "type": "string", "enum": ["personal", "business", "receive-only", "unverified"] },
+          "ipAddress": { "type": "string" },
+          "dateOfBirth": { "type": "string" },
+          "ssn": { "type": "string" },
+          "phone": { "type": "string" },
+          "address1": { "type": "string" },
+          "address2": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "businessClassification": { "type": "string" },
+          "businessType": { "type": "string" },
+          "businessName": { "type": "string" },
+          "doingBusinessAs": { "type": "string" },
+          "ein": { "type": "string" },
+          "website": { "type": "string" },
+          "correlationId": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new Dwolla customer (personal, business, receive-only, or unverified), subject to Dwolla's identity-verification rules for the requested type"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "ipAddress": { "type": "string" },
+          "phone": { "type": "string" },
+          "address1": { "type": "string" },
+          "address2": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "businessName": { "type": "string" },
+          "doingBusinessAs": { "type": "string" },
+          "website": { "type": "string" },
+          "status": { "type": "string", "enum": ["deactivated", "reactivated", "suspended"] }
+        }
+      },
+      "risk": "external mutation; updates a customer's profile fields, or its status (e.g. deactivating/reactivating the customer, which blocks/restores its ability to transact)"
+    },
+    {
+      "name": "create_funding_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/funding-sources",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "name"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "routingNumber": { "type": "string" },
+          "accountNumber": { "type": "string" },
+          "bankAccountType": { "type": "string", "enum": ["checking", "savings"] },
+          "name": { "type": "string" },
+          "plaidToken": { "type": "string" },
+          "onDemandAuthorizationId": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; attaches a new bank-account funding source to a customer, either as unverified (routingNumber/accountNumber, requiring later micro-deposit verification) or pre-verified via an open-banking plaidToken/onDemandAuthorizationId"
+    },
+    {
+      "name": "update_funding_source",
+      "kind": "update",
+      "method": "POST",
+      "path": "/funding-sources/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "routingNumber": { "type": "string" },
+          "accountNumber": { "type": "string" },
+          "bankAccountType": { "type": "string", "enum": ["checking", "savings"] }
+        }
+      },
+      "risk": "external mutation; renames a funding source or replaces its unverified bank-account routing/account numbers"
+    },
+    {
+      "name": "remove_funding_source",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/funding-sources/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["removed"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "removed"],
+        "properties": {
+          "id": { "type": "string" },
+          "removed": { "type": "boolean", "enum": [true] }
+        }
+      },
+      "risk": "destructive external mutation; Dwolla has no hard-delete for funding sources, this soft-removes it (POST {removed:true}) so it can no longer send/receive transfers; not reversible via the API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiate_micro_deposits",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/funding-sources/{{ record.id }}/initiate-micro-deposits",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; sends two small trial-deposit ACH transactions to an unverified bank-account funding source, the first step of micro-deposit verification"
+    },
+    {
+      "name": "verify_micro_deposits",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/funding-sources/{{ record.id }}/verify-micro-deposits",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["amount1", "amount2"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "amount1", "amount2"],
+        "properties": {
+          "id": { "type": "string" },
+          "amount1": { "type": "object" },
+          "amount2": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; verifies a funding source's micro-deposit amounts, completing bank-account verification; Dwolla locks the funding source after repeated failed attempts"
+    },
+    {
+      "name": "cancel_transfer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/transfers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["cancelled"] }
+        }
+      },
+      "risk": "external mutation; cancels a still-pending transfer before it clears, this action is not reversible and only succeeds while the transfer's status is pending",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook-subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "secret"],
+        "properties": {
+          "url": { "type": "string" },
+          "secret": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; registers a new webhook subscription; Dwolla enforces a maximum of 10 active subscriptions in Sandbox and 5 in Production"
+    },
+    {
+      "name": "update_webhook_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/webhook-subscriptions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["paused"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "paused"],
+        "properties": {
+          "id": { "type": "string" },
+          "paused": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; pauses or resumes webhook delivery for a subscription (Dwolla still generates the events while paused, it just withholds delivery)"
+    },
+    {
+      "name": "delete_webhook_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhook-subscriptions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently deletes a webhook subscription and stops all future event delivery to it; not reversible",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_beneficial_owner",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/beneficial-owners",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "firstName", "lastName", "dateOfBirth", "ssn", "address"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "dateOfBirth": { "type": "string" },
+          "ssn": { "type": "string" },
+          "address": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; registers a beneficial owner (25%+ equity holder) for a business verified customer; submits sensitive PII (SSN, date of birth, address) to Dwolla for identity verification"
+    },
+    {
+      "name": "update_beneficial_owner",
+      "kind": "update",
+      "method": "POST",
+      "path": "/beneficial-owners/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "dateOfBirth": { "type": "string" },
+          "ssn": { "type": "string" },
+          "address": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; updates a beneficial owner's identity/PII fields, which resets its verification status pending re-review"
+    },
+    {
+      "name": "remove_beneficial_owner",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/beneficial-owners/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently removes a beneficial owner from a business verified customer; not reversible and may affect the customer's beneficial-ownership certification status",
+      "confirm": "destructive"
+    },
+    {
+      "name": "certify_beneficial_ownership",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/beneficial-ownership",
+      "path_fields": ["customer_id"],
+      "body_type": "json",
+      "body_fields": ["status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer_id", "status"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["certified"] }
+        }
+      },
+      "risk": "external mutation; the Account Admin attests that a business customer's beneficial-owner information is accurate and complete, which is required before the customer can transact"
+    }
+  ]
+}

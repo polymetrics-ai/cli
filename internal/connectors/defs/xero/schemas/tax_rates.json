@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tax_rates",
+  "type": "object",
+  "x-primary-key": [
+    "TaxType"
+  ],
+  "properties": {
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TaxType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TaxComponents": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportTaxType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CanApplyToAssets": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CanApplyToEquity": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CanApplyToExpenses": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CanApplyToLiabilities": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CanApplyToRevenue": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "DisplayTaxRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "EffectiveRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

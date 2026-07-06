@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/canned_response_folders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "canned_response_folder": {
+        "id": "show_canned_response_folder",
+        "name": "Fixture show_canned_response_folder",
+        "subject": "Fixture show_canned_response_folder",
+        "description": "Fixture show_canned_response_folder record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

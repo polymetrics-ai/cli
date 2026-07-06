@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/sites/fixture-site/lists" },
+  "response": {
+    "status": 200,
+    "body": { "value": [] }
+  }
+}

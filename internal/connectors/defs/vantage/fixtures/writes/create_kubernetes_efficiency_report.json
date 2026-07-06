@@ -1,0 +1,10 @@
+{
+  "record": {
+    "workspace_token": "wrkspc_fixture_1",
+    "title": "Fixture KER"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/kubernetes_efficiency_reports"
+  }
+}

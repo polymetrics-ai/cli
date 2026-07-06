@@ -1,0 +1,9 @@
+{
+  "record": { "tracker": { "tracking_code": "TRACK1", "carrier": "USPS" } },
+  "expect": {
+    "method": "POST",
+    "path": "/trackers",
+    "body": { "tracker": { "tracking_code": "TRACK1", "carrier": "USPS" } }
+  },
+  "response": { "status": 201, "body": { "id": "trk_fixture_new", "object": "Tracker" } }
+}

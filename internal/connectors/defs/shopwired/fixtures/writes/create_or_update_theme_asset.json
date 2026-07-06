@@ -1,0 +1,18 @@
+{
+  "record": {
+    "theme_id": 1,
+    "key": "key_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/theme-assets/1",
+    "body": {
+      "key": "key_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

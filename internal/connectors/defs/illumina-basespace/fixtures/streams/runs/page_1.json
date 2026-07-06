@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/synthetic-conformance-value/runs",
+    "query": {
+      "Limit": "100",
+      "Offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Items": [
+          {
+            "Id": "run_fixture_1",
+            "Name": "Fixture Run One",
+            "Href": "v1pre3/runs/run_fixture_1",
+            "ExperimentName": "Fixture Experiment",
+            "Status": "Complete",
+            "DateCreated": "2026-01-01T00:00:00Z",
+            "DateModified": "2026-01-01T02:00:00Z",
+            "TotalSize": 5000,
+            "InstrumentName": "NovaSeq"
+          }
+        ],
+        "Offset": 0,
+        "Limit": 100,
+        "TotalCount": 1
+      }
+    }
+  }
+}

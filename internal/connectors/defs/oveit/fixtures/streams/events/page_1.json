@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "per_page": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "event_fixture_1", "name": "Fixture Conference", "email": null, "status": "active", "starts_at": "2026-01-01T00:00:00Z", "created_at": "2026-01-01T00:00:00Z", "total": 1000 }
+      ],
+      "next_page": "2"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "curated_photos",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "url": { "type": ["string", "null"] },
+    "photographer": { "type": ["string", "null"] },
+    "photographer_url": { "type": ["string", "null"] },
+    "src": { "type": ["object", "null"] },
+    "alt": { "type": ["string", "null"] }
+  }
+}

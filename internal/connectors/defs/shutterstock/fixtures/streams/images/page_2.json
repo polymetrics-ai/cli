@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/images/search",
+    "query": {
+      "page": "2",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "img_fixture_101",
+          "description": "Fixture image 101",
+          "media_type": "images",
+          "updated_time": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

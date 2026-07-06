@@ -1,0 +1,13 @@
+{
+  "api": "Buzzsprout API (https://www.buzzsprout.com/api)",
+  "docs": "https://github.com/Buzzsprout/buzzsprout-api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: verified against the Buzzsprout API's real published documentation (github.com/Buzzsprout/buzzsprout-api, sections/episodes.md + sections/podcasts.md). Buzzsprout publishes exactly 5 endpoints total across 2 resources (episodes, podcasts) with no delete endpoint documented anywhere for either resource. All 5 are now covered: 2 read streams (episodes, podcasts) and 2 writes (create_episode, update_episode); the single-episode detail GET is excluded as a non-list convenience endpoint with no incremental/catalog value beyond the list stream.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/{podcast_id}/episodes.json", "covered_by": { "stream": "episodes" } },
+    { "method": "GET", "path": "/api/podcasts.json", "covered_by": { "stream": "podcasts" } },
+    { "method": "POST", "path": "/api/{podcast_id}/episodes.json", "covered_by": { "write": "create_episode" } },
+    { "method": "PUT", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "covered_by": { "write": "update_episode" } },
+    { "method": "GET", "path": "/api/{podcast_id}/episodes/{episode_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-episode detail fetch; every field it returns is already emitted by the episodes list stream (GET /api/{podcast_id}/episodes.json returns the full episode set with the identical shape), and Buzzsprout has no per-episode incremental/webhook signal that would make a targeted single-record read useful beyond the list sync" } }
+  ]
+}

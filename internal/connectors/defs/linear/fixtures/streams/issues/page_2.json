@@ -1,0 +1,33 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "issues": {
+          "nodes": [
+            {
+              "id": "iss_fixture_2",
+              "identifier": "ENG-2",
+              "title": "Fixture issue 2",
+              "description": "fixture record",
+              "priority": 2,
+              "estimate": 3,
+              "url": "https://linear.app/example/issue/ENG-2",
+              "branchName": "eng-2",
+              "createdAt": "2026-01-01T00:00:00.000Z",
+              "updatedAt": "2026-01-03T00:00:00.000Z",
+              "completedAt": null,
+              "canceledAt": null,
+              "state": { "id": "state_1", "name": "Todo", "type": "unstarted" },
+              "team": { "id": "team_1", "key": "ENG", "name": "Engineering" },
+              "assignee": { "id": "user_1", "name": "Fixture User", "email": "fixture@example.com" },
+              "creator": { "id": "user_1", "name": "Fixture User", "email": "fixture@example.com" }
+            }
+          ],
+          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_3" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bulk_email_status",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "Id"
+  ],
+  "properties": {
+    "Id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "array",
+        "object",
+        "null"
+      ]
+    }
+  }
+}

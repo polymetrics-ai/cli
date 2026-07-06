@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "session_aggregation",
+  "type": "object",
+  "properties": {
+    "count": { "type": ["integer", "null"] },
+    "month": { "type": ["string", "null"] },
+    "trial": { "type": ["boolean", "null"] },
+    "billing_interval": { "type": ["string", "null"] },
+    "plan_id": { "type": ["string", "null"] },
+    "aborted": { "type": ["boolean", "null"] },
+    "canceled": { "type": ["boolean", "null"] },
+    "offer_type": { "type": ["string", "null"] },
+    "save_type": { "type": ["string", "null"] }
+  }
+}

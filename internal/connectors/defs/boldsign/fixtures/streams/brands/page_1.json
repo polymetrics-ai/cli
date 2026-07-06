@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/v1/brand/list", "query": { "Page": "1", "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        {
+          "brandId": "brand_fixture_1",
+          "brandName": "Fixture Brand 1",
+          "isDefault": true,
+          "backgroundColor": "#ffffff",
+          "buttonColor": "#1a73e8"
+        }
+      ],
+      "pageDetails": { "page": 1, "totalPages": 1 }
+    }
+  }
+}

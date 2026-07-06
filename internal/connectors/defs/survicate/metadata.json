@@ -1,0 +1,26 @@
+{
+  "name": "survicate",
+  "display_name": "Survicate",
+  "description": "Reads Survicate surveys, survey questions, responses, and respondent attributes, and manages GDPR personal-data requests, through the Survicate Data Export API v2. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.survicate.com/data-export/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 1000
+  },
+  "risk": {
+    "read": "external Survicate API read of survey, response, and respondent data",
+    "approval": "none; read-only"
+  }
+}

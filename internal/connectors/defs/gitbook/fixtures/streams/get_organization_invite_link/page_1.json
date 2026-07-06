@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/link-invites/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_organization_invite_link_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_organization_invite_link",
+      "name": "Fixture get_organization_invite_link",
+      "status": "active",
+      "operation_id": "getOrganizationInviteLink"
+    }
+  }
+}

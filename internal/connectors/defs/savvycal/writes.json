@@ -1,0 +1,158 @@
+{
+  "actions": [
+    {
+      "name": "create_personal_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/links",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "duration": { "type": "integer" },
+          "state": { "type": "string", "enum": ["active", "disabled"] }
+        }
+      },
+      "risk": "creates a new scheduling link in the authenticated user's personal scope; external mutation, approval required"
+    },
+    {
+      "name": "create_scope_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/scopes/{{ record.scope_slug }}/links",
+      "path_fields": ["scope_slug"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["scope_slug", "name"],
+        "properties": {
+          "scope_slug": { "type": "string" },
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "duration": { "type": "integer" },
+          "state": { "type": "string", "enum": ["active", "disabled"] }
+        }
+      },
+      "risk": "creates a new scheduling link under a specific team or individual scope; external mutation, approval required"
+    },
+    {
+      "name": "update_link",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/links/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "duration": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation updating an existing scheduling link's name/slug/duration; approval required"
+    },
+    {
+      "name": "delete_link",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/links/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a scheduling link; approval required"
+    },
+    {
+      "name": "duplicate_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/links/{{ record.id }}/duplicate",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "creates a copy of an existing scheduling link; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "toggle_link",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/links/{{ record.id }}/toggle",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "flips a scheduling link between active and disabled state, changing its public bookability; approval required"
+    },
+    {
+      "name": "cancel_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/events/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive/irreversible: cancels a scheduled event, notifying attendees; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new webhook subscription that will POST event notifications to an external URL; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive/irreversible: permanently deletes a webhook subscription; approval required"
+    }
+  ]
+}

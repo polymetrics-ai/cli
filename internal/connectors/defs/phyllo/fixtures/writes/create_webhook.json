@@ -1,0 +1,9 @@
+{
+  "record": { "url": "https://example.com/phyllo-webhook", "events": ["PROFILES.ADDED", "PROFILES.UPDATED"] },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/webhooks",
+    "body": { "url": "https://example.com/phyllo-webhook", "events": ["PROFILES.ADDED", "PROFILES.UPDATED"] }
+  },
+  "response": { "status": 200, "body": { "id": "webhook_fixture_1", "url": "https://example.com/phyllo-webhook", "events": ["PROFILES.ADDED", "PROFILES.UPDATED"] } }
+}

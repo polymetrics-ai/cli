@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settings/taxgroups/synthetic-conformance-value",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "tax_group": {
+        "tax_group_id": "get_tax_group_fixture_1",
+        "tax_group_name": "get_tax_group fixture 1",
+        "updated_at": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "get_tax_group_fixture_1",
+        "name": "get_tax_group fixture 1"
+      }
+    }
+  }
+}

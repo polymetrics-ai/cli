@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_invoice",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "errorCode": {
+      "type": "string"
+    },
+    "externalInvoiceId": {
+      "type": "string"
+    },
+    "govResponse": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "invoiceType": {
+      "type": "string"
+    },
+    "series": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "transactionIds": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "transactionType": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

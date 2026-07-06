@@ -1,0 +1,417 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "limit": "50",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d01",
+          "projectName": "project-1",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:01:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d02",
+          "projectName": "project-2",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:02:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d03",
+          "projectName": "project-3",
+          "favorite": true,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:03:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d04",
+          "projectName": "project-4",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:04:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d05",
+          "projectName": "project-5",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:05:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d06",
+          "projectName": "project-6",
+          "favorite": true,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:06:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d07",
+          "projectName": "project-7",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:07:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d08",
+          "projectName": "project-8",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:08:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d09",
+          "projectName": "project-9",
+          "favorite": true,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:09:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0a",
+          "projectName": "project-10",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:10:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0b",
+          "projectName": "project-11",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:11:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0c",
+          "projectName": "project-12",
+          "favorite": true,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:12:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0d",
+          "projectName": "project-13",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:13:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0e",
+          "projectName": "project-14",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:14:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d0f",
+          "projectName": "project-15",
+          "favorite": true,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:15:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d10",
+          "projectName": "project-16",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:16:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d11",
+          "projectName": "project-17",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:17:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d12",
+          "projectName": "project-18",
+          "favorite": true,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:18:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d13",
+          "projectName": "project-19",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:19:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d14",
+          "projectName": "project-20",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:20:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d15",
+          "projectName": "project-21",
+          "favorite": true,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:21:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d16",
+          "projectName": "project-22",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:22:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d17",
+          "projectName": "project-23",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:23:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d18",
+          "projectName": "project-24",
+          "favorite": true,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:24:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d19",
+          "projectName": "project-25",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:25:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1a",
+          "projectName": "project-26",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:26:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1b",
+          "projectName": "project-27",
+          "favorite": true,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:27:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1c",
+          "projectName": "project-28",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:28:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1d",
+          "projectName": "project-29",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:29:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1e",
+          "projectName": "project-30",
+          "favorite": true,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:30:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d1f",
+          "projectName": "project-31",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:31:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d20",
+          "projectName": "project-32",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:32:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d21",
+          "projectName": "project-33",
+          "favorite": true,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:33:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d22",
+          "projectName": "project-34",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:34:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d23",
+          "projectName": "project-35",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:35:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d24",
+          "projectName": "project-36",
+          "favorite": true,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:36:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d25",
+          "projectName": "project-37",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:37:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d26",
+          "projectName": "project-38",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:38:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d27",
+          "projectName": "project-39",
+          "favorite": true,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:39:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d28",
+          "projectName": "project-40",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:40:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d29",
+          "projectName": "project-41",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:41:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2a",
+          "projectName": "project-42",
+          "favorite": true,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:42:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2b",
+          "projectName": "project-43",
+          "favorite": false,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:43:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2c",
+          "projectName": "project-44",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:44:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2d",
+          "projectName": "project-45",
+          "favorite": true,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:45:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2e",
+          "projectName": "project-46",
+          "favorite": false,
+          "pipelinesNumber": 2,
+          "updatedAt": "2026-01-01T00:46:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d2f",
+          "projectName": "project-47",
+          "favorite": false,
+          "pipelinesNumber": 3,
+          "updatedAt": "2026-01-01T00:47:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d30",
+          "projectName": "project-48",
+          "favorite": true,
+          "pipelinesNumber": 4,
+          "updatedAt": "2026-01-01T00:48:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d31",
+          "projectName": "project-49",
+          "favorite": false,
+          "pipelinesNumber": 5,
+          "updatedAt": "2026-01-01T00:49:00Z",
+          "tags": []
+        },
+        {
+          "id": "5f8a1c2b3d4e5f6a7b8c9d32",
+          "projectName": "project-50",
+          "favorite": false,
+          "pipelinesNumber": 1,
+          "updatedAt": "2026-01-01T00:50:00Z",
+          "tags": []
+        }
+      ]
+    }
+  }
+}

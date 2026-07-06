@@ -1,0 +1,68 @@
+{
+  "api": "pretix REST API v1 (https://docs.pretix.eu/en/latest/api/)",
+  "docs": "https://docs.pretix.eu/en/latest/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (organizers, events, items, orders). pretix's write endpoints (order/ticket creation, check-in, refunds) are out of scope; legacy itself ships no writes (capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/",
+      "covered_by": {
+        "stream": "organizers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/items/",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/orders/",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/orders/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented order creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/checkinlists/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "check-in list data not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/subevents/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sub-event series data not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizers/{organizer}/events/{event}/vouchers/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "voucher data not modeled by legacy; not implemented in this bundle"
+      }
+    }
+  ]
+}

@@ -1,0 +1,917 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/calls",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "calls": [
+        {
+          "id": 1,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-01T00:00:00Z",
+          "duration": 60,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 2,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-02T00:00:00Z",
+          "duration": 120,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 3,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-03T00:00:00Z",
+          "duration": 180,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 4,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-04T00:00:00Z",
+          "duration": 240,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 5,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-05T00:00:00Z",
+          "duration": 300,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 6,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-06T00:00:00Z",
+          "duration": 360,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 7,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-07T00:00:00Z",
+          "duration": 420,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 8,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-08T00:00:00Z",
+          "duration": 480,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 9,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-09T00:00:00Z",
+          "duration": 540,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 10,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-10T00:00:00Z",
+          "duration": 600,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 11,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-11T00:00:00Z",
+          "duration": 660,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 12,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-12T00:00:00Z",
+          "duration": 720,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 13,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-13T00:00:00Z",
+          "duration": 780,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 14,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-14T00:00:00Z",
+          "duration": 840,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 15,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-15T00:00:00Z",
+          "duration": 900,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 16,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-16T00:00:00Z",
+          "duration": 960,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 17,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-17T00:00:00Z",
+          "duration": 1020,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 18,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-18T00:00:00Z",
+          "duration": 1080,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 19,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-19T00:00:00Z",
+          "duration": 1140,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 20,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-20T00:00:00Z",
+          "duration": 1200,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 21,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-21T00:00:00Z",
+          "duration": 1260,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 22,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-22T00:00:00Z",
+          "duration": 1320,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 23,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-23T00:00:00Z",
+          "duration": 1380,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 24,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-24T00:00:00Z",
+          "duration": 1440,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 25,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-25T00:00:00Z",
+          "duration": 1500,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 26,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-26T00:00:00Z",
+          "duration": 1560,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 27,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-27T00:00:00Z",
+          "duration": 1620,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 28,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-28T00:00:00Z",
+          "duration": 1680,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 29,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-01T00:00:00Z",
+          "duration": 1740,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 30,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-02T00:00:00Z",
+          "duration": 1800,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 31,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-03T00:00:00Z",
+          "duration": 1860,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 32,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-04T00:00:00Z",
+          "duration": 1920,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 33,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-05T00:00:00Z",
+          "duration": 1980,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 34,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-06T00:00:00Z",
+          "duration": 2040,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 35,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-07T00:00:00Z",
+          "duration": 2100,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 36,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-08T00:00:00Z",
+          "duration": 2160,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 37,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-09T00:00:00Z",
+          "duration": 2220,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 38,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-10T00:00:00Z",
+          "duration": 2280,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 39,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-11T00:00:00Z",
+          "duration": 2340,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 40,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-12T00:00:00Z",
+          "duration": 2400,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 41,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-13T00:00:00Z",
+          "duration": 2460,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 42,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-14T00:00:00Z",
+          "duration": 2520,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 43,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-15T00:00:00Z",
+          "duration": 2580,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 44,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-16T00:00:00Z",
+          "duration": 2640,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 45,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-17T00:00:00Z",
+          "duration": 2700,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 46,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-18T00:00:00Z",
+          "duration": 2760,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 47,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-19T00:00:00Z",
+          "duration": 2820,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 48,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-20T00:00:00Z",
+          "duration": 2880,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 49,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-21T00:00:00Z",
+          "duration": 2940,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 50,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-22T00:00:00Z",
+          "duration": 3000,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 51,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-23T00:00:00Z",
+          "duration": 3060,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 52,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-24T00:00:00Z",
+          "duration": 3120,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 53,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-25T00:00:00Z",
+          "duration": 3180,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 54,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-26T00:00:00Z",
+          "duration": 3240,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 55,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-27T00:00:00Z",
+          "duration": 3300,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 56,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-28T00:00:00Z",
+          "duration": 3360,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 57,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-01T00:00:00Z",
+          "duration": 3420,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 58,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-02T00:00:00Z",
+          "duration": 3480,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 59,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-03T00:00:00Z",
+          "duration": 3540,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 60,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-04T00:00:00Z",
+          "duration": 3600,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 61,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-05T00:00:00Z",
+          "duration": 3660,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 62,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-06T00:00:00Z",
+          "duration": 3720,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 63,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-07T00:00:00Z",
+          "duration": 3780,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 64,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-08T00:00:00Z",
+          "duration": 3840,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 65,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-09T00:00:00Z",
+          "duration": 3900,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 66,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-10T00:00:00Z",
+          "duration": 3960,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 67,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-11T00:00:00Z",
+          "duration": 4020,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 68,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-12T00:00:00Z",
+          "duration": 4080,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 69,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-13T00:00:00Z",
+          "duration": 4140,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 70,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-14T00:00:00Z",
+          "duration": 4200,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 71,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-15T00:00:00Z",
+          "duration": 4260,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 72,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-16T00:00:00Z",
+          "duration": 4320,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 73,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-17T00:00:00Z",
+          "duration": 4380,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 74,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-18T00:00:00Z",
+          "duration": 4440,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 75,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-19T00:00:00Z",
+          "duration": 4500,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 76,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-20T00:00:00Z",
+          "duration": 4560,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 77,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-21T00:00:00Z",
+          "duration": 4620,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 78,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-22T00:00:00Z",
+          "duration": 4680,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 79,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-23T00:00:00Z",
+          "duration": 4740,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 80,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-24T00:00:00Z",
+          "duration": 4800,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 81,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-25T00:00:00Z",
+          "duration": 4860,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 82,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-26T00:00:00Z",
+          "duration": 4920,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 83,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-27T00:00:00Z",
+          "duration": 4980,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 84,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-28T00:00:00Z",
+          "duration": 5040,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 85,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-01T00:00:00Z",
+          "duration": 5100,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 86,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-02T00:00:00Z",
+          "duration": 5160,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 87,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-03T00:00:00Z",
+          "duration": 5220,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 88,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-04T00:00:00Z",
+          "duration": 5280,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 89,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-05T00:00:00Z",
+          "duration": 5340,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 90,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-06T00:00:00Z",
+          "duration": 5400,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 91,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-07T00:00:00Z",
+          "duration": 5460,
+          "agent_id": 1001,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 92,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-08T00:00:00Z",
+          "duration": 5520,
+          "agent_id": 1002,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 93,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-09T00:00:00Z",
+          "duration": 5580,
+          "agent_id": 1003,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 94,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-10T00:00:00Z",
+          "duration": 5640,
+          "agent_id": 1004,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 95,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-11T00:00:00Z",
+          "duration": 5700,
+          "agent_id": 1005,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 96,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-12T00:00:00Z",
+          "duration": 5760,
+          "agent_id": 1006,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 97,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-13T00:00:00Z",
+          "duration": 5820,
+          "agent_id": 1007,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 98,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-14T00:00:00Z",
+          "duration": 5880,
+          "agent_id": 1008,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 99,
+          "direction": "inbound",
+          "status": "completed",
+          "call_time": "2026-01-15T00:00:00Z",
+          "duration": 5940,
+          "agent_id": 1009,
+          "phone_number": "+15550100000"
+        },
+        {
+          "id": 100,
+          "direction": "outbound",
+          "status": "missed",
+          "call_time": "2026-01-16T00:00:00Z",
+          "duration": 6000,
+          "agent_id": 1000,
+          "phone_number": "+15550100000"
+        }
+      ]
+    }
+  }
+}

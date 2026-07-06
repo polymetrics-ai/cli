@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bank_transaction",
+  "type": "object",
+  "x-primary-key": [
+    "BankTransactionID"
+  ],
+  "properties": {
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "LineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "BankAccount": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "IsReconciled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SubTotal": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalTax": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "BankTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PrepaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "OverpaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "bank_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

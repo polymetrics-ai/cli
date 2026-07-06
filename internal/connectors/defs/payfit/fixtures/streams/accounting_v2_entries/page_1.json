@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/accounting-v2",
+    "query": {
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "operationDate": "accounting_v2_entries_1",
+        "accountId": "accounting_v2_entries_2",
+        "contractId": "accounting_v2_entries_3",
+        "name": "Fixture accounting v2 entries"
+      }
+    ]
+  }
+}

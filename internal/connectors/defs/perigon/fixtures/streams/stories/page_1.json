@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/stories/all", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "numResults": 1,
+      "stories": [
+        {
+          "id": "story-fixture-1",
+          "name": "Fixture Story One",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:05:00Z"
+        }
+      ]
+    }
+  }
+}

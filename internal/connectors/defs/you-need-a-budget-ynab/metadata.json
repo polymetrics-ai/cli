@@ -1,0 +1,21 @@
+{
+  "name": "you-need-a-budget-ynab",
+  "display_name": "You Need A Budget (YNAB)",
+  "description": "Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions, and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.ynab.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external YNAB API read of budget, account, category, payee, month, transaction, and scheduled-transaction data",
+    "write": "external mutation: creates/updates/deletes budget transactions, creates accounts/categories/payees/scheduled transactions, updates category names/goals and month-category budgeted amounts",
+    "approval": "required for all write actions; reads require none"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/analytics/ua-type", "query": { "date_from": "synthetic-conformance-value", "date_to": "synthetic-conformance-value", "domain_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "date_from": 1767225600,
+        "date_to": 1767311999,
+        "stats": [
+          { "name": "desktop", "count": 2 }
+        ]
+      }
+    }
+  }
+}

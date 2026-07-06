@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/meetings/synthetic-conformance-value/transcribe"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meetingId": "meeting_id_fixture",
+      "recordingStatus": "fixture",
+      "transcript": {
+        "id": "id_fixture",
+        "status": "fixture",
+        "externalId": "external_id_fixture"
+      }
+    }
+  }
+}

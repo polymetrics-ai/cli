@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/profiles", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "profiles": [
+        {
+          "id": "profile_fixture_1",
+          "name": "Fixture Profile One",
+          "createdOn": "2026-01-01T00:00:00Z",
+          "modifiedOn": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "nextPageCursor": null, "hasNextPage": false }
+    }
+  }
+}

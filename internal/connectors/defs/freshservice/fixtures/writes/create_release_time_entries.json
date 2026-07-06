@@ -1,0 +1,15 @@
+{
+  "record": {
+    "release_id": 123,
+    "name": "Fixture create_release_time_entries",
+    "description": "Fixture create_release_time_entries record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/releases/123/time_entries",
+    "body": {
+      "name": "Fixture create_release_time_entries",
+      "description": "Fixture create_release_time_entries record"
+    }
+  }
+}

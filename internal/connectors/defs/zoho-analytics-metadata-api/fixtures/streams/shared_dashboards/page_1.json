@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/dashboards/shared" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "summary": "Get shared dashboards",
+      "data": {
+        "views": [
+          {
+            "viewId": "dashboard_fixture_1",
+            "viewName": "Fixture Dashboard",
+            "viewDesc": "fixture dashboard description",
+            "viewType": "Dashboard",
+            "parentViewId": "",
+            "folderId": "folder_fixture_1",
+            "createdTime": "1767225601000",
+            "createdBy": "fixture1@example.com",
+            "lastModifiedTime": "1767225601000",
+            "lastModifiedBy": "fixture1@example.com",
+            "isFavorite": false,
+            "sharedBy": "",
+            "workspaceId": "ws_fixture_1",
+            "orgId": "org_fixture_1"
+          }
+        ]
+      }
+    }
+  }
+}

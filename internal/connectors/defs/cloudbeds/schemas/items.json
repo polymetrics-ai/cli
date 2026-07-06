@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "items",
+  "type": "object",
+  "x-primary-key": ["itemID"],
+  "required": ["itemID"],
+  "properties": {
+    "itemID": { "type": "string" },
+    "itemType": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "itemCode": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "categoryID": { "type": ["string", "null"] },
+    "categoryName": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "price": { "type": ["number", "null"] },
+    "stockInventory": { "type": ["boolean", "null"] },
+    "itemQuantity": { "type": ["integer", "null"] },
+    "reorderThreshold": { "type": ["integer", "null"] },
+    "reorderNeeded": { "type": ["boolean", "null"] },
+    "stopSell": { "type": ["boolean", "null"] },
+    "stopSellMet": { "type": ["boolean", "null"] },
+    "taxes": { "type": ["array", "null"] },
+    "totalTaxes": { "type": ["number", "null"] },
+    "fees": { "type": ["array", "null"] },
+    "totalFees": { "type": ["number", "null"] },
+    "priceWithoutFeesAndTaxes": { "type": ["number", "null"] },
+    "grandTotal": { "type": ["number", "null"] }
+  }
+}

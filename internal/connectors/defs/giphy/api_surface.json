@@ -1,0 +1,76 @@
+{
+  "api": "Giphy API v1 (https://api.giphy.com/v1)",
+  "docs": "https://developers.giphy.com/docs/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; Giphy's other endpoints (get-by-id, random, categories, translate) are out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/gifs/search",
+      "covered_by": {
+        "stream": "gif_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stickers/search",
+      "covered_by": {
+        "stream": "sticker_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clips/search",
+      "covered_by": {
+        "stream": "clip_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gifs/trending",
+      "covered_by": {
+        "stream": "trending_gifs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gifs/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/gifs/{id} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gifs/random",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/gifs/random is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gifs/translate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/gifs/translate is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stickers/trending",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/stickers/trending is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clips/trending",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/clips/trending is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

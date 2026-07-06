@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [],
+      "speakers": [],
+      "days": [],
+      "halls": [],
+      "tracks": [],
+      "workshops": [],
+      "pauses": [
+        {
+          "id": 240,
+          "name": "Fixture Break",
+          "description": "<p>Sanitized fixture break.</p>",
+          "start": "2026-06-01 10:00:00",
+          "end": "2026-06-01 10:30:00",
+          "created_at": "2026-05-01 00:00:00",
+          "updated_at": "2026-05-02 00:00:00"
+        }
+      ]
+    }
+  }
+}

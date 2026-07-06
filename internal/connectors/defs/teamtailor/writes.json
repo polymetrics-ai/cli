@@ -1,0 +1,298 @@
+{
+  "actions": [
+    {
+      "name": "create_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["jobs"] },
+              "attributes": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "pitch": { "type": "string" },
+                  "body": { "type": "string" }
+                }
+              },
+              "relationships": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new job posting; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["candidates"] },
+              "attributes": {
+                "type": "object",
+                "properties": {
+                  "first-name": { "type": "string" },
+                  "last-name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "pitch": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new candidate record; stores personal data (name/email) about a real individual, subject to data-protection obligations"
+    },
+    {
+      "name": "update_candidate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/candidates/{{ record.data.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string", "enum": ["candidates"] },
+              "attributes": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing candidate's personal data (name/email/pitch)"
+    },
+    {
+      "name": "create_job_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/job-applications",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "relationships"],
+            "properties": {
+              "type": { "type": "string", "enum": ["job-applications"] },
+              "attributes": { "type": "object" },
+              "relationships": {
+                "type": "object",
+                "required": ["candidate", "job"],
+                "properties": {
+                  "candidate": { "type": "object" },
+                  "job": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "links a candidate to a job as a new application; moves the candidate into that job's active pipeline and may trigger applicant notifications"
+    },
+    {
+      "name": "update_job_application",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/job-applications/{{ record.data.id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["id", "type"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string", "enum": ["job-applications"] },
+              "attributes": { "type": "object" },
+              "relationships": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing job application (e.g. moves it to a different stage); may trigger applicant-facing notifications"
+    },
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/departments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["departments"] },
+              "attributes": {
+                "type": "object",
+                "required": ["name"],
+                "properties": { "name": { "type": "string" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new department record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["locations"] },
+              "attributes": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "city": { "type": "string" },
+                  "country": { "type": "string" },
+                  "address": { "type": "string" },
+                  "zip": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new office/location record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["teams"] },
+              "attributes": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "emoji": { "type": "string" }
+                }
+              },
+              "relationships": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new hiring team; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_todo",
+      "kind": "create",
+      "method": "POST",
+      "path": "/todos",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes"],
+            "properties": {
+              "type": { "type": "string", "enum": ["todos"] },
+              "attributes": {
+                "type": "object",
+                "required": ["value"],
+                "properties": { "value": { "type": "string" } }
+              },
+              "relationships": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new to-do reminder, optionally assigned to a user against a candidate; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["type", "attributes", "relationships"],
+            "properties": {
+              "type": { "type": "string", "enum": ["notes"] },
+              "attributes": {
+                "type": "object",
+                "required": ["note"],
+                "properties": { "note": { "type": "string" } }
+              },
+              "relationships": {
+                "type": "object",
+                "required": ["candidate"],
+                "properties": { "candidate": { "type": "object" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new internal note on a candidate; stores potentially sensitive recruiter commentary about a real individual"
+    }
+  ]
+}

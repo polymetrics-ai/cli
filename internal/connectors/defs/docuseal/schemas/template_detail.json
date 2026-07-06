@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "template_detail",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "slug": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "folder_id": { "type": ["integer", "null"] },
+    "folder_name": { "type": ["string", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "author_id": { "type": ["integer", "null"] },
+    "archived_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "preferences": { "type": ["object", "null"] },
+    "schema": { "type": ["array", "null"], "items": { "type": "object" } },
+    "fields": { "type": ["array", "null"], "items": { "type": "object" } },
+    "submitters": { "type": ["array", "null"], "items": { "type": "object" } },
+    "documents": { "type": ["array", "null"], "items": { "type": "object" } },
+    "author": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "api": "Google Search Console API v3 (https://www.googleapis.com/webmasters/v3)",
+  "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B expansion of the documented Search Console API reference. Site and sitemap list/detail reads are covered as streams; Search Analytics POST-body report reads remain stream-covered through the existing hook; site and sitemap submit/delete endpoints are exposed as explicit write actions. URL Inspection is excluded because it is a read-like POST endpoint on a separate API root requiring request-body semantics outside the current declarative read path.",
+  "endpoints": [
+    { "method": "GET", "path": "/sites", "covered_by": { "stream": "sites" } },
+    { "method": "GET", "path": "/sites/{siteUrl}", "covered_by": { "stream": "site_details" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/sitemaps", "covered_by": { "stream": "sitemaps" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/sitemaps/{feedpath}", "covered_by": { "stream": "sitemap_details" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_date" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_country" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_device" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_page" } },
+    { "method": "GET", "path": "/sites/{siteUrl}/searchAnalytics/query (wire verb POST; semantic read)", "covered_by": { "stream": "search_analytics_by_query" } },
+    { "method": "PUT", "path": "/sites/{siteUrl}/sitemaps/{feedpath}", "covered_by": { "write": "submit_sitemap" } },
+    { "method": "DELETE", "path": "/sites/{siteUrl}/sitemaps/{feedpath}", "covered_by": { "write": "delete_sitemap" } },
+    { "method": "PUT", "path": "/sites/{siteUrl}", "covered_by": { "write": "add_site" } },
+    { "method": "DELETE", "path": "/sites/{siteUrl}", "covered_by": { "write": "delete_site" } },
+    { "method": "POST", "path": "/urlInspection/index:inspect", "excluded": { "category": "out_of_scope", "reason": "URL Inspection is a semantic read on https://searchconsole.googleapis.com/v1 with JSON request-body parameters; this bundle's existing hook only covers webmasters/v3 Search Analytics body reads" } }
+  ]
+}

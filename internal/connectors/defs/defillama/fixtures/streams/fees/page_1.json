@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/overview/fees",
+    "query": { "excludeTotalDataChart": "true", "excludeTotalDataChartBreakdown": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "protocols": [
+        {
+          "defillamaId": "1",
+          "name": "Fixture Protocol Fees",
+          "displayName": "Fixture Protocol Fees",
+          "category": "Lending",
+          "chains": ["Ethereum"],
+          "total24h": 20000.0,
+          "total7d": 140000.0,
+          "total30d": 600000.0,
+          "totalAllTime": 5000000.0,
+          "change_1d": 0.5
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "mapping_id": "synthetic-conformance-value",
+    "properties": {
+      "expression": "expression_fixture",
+      "pushStatus": "DONT_PUSH"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/mappings/synthetic-conformance-value",
+    "body": {
+      "properties": {
+        "expression": "expression_fixture",
+        "pushStatus": "DONT_PUSH"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "api": "US Census Bureau API (https://api.census.gov)",
+  "docs": "https://www.census.gov/data/developers/guidance/api-user-guide.html",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface review of a small, structurally unusual API: legacy exposes exactly one caller-configured dataset query endpoint (query_path/query_params are entirely operator-supplied at connection-config time, not per-stream) -- this remains the only real per-dataset data query surface and is unchanged from the wave1 Tier-2 StreamHook migration. This revision adds ONE genuinely new, declaratively-shapeable resource researched directly against the live API: the Bureau's own public dataset discovery catalog (GET /data.json, confirmed live via a direct fetch during this review -- a DCAT-formatted JSON object listing every published dataset with its own variables/geography/tags/groups sub-resource links), which is a fixed, uniform-shaped resource unlike the caller-driven query endpoint. Per-dataset sub-resources (variables.json, geography.json, tags.json, groups.json, examples.json -- one set per one of thousands of published datasets, each dataset's own path embedded in the catalog response) are excluded: there is no fixed, finite endpoint list to enumerate (the set of valid paths is itself the catalog's own row count, thousands of entries, each a distinct URL), matching the exact reasoning that scoped the original query stream.",
+  "endpoints": [
+    { "method": "GET", "path": "/{query_path}", "covered_by": { "stream": "query" } },
+    { "method": "GET", "path": "/data.json", "covered_by": { "stream": "datasets" } },
+    { "method": "GET", "path": "/data/{year}/{dataset}/variables.json", "excluded": { "category": "out_of_scope", "reason": "per-dataset variable-metadata sub-resource; one distinct URL per published dataset (thousands, enumerated only by reading the datasets stream's own c_variablesLink field per row) -- not a fixed, finite endpoint this manifest can enumerate directly, matching the reasoning that scoped the caller-driven query endpoint itself" } },
+    { "method": "GET", "path": "/data/{year}/{dataset}/geography.json", "excluded": { "category": "out_of_scope", "reason": "per-dataset geography-hierarchy sub-resource; same thousands-of-distinct-URLs reasoning as the variables.json sub-resource" } },
+    { "method": "GET", "path": "/data/{year}/{dataset}/tags.json", "excluded": { "category": "out_of_scope", "reason": "per-dataset tag-metadata sub-resource; same thousands-of-distinct-URLs reasoning as the variables.json sub-resource" } },
+    { "method": "GET", "path": "/data/{year}/{dataset}/groups.json", "excluded": { "category": "out_of_scope", "reason": "per-dataset variable-group sub-resource; same thousands-of-distinct-URLs reasoning as the variables.json sub-resource" } },
+    { "method": "GET", "path": "/data/{year}/{dataset}/examples.json", "excluded": { "category": "out_of_scope", "reason": "per-dataset example-query documentation sub-resource (illustrative curl examples, not data); same thousands-of-distinct-URLs reasoning as the variables.json sub-resource, and non-data even where reachable" } }
+  ]
+}

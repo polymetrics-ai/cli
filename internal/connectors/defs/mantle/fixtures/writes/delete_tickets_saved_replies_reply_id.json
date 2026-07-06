@@ -1,0 +1,13 @@
+{
+  "record": {
+    "reply_id": "reply_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/tickets/saved_replies/reply_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

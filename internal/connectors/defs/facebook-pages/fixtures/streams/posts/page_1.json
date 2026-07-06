@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/posts", "query": { "fields": "id,message,created_time,updated_time,permalink_url" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "post_fixture_1",
+          "message": "Fixture post 1",
+          "created_time": "2026-01-01T00:00:00+0000",
+          "updated_time": "2026-01-01T00:00:00+0000",
+          "permalink_url": "https://www.facebook.com/fixture-page/posts/post_fixture_1"
+        },
+        {
+          "id": "post_fixture_2",
+          "message": "Fixture post 2",
+          "created_time": "2026-01-02T00:00:00+0000",
+          "updated_time": "2026-01-02T00:00:00+0000",
+          "permalink_url": "https://www.facebook.com/fixture-page/posts/post_fixture_2"
+        }
+      ],
+      "paging": { "next": "" }
+    }
+  }
+}

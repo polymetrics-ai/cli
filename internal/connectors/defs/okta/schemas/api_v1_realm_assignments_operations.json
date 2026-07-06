@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "assignmentOperation": {
+      "type": "object",
+      "description": "Definition of the realm assignment operation",
+      "properties": {
+        "configuration": {
+          "type": "object",
+          "description": "Configuration defintion of the realm",
+          "properties": {
+            "actions": {
+              "type": "object",
+              "description": "Realm assignment action",
+              "properties": {
+                "assignUserToRealm": {
+                  "type": "object",
+                  "description": "Action that assigns a user to a realm",
+                  "properties": {
+                    "realmId": {
+                      "type": "string",
+                      "description": "ID of the realm"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": true
+            },
+            "conditions": {
+              "type": "object",
+              "description": "Conditions of applying realm assignment",
+              "properties": {
+                "expression": {
+                  "type": "object",
+                  "description": "Conditional expression",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "description": "Value of the condition expression"
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                "profileSourceId": {
+                  "type": "string",
+                  "description": "ID of the profile source"
+                }
+              },
+              "additionalProperties": true
+            },
+            "id": {
+              "type": "string",
+              "description": "ID of the realm assignment operation"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the realm assignment operation"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "numUserMoved": {
+      "type": "number",
+      "description": "Number of users moved"
+    },
+    "realmId": {
+      "type": "string",
+      "description": "ID of the realm"
+    },
+    "realmName": {
+      "type": "string",
+      "description": "Name of the realm"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

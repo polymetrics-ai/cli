@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (ID) of an item."
+    },
+    "data": {
+      "type": "object",
+      "description": "Contains shape item data, such as the content or the type of the shape.",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The text you want to display on the shape.\n<br>**Not supported for shapes:**\n<ul>\n  <li>flow_chart_or</li>\n  <li>flow_chart_summing_junction</li>\n</ul>"
+        },
+        "shape": {
+          "type": "string",
+          "description": "Defines the geometric shape of the item when it is rendered on the board. <details>\n  <summary>Basic shapes</summary>\n  <ul>\n    <li>rectangle</li>\n    <li>round_rectangle</li>\n    <li>circle</li>\n    <li>triangle</li>\n    <li>rhombus</li>\n    <li>parallelogram</li>\n    <li>trapezoid</li>\n    <li>pentagon</li>\n    <li>hexagon</li>\n    <li>octagon</li>\n    <li>wedge_round_rectangle_callout</li>\n    <li>star</li>\n    <li>flow_chart_predefined_process</li>\n    <li>cloud</li>\n    <li>cross</li>\n    "
+        }
+      },
+      "additionalProperties": true
+    },
+    "style": {
+      "type": "object",
+      "description": "Contains information about the shape style, such as the border color or opacity. <br> All properties in style object are supported for shape types aren't listed below. <br> <table>\n  <tr>\n    <th align=\"left\">Shape type</th>\n    <th align=\"left\">Unsupported properties</th>\n  </tr>\n  <tr>\n    <td>flow_chart_or</td>\n    <td>fontSize, fontFamily, color, textAlign, textAlignVertical</td>\n  </tr>\n  <tr>\n    <td>flow_chart_summing_junction</td>\n    <td>fontSize, fontFamily, color, textAlign, textAlign",
+      "properties": {
+        "borderColor": {
+          "type": "string",
+          "description": "Defines the color of the border of the shape.\nDefault: `#1a1a1a` (dark gray)."
+        },
+        "borderOpacity": {
+          "type": "string",
+          "description": "Defines the opacity level of the shape border.\nPossible values: any number between `0.0` and `1.0`, where:\n`0.0`: the background color is completely transparent or invisible\n`1.0`: the background color is completely opaque or solid\nDefault: `1.0` (solid color)."
+        },
+        "borderStyle": {
+          "type": "string",
+          "description": "Defines the style used to represent the border of the shape.\nDefault: `normal`.",
+          "enum": [
+            "normal",
+            "dotted",
+            "dashed"
+          ]
+        },
+        "borderWidth": {
+          "type": "string",
+          "description": "Defines the thickness of the shape border, in dp.\nDefault: `2.0`."
+        },
+        "color": {
+          "type": "string",
+          "description": "Hex value representing the color for the text within the shape item.\nDefault: `#1a1a1a`."
+        },
+        "fillColor": {
+          "type": "string",
+          "description": "Fill color for the shape.\nHex values: `#f5f6f8` `#d5f692` `#d0e17a` `#93d275` `#67c6c0` `#23bfe7` `#a6ccf5` `#7b92ff` `#fff9b1` `#f5d128` `#ff9d48` `#f16c7f` `#ea94bb` `#ffcee0` `#b384bb` `#000000`\nDefault: #ffffff."
+        },
+        "fillOpacity": {
+          "type": "string",
+          "description": "Opacity level of the fill color.\nPossible values: any number between `0` and `1`, where:\n`0.0`: the background color is completely transparent or invisible\n`1.0`: the background color is completely opaque or solid\nDefault: `Flowchart` shapes: `1.0`. `Basic` shapes: `1.0` if `fillColor` provided, `0.0` if no `fillColor` provided.\n"
+        },
+        "fontFamily": {
+          "type": "string",
+          "description": "Defines the font type for the text in the shape item.\nDefault: `arial`."
+        },
+        "fontSize": {
+          "type": "string",
+          "description": "Defines the font size, in dp, for the text on the shape.\nDefault: `14`."
+        },
+        "textAlign": {
+          "type": "string",
+          "description": "Defines how the shape text is horizontally aligned.\nDefault:\nFlowchart shapes: `center`.\nBasic shapes: `left`.\n\n`unknown` is returned for unsupported shapes.",
+          "enum": [
+            "left",
+            "right",
+            "center",
+            "unknown"
+          ]
+        },
+        "textAlignVertical": {
+          "type": "string",
+          "description": "Defines how the shape text is vertically aligned.\nDefault:\nFlowchart shapes: `middle`.\nBasic shapes: `top`.\n\n`unknown` is returned for unsupported shapes.",
+          "enum": [
+            "top",
+            "middle",
+            "bottom",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "position": {
+      "type": "object",
+      "description": "Contains location information about the item, such as its x coordinate, y coordinate, and the origin of the x and y coordinates.",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "Area of the item that is referenced by its x and y coordinates. For example, an item with a center origin will have its x and y coordinates point to its center. The center point of the board has x: 0 and y: 0 coordinates.\nCurrently, only one option is supported.",
+          "enum": [
+            "center"
+          ]
+        },
+        "relativeTo": {
+          "type": "string",
+          "enum": [
+            "canvas_center",
+            "parent_top_left"
+          ]
+        },
+        "x": {
+          "type": "number",
+          "description": "X-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        },
+        "y": {
+          "type": "number",
+          "description": "Y-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+        }
+      },
+      "additionalProperties": true
+    },
+    "geometry": {
+      "type": "object",
+      "description": "Contains geometrical information about the item, such as its width or height.",
+      "properties": {
+        "height": {
+          "type": "number",
+          "description": "Height of the item, in pixels."
+        },
+        "rotation": {
+          "type": "number",
+          "description": "Rotation angle of an item, in degrees, relative to the board. You can rotate items clockwise (right) and counterclockwise (left) by specifying positive and negative values, respectively."
+        },
+        "width": {
+          "type": "number",
+          "description": "Width of the item, in pixels."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when the item was created. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "Contains information about the user who created the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "Date and time when the item was last modified. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+      "format": "date-time"
+    },
+    "modifiedBy": {
+      "type": "object",
+      "description": "Contains information about the user who last modified the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the user."
+        },
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+        }
+      },
+      "additionalProperties": true
+    },
+    "parent": {
+      "type": "object",
+      "description": "Contains information about the parent frame for the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ID) of the parent frame for the item."
+        },
+        "links": {
+          "type": "object",
+          "description": "Contains applicable links for the current object.",
+          "properties": {
+            "self": {
+              "type": "string",
+              "description": "Link to obtain more information about the current object."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains applicable links for the item.",
+      "properties": {
+        "related": {
+          "type": "string",
+          "description": "Link to obtain information about the child items related to the frame."
+        },
+        "self": {
+          "type": "string",
+          "description": "Link to obtain information about the current item."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of item that is returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

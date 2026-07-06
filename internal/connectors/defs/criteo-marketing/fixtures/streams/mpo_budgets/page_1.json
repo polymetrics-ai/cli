@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "16501666", "sellerId": "10656107", "campaignIds": [436017], "budgetType": "Capped", "amount": 462.47, "startDate": "2026-01-01", "endDate": "2026-04-30", "spend": 117.59, "status": "Current", "isSuspended": false },
+      { "id": "16501667", "sellerId": "10656108", "campaignIds": [436018], "budgetType": "Daily", "amount": 50.0, "startDate": "2026-01-01", "endDate": "", "spend": 12.5, "status": "Current", "isSuspended": false }
+    ]
+  }
+}

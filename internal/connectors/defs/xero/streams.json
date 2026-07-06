@@ -1,0 +1,1281 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Xero-tenant-id": "{{ secrets.tenant_id }}"
+    },
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "Organisation"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "xero access_token is missing, invalid, or expired; re-run pm credentials add xero"
+      },
+      {
+        "status": 403,
+        "hint": "xero tenant_id is missing or the connected app lacks access to this tenant"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "xero rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "invoices",
+      "path": "Invoices",
+      "records": {
+        "path": "Invoices"
+      },
+      "computed_fields": {
+        "id": "{{ record.InvoiceID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}",
+        "ContactID": "{{ record.Contact.ContactID }}"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "contacts",
+      "path": "Contacts",
+      "records": {
+        "path": "Contacts"
+      },
+      "computed_fields": {
+        "id": "{{ record.ContactID }}",
+        "status": "{{ record.ContactStatus }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "accounts",
+      "path": "Accounts",
+      "records": {
+        "path": "Accounts"
+      },
+      "computed_fields": {
+        "id": "{{ record.AccountID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "bank_transactions",
+      "path": "BankTransactions",
+      "records": {
+        "path": "BankTransactions"
+      },
+      "computed_fields": {
+        "id": "{{ record.BankTransactionID }}",
+        "type": "{{ record.Type }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}",
+        "ContactID": "{{ record.Contact.ContactID }}"
+      },
+      "schema": "schemas/bank_transactions.json"
+    },
+    {
+      "name": "items",
+      "path": "Items",
+      "records": {
+        "path": "Items"
+      },
+      "computed_fields": {
+        "id": "{{ record.ItemID }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/items.json"
+    },
+    {
+      "name": "payments",
+      "path": "Payments",
+      "records": {
+        "path": "Payments"
+      },
+      "computed_fields": {
+        "id": "{{ record.PaymentID }}",
+        "status": "{{ record.Status }}",
+        "updated_at": "{{ record.UpdatedDateUTC }}"
+      },
+      "schema": "schemas/payments.json"
+    },
+    {
+      "name": "account",
+      "path": "Accounts/{{ config.account_id }}",
+      "records": {
+        "path": "Accounts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/account.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "account_attachments",
+      "path": "Accounts/{{ config.account_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/account_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transaction",
+      "path": "BankTransactions/{{ config.bank_transaction_id }}",
+      "records": {
+        "path": "BankTransactions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transaction.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transaction_attachments",
+      "path": "BankTransactions/{{ config.bank_transaction_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transaction_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transactions_history",
+      "path": "BankTransactions/{{ config.bank_transaction_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transactions_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transfer",
+      "path": "BankTransfers/{{ config.bank_transfer_id }}",
+      "records": {
+        "path": "BankTransfers"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transfer.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transfer_attachments",
+      "path": "BankTransfers/{{ config.bank_transfer_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transfer_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transfer_history",
+      "path": "BankTransfers/{{ config.bank_transfer_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transfer_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bank_transfers",
+      "path": "BankTransfers",
+      "records": {
+        "path": "BankTransfers"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/bank_transfers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "batch_payment",
+      "path": "BatchPayments/{{ config.batch_payment_id }}",
+      "records": {
+        "path": "BatchPayments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/batch_payment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "batch_payment_history",
+      "path": "BatchPayments/{{ config.batch_payment_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/batch_payment_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "batch_payments",
+      "path": "BatchPayments",
+      "records": {
+        "path": "BatchPayments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/batch_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "branding_theme",
+      "path": "BrandingThemes/{{ config.branding_theme_id }}",
+      "records": {
+        "path": "BrandingThemes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/branding_theme.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "branding_theme_payment_services",
+      "path": "BrandingThemes/{{ config.branding_theme_id }}/PaymentServices",
+      "records": {
+        "path": "PaymentServices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/branding_theme_payment_services.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "branding_themes",
+      "path": "BrandingThemes",
+      "records": {
+        "path": "BrandingThemes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/branding_themes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "budget",
+      "path": "Budgets/{{ config.budget_id }}",
+      "records": {
+        "path": "Budgets"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/budget.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "budgets",
+      "path": "Budgets",
+      "records": {
+        "path": "Budgets"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/budgets.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact",
+      "path": "Contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "Contacts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_attachments",
+      "path": "Contacts/{{ config.contact_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_by_contact_number",
+      "path": "Contacts/{{ config.contact_number }}",
+      "records": {
+        "path": "Contacts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_by_contact_number.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_cis_settings",
+      "path": "Contacts/{{ config.contact_id }}/CISSettings",
+      "records": {
+        "path": "CISSettings"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_cis_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_group",
+      "path": "ContactGroups/{{ config.contact_group_id }}",
+      "records": {
+        "path": "ContactGroups"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_group.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_groups",
+      "path": "ContactGroups",
+      "records": {
+        "path": "ContactGroups"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_history",
+      "path": "Contacts/{{ config.contact_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "credit_note",
+      "path": "CreditNotes/{{ config.credit_note_id }}",
+      "records": {
+        "path": "CreditNotes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/credit_note.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "credit_note_attachments",
+      "path": "CreditNotes/{{ config.credit_note_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/credit_note_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "credit_note_history",
+      "path": "CreditNotes/{{ config.credit_note_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/credit_note_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "credit_notes",
+      "path": "CreditNotes",
+      "records": {
+        "path": "CreditNotes"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/credit_notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "currencies",
+      "path": "Currencies",
+      "records": {
+        "path": "Currencies"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/currencies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_claim",
+      "path": "ExpenseClaims/{{ config.expense_claim_id }}",
+      "records": {
+        "path": "ExpenseClaims"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/expense_claim.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_claim_history",
+      "path": "ExpenseClaims/{{ config.expense_claim_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/expense_claim_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_claims",
+      "path": "ExpenseClaims",
+      "records": {
+        "path": "ExpenseClaims"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/expense_claims.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice",
+      "path": "Invoices/{{ config.invoice_id }}",
+      "records": {
+        "path": "Invoices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_attachments",
+      "path": "Invoices/{{ config.invoice_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/invoice_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_history",
+      "path": "Invoices/{{ config.invoice_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/invoice_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "invoice_reminders",
+      "path": "InvoiceReminders/Settings",
+      "records": {
+        "path": "InvoiceReminders"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/invoice_reminders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "item",
+      "path": "Items/{{ config.item_id }}",
+      "records": {
+        "path": "Items"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/item.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "item_history",
+      "path": "Items/{{ config.item_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/item_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "journal",
+      "path": "Journals/{{ config.journal_id }}",
+      "records": {
+        "path": "Journals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/journal.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "journal_by_number",
+      "path": "Journals/{{ config.journal_number }}",
+      "records": {
+        "path": "Journals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/journal_by_number.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "journals",
+      "path": "Journals",
+      "records": {
+        "path": "Journals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/journals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "linked_transaction",
+      "path": "LinkedTransactions/{{ config.linked_transaction_id }}",
+      "records": {
+        "path": "LinkedTransactions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/linked_transaction.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "linked_transactions",
+      "path": "LinkedTransactions",
+      "records": {
+        "path": "LinkedTransactions"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/linked_transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "manual_journal",
+      "path": "ManualJournals/{{ config.manual_journal_id }}",
+      "records": {
+        "path": "ManualJournals"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/manual_journal.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "manual_journal_attachments",
+      "path": "ManualJournals/{{ config.manual_journal_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/manual_journal_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "manual_journals",
+      "path": "ManualJournals",
+      "records": {
+        "path": "ManualJournals"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/manual_journals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "manual_journals_history",
+      "path": "ManualJournals/{{ config.manual_journal_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/manual_journals_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "online_invoice",
+      "path": "Invoices/{{ config.invoice_id }}/OnlineInvoice",
+      "records": {
+        "path": "OnlineInvoices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/online_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organisation_actions",
+      "path": "Organisation/Actions",
+      "records": {
+        "path": "Actions"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/organisation_actions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organisation_cis_settings",
+      "path": "Organisation/{{ config.organisation_id }}/CISSettings",
+      "records": {
+        "path": "CISSettings"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/organisation_cis_settings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organisations",
+      "path": "Organisation",
+      "records": {
+        "path": "Organisations"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/organisations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "overpayment",
+      "path": "Overpayments/{{ config.overpayment_id }}",
+      "records": {
+        "path": "Overpayments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/overpayment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "overpayment_history",
+      "path": "Overpayments/{{ config.overpayment_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/overpayment_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "overpayments",
+      "path": "Overpayments",
+      "records": {
+        "path": "Overpayments"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/overpayments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment",
+      "path": "Payments/{{ config.payment_id }}",
+      "records": {
+        "path": "Payments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/payment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment_history",
+      "path": "Payments/{{ config.payment_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/payment_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment_services",
+      "path": "PaymentServices",
+      "records": {
+        "path": "PaymentServices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/payment_services.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "prepayment",
+      "path": "Prepayments/{{ config.prepayment_id }}",
+      "records": {
+        "path": "Prepayments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/prepayment.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "prepayment_history",
+      "path": "Prepayments/{{ config.prepayment_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/prepayment_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "prepayments",
+      "path": "Prepayments",
+      "records": {
+        "path": "Prepayments"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/prepayments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "purchase_order",
+      "path": "PurchaseOrders/{{ config.purchase_order_id }}",
+      "records": {
+        "path": "PurchaseOrders"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/purchase_order.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "purchase_order_attachments",
+      "path": "PurchaseOrders/{{ config.purchase_order_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/purchase_order_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "purchase_order_by_number",
+      "path": "PurchaseOrders/{{ config.purchase_order_number }}",
+      "records": {
+        "path": "PurchaseOrders"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/purchase_order_by_number.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "purchase_order_history",
+      "path": "PurchaseOrders/{{ config.purchase_order_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/purchase_order_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "purchase_orders",
+      "path": "PurchaseOrders",
+      "records": {
+        "path": "PurchaseOrders"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/purchase_orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "quote",
+      "path": "Quotes/{{ config.quote_id }}",
+      "records": {
+        "path": "Quotes"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/quote.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "quote_attachments",
+      "path": "Quotes/{{ config.quote_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/quote_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "quote_history",
+      "path": "Quotes/{{ config.quote_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/quote_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "quotes",
+      "path": "Quotes",
+      "records": {
+        "path": "Quotes"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/quotes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "receipt",
+      "path": "Receipts/{{ config.receipt_id }}",
+      "records": {
+        "path": "Receipts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/receipt.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "receipt_attachments",
+      "path": "Receipts/{{ config.receipt_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/receipt_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "receipt_history",
+      "path": "Receipts/{{ config.receipt_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/receipt_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "receipts",
+      "path": "Receipts",
+      "records": {
+        "path": "Receipts"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/receipts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "repeating_invoice",
+      "path": "RepeatingInvoices/{{ config.repeating_invoice_id }}",
+      "records": {
+        "path": "RepeatingInvoices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/repeating_invoice.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "repeating_invoice_attachments",
+      "path": "RepeatingInvoices/{{ config.repeating_invoice_id }}/Attachments",
+      "records": {
+        "path": "Attachments"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/repeating_invoice_attachments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "repeating_invoice_history",
+      "path": "RepeatingInvoices/{{ config.repeating_invoice_id }}/History",
+      "records": {
+        "path": "HistoryRecords"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/repeating_invoice_history.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "repeating_invoices",
+      "path": "RepeatingInvoices",
+      "records": {
+        "path": "RepeatingInvoices"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/repeating_invoices.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_aged_payables_by_contact",
+      "path": "Reports/AgedPayablesByContact",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_aged_payables_by_contact.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_aged_receivables_by_contact",
+      "path": "Reports/AgedReceivablesByContact",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_aged_receivables_by_contact.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_balance_sheet",
+      "path": "Reports/BalanceSheet",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_balance_sheet.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_bank_summary",
+      "path": "Reports/BankSummary",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_bank_summary.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_budget_summary",
+      "path": "Reports/BudgetSummary",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_budget_summary.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_executive_summary",
+      "path": "Reports/ExecutiveSummary",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_executive_summary.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_from_id",
+      "path": "Reports/{{ config.report_id }}",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_from_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_profit_and_loss",
+      "path": "Reports/ProfitAndLoss",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_profit_and_loss.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_ten_ninety_nine",
+      "path": "Reports/TenNinetyNine",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_ten_ninety_nine.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "report_trial_balance",
+      "path": "Reports/TrialBalance",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/report_trial_balance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "reports_list",
+      "path": "Reports",
+      "records": {
+        "path": "Reports"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/reports_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tax_rate_by_tax_type",
+      "path": "TaxRates/{{ config.tax_type }}",
+      "records": {
+        "path": "TaxRates"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tax_rate_by_tax_type.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tax_rates",
+      "path": "TaxRates",
+      "records": {
+        "path": "TaxRates"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tax_rates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracking_categories",
+      "path": "TrackingCategories",
+      "records": {
+        "path": "TrackingCategories"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tracking_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracking_category",
+      "path": "TrackingCategories/{{ config.tracking_category_id }}",
+      "records": {
+        "path": "TrackingCategories"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tracking_category.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user",
+      "path": "Users/{{ config.user_id }}",
+      "records": {
+        "path": "Users"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "Users",
+      "records": {
+        "path": "Users"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    }
+  ]
+}

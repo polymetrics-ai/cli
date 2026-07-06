@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "sequencetemplate",
+      "attributes": {
+        "name": "Fixture Create Sequence Template"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sequenceTemplates",
+    "body": {
+      "data": {
+        "type": "sequencetemplate",
+        "attributes": {
+          "name": "Fixture Create Sequence Template"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/factors/synthetic-conformance-value/transactions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "factorResult": "WAITING (with number matching challenge)"
+    }
+  }
+}

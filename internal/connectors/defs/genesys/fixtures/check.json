@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": { "pageSize": "1", "pageNumber": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "entities": [] }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "subscription_id": "sub_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/subscriptions/sub_fixture_1/actions/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

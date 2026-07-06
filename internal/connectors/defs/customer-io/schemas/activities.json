@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "timestamp",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "customer_id": { "type": ["string", "null"] },
+    "customer_identifiers": { "type": ["object", "null"] },
+    "type": { "type": ["string", "null"] },
+    "delivery_id": { "type": ["string", "null"] },
+    "delivery_type": { "type": ["string", "null"] },
+    "timestamp": { "type": "integer", "description": "Unix seconds." },
+    "data": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "lemlist",
+  "display_name": "Lemlist",
+  "description": "Reads lemlist campaigns, activities, team metadata, CRM contacts/companies, schedules, tasks, webhooks, unsubscribes, field definitions, and signal-agent data through the lemlist REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.lemlist.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external lemlist API read of campaign, outreach, CRM, inbox metadata, unsubscribe, webhook, and signal-agent data"
+  }
+}

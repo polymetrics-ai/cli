@@ -1,0 +1,13 @@
+{
+  "record": {
+    "guid": "grp_fixture_1",
+    "name": "Updated Fixture Group"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/groups/grp_fixture_1",
+    "body": {
+      "name": "Updated Fixture Group"
+    }
+  }
+}

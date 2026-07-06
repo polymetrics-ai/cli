@@ -1,0 +1,22 @@
+{
+  "name": "tiktok-marketing",
+  "display_name": "TikTok Marketing",
+  "description": "Reads TikTok Business advertisers, campaigns, ad groups, and ads through the TikTok Marketing (Business) API.",
+  "integration_type": "api",
+  "docs_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external TikTok Business API read of advertiser and campaign management data"
+  }
+}

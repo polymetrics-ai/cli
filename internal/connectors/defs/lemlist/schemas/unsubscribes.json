@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "unsubscribes",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "email": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik Actions.get Report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "required": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    },
+    "avg_time_generation": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "hits": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_downloads": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_keywords": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_outlinks": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_pageviews": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_searches": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_uniq_downloads": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_uniq_outlinks": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "nb_uniq_pageviews": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    }
+  }
+}

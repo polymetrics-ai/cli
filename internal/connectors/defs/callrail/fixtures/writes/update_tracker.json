@@ -1,0 +1,9 @@
+{
+  "record": { "id": "TRK_fixture_1", "name": "Renamed Tracker", "sms_enabled": true },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/trackers/TRK_fixture_1.json",
+    "body": { "name": "Renamed Tracker", "sms_enabled": true }
+  },
+  "response": { "status": 200, "body": { "id": "TRK_fixture_1", "name": "Renamed Tracker" } }
+}

@@ -12,20 +12,47 @@ SYNOPSIS
 DESCRIPTION
   Reads ShipStation orders, shipments, products, and customers through the ShipStation REST API.
 
+ICON
+  asset: icons/shipstation.svg
+  source: official
+  review_status: official_verified
+  review_url: https://www.shipstation.com/docs/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+  api_secret (secret)
+
+ETL STREAMS
+  orders:
+    primary key: id
+    cursor: modified_at
+    fields: id(), modified_at(), order_number(), status()
+  shipments:
+    primary key: id
+    cursor: modified_at
+    fields: id(), modified_at(), order_number(), status()
+  products:
+    primary key: id
+    cursor: modified_at
+    fields: id(), modified_at(), name(), sku()
+  customers:
+    primary key: id
+    cursor: modified_at
+    fields: email(), id(), modified_at(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external ShipStation API read of order, shipment, product, and customer data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

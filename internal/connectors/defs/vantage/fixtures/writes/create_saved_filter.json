@@ -1,0 +1,10 @@
+{
+  "record": {
+    "title": "Fixture Filter",
+    "filter": "costs.provider = 'gcp'"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/saved_filters"
+  }
+}

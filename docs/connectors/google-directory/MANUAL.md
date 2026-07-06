@@ -10,22 +10,49 @@ SYNOPSIS
   pm credentials add <name> --connector google-directory [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices.
+  Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.
+
+ICON
+  asset: icons/googledirectory.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.google.com/admin-sdk/directory/reference/rest
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  customer_id
+  max_pages
+  mode
+  page_size
+  access_token (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: id(), name(), org_unit_path(), primary_email()
+  groups:
+    primary key: id
+    fields: description(), email(), id(), name()
+  orgunits:
+    primary key: id
+    fields: description(), id(), name(), org_unit_path()
+  chromeos_devices:
+    primary key: id
+    fields: id(), org_unit_path(), serial_number(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Google Admin SDK Directory API read of user/group/org-unit/device metadata
+  approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

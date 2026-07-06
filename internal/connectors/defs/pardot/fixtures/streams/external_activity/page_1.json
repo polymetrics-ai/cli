@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/external-activities/synthetic-conformance-value",
+    "query": {
+      "fields": "id,extension,type,email,value,activityDate,createdAt,updatedAt"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "extension": "extension_fixture",
+      "type": 1,
+      "email": "email_fixture",
+      "value": "value_fixture",
+      "activityDate": "2026-01-01T00:00:00Z",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

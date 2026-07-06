@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WordPress Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your WordPress site's base URL (e.g. https://example.com). No default: legacy derives this from either an explicit base_url or a bare domain, but the engine's config-default mechanism only supports a fixed literal, not a derived value, so base_url must be provided explicitly here (see docs.md Known limits)."
+    },
+    "username": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional HTTP Basic auth username for private/authenticated WordPress sites. Only applied when both username and password are set."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional HTTP Basic auth password (or application password) for private/authenticated WordPress sites. Only applied when both username and password are set. Never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound forwarded as the 'after' query parameter on every stream, matching legacy's static (non-advancing) date filter."
+    }
+  }
+}

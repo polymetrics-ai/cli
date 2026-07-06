@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/team/synthetic-conformance-value/space", "query": { "archived": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "spaces": [
+        {
+          "id": "space_fixture_1",
+          "name": "Fixture Space",
+          "private": false,
+          "archived": false,
+          "multiple_assignees": true
+        }
+      ]
+    }
+  }
+}

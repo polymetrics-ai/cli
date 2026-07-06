@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sick_leaves",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "userId": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "percentage": { "type": ["number", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "actualStart": { "type": ["string", "null"] },
+    "actualReturn": { "type": ["string", "null"] },
+    "reportedStart": { "type": ["string", "null"] },
+    "reportedReturn": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

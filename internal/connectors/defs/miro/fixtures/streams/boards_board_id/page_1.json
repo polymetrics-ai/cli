@@ -1,0 +1,83 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "team": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "picture": {
+          "id": 1.25,
+          "imageURL": "https://example.invalid/fixture",
+          "originalUrl": "https://example.invalid/fixture",
+          "type": "picture"
+        },
+        "type": "team"
+      },
+      "project": {
+        "id": "id_fixture"
+      },
+      "picture": {
+        "id": 1.25,
+        "imageURL": "https://example.invalid/fixture",
+        "originalUrl": "https://example.invalid/fixture",
+        "type": "picture"
+      },
+      "policy": {
+        "permissionsPolicy": {
+          "collaborationToolsStartAccess": "all_editors",
+          "copyAccess": "anyone",
+          "sharingAccess": "team_members_with_editing_rights"
+        },
+        "sharingPolicy": {
+          "access": "private",
+          "accessPasswordRequired": false,
+          "inviteToAccountAndBoardLinkAccess": "no_access",
+          "organizationAccess": "private",
+          "teamAccess": "private"
+        }
+      },
+      "viewLink": "https://example.invalid/fixture",
+      "owner": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "type": "type_fixture"
+      },
+      "currentUserMembership": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "role": "viewer",
+        "type": "type_fixture"
+      },
+      "createdAt": "2026-01-01T00:00:00Z",
+      "createdBy": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "type": "type_fixture"
+      },
+      "lastOpenedAt": "2026-01-01T00:00:00Z",
+      "lastOpenedBy": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "type": "type_fixture"
+      },
+      "modifiedAt": "2026-01-01T00:00:00Z",
+      "modifiedBy": {
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "type": "type_fixture"
+      },
+      "links": {
+        "related": "related_fixture",
+        "self": "self_fixture"
+      },
+      "type": "type_fixture"
+    }
+  }
+}

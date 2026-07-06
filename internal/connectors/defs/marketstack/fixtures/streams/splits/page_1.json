@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/splits",
+    "query": {
+      "limit": "100",
+      "offset": "0",
+      "symbols": "synthetic-conformance-value",
+      "date_from": "2020-01-01"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "count": 1,
+        "total": 1
+      },
+      "data": [
+        {
+          "symbol": "AAPL",
+          "date": "2020-08-31T00:00:00+0000",
+          "split_factor": 4.0
+        }
+      ]
+    }
+  }
+}

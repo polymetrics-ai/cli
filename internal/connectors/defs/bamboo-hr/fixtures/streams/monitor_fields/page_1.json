@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/webhooks/monitor_fields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        {
+          "id": "fixture_id",
+          "name": "Fixture Name",
+          "alias": "fixture_value"
+        }
+      ]
+    }
+  }
+}

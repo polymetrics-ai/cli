@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mail_folders",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "display_name": { "type": ["string", "null"] },
+    "total_item_count": { "type": ["integer", "null"] },
+    "unread_item_count": { "type": ["integer", "null"] }
+  }
+}

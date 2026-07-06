@@ -1,0 +1,23 @@
+{
+  "name": "looker",
+  "display_name": "Looker",
+  "description": "Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.",
+  "integration_type": "api",
+  "docs_url": "https://cloud.google.com/looker/docs/reference/looker-api/latest",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Looker API read of users, groups, folders, looks, and dashboards",
+    "approval": "none; read-only source connector"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LinkedIn Pages Connection Specification",
+  "type": "object",
+  "required": ["org_id", "access_token"],
+  "properties": {
+    "org_id": {
+      "type": "string",
+      "description": "LinkedIn organization id (company page). Scopes every request and is stamped onto every emitted record. Not a credential (a bare numeric organization identifier); declared as ordinary config, not x-secret, so it is available to computed_fields (secrets.* is never wired into computed_fields templating, see conventions.md §3) and to the request path/query."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "LinkedIn member OAuth2 access token (long-lived). The refresh_token exchange, when needed, is performed by the operator/agent layer before this connector runs; only the resolved bearer token is used here."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.linkedin.com/rest",
+      "description": "LinkedIn Community Management API base URL override for tests or proxies."
+    },
+    "linkedin_version": {
+      "type": "string",
+      "default": "202601",
+      "description": "LinkedIn-Version header value (YYYYMM). LinkedIn versions are monthly."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

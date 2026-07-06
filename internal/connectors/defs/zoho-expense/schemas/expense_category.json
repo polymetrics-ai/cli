@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "expense_category",
+  "type": "object",
+  "x-primary-key": [
+    "expense_category_id"
+  ],
+  "properties": {
+    "expense_category_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

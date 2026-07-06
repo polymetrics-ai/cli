@@ -1,0 +1,11 @@
+{
+  "record": {
+    "title": "Fixture Dashboard",
+    "layout_type": "ordered",
+    "widgets": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/dashboard"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v4/aliases"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "aliases": [
+        {
+          "uid": "alias_fixture_1",
+          "alias": "fixture.vercel.app",
+          "created": "2026-01-01T00:00:00.000Z",
+          "createdAt": 1767225600000,
+          "deploymentId": "dpl_fixture_1",
+          "projectId": "prj_fixture_1"
+        }
+      ],
+      "pagination": {
+        "count": 1,
+        "next": null,
+        "prev": null
+      }
+    }
+  }
+}

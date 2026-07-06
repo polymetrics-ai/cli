@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "page": "2",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 51,
+          "type": "user",
+          "user_id": "contacts_fixture_51",
+          "email": "fixture51@example.com",
+          "name": "Fixture 51",
+          "phone": "+15550100",
+          "created_at": 1767225651,
+          "signed_up_at": 1767225651,
+          "updated_at": 1767225651,
+          "last_seen_at": 1767225651,
+          "last_contacted_at": 1767225651,
+          "session_count": 51,
+          "unsubscribed_from_emails": false
+        }
+      ],
+      "pages": {
+        "next": null
+      }
+    }
+  }
+}

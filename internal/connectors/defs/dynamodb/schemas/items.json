@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "items",
+  "type": "object",
+  "x-primary-key": ["pk"],
+  "description": "A DynamoDB table's item shape is arbitrary per-table (schemaless beyond its declared key attributes) and only knowable at Scan time -- this bundle, like legacy, publishes a single generic 'items' stream rather than a per-table schema. additionalProperties is intentionally true so every attribute native/dynamodb's cataloger.go flattens from the item's AttributeValue envelope passes through unfiltered (this schema is documentation/reference only for the Tier-3 native package; the real projection is Go, not engine schema-mode projection).",
+  "required": ["pk"],
+  "properties": {
+    "pk": { "type": "string", "description": "Legacy's static illustrative primary-key field name; the real partition key attribute name is whatever the target table defines." }
+  },
+  "additionalProperties": true
+}

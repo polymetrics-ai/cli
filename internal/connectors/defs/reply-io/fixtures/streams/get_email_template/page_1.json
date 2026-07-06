@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/email-templates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1",
+      "name": "Fixture Record",
+      "status": "active",
+      "created": "2026-01-01T00:00:00+00:00",
+      "updated": "2026-01-02T00:00:00+00:00"
+    }
+  }
+}

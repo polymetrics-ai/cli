@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value" },
+  "response": { "status": 200, "body": { "id": 514, "email": "fixture@example.invalid", "firstname": "Fixture", "lastname": "User", "active": true } }
+}

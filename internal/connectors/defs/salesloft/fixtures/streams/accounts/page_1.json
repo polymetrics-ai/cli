@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts",
+    "query": {
+      "updated_at[gte]": "2020-01-01T00:00:00Z",
+      "sort_by": "updated_at",
+      "sort_direction": "ASC"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "name": "Fixture Account One",
+          "domain": "fixture-one.example.com",
+          "website": "https://fixture-one.example.com",
+          "industry": "Software",
+          "company_type": "B2B",
+          "phone": "+15550200",
+          "city": "Atlanta",
+          "country": "US",
+          "owner": { "id": 200 },
+          "archived_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 102,
+          "name": "Fixture Account Two",
+          "domain": "fixture-two.example.com",
+          "website": "https://fixture-two.example.com",
+          "industry": "Software",
+          "company_type": "B2B",
+          "phone": "+15550201",
+          "city": "Atlanta",
+          "country": "US",
+          "owner": { "id": 200 },
+          "archived_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "metadata": { "paging": { "per_page": 2, "current_page": 1, "next_page": null, "total_pages": 1 } }
+    }
+  }
+}

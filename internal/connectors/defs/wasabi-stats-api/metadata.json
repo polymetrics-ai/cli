@@ -1,0 +1,24 @@
+{
+  "name": "wasabi-stats-api",
+  "display_name": "Wasabi Stats API",
+  "description": "Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.wasabi.com/apidocs/wasabi-stats-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Wasabi Stats API read of account/bucket storage usage metrics",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "AUTH_COMPLEX (quarantine.json): legacy's requester() branches auth mode on the CONTENTS of the api_key secret at runtime -- Bearer api_key_header unless strings.SplitN(key, \":\", 2) yields exactly 2 parts, in which case Basic(parts[0], parts[1]) is used instead -- which the engine's `when` grammar (equality/membership/truthiness over a whole resolved value, conventions.md Sec3) cannot express, since it has no string-split/contains primitive to branch on a SUBSTRING of a secret's value. hook-covered by hooks/wasabi-stats-api/hooks.go's AuthHook, proven by hooks_test.go and mirroring gmail's identical custom-auth-only skip_dynamic precedent: conformance's synthetic secret value can exercise only one of the two legacy-equivalent branches at a time, so every auth-resolving dynamic check would otherwise pass or fail arbitrarily depending on which branch conformance's fixed synthetic value happens to hit, not exercise both"
+  }
+}

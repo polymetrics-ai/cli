@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reseller_offers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "cloud": { "type": ["string", "null"] },
+    "cloud_id": { "type": ["string", "null"] },
+    "cloud_url": { "type": ["string", "null"] },
+    "eula_type": { "type": ["string", "null"] },
+    "listing_id": { "type": ["string", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "accepted_at": { "type": ["string", "null"], "format": "date-time" },
+    "published_at": { "type": ["string", "null"], "format": "date-time" },
+    "expiration_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

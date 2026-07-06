@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": { "start": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture User One",
+          "email": "fixtureuser1@example.com",
+          "active_flag": true,
+          "is_admin": 1,
+          "created": "2026-01-01 00:00:00",
+          "modified": "2026-01-01 00:00:00"
+        }
+      ],
+      "additional_data": {
+        "pagination": { "start": 0, "limit": 100, "more_items_in_collection": false, "next_start": null }
+      }
+    }
+  }
+}

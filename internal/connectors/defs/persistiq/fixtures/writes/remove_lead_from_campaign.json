@@ -1,0 +1,14 @@
+{
+  "record": {
+    "campaign_id": "campaign_fixture_1",
+    "id": "lead_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/campaigns/campaign_fixture_1/leads/lead_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null }
+  }
+}

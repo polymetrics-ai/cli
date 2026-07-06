@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/core/v3/stores/synthetic-conformance-value/customers",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        {
+          "external_id": "customer_fixture_1",
+          "email": "fixture1@example.com",
+          "phone_number": "+15550100",
+          "first_name": "Fixture",
+          "last_name": "One",
+          "gender": "F",
+          "account_created_at": "2026-01-01T00:00:00Z",
+          "account_updated_at": "2026-01-01T00:00:00Z",
+          "account_status": "enabled",
+          "default_language": "en",
+          "default_currency": "USD",
+          "tags": "vip",
+          "accepts_email_marketing": true,
+          "accepts_sms_marketing": true
+        },
+        {
+          "external_id": "customer_fixture_2",
+          "email": "fixture2@example.com",
+          "phone_number": "+15550101",
+          "first_name": "Fixture",
+          "last_name": "Two",
+          "gender": "M",
+          "account_created_at": "2026-01-02T00:00:00Z",
+          "account_updated_at": "2026-01-02T00:00:00Z",
+          "account_status": "enabled",
+          "default_language": "en",
+          "default_currency": "USD",
+          "tags": null,
+          "accepts_email_marketing": false,
+          "accepts_sms_marketing": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/accessories", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Accessory 1",
+        "model_number": "MN-1",
+        "category_id": 2,
+        "manufacturer_id": 7,
+        "supplier_id": 6,
+        "location_id": 4,
+        "department_id": 5,
+        "quantity": 10,
+        "available": 9,
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 50,
+        "currency": "USD",
+        "notes": "fixture record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

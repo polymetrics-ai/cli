@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data/tickers",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "symbol": "AAPL",
+          "name": "Apple Inc.",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "MSFT",
+          "name": "Microsoft Corp.",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "GOOG",
+          "name": "Alphabet Inc.",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX4",
+          "name": "Fixture Ticker 4",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX5",
+          "name": "Fixture Ticker 5",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX6",
+          "name": "Fixture Ticker 6",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX7",
+          "name": "Fixture Ticker 7",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX8",
+          "name": "Fixture Ticker 8",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX9",
+          "name": "Fixture Ticker 9",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX10",
+          "name": "Fixture Ticker 10",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX11",
+          "name": "Fixture Ticker 11",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX12",
+          "name": "Fixture Ticker 12",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX13",
+          "name": "Fixture Ticker 13",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX14",
+          "name": "Fixture Ticker 14",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX15",
+          "name": "Fixture Ticker 15",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX16",
+          "name": "Fixture Ticker 16",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX17",
+          "name": "Fixture Ticker 17",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX18",
+          "name": "Fixture Ticker 18",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX19",
+          "name": "Fixture Ticker 19",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX20",
+          "name": "Fixture Ticker 20",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX21",
+          "name": "Fixture Ticker 21",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX22",
+          "name": "Fixture Ticker 22",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX23",
+          "name": "Fixture Ticker 23",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX24",
+          "name": "Fixture Ticker 24",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX25",
+          "name": "Fixture Ticker 25",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX26",
+          "name": "Fixture Ticker 26",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX27",
+          "name": "Fixture Ticker 27",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX28",
+          "name": "Fixture Ticker 28",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX29",
+          "name": "Fixture Ticker 29",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX30",
+          "name": "Fixture Ticker 30",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX31",
+          "name": "Fixture Ticker 31",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX32",
+          "name": "Fixture Ticker 32",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX33",
+          "name": "Fixture Ticker 33",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX34",
+          "name": "Fixture Ticker 34",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX35",
+          "name": "Fixture Ticker 35",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX36",
+          "name": "Fixture Ticker 36",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX37",
+          "name": "Fixture Ticker 37",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX38",
+          "name": "Fixture Ticker 38",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX39",
+          "name": "Fixture Ticker 39",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX40",
+          "name": "Fixture Ticker 40",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX41",
+          "name": "Fixture Ticker 41",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX42",
+          "name": "Fixture Ticker 42",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX43",
+          "name": "Fixture Ticker 43",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX44",
+          "name": "Fixture Ticker 44",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX45",
+          "name": "Fixture Ticker 45",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX46",
+          "name": "Fixture Ticker 46",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX47",
+          "name": "Fixture Ticker 47",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX48",
+          "name": "Fixture Ticker 48",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX49",
+          "name": "Fixture Ticker 49",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX50",
+          "name": "Fixture Ticker 50",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX51",
+          "name": "Fixture Ticker 51",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX52",
+          "name": "Fixture Ticker 52",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX53",
+          "name": "Fixture Ticker 53",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX54",
+          "name": "Fixture Ticker 54",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX55",
+          "name": "Fixture Ticker 55",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX56",
+          "name": "Fixture Ticker 56",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX57",
+          "name": "Fixture Ticker 57",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX58",
+          "name": "Fixture Ticker 58",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX59",
+          "name": "Fixture Ticker 59",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX60",
+          "name": "Fixture Ticker 60",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX61",
+          "name": "Fixture Ticker 61",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX62",
+          "name": "Fixture Ticker 62",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX63",
+          "name": "Fixture Ticker 63",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX64",
+          "name": "Fixture Ticker 64",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX65",
+          "name": "Fixture Ticker 65",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX66",
+          "name": "Fixture Ticker 66",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX67",
+          "name": "Fixture Ticker 67",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX68",
+          "name": "Fixture Ticker 68",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX69",
+          "name": "Fixture Ticker 69",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX70",
+          "name": "Fixture Ticker 70",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX71",
+          "name": "Fixture Ticker 71",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX72",
+          "name": "Fixture Ticker 72",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX73",
+          "name": "Fixture Ticker 73",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX74",
+          "name": "Fixture Ticker 74",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX75",
+          "name": "Fixture Ticker 75",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX76",
+          "name": "Fixture Ticker 76",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX77",
+          "name": "Fixture Ticker 77",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX78",
+          "name": "Fixture Ticker 78",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX79",
+          "name": "Fixture Ticker 79",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX80",
+          "name": "Fixture Ticker 80",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX81",
+          "name": "Fixture Ticker 81",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX82",
+          "name": "Fixture Ticker 82",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX83",
+          "name": "Fixture Ticker 83",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX84",
+          "name": "Fixture Ticker 84",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX85",
+          "name": "Fixture Ticker 85",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX86",
+          "name": "Fixture Ticker 86",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX87",
+          "name": "Fixture Ticker 87",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX88",
+          "name": "Fixture Ticker 88",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX89",
+          "name": "Fixture Ticker 89",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX90",
+          "name": "Fixture Ticker 90",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX91",
+          "name": "Fixture Ticker 91",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX92",
+          "name": "Fixture Ticker 92",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX93",
+          "name": "Fixture Ticker 93",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX94",
+          "name": "Fixture Ticker 94",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX95",
+          "name": "Fixture Ticker 95",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX96",
+          "name": "Fixture Ticker 96",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX97",
+          "name": "Fixture Ticker 97",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX98",
+          "name": "Fixture Ticker 98",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX99",
+          "name": "Fixture Ticker 99",
+          "exchange": "NASDAQ"
+        },
+        {
+          "symbol": "FIX100",
+          "name": "Fixture Ticker 100",
+          "exchange": "NASDAQ"
+        }
+      ]
+    }
+  }
+}

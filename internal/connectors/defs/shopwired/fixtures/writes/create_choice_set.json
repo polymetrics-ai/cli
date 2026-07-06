@@ -1,0 +1,19 @@
+{
+  "record": {
+    "displayName": "displayName_fixture",
+    "internalName": "internalName_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/choice-sets",
+    "body": {
+      "displayName": "displayName_fixture",
+      "internalName": "internalName_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

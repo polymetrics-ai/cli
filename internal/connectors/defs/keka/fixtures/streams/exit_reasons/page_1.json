@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/exitreasons"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "exitReason": [
+        {
+          "id": "exit_reasons_fixture_1",
+          "name": "Fixture exit reasons 1"
+        },
+        {
+          "id": "exit_reasons_fixture_2",
+          "name": "Fixture exit reasons 2"
+        }
+      ],
+      "terminationReason": [
+        {
+          "id": "exit_reasons_fixture_1",
+          "name": "Fixture exit reasons 1"
+        },
+        {
+          "id": "exit_reasons_fixture_2",
+          "name": "Fixture exit reasons 2"
+        }
+      ]
+    }
+  }
+}

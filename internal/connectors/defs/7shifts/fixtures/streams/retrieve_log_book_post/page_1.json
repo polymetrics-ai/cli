@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/log_book_posts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "uuid": "00000000-0000-4000-8000-000000000001",
+        "location_id": 1001,
+        "user_id": 1001,
+        "log_book_category_id": 1001,
+        "date": "2026-01-01",
+        "message": "fixture message",
+        "attachments": [
+          {
+            "file_name": "fixture file name",
+            "full_path": "fixture full path",
+            "file_id": "fixture-id"
+          }
+        ],
+        "log_book_comment_count": 1001,
+        "created": "2026-01-01T00:00:00Z",
+        "company_id": 1001
+      }
+    }
+  }
+}

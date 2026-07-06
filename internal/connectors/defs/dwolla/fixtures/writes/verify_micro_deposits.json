@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "fs_fixture_1",
+    "amount1": { "value": "0.01", "currency": "USD" },
+    "amount2": { "value": "0.08", "currency": "USD" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/funding-sources/fs_fixture_1/verify-micro-deposits",
+    "body": {
+      "amount1": { "value": "0.01", "currency": "USD" },
+      "amount2": { "value": "0.08", "currency": "USD" }
+    }
+  }
+}

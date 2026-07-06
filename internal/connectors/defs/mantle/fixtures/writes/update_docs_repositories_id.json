@@ -1,0 +1,65 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "locale": "fixture",
+    "autoTranslate": true,
+    "defaultLocale": "fixture",
+    "supportedLocales": [
+      "fixture"
+    ],
+    "title": "fixture",
+    "shortDescription": "fixture",
+    "visibility": "public",
+    "customDomain": "fixture",
+    "useCustomDomain": true,
+    "config": {
+      "settings": {
+        "seoTitle": "fixture",
+        "seoDescription": "fixture"
+      },
+      "homePage": {
+        "displayFormat": "redirect-to-first-collection",
+        "heroHeading": "fixture",
+        "heroDescription": "fixture"
+      },
+      "collectionPage": {
+        "displayFormat": "group-summary"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/repositories/id_fixture",
+    "body": {
+      "locale": "fixture",
+      "autoTranslate": true,
+      "defaultLocale": "fixture",
+      "supportedLocales": [
+        "fixture"
+      ],
+      "title": "fixture",
+      "shortDescription": "fixture",
+      "visibility": "public",
+      "customDomain": "fixture",
+      "useCustomDomain": true,
+      "config": {
+        "settings": {
+          "seoTitle": "fixture",
+          "seoDescription": "fixture"
+        },
+        "homePage": {
+          "displayFormat": "redirect-to-first-collection",
+          "heroHeading": "fixture",
+          "heroDescription": "fixture"
+        },
+        "collectionPage": {
+          "displayFormat": "group-summary"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

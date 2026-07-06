@@ -1,0 +1,13 @@
+{
+  "record": {
+    "endpoint_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v0/dedicated_endpoints/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

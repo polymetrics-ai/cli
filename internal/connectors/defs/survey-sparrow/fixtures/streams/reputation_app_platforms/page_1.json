@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/reputation/app_platforms", "query": { "page": "1", "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "location": "us", "is_active": true, "platform_id": 1 }
+      ]
+    }
+  }
+}

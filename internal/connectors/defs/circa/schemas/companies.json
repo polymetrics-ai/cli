@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "companies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email_opt_in": { "type": ["boolean", "null"] },
+    "sync_status": { "type": ["object", "null"] },
+    "created_method": { "type": ["string", "null"] },
+    "updated_method": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": "string" }
+  }
+}

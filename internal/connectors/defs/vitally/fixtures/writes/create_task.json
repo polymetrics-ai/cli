@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Check in on the account",
+    "accountId": "acct_fixture_1",
+    "externalId": "task-fixture-1",
+    "description": "<p>Ask how onboarding is going.</p>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/tasks",
+    "body": {
+      "name": "Check in on the account",
+      "accountId": "acct_fixture_1",
+      "externalId": "task-fixture-1",
+      "description": "<p>Ask how onboarding is going.</p>"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "task_fixture_1", "externalId": "task-fixture-1" }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "gologin",
+  "display_name": "GoLogin",
+  "description": "Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.gologin.com/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 30
+  },
+  "risk": {
+    "read": "external GoLogin API read of browser profile and account data"
+  }
+}

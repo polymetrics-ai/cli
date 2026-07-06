@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/revisions/synthetic-conformance-value/changes",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "changes": [
+        {
+          "id": "get_revision_semantic_changes_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_revision_semantic_changes",
+          "name": "Fixture get_revision_semantic_changes",
+          "status": "active",
+          "operation_id": "getRevisionSemanticChanges"
+        }
+      ]
+    }
+  }
+}

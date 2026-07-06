@@ -1,0 +1,221 @@
+{
+  "actions": [
+    {
+      "name": "create_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["fields"],
+        "properties": {
+          "fields": { "type": "object" }
+        }
+      },
+      "risk": "creates a new record in the configured base/table; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_record",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "fields"],
+        "properties": {
+          "id": { "type": "string" },
+          "fields": { "type": "object" }
+        }
+      },
+      "risk": "mutates only the field values included in the request (non-destructive PATCH); unincluded cell values are left unchanged"
+    },
+    {
+      "name": "delete_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a record from the base/table; irreversible"
+    },
+    {
+      "name": "create_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meta/bases/{{ config.base_id }}/tables",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "fields"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "fields": { "type": "array" }
+        }
+      },
+      "risk": "creates a new table (schema mutation) in the configured base; low-risk but changes the base's structure, visible to every collaborator"
+    },
+    {
+      "name": "update_table",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "renames or redescribes an existing table; a visible schema change for every collaborator on the base"
+    },
+    {
+      "name": "create_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields",
+      "path_fields": ["table_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "name", "type"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new column (schema mutation) in the target table; low-risk but changes the table's structure, visible to every collaborator"
+    },
+    {
+      "name": "update_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.id }}",
+      "path_fields": ["table_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["table_id", "id"],
+        "properties": {
+          "table_id": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "renames or redescribes an existing column; a visible schema change for every collaborator on the base"
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments",
+      "path_fields": ["record_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["record_id", "text"],
+        "properties": {
+          "record_id": { "type": "string" },
+          "text": { "type": "string" },
+          "parentCommentId": { "type": "string" }
+        }
+      },
+      "risk": "adds a visible comment to a record; every base collaborator with record access can see it, no external side effect"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}",
+      "path_fields": ["record_id", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["record_id", "id", "text"],
+        "properties": {
+          "record_id": { "type": "string" },
+          "id": { "type": "string" },
+          "text": { "type": "string" }
+        }
+      },
+      "risk": "edits the text of an existing comment; visible to every base collaborator with record access"
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}",
+      "path_fields": ["record_id", "id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["record_id", "id"],
+        "properties": {
+          "record_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a comment from a record; irreversible"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bases/{{ config.base_id }}/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["notificationUrl", "specification"],
+        "properties": {
+          "notificationUrl": { "type": "string" },
+          "specification": { "type": "object" }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live base-change notifications to an external URL of the caller's choosing; verify the target endpoint before enabling"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/bases/{{ config.base_id }}/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes a webhook subscription; notification delivery to its target URL stops immediately"
+    }
+  ]
+}

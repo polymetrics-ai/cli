@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer": {
+      "email": "fixture@example.com",
+      "customer_type": "retail",
+      "phone": "01234 567890"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers"
+  }
+}

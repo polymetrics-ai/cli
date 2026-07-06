@@ -1,0 +1,8 @@
+{
+  "record": { "name": "fixture_snippet" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/snippets/fixture_snippet"
+  },
+  "response": { "status": 200, "body": {} }
+}

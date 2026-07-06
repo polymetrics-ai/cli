@@ -1,0 +1,9 @@
+{
+  "record": {
+    "offer_id": "offer_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/offers/offer_fixture/approve"
+  }
+}

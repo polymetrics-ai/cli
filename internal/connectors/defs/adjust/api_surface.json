@@ -1,0 +1,9 @@
+{
+  "api": "Adjust Report Service API (https://automate.adjust.com)",
+  "docs": "https://help.adjust.com/en/article/reports-endpoint",
+  "reviewed_at": "2026-07-03",
+  "scope": "Report Service JSON endpoint scope: the single legacy-parity reports-service/report read stream is covered. Adjacent Adjust app automation, campaign, device, S2S, blocklist, deep-link, and non-JSON report export APIs are separate operational surfaces and remain excluded from this report-reader connector because they either mutate Adjust configuration, ingest events, or return file/download workflows rather than the JSON report rows this connector is configured to sync.",
+  "endpoints": [
+    { "method": "GET", "path": "/reports-service/report", "covered_by": { "stream": "reports" } }
+  ]
+}

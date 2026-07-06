@@ -1,0 +1,480 @@
+{
+  "actions": [
+    {
+      "name": "create_event_series",
+      "kind": "create",
+      "method": "POST",
+      "path": "/event_series",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "currency": { "type": "string" },
+          "venue": { "type": "string" },
+          "country": { "type": "string" },
+          "postal_code": { "type": "string" },
+          "access_code": { "type": "string" }
+        }
+      },
+      "risk": "creates a new event series (a recurring/template event definition); low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_event_series",
+      "kind": "update",
+      "method": "POST",
+      "path": "/event_series/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "call_to_action": { "type": "string" },
+          "currency": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing event series' public-facing name/description/currency"
+    },
+    {
+      "name": "delete_event_series",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/event_series/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes an event series and every event occurrence within it; destructive, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "change_event_series_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/event_series/{{ record.id }}/status",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "body_fields": ["status"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["draft", "published", "sales_closed"] }
+        }
+      },
+      "risk": "changes an event series' publication status; setting to draft/sales_closed immediately stops further public ticket sales"
+    },
+    {
+      "name": "create_discount",
+      "kind": "create",
+      "method": "POST",
+      "path": "/discounts",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "code", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "type": { "type": "string", "enum": ["fixed_amount", "percentage"] },
+          "price": { "type": "integer" },
+          "price_percent": { "type": "integer" },
+          "max_redemptions": { "type": "integer" },
+          "expires": { "type": "integer" }
+        }
+      },
+      "risk": "creates a discount code redeemable at checkout; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_discount",
+      "kind": "update",
+      "method": "POST",
+      "path": "/discounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "code": { "type": "string" },
+          "max_redemptions": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing discount code's name, code, or usage limit; changing the code invalidates any already-shared link using the old code"
+    },
+    {
+      "name": "delete_discount",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a discount code; any customer relying on the code at checkout will see it rejected"
+    },
+    {
+      "name": "delete_hold",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/holds/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "releases a hold, returning its reserved tickets to public sale immediately"
+    },
+    {
+      "name": "create_check_in",
+      "kind": "create",
+      "method": "POST",
+      "path": "/check_ins",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["issued_ticket_id", "quantity"],
+        "properties": {
+          "issued_ticket_id": { "type": "string" },
+          "quantity": { "type": "integer", "enum": [-1, 1] },
+          "check_in_at": { "type": "integer" },
+          "local_unique_id": { "type": "string" }
+        }
+      },
+      "risk": "checks an attendee's issued ticket in (or out, when quantity is -1) at the door; low-risk operational mutation, no approval required"
+    },
+    {
+      "name": "create_issued_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issued_tickets",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["full_name"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "ticket_type_id": { "type": "string" },
+          "hold_id": { "type": "string" },
+          "full_name": { "type": "string" },
+          "email": { "type": "string" },
+          "send_email": { "type": "boolean" }
+        }
+      },
+      "risk": "issues a new ticket directly (bypassing checkout), consuming inventory from either a ticket type or an existing hold; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "void_issued_ticket",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issued_tickets/{{ record.id }}/void",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "void_to_hold": { "type": "string", "enum": ["true", "false"] }
+        }
+      },
+      "risk": "voids an issued ticket, invalidating it for entry; optionally returns its inventory to a hold rather than public sale"
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "address_1": { "type": "string" },
+          "postal_code": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing order's buyer contact/address details"
+    },
+    {
+      "name": "confirm_order_payment_received",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orders/{{ record.id }}/confirm-payment-received",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "transaction_id": { "type": "string" }
+        }
+      },
+      "risk": "marks an order (typically an offline/manual payment method) as paid, releasing its tickets from pending status"
+    },
+    {
+      "name": "create_membership_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/membership_types",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "valid_from_type", "valid_to_type"],
+        "properties": {
+          "name": { "type": "string" },
+          "valid_from_type": { "type": "string" },
+          "valid_to_type": { "type": "string" },
+          "max_redemptions": { "type": "integer" },
+          "photo_required": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new membership type template; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "delete_membership_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/membership_types/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a membership type; any issued membership referencing it is orphaned"
+    },
+    {
+      "name": "create_issued_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/issued_memberships",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["membership_type_id", "first_name", "last_name", "email"],
+        "properties": {
+          "membership_type_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "valid_from_date": { "type": "string" },
+          "valid_to_date": { "type": "string" }
+        }
+      },
+      "risk": "issues a new membership directly to a member; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_issued_membership",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issued_memberships/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "valid_to_date": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing issued membership's holder details or validity window"
+    },
+    {
+      "name": "void_issued_membership",
+      "kind": "update",
+      "method": "POST",
+      "path": "/issued_memberships/{{ record.id }}/void",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "voids an issued membership, invalidating it immediately for entry/redemption"
+    },
+    {
+      "name": "create_voucher",
+      "kind": "create",
+      "method": "POST",
+      "path": "/vouchers",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "integer" },
+          "voucher_type": { "type": "string" },
+          "codes": { "type": "integer" },
+          "expiry": { "type": "integer" },
+          "usable_on_any_event": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a new voucher and its redeemable codes; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_voucher",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vouchers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "value": { "type": "integer" },
+          "expiry": { "type": "integer" }
+        }
+      },
+      "risk": "mutates an existing voucher's value or expiry, directly changing what every un-redeemed code is worth"
+    },
+    {
+      "name": "delete_voucher",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/vouchers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a voucher and every un-redeemed code issued under it"
+    },
+    {
+      "name": "void_voucher_code",
+      "kind": "update",
+      "method": "POST",
+      "path": "/vouchers/{{ record.voucher_id }}/codes/{{ record.id }}/void",
+      "path_fields": ["voucher_id", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["voucher_id", "id"],
+        "properties": {
+          "voucher_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "voids a single voucher code, invalidating it for redemption immediately"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "price"],
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "integer" },
+          "description": { "type": "string" },
+          "currency": { "type": "string" },
+          "booking_fee": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new sellable add-on product; low-risk additive external mutation, no approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "POST",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "price": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing product's name, price, or description, directly changing checkout pricing for it"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently deletes a sellable product; it becomes unavailable at checkout immediately"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Confluence Connection Specification",
+  "type": "object",
+  "required": ["base_url", "email", "api_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Confluence Cloud site origin, without the /wiki/api/v2 path (e.g. https://mysite.atlassian.net). The bundle paths include /wiki/api/v2 so relative _links.next pagination follows the same host correctly."
+    },
+    "email": {
+      "type": "string",
+      "description": "Atlassian account email used as the HTTP Basic auth username."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Atlassian API token, used as the HTTP Basic auth password. Never logged."
+    },
+    "custom_content_type": {
+      "type": "string",
+      "default": "com.atlassian.confluence.macro.core",
+      "description": "Confluence custom-content type key to sync via the custom_content stream. GET /custom-content requires a type filter (Confluence has no type-agnostic custom-content list); set this to the app-defined type key you want to read (e.g. a Forge/Connect app's registered custom content type)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

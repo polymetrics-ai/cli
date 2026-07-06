@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/group/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "case_sharing": false,
+          "domain": "synthetic-conformance-value",
+          "id": "group_fixture_1",
+          "metadata": { "localization": "Fixture" },
+          "name": "Fixture group",
+          "path": [],
+          "reporting": true,
+          "users": ["mobile_worker_fixture_1"]
+        }
+      ]
+    }
+  }
+}

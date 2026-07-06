@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_series_waitlist_signups",
+  "type": "object",
+  "x-primary-key": ["id", "event_series_id"],
+  "required": ["id", "event_series_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "event_id": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "notified_date": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "event_series_id": { "type": "string" }
+  }
+}

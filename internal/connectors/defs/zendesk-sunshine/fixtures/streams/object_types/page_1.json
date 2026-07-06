@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/objects/types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "key": "asset",
+          "schema": { "properties": { "name": { "type": "string" } } },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": { "next": null, "previous": null }
+    }
+  }
+}

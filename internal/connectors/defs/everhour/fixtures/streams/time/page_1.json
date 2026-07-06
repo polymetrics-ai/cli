@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/team/time" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "tm:3001",
+        "date": "2026-01-01",
+        "time": 3600,
+        "user": 100,
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "tm:3002",
+        "date": "2026-01-02",
+        "time": 7200,
+        "user": 101,
+        "createdAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

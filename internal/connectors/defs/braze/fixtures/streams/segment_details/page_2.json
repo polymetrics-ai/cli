@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/segments/details",
+    "query": { "segment_id": "segment_fixture_1", "page": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:01Z",
+      "name": "Fixture Segment 1",
+      "description": "Fixture segment description",
+      "text_description": "Users matching fixture criteria",
+      "tags": ["fixture"]
+    }
+  }
+}

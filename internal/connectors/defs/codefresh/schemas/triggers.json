@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "triggers",
+  "type": "object",
+  "x-primary-key": ["event", "pipeline"],
+  "required": ["event", "pipeline"],
+  "properties": {
+    "event": { "type": "string" },
+    "pipeline": { "type": "string" },
+    "filter_tag": { "type": ["string", "null"] },
+    "event_type": { "type": ["string", "null"] },
+    "event_status": { "type": ["string", "null"] },
+    "event_description": { "type": ["string", "null"] }
+  }
+}

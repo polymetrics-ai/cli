@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/journeys/configs/synthetic-conformance-value/data-fields",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        {
+          "id": "journey_initiator_config_form",
+          "name": "Fixture journey_initiator_config_form",
+          "subject": "Fixture journey_initiator_config_form",
+          "description": "Fixture journey_initiator_config_form record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

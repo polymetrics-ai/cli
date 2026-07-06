@@ -10,22 +10,782 @@ SYNOPSIS
   pm credentials add <name> --connector shopwired [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads ShopWired products, orders, customers, and categories through the ShopWired REST API.
+  Reads and writes ShopWired v1 catalog, order, customer, content, marketing, shipping, theme, webhook, wishlist, and payment resources through the documented REST API.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  active
+  archived
+  base_url
+  code
+  count
+  country_id
+  created_after
+  created_before
+  customer_id
+  dispute_id
+  email
+  embed
+  fields
+  from
+  id
+  ids
+  key
+  keyword
+  keywords
+  name
+  offset
+  path
+  payout_id
+  product_id
+  session_id
+  since_id
+  sku
+  sort
+  status
+  subject_id
+  subject_type
+  theme_id
+  to
+  topic
+  trade
+  transaction_id
+  access_token (secret)
+  api_key (secret)
+  api_secret (secret)
+
+ETL STREAMS
+  app:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  data:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_categories:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_category:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_posts:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_post:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_tags:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  blog_tag:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  brands:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  brand:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  business:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  features:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  categories:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), updated_at()
+  category:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  choice_sets:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  choice_set:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  collect_locations:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  collect_location:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  custom_fields:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  custom_field:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: email(), id(), name(), updated_at()
+  customer:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  digital_files:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  digital_file:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  events:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  event:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  filter_groups:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  filter_group:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  gift_vouchers:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  gift_voucher:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  incomplete_orders:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  incomplete_order:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  newsletter_subscribers:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  newsletter_subscriber:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  nexuses:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  offers:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  offer:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  order_statuses:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  orders:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), updated_at()
+  search:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  order:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  pages:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  page:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  payment_methods:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  products:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), sku(), updated_at()
+  search_2:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  product:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  bulk_prices:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  bulk_price:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  choices:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  choice:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  customization_fields:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  extras:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  images:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  options:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  option:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  reviews:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  variations:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  variation:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  redirects:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  redirect:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  sales:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  sale:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  shipping_rates:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  shipping_rate:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  shipping_zones:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  shipping_zone:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  disputes:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  dispute:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  payouts:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  payout:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  transactions:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  transaction:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  stock:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  stock_requests:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  theme_assets:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  themes:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  theme:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  trade_customer_product_prices:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  trade_customer_product_price:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  trade_groups:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  trade_group:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  vouchers:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  voucher:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  webhooks:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  webhook:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  wishlists:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+  wishlist:
+    primary key: id
+    fields: email(), id(), name(), sku(), status(), title(), updatedAt(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  deletes_all_app_data:
+    endpoint: DELETE /app/data
+    risk: Deletes all app data in ShopWired
+  create_new_app_data:
+    endpoint: POST /app/data
+    risk: Create new app data in ShopWired
+  create_blog_category:
+    endpoint: POST /blog-categories
+    risk: Create a new blog category in ShopWired
+  delete_blog_category:
+    endpoint: DELETE /blog-categories/{{ record.id }}
+    required fields: id
+    risk: Delete a blog category in ShopWired
+  update_blog_category:
+    endpoint: PUT /blog-categories/{{ record.id }}
+    required fields: id
+    risk: Update a blog category in ShopWired
+  create_blog_post:
+    endpoint: POST /blog-posts
+    risk: Create a new blog post in ShopWired
+  delete_blog_post:
+    endpoint: DELETE /blog-posts/{{ record.id }}
+    required fields: id
+    risk: Delete a blog post in ShopWired
+  update_blog_post:
+    endpoint: PUT /blog-posts/{{ record.id }}
+    required fields: id
+    risk: Update a blog post in ShopWired
+  create_blog_tag:
+    endpoint: POST /blog-tags
+    risk: Create a new blog tag in ShopWired
+  delete_blog_tag:
+    endpoint: DELETE /blog-tags/{{ record.id }}
+    required fields: id
+    risk: Delete a blog tag in ShopWired
+  update_blog_tag:
+    endpoint: PUT /blog-tags/{{ record.id }}
+    required fields: id
+    risk: Update a blog tag in ShopWired
+  create_brand:
+    endpoint: POST /brands
+    risk: Create a new brand in ShopWired
+  delete_brand:
+    endpoint: DELETE /brands/{{ record.id }}
+    required fields: id
+    risk: Delete a brand in ShopWired
+  update_brand:
+    endpoint: PUT /brands/{{ record.id }}
+    required fields: id
+    risk: Update a brand in ShopWired
+  change_business_feature_status:
+    endpoint: POST /business/features/change-status
+    risk: Change business feature status in ShopWired
+  create_category:
+    endpoint: POST /categories
+    risk: Create a new category in ShopWired
+  delete_category_by_id:
+    endpoint: DELETE /categories/{{ record.id }}
+    required fields: id
+    risk: Delete a category in ShopWired
+  update_category_by_id:
+    endpoint: PUT /categories/{{ record.id }}
+    required fields: id
+    risk: Update a category in ShopWired
+  create_choice_set_value:
+    endpoint: POST /choice-set-values
+    risk: Create a choice set value in ShopWired
+  delete_choice_set_value:
+    endpoint: DELETE /choice-set-values/{{ record.id }}
+    required fields: id
+    risk: Delete a choice set value in ShopWired
+  update_choice_set_value:
+    endpoint: PUT /choice-set-values/{{ record.id }}
+    required fields: id
+    risk: Update a choice set value in ShopWired
+  create_choice_set:
+    endpoint: POST /choice-sets
+    risk: Create a choice set in ShopWired
+  delete_choice_set:
+    endpoint: DELETE /choice-sets/{{ record.id }}
+    required fields: id
+    risk: Delete a choice set in ShopWired
+  update_choice_set:
+    endpoint: PUT /choice-sets/{{ record.id }}
+    required fields: id
+    risk: Update a choice set in ShopWired
+  create_custom_field:
+    endpoint: POST /custom-fields
+    risk: Create a custom field in ShopWired
+  delete_custom_field:
+    endpoint: DELETE /custom-fields/{{ record.id }}
+    required fields: id
+    risk: Delete a custom field in ShopWired
+  update_custom_field:
+    endpoint: PUT /custom-fields/{{ record.id }}
+    required fields: id
+    risk: Update a custom field in ShopWired
+  create_customer:
+    endpoint: POST /customers
+    risk: Create a new customer in ShopWired
+  create_digital_file:
+    endpoint: POST /digital-files
+    risk: Create a new digital file in ShopWired
+  delete_digital_file:
+    endpoint: DELETE /digital-files/{{ record.id }}
+    required fields: id
+    risk: Delete a digital file in ShopWired
+  update_digital_file:
+    endpoint: PUT /digital-files/{{ record.id }}
+    required fields: id
+    risk: Update a digital file in ShopWired
+  create_filter_group:
+    endpoint: POST /filter-groups
+    risk: Create a new filter group in ShopWired
+  delete_filter_group:
+    endpoint: DELETE /filter-groups/{{ record.id }}
+    required fields: id
+    risk: Delete a filter group in ShopWired
+  update_filter_group:
+    endpoint: PUT /filter-groups/{{ record.id }}
+    required fields: id
+    risk: Update a filter group in ShopWired
+  create_gift_card:
+    endpoint: POST /gift-vouchers
+    risk: Create a gift card in ShopWired
+  delete_gift_card:
+    endpoint: DELETE /gift-vouchers/{{ record.id }}
+    required fields: id
+    risk: Delete a gift card in ShopWired
+  update_gift_card:
+    endpoint: PUT /gift-vouchers/{{ record.id }}
+    required fields: id
+    risk: Update a gift card in ShopWired
+  create_business_nexus:
+    endpoint: POST /nexuses
+    risk: Create a new business nexus item in ShopWired
+  delete_business_nexus:
+    endpoint: DELETE /nexuses/{{ record.id }}
+    required fields: id
+    risk: Delete a business nexus item in ShopWired
+  update_business_nexus:
+    endpoint: PUT /nexuses/{{ record.id }}
+    required fields: id
+    risk: Update a business nexus item in ShopWired
+  create_offer:
+    endpoint: POST /offers
+    risk: Create a new offer in ShopWired
+  delete_offer:
+    endpoint: DELETE /offers/{{ record.id }}
+    required fields: id
+    risk: Delete an offer in ShopWired
+  update_offer:
+    endpoint: PUT /offers/{{ record.id }}
+    required fields: id
+    risk: Update an offer in ShopWired
+  create_order_status:
+    endpoint: POST /order-statuses
+    risk: Create an order status in ShopWired
+  delete_order_status:
+    endpoint: DELETE /order-statuses/{{ record.id }}
+    required fields: id
+    risk: Delete an order status in ShopWired
+  create_order:
+    endpoint: POST /orders
+    risk: Create a new order in ShopWired
+  delete_order:
+    endpoint: DELETE /orders/{{ record.id }}
+    required fields: id
+    risk: Delete an order in ShopWired
+  create_an_order_admin_comment:
+    endpoint: POST /orders/{{ record.id }}/comments
+    required fields: id
+    risk: Create an order admin comment in ShopWired
+  delete_an_order_admin_comment:
+    endpoint: DELETE /orders/{{ record.id }}/comments/{{ record.comment_id }}
+    required fields: id, comment_id
+    risk: Delete an order admin comment in ShopWired
+  request_a_pre_order_be_dispatched:
+    endpoint: POST /orders/{{ record.id }}/dispatch-pre-order
+    required fields: id
+    risk: Request a pre-order be dispatched in ShopWired
+  update_an_order_s_status:
+    endpoint: POST /orders/{{ record.id }}/status
+    required fields: id
+    risk: Update an order's status in ShopWired
+  create_refund:
+    endpoint: POST /orders/{{ record.order_id }}/refunds
+    required fields: order_id
+    risk: Create a refund for an order in ShopWired
+  create_page:
+    endpoint: POST /pages
+    risk: Create a new page in ShopWired
+  delete_page:
+    endpoint: DELETE /pages/{{ record.id }}
+    required fields: id
+    risk: Delete a page in ShopWired
+  update_page:
+    endpoint: PUT /pages/{{ record.id }}
+    required fields: id
+    risk: Update a page in ShopWired
+  create_product:
+    endpoint: POST /products
+    risk: Create a new product in ShopWired
+  update_prices:
+    endpoint: POST /products/prices
+    risk: Update product prices in ShopWired
+  delete_product:
+    endpoint: DELETE /products/{{ record.id }}
+    required fields: id
+    risk: Delete a product in ShopWired
+  update_product:
+    endpoint: PUT /products/{{ record.id }}
+    required fields: id
+    risk: Update a product in ShopWired
+  create_bulk_price:
+    endpoint: POST /products/{{ record.id }}/bulk-prices
+    required fields: id
+    risk: Create a bulk price for a product in ShopWired
+  delete_bulk_price:
+    endpoint: DELETE /products/{{ record.product_id }}/bulk-prices/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a specific bulk price in ShopWired
+  update_bulk_price:
+    endpoint: PUT /products/{{ record.product_id }}/bulk-prices/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a specific bulk price in ShopWired
+  assign_product_choice:
+    endpoint: POST /products/{{ record.product_id }}/choices
+    required fields: product_id
+    risk: Assign a choice to a product in ShopWired
+  delete_product_choice:
+    endpoint: DELETE /products/{{ record.product_id }}/choices/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product choice in ShopWired
+  update_product_choice:
+    endpoint: PUT /products/{{ record.product_id }}/choices/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product choice in ShopWired
+  create_product_customization_field:
+    endpoint: POST /products/{{ record.product_id }}/customization-fields
+    required fields: product_id
+    risk: Create a product customisation field in ShopWired
+  delete_product_customization_field:
+    endpoint: DELETE /products/{{ record.product_id }}/customization-fields/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product customisation field in ShopWired
+  update_product_customization_field:
+    endpoint: PUT /products/{{ record.product_id }}/customization-fields/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product customisation field in ShopWired
+  create_product_extra:
+    endpoint: POST /products/{{ record.product_id }}/extras
+    required fields: product_id
+    risk: Create a product extra in ShopWired
+  delete_product_extra:
+    endpoint: DELETE /products/{{ record.product_id }}/extras/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product extra in ShopWired
+  update_product_extra:
+    endpoint: PUT /products/{{ record.product_id }}/extras/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product extra in ShopWired
+  create_product_image:
+    endpoint: POST /products/{{ record.product_id }}/images
+    required fields: product_id
+    risk: Create a product image in ShopWired
+  delete_product_image:
+    endpoint: DELETE /products/{{ record.product_id }}/images/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product image in ShopWired
+  update_product_image:
+    endpoint: PUT /products/{{ record.product_id }}/images/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product image in ShopWired
+  create_product_option_value:
+    endpoint: POST /products/{{ record.product_id }}/option-values
+    required fields: product_id
+    risk: Create a product option value in ShopWired
+  delete_product_option_value:
+    endpoint: DELETE /products/{{ record.product_id }}/option-values/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product option value in ShopWired
+  update_product_option_value:
+    endpoint: PUT /products/{{ record.product_id }}/option-values/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product option value in ShopWired
+  create_product_option:
+    endpoint: POST /products/{{ record.product_id }}/options
+    required fields: product_id
+    risk: Create a product option in ShopWired
+  delete_product_option:
+    endpoint: DELETE /products/{{ record.product_id }}/options/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product option in ShopWired
+  update_product_option:
+    endpoint: PUT /products/{{ record.product_id }}/options/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product option in ShopWired
+  create_product_review:
+    endpoint: POST /products/{{ record.product_id }}/reviews
+    required fields: product_id
+    risk: Create a product review in ShopWired
+  delete_product_review:
+    endpoint: DELETE /products/{{ record.product_id }}/reviews/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product review in ShopWired
+  update_product_review:
+    endpoint: PUT /products/{{ record.product_id }}/reviews/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product review in ShopWired
+  create_product_variation:
+    endpoint: POST /products/{{ record.product_id }}/variations
+    required fields: product_id
+    risk: Create a new product variation in ShopWired
+  delete_product_variation:
+    endpoint: DELETE /products/{{ record.product_id }}/variations/{{ record.id }}
+    required fields: product_id, id
+    risk: Delete a product variation in ShopWired
+  update_product_variation:
+    endpoint: PUT /products/{{ record.product_id }}/variations/{{ record.id }}
+    required fields: product_id, id
+    risk: Update a product variation in ShopWired
+  create_redirect:
+    endpoint: POST /redirects
+    risk: Create a new 301 redirect in ShopWired
+  delete_redirect:
+    endpoint: DELETE /redirects/{{ record.id }}
+    required fields: id
+    risk: Delete a 301 redirect in ShopWired
+  create_sale:
+    endpoint: POST /sales
+    risk: Create a sale in ShopWired
+  delete_sale:
+    endpoint: DELETE /sales/{{ record.id }}
+    required fields: id
+    risk: Delete a sale in ShopWired
+  update_sale:
+    endpoint: PUT /sales/{{ record.id }}
+    required fields: id
+    risk: Update a sale in ShopWired
+  create_shipping_rate:
+    endpoint: POST /shipping-rates
+    risk: Create a new shipping rate in ShopWired
+  delete_shipping_rate:
+    endpoint: DELETE /shipping-rates/{{ record.id }}
+    required fields: id
+    risk: Delete a shipping rate in ShopWired
+  update_shipping_rate:
+    endpoint: PUT /shipping-rates/{{ record.id }}
+    required fields: id
+    risk: Update a shipping rate in ShopWired
+  create_shipping_zone:
+    endpoint: POST /shipping-zones
+    risk: Create a new shipping zone in ShopWired
+  delete_shipping_zone:
+    endpoint: DELETE /shipping-zones/{{ record.country_id }}
+    required fields: country_id
+    risk: Delete a shipping zone in ShopWired
+  update_shipping_zone:
+    endpoint: PUT /shipping-zones/{{ record.country_id }}
+    required fields: country_id
+    risk: Update an existing shipping zone in ShopWired
+  update_stock:
+    endpoint: POST /stock
+    risk: Update stock quantity in ShopWired
+  return_stock:
+    endpoint: POST /stock/return
+    risk: Return stock for cancelled orders in ShopWired
+  delete_theme_asset:
+    endpoint: DELETE /theme-assets/{{ record.theme_id }}
+    required fields: theme_id
+    risk: Delete a theme asset in ShopWired
+  create_or_update_theme_asset:
+    endpoint: POST /theme-assets/{{ record.theme_id }}
+    required fields: theme_id
+    risk: Create or update a theme asset in ShopWired
+  update_theme:
+    endpoint: PUT /themes/{{ record.id }}
+    required fields: id
+    risk: Update a theme in ShopWired
+  create_trade_customer_product_price:
+    endpoint: POST /trade-customer-product-prices
+    risk: Create a new trade customer product price in ShopWired
+  bulk_trade_customer_product_prices:
+    endpoint: POST /trade-customer-product-prices/bulk
+    risk: Bulk create or remove trade customer product prices in ShopWired
+  delete_trade_customer_product_price:
+    endpoint: DELETE /trade-customer-product-prices/{{ record.id }}
+    required fields: id
+    risk: Delete a trade customer product price in ShopWired
+  update_trade_customer_product_price:
+    endpoint: PUT /trade-customer-product-prices/{{ record.id }}
+    required fields: id
+    risk: Update a trade customer product price in ShopWired
+  create_trade_group:
+    endpoint: POST /trade-groups
+    risk: Create a trade pricing band in ShopWired
+  delete_trade_group:
+    endpoint: DELETE /trade-groups/{{ record.id }}
+    required fields: id
+    risk: Delete a trade pricing band in ShopWired
+  update_trade_group:
+    endpoint: PUT /trade-groups/{{ record.id }}
+    required fields: id
+    risk: Update a trade pricing band in ShopWired
+  create_voucher:
+    endpoint: POST /vouchers
+    risk: Create a new voucher in ShopWired
+  delete_voucher:
+    endpoint: DELETE /vouchers/{{ record.id }}
+    required fields: id
+    risk: Delete a voucher in ShopWired
+  update_voucher:
+    endpoint: PUT /vouchers/{{ record.id }}
+    required fields: id
+    risk: Update a voucher in ShopWired
+  create_a_webhook:
+    endpoint: POST /webhooks
+    risk: Create a webhook in ShopWired
+  delete_a_webhook:
+    endpoint: DELETE /webhooks/{{ record.id }}
+    required fields: id
+    risk: Delete a webhook in ShopWired
+  update_a_webhook:
+    endpoint: PUT /webhooks/{{ record.id }}
+    required fields: id
+    risk: Update a webhook in ShopWired
+  verify_a_webhook:
+    endpoint: POST /webhooks/{{ record.id }}/verify
+    required fields: id
+    risk: Verify a webhook in ShopWired
+  create_a_wishlist:
+    endpoint: POST /wishlists
+    risk: Create a wishlist in ShopWired
+  update_a_wishlist:
+    endpoint: PUT /wishlists/{{ record.id }}
+    required fields: id
+    risk: Update a wishlist in ShopWired
+  modify_a_wishlist:
+    endpoint: POST /wishlists/{{ record.id }}/modify
+    required fields: id
+    risk: Modify a wishlist in ShopWired
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external ShopWired API reads across catalog, orders, customers, content, marketing, shipping, webhooks, themes, wishlists, stock, and payments resources
+  write risk: external ShopWired API mutations that create, update, delete, refund, dispatch, verify, modify, or otherwise alter store data
+  approval: reverse ETL writes require plan preview and approval token; destructive deletes and irreversible store changes are flagged destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +799,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect shopwired before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

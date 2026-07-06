@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "alerts",
+  "type": "object",
+  "x-primary-key": ["lat", "lon", "start", "event"],
+  "x-cursor-field": "start",
+  "required": ["event", "start"],
+  "properties": {
+    "lat": { "type": "string" },
+    "lon": { "type": "string" },
+    "timezone": { "type": "string" },
+    "sender_name": { "type": ["string", "null"] },
+    "event": { "type": "string" },
+    "start": { "type": "integer" },
+    "end": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] }
+  }
+}

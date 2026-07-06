@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ticket-forms/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "fixture-ticket_form",
+        "slug": "fixture-ticket_form"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

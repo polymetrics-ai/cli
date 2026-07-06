@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "validators",
+  "type": "object",
+  "x-primary-key": ["operator_address"],
+  "required": ["operator_address"],
+  "properties": {
+    "operator_address": { "type": ["string", "null"] },
+    "moniker": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

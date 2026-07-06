@@ -1,0 +1,139 @@
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "description": "The date of the actual and projected data (y-m-d)"
+    },
+    "actual_sales": {
+      "type": "integer",
+      "description": "Actual Sales (in cents)",
+      "format": "int64"
+    },
+    "projected_sales": {
+      "type": "integer",
+      "description": "Projected Sales (in cents)",
+      "format": "int64"
+    },
+    "projected_sales_override": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "User specified override for projected sales",
+      "format": "int64"
+    },
+    "actual_labor_cost": {
+      "type": "integer",
+      "description": "Actual Labor Cost (in cents)",
+      "format": "int64"
+    },
+    "projected_labor_cost": {
+      "type": "integer",
+      "description": "Projected Labor Cost (in cents)",
+      "format": "int64"
+    },
+    "sales_per_labor_hour": {
+      "type": "number",
+      "description": "Sales Per Labor Hour (in cents, not rounded)",
+      "format": "float"
+    },
+    "projected_sales_per_labor_hour": {
+      "type": "number",
+      "description": "Projected Sales Per Labor Hour (in cents, not rounded)",
+      "format": "float"
+    },
+    "items_per_labor_hour": {
+      "type": "number",
+      "description": "Items Per Labor Hour",
+      "format": "float"
+    },
+    "projected_items_per_labor_hour": {
+      "type": "number",
+      "description": "Projected Items Per Labor Hour",
+      "format": "float"
+    },
+    "labor_percent": {
+      "type": "number",
+      "description": "Labor Percent",
+      "format": "float"
+    },
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "ID of the Daily Report",
+      "format": "int64"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID for the Daily Report",
+      "format": "int64"
+    },
+    "department_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Department ID for the Daily Report",
+      "format": "int64"
+    },
+    "actual_items": {
+      "type": "integer",
+      "description": "Number of items sold",
+      "format": "int64"
+    },
+    "projected_items": {
+      "type": "integer",
+      "description": "Projected number of items sold",
+      "format": "int64"
+    },
+    "projected_items_override": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "User specified override for projected number of items sold",
+      "format": "int64"
+    },
+    "labor_target": {
+      "type": "number",
+      "description": "the labor target",
+      "format": "float"
+    },
+    "actual_labor_minutes": {
+      "type": "integer",
+      "description": "Actual number of minutes worked",
+      "format": "int64"
+    },
+    "projected_labor_minutes": {
+      "type": "integer",
+      "description": "Projected number of minutes worked",
+      "format": "int64"
+    },
+    "actual_ot_minutes": {
+      "type": "integer",
+      "description": "Actual number of overtime minutes worked",
+      "format": "int64"
+    }
+  },
+  "required": [
+    "id",
+    "date",
+    "actual_sales",
+    "projected_sales",
+    "actual_labor_cost",
+    "projected_labor_cost",
+    "sales_per_labor_hour",
+    "projected_sales_per_labor_hour",
+    "items_per_labor_hour",
+    "projected_items_per_labor_hour",
+    "labor_percent"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_daily_sales_and_labor",
+  "x-primary-key": [
+    "id"
+  ]
+}

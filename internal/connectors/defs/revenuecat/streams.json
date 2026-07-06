@@ -1,0 +1,696 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/projects",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "revenuecat api_key is missing or invalid; re-run pm credentials add revenuecat"
+      },
+      {
+        "status": 403,
+        "hint": "revenuecat api_key lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "revenuecat rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
+        "stream": "projects"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/projects.json",
+      "query": {
+        "starting_after": {
+          "template": "{{ config.starting_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "apps",
+      "path": "/projects/{{ config.project_id }}/apps",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
+        "stream": "apps"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/apps.json",
+      "query": {
+        "starting_after": {
+          "template": "{{ config.starting_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "products",
+      "path": "/projects/{{ config.project_id }}/products",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
+        "stream": "products"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/products.json",
+      "query": {
+        "starting_after": {
+          "template": "{{ config.starting_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "offerings",
+      "path": "/projects/{{ config.project_id }}/offerings",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
+        "stream": "offerings"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offerings.json",
+      "query": {
+        "starting_after": {
+          "template": "{{ config.starting_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "customers",
+      "path": "/projects/{{ config.project_id }}/customers",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.uuid record.app_user_id record.identifier record.name }}",
+        "stream": "customers"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customers.json",
+      "query": {
+        "starting_after": {
+          "template": "{{ config.starting_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "app",
+      "path": "/projects/{{ config.project_id }}/apps/{{ config.app_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "app"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/app.json"
+    },
+    {
+      "name": "app_public_api_keys",
+      "path": "/projects/{{ config.project_id }}/apps/{{ config.app_id }}/public_api_keys",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "app_public_api_keys"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/app_public_api_keys.json"
+    },
+    {
+      "name": "app_store_kit_config",
+      "path": "/projects/{{ config.project_id }}/apps/{{ config.app_id }}/store_kit_config",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "app_id": "{{ config.app_id }}",
+        "stream": "app_store_kit_config"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/app_store_kit_config.json"
+    },
+    {
+      "name": "audit_logs",
+      "path": "/projects/{{ config.project_id }}/audit_logs",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "audit_logs"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/audit_logs.json"
+    },
+    {
+      "name": "chart_data",
+      "path": "/projects/{{ config.project_id }}/charts/{{ config.chart_name }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "chart_name": "{{ config.chart_name }}",
+        "stream": "chart_data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/chart_data.json"
+    },
+    {
+      "name": "chart_options",
+      "path": "/projects/{{ config.project_id }}/charts/{{ config.chart_name }}/options",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "chart_name": "{{ config.chart_name }}",
+        "stream": "chart_options"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/chart_options.json"
+    },
+    {
+      "name": "collaborators",
+      "path": "/projects/{{ config.project_id }}/collaborators",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "collaborators"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collaborators.json"
+    },
+    {
+      "name": "customer",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "customer"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer.json"
+    },
+    {
+      "name": "customer_active_entitlements",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/active_entitlements",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_active_entitlements"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_active_entitlements.json"
+    },
+    {
+      "name": "customer_aliases",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/aliases",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_aliases"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_aliases.json"
+    },
+    {
+      "name": "customer_attributes",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/attributes",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_attributes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_attributes.json"
+    },
+    {
+      "name": "customer_center",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/customer_center",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "customer_id": "{{ config.customer_id }}",
+        "stream": "customer_center"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_center.json"
+    },
+    {
+      "name": "customer_invoices",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/invoices",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_invoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_invoices.json"
+    },
+    {
+      "name": "customer_purchases",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/purchases",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_purchases"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_purchases.json"
+    },
+    {
+      "name": "customer_subscriptions",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/subscriptions",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_subscriptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_subscriptions.json"
+    },
+    {
+      "name": "customer_virtual_currencies",
+      "path": "/projects/{{ config.project_id }}/customers/{{ config.customer_id }}/virtual_currencies",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "customer_virtual_currencies"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/customer_virtual_currencies.json"
+    },
+    {
+      "name": "entitlements",
+      "path": "/projects/{{ config.project_id }}/entitlements",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "entitlements"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/entitlements.json"
+    },
+    {
+      "name": "entitlement",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ config.entitlement_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "entitlement"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/entitlement.json"
+    },
+    {
+      "name": "entitlement_products",
+      "path": "/projects/{{ config.project_id }}/entitlements/{{ config.entitlement_id }}/products",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "entitlement_products"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/entitlement_products.json"
+    },
+    {
+      "name": "webhook_integrations",
+      "path": "/projects/{{ config.project_id }}/integrations/webhooks",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "webhook_integrations"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhook_integrations.json"
+    },
+    {
+      "name": "webhook_integration",
+      "path": "/projects/{{ config.project_id }}/integrations/webhooks/{{ config.webhook_integration_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "webhook_integration"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/webhook_integration.json"
+    },
+    {
+      "name": "overview_metrics",
+      "path": "/projects/{{ config.project_id }}/metrics/overview",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "project_id": "{{ config.project_id }}",
+        "stream": "overview_metrics"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/overview_metrics.json"
+    },
+    {
+      "name": "revenue_metric",
+      "path": "/projects/{{ config.project_id }}/metrics/revenue",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "project_id": "{{ config.project_id }}",
+        "stream": "revenue_metric"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/revenue_metric.json"
+    },
+    {
+      "name": "offering",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ config.offering_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "offering"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offering.json"
+    },
+    {
+      "name": "offering_packages",
+      "path": "/projects/{{ config.project_id }}/offerings/{{ config.offering_id }}/packages",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "offering_packages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offering_packages.json"
+    },
+    {
+      "name": "package",
+      "path": "/projects/{{ config.project_id }}/packages/{{ config.package_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "package"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/package.json"
+    },
+    {
+      "name": "package_products",
+      "path": "/projects/{{ config.project_id }}/packages/{{ config.package_id }}/products",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "id": "{{ record.product.id }}",
+        "stream": "package_products"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/package_products.json"
+    },
+    {
+      "name": "paywalls",
+      "path": "/projects/{{ config.project_id }}/paywalls",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "paywalls"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/paywalls.json"
+    },
+    {
+      "name": "paywall",
+      "path": "/projects/{{ config.project_id }}/paywalls/{{ config.paywall_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "paywall"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/paywall.json"
+    },
+    {
+      "name": "product",
+      "path": "/projects/{{ config.project_id }}/products/{{ config.product_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "product"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product.json"
+    },
+    {
+      "name": "purchases",
+      "path": "/projects/{{ config.project_id }}/purchases",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "purchases"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/purchases.json",
+      "query": {
+        "store_purchase_identifier": {
+          "template": "{{ config.store_purchase_identifier }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "purchase",
+      "path": "/projects/{{ config.project_id }}/purchases/{{ config.purchase_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "purchase"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/purchase.json"
+    },
+    {
+      "name": "purchase_entitlements",
+      "path": "/projects/{{ config.project_id }}/purchases/{{ config.purchase_id }}/entitlements",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "purchase_entitlements"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/purchase_entitlements.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/projects/{{ config.project_id }}/subscriptions",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "subscriptions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscriptions.json",
+      "query": {
+        "store_subscription_identifier": {
+          "template": "{{ config.store_subscription_identifier }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "subscription",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ config.subscription_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "subscription"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription.json"
+    },
+    {
+      "name": "subscription_authenticated_management_url",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ config.subscription_id }}/authenticated_management_url",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "subscription_id": "{{ config.subscription_id }}",
+        "stream": "subscription_authenticated_management_url"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription_authenticated_management_url.json"
+    },
+    {
+      "name": "subscription_entitlements",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ config.subscription_id }}/entitlements",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "subscription_entitlements"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription_entitlements.json"
+    },
+    {
+      "name": "subscription_transactions",
+      "path": "/projects/{{ config.project_id }}/subscriptions/{{ config.subscription_id }}/transactions",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "subscription_transactions"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/subscription_transactions.json"
+    },
+    {
+      "name": "virtual_currencies",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies",
+      "records": {
+        "path": "items"
+      },
+      "computed_fields": {
+        "stream": "virtual_currencies"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/virtual_currencies.json"
+    },
+    {
+      "name": "virtual_currency",
+      "path": "/projects/{{ config.project_id }}/virtual_currencies/{{ config.virtual_currency_code }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "computed_fields": {
+        "stream": "virtual_currency"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/virtual_currency.json"
+    }
+  ]
+}

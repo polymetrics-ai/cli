@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "commit_comments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Config-derived per-record marker field (\"owner/repo\"), matching every other stream in this bundle."
+    },
+    "id": { "type": "integer" },
+    "node_id": { "type": "string" },
+    "commit_id": { "type": "string" },
+    "body": { "type": "string" },
+    "path": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "line": { "type": ["integer", "null"] },
+    "user_login": { "type": ["string", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "author_association": { "type": "string" },
+    "html_url": { "type": "string" },
+    "url": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

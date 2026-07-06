@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/tags", "query": { "opt_fields": "gid,name,resource_type,color,notes,created_at" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_tag_1", "name": "Fixture Tag One", "resource_type": "tag", "color": "light-green", "notes": "Fixture notes", "created_at": "2026-01-01T00:00:00Z" },
+        { "gid": "fixture_tag_2", "name": "Fixture Tag Two", "resource_type": "tag", "color": null, "notes": null, "created_at": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page": null
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "task",
+      "attributes": {
+        "name": "Fixture Create Task"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks",
+    "body": {
+      "data": {
+        "type": "task",
+        "attributes": {
+          "name": "Fixture Create Task"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

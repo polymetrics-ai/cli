@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "table": "fixture_value",
+    "date": "2026-01-01T00:00:00Z",
+    "department": "fixture_value",
+    "division": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees/fixture_id/tables/fixture_value",
+    "body": {
+      "date": "2026-01-01T00:00:00Z",
+      "department": "fixture_value",
+      "division": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

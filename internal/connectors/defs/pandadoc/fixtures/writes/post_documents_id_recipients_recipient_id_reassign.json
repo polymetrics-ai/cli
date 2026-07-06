@@ -1,0 +1,37 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "recipient_id": "recipient_id_fixture",
+    "name": "Fixture post_documents_id_recipients_recipient_id_reassign",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/documents/id_fixture/recipients/recipient_id_fixture/reassign",
+    "body": {
+      "name": "Fixture post_documents_id_recipients_recipient_id_reassign",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_id_recipients_recipient_id_reassign_response",
+      "status": "ok"
+    }
+  }
+}

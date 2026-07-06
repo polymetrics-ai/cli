@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_disputes",
+  "type": "object",
+  "x-primary-key": ["payment_dispute_id"],
+  "x-cursor-field": "open_date",
+  "required": ["payment_dispute_id"],
+  "properties": {
+    "payment_dispute_id": { "type": "string" },
+    "order_id": { "type": ["string", "null"] },
+    "dispute_state": { "type": ["string", "null"] },
+    "dispute_status": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] },
+    "open_date": { "type": ["string", "null"], "format": "date-time" },
+    "amount_value": { "type": ["string", "null"] },
+    "amount_currency": { "type": ["string", "null"] },
+    "buyer_username": { "type": ["string", "null"] }
+  }
+}

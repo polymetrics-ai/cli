@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/core/custom_field_values" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "custom_field_value_fixture_1",
+            "value": "Fixture Value",
+            "custom_field": { "object": "/meta/ref/detail", "ref_object": "/core/custom_field", "url": "https://api.zenefits.com/core/custom_field/custom_field_fixture_1" },
+            "person": { "object": "/meta/ref/detail", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/people/person_fixture_1" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/custom_field_values"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

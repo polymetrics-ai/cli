@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/subscriptions/synthetic-conformance-value/authenticated_management_url",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "authenticated_management_url",
+      "management_url": "https://example.invalid/manage-auth"
+    }
+  }
+}

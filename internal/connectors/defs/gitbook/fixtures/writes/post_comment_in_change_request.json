@@ -1,0 +1,25 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "change_request_id": "synthetic-conformance-value",
+    "body": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/comments",
+    "body": {
+      "body": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "post_comment_in_change_request_fixture_1"
+    }
+  }
+}

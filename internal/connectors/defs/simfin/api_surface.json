@@ -1,0 +1,121 @@
+{
+  "api": "SimFin REST API v3 (https://backend.simfin.com)",
+  "docs": "https://simfin.readme.io/llms.txt",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion covers every endpoint listed in the official SimFin ReadMe v3 API reference; legacy-only statements and markets list endpoints remain covered to preserve the existing Go connector surface.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/general/compact",
+      "covered_by": {
+        "stream": "company_general_compact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/general/verbose",
+      "covered_by": {
+        "stream": "company_general_verbose"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/list",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/statements/compact",
+      "covered_by": {
+        "stream": "company_statements_compact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/statements/verbose",
+      "covered_by": {
+        "stream": "company_statements_verbose"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/prices/compact",
+      "covered_by": {
+        "stream": "company_prices_compact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/prices/verbose",
+      "covered_by": {
+        "stream": "company_prices_verbose"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/common-shares-outstanding",
+      "covered_by": {
+        "stream": "common_shares_outstanding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/weighted-shares-outstanding",
+      "covered_by": {
+        "stream": "weighted_shares_outstanding"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/filings/by-company",
+      "covered_by": {
+        "stream": "filings_by_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/filings/get-report/{filingType}/{filingIdentifier}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Returns the raw filing document as HTML or PDF/binary content; the declarative stream reader only models JSON data records."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/filings/list",
+      "covered_by": {
+        "stream": "filings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/changed-companies",
+      "covered_by": {
+        "stream": "changed_companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/companies/data-change-log",
+      "covered_by": {
+        "stream": "data_change_log"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/statements/list",
+      "covered_by": {
+        "stream": "statements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/markets/list",
+      "covered_by": {
+        "stream": "markets"
+      }
+    }
+  ]
+}

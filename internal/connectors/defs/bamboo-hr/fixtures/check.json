@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/fields"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "First Name",
+        "type": "text",
+        "alias": "firstName"
+      }
+    ]
+  }
+}

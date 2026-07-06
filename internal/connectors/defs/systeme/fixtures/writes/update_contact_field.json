@@ -1,0 +1,7 @@
+{
+  "record": { "id": "field_fixture_1", "slug": "favorite_color", "type": "string" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contact_fields/field_fixture_1"
+  }
+}

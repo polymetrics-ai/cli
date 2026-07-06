@@ -1,0 +1,98 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/well-known-uris"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "apple-app-site-association": {
+          "customized": {
+            "representation": {},
+            "_links": {
+              "self": {
+                "hints": {
+                  "allow": {}
+                },
+                "href": "https://example.invalid/fixture",
+                "name": "name_fixture",
+                "templated": true,
+                "type": "type_fixture"
+              }
+            }
+          }
+        },
+        "assetlinks.json": {
+          "customized": {
+            "representation": [
+              "representation_fixture"
+            ],
+            "_links": {
+              "self": {
+                "hints": {
+                  "allow": {}
+                },
+                "href": "https://example.invalid/fixture",
+                "name": "name_fixture",
+                "templated": true,
+                "type": "type_fixture"
+              }
+            }
+          }
+        },
+        "webauthn": {
+          "customized": {
+            "representation": {},
+            "_links": {
+              "self": {
+                "hints": {
+                  "allow": {}
+                },
+                "href": "https://example.invalid/fixture",
+                "name": "name_fixture",
+                "templated": true,
+                "type": "type_fixture"
+              }
+            }
+          }
+        }
+      },
+      "_links": {
+        "apple-app-site-association": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "assetlinks.json": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "webauthn": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

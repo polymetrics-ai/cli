@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/search",
+    "query": {
+      "query": "synthetic-conformance-value",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "search_space_content_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture search_space_content",
+          "name": "Fixture search_space_content",
+          "status": "active",
+          "operation_id": "searchSpaceContent"
+        }
+      ]
+    }
+  }
+}

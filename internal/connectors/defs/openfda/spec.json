@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenFDA Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional openFDA API key, sent as the api_key query parameter to raise rate limits. openFDA works credential-free; when unset, requests are sent unauthenticated (public tier)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.fda.gov",
+      "description": "openFDA API base URL override for tests or proxies."
+    },
+    "search": {
+      "type": "string",
+      "description": "Optional openFDA search query string, applied to every stream via the search query parameter. Absent when unset (unfiltered)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

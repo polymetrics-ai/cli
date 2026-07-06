@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ssh_tunnels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": "integer" },
+    "connection_id": { "type": ["integer", "null"] },
+    "username": { "type": ["string", "null"] },
+    "port": { "type": ["integer", "null"] },
+    "hostname": { "type": ["string", "null"] },
+    "public_key": { "type": ["string", "null"] },
+    "state": { "type": ["integer", "null"] }
+  }
+}

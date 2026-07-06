@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pm/projects/synthetic-conformance-value/tasks/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tickets": {
+        "id": "view_project_task_associations",
+        "name": "Fixture view_project_task_associations",
+        "subject": "Fixture view_project_task_associations",
+        "description": "Fixture view_project_task_associations record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

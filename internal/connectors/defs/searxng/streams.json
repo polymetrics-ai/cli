@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "pageno",
+      "start_page": 1,
+      "page_size": 10,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/search" },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "searxng instance rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "search",
+      "path": "/search",
+      "query": {
+        "q": "{{ config.query }}",
+        "format": "json"
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "published_date": "{{ record.publishedDate }}",
+        "engines": "{{ record.engines | join:, }}",
+        "stream": "search"
+      },
+      "schema": "schemas/search.json"
+    },
+    {
+      "name": "reddit",
+      "path": "/search",
+      "query": {
+        "q": "site:reddit.com {{ config.query }}",
+        "format": "json"
+      },
+      "records": { "path": "results" },
+      "computed_fields": {
+        "published_date": "{{ record.publishedDate }}",
+        "engines": "{{ record.engines | join:, }}",
+        "stream": "reddit"
+      },
+      "schema": "schemas/reddit.json"
+    }
+  ]
+}

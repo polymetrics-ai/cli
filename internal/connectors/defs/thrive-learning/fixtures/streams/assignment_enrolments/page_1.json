@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/assignments/63f57d805d8ecbf46f50001/enrolments",
+    "query": {
+      "page": "1",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "63f57d805d8ecbf46f5e001",
+        "userId": "646767d825352012230001",
+        "assignmentId": "63f57d805d8ecbf46f50001",
+        "audienceId": "5f9d88d6e1b2a34c56d0001",
+        "primaryContentId": "5c8936159ec2d00010c0001",
+        "status": "assigned",
+        "availableDate": "2026-01-02T00:00:00.000Z",
+        "dueDate": "2026-02-02T00:00:00.000Z",
+        "lastCompletedAt": null,
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "63f57d805d8ecbf46f5e002",
+        "userId": "646767d825352012230002",
+        "assignmentId": "63f57d805d8ecbf46f50001",
+        "audienceId": "5f9d88d6e1b2a34c56d0001",
+        "primaryContentId": "5c8936159ec2d00010c0001",
+        "status": "assigned",
+        "availableDate": "2026-01-02T00:00:00.000Z",
+        "dueDate": "2026-02-02T00:00:00.000Z",
+        "lastCompletedAt": null,
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

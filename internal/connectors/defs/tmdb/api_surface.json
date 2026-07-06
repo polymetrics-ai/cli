@@ -1,0 +1,1093 @@
+{
+  "api": "TMDb API v3 OpenAPI (https://developer.themoviedb.org/openapi/tmdb-api.json)",
+  "docs": "https://developer.themoviedb.org/reference/intro/getting-started",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B reviewed the official ReadMe OpenAPI 3.1 document for TMDb API v3. All documented GET endpoints are covered by streams except authentication probes/token creation and one scalar reference list. POST/DELETE endpoints are excluded because this connector remains read-only and they require user session/account/list/rating side effects.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/3/authentication",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "API-key validation probe, already represented by connector check rather than a syncable stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}",
+      "covered_by": {
+        "stream": "account_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/favorite/movies",
+      "covered_by": {
+        "stream": "account_get_favorites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/favorite/tv",
+      "covered_by": {
+        "stream": "account_favorite_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/lists",
+      "covered_by": {
+        "stream": "account_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/rated/movies",
+      "covered_by": {
+        "stream": "account_rated_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/rated/tv",
+      "covered_by": {
+        "stream": "account_rated_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/rated/tv/episodes",
+      "covered_by": {
+        "stream": "account_rated_tv_episodes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/watchlist/movies",
+      "covered_by": {
+        "stream": "account_watchlist_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/account/{account_id}/watchlist/tv",
+      "covered_by": {
+        "stream": "account_watchlist_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/authentication/guest_session/new",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "creates an authentication guest session token, not a data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/authentication/token/new",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "creates an authentication request token, not a data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/certification/movie/list",
+      "covered_by": {
+        "stream": "certification_movie_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/certification/tv/list",
+      "covered_by": {
+        "stream": "certifications_tv_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/changes",
+      "covered_by": {
+        "stream": "changes_movie_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/changes",
+      "covered_by": {
+        "stream": "changes_people_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/changes",
+      "covered_by": {
+        "stream": "changes_tv_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/collection/{collection_id}",
+      "covered_by": {
+        "stream": "collection_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/collection/{collection_id}/images",
+      "covered_by": {
+        "stream": "collection_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/collection/{collection_id}/translations",
+      "covered_by": {
+        "stream": "collection_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/company/{company_id}",
+      "covered_by": {
+        "stream": "company_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/company/{company_id}/alternative_names",
+      "covered_by": {
+        "stream": "company_alternative_names"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/company/{company_id}/images",
+      "covered_by": {
+        "stream": "company_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration",
+      "covered_by": {
+        "stream": "configuration_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration/countries",
+      "covered_by": {
+        "stream": "configuration_countries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration/jobs",
+      "covered_by": {
+        "stream": "configuration_jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration/languages",
+      "covered_by": {
+        "stream": "configuration_languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration/primary_translations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static scalar reference list of translation codes rather than object records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/configuration/timezones",
+      "covered_by": {
+        "stream": "configuration_timezones"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/credit/{credit_id}",
+      "covered_by": {
+        "stream": "credit_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/discover/movie",
+      "covered_by": {
+        "stream": "discover_movie"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/discover/tv",
+      "covered_by": {
+        "stream": "discover_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/find/{external_id}",
+      "covered_by": {
+        "stream": "find_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/genre/movie/list",
+      "covered_by": {
+        "stream": "genre_movie_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/genre/tv/list",
+      "covered_by": {
+        "stream": "genre_tv_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/guest_session/{guest_session_id}/rated/movies",
+      "covered_by": {
+        "stream": "guest_session_rated_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/guest_session/{guest_session_id}/rated/tv",
+      "covered_by": {
+        "stream": "guest_session_rated_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/guest_session/{guest_session_id}/rated/tv/episodes",
+      "covered_by": {
+        "stream": "guest_session_rated_tv_episodes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/keyword/{keyword_id}",
+      "covered_by": {
+        "stream": "keyword_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/keyword/{keyword_id}/movies",
+      "covered_by": {
+        "stream": "keyword_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/list/{list_id}/item_status",
+      "covered_by": {
+        "stream": "list_check_item_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/list/{list_id}",
+      "covered_by": {
+        "stream": "list_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/now_playing",
+      "covered_by": {
+        "stream": "now_playing_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/popular",
+      "covered_by": {
+        "stream": "popular_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/top_rated",
+      "covered_by": {
+        "stream": "movie_top_rated_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/upcoming",
+      "covered_by": {
+        "stream": "movie_upcoming_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}",
+      "covered_by": {
+        "stream": "movie_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/account_states",
+      "covered_by": {
+        "stream": "movie_account_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/alternative_titles",
+      "covered_by": {
+        "stream": "movie_alternative_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/changes",
+      "covered_by": {
+        "stream": "movie_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/credits",
+      "covered_by": {
+        "stream": "movie_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/external_ids",
+      "covered_by": {
+        "stream": "movie_external_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/images",
+      "covered_by": {
+        "stream": "movie_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/keywords",
+      "covered_by": {
+        "stream": "movie_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/latest",
+      "covered_by": {
+        "stream": "movie_latest_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/lists",
+      "covered_by": {
+        "stream": "movie_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/recommendations",
+      "covered_by": {
+        "stream": "movie_recommendations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/release_dates",
+      "covered_by": {
+        "stream": "movie_release_dates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/reviews",
+      "covered_by": {
+        "stream": "movie_reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/similar",
+      "covered_by": {
+        "stream": "movie_similar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/translations",
+      "covered_by": {
+        "stream": "movie_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/videos",
+      "covered_by": {
+        "stream": "movie_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/{movie_id}/watch/providers",
+      "covered_by": {
+        "stream": "movie_watch_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/network/{network_id}",
+      "covered_by": {
+        "stream": "network_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/network/{network_id}/alternative_names",
+      "covered_by": {
+        "stream": "details_copy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/network/{network_id}/images",
+      "covered_by": {
+        "stream": "alternative_names_copy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/popular",
+      "covered_by": {
+        "stream": "person_popular_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}",
+      "covered_by": {
+        "stream": "person_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/changes",
+      "covered_by": {
+        "stream": "person_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/combined_credits",
+      "covered_by": {
+        "stream": "person_combined_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/external_ids",
+      "covered_by": {
+        "stream": "person_external_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/images",
+      "covered_by": {
+        "stream": "person_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/latest",
+      "covered_by": {
+        "stream": "person_latest_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/movie_credits",
+      "covered_by": {
+        "stream": "person_movie_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/tv_credits",
+      "covered_by": {
+        "stream": "person_tv_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/tagged_images",
+      "covered_by": {
+        "stream": "person_tagged_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/{person_id}/translations",
+      "covered_by": {
+        "stream": "translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/review/{review_id}",
+      "covered_by": {
+        "stream": "review_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/collection",
+      "covered_by": {
+        "stream": "search_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/company",
+      "covered_by": {
+        "stream": "search_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/keyword",
+      "covered_by": {
+        "stream": "search_keyword"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/movie",
+      "covered_by": {
+        "stream": "search_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/multi",
+      "covered_by": {
+        "stream": "search_multi"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/person",
+      "covered_by": {
+        "stream": "search_person"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/search/tv",
+      "covered_by": {
+        "stream": "search_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/trending/all/{time_window}",
+      "covered_by": {
+        "stream": "trending_all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/trending/movie/{time_window}",
+      "covered_by": {
+        "stream": "trending_movies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/trending/person/{time_window}",
+      "covered_by": {
+        "stream": "trending_people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/trending/tv/{time_window}",
+      "covered_by": {
+        "stream": "trending_tv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/airing_today",
+      "covered_by": {
+        "stream": "tv_series_airing_today_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/on_the_air",
+      "covered_by": {
+        "stream": "tv_series_on_the_air_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/popular",
+      "covered_by": {
+        "stream": "tv_series_popular_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/top_rated",
+      "covered_by": {
+        "stream": "tv_series_top_rated_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}",
+      "covered_by": {
+        "stream": "tv_series_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/account_states",
+      "covered_by": {
+        "stream": "tv_series_account_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/aggregate_credits",
+      "covered_by": {
+        "stream": "tv_series_aggregate_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/alternative_titles",
+      "covered_by": {
+        "stream": "tv_series_alternative_titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/changes",
+      "covered_by": {
+        "stream": "tv_series_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/content_ratings",
+      "covered_by": {
+        "stream": "tv_series_content_ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/credits",
+      "covered_by": {
+        "stream": "tv_series_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/episode_groups",
+      "covered_by": {
+        "stream": "tv_series_episode_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/external_ids",
+      "covered_by": {
+        "stream": "tv_series_external_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/images",
+      "covered_by": {
+        "stream": "tv_series_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/keywords",
+      "covered_by": {
+        "stream": "tv_series_keywords"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/latest",
+      "covered_by": {
+        "stream": "tv_series_latest_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/lists",
+      "covered_by": {
+        "stream": "lists_copy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/recommendations",
+      "covered_by": {
+        "stream": "tv_series_recommendations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/reviews",
+      "covered_by": {
+        "stream": "tv_series_reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/screened_theatrically",
+      "covered_by": {
+        "stream": "tv_series_screened_theatrically"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/similar",
+      "covered_by": {
+        "stream": "tv_series_similar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/translations",
+      "covered_by": {
+        "stream": "tv_series_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/videos",
+      "covered_by": {
+        "stream": "tv_series_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/watch/providers",
+      "covered_by": {
+        "stream": "tv_series_watch_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}",
+      "covered_by": {
+        "stream": "tv_season_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/account_states",
+      "covered_by": {
+        "stream": "tv_season_account_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/aggregate_credits",
+      "covered_by": {
+        "stream": "tv_season_aggregate_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/season/{season_id}/changes",
+      "covered_by": {
+        "stream": "tv_season_changes_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/credits",
+      "covered_by": {
+        "stream": "tv_season_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/external_ids",
+      "covered_by": {
+        "stream": "tv_season_external_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/images",
+      "covered_by": {
+        "stream": "tv_season_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/translations",
+      "covered_by": {
+        "stream": "tv_season_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/videos",
+      "covered_by": {
+        "stream": "tv_season_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/watch/providers",
+      "covered_by": {
+        "stream": "tv_season_watch_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}",
+      "covered_by": {
+        "stream": "tv_episode_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states",
+      "covered_by": {
+        "stream": "tv_episode_account_states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/episode/{episode_id}/changes",
+      "covered_by": {
+        "stream": "tv_episode_changes_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/credits",
+      "covered_by": {
+        "stream": "tv_episode_credits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/external_ids",
+      "covered_by": {
+        "stream": "tv_episode_external_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/images",
+      "covered_by": {
+        "stream": "tv_episode_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/translations",
+      "covered_by": {
+        "stream": "tv_episode_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos",
+      "covered_by": {
+        "stream": "tv_episode_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/episode_group/{tv_episode_group_id}",
+      "covered_by": {
+        "stream": "tv_episode_group_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/watch/providers/regions",
+      "covered_by": {
+        "stream": "watch_providers_available_regions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/watch/providers/movie",
+      "covered_by": {
+        "stream": "watch_providers_movie_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/watch/providers/tv",
+      "covered_by": {
+        "stream": "watch_provider_tv_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/account/{account_id}/favorite",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/account/{account_id}/watchlist",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/session/new",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/session/convert/4",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/token/validate_with_login",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/authentication/session",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/add_item",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/clear",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/list/{list_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/remove_item",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/movie/{movie_id}/rating",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/movie/{movie_id}/rating",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/tv/{series_id}/rating",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/tv/{series_id}/rating",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
+      }
+    }
+  ]
+}

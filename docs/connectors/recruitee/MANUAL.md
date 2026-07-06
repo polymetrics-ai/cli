@@ -10,22 +10,50 @@ SYNOPSIS
   pm credentials add <name> --connector recruitee [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API. Read-only.
+  Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API.
+
+ICON
+  asset: icons/recruitee.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  company_id
+  api_key (secret)
+
+ETL STREAMS
+  offers:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), id(), status(), title(), updated_at()
+  candidates:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), updated_at()
+  departments:
+    primary key: id
+    fields: id(), name()
+  sources:
+    primary key: id
+    fields: id(), name()
+  tags:
+    primary key: id
+    fields: id(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Recruitee API read of ATS offer and candidate data
+  approval: none; read-only ATS API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

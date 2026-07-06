@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/quotes/sent",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "quoteNumber": 8002,
+          "date": "2026-01-10",
+          "currency": "DKK",
+          "netAmount": 220.0,
+          "grossAmount": 275.0,
+          "vatAmount": 55.0,
+          "lastUpdated": "2026-01-10T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

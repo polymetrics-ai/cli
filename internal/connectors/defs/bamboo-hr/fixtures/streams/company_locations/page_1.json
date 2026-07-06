@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/applicant_tracking/locations"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "description": "fixture_value",
+        "addressLine1": "fixture_value",
+        "addressLine2": "fixture_value",
+        "city": "fixture_value",
+        "country": {
+          "id": 1001,
+          "iso_code": "fixture_value",
+          "name": "Fixture Name"
+        },
+        "name": "Fixture Name",
+        "phone": "fixture_value"
+      }
+    ]
+  }
+}

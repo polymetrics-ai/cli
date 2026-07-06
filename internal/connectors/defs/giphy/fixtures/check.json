@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/gifs/trending", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "gif_fixture_check", "type": "gif", "title": "check" }
+      ],
+      "pagination": { "total_count": 1, "count": 1, "offset": 0 }
+    }
+  }
+}

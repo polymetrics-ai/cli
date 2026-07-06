@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/holidays", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "hol_fixture_1",
+        "name": "Fixture Holiday One",
+        "workspaceId": "ws_fixture_1",
+        "datePeriod": { "startDate": "2026-01-01T00:00:00Z", "endDate": "2026-01-01T00:00:00Z" },
+        "occursAnnually": true,
+        "everyoneIncludingNew": true,
+        "automaticTimeEntryCreation": false,
+        "projectId": null,
+        "taskId": null,
+        "userIds": [],
+        "userGroupIds": []
+      }
+    ]
+  }
+}

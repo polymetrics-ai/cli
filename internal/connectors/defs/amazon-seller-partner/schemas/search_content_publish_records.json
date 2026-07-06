@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search_content_publish_records",
+  "type": "object",
+  "properties": {
+    "marketplaceId": {
+      "type": "string"
+    },
+    "locale": {
+      "type": "string"
+    },
+    "asin": {
+      "type": "string"
+    },
+    "contentType": {
+      "type": "string"
+    },
+    "contentSubType": {
+      "type": "string"
+    },
+    "contentReferenceKey": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "contentReferenceKey"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Instagram Story",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "caption": { "type": ["string", "null"] },
+    "media_type": { "type": ["string", "null"] },
+    "media_product_type": { "type": ["string", "null"] },
+    "media_url": { "type": ["string", "null"] },
+    "permalink": { "type": ["string", "null"] },
+    "thumbnail_url": { "type": ["string", "null"] },
+    "timestamp": { "type": ["string", "null"] },
+    "username": { "type": ["string", "null"] }
+  },
+  "required": ["id"]
+}

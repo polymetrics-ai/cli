@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/products" },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        {
+          "id": "prod_fixture_1",
+          "name": "Fixture Gift Card",
+          "description": "A fixture gift card product.",
+          "category": "gift-card",
+          "subcategory": "retail",
+          "disclosure": null,
+          "skus": [],
+          "currency_codes": ["USD"],
+          "countries": ["US"],
+          "images": [],
+          "usage_instructions": null,
+          "documents": []
+        },
+        {
+          "id": "prod_fixture_2",
+          "name": "Fixture Donation",
+          "description": "A fixture charity donation product.",
+          "category": "charity",
+          "subcategory": null,
+          "disclosure": null,
+          "skus": [],
+          "currency_codes": ["USD"],
+          "countries": ["US"],
+          "images": [],
+          "usage_instructions": null,
+          "documents": []
+        }
+      ]
+    }
+  }
+}

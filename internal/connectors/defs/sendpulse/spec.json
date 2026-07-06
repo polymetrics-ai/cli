@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SendPulse Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SendPulse API client ID (OAuth2 client-credentials). Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SendPulse API client secret (OAuth2 client-credentials). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.sendpulse.com",
+      "description": "SendPulse API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.sendpulse.com/oauth/access_token",
+      "description": "OAuth2 token endpoint override; defaults to <base_url>/oauth/access_token (legacy derives this from base_url at runtime, but the engine's default materialization is a fixed literal, not a base_url-derived one - see docs.md Known limits)."
+    }
+  }
+}

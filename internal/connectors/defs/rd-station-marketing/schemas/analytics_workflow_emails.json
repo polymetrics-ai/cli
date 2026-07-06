@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "analytics_workflow_emails",
+  "type": "object",
+  "x-primary-key": ["workflow_action_id"],
+  "required": ["workflow_action_id"],
+  "properties": {
+    "workflow_id": { "type": ["string", "null"] },
+    "workflow_name": { "type": ["string", "null"] },
+    "workflow_action_id": { "type": "string" },
+    "workflow_created_at": { "type": ["string", "null"] },
+    "workflow_updated_at": { "type": ["string", "null"] },
+    "email_name": { "type": ["string", "null"] },
+    "email_dropped_count": { "type": ["integer", "null"] },
+    "email_delivered_count": { "type": ["integer", "null"] },
+    "email_bounced_unique_count": { "type": ["integer", "null"] },
+    "email_opened_unique_count": { "type": ["integer", "null"] },
+    "email_clicked_unique_count": { "type": ["integer", "null"] },
+    "email_unsubscribed_count": { "type": ["integer", "null"] },
+    "email_spam_reported_count": { "type": ["integer", "null"] },
+    "email_delivered_rate": { "type": ["number", "null"] },
+    "email_opened_rate": { "type": ["number", "null"] },
+    "email_clicked_rate": { "type": ["number", "null"] },
+    "email_spam_reported_rate": { "type": ["number", "null"] }
+  }
+}

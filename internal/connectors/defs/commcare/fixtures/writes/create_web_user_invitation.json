@@ -1,0 +1,24 @@
+{
+  "record": {
+    "email": "invitee@example.test",
+    "role": "App Editor",
+    "primary_location_id": "location_v2_fixture_1",
+    "assigned_location_ids": ["location_v2_fixture_1"],
+    "profile": "Facility User",
+    "user_data": { "Can View Data": "yes" },
+    "tableau_role": "Viewer",
+    "tableau_groups": ["fixture_group"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/invitation/v1/",
+    "body": {
+      "email": "invitee@example.test",
+      "role": "App Editor"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "invitation_fixture_1" }
+  }
+}

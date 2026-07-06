@@ -1,0 +1,7 @@
+{
+  "record": { "id": "tag_fixture_1", "name": "Renamed Fixture Tag" },
+  "expect": {
+    "method": "PUT",
+    "path": "/tags/tag_fixture_1"
+  }
+}

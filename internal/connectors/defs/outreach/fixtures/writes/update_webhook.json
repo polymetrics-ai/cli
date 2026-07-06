@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "webhook",
+      "attributes": {
+        "name": "Fixture Update Webhook"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/webhooks/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "webhook",
+        "attributes": {
+          "name": "Fixture Update Webhook"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

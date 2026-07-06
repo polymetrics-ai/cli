@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/flows-v2", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "flow2_fixture_1",
+        "name": "Fixture Flow 2.0 One",
+        "published": true,
+        "frequency": "once",
+        "tag_ids": ["tag_fixture_1"],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z",
+        "createdBy": "user_fixture",
+        "updatedBy": "user_fixture"
+      },
+      {
+        "id": "flow2_fixture_2",
+        "name": "Fixture Flow 2.0 Two",
+        "published": false,
+        "frequency": "always",
+        "tag_ids": [],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z",
+        "createdBy": "user_fixture",
+        "updatedBy": "user_fixture"
+      }
+    ]
+  }
+}

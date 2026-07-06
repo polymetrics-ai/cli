@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/comments", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "comment_fixture_1",
+        "date": "2026-01-01T00:00:00Z",
+        "content": "Fixture comment 1",
+        "postId": "post_fixture_1",
+        "featureRequestId": "",
+        "userId": "user_1",
+        "userEmail": "fixture1@example.com",
+        "userFirstName": "First1",
+        "userLastName": "Last1"
+      },
+      {
+        "id": "comment_fixture_2",
+        "date": "2026-01-02T00:00:00Z",
+        "content": "Fixture comment 2",
+        "postId": "",
+        "featureRequestId": "fr_fixture_1",
+        "userId": "user_2",
+        "userEmail": "fixture2@example.com",
+        "userFirstName": "First2",
+        "userLastName": "Last2"
+      }
+    ]
+  }
+}

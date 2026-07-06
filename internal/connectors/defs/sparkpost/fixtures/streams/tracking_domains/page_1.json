@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/tracking-domains" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "domain": "click.fixture.example.com",
+          "port": 443,
+          "secure": true,
+          "default": true,
+          "status": { "verified": true, "cname_status": "valid", "compliance_status": "valid" }
+        }
+      ]
+    }
+  }
+}

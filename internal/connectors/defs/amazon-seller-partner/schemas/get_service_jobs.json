@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_service_jobs",
+  "type": "object",
+  "properties": {
+    "createTime": {
+      "type": "string"
+    },
+    "serviceJobId": {
+      "type": "string"
+    },
+    "serviceJobStatus": {
+      "type": "string"
+    },
+    "scopeOfWork": {
+      "type": "object"
+    },
+    "seller": {
+      "type": "object"
+    },
+    "serviceJobProvider": {
+      "type": "object"
+    },
+    "preferredAppointmentTimes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "appointments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "serviceOrderId": {
+      "type": "string"
+    },
+    "productOrderIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "trackingIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "marketplaceId": {
+      "type": "string"
+    },
+    "storeId": {
+      "type": "string"
+    },
+    "buyer": {
+      "type": "object"
+    },
+    "associatedItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "serviceLocation": {
+      "type": "object"
+    },
+    "payments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "serviceJobId"
+  ]
+}

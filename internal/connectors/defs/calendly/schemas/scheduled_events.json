@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scheduled_events",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "start_time",
+  "required": ["id", "uri"],
+  "properties": {
+    "id": { "type": "string", "description": "Legacy's derived primary key: uri's trailing path segment (idFromURI), reproduced here via computed_fields' last_path_segment filter." },
+    "uri": { "type": "string", "description": "Calendly's stable resource identifier; id is derived from this URI's trailing path segment." },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "start_time": { "type": "string", "format": "date-time" },
+    "end_time": { "type": ["string", "null"], "format": "date-time" },
+    "event_type": { "type": ["string", "null"] },
+    "location": { "type": ["object", "null"] },
+    "invitees_counter": { "type": ["object", "null"] },
+    "cancellation": { "type": ["object", "null"] },
+    "event_memberships": { "type": ["array", "null"] },
+    "event_guests": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

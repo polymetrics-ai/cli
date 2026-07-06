@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/postings", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "posting_fixture_1", "text": "Fixture Posting", "state": "published" }
+      ],
+      "hasNext": false
+    }
+  }
+}

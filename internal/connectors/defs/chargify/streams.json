@@ -1,0 +1,230 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}",
+        "when": "{{ config.username }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "x",
+        "when": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/customers.json" },
+    "error_map": [
+      { "status": 401, "hint": "chargify API key or username/password is missing or invalid; re-run pm credentials add chargify" },
+      { "status": 403, "hint": "chargify credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chargify rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record.customer.id record.id }}",
+        "first_name": "{{ coalesce record.customer.first_name record.first_name }}",
+        "last_name": "{{ coalesce record.customer.last_name record.last_name }}",
+        "email": "{{ coalesce record.customer.email record.email }}",
+        "organization": "{{ coalesce record.customer.organization record.organization }}",
+        "reference": "{{ coalesce record.customer.reference record.reference }}",
+        "phone": "{{ coalesce record.customer.phone record.phone }}",
+        "country": "{{ coalesce record.customer.country record.country }}",
+        "created_at": "{{ coalesce record.customer.created_at record.created_at }}",
+        "updated_at": "{{ coalesce record.customer.updated_at record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record.subscription.id record.id }}",
+        "state": "{{ coalesce record.subscription.state record.state }}",
+        "customer_id": "{{ coalesce record.subscription.customer_id record.customer_id }}",
+        "product_id": "{{ coalesce record.subscription.product_id record.product_id }}",
+        "balance_in_cents": "{{ coalesce record.subscription.balance_in_cents record.balance_in_cents }}",
+        "total_revenue_in_cents": "{{ coalesce record.subscription.total_revenue_in_cents record.total_revenue_in_cents }}",
+        "current_period_started_at": "{{ coalesce record.subscription.current_period_started_at record.current_period_started_at }}",
+        "current_period_ends_at": "{{ coalesce record.subscription.current_period_ends_at record.current_period_ends_at }}",
+        "created_at": "{{ coalesce record.subscription.created_at record.created_at }}",
+        "updated_at": "{{ coalesce record.subscription.updated_at record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "products",
+      "path": "/products.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record.product.id record.id }}",
+        "name": "{{ coalesce record.product.name record.name }}",
+        "handle": "{{ coalesce record.product.handle record.handle }}",
+        "description": "{{ coalesce record.product.description record.description }}",
+        "price_in_cents": "{{ coalesce record.product.price_in_cents record.price_in_cents }}",
+        "interval": "{{ coalesce record.product.interval record.interval }}",
+        "interval_unit": "{{ coalesce record.product.interval_unit record.interval_unit }}",
+        "product_family_id": "{{ coalesce record.product.product_family_id record.product_family_id }}",
+        "created_at": "{{ coalesce record.product.created_at record.created_at }}",
+        "updated_at": "{{ coalesce record.product.updated_at record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "coupons",
+      "path": "/coupons.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record.coupon.id record.id }}",
+        "name": "{{ coalesce record.coupon.name record.name }}",
+        "code": "{{ coalesce record.coupon.code record.code }}",
+        "description": "{{ coalesce record.coupon.description record.description }}",
+        "percentage": "{{ coalesce record.coupon.percentage record.percentage }}",
+        "amount_in_cents": "{{ coalesce record.coupon.amount_in_cents record.amount_in_cents }}",
+        "product_family_id": "{{ coalesce record.coupon.product_family_id record.product_family_id }}",
+        "created_at": "{{ coalesce record.coupon.created_at record.created_at }}",
+        "updated_at": "{{ coalesce record.coupon.updated_at record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/coupons.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/transactions.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ coalesce record.transaction.id record.id }}",
+        "transaction_type": "{{ coalesce record.transaction.transaction_type record.transaction_type }}",
+        "amount_in_cents": "{{ coalesce record.transaction.amount_in_cents record.amount_in_cents }}",
+        "subscription_id": "{{ coalesce record.transaction.subscription_id record.subscription_id }}",
+        "customer_id": "{{ coalesce record.transaction.customer_id record.customer_id }}",
+        "product_id": "{{ coalesce record.transaction.product_id record.product_id }}",
+        "success": "{{ coalesce record.transaction.success record.success }}",
+        "kind": "{{ coalesce record.transaction.kind record.kind }}",
+        "created_at": "{{ coalesce record.transaction.created_at record.created_at }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "product_families",
+      "path": "/product_families.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.product_family.id }}",
+        "name": "{{ record.product_family.name }}",
+        "handle": "{{ record.product_family.handle }}",
+        "description": "{{ record.product_family.description }}",
+        "accounting_code": "{{ record.product_family.accounting_code }}",
+        "created_at": "{{ record.product_family.created_at }}",
+        "updated_at": "{{ record.product_family.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/product_families.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices.json",
+      "records": { "path": "invoices" },
+      "computed_fields": {
+        "id": "{{ record.uid }}",
+        "number": "{{ record.number }}",
+        "state": "{{ record.status }}",
+        "customer_id": "{{ record.customer.id }}",
+        "subscription_id": "{{ record.subscription_id }}",
+        "total_amount": "{{ record.total_amount }}",
+        "paid_amount": "{{ record.paid_amount }}",
+        "due_amount": "{{ record.due_amount }}",
+        "currency": "{{ record.currency }}",
+        "issue_date": "{{ record.issue_date }}",
+        "due_date": "{{ record.due_date }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "payment_profiles",
+      "path": "/payment_profiles.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.payment_profile.id }}",
+        "customer_id": "{{ record.payment_profile.customer_id }}",
+        "payment_type": "{{ record.payment_profile.payment_type }}",
+        "card_type": "{{ record.payment_profile.card_type }}",
+        "last_four": "{{ record.payment_profile.last_four }}",
+        "expiration_month": "{{ record.payment_profile.expiration_month }}",
+        "expiration_year": "{{ record.payment_profile.expiration_year }}",
+        "current_vault": "{{ record.payment_profile.current_vault }}",
+        "created_at": "{{ record.payment_profile.created_at }}",
+        "updated_at": "{{ record.payment_profile.updated_at }}"
+      },
+      "schema": "schemas/payment_profiles.json"
+    },
+    {
+      "name": "events",
+      "path": "/events.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.event.id }}",
+        "key": "{{ record.event.key }}",
+        "message": "{{ record.event.message }}",
+        "customer_id": "{{ record.event.customer_id }}",
+        "subscription_id": "{{ record.event.subscription_id }}",
+        "created_at": "{{ record.event.created_at }}"
+      },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "statements",
+      "path": "/statements.json",
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "{{ record.statement.id }}",
+        "uid": "{{ record.statement.uid }}",
+        "subscription_id": "{{ record.statement.subscription_id }}",
+        "customer_id": "{{ record.statement.customer_id }}",
+        "settlement_date": "{{ record.statement.settlement_date }}",
+        "closing_balance_in_cents": "{{ record.statement.closing_balance_in_cents }}",
+        "created_at": "{{ record.statement.created_at }}"
+      },
+      "schema": "schemas/statements.json"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "sys_id": "incident_fixture_1",
+    "state": "6",
+    "priority": "2"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/now/table/incident/incident_fixture_1",
+    "body": {
+      "state": "6",
+      "priority": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "result": { "sys_id": "incident_fixture_1", "state": "6", "priority": "2" } }
+  }
+}

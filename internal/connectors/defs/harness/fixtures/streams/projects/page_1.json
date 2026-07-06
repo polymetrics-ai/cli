@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/ng/api/projects" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "SUCCESS",
+      "data": {
+        "totalPages": 1,
+        "totalItems": 1,
+        "pageItemCount": 1,
+        "pageSize": 50,
+        "pageIndex": 0,
+        "empty": false,
+        "content": [
+          { "project": { "identifier": "proj_fixture_1", "orgIdentifier": "org_fixture_1", "accountIdentifier": "acct_fixture", "name": "Proj One", "color": "#0063F7", "description": "fixture project", "modules": ["CD", "CI"] } }
+        ]
+      }
+    }
+  }
+}

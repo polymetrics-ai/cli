@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Funnel" },
+  "expect": {
+    "method": "POST",
+    "path": "/funnels"
+  }
+}

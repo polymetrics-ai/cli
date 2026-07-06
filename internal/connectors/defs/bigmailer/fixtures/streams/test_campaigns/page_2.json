@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_1/test-campaigns", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "test_campaign_fixture_1",
+          "brand_id": "brand_fixture_1",
+          "created": 1767225601,
+          "name": "Fixture Test Campaign",
+          "subject": "Fixture Test Subject",
+          "from": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "reply_to": { "email": "fixture@example.com", "name": "Fixture Sender" },
+          "status": "sent",
+          "started": 1767225650,
+          "sent": 1767225700,
+          "recipients": ["fixture1@example.com", "fixture2@example.com"],
+          "feed_url": "",
+          "num_sent": 2
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

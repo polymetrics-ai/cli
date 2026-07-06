@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/folders" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "folder_fixture_1", "name": "Work", "profilesCount": 5 },
+      { "id": "folder_fixture_2", "name": "Personal", "profilesCount": 2 }
+    ]
+  }
+}

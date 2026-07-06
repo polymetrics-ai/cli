@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "kaiavoiceimport",
+      "attributes": {
+        "name": "Fixture Create Kaia Voice Import"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/kaiaVoiceImports",
+    "body": {
+      "data": {
+        "type": "kaiavoiceimport",
+        "attributes": {
+          "name": "Fixture Create Kaia Voice Import"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

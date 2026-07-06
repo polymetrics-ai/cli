@@ -1,0 +1,21 @@
+{
+  "record": {
+    "availability_id": 1001,
+    "status": "approved",
+    "message": "fixture message"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/availabilities/1001/status",
+    "body": {
+      "status": "approved",
+      "message": "fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

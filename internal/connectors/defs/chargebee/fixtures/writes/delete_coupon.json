@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "coupon_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupons/coupon_fixture_1/delete"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vacation_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "counts_as": { "type": ["string", "null"] },
+    "company": { "type": ["object", "null"] },
+    "vacation_requests": { "type": ["object", "null"] }
+  }
+}

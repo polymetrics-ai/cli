@@ -1,0 +1,24 @@
+{
+  "name": "beamer",
+  "display_name": "Beamer",
+  "description": "Reads and writes Beamer NPS survey responses, announcement posts, feature requests, comments, reactions, votes, and end users through the Beamer REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.getbeamer.com/api/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Beamer API read of NPS feedback, posts, feature requests, comments, reactions, votes, and end users",
+    "write": "external mutation of Beamer posts, feature requests, comments, reactions, and votes; a published post/feature-request write is immediately end-user-visible in the customer-facing widget",
+    "approval": "required for every write action; see writes.json risk field per action"
+  }
+}

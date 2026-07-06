@@ -1,0 +1,61 @@
+{
+  "api": "Ruddr API",
+  "docs": "https://docs.ruddr.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Ruddr surface (invoices, expenses, resource management, custom fields, write endpoints, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/clients",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/time_entries",
+      "covered_by": {
+        "stream": "time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/workspaces/{workspace_id}/time_entries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/invoices",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/expenses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/workspaces/{workspace_id}/users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

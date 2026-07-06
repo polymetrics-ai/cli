@@ -1,0 +1,146 @@
+{
+  "record": {
+    "credentials": {
+      "password": {
+        "hash": {
+          "algorithm": "BCRYPT",
+          "digestAlgorithm": "SHA256_HMAC",
+          "iterationCount": 1,
+          "keySize": 1,
+          "salt": "salt_fixture",
+          "saltOrder": "salt_order_fixture",
+          "value": "value_fixture",
+          "workFactor": 1
+        },
+        "hook": {
+          "type": "type_fixture"
+        },
+        "value": "value_fixture"
+      },
+      "provider": {
+        "name": "name_fixture",
+        "type": "ACTIVE_DIRECTORY"
+      },
+      "recovery_question": {
+        "answer": "answer_fixture",
+        "question": "question_fixture"
+      }
+    },
+    "groupIds": [
+      "group_id_fixture"
+    ],
+    "profile": {
+      "city": "city_fixture",
+      "costCenter": "cost_center_fixture",
+      "countryCode": "country_code_fixture",
+      "department": "department_fixture",
+      "displayName": "display_name_fixture",
+      "division": "division_fixture",
+      "email": "fixture@example.invalid",
+      "employeeNumber": "employee_number_fixture",
+      "firstName": "first_name_fixture",
+      "honorificPrefix": "honorific_prefix_fixture",
+      "honorificSuffix": "honorific_suffix_fixture",
+      "lastName": "last_name_fixture",
+      "locale": "locale_fixture",
+      "login": "fixture@example.invalid",
+      "manager": "manager_fixture",
+      "managerId": "manager_id_fixture",
+      "middleName": "middle_name_fixture",
+      "mobilePhone": "mobile_phone_fixture",
+      "nickName": "nick_name_fixture",
+      "organization": "organization_fixture",
+      "postalAddress": "postal_address_fixture",
+      "preferredLanguage": "preferred_language_fixture",
+      "primaryPhone": "primary_phone_fixture",
+      "profileUrl": "https://example.invalid/fixture",
+      "secondEmail": "fixture@example.invalid",
+      "state": "state_fixture",
+      "streetAddress": "street_address_fixture",
+      "timezone": "2026-01-01T00:00:00Z",
+      "title": "title_fixture",
+      "userType": "user_type_fixture",
+      "zipCode": "zip_code_fixture"
+    },
+    "realmId": "realm_id_fixture",
+    "type": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/users",
+    "body": {
+      "credentials": {
+        "password": {
+          "hash": {
+            "algorithm": "BCRYPT",
+            "digestAlgorithm": "SHA256_HMAC",
+            "iterationCount": 1,
+            "keySize": 1,
+            "salt": "salt_fixture",
+            "saltOrder": "salt_order_fixture",
+            "value": "value_fixture",
+            "workFactor": 1
+          },
+          "hook": {
+            "type": "type_fixture"
+          },
+          "value": "value_fixture"
+        },
+        "provider": {
+          "name": "name_fixture",
+          "type": "ACTIVE_DIRECTORY"
+        },
+        "recovery_question": {
+          "answer": "answer_fixture",
+          "question": "question_fixture"
+        }
+      },
+      "groupIds": [
+        "group_id_fixture"
+      ],
+      "profile": {
+        "city": "city_fixture",
+        "costCenter": "cost_center_fixture",
+        "countryCode": "country_code_fixture",
+        "department": "department_fixture",
+        "displayName": "display_name_fixture",
+        "division": "division_fixture",
+        "email": "fixture@example.invalid",
+        "employeeNumber": "employee_number_fixture",
+        "firstName": "first_name_fixture",
+        "honorificPrefix": "honorific_prefix_fixture",
+        "honorificSuffix": "honorific_suffix_fixture",
+        "lastName": "last_name_fixture",
+        "locale": "locale_fixture",
+        "login": "fixture@example.invalid",
+        "manager": "manager_fixture",
+        "managerId": "manager_id_fixture",
+        "middleName": "middle_name_fixture",
+        "mobilePhone": "mobile_phone_fixture",
+        "nickName": "nick_name_fixture",
+        "organization": "organization_fixture",
+        "postalAddress": "postal_address_fixture",
+        "preferredLanguage": "preferred_language_fixture",
+        "primaryPhone": "primary_phone_fixture",
+        "profileUrl": "https://example.invalid/fixture",
+        "secondEmail": "fixture@example.invalid",
+        "state": "state_fixture",
+        "streetAddress": "street_address_fixture",
+        "timezone": "2026-01-01T00:00:00Z",
+        "title": "title_fixture",
+        "userType": "user_type_fixture",
+        "zipCode": "zip_code_fixture"
+      },
+      "realmId": "realm_id_fixture",
+      "type": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

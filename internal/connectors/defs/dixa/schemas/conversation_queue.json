@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversation_queue",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "queue_id": {
+      "type": "string"
+    },
+    "queue_name": {
+      "type": "string"
+    },
+    "queued_at": {
+      "type": "integer"
+    },
+    "initial_channel": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

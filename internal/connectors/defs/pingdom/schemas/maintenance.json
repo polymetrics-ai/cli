@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "maintenance",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "description": { "type": ["string", "null"] },
+    "from": { "type": ["integer", "null"] },
+    "to": { "type": ["integer", "null"] },
+    "recurrencetype": { "type": ["string", "null"] },
+    "repeatevery": { "type": ["integer", "null"] },
+    "effectiveto": { "type": ["integer", "null"] }
+  }
+}

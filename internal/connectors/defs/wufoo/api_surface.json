@@ -1,0 +1,26 @@
+{
+  "api": "Wufoo API v3 (https://wufoo.github.io/docs/)",
+  "docs": "https://wufoo.github.io/docs/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-confirmed against the live docs page (https://wufoo.github.io/docs/, fetched 2026-07-04). Wufoo's v3 REST surface is small and entirely enumerated below: Forms, Form Fields, Entries (read + submit), Entries Count, Form Comments (+ count), Reports, Report Fields, Report Entries (+ count), Report Widgets, Users, Webhooks (add/delete only, no list), and Login. Every GET list/detail resource is now a stream; every dialect-expressible mutation (entry submission, webhook add/delete) is a writes.json action. Excluded endpoints are single-object detail duplicates of an already-covered list stream, non-data count endpoints, the Login call (session-cookie auth, not applicable to this connector's API-key auth model), and the Users list (account-admin data, not sync-relevant business data).",
+  "endpoints": [
+    { "method": "GET", "path": "/forms.json", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/forms/{identifier}.json", "excluded": { "category": "duplicate_of", "reason": "single-form detail; identical record shape to the forms list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/forms/{identifier}/fields.json", "covered_by": { "stream": "form_fields" } },
+    { "method": "GET", "path": "/forms/{identifier}/entries.json", "covered_by": { "stream": "entries" } },
+    { "method": "POST", "path": "/forms/{identifier}/entries.json", "covered_by": { "write": "submit_entry" } },
+    { "method": "GET", "path": "/forms/{identifier}/entries/count.json", "excluded": { "category": "non_data_endpoint", "reason": "single-scalar entry count, not a syncable object list" } },
+    { "method": "GET", "path": "/forms/{identifier}/comments.json", "covered_by": { "stream": "form_comments" } },
+    { "method": "GET", "path": "/forms/{identifier}/comments/count.json", "excluded": { "category": "non_data_endpoint", "reason": "single-scalar comment count, not a syncable object list" } },
+    { "method": "PUT", "path": "/forms/{identifier}/webhooks.json", "covered_by": { "write": "add_webhook" } },
+    { "method": "DELETE", "path": "/forms/{identifier}/webhooks/{webhook_hash}.json", "covered_by": { "write": "delete_webhook" } },
+    { "method": "GET", "path": "/reports.json", "covered_by": { "stream": "reports" } },
+    { "method": "GET", "path": "/reports/{identifier}.json", "excluded": { "category": "duplicate_of", "reason": "single-report detail; identical record shape to the reports list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/reports/{identifier}/fields.json", "covered_by": { "stream": "report_fields" } },
+    { "method": "GET", "path": "/reports/{identifier}/entries.json", "covered_by": { "stream": "report_entries" } },
+    { "method": "GET", "path": "/reports/{identifier}/entries/count.json", "excluded": { "category": "non_data_endpoint", "reason": "single-scalar entry count for a report, not a syncable object list" } },
+    { "method": "GET", "path": "/reports/{identifier}/widgets.json", "covered_by": { "stream": "report_widgets" } },
+    { "method": "GET", "path": "/users.json", "excluded": { "category": "requires_elevated_scope", "reason": "account sub-user administration listing, not business form/entry data; requires account-owner-level API key scope distinct from a per-form key" } },
+    { "method": "POST", "path": "/login", "excluded": { "category": "out_of_scope", "reason": "session-cookie login flow for Wufoo's legacy widget/embed tooling; this connector authenticates every request with HTTP Basic api_key auth and never establishes a session" } }
+  ]
+}

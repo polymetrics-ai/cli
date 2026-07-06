@@ -1,0 +1,22 @@
+{
+  "name": "productive",
+  "display_name": "Productive",
+  "description": "Reads Productive projects, people, companies, and tasks through the Productive JSON:API-style REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://developer.productive.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Productive API read of projects, people, companies, and tasks"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/workflows",
+    "query": {
+      "page": "1",
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "wf_fixture_1",
+          "name": "Fixture Welcome Workflow",
+          "scope_slug": "fixture-team",
+          "inserted_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

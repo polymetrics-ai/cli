@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/shift_feedback",
+    "query": {
+      "limit": "100",
+      "start_date": "2020-01-01T00:00:00Z",
+      "end_date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "location_id": 1001,
+          "department_id": 1001,
+          "role_id": 1001,
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:00:00Z",
+          "shift_id": 1001,
+          "user_id": 1001,
+          "notified": true,
+          "rating": 1001,
+          "comments": "fixture comments",
+          "dismissed": true,
+          "station_name": "fixture station name"
+        }
+      ],
+      "meta": {
+        "cursor": {
+          "next": null
+        }
+      }
+    }
+  }
+}

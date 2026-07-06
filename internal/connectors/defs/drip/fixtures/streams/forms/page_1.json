@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/forms", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "forms": [
+        {
+          "id": "form_fixture_1",
+          "href": "https://api.getdrip.com/v2/synthetic-conformance-value/forms/form_fixture_1",
+          "headline": "Fixture Signup",
+          "description": "Fixture form description",
+          "button_text": "Subscribe",
+          "confirmation_heading": "Thanks!",
+          "confirmation_text": "You are subscribed."
+        }
+      ]
+    }
+  }
+}

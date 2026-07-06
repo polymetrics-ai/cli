@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/configuration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organisation_id": 1775382926361,
+      "organisation_domain": "fixture.example.com",
+      "account_id": 8762573821,
+      "account_domain": "fixture.freshchat.example.com",
+      "app_id": "app_fixture_1",
+      "bundle_id": 991773928113,
+      "bundle_type": "freshchat",
+      "plan_type": "Enterprise Annual Plan",
+      "datacenter": "US"
+    }
+  }
+}

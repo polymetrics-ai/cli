@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_methods",
+  "type": "object",
+  "x-primary-key": ["token"],
+  "required": ["token"],
+  "properties": {
+    "token": { "type": "string" },
+    "customer_id": { "type": ["string", "null"] },
+    "payment_instrument_type": { "type": ["string", "null"] },
+    "default": { "type": ["boolean", "null"] }
+  }
+}

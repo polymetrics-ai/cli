@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "response_details",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "surveyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "surveyName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recievedDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "respondentId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "channel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responseURL": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

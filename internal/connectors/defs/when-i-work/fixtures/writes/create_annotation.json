@@ -1,0 +1,11 @@
+{
+  "record": {
+    "start_date": "2026-01-01T00:00:00Z",
+    "end_date": "2026-01-01T23:59:59Z",
+    "title": "Fixture Annotation"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/annotations"
+  }
+}

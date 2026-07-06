@@ -1,0 +1,21 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture add generic notice",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/generic-notices",
+    "body": {
+      "name": "Fixture add generic notice",
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_generic_notice_fixture_response"
+    }
+  }
+}

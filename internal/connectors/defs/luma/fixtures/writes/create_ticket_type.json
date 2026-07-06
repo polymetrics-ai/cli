@@ -1,0 +1,16 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "name": "Fixture Name",
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/ticket-types/create",
+    "body": {
+      "event_id": "fixture_event_id",
+      "name": "Fixture Name",
+      "type": "fixture_type"
+    }
+  }
+}

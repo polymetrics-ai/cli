@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "emails",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "send_count": { "type": ["string", "null"] },
+    "send_now": { "type": ["boolean", "null"] },
+    "unique_views": { "type": ["number", "null"] },
+    "percent_views": { "type": ["number", "null"] },
+    "unique_responses": { "type": ["number", "null"] },
+    "percent_responses": { "type": ["number", "null"] },
+    "preview_url": { "type": ["string", "null"] },
+    "preview_thumb": { "type": ["string", "null"] }
+  }
+}

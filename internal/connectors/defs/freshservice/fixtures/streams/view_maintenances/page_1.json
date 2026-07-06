@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/status/pages/synthetic-conformance-value/maintenances",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "maintenances": [
+        {
+          "id": "view_maintenances",
+          "name": "Fixture view_maintenances",
+          "subject": "Fixture view_maintenances",
+          "description": "Fixture view_maintenances record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

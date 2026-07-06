@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/service" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "svc_fixture_1" },
+      { "id": "svc_fixture_2" }
+    ]
+  }
+}

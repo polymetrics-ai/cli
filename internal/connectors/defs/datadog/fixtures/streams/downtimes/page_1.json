@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/downtime" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "scope": "*",
+        "message": "fixture downtime 1",
+        "monitor_id": 100,
+        "active": true,
+        "disabled": false,
+        "start": 1767225600,
+        "end": 1767229200
+      },
+      {
+        "id": 2,
+        "scope": "env:prod",
+        "message": "fixture downtime 2",
+        "monitor_id": 200,
+        "active": false,
+        "disabled": true,
+        "start": 1767312000,
+        "end": 1767315600
+      }
+    ]
+  }
+}

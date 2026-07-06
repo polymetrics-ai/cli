@@ -1,0 +1,270 @@
+{
+  "actions": [
+    {
+      "name": "create_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new contact list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["name"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing list; the id used by campaigns/API integrations to reference it is unchanged"
+    },
+    {
+      "name": "delete_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a list and all of its contacts/tags/custom fields"
+    },
+    {
+      "name": "create_list_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.list_id }}/contacts",
+      "path_fields": ["list_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "email_address"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "fields": { "type": "object" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "adds a new contact to a list, immediately eligible to receive future campaigns targeting it (unless status is PENDING on a double opt-in list)"
+    },
+    {
+      "name": "update_list_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.list_id }}/contacts/{{ record.member_id }}",
+      "path_fields": ["list_id", "member_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "member_id"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "member_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "fields": { "type": "object" },
+          "tags": { "type": "object" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing contact's email/fields/tags/status; a status change to UNSUBSCRIBED or SUBSCRIBED changes future campaign eligibility for this recipient"
+    },
+    {
+      "name": "delete_list_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.list_id }}/contacts/{{ record.member_id }}",
+      "path_fields": ["list_id", "member_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "member_id"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "member_id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a contact from a list and its subscription/consent history"
+    },
+    {
+      "name": "create_list_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.list_id }}/tags",
+      "path_fields": ["list_id"],
+      "body_type": "json",
+      "body_fields": ["tag"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "tag"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "creates a new tag on a list, up to that list's tag-count limit; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_list_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.list_id }}/tags/{{ record.tag }}",
+      "path_fields": ["list_id", "tag"],
+      "body_type": "json",
+      "body_fields": ["new_tag"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "tag", "new_tag"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "tag": { "type": "string" },
+          "new_tag": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing tag on a list; any external automation/segment referencing the old tag name stops matching contacts by that name"
+    },
+    {
+      "name": "delete_list_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.list_id }}/tags/{{ record.tag }}",
+      "path_fields": ["list_id", "tag"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "tag"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a tag from a list and from every contact currently carrying it"
+    },
+    {
+      "name": "create_list_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lists/{{ record.list_id }}/fields",
+      "path_fields": ["list_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "label", "tag", "type"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "label": { "type": "string" },
+          "tag": { "type": "string" },
+          "type": { "type": "string" },
+          "fallback": { "type": "string" }
+        }
+      },
+      "risk": "creates a new custom field on a list; the field's type (NUMBER/TEXT/DATE) cannot be changed after creation"
+    },
+    {
+      "name": "update_list_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lists/{{ record.list_id }}/fields/{{ record.tag }}",
+      "path_fields": ["list_id", "tag"],
+      "body_type": "json",
+      "body_fields": ["label", "new_tag", "fallback"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "tag", "label", "new_tag"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "tag": { "type": "string" },
+          "label": { "type": "string" },
+          "new_tag": { "type": "string" },
+          "fallback": { "type": "string" }
+        }
+      },
+      "risk": "renames a custom field's label/tag or changes its fallback default; any email template referencing the old field tag stops resolving a value"
+    },
+    {
+      "name": "delete_list_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lists/{{ record.list_id }}/fields/{{ record.tag }}",
+      "path_fields": ["list_id", "tag"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["list_id", "tag"],
+        "properties": {
+          "list_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a custom field and its stored values from every contact on the list"
+    },
+    {
+      "name": "start_automation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/automations/{{ record.automation_id }}/queue",
+      "path_fields": ["automation_id"],
+      "body_type": "json",
+      "body_fields": ["list_member_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["automation_id", "list_member_id"],
+        "properties": {
+          "automation_id": { "type": "string" },
+          "list_member_id": { "type": "string" }
+        }
+      },
+      "risk": "enrolls a contact into a live automation sequence, triggering its configured emails/delays; the automation must already have the 'Started via API' trigger enabled in the EmailOctopus dashboard"
+    }
+  ]
+}

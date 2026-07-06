@@ -1,0 +1,23 @@
+{
+  "name": "linkedin-pages",
+  "display_name": "LinkedIn Pages",
+  "description": "Reads LinkedIn organization (company page) profile, follower statistics, share statistics, and total follower count through the LinkedIn Community Management REST API.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external LinkedIn Community Management API read of company page profile and lifetime statistics",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

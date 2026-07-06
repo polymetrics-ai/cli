@@ -1,0 +1,24 @@
+{
+  "record": {
+    "sight_id": "sight_id_fixture",
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sights/sight_id_fixture",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

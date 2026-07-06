@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/webhooks/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "webhook_fixture_1",
+          "url": "https://example.com/hooks/zapsign",
+          "type": "doc_signed",
+          "enabled": true
+        }
+      ]
+    }
+  }
+}

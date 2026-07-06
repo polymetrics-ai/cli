@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "packingstations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idpacking_station": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "printer_packinglists": { "type": ["object", "null"] },
+    "printer_shipping_labels": { "type": ["object", "null"] },
+    "printer_shipping_documents": { "type": ["object", "null"] },
+    "printer_product_labels": { "type": ["object", "null"] }
+  }
+}

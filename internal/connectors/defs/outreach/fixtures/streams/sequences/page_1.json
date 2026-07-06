@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sequences",
+    "query": { "page[size]": "100", "filter[updatedAt]": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sequence_fixture_1",
+          "type": "sequence",
+          "attributes": {
+            "email": null,
+            "name": "Fixture Sequence One",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        }
+      ],
+      "links": { "next": "" }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rows",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "href": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "index": { "type": ["integer", "null"] },
+    "browserLink": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] },
+    "values": { "type": ["object", "null"] },
+    "doc_id": { "type": ["string", "null"] },
+    "table_id": { "type": ["string", "null"] }
+  }
+}

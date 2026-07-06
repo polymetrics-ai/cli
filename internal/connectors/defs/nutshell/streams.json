@@ -1,0 +1,818 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page[page]",
+      "size_param": "page[limit]",
+      "start_page": 0,
+      "page_size": 500
+    },
+    "check": {
+      "method": "GET",
+      "path": "/users",
+      "query": {
+        "page[limit]": "1",
+        "page[page]": "0"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "nutshell username/password is missing or invalid; re-run pm credentials add nutshell"
+      },
+      {
+        "status": 403,
+        "hint": "nutshell account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "nutshell rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": {
+        "path": "accounts"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": {
+        "path": "contacts"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "leads",
+      "path": "/leads",
+      "records": {
+        "path": "leads"
+      },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "records": {
+        "path": "activities"
+      },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "users"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "account",
+      "path": "/accounts/{{ config.account_id }}",
+      "records": {
+        "path": "accounts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account_custom_fields",
+      "path": "/accounts/{{ config.account_id }}/customfields",
+      "records": {
+        "path": "customFields"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_custom_fields.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account_custom_field_attributes",
+      "path": "/accounts/customfields/attributes",
+      "records": {
+        "path": "customFields"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_custom_field_attributes.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account_list_items",
+      "path": "/accounts/list",
+      "records": {
+        "path": "listItems"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_list_items.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account_list_fields",
+      "path": "/accounts/list/fields",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_list_fields.json"
+    },
+    {
+      "name": "account_types",
+      "path": "/accounttypes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_types.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "activity",
+      "path": "/activities/{{ config.activity_id }}",
+      "records": {
+        "path": "activities"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/activity.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "activity_types",
+      "path": "/activitytypes",
+      "records": {
+        "path": "activityTypes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/activity_types.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "audiences",
+      "path": "/audiences",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/audiences.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "competitor_maps",
+      "path": "/competitormaps",
+      "records": {
+        "path": "competitorMaps"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/competitor_maps.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "competitor_map",
+      "path": "/competitormaps/{{ config.competitor_map_id }}",
+      "records": {
+        "path": "competitorMaps"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/competitor_map.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "competitors",
+      "path": "/competitors",
+      "records": {
+        "path": "competitors"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/competitors.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "competitor",
+      "path": "/competitors/{{ config.competitor_id }}",
+      "records": {
+        "path": "competitors"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/competitor.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "contacts"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact_custom_fields",
+      "path": "/contacts/{{ config.contact_id }}/customfields",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_custom_fields.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact_custom_field_attributes",
+      "path": "/contacts/customfields/attributes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_custom_field_attributes.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact_list_items",
+      "path": "/contacts/list",
+      "records": {
+        "path": "listItems"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_list_items.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "contact_list_fields",
+      "path": "/contacts/list/fields",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_list_fields.json"
+    },
+    {
+      "name": "editions",
+      "path": "/editions",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/editions.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "edition",
+      "path": "/editions/{{ config.edition_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/edition.json"
+    },
+    {
+      "name": "email",
+      "path": "/emails/{{ config.email_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "events"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "deleted_events",
+      "path": "/events/deleted",
+      "records": {
+        "path": "events"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deleted_events.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "saved_filters",
+      "path": "/filters",
+      "records": {
+        "path": "filters"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/saved_filters.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "forms",
+      "path": "/forms",
+      "records": {
+        "path": "wfForms"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/forms.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "form_field",
+      "path": "/forms/{{ config.form_field_id }}",
+      "records": {
+        "path": "wfFields"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/form_field.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "form",
+      "path": "/forms/{{ config.form_id }}",
+      "records": {
+        "path": "wfForms"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/form.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "industries",
+      "path": "/industries",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/industries.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "industry",
+      "path": "/industries/{{ config.industry_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/industry.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": {
+        "path": "invoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "invoice",
+      "path": "/invoices/{{ config.invoice_id }}",
+      "records": {
+        "path": "invoices"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/invoice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead",
+      "path": "/leads/{{ config.lead_id }}",
+      "records": {
+        "path": "leads"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_custom_fields",
+      "path": "/leads/{{ config.lead_id }}/customfields",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_custom_fields.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_installments",
+      "path": "/leads/{{ config.lead_id }}/installments",
+      "records": {
+        "path": "installments"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_installments.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_stages",
+      "path": "/leads/{{ config.lead_id }}/stages",
+      "records": {
+        "path": "stages"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_stages.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_custom_field_attributes",
+      "path": "/leads/customfields/attributes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_custom_field_attributes.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_list_items",
+      "path": "/leads/list",
+      "records": {
+        "path": "listItems"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_list_items.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_list_fields",
+      "path": "/leads/list/fields",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_list_fields.json"
+    },
+    {
+      "name": "lead_reports",
+      "path": "/leads/report",
+      "records": {
+        "path": "reports"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_reports.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "markets",
+      "path": "/markets",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/markets.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "market",
+      "path": "/markets/{{ config.market_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/market.json"
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "records": {
+        "path": "notes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "note",
+      "path": "/notes/{{ config.note_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/note.json"
+    },
+    {
+      "name": "lead_outcomes",
+      "path": "/outcomes",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_outcomes.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "lead_outcome",
+      "path": "/outcomes/{{ config.outcome_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lead_outcome.json"
+    },
+    {
+      "name": "product_categories",
+      "path": "/productcategories",
+      "records": {
+        "path": "productCategories"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product_categories.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_category",
+      "path": "/productcategories/{{ config.product_category_id }}",
+      "records": {
+        "path": "productCategories"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product_category.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_maps",
+      "path": "/productmaps",
+      "records": {
+        "path": "productMaps"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product_maps.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_map",
+      "path": "/productmaps/{{ config.product_map_id }}",
+      "records": {
+        "path": "productMaps"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product_map.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": {
+        "path": "products"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/products.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product",
+      "path": "/products/{{ config.product_id }}",
+      "records": {
+        "path": "products"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/product.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "quotes",
+      "path": "/quotes",
+      "records": {
+        "path": "quotes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/quotes.json"
+    },
+    {
+      "name": "quote",
+      "path": "/quotes/{{ config.quote_id }}",
+      "records": {
+        "path": "quotes"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/quote.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "records": {
+        "path": "sources"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/stages.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "pipelines",
+      "path": "/stagesets",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pipelines.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": {
+        "path": "tags"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tags.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": {
+        "path": "tasks"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "task",
+      "path": "/tasks/{{ config.task_id }}",
+      "pagination": {
+        "type": "none"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/task.json"
+    },
+    {
+      "name": "territories",
+      "path": "/territories",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/territories.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "users"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

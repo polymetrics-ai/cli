@@ -1,0 +1,47 @@
+{
+  "record": {
+    "projectId": "fixture_project_id_1",
+    "name": "Fixture name",
+    "description": "fixture_description_1",
+    "assignedTo": [
+      "fixture_assigned_to_1",
+      "fixture_assigned_to_2"
+    ],
+    "taskBillingType": 1,
+    "startDate": "2026-01-01T00:00:00Z",
+    "endDate": "2026-01-01T00:00:00Z",
+    "estimatedHours": 139.5,
+    "phaseId": null,
+    "project_id": "fixture_project_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/psa/projects/fixture_project_id/tasks",
+    "body": {
+      "projectId": "fixture_project_id_1",
+      "name": "Fixture name",
+      "description": "fixture_description_1",
+      "assignedTo": [
+        "fixture_assigned_to_1",
+        "fixture_assigned_to_2"
+      ],
+      "taskBillingType": 1,
+      "startDate": "2026-01-01T00:00:00Z",
+      "endDate": "2026-01-01T00:00:00Z",
+      "estimatedHours": 139.5,
+      "phaseId": null
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "create_project_task_fixture_1",
+        "name": "Fixture create project task"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

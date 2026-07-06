@@ -1,0 +1,8 @@
+{
+  "record": { "id": "lp_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/launchpads/lp_fixture_1/unpublish"
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "external_id": "external_case_write_fixture_2",
+    "case_type": "patient",
+    "case_name": "Fixture Body Upsert Patient",
+    "owner_id": "mobile_worker_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/case/v2/",
+    "body": {
+      "external_id": "external_case_write_fixture_2",
+      "case_name": "Fixture Body Upsert Patient"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "xform_id": "xform_fixture_4", "case": { "case_id": "case_upsert_write_fixture_1" } }
+  }
+}

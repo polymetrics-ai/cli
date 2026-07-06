@@ -1,0 +1,9 @@
+{
+  "record": { "id": "1", "project": { "name": "Fixture Project Renamed" } },
+  "expect": {
+    "method": "PUT",
+    "path": "/projects/1.json",
+    "body": { "project": { "name": "Fixture Project Renamed" } }
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "title": "Fixture task",
+    "description": "Fixture task description",
+    "dueTime": "2026-01-02"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks",
+    "body": {
+      "title": "Fixture task",
+      "description": "Fixture task description",
+      "dueTime": "2026-01-02"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

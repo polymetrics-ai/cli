@@ -1,0 +1,17 @@
+{
+  "record": {
+    "change_id": 123,
+    "status_page_id": 123,
+    "maintenance_id": 123,
+    "name": "Fixture create_maintenance_update_from_change",
+    "description": "Fixture create_maintenance_update_from_change record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes/123/status/pages/123/maintenances/123/updates",
+    "body": {
+      "name": "Fixture create_maintenance_update_from_change",
+      "description": "Fixture create_maintenance_update_from_change record"
+    }
+  }
+}

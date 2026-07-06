@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vat-zones",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "vatZoneNumber": 1,
+          "name": "Domestic",
+          "enabledForCustomer": true,
+          "enabledForSupplier": true
+        },
+        {
+          "vatZoneNumber": 2,
+          "name": "EU",
+          "enabledForCustomer": true,
+          "enabledForSupplier": true
+        }
+      ]
+    }
+  }
+}

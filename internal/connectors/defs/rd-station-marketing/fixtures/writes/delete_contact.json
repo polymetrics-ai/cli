@@ -1,0 +1,11 @@
+{
+  "record": {
+    "identifier": "uuid",
+    "value": "contact_delete_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/uuid:contact_delete_fixture_1"
+  },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sp/adGroups",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "adGroupId": 990011001,
+        "name": "Fixture ad group 1",
+        "campaignId": 445566001,
+        "defaultBid": 1.0,
+        "state": "enabled"
+      },
+      {
+        "adGroupId": 990011002,
+        "name": "Fixture ad group 2",
+        "campaignId": 445566002,
+        "defaultBid": 1.5,
+        "state": "enabled"
+      }
+    ]
+  }
+}

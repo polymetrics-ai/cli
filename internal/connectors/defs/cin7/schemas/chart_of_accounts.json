@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "chart_of_accounts",
+  "type": "object",
+  "x-primary-key": ["Code"],
+  "required": ["Code"],
+  "properties": {
+    "Code": { "type": "string" },
+    "Status": { "type": ["string", "null"] },
+    "Name": { "type": ["string", "null"] },
+    "Type": { "type": ["string", "null"] },
+    "Description": { "type": ["string", "null"] },
+    "Class": { "type": ["string", "null"] },
+    "SystemAccount": { "type": ["string", "null"] },
+    "SystemAccountCode": { "type": ["string", "null"] },
+    "BankAccountNumber": { "type": ["string", "null"] },
+    "BankAccountId": { "type": ["string", "null"] },
+    "ForPayments": { "type": ["boolean", "null"] },
+    "DisplayName": { "type": ["string", "null"] },
+    "OldCode": { "type": ["string", "null"] }
+  }
+}

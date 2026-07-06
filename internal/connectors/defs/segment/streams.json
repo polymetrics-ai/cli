@@ -1,0 +1,44 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/workspaces" },
+    "error_map": [
+      { "status": 401, "hint": "segment API token is missing or invalid; re-run pm credentials add segment" },
+      { "status": 429, "class": "rate_limited", "hint": "segment rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "records": { "path": "workspaces" },
+      "schema": "schemas/workspaces.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "records": { "path": "sources" },
+      "schema": "schemas/sources.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "destinations",
+      "path": "/destinations",
+      "records": { "path": "destinations" },
+      "schema": "schemas/destinations.json",
+      "projection": "passthrough"
+    }
+  ]
+}

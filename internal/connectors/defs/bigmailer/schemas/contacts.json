@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "brand_id": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "unsubscribe_all": { "type": ["boolean", "null"] },
+    "num_soft_bounces": { "type": ["integer", "null"] },
+    "num_hard_bounces": { "type": ["integer", "null"] },
+    "num_complaints": { "type": ["integer", "null"] },
+    "created": { "type": ["integer", "null"] }
+  }
+}

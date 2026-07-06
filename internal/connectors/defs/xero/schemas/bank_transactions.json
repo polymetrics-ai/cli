@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bank_transactions",
+  "type": "object",
+  "x-primary-key": ["BankTransactionID"],
+  "x-cursor-field": "UpdatedDateUTC",
+  "required": ["BankTransactionID"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "BankTransactionID": { "type": "string" },
+    "Type": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "IsReconciled": { "type": ["boolean", "null"] },
+    "SubTotal": { "type": ["number", "null"] },
+    "TotalTax": { "type": ["number", "null"] },
+    "Total": { "type": ["number", "null"] },
+    "CurrencyCode": { "type": ["string", "null"] },
+    "Date": { "type": ["string", "null"] },
+    "ContactID": { "type": ["string", "null"] },
+    "UpdatedDateUTC": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/clients/client_fixture_1/templates.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "TemplateID": "template_fixture_1",
+        "Name": "Fixture Template",
+        "PreviewURL": "https://preview.example.com/templates/fixture",
+        "ScreenshotURL": "https://preview.example.com/templates/fixture.jpg"
+      }
+    ]
+  }
+}

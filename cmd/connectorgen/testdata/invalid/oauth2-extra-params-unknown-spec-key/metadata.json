@@ -1,0 +1,15 @@
+{
+  "name": "oauth2-extra-params-unknown-spec-key",
+  "display_name": "OAuth2 Extra Params Bad Connector",
+  "description": "a test connector whose oauth2_client_credentials auth.extra_params references an undeclared spec key",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

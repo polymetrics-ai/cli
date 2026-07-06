@@ -1,0 +1,24 @@
+{
+  "name": "teamtailor",
+  "display_name": "Teamtailor",
+  "description": "Reads Teamtailor jobs, candidates, job applications, departments, locations, roles, stages, teams, users, and regions, and writes approved recruiting mutations (jobs, candidates, job applications, departments, locations, teams, todos, notes) through the Teamtailor JSON:API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.teamtailor.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Teamtailor API read of job, candidate, job-application, and organizational data, including candidate personal data",
+    "write": "external Teamtailor API mutation (create/update jobs, candidates, job applications, departments, locations, teams, todos, notes); candidate/note writes touch personal data about real individuals",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

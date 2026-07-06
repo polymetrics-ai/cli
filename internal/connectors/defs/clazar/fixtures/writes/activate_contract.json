@@ -1,0 +1,7 @@
+{
+  "record": { "id": "contract_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/contracts/contract_fixture_1/activate/"
+  }
+}

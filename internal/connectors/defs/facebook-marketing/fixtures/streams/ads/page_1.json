@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/ads", "query": { "limit": "100", "fields": "id,name,status,effective_status,created_time,updated_time" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ad_fixture_1", "name": "Fixture Ad 1", "status": "ACTIVE", "effective_status": "ACTIVE", "created_time": "2026-01-01T00:00:00+0000", "updated_time": "2026-01-02T00:00:00+0000" },
+        { "id": "ad_fixture_2", "name": "Fixture Ad 2", "status": "PAUSED", "effective_status": "PAUSED", "created_time": "2026-01-01T00:00:00+0000", "updated_time": "2026-01-02T00:00:00+0000" }
+      ],
+      "paging": {}
+    }
+  }
+}

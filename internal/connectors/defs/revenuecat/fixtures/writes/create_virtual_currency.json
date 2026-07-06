@@ -1,0 +1,19 @@
+{
+  "record": {
+    "code": "COIN",
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/virtual_currencies",
+    "body": {
+      "code": "COIN",
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

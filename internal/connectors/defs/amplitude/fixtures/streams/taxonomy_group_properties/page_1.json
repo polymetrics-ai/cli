@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/2/taxonomy/group-property" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "group_type": "fixture_group",
+          "group_property": "grp:Fixture Property",
+          "description": "fixture group property description",
+          "type": "string",
+          "enum_values": null,
+          "regex": null,
+          "is_array_type": false,
+          "is_hidden": false,
+          "classifications": []
+        }
+      ]
+    }
+  }
+}

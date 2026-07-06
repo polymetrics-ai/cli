@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/opportunityStages/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "type": "opportunityStage",
+        "attributes": {
+          "name": "Fixture Opportunity Stage",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "relationships": {
+        },
+        "links": {
+          "self": "https://api.outreach.io/api/v2/opportunityStages/synthetic-conformance-value"
+        }
+      }
+    }
+  }
+}

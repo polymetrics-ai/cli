@@ -1,0 +1,24 @@
+{
+  "name": "service-now",
+  "display_name": "ServiceNow",
+  "description": "Reads and writes ServiceNow incident, user, and group table data through the ServiceNow Table API.",
+  "integration_type": "api",
+  "docs_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ServiceNow API read of incident, user, and group table data",
+    "write": "creates incident/user/group records and updates their fields by sys_id (ServiceNow Table API PATCH, which modifies only submitted fields); creating/deactivating a user account is a higher-scrutiny mutation than incident/group create-update",
+    "approval": "none for incident/group create-update (low-risk ticketing/CRM-style data); review user create/update before enabling in a caller with untrusted input, since it can grant or revoke ServiceNow instance access"
+  }
+}

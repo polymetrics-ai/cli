@@ -1,0 +1,24 @@
+{
+  "name": "coda",
+  "display_name": "Coda",
+  "description": "Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and controls, and writes rows/pages, through the Coda REST API v1.",
+  "integration_type": "api",
+  "docs_url": "https://coda.io/developers/apis/v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Coda API read of docs and doc-scoped tables, rows, columns, pages, formulas, and controls",
+    "write": "external mutation of Coda table rows and doc pages (insert/upsert/update/delete rows, push a row button, create/update/delete a page); push_button and delete actions are approval-gated per writes.json risk text",
+    "approval": "row/page create+update: none; delete_row/delete_rows/delete_page: approval required (irreversible); push_button: approval required (arbitrary doc-defined side effects)"
+  }
+}

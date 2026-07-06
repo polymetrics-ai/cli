@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_order_items",
+  "type": "object",
+  "properties": {
+    "ASIN": {
+      "type": "string"
+    },
+    "SellerSKU": {
+      "type": "string"
+    },
+    "OrderItemId": {
+      "type": "string"
+    },
+    "AssociatedItems": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "Title": {
+      "type": "string"
+    },
+    "QuantityOrdered": {
+      "type": "integer"
+    },
+    "QuantityShipped": {
+      "type": "integer"
+    },
+    "ProductInfo": {
+      "type": "object"
+    },
+    "PointsGranted": {
+      "type": "object"
+    },
+    "ItemPrice": {
+      "type": "object"
+    },
+    "ShippingPrice": {
+      "type": "object"
+    },
+    "ItemTax": {
+      "type": "object"
+    },
+    "ShippingTax": {
+      "type": "object"
+    },
+    "ShippingDiscount": {
+      "type": "object"
+    },
+    "ShippingDiscountTax": {
+      "type": "object"
+    },
+    "PromotionDiscount": {
+      "type": "object"
+    },
+    "PromotionDiscountTax": {
+      "type": "object"
+    },
+    "PromotionIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "CODFee": {
+      "type": "object"
+    },
+    "CODFeeDiscount": {
+      "type": "object"
+    },
+    "IsGift": {
+      "type": "string"
+    },
+    "ConditionNote": {
+      "type": "string"
+    },
+    "ConditionId": {
+      "type": "string"
+    },
+    "ConditionSubtypeId": {
+      "type": "string"
+    },
+    "ScheduledDeliveryStartDate": {
+      "type": "string"
+    },
+    "ScheduledDeliveryEndDate": {
+      "type": "string"
+    },
+    "PriceDesignation": {
+      "type": "string"
+    },
+    "TaxCollection": {
+      "type": "object"
+    },
+    "SerialNumberRequired": {
+      "type": "boolean"
+    },
+    "IsTransparency": {
+      "type": "boolean"
+    },
+    "IossNumber": {
+      "type": "string"
+    },
+    "StoreChainStoreId": {
+      "type": "string"
+    },
+    "DeemedResellerCategory": {
+      "type": "string"
+    },
+    "BuyerInfo": {
+      "type": "object"
+    },
+    "BuyerRequestedCancel": {
+      "type": "object"
+    },
+    "SerialNumbers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "SubstitutionPreferences": {
+      "type": "object"
+    },
+    "Measurement": {
+      "type": "object"
+    },
+    "ShippingConstraints": {
+      "type": "object"
+    },
+    "AmazonPrograms": {
+      "type": "object"
+    },
+    "order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "order_id"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "POST", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "users": {
+          "nodes": [
+            {
+              "id": "user_fixture_1",
+              "name": "Fixture User",
+              "displayName": "fixture1",
+              "email": "fixture1@example.com",
+              "active": true,
+              "admin": false,
+              "createdAt": "2026-01-01T00:00:00.000Z",
+              "updatedAt": "2026-01-02T00:00:00.000Z"
+            }
+          ],
+          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+        }
+      }
+    }
+  }
+}

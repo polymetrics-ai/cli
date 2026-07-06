@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/entries",
+    "query": {
+      "page": "1",
+      "time_since": "synthetic-conformance-value",
+      "time_until": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "paging": { "current_page": 1, "count_pages": 1 },
+      "filter": {},
+      "entries": [
+        {
+          "id": 1,
+          "customers_id": 1,
+          "projects_id": 1,
+          "users_id": 1,
+          "billable": 1,
+          "texts_id": 1,
+          "time_since": "2026-01-01T09:00:00Z",
+          "time_until": "2026-01-01T10:00:00Z",
+          "time_insert": "2026-01-01T10:00:01Z",
+          "time_last_change": "2026-01-01T10:00:01Z",
+          "type": 1,
+          "services_id": 1,
+          "duration": 3600,
+          "offset": 0,
+          "clocked": false,
+          "clocked_offline": false,
+          "time_clocked_since": null,
+          "time_last_change_worktime": null,
+          "hourly_rate": 50.0,
+          "lumpsum": null,
+          "lumpsum_services_id": null,
+          "lumpsum_services_amount": null,
+          "lumpsum_services_price": null
+        }
+      ]
+    }
+  }
+}

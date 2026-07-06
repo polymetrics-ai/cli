@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "supplier_groups",
+  "type": "object",
+  "x-primary-key": ["supplier_group_number"],
+  "required": ["supplier_group_number"],
+  "properties": {
+    "supplier_group_number": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

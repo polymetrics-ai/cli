@@ -1,0 +1,8 @@
+{
+  "record": { "id": "group_fixture_1", "name": "Renamed Group" },
+  "expect": {
+    "method": "PUT",
+    "path": "/groups/group_fixture_1",
+    "body": { "name": "Renamed Group" }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apiKey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/v1/articles/all", "query": { "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "perigon api_key is missing or invalid; re-run pm credentials add perigon" },
+      { "status": 429, "class": "rate_limited", "hint": "perigon rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "articles",
+      "path": "/v1/articles/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true },
+        "from": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "articles" },
+      "incremental": {
+        "cursor_field": "pub_date",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "article_id": "{{ coalesce record.articleId record.id }}",
+        "pub_date": "{{ coalesce record.pubDate record.publishedAt }}"
+      },
+      "schema": "schemas/articles.json"
+    },
+    {
+      "name": "stories",
+      "path": "/v1/stories/all",
+      "records": { "path": "stories" },
+      "projection": "passthrough",
+      "schema": "schemas/stories.json"
+    },
+    {
+      "name": "journalists",
+      "path": "/v1/journalists/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/journalists.json"
+    },
+    {
+      "name": "sources",
+      "path": "/v1/sources/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "companies",
+      "path": "/v1/companies/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "people",
+      "path": "/v1/people/all",
+      "query": {
+        "q": { "template": "{{ config.query }}", "omit_when_absent": true }
+      },
+      "records": { "path": "results" },
+      "projection": "passthrough",
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "topics",
+      "path": "/v1/topics/all",
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/topics.json"
+    }
+  ]
+}

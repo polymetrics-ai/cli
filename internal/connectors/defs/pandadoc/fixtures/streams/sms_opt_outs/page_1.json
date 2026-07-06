@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/sms-opt-outs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "sms_opt_outs_fixture_1",
+          "name": "Fixture sms_opt_outs",
+          "status": "fixture",
+          "date_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

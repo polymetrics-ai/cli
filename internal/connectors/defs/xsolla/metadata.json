@@ -1,0 +1,24 @@
+{
+  "name": "xsolla",
+  "display_name": "Xsolla",
+  "description": "Reads Xsolla merchant transaction search/registry, payouts, payout currency breakdown, and financial report data, and writes full/partial transaction refunds through the Xsolla Pay Station API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.xsolla.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Xsolla merchant API read of transaction, payout, and financial report data",
+    "write": "external mutation: issues full or partial refunds to end users for completed transactions",
+    "approval": "required for all write actions (request_refund, request_partial_refund); reads require none"
+  }
+}

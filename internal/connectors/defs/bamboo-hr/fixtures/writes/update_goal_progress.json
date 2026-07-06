@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "goal_id": "fixture_id",
+    "percentComplete": 1001,
+    "completionDate": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/performance/employees/fixture_id/goals/fixture_id/progress",
+    "body": {
+      "percentComplete": 1001,
+      "completionDate": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

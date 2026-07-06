@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/Workspaces/synthetic-conformance-value/Workers", "query": { "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "workers": [
+        { "sid": "WK_fixture_1", "friendly_name": "Fixture Worker 1", "activity_name": "Available", "available": true },
+        { "sid": "WK_fixture_2", "friendly_name": "Fixture Worker 2", "activity_name": "Offline", "available": false }
+      ]
+    }
+  }
+}

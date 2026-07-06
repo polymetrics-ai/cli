@@ -9,6 +9,13 @@ description: Freshdesk connector knowledge and safe action guide.
 
 Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
 
+## Icon
+
+- asset: icons/freshdesk.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.freshdesk.com/api/#change_log
+
 ## Capabilities
 
 - check=true catalog=true read=true write=false query=false
@@ -16,56 +23,43 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 
 ## Authentication
 
-- fixture: Fixture-backed conformance mode; no credentials required.
-  - supports: read=true write=false
-- api_key: Live Freshdesk API key via HTTP Basic auth (api_key:X).
-  - secrets: api_key
-  - supports: read=true write=false
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- domain (required): Freshdesk domain, e.g. acme.freshdesk.com. Used to build the https://<domain>/api/v2 base URL.
-- base_url: Freshdesk base URL override for tests or proxies; /api/v2 is appended automatically.
-- start_date: RFC3339 lower bound; for tickets, only objects updated at or after this time are read (updated_since).
-- page_size default=100: Records per page (1-100).
-- max_pages default=0: Maximum pages; use 0, all, or unlimited to exhaust the stream.
-- mode: Runtime mode: live (default) or fixture for credential-free conformance.
-- api_key (secret) (required): Freshdesk API key. Sent as the HTTP Basic username (password is the literal X); never logged.
+- base_url
+- max_pages
+- mode
+- page_size
+- start_date
+- api_key (secret)
 
 ## ETL Streams
 
-- tickets: Freshdesk support tickets.
+- tickets:
   - primary key: id
   - cursor: updated_at
-  - fields: id(integer), subject(string), type(string), status(integer), priority(integer), source(integer), requester_id(integer), responder_id(integer), group_id(integer), company_id(integer), spam(boolean), due_by(timestamp), created_at(timestamp), updated_at(timestamp)
-- contacts: Freshdesk contacts (requesters).
+  - fields: company_id(), created_at(), due_by(), group_id(), id(), priority(), requester_id(), responder_id(), source(), spam(), status(), subject(), type(), updated_at()
+- contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: id(integer), name(string), email(string), phone(string), mobile(string), company_id(integer), active(boolean), created_at(timestamp), updated_at(timestamp)
-- companies: Freshdesk companies.
+  - fields: active(), company_id(), created_at(), email(), id(), mobile(), name(), phone(), updated_at()
+- companies:
   - primary key: id
   - cursor: updated_at
-  - fields: id(integer), name(string), description(string), note(string), created_at(timestamp), updated_at(timestamp)
-- agents: Freshdesk agents.
+  - fields: created_at(), description(), id(), name(), note(), updated_at()
+- agents:
   - primary key: id
   - cursor: updated_at
-  - fields: id(integer), available(boolean), occasional(boolean), ticket_scope(integer), created_at(timestamp), updated_at(timestamp)
-- groups: Freshdesk agent groups.
+  - fields: available(), created_at(), id(), occasional(), ticket_scope(), updated_at()
+- groups:
   - primary key: id
   - cursor: updated_at
-  - fields: id(integer), name(string), description(string), created_at(timestamp), updated_at(timestamp)
+  - fields: created_at(), description(), id(), name(), updated_at()
 
 ## Sync Modes
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
-- Source modes: full_refresh, incremental
-
-## Pagination
-
-- type: link_header
-- page size field: page_size
-- page limit field: max_pages
-- default limit: 0
 
 ## Security
 
@@ -91,4 +85,3 @@ pm connectors inspect freshdesk --json
 - Run pm connectors inspect freshdesk before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

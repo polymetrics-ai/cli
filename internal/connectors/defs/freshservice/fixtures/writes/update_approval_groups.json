@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "approval_group_id": 123,
+    "name": "Fixture update_approval_groups",
+    "description": "Fixture update_approval_groups record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/approval-groups/123",
+    "body": {
+      "name": "Fixture update_approval_groups",
+      "description": "Fixture update_approval_groups record"
+    }
+  }
+}

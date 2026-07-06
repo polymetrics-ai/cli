@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "snippet",
+      "attributes": {
+        "name": "Fixture Update Snippet"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/snippets/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "snippet",
+        "attributes": {
+          "name": "Fixture Update Snippet"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

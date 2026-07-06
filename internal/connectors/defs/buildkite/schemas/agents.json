@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agents",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "graphql_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "connection_state": { "type": ["string", "null"] },
+    "hostname": { "type": ["string", "null"] },
+    "ip_address": { "type": ["string", "null"] },
+    "user_agent": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "priority": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "last_job_finished_at": { "type": ["string", "null"] }
+  }
+}

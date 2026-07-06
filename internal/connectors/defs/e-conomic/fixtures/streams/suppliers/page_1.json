@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/suppliers", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "supplierNumber": 1,
+          "name": "Fixture Supplier 1",
+          "currency": "DKK",
+          "email": "supplier1@example.com",
+          "city": "Copenhagen",
+          "zip": "1000",
+          "country": "Denmark",
+          "address": "1 Supplier Street",
+          "barred": false,
+          "supplierGroup": { "supplierGroupNumber": 1 },
+          "vatZone": { "vatZoneNumber": 1 },
+          "self": "https://restapi.e-conomic.com/suppliers/1"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 1 }
+    }
+  }
+}

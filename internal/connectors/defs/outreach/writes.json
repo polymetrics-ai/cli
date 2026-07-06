@@ -1,0 +1,4009 @@
+{
+  "actions": [
+    {
+      "name": "create_account_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accountNotes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create account note; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_account_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accountNotes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update account note; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_account_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accountNotes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete account note in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create account; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update account; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete account in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_account_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountAddTags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; add account tags; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "add_account_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsAddAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; add account assignments; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "assign_account_owner",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsAssignOwner",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; assign account owner; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "bulk_modify_accounts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsBulkModify",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; bulk modify accounts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "destroy_all_accounts",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/batches/actions/accountsDestroyAll",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "destructive external mutation; destroy all accounts in Outreach; approval required",
+      "body_type": "json",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_all_account_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsRemoveAllAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "destructive external mutation; remove all account assignments in Outreach; approval required",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_account_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsRemoveAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; remove account assignments; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "remove_account_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/accountsRemoveTags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; remove account tags; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "bulk_delete_custom_objects",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/batches/actions/customObjectBulkDelete?actionParams[objectName]={{ record.objectName }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "objectName": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "objectName",
+          "data"
+        ]
+      },
+      "risk": "destructive external mutation; bulk delete custom objects in Outreach; approval required",
+      "path_fields": [
+        "objectName"
+      ],
+      "body_type": "json",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "bulk_modify_custom_objects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/customObjectBulkModify?actionParams[objectName]={{ record.objectName }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "objectName": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "objectName",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; bulk modify custom objects; approval required",
+      "path_fields": [
+        "objectName"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_prospect_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAddAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; add prospect assignments; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "add_prospect_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAddTags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; add prospect tags; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "add_prospects_to_sequence",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAddToSequence",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; add prospects to sequence; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "assign_prospect_account",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAssignAccount",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; assign prospect account; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "assign_prospect_opportunity",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAssignOpportunity",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; assign prospect opportunity; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "assign_prospect_owner",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsAssignOwner",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; assign prospect owner; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "bulk_modify_prospects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsBulkModify",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; bulk modify prospects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "destroy_all_prospects",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/batches/actions/prospectsDestroyAll",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "destructive external mutation; destroy all prospects in Outreach; approval required",
+      "body_type": "json",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "finish_all_prospects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsFinishAll",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; finish all prospects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "pause_all_prospects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsPauseAll",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; pause all prospects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "remove_all_prospect_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsRemoveAllAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "destructive external mutation; remove all prospect assignments in Outreach; approval required",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_prospect_assignments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsRemoveAssignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; remove prospect assignments; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "remove_prospect_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/actions/prospectsRemoveTags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; remove prospect tags; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "cancel_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/actions/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; cancel batch; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "confirm_batch",
+      "kind": "update",
+      "method": "POST",
+      "path": "/batches/{{ record.id }}/actions/confirm",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; confirm batch; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_call_disposition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/callDispositions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create call disposition; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_call_disposition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/callDispositions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update call disposition; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_call_disposition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/callDispositions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete call disposition in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_call_purpose",
+      "kind": "create",
+      "method": "POST",
+      "path": "/callPurposes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create call purpose; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_call_purpose",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/callPurposes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update call purpose; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_call_purpose",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/callPurposes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete call purpose in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create call; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_call",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calls/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete call in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_compliance_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/complianceRequests",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create compliance request; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_content_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contentCategories",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create content category; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_content_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contentCategories/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update content category; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_content_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contentCategories/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete content category in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_content_category_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contentCategoryMemberships",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create content category membership; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_content_category_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contentCategoryMemberships/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete content category membership in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_content_category_ownership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contentCategoryOwnerships",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create content category ownership; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_content_category_ownership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contentCategoryOwnerships/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete content category ownership in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_custom_duty",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customDuties",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create custom duty; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_email_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/emailAddresses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create email address; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_email_address",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/emailAddresses/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update email address; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_email_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/emailAddresses/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete email address in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_favorite",
+      "kind": "create",
+      "method": "POST",
+      "path": "/favorites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create favorite; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_favorite",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/favorites/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete favorite in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "import_accounts",
+      "kind": "update",
+      "method": "POST",
+      "path": "/imports/actions/accountsImport",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; import accounts; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "bulk_upsert_imports",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/imports/actions/bulkUpsert",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; bulk upsert imports; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "bulk_upsert_custom_objects",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/imports/actions/customObjectBulkUpsert",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; bulk upsert custom objects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "generate_import_upload_link",
+      "kind": "update",
+      "method": "POST",
+      "path": "/imports/actions/generateUploadLink",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+        }
+      },
+      "risk": "external Outreach mutation; generate import upload link; approval required",
+      "body_type": "none"
+    },
+    {
+      "name": "import_prospects",
+      "kind": "update",
+      "method": "POST",
+      "path": "/imports/actions/prospectsImport",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; import prospects; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "validate_import_upload",
+      "kind": "update",
+      "method": "POST",
+      "path": "/imports/actions/validateUpload?actionParams[hash]={{ record.hash }}&actionParams[storageKey]={{ record.storageKey }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "storageKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "hash",
+          "storageKey"
+        ]
+      },
+      "risk": "external Outreach mutation; validate import upload; approval required",
+      "path_fields": [
+        "hash",
+        "storageKey"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_kaia_voice_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/kaiaVoiceImports",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create kaia voice import; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_mailbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mailboxes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create mailbox; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_mailbox",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/mailboxes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update mailbox; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_mailbox",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/mailboxes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete mailbox in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "link_ews_master_account_mailbox",
+      "kind": "update",
+      "method": "POST",
+      "path": "/mailboxes/{{ record.id }}/actions/linkEwsMasterAccount",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; link ews master account mailbox; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "test_send_mailbox",
+      "kind": "update",
+      "method": "POST",
+      "path": "/mailboxes/{{ record.id }}/actions/testSend",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; test send mailbox; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "test_sync_mailbox",
+      "kind": "update",
+      "method": "POST",
+      "path": "/mailboxes/{{ record.id }}/actions/testSync",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; test sync mailbox; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "unlink_ews_master_account_mailbox",
+      "kind": "update",
+      "method": "POST",
+      "path": "/mailboxes/{{ record.id }}/actions/unlinkEwsMasterAccount",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; unlink ews master account mailbox; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_mailing",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mailings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create mailing; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "create_opportunity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunities",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create opportunity; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_opportunity",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/opportunities/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update opportunity; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_opportunity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunities/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete opportunity in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_opportunity_prospect_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunityProspectRoles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create opportunity prospect role; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_opportunity_prospect_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/opportunityProspectRoles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update opportunity prospect role; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_opportunity_prospect_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunityProspectRoles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete opportunity prospect role in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_opportunity_stage",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunityStages",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create opportunity stage; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_opportunity_stage",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/opportunityStages/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update opportunity stage; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_opportunity_stage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunityStages/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete opportunity stage in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_org_setting",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgSettings/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update org setting; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_persona",
+      "kind": "create",
+      "method": "POST",
+      "path": "/personas",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create persona; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_persona",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/personas/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update persona; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_persona",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/personas/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete persona in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_phone_number",
+      "kind": "create",
+      "method": "POST",
+      "path": "/phoneNumbers",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create phone number; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_phone_number",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/phoneNumbers/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update phone number; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_phone_number",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/phoneNumbers/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete phone number in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create product; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/products/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update product; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete product in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/profiles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create profile; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_profile",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/profiles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update profile; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/profiles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete profile in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_prospect_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/prospectNotes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create prospect note; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_prospect_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/prospectNotes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update prospect note; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_prospect_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/prospectNotes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete prospect note in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_prospect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/prospects",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create prospect; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_prospect",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/prospects/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update prospect; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_prospect",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/prospects/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete prospect in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create purchase; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_purchase",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/purchases/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update purchase; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_purchase",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/purchases/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete purchase in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_recipient",
+      "kind": "create",
+      "method": "POST",
+      "path": "/recipients",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create recipient; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_recipient",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/recipients/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update recipient; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_recipient",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/recipients/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete recipient in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/roles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create role; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/roles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update role; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/roles/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete role in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_ruleset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rulesets",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create ruleset; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_ruleset",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rulesets/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update ruleset; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_ruleset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rulesets/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete ruleset in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sequence_state",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sequenceStates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create sequence state; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_sequence_state",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sequenceStates/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete sequence state in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "finish_sequence_state",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequenceStates/{{ record.id }}/actions/finish",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; finish sequence state; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "pause_sequence_state",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequenceStates/{{ record.id }}/actions/pause",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; pause sequence state; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "resume_sequence_state",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequenceStates/{{ record.id }}/actions/resume",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; resume sequence state; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_sequence_step",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sequenceSteps",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create sequence step; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_sequence_step",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sequenceSteps/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update sequence step; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_sequence_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sequenceTemplates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create sequence template; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_sequence_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sequenceTemplates/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update sequence template; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_sequence_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sequenceTemplates/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete sequence template in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "activate_sequence_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequenceTemplates/{{ record.id }}/actions/activate",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; activate sequence template; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "deactivate_sequence_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequenceTemplates/{{ record.id }}/actions/deactivate",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; deactivate sequence template; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_sequence",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sequences",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create sequence; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_sequence",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sequences/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update sequence; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_sequence",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sequences/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete sequence in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "activate_sequence",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequences/{{ record.id }}/actions/activate",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; activate sequence; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "deactivate_sequence",
+      "kind": "update",
+      "method": "POST",
+      "path": "/sequences/{{ record.id }}/actions/deactivate",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; deactivate sequence; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_snippet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create snippet; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_snippet",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/snippets/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update snippet; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_snippet",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/snippets/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete snippet in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_stage",
+      "kind": "create",
+      "method": "POST",
+      "path": "/stages",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create stage; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_stage",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/stages/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update stage; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_stage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/stages/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete stage in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_task_disposition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/taskDispositions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create task disposition; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_task_disposition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/taskDispositions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update task disposition; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_task_disposition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/taskDispositions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete task disposition in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_task_purpose",
+      "kind": "create",
+      "method": "POST",
+      "path": "/taskPurposes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create task purpose; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_task_purpose",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/taskPurposes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update task purpose; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_task_purpose",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/taskPurposes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete task purpose in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create task; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tasks/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update task; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete task in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "advance_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/advance",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; advance task; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "deliver_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/deliver",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; deliver task; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "log_meet_in_person_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/logMeetInPerson?actionParams[taskDispositionId]={{ record.taskDispositionId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "taskDispositionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "taskDispositionId"
+        ]
+      },
+      "risk": "external Outreach mutation; log meet in person task; approval required",
+      "path_fields": [
+        "id",
+        "taskDispositionId"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "mark_complete_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/markComplete",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; mark complete task; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "reassign_owner_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/reassignOwner?actionParams[ownerId]={{ record.ownerId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId"
+        ]
+      },
+      "risk": "external Outreach mutation; reassign owner task; approval required",
+      "path_fields": [
+        "id",
+        "ownerId"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "reschedule_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/reschedule?actionParams[dueAt]={{ record.dueAt }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dueAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "dueAt"
+        ]
+      },
+      "risk": "external Outreach mutation; reschedule task; approval required",
+      "path_fields": [
+        "id",
+        "dueAt"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "snooze_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/snooze",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "external Outreach mutation; snooze task; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_note_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/updateNote?actionParams[note]={{ record.note }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "note"
+        ]
+      },
+      "risk": "external Outreach mutation; update note task; approval required",
+      "path_fields": [
+        "id",
+        "note"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_opportunity_association_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.id }}/actions/updateOpportunityAssociation?actionParams[opportunityAssociation]={{ record.opportunityAssociation }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "opportunityAssociation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "opportunityAssociation"
+        ]
+      },
+      "risk": "external Outreach mutation; update opportunity association task; approval required",
+      "path_fields": [
+        "id",
+        "opportunityAssociation"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create team; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update team; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete team in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/templates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create template; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/templates/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update template; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/templates/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete template in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create user; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update user; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; create webhook; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; update webhook; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive external mutation; delete webhook in Outreach; approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_custom_object_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customObjects/{{ record.objectName }}",
+      "path_fields": [
+        "objectName"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "objectName": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "objectName",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; creates a record in the configured custom object type; approval required"
+    },
+    {
+      "name": "update_custom_object_record",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customObjects/{{ record.objectName }}/{{ record.id }}",
+      "path_fields": [
+        "objectName",
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "objectName": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "objectName",
+          "id",
+          "data"
+        ]
+      },
+      "risk": "external Outreach mutation; updates a record in the configured custom object type; approval required"
+    },
+    {
+      "name": "delete_custom_object_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customObjects/{{ record.objectName }}/{{ record.id }}",
+      "path_fields": [
+        "objectName",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "objectName": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "objectName",
+          "id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "destructive external mutation; deletes a record from the configured custom object type; approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

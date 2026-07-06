@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Team New"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/teams",
+    "body": {
+      "name": "Fixture Team New"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "team_fixture_new"
+    }
+  }
+}

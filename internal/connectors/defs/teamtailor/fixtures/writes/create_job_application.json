@@ -1,0 +1,25 @@
+{
+  "record": {
+    "data": {
+      "type": "job-applications",
+      "relationships": {
+        "candidate": { "data": { "id": "candidate_fixture_1", "type": "candidates" } },
+        "job": { "data": { "id": "job_fixture_1", "type": "jobs" } }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/job-applications",
+    "body": {
+      "data": {
+        "type": "job-applications",
+        "relationships": {
+          "candidate": { "data": { "id": "candidate_fixture_1", "type": "candidates" } },
+          "job": { "data": { "id": "job_fixture_1", "type": "jobs" } }
+        }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "application_fixture_new", "type": "job-applications" } } }
+}

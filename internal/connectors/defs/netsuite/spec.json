@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NetSuite Connection Specification",
+  "type": "object",
+  "required": ["base_url", "realm", "consumer_key", "consumer_secret", "token_key", "token_secret"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "NetSuite REST Record API base URL, e.g. https://<account-id>.suitetalk.api.netsuite.com/services/rest/record/v1. Required: legacy derives this from realm when unset (lowercased, underscores replaced with hyphens), but the engine's streams.json base URL is a plain {{ config.base_url }} template with no cross-key derivation mechanism (spec-default materialization only fills a literal per-key default, not a function of another config value) -- the same class of gap as nylas's api_server-derived host and sentry/chargebee's hostname/site-derived URLs (docs/migration/conventions.md). Compute the value using legacy's own derivation (https://<realm-with-underscores-as-hyphens-lowercased>.suitetalk.api.netsuite.com/services/rest/record/v1) and set it explicitly; see docs.md Known limits."
+    },
+    "realm": {
+      "type": "string",
+      "description": "NetSuite account id (OAuth 1.0a realm), e.g. 123456 or 123456_SB1. Sent verbatim as the OAuth Authorization header's realm parameter."
+    },
+    "consumer_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NetSuite integration record consumer key (OAuth 1.0a oauth_consumer_key). Never logged."
+    },
+    "consumer_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NetSuite integration record consumer secret. Used only to compute the OAuth 1.0a HMAC-SHA256 request signature; never sent on the wire itself, never logged."
+    },
+    "token_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NetSuite access token (OAuth 1.0a oauth_token). Never logged."
+    },
+    "token_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NetSuite token secret. Used only to compute the OAuth 1.0a HMAC-SHA256 request signature; never sent on the wire itself, never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000, limit query param)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

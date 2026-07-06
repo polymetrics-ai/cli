@@ -1,0 +1,44 @@
+{
+  "record": {
+    "uiSchema": {
+      "buttonLabel": "button_label_fixture",
+      "elements": [
+        {
+          "label": "label_fixture",
+          "options": {
+            "format": "text"
+          },
+          "scope": "scope_fixture",
+          "type": "type_fixture"
+        }
+      ],
+      "label": "label_fixture",
+      "type": "type_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/meta/uischemas",
+    "body": {
+      "uiSchema": {
+        "buttonLabel": "button_label_fixture",
+        "elements": [
+          {
+            "label": "label_fixture",
+            "options": {
+              "format": "text"
+            },
+            "scope": "scope_fixture",
+            "type": "type_fixture"
+          }
+        ],
+        "label": "label_fixture",
+        "type": "type_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

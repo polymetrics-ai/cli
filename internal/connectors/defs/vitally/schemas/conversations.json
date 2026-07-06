@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "external_id": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "traits": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"], "description": "Open/Closed status of the conversation." },
+    "rating": { "type": ["string", "null"], "description": "Satisfied, Unsatisfied, or Neutral." },
+    "source": { "type": ["string", "null"], "description": "Name of the integration the conversation originated in." },
+    "accounts": { "type": ["array", "null"] },
+    "users": { "type": ["array", "null"] },
+    "admins": { "type": ["array", "null"] }
+  }
+}

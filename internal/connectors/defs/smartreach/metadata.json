@@ -1,0 +1,21 @@
+{
+  "name": "smartreach",
+  "display_name": "SmartReach",
+  "description": "Reads SmartReach teams, campaigns, prospects, email settings, do-not-contact records, users, and accounts; creates/updates prospects and accounts, manages campaign membership/status, do-not-contact entries, and task status.",
+  "integration_type": "api",
+  "docs_url": "https://help.smartreach.io/reference/getprospects",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only team/campaign/prospect/email-setting/do-not-contact/user/account data from a connected SmartReach account",
+    "write": "creates/updates prospects and CRM accounts, enrolls/unenrolls prospects in outbound campaigns, starts/stops entire campaigns, changes prospect engagement status, blacklists emails/domains from outreach, and changes sales task status",
+    "approval": "required for all 10 write actions; read is unapproved"
+  }
+}

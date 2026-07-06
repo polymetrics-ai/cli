@@ -1,0 +1,22 @@
+{
+  "name": "sap-fieldglass",
+  "display_name": "SAP Fieldglass",
+  "description": "Reads SAP Fieldglass workers, job postings, and time sheets through the SAP Fieldglass API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://api.sap.com/package/SAPFieldglass/rest",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SAP Fieldglass API read of worker, job posting, and time sheet data"
+  }
+}

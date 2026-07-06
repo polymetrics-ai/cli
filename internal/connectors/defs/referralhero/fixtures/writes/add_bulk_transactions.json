@@ -1,0 +1,40 @@
+{
+  "record": {
+    "uuid": "MFfixture001",
+    "transactions": [
+      {
+        "email": "jane.fixture@example.com",
+        "amount": 150,
+        "product_id": "prod_fixture_1",
+        "transaction_id": "txn_fixture_1",
+        "reward_value": 15
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/MFfixture001/subscribers/add_bulk_transactions",
+    "body": {
+      "transactions": [
+        {
+          "email": "jane.fixture@example.com",
+          "amount": 150,
+          "product_id": "prod_fixture_1",
+          "transaction_id": "txn_fixture_1",
+          "reward_value": 15
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "bulk_transactions_added"
+      },
+      "calls_left": null,
+      "timestamp": 1708352771
+    }
+  }
+}

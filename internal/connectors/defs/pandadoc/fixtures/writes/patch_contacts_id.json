@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "Fixture patch_contacts_id",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v1/contacts/id_fixture",
+    "body": {
+      "name": "Fixture patch_contacts_id",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_contacts_id_response",
+      "status": "ok"
+    }
+  }
+}

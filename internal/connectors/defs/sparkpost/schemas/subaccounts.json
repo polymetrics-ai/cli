@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subaccounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "ip_pool": { "type": ["string", "null"] },
+    "compliance_status": { "type": ["string", "null"] }
+  }
+}

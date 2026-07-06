@@ -1,0 +1,111 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "currency"],
+        "properties": {
+          "name": { "type": "string" },
+          "currency": { "type": "string", "description": "Currency code or Currency-Id, e.g. \"SEK\"." },
+          "accountType": { "type": "string" },
+          "ourReference": { "type": "string" },
+          "yourReference": { "type": "string" },
+          "invoiceEmailAddress": { "type": "string" },
+          "invoiceEmailCcAddresses": { "type": "string" },
+          "defaultPaymentTerm": { "type": "string", "description": "PaymentTerm name or PaymentTerm-Id, e.g. \"NET30\"." },
+          "taxRegistrationNumber": { "type": "string" },
+          "organizationNumber": { "type": "string" }
+        }
+      },
+      "risk": "creates a new billing account in Younium; external mutation, approval required"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/Accounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "accountType": { "type": "string" },
+          "currency": { "type": "string" },
+          "ourReference": { "type": "string" },
+          "yourReference": { "type": "string" },
+          "invoiceEmailAddress": { "type": "string" },
+          "defaultPaymentTerm": { "type": "string" },
+          "taxRegistrationNumber": { "type": "string" },
+          "organizationNumber": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing account's billing/contact/tax metadata; external mutation, approval required"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Subscriptions/cancel/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "cancellationDate", "cancellationMode"],
+        "properties": {
+          "id": { "type": "string" },
+          "cancellationDate": { "type": "string", "format": "date-time" },
+          "cancellationMode": { "type": "string", "description": "Younium CancelOrderMode enum value, e.g. \"EndOfTerm\" or \"Immediate\"." },
+          "endDate": { "type": "string", "format": "date-time" }
+        }
+      },
+      "risk": "irreversibly schedules or immediately cancels an active subscription, ending future billing; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Invoices/{{ record.id }}/post",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "finalizes a draft invoice, making it official/sendable to the customer; external mutation, approval required"
+    },
+    {
+      "name": "cancel_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Invoices/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly cancels a posted invoice; external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

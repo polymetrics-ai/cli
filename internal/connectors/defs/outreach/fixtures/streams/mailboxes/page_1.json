@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mailboxes",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "mailboxes_fixture_1",
+          "type": "mailbox",
+          "attributes": {
+            "name": "Fixture Mailboxes",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/mailboxes"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

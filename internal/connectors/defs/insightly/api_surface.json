@@ -1,0 +1,106 @@
+{
+  "api": "Insightly REST API v3.1 (https://api.<pod>.insightly.com/v3.1)",
+  "docs": "https://api.na1.insightly.com/v3.1/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only; the full Insightly surface (emails, events, notes, pipelines, custom fields, writes, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/Contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Organisations",
+      "covered_by": {
+        "stream": "organisations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Leads",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Emails",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Notes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/Contacts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "destructive administrative mutation is not exposed as a reverse-ETL action for this connector"
+      }
+    }
+  ]
+}

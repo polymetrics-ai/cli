@@ -1,0 +1,5 @@
+{
+  "record": { "name": "Fixture Opportunity", "value": 1000 },
+  "expect": { "method": "POST", "path": "/opportunities" },
+  "response": { "status": 201, "body": { "id": 31 } }
+}

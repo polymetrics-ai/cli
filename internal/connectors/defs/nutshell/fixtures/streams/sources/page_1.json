@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sources"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sources": [
+        {
+          "id": "1",
+          "name": "Fixture sources",
+          "href": "https://app.nutshell.com/rest/sources/1",
+          "htmlUrl": "https://app.nutshell.com/sources/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture sources",
+          "href": "https://app.nutshell.com/rest/sources/2",
+          "htmlUrl": "https://app.nutshell.com/sources/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

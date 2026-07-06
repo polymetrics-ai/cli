@@ -1,0 +1,16 @@
+{
+  "record": {
+    "change_id": 123,
+    "note_id": 123,
+    "name": "Fixture update_a_change_note",
+    "description": "Fixture update_a_change_note record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/notes/123",
+    "body": {
+      "name": "Fixture update_a_change_note",
+      "description": "Fixture update_a_change_note record"
+    }
+  }
+}

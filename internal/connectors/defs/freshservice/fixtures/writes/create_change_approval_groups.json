@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture create_change_approval_groups",
+    "description": "Fixture create_change_approval_groups record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes/123/approval-groups",
+    "body": {
+      "name": "Fixture create_change_approval_groups",
+      "description": "Fixture create_change_approval_groups record"
+    }
+  }
+}

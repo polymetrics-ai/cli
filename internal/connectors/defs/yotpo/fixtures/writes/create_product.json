@@ -1,0 +1,23 @@
+{
+  "record": {
+    "product": {
+      "external_id": "ext-fixture-new",
+      "name": "Fixture New Product",
+      "price": 500,
+      "currency": "USD"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/products",
+    "body": {
+      "product": {
+        "external_id": "ext-fixture-new",
+        "name": "Fixture New Product",
+        "price": 500,
+        "currency": "USD"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "product": { "yotpo_id": 999999 } } }
+}

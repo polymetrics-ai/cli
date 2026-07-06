@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/productfields", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idproductfield": 1, "title": "Season", "type": "text", "values": [], "required": false, "visible_picklist": true, "visible_invoice": true, "visible_shippinglist": true, "visible_portal": true, "visible_purchase_order": true }
+    ]
+  }
+}

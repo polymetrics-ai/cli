@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 8,
+    "name": "Fixture Group 1 Updated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/groups/8",
+    "body": {
+      "name": "Fixture Group 1 Updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 8,
+      "name": "Fixture Group 1 Updated"
+    }
+  }
+}

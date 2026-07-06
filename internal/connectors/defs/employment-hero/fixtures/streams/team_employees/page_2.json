@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/teams/team_fixture_1/employees",
+    "query": {
+      "page_index": "1",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "team_employee_fixture_1",
+            "team_id": "team_fixture_1",
+            "first_name": "Ada",
+            "last_name": "Lovelace",
+            "company_email": "ada@example.com",
+            "role": "employee"
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

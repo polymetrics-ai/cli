@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/notifications/",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "account_id": 1,
+          "user_id": 1,
+          "external_email": "fixture-alerts@example.com",
+          "slack_channel_id": null,
+          "slack_channel_name": null,
+          "on_cancel": [1],
+          "on_failure": [1],
+          "on_success": [],
+          "on_warning": [1],
+          "state": 1,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": 2,
+          "account_id": 1,
+          "user_id": 2,
+          "external_email": null,
+          "slack_channel_id": "C0FIXTURE",
+          "slack_channel_name": "#fixture-alerts",
+          "on_cancel": [],
+          "on_failure": [1, 2],
+          "on_success": [1],
+          "on_warning": [],
+          "state": 1,
+          "created_at": "2026-01-01T01:00:00Z",
+          "updated_at": "2026-01-01T01:05:00Z"
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 100, "offset": 0 }, "pagination": { "count": 2, "total_count": 2 } }
+    }
+  }
+}

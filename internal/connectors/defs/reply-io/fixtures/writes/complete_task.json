@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "callResolution": 1,
+    "finishProspectInSequence": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/tasks/synthetic-conformance-value/complete",
+    "body": {
+      "callResolution": 1,
+      "finishProspectInSequence": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

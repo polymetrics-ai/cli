@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "model": { "type": ["string", "null"] },
+    "index": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "completed": { "type": ["boolean", "null"] },
+    "completedAt": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "url": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "createdUserId": { "type": ["string", "null"] },
+    "lastActivityAt": { "type": ["string", "null"] },
+    "listIds": { "type": ["array", "null"] },
+    "assigneesIds": { "type": ["array", "null"] },
+    "parentTaskId": { "type": ["string", "null"] }
+  }
+}

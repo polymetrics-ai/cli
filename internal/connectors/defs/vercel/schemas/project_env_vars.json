@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "project_env_vars",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "key": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "target": { "type": ["array", "string", "null"] },
+    "project_id": { "type": ["string", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "updatedAt": { "type": ["integer", "null"] }
+  }
+}

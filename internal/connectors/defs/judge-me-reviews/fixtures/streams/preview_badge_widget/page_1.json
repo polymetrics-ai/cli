@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/preview_badge"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "badge": "<div class=\"jdgm-prev-badge\">5.0 stars</div>"
+    }
+  }
+}

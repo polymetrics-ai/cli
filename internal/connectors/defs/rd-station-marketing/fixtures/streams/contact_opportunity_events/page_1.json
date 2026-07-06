@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts/synthetic-conformance-value/events",
+    "query": { "event_type": "OPPORTUNITY", "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "event_type": "OPPORTUNITY",
+        "event_family": "CDP",
+        "event_identifier": "fixture_opportunity",
+        "event_timestamp": "2026-01-04T00:00:00Z",
+        "payload": {
+          "name": "Fixture Opportunity",
+          "email": "fixture.opportunity@example.com",
+          "phone": "+15550301"
+        }
+      }
+    ]
+  }
+}

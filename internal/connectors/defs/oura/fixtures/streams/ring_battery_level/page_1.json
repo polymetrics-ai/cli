@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/ring_battery_level"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "timestamp_unix": 1767225600000,
+          "charging": true,
+          "in_charger": true,
+          "level": 80
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

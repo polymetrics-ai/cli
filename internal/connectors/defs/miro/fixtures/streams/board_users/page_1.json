@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/members",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "member_fixture_1",
+          "type": "board_member",
+          "name": "Fixture Member One",
+          "role": "viewer"
+        }
+      ],
+      "total": 1,
+      "size": 1,
+      "offset": 0,
+      "limit": 50
+    }
+  }
+}

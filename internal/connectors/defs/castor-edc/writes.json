@@ -1,0 +1,120 @@
+{
+  "actions": [
+    {
+      "name": "create_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/record",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["institute_id", "email_address"],
+        "properties": {
+          "institute_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "record_id": { "type": "string" },
+          "ccr_record_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation creating a new clinical-trial study participant record; approval required"
+    },
+    {
+      "name": "create_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/site",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "abbreviation", "code", "country_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "abbreviation": { "type": "string" },
+          "code": { "type": "string" },
+          "country_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation creating a new study site/institute; approval required"
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/role",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description", "permissions"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "permissions": { "type": "object" }
+        }
+      },
+      "risk": "external mutation creating a new study access-control role; approval required"
+    },
+    {
+      "name": "create_survey_package_instance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/surveypackageinstance",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["survey_package_id", "record_id", "email_address"],
+        "properties": {
+          "survey_package_id": { "type": "string" },
+          "record_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "ccr_patient_id": { "type": "string" },
+          "package_invitation_subject": { "type": "string" },
+          "package_invitation": { "type": "string" },
+          "auto_send": { "type": "boolean" },
+          "auto_lock_on_finish": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation dispatching a survey package invitation to a study participant; approval required"
+    },
+    {
+      "name": "create_report_instance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/record/{{ record.record_id }}/report-instance",
+      "path_fields": ["record_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["record_id", "report_id"],
+        "properties": {
+          "record_id": { "type": "string" },
+          "report_id": { "type": "string" },
+          "report_name_custom": { "type": "string" },
+          "parent_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation creating a new report instance for a study participant record; approval required"
+    },
+    {
+      "name": "create_randomization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/study/{{ config.study_id }}/record/{{ record.record_id }}/randomization",
+      "path_fields": ["record_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["record_id"],
+        "properties": {
+          "record_id": { "type": "string" }
+        }
+      },
+      "risk": "irreversible external mutation randomizing a clinical-trial study participant; approval required"
+    }
+  ]
+}

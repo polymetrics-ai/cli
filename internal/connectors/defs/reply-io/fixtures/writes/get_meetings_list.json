@@ -1,0 +1,18 @@
+{
+  "record": {
+    "filters": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/reporting/team-performance/meetings",
+    "body": {
+      "filters": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

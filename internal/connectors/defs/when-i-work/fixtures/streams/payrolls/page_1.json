@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/payrolls" },
+  "response": {
+    "status": 200,
+    "body": {
+      "payrolls": [
+        { "id": 1, "start_date": "2026-01-01", "end_date": "2026-01-15", "is_closed": false, "is_finalized": false }
+      ]
+    }
+  }
+}

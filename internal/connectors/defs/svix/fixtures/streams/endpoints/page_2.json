@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/app/app_fixture_1/endpoint", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ep_fixture_1",
+          "url": "https://example.com/webhook",
+          "description": "Fixture Endpoint",
+          "disabled": false,
+          "channels": null,
+          "filterTypes": null,
+          "version": 1,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

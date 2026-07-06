@@ -1,0 +1,14 @@
+{
+  "record": {
+    "training_data_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/training-data/synthetic-conformance-value/documents"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

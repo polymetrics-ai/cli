@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wishlists/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "wishlist_fixture_1",
+      "name": "Fixture wishlist",
+      "title": "Fixture wishlist",
+      "sku": "SKU-FIXTURE-1",
+      "email": "fixture@example.invalid",
+      "status": "fixture",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

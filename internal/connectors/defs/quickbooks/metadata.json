@@ -1,0 +1,27 @@
+{
+  "name": "quickbooks",
+  "display_name": "QuickBooks",
+  "description": "Reads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query API via the OAuth 2.0 refresh-token grant. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external QuickBooks Online v3 Query API read of customer/invoice/payment/account/vendor entities",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback) AND every stream is StreamHook-handled (QuickBooks' STARTPOSITION/MAXRESULTS pagination state is embedded inside a single Query-API 'query' string value, which the declarative page_number/offset_limit paginators cannot express independently); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

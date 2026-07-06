@@ -1,0 +1,18 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "change_request_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/requested-reviewers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_requested_reviewer_from_change_request_fixture_1"
+    }
+  }
+}

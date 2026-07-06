@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [],
+      "speakers": [
+        {
+          "id": 444,
+          "name": "Fixture Speaker",
+          "email": "speaker@example.test",
+          "photo": "https://example.com/profile.png",
+          "phone": "(555) 010-0100",
+          "bio": "Sanitized fixture speaker bio.",
+          "web": "https://example.com",
+          "facebook": "https://example.com/facebook",
+          "twitter": "https://example.com/twitter",
+          "linkedIn": "https://example.com/linkedin",
+          "position": "Presenter",
+          "company": "Fixture Co",
+          "country": "US",
+          "language": "English",
+          "event_id": 1,
+          "thumbnail": "https://example.com/thumbnail.png"
+        }
+      ],
+      "days": [],
+      "halls": [],
+      "tracks": [],
+      "workshops": [],
+      "pauses": []
+    }
+  }
+}

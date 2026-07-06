@@ -1,0 +1,1589 @@
+{
+  "actions": [
+    {
+      "name": "create_a_bank_authorisation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bank_authorisations",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Bank Authorisation."
+    },
+    {
+      "name": "create_a_billing_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Billing Request."
+    },
+    {
+      "name": "collect_customer_details",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/collect_customer_details",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Collect customer details.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "collect_bank_account_details",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/collect_bank_account",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Collect bank account details.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "confirm_the_payer_details",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/confirm_payer_details",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Confirm the payer details.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "fulfil_a_billing_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/fulfil",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Fulfil a Billing Request.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "cancel_a_billing_request",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel a Billing Request.",
+      "path_fields": [
+        "billing_request_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "notify_the_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/notify",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Notify the customer.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "trigger_fallback",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/fallback",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Trigger fallback.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "change_currency",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/choose_currency",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Change currency.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "select_institution_for_a_billing_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/{{ record.billing_request_id }}/actions/select_institution",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Select institution for a Billing Request.",
+      "path_fields": [
+        "billing_request_id"
+      ]
+    },
+    {
+      "name": "create_a_billing_request_flow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_request_flows",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Billing Request Flow."
+    },
+    {
+      "name": "initialise_a_billing_request_flow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_request_flows/{{ record.billing_request_flow_id }}/actions/initialise",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_flow_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_flow_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Initialise a Billing Request Flow.",
+      "path_fields": [
+        "billing_request_flow_id"
+      ]
+    },
+    {
+      "name": "create_a_billing_request_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_request_templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Billing Request Template."
+    },
+    {
+      "name": "update_a_billing_request_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/billing_request_templates/{{ record.billing_request_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "billing_request_template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "billing_request_template_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a Billing Request Template.",
+      "path_fields": [
+        "billing_request_template_id"
+      ]
+    },
+    {
+      "name": "create_a_billing_request_with_actions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billing_requests/create_with_actions",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Billing Request with Actions."
+    },
+    {
+      "name": "create_a_bank_account_holder_verification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bank_account_holder_verifications",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a bank account holder verification.."
+    },
+    {
+      "name": "create_a_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blocks",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a block."
+    },
+    {
+      "name": "disable_a_block",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/blocks/{{ record.block_id }}/actions/disable",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "block_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Disable a block.",
+      "path_fields": [
+        "block_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "enable_a_block",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blocks/{{ record.block_id }}/actions/enable",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "block_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Enable a block.",
+      "path_fields": [
+        "block_id"
+      ]
+    },
+    {
+      "name": "create_blocks_by_reference",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blocks/block_by_ref",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create blocks by reference."
+    },
+    {
+      "name": "create_a_creditor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/creditors",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a creditor."
+    },
+    {
+      "name": "update_a_creditor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/creditors/{{ record.creditor_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "creditor_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "creditor_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a creditor.",
+      "path_fields": [
+        "creditor_id"
+      ]
+    },
+    {
+      "name": "create_a_creditor_bank_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/creditor_bank_accounts",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a creditor bank account."
+    },
+    {
+      "name": "disable_a_creditor_bank_account",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/creditor_bank_accounts/{{ record.creditor_bank_account_id }}/actions/disable",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "creditor_bank_account_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "creditor_bank_account_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Disable a creditor bank account.",
+      "path_fields": [
+        "creditor_bank_account_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a customer."
+    },
+    {
+      "name": "update_a_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a customer.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "remove_a_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Remove a customer.",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_customer_bank_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer_bank_accounts",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a customer bank account."
+    },
+    {
+      "name": "update_a_customer_bank_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer_bank_accounts/{{ record.customer_bank_account_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_bank_account_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_bank_account_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a customer bank account.",
+      "path_fields": [
+        "customer_bank_account_id"
+      ]
+    },
+    {
+      "name": "disable_a_customer_bank_account",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/customer_bank_accounts/{{ record.customer_bank_account_id }}/actions/disable",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_bank_account_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_bank_account_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Disable a customer bank account.",
+      "path_fields": [
+        "customer_bank_account_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "handle_a_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer_notifications/{{ record.customer_notification_id }}/actions/handle",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_notification_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_notification_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Handle a notification.",
+      "path_fields": [
+        "customer_notification_id"
+      ]
+    },
+    {
+      "name": "create_with_dates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/instalment_schedules",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create (with dates)."
+    },
+    {
+      "name": "update_an_instalment_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/instalment_schedules/{{ record.instalment_schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "instalment_schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "instalment_schedule_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update an instalment schedule.",
+      "path_fields": [
+        "instalment_schedule_id"
+      ]
+    },
+    {
+      "name": "cancel_an_instalment_schedule",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/instalment_schedules/{{ record.instalment_schedule_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "instalment_schedule_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "instalment_schedule_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel an instalment schedule.",
+      "path_fields": [
+        "instalment_schedule_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_logo_associated_with_a_creditor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/branding/logos",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a logo associated with a creditor."
+    },
+    {
+      "name": "create_a_mandate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a mandate."
+    },
+    {
+      "name": "update_a_mandate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/mandates/{{ record.mandate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mandate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mandate_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a mandate.",
+      "path_fields": [
+        "mandate_id"
+      ]
+    },
+    {
+      "name": "cancel_a_mandate",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/mandates/{{ record.mandate_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mandate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mandate_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel a mandate.",
+      "path_fields": [
+        "mandate_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reinstate_a_mandate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandates/{{ record.mandate_id }}/actions/reinstate",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mandate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mandate_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Reinstate a mandate.",
+      "path_fields": [
+        "mandate_id"
+      ]
+    },
+    {
+      "name": "create_a_new_mandate_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandate_imports",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a new mandate import."
+    },
+    {
+      "name": "submit_a_mandate_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandate_imports/{{ record.mandate_import_id }}/actions/submit",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mandate_import_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mandate_import_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Submit a mandate import.",
+      "path_fields": [
+        "mandate_import_id"
+      ]
+    },
+    {
+      "name": "cancel_a_mandate_import",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/mandate_imports/{{ record.mandate_import_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mandate_import_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mandate_import_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel a mandate import.",
+      "path_fields": [
+        "mandate_import_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_a_mandate_import_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandate_import_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Add a mandate import entry."
+    },
+    {
+      "name": "create_an_outbound_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/outbound_payments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create an outbound payment."
+    },
+    {
+      "name": "create_a_withdrawal_outbound_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/outbound_payments/withdrawal",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a withdrawal outbound payment."
+    },
+    {
+      "name": "cancel_an_outbound_payment",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/outbound_payments/{{ record.outbound_payment_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "outbound_payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "outbound_payment_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel an outbound payment.",
+      "path_fields": [
+        "outbound_payment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "approve_an_outbound_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/outbound_payments/{{ record.outbound_payment_id }}/actions/approve",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "outbound_payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "outbound_payment_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Approve an outbound payment.",
+      "path_fields": [
+        "outbound_payment_id"
+      ]
+    },
+    {
+      "name": "update_an_outbound_payment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/outbound_payments/{{ record.outbound_payment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "outbound_payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "outbound_payment_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update an outbound payment.",
+      "path_fields": [
+        "outbound_payment_id"
+      ]
+    },
+    {
+      "name": "create_an_outbound_payment_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/outbound_payment_imports",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create an outbound payment import."
+    },
+    {
+      "name": "create_a_payer_authorisation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payer_authorisations",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a Payer Authorisation."
+    },
+    {
+      "name": "update_a_payer_authorisation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/payer_authorisations/{{ record.payer_authorisation_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payer_authorisation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payer_authorisation_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a Payer Authorisation.",
+      "path_fields": [
+        "payer_authorisation_id"
+      ]
+    },
+    {
+      "name": "submit_a_payer_authorisation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payer_authorisations/{{ record.payer_authorisation_id }}/actions/submit",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payer_authorisation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payer_authorisation_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Submit a Payer Authorisation.",
+      "path_fields": [
+        "payer_authorisation_id"
+      ]
+    },
+    {
+      "name": "confirm_a_payer_authorisation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payer_authorisations/{{ record.payer_authorisation_id }}/actions/confirm",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payer_authorisation_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payer_authorisation_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Confirm a Payer Authorisation.",
+      "path_fields": [
+        "payer_authorisation_id"
+      ]
+    },
+    {
+      "name": "create_a_payer_theme_associated_with_a_creditor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/branding/payer_themes",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a payer theme associated with a creditor."
+    },
+    {
+      "name": "create_a_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a payment."
+    },
+    {
+      "name": "update_a_payment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/payments/{{ record.payment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a payment.",
+      "path_fields": [
+        "payment_id"
+      ]
+    },
+    {
+      "name": "cancel_a_payment",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/payments/{{ record.payment_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel a payment.",
+      "path_fields": [
+        "payment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "retry_a_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payments/{{ record.payment_id }}/actions/retry",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Retry a payment.",
+      "path_fields": [
+        "payment_id"
+      ]
+    },
+    {
+      "name": "update_a_payout",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/payouts/{{ record.payout_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payout_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payout_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a payout.",
+      "path_fields": [
+        "payout_id"
+      ]
+    },
+    {
+      "name": "create_a_redirect_flow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/redirect_flows",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a redirect flow."
+    },
+    {
+      "name": "complete_a_redirect_flow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/redirect_flows/{{ record.redirect_flow_id }}/actions/complete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "redirect_flow_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "redirect_flow_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Complete a redirect flow.",
+      "path_fields": [
+        "redirect_flow_id"
+      ]
+    },
+    {
+      "name": "create_a_refund",
+      "kind": "create",
+      "method": "POST",
+      "path": "/refunds",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a refund."
+    },
+    {
+      "name": "update_a_refund",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/refunds/{{ record.refund_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "refund_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "refund_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a refund.",
+      "path_fields": [
+        "refund_id"
+      ]
+    },
+    {
+      "name": "simulate_a_scenario",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scenario_simulators/{{ record.scenario }}/actions/run",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "scenario"
+        ]
+      },
+      "risk": "GoCardless mutation: Simulate a scenario.",
+      "path_fields": [
+        "scenario"
+      ]
+    },
+    {
+      "name": "create_a_scheme_identifier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scheme_identifiers",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a scheme identifier."
+    },
+    {
+      "name": "create_a_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a subscription."
+    },
+    {
+      "name": "update_a_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Update a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ]
+    },
+    {
+      "name": "pause_a_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.subscription_id }}/actions/pause",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Pause a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ]
+    },
+    {
+      "name": "resume_a_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.subscription_id }}/actions/resume",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Resume a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ]
+    },
+    {
+      "name": "cancel_a_subscription",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.subscription_id }}/actions/cancel",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "Destructive GoCardless mutation: Cancel a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_a_verification_detail",
+      "kind": "create",
+      "method": "POST",
+      "path": "/verification_details",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a verification detail."
+    },
+    {
+      "name": "retry_a_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks/{{ record.webhook_id }}/actions/retry",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "GoCardless mutation: Retry a webhook.",
+      "path_fields": [
+        "webhook_id"
+      ]
+    },
+    {
+      "name": "perform_a_bank_details_lookup",
+      "kind": "create",
+      "method": "POST",
+      "path": "/bank_details_lookups",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Perform a bank details lookup."
+    },
+    {
+      "name": "create_a_mandate_pdf",
+      "kind": "create",
+      "method": "POST",
+      "path": "/mandate_pdfs",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a mandate PDF."
+    },
+    {
+      "name": "create_a_customer_bank_account_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customer_bank_account_tokens",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "GoCardless mutation: Create a customer bank account token."
+    }
+  ]
+}

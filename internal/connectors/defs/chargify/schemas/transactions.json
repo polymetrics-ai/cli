@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "transaction_type": { "type": ["string", "null"] },
+    "amount_in_cents": { "type": ["integer", "null"] },
+    "subscription_id": { "type": ["integer", "null"] },
+    "customer_id": { "type": ["integer", "null"] },
+    "product_id": { "type": ["integer", "null"] },
+    "success": { "type": ["boolean", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

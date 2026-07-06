@@ -1,0 +1,9 @@
+{
+  "record": {
+    "predefined_action_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/predefined_actions/fixture_id"
+  }
+}

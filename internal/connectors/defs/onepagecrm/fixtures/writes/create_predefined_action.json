@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "fixture_value",
+    "text": "Fixture text",
+    "days": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/predefined_actions",
+    "body": {
+      "id": "fixture_value",
+      "text": "Fixture text",
+      "days": "fixture_value"
+    }
+  }
+}

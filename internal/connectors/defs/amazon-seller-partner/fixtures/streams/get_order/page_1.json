@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders/2026-01-01/orders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "order": {
+        "orderId": "orderId-fixture-1",
+        "orderAliases": [],
+        "createdTime": "createdTime-fixture-1",
+        "lastUpdatedTime": "lastUpdatedTime-fixture-1",
+        "programs": [],
+        "associatedOrders": [],
+        "salesChannel": {},
+        "buyer": {},
+        "recipient": {},
+        "proceeds": {},
+        "payment": {},
+        "tax": {},
+        "fulfillment": {},
+        "orderItems": [],
+        "packages": [],
+        "fulfillmentOrders": [],
+        "order_id": "order_id-fixture-1"
+      }
+    }
+  }
+}

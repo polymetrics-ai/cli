@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "123",
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/teams/123",
+    "body": {
+      "name": "Fixture Name"
+    }
+  }
+}

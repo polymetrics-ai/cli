@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": { "page": "2", "per_page": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ord_fixture_3", "name": "Fixture Order Three", "status": "cancelled", "created_at": "2026-01-03T00:00:00Z" }
+      ],
+      "meta": { "next_page": null }
+    }
+  }
+}

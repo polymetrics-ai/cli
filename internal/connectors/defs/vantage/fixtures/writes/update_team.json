@@ -1,0 +1,10 @@
+{
+  "record": {
+    "team_token": "team_fixture_1",
+    "name": "Updated Team"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/teams/team_fixture_1"
+  }
+}

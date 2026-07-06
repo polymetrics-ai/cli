@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/listings/2021-08-01/restrictions",
+    "query": {
+      "asin": "synthetic-conformance-value",
+      "sellerId": "synthetic-conformance-value",
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "restrictions": [
+        {
+          "marketplaceId": "marketplaceId-fixture-1",
+          "conditionType": "conditionType-fixture-1",
+          "reasons": []
+        }
+      ]
+    }
+  }
+}

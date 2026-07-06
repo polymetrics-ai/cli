@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sp/productAds",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "adId": 334455001,
+        "campaignId": 445566001,
+        "adGroupId": 990011001,
+        "sku": "fixture-sku-1",
+        "asin": "B000FIXTURE1",
+        "state": "enabled",
+        "servingStatus": "AD_STATUS_LIVE"
+      },
+      {
+        "adId": 334455002,
+        "campaignId": 445566002,
+        "adGroupId": 990011002,
+        "sku": "fixture-sku-2",
+        "asin": "B000FIXTURE2",
+        "state": "paused",
+        "servingStatus": "CAMPAIGN_PAUSED"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1",
+    "job_title": "Principal Engineer"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/employment_details",
+    "body": {
+      "job_title": "Principal Engineer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_employee_employment_details_fixture_response"
+    }
+  }
+}

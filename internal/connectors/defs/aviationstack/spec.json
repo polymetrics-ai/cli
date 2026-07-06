@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aviationstack Connection Specification",
+  "type": "object",
+  "required": ["access_key"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Aviationstack API access key. Sent as the access_key query parameter; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.aviationstack.com/v1",
+      "description": "Aviationstack API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/hooks" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "hook_fixture_1",
+        "targetUrl": "https://example.com/lemlist-webhook",
+        "type": "emailsOpened",
+        "campaignId": "cmp_fixture_1",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "zapId": null
+      }
+    ]
+  }
+}

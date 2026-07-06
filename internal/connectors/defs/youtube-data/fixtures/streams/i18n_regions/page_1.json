@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/i18nRegions", "query": { "part": "snippet" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "US", "snippet": { "name": "United States" } },
+        { "id": "GB", "snippet": { "name": "United Kingdom" } }
+      ]
+    }
+  }
+}

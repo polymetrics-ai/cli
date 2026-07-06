@@ -1,0 +1,24 @@
+{
+  "name": "tinyemail",
+  "display_name": "TinyEmail",
+  "description": "Reads subscribers, lists, and campaigns, and writes subscriber create/upsert actions, through the tinyEmail API.",
+  "integration_type": "api",
+  "docs_url": "https://tinyemail.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external tinyEmail API read of subscriber, list, and campaign data",
+    "write": "external tinyEmail API mutation: creates or upserts a subscriber (customer) record, optionally assigning it to a named audience segment",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

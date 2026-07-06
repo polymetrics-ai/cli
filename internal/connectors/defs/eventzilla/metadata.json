@@ -1,0 +1,24 @@
+{
+  "name": "eventzilla",
+  "display_name": "Eventzilla",
+  "description": "Reads Eventzilla events, categories, users, attendees, ticket types, and transactions, and writes attendee check-in and event sales-page toggle mutations, through the Eventzilla v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.eventzilla.net/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Eventzilla API read of event, category, user, attendee, ticket, and transaction data",
+    "write": "external mutation of attendee check-in state and event sales-page publish status; every write ships with an explicit per-action risk string",
+    "approval": "required for toggle_event_sales (unpublishing stops new ticket sales immediately); checkin_attendee is a low-risk operational door-scan mutation, no approval required"
+  }
+}

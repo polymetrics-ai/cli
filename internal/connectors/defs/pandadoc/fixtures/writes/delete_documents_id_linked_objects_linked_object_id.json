@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "linked_object_id": "linked_object_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v1/documents/id_fixture/linked-objects/linked_object_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_documents_id_linked_objects_linked_object_id_response",
+      "status": "ok"
+    }
+  }
+}

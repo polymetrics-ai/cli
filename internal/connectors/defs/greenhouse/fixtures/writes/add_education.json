@@ -1,0 +1,13 @@
+{
+  "record": {
+    "candidate_id": "candidate_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_id_fixture/educations"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

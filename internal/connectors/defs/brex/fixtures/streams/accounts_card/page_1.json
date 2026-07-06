@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/accounts/card"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "cardacct_fixture_1",
+        "status": "ACTIVE",
+        "current_balance": {
+          "amount": 100000,
+          "currency": "USD"
+        },
+        "available_balance": {
+          "amount": 400000,
+          "currency": "USD"
+        },
+        "account_limit": {
+          "amount": 500000,
+          "currency": "USD"
+        },
+        "current_statement_period": {
+          "start_date": "2026-01-01",
+          "end_date": "2026-01-31"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "execution",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "startedAt",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "workflowId": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "finished": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "mode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retryOf": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "retrySuccessId": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stoppedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "waitTill": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "customData": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

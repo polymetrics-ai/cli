@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_profiles",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "customer_id": { "type": ["integer", "null"] },
+    "payment_type": { "type": ["string", "null"] },
+    "card_type": { "type": ["string", "null"] },
+    "last_four": { "type": ["string", "null"] },
+    "expiration_month": { "type": ["integer", "null"] },
+    "expiration_year": { "type": ["integer", "null"] },
+    "current_vault": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

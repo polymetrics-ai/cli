@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/thirdparties",
+    "query": {
+      "sortfield": "t.rowid",
+      "sortorder": "ASC",
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "101",
+        "name": "Fixture Thirdparty 101",
+        "name_alias": "",
+        "email": "fixture101@example.com",
+        "phone": "+15550100",
+        "town": "San Francisco",
+        "zip": "94105",
+        "country_code": "US",
+        "client": "1",
+        "fournisseur": "0",
+        "status": "1",
+        "date_creation": 1767225600,
+        "date_modification": 1767225701
+      }
+    ]
+  }
+}

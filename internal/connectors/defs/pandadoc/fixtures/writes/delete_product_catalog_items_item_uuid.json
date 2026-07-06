@@ -1,0 +1,16 @@
+{
+  "record": {
+    "item_uuid": "item_uuid_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v2/product-catalog/items/item_uuid_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_product_catalog_items_item_uuid_response",
+      "status": "ok"
+    }
+  }
+}

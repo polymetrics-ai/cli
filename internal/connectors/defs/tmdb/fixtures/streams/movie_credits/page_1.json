@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/movie/synthetic-conformance-value/credits"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture movie_credits",
+      "name": "Fixture movie_credits",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

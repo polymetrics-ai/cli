@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "123",
+    "client_id": "890"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/123/add_to_client",
+    "body": {
+      "client_id": "890"
+    }
+  }
+}

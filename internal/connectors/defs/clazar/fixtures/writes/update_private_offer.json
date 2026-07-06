@@ -1,0 +1,8 @@
+{
+  "record": { "id": "private_offer_fixture_1", "custom_properties": { "discount": "10pct" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/private_offers/private_offer_fixture_1/",
+    "body": { "custom_properties": { "discount": "10pct" } }
+  }
+}

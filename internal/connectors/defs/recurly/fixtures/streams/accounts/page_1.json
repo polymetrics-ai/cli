@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        { "id": "acct_fixture_1", "code": "fixture_1", "email": "fixture1@example.com", "state": "active", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" },
+        { "id": "acct_fixture_2", "code": "fixture_2", "email": "fixture2@example.com", "state": "active", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

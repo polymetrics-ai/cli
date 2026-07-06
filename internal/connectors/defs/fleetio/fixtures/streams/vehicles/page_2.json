@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/vehicles", "query": { "per_page": "synthetic-conformance-value", "start_cursor": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": 3,
+          "name": "Truck 3",
+          "vin": "VINFIXTURE00003",
+          "make": "Acme",
+          "model": "FixtureLine",
+          "year": 2026,
+          "license_plate": "FIX-0003",
+          "vehicle_status_name": "Active",
+          "vehicle_type_name": "Truck",
+          "current_meter_value": "3000",
+          "archived_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

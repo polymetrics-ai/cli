@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/prices/verbose"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "prices": [
+          {
+            "date": "2026-01-02",
+            "close": 42.5,
+            "volume": 1000
+          }
+        ]
+      }
+    ]
+  }
+}

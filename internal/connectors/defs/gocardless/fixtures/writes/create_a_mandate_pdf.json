@@ -1,0 +1,20 @@
+{
+  "record": {
+    "mandate_pdfs": {
+      "description": "Synthetic create_a_mandate_pdf fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mandate_pdfs",
+    "body": {
+      "mandate_pdfs": {
+        "description": "Synthetic create_a_mandate_pdf fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

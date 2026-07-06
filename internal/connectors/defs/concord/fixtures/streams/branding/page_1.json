@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/branding"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customEmailContent": null,
+      "customEmailSender": null,
+      "customAgreementView": null,
+      "useForInternalEmails": false
+    }
+  }
+}

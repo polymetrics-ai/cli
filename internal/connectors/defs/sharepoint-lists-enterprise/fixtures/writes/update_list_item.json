@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "item_fixture_1",
+    "Title": "Updated Fixture Item"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/sites/fixture-site/lists/fixture-list/items/item_fixture_1/fields",
+    "body": {
+      "Title": "Updated Fixture Item"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "Title": "Updated Fixture Item" }
+  }
+}

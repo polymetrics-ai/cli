@@ -1,0 +1,19 @@
+{
+  "name": "open-data-dc",
+  "display_name": "Open Data DC",
+  "description": "Reads District of Columbia Master Address Repository (MAR 2) locations, units, and SSL parcel records via the Open Data DC API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://opendata.dc.gov/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Open Data DC (MAR 2) API read of public address/parcel data"
+  }
+}

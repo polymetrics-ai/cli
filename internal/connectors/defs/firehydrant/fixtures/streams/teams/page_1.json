@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/teams", "query": { "per_page": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "team_fixture_1",
+          "name": "Platform",
+          "description": "Platform engineering",
+          "slug": "platform",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": { "page": 1, "next": null, "prev": null }
+    }
+  }
+}

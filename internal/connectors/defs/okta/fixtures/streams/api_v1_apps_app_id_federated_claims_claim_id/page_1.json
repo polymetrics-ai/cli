@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/federated-claims/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "expression": "expression_fixture",
+      "name": "name_fixture"
+    }
+  }
+}

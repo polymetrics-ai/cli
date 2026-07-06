@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "paid_payments",
+  "type": "object",
+  "x-primary-key": ["payment_id"],
+  "x-cursor-field": "processed_at",
+  "required": ["payment_id"],
+  "properties": {
+    "payment_id": { "type": "integer" },
+    "affiliate_id": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "affiliate_email": { "type": ["string", "null"] },
+    "total_referrals": { "type": ["integer", "null"] },
+    "total_processed": { "type": ["number", "null"] },
+    "payment_method": { "type": ["string", "null"] },
+    "processed_at": { "type": ["string", "null"] }
+  }
+}

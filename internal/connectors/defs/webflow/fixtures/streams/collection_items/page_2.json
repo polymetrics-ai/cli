@@ -1,0 +1,1322 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/collections/collection_fixture_1/items",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "item_fixture_1",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 1",
+            "slug": "fixture-item-1"
+          }
+        },
+        {
+          "id": "item_fixture_2",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 2",
+            "slug": "fixture-item-2"
+          }
+        },
+        {
+          "id": "item_fixture_3",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 3",
+            "slug": "fixture-item-3"
+          }
+        },
+        {
+          "id": "item_fixture_4",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 4",
+            "slug": "fixture-item-4"
+          }
+        },
+        {
+          "id": "item_fixture_5",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 5",
+            "slug": "fixture-item-5"
+          }
+        },
+        {
+          "id": "item_fixture_6",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 6",
+            "slug": "fixture-item-6"
+          }
+        },
+        {
+          "id": "item_fixture_7",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 7",
+            "slug": "fixture-item-7"
+          }
+        },
+        {
+          "id": "item_fixture_8",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 8",
+            "slug": "fixture-item-8"
+          }
+        },
+        {
+          "id": "item_fixture_9",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 9",
+            "slug": "fixture-item-9"
+          }
+        },
+        {
+          "id": "item_fixture_10",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 10",
+            "slug": "fixture-item-10"
+          }
+        },
+        {
+          "id": "item_fixture_11",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 11",
+            "slug": "fixture-item-11"
+          }
+        },
+        {
+          "id": "item_fixture_12",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 12",
+            "slug": "fixture-item-12"
+          }
+        },
+        {
+          "id": "item_fixture_13",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 13",
+            "slug": "fixture-item-13"
+          }
+        },
+        {
+          "id": "item_fixture_14",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 14",
+            "slug": "fixture-item-14"
+          }
+        },
+        {
+          "id": "item_fixture_15",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 15",
+            "slug": "fixture-item-15"
+          }
+        },
+        {
+          "id": "item_fixture_16",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 16",
+            "slug": "fixture-item-16"
+          }
+        },
+        {
+          "id": "item_fixture_17",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 17",
+            "slug": "fixture-item-17"
+          }
+        },
+        {
+          "id": "item_fixture_18",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 18",
+            "slug": "fixture-item-18"
+          }
+        },
+        {
+          "id": "item_fixture_19",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 19",
+            "slug": "fixture-item-19"
+          }
+        },
+        {
+          "id": "item_fixture_20",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 20",
+            "slug": "fixture-item-20"
+          }
+        },
+        {
+          "id": "item_fixture_21",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 21",
+            "slug": "fixture-item-21"
+          }
+        },
+        {
+          "id": "item_fixture_22",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 22",
+            "slug": "fixture-item-22"
+          }
+        },
+        {
+          "id": "item_fixture_23",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 23",
+            "slug": "fixture-item-23"
+          }
+        },
+        {
+          "id": "item_fixture_24",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 24",
+            "slug": "fixture-item-24"
+          }
+        },
+        {
+          "id": "item_fixture_25",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 25",
+            "slug": "fixture-item-25"
+          }
+        },
+        {
+          "id": "item_fixture_26",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 26",
+            "slug": "fixture-item-26"
+          }
+        },
+        {
+          "id": "item_fixture_27",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 27",
+            "slug": "fixture-item-27"
+          }
+        },
+        {
+          "id": "item_fixture_28",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 28",
+            "slug": "fixture-item-28"
+          }
+        },
+        {
+          "id": "item_fixture_29",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 29",
+            "slug": "fixture-item-29"
+          }
+        },
+        {
+          "id": "item_fixture_30",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 30",
+            "slug": "fixture-item-30"
+          }
+        },
+        {
+          "id": "item_fixture_31",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 31",
+            "slug": "fixture-item-31"
+          }
+        },
+        {
+          "id": "item_fixture_32",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 32",
+            "slug": "fixture-item-32"
+          }
+        },
+        {
+          "id": "item_fixture_33",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 33",
+            "slug": "fixture-item-33"
+          }
+        },
+        {
+          "id": "item_fixture_34",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 34",
+            "slug": "fixture-item-34"
+          }
+        },
+        {
+          "id": "item_fixture_35",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 35",
+            "slug": "fixture-item-35"
+          }
+        },
+        {
+          "id": "item_fixture_36",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 36",
+            "slug": "fixture-item-36"
+          }
+        },
+        {
+          "id": "item_fixture_37",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 37",
+            "slug": "fixture-item-37"
+          }
+        },
+        {
+          "id": "item_fixture_38",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 38",
+            "slug": "fixture-item-38"
+          }
+        },
+        {
+          "id": "item_fixture_39",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 39",
+            "slug": "fixture-item-39"
+          }
+        },
+        {
+          "id": "item_fixture_40",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 40",
+            "slug": "fixture-item-40"
+          }
+        },
+        {
+          "id": "item_fixture_41",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 41",
+            "slug": "fixture-item-41"
+          }
+        },
+        {
+          "id": "item_fixture_42",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 42",
+            "slug": "fixture-item-42"
+          }
+        },
+        {
+          "id": "item_fixture_43",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 43",
+            "slug": "fixture-item-43"
+          }
+        },
+        {
+          "id": "item_fixture_44",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 44",
+            "slug": "fixture-item-44"
+          }
+        },
+        {
+          "id": "item_fixture_45",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 45",
+            "slug": "fixture-item-45"
+          }
+        },
+        {
+          "id": "item_fixture_46",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 46",
+            "slug": "fixture-item-46"
+          }
+        },
+        {
+          "id": "item_fixture_47",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 47",
+            "slug": "fixture-item-47"
+          }
+        },
+        {
+          "id": "item_fixture_48",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 48",
+            "slug": "fixture-item-48"
+          }
+        },
+        {
+          "id": "item_fixture_49",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 49",
+            "slug": "fixture-item-49"
+          }
+        },
+        {
+          "id": "item_fixture_50",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 50",
+            "slug": "fixture-item-50"
+          }
+        },
+        {
+          "id": "item_fixture_51",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 51",
+            "slug": "fixture-item-51"
+          }
+        },
+        {
+          "id": "item_fixture_52",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 52",
+            "slug": "fixture-item-52"
+          }
+        },
+        {
+          "id": "item_fixture_53",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 53",
+            "slug": "fixture-item-53"
+          }
+        },
+        {
+          "id": "item_fixture_54",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 54",
+            "slug": "fixture-item-54"
+          }
+        },
+        {
+          "id": "item_fixture_55",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 55",
+            "slug": "fixture-item-55"
+          }
+        },
+        {
+          "id": "item_fixture_56",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 56",
+            "slug": "fixture-item-56"
+          }
+        },
+        {
+          "id": "item_fixture_57",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 57",
+            "slug": "fixture-item-57"
+          }
+        },
+        {
+          "id": "item_fixture_58",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 58",
+            "slug": "fixture-item-58"
+          }
+        },
+        {
+          "id": "item_fixture_59",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 59",
+            "slug": "fixture-item-59"
+          }
+        },
+        {
+          "id": "item_fixture_60",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 60",
+            "slug": "fixture-item-60"
+          }
+        },
+        {
+          "id": "item_fixture_61",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 61",
+            "slug": "fixture-item-61"
+          }
+        },
+        {
+          "id": "item_fixture_62",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 62",
+            "slug": "fixture-item-62"
+          }
+        },
+        {
+          "id": "item_fixture_63",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 63",
+            "slug": "fixture-item-63"
+          }
+        },
+        {
+          "id": "item_fixture_64",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 64",
+            "slug": "fixture-item-64"
+          }
+        },
+        {
+          "id": "item_fixture_65",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 65",
+            "slug": "fixture-item-65"
+          }
+        },
+        {
+          "id": "item_fixture_66",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 66",
+            "slug": "fixture-item-66"
+          }
+        },
+        {
+          "id": "item_fixture_67",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 67",
+            "slug": "fixture-item-67"
+          }
+        },
+        {
+          "id": "item_fixture_68",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 68",
+            "slug": "fixture-item-68"
+          }
+        },
+        {
+          "id": "item_fixture_69",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 69",
+            "slug": "fixture-item-69"
+          }
+        },
+        {
+          "id": "item_fixture_70",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 70",
+            "slug": "fixture-item-70"
+          }
+        },
+        {
+          "id": "item_fixture_71",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 71",
+            "slug": "fixture-item-71"
+          }
+        },
+        {
+          "id": "item_fixture_72",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 72",
+            "slug": "fixture-item-72"
+          }
+        },
+        {
+          "id": "item_fixture_73",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 73",
+            "slug": "fixture-item-73"
+          }
+        },
+        {
+          "id": "item_fixture_74",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 74",
+            "slug": "fixture-item-74"
+          }
+        },
+        {
+          "id": "item_fixture_75",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 75",
+            "slug": "fixture-item-75"
+          }
+        },
+        {
+          "id": "item_fixture_76",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 76",
+            "slug": "fixture-item-76"
+          }
+        },
+        {
+          "id": "item_fixture_77",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 77",
+            "slug": "fixture-item-77"
+          }
+        },
+        {
+          "id": "item_fixture_78",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 78",
+            "slug": "fixture-item-78"
+          }
+        },
+        {
+          "id": "item_fixture_79",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 79",
+            "slug": "fixture-item-79"
+          }
+        },
+        {
+          "id": "item_fixture_80",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 80",
+            "slug": "fixture-item-80"
+          }
+        },
+        {
+          "id": "item_fixture_81",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 81",
+            "slug": "fixture-item-81"
+          }
+        },
+        {
+          "id": "item_fixture_82",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 82",
+            "slug": "fixture-item-82"
+          }
+        },
+        {
+          "id": "item_fixture_83",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 83",
+            "slug": "fixture-item-83"
+          }
+        },
+        {
+          "id": "item_fixture_84",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 84",
+            "slug": "fixture-item-84"
+          }
+        },
+        {
+          "id": "item_fixture_85",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 85",
+            "slug": "fixture-item-85"
+          }
+        },
+        {
+          "id": "item_fixture_86",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 86",
+            "slug": "fixture-item-86"
+          }
+        },
+        {
+          "id": "item_fixture_87",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 87",
+            "slug": "fixture-item-87"
+          }
+        },
+        {
+          "id": "item_fixture_88",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 88",
+            "slug": "fixture-item-88"
+          }
+        },
+        {
+          "id": "item_fixture_89",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 89",
+            "slug": "fixture-item-89"
+          }
+        },
+        {
+          "id": "item_fixture_90",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 90",
+            "slug": "fixture-item-90"
+          }
+        },
+        {
+          "id": "item_fixture_91",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 91",
+            "slug": "fixture-item-91"
+          }
+        },
+        {
+          "id": "item_fixture_92",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 92",
+            "slug": "fixture-item-92"
+          }
+        },
+        {
+          "id": "item_fixture_93",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 93",
+            "slug": "fixture-item-93"
+          }
+        },
+        {
+          "id": "item_fixture_94",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 94",
+            "slug": "fixture-item-94"
+          }
+        },
+        {
+          "id": "item_fixture_95",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 95",
+            "slug": "fixture-item-95"
+          }
+        },
+        {
+          "id": "item_fixture_96",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 96",
+            "slug": "fixture-item-96"
+          }
+        },
+        {
+          "id": "item_fixture_97",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 97",
+            "slug": "fixture-item-97"
+          }
+        },
+        {
+          "id": "item_fixture_98",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 98",
+            "slug": "fixture-item-98"
+          }
+        },
+        {
+          "id": "item_fixture_99",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 99",
+            "slug": "fixture-item-99"
+          }
+        },
+        {
+          "id": "item_fixture_100",
+          "cmsLocaleId": null,
+          "lastPublished": "2026-01-01T00:00:00.000Z",
+          "lastUpdated": "2026-01-02T00:00:00.000Z",
+          "createdOn": "2026-01-01T00:00:00.000Z",
+          "isArchived": false,
+          "isDraft": false,
+          "fieldData": {
+            "name": "Fixture Item 100",
+            "slug": "fixture-item-100"
+          }
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "total": 101
+      }
+    }
+  }
+}

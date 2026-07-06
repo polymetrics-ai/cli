@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v1/business-units/synthetic-conformance-value/reviews", "query": { "perPage": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "reviews": [
+        {
+          "id": "review_fixture_1",
+          "stars": 5,
+          "title": "Fixture review 1",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "review_fixture_2",
+          "stars": 4,
+          "title": "Fixture review 2",
+          "createdAt": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

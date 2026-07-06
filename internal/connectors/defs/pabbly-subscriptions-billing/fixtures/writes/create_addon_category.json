@@ -1,0 +1,10 @@
+{
+  "record": {
+    "category_name": "Fixture Category",
+    "product_id": "product_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/addoncategory"
+  }
+}

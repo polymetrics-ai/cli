@@ -1,0 +1,21 @@
+{
+  "record": {
+    "customer": 1001,
+    "plan": "monthly"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/preview",
+    "body": {
+      "customer": 1001,
+      "plan": "monthly"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

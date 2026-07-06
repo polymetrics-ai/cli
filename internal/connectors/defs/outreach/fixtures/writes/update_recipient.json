@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "recipient",
+      "attributes": {
+        "name": "Fixture Update Recipient"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/recipients/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "recipient",
+        "attributes": {
+          "name": "Fixture Update Recipient"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Avni Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Avni account username, sent via HTTP Basic auth."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Avni account password, sent via HTTP Basic auth. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.avniproject.org",
+      "description": "Avni API base URL override for tests, proxies, or self-hosted instances."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound sent as the start_date query parameter on every request."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

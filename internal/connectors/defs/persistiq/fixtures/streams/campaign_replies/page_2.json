@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/v1/campaigns/campaign_fixture_1/replies", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "has_more": false,
+      "next_page": null,
+      "status": "success",
+      "errors": null,
+      "replies": [
+        {
+          "id": "reply_fixture_1",
+          "from_email": "fixture1@example.com",
+          "to_emails": ["fixture2@example.com"],
+          "cc_emails": [],
+          "subject": "Re: Fixture Outreach",
+          "body": "Fixture reply body.",
+          "preview": "Fixture reply body.",
+          "sent_at": "2026-01-01T00:00:00Z",
+          "sentiment": "neutral",
+          "kind": "reply",
+          "lead_id": "lead_fixture_1",
+          "campaign_id": "campaign_fixture_1",
+          "step_message_id": "step_fixture_1"
+        }
+      ]
+    }
+  }
+}

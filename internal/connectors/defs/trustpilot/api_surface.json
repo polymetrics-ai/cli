@@ -1,0 +1,476 @@
+{
+  "api": "Trustpilot Business API v1 (https://api.trustpilot.com), per the published Trustpilot for Business developer docs (https://developers.trustpilot.com/, fetched 2026-07-03: Business Units API, Invitation API, Categories API, Consumer API, Product Reviews API, Service Reviews API, Private Products API, Resources API)",
+  "docs": "https://developers.trustpilot.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion. Covered: the 3 legacy-parity read streams (reviews, invitations, business_units, unchanged from wave2 \u2014 their schemas stay narrow, field-for-field matching legacy's own reviewRecord/invitationRecord/businessUnitRecord mapping functions per conventions.md \u00a73's schema-as-projection rule) plus 1 new Pass B stream (categories, a genuinely new business-unit-scoped, apikey-authed, unpaginated resource). No new write actions: every mutation-capable and every private/OAuth-gated endpoint in Trustpilot's current API (review replies, review tags, invitation management, product-review conversations, private reviews/products) requires a 'Business user OAuth Token' credential this connector's spec.json has never declared (legacy authenticates every request with a plain apikey query parameter only, and never implemented any write); adding OAuth would be a new credential-shape/spec.json change out of this pass's scope, not a dialect gap. Excluded: the OAuth-gated write/private surface (documented above), binary image/asset endpoints, static reference-data lookups (locales/countries/star-rating strings), the separate Product Reviews API product line, global (non-business-unit-scoped) search and category-taxonomy browsing, and duplicate/superseded single-item or cursor-paginated variants of data the covered streams already return.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/business-units/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "free-text business-unit search by name across all of Trustpilot, not scoped to the configured business_unit_id; requires a new required 'query' search-term config property this connector's spec.json does not declare, and returns OTHER companies' business units, not this account's own data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/all-reviews",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cursor/pageToken-paginated variant of the same review data the reviews stream already covers via page/perPage pagination; Trustpilot's own docs recommend all-reviews only beyond the reviews endpoint's 100,000-record cap, a scale concern rather than a distinct data source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/categories",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "business-unit image asset URLs collection; binary-image-adjacent metadata with no declarative dialect representation and no use to a reverse-ETL/analytics sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/images/header",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "header image asset; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/images/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "business-unit or location logo image; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/images/promotion-box",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "promotion-box image asset; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/profileinfo",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "business-unit profile detail (contact info, address, social media); this bundle's legacy-parity business_units stream already covers business-unit identity data (id/display_name) from the bare-object /v1/business-units/{id} endpoint at the exact narrow field set legacy's own businessUnitRecord emits; widening it to profileinfo's fuller field set is a schema-parity change out of scope for a capability-preserving Pass B pass on a legacy-mapped stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/reviews",
+      "covered_by": {
+        "stream": "reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{businessUnitId}/web-links",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns locale-specific review/evaluate web-page URLs for linking out to the public Trustpilot site; presentation/linking metadata, not business-unit object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/business-units/{business_unit_id}",
+      "covered_by": {
+        "stream": "business_units"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/categories",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "global category taxonomy lookup (not business-unit scoped); the categories stream already covers the business-unit-relevant subset via the business-unit-scoped endpoint, which is the data this connector's config (business_unit_id) is actually scoped to"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/categories/{categoryId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single global category taxonomy detail lookup by id; reference/lookup data, not business-unit object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/categories/{categoryId}/business-units",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists OTHER companies' business units in a given category; not this account's own data and unrelated to the configured business_unit_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/consumers/{consumerId}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reviews written by a specific consumer across ALL business units on Trustpilot; a consumer-centric (not business-unit-centric) view this connector's business_unit_id-scoped config has no natural id to request with, since the connector never learns arbitrary consumerIds it wasn't already given from another stream's response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/conversations/{conversationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the Product Reviews API's product-conversation surface is a distinct product line (Trustpilot Product Reviews, requiring a separate product-review integration) this connector's business-unit-scoped legacy spec was never built against"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/business-units/{businessUnitId}/products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists a business unit's product catalog for product reviews; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/business-units/{businessUnitId}/products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates/upserts products in the product catalog; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/business-units/{businessUnitId}/reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "private reviews (includes customer email and order ID) require a Business user OAuth Token; this connector's spec.json only declares an apikey-query credential (matching legacy exactly), which the OAuth-gated private-review surface cannot authenticate against"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/business-units/{business_unit_id}/invitations",
+      "covered_by": {
+        "stream": "invitations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/conversations/{conversationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "product-review conversation detail; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/conversations/{conversationId}/comments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "product-review conversation reply; requires a Business user OAuth Token this connector's apikey-query-only spec.json cannot provide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/conversations/{conversationId}/comments/{commentId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single conversation comment detail; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/private/conversations/{conversationId}/comments/{commentId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "edits a conversation comment; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/conversations/{conversationId}/state",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "changes a product-review conversation's state; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/product-reviews/business-units/{businessUnitId}/invitation-links",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "product-review invitation link generation; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/product-reviews/business-units/{businessUnitId}/reviews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "private product reviews; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/product-reviews/business-units/{businessUnitId}/summaries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "private product-review summaries; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/product-reviews/{reviewId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "single private product-review detail; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/product-reviews/{reviewId}/create-conversation",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "starts a product-review conversation; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/reviews/{reviewId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "private single-review detail (includes non-public fields); requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/reviews/{reviewId}/find-reviewer",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "requests reviewer-identity disclosure for a review; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/private/reviews/{reviewId}/reply",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a review reply; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/reviews/{reviewId}/reply",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "replies to a review; requires a Business user OAuth Token this connector's apikey-query-only spec.json cannot provide (legacy never implemented writes at all)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/private/reviews/{reviewId}/tags",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a tag from a review; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/private/reviews/{reviewId}/tags",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists tags on a review; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/private/reviews/{reviewId}/tags",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "adds tags to a review; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/private/reviews/{reviewId}/tags",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "sets tags on a review; requires a Business user OAuth Token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API business-unit config; not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}/attribute-summaries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API surface (a distinct product-review product line from the service reviews this connector's spec is scoped to); not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}/batch-summaries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API surface; not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}/imported-reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API surface; not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}/imported-reviews-summaries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API surface; not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/product-reviews/business-units/{businessUnitId}/reviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Product Reviews API surface (per-SKU product reviews, distinct from the service reviews this connector's reviews stream covers); not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "static image-asset resource index; binary-image-adjacent metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/images/icons",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Trustpilot icon image assets; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/images/logos",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Trustpilot logo image assets; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/images/stars/{stars}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "star-rating badge image asset by star count; binary image resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/metadata/countries",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static list of supported country codes; reference/lookup data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/metadata/locales",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static list of supported locale codes; reference/lookup data, not business-unit object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources/strings/stars/{stars}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "localized display string for a given star rating; static UI string lookup, not business-unit object data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/latest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "cross-business-unit latest-reviews-by-language feed (a global/platform-wide view), not scoped to the configured business_unit_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/{reviewId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single review detail lookup by id; the reviews stream's list endpoint already returns this record's full field set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/{reviewId}/likes",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-review like count already present as numberOfLikes on the review record the reviews stream's list endpoint returns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/reviews/{reviewId}/web-links",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "public web-page link for a single review; presentation/linking metadata, not review object data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://invitations-api.trustpilot.com/v1/private/business-units/{businessUnitId}/email-invitations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "sends review-invitation emails to customers; requires a Business user OAuth Token this connector's apikey-query-only spec.json cannot provide"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://invitations-api.trustpilot.com/v1/private/business-units/{businessUnitId}/invitation-data/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "invitation data deletion requires a Business user OAuth Token on a distinct invitations-api.trustpilot.com host; this connector's apikey-query credential (matching legacy) cannot authenticate this request, and it is a destructive/irreversible action besides"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://invitations-api.trustpilot.com/v1/private/business-units/{businessUnitId}/invitation-links",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "generates a service-review invitation link; requires a Business user OAuth Token this connector's apikey-query-only spec.json cannot provide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "https://invitations-api.trustpilot.com/v1/private/business-units/{businessUnitId}/templates",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists invitation email templates; requires a Business user OAuth Token this connector's apikey-query-only spec.json cannot provide"
+      }
+    }
+  ]
+}

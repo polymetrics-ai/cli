@@ -1,0 +1,12 @@
+{
+  "record": {
+    "conversation_id": 123,
+    "attachment_id": 123,
+    "name": "Fixture delete_a_conversation_attachment",
+    "description": "Fixture delete_a_conversation_attachment record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/conversations/123/attachments/123"
+  }
+}

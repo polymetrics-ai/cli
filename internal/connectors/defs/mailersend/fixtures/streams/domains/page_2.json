@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/domains", "query": { "page": "2", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "domain_fixture_26",
+          "name": "fixture-26.example.com",
+          "dkim": true,
+          "spf": true,
+          "tracking": true,
+          "is_verified": true,
+          "is_dns_active": true,
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}

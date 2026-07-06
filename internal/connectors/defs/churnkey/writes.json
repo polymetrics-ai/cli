@@ -1,0 +1,79 @@
+{
+  "actions": [
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/api/events/new",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event", "customerId"],
+        "properties": {
+          "event": { "type": "string" },
+          "customerId": { "type": "string" },
+          "uid": { "type": "string" },
+          "eventDate": { "type": "string" },
+          "eventData": { "type": "object" },
+          "user": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; records a usage/billing event against a Churnkey customer, influencing cancel-flow offer targeting; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/api/events/customer-update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customerId": { "type": "string" },
+          "uid": { "type": "string" },
+          "customerData": { "type": "object" },
+          "user": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; overwrites a Churnkey customer's tracked attributes used to drive cancel-flow segmentation and offer eligibility; approval required"
+    },
+    {
+      "name": "set_billing_users",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/api/events/customer-update/set-users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customerId", "users"],
+        "properties": {
+          "customerId": { "type": "string" },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["userId", "data"],
+              "properties": {
+                "userId": { "type": "string" },
+                "data": {
+                  "type": "object",
+                  "required": ["email", "name", "billingAdmin"],
+                  "properties": {
+                    "email": { "type": "string" },
+                    "name": { "type": "string" },
+                    "billingAdmin": { "type": "boolean" },
+                    "phone": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; overwrites which users on a Churnkey customer account receive Payment Recovery billing-contact emails; approval required"
+    }
+  ]
+}

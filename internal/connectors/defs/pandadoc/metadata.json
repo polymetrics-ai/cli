@@ -1,0 +1,24 @@
+{
+  "name": "pandadoc",
+  "display_name": "PandaDoc",
+  "description": "Reads and writes documented PandaDoc public API resources across documents, templates, contacts, folders, forms, logs, members, webhooks, workspaces, notary, and catalog surfaces.",
+  "integration_type": "api",
+  "docs_url": "https://developers.pandadoc.com/reference/about",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PandaDoc API read of document, template, contact, member, workspace, webhook, notary, and catalog data",
+    "write": "external PandaDoc API mutations including document sending/status changes, contact/template/folder/webhook/admin updates, and destructive deletes",
+    "approval": "required for write actions; destructive and notification-sending actions carry explicit risk metadata"
+  }
+}

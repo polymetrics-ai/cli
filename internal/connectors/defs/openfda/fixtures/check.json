@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/drug/event.json", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 1, "total": 1 } },
+      "results": [
+        { "safetyreportid": "fixture_1", "safetyreportversion": "1", "receivedate": "20260101", "receiptdate": "20260101", "serious": "1", "seriousnessdeath": "0", "transmissiondate": "20260101", "primarysourcecountry": "US", "occurcountry": "US", "fulfillexpeditecriteria": "0" }
+      ]
+    }
+  }
+}

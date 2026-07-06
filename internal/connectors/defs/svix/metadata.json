@@ -1,0 +1,24 @@
+{
+  "name": "svix",
+  "display_name": "Svix",
+  "description": "Reads Svix applications, endpoints, event types, messages, message delivery attempts, background tasks, connectors, and operational webhook endpoints, and writes application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle mutations and outgoing messages, through the Svix REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.svix.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Svix API read of application, endpoint, message, and delivery-attempt data",
+    "write": "external Svix API mutation (application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle, outgoing message creation)",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

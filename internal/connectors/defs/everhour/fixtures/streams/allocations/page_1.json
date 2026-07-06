@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/allocations" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 301,
+        "startDate": "2026-01-01",
+        "endDate": "2026-12-31",
+        "timeOffType": 1,
+        "days": 20,
+        "accrualFrequency": "yearly",
+        "restrictOverAllocation": false,
+        "completed": false,
+        "notes": "Fixture allocation"
+      }
+    ]
+  }
+}

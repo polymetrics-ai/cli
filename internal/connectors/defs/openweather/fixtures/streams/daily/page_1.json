@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/onecall", "query": { "lat": "synthetic-conformance-value", "lon": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lat": 33.44,
+      "lon": -94.04,
+      "timezone": "America/Chicago",
+      "daily": [
+        {
+          "dt": 1767225600,
+          "sunrise": 1767225600,
+          "sunset": 1767268800,
+          "summary": "Expect a day of partly cloudy weather",
+          "temp": { "day": 299.03, "min": 290.69, "max": 300.35 },
+          "pressure": 1014,
+          "humidity": 70,
+          "wind_speed": 3.13,
+          "wind_deg": 93,
+          "pop": 0.1,
+          "uvi": 4.2,
+          "weather": [{ "id": 803, "main": "Clouds", "description": "broken clouds", "icon": "04d" }]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "mailersend",
+  "display_name": "MailerSend",
+  "description": "Reads MailerSend email activity, analytics, domains, messages, recipients, templates, scheduled messages, sender identities, inbound routes, users, invites, tokens, and webhooks through the MailerSend REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.mailersend.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external MailerSend API read of email activity, analytics, domain, message, recipient, template, schedule, identity, inbound-route, account-user, token, invite, and webhook data",
+    "approval": "none; read-only"
+  }
+}

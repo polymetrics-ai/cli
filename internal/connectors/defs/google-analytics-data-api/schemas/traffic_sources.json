@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "traffic_sources",
+  "type": "object",
+  "properties": {
+    "property_id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "sessionSource": {
+      "type": "string"
+    },
+    "sessionMedium": {
+      "type": "string"
+    },
+    "sessions": {
+      "type": "number"
+    },
+    "activeUsers": {
+      "type": "number"
+    },
+    "newUsers": {
+      "type": "number"
+    },
+    "engagedSessions": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "property_id",
+    "date",
+    "sessionSource",
+    "sessionMedium"
+  ],
+  "x-cursor-field": "date"
+}

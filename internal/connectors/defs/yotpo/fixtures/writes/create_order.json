@@ -1,0 +1,23 @@
+{
+  "record": {
+    "order": {
+      "external_id": "order-ext-new",
+      "order_date": "2026-01-15T00:00:00Z",
+      "customer": { "external_id": "customer_fixture_1", "email": "fixture1@example.com" },
+      "line_items": [ { "external_product_id": "ext-fixture-1", "quantity": 1 } ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/orders",
+    "body": {
+      "order": {
+        "external_id": "order-ext-new",
+        "order_date": "2026-01-15T00:00:00Z",
+        "customer": { "external_id": "customer_fixture_1", "email": "fixture1@example.com" },
+        "line_items": [ { "external_product_id": "ext-fixture-1", "quantity": 1 } ]
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "order": { "yotpo_id": 777777 } } }
+}

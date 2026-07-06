@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "User ID"
+    },
+    "email": {
+      "type": "string",
+      "description": "User email"
+    },
+    "type": {
+      "type": "string",
+      "description": "Object type"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

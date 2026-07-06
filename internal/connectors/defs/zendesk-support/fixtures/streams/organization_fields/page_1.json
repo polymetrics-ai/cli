@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/organization_fields",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organization_fields": [
+        {
+          "active": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "custom_field_options": [
+
+          ],
+          "description": "fixture_description",
+          "id": 1,
+          "key": "fixture_key",
+          "position": 7,
+          "raw_description": "fixture_raw_description",
+          "raw_title": "fixture_raw_title",
+          "regexp_for_validation": "fixture_regexp_for_validation",
+          "relationship_filter": {
+          },
+          "relationship_target_type": "fixture_relationship_target_type",
+          "system": true,
+          "tag": "fixture_tag",
+          "title": "fixture_title",
+          "type": "fixture_type",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "url": "fixture_url"
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

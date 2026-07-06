@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "nps",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "date": { "type": "string", "format": "date-time" },
+    "score": { "type": ["number", "null"] },
+    "feedback": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "userEmail": { "type": ["string", "null"] },
+    "userFirstName": { "type": ["string", "null"] },
+    "userLastName": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "os": { "type": ["string", "null"] },
+    "browser": { "type": ["string", "null"] },
+    "origin": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "refUrl": { "type": ["string", "null"] },
+    "filter": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,677 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "keka"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "pageNumber",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/hris/employees",
+      "query": {
+        "pageNumber": "1",
+        "pageSize": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "keka client credentials are missing or invalid; re-run pm credentials add keka"
+      },
+      {
+        "status": 403,
+        "hint": "keka account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "keka rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employees",
+      "path": "/hris/employees",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employees.json"
+    },
+    {
+      "name": "attendance",
+      "path": "/time/attendance",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/attendance.json"
+    },
+    {
+      "name": "leave_types",
+      "path": "/time/leavetypes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/leave_types.json"
+    },
+    {
+      "name": "leave_requests",
+      "path": "/time/leaverequests",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/leave_requests.json"
+    },
+    {
+      "name": "clients",
+      "path": "/psa/clients",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "path": "/psa/projects",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "employee",
+      "path": "/hris/employees/{{ config.employee_id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_update_fields",
+      "path": "/hris/employees/updatefields",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_update_fields.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "groups",
+      "path": "/hris/groups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group_types",
+      "path": "/hris/grouptypes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/group_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "departments",
+      "path": "/hris/departments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/departments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "locations",
+      "path": "/hris/locations",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/locations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "job_titles",
+      "path": "/hris/jobtitles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/job_titles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "currencies",
+      "path": "/hris/currencies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/currencies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notice_periods",
+      "path": "/hris/noticeperiods",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/notice_periods.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "exit_reasons",
+      "path": "/hris/exitreasons",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/exit_reasons.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "document_types",
+      "path": "/hris/documents/types",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/document_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_documents",
+      "path": "/hris/employees/{{ config.employee_id }}/documenttypes/{{ config.document_type_id }}/documents",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_documents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_document_attachment_download_urls",
+      "path": "/hris/employees/{{ config.employee_id }}/documents/{{ config.document_id }}/attachment/{{ config.attachment_id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_document_attachment_download_urls.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "leave_balances",
+      "path": "/time/leavebalance",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/leave_balances.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "leave_plans",
+      "path": "/time/leaveplans",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/leave_plans.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "capture_schemes",
+      "path": "/time/capturescheme",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/capture_schemes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "shift_policies",
+      "path": "/time/shiftpolicies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/shift_policies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "holiday_calendars",
+      "path": "/time/holidayscalendar",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/holiday_calendars.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tracking_policies",
+      "path": "/time/penalisationpolicies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tracking_policies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "weekly_off_policies",
+      "path": "/time/weeklyoffpolicies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/weekly_off_policies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "salary_components",
+      "path": "/payroll/salarycomponents",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/salary_components.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_groups",
+      "path": "/payroll/paygroups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_cycles",
+      "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_cycles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_register",
+      "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles/{{ config.pay_cycle_id }}/payregister",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_register.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_batches",
+      "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles/{{ config.pay_cycle_id }}/paybatches",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_batches.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "batch_payments",
+      "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles/{{ config.pay_cycle_id }}/paybatches/{{ config.pay_batch_id }}/payments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/batch_payments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_grades",
+      "path": "/time/payroll/paygrades",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_grades.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pay_bands",
+      "path": "/payroll/payband",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pay_bands.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_salaries",
+      "path": "/payroll/salaries",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_salaries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_fnf_details",
+      "path": "/payroll/employees/fnf",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_fnf_details.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "client",
+      "path": "/psa/clients/{{ config.client_id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/client.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "billing_roles",
+      "path": "/psa/clients/{{ config.client_id }}/billingroles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/billing_roles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_phases",
+      "path": "/psa/projects/{{ config.project_id }}/phases",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_phases.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project",
+      "path": "/psa/projects/{{ config.project_id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_allocations",
+      "path": "/psa/projects/{{ config.project_id }}/allocations",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_allocations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_time_entries",
+      "path": "/psa/projects/{{ config.project_id }}/timeentries",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_time_entries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_tasks",
+      "path": "/psa/projects/{{ config.project_id }}/tasks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_task_time_entries",
+      "path": "/psa/projects/{{ config.project_id }}/tasks/{{ config.task_id }}/timeentries",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_task_time_entries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "project_task_assignees",
+      "path": "/psa/projects/{{ config.project_id }}/tasks/{{ config.task_id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_task_assignees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "timesheet_entries",
+      "path": "/psa/timeentries",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/timesheet_entries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pms_timeframes",
+      "path": "/pms/timeframes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pms_timeframes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "goals",
+      "path": "/pms/goals",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/goals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "badges",
+      "path": "/pms/badges",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/badges.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "praise",
+      "path": "/pms/praise",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/praise.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "review_groups",
+      "path": "/pms/reviewgroups",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/review_groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "review_cycles",
+      "path": "/pms/reviewcycles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/review_cycles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "reviews",
+      "path": "/pms/reviews",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/reviews.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "hire_jobs",
+      "path": "/hire/jobs",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/hire_jobs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "job_application_fields",
+      "path": "/hire/jobs/{{ config.job_id }}/applicationfields",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/job_application_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "candidates",
+      "path": "/hire/jobs/{{ config.job_id }}/candidates",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/candidates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "candidate_interviews",
+      "path": "/hire/jobs/{{ config.job_id }}/candidate/{{ config.candidate_id }}/interviews",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/candidate_interviews.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "candidate_scorecards",
+      "path": "/hire/jobs/{{ config.job_id }}/candidate/{{ config.candidate_id }}/scorecards",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/candidate_scorecards.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "preboarding_candidates",
+      "path": "/hire/preboarding/candiates",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/preboarding_candidates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_categories",
+      "path": "/expense/categories",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/expense_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_claims",
+      "path": "/expense/claims",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/expense_claims.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "expense_policies",
+      "path": "/expensepolicies",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/expense_policies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "assets",
+      "path": "/assets",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/assets.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "asset_types",
+      "path": "/assets/types",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/asset_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "asset_categories",
+      "path": "/assets/categories",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/asset_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "asset_conditions",
+      "path": "/assets/conditions",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/asset_conditions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "requisition_requests",
+      "path": "/requisition/requests",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/requisition_requests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "employee_skills",
+      "path": "/hris/employees/{{ config.employee_id }}/skills",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/employee_skills.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bgv_requests",
+      "path": "/hris/bgv/{{ config.bgv_id }}/requests",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/bgv_requests.json",
+      "projection": "passthrough"
+    }
+  ]
+}

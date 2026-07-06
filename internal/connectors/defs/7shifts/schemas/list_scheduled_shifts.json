@@ -1,0 +1,103 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "location_id": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "department_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "role_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "station_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "station_name": {
+      "type": "string"
+    },
+    "start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "close": {
+      "type": "boolean"
+    },
+    "business_decline": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "publish_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "draft_deleted",
+        "published_deleted"
+      ]
+    },
+    "open": {
+      "type": "boolean"
+    },
+    "attendance_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "sick",
+        "no_show",
+        "late",
+        "called_off",
+        "called_in",
+        "custom"
+      ]
+    },
+    "company_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "location_id",
+    "start",
+    "end",
+    "close",
+    "business_decline",
+    "notes",
+    "publish_status",
+    "open",
+    "attendance_status",
+    "station_name"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_scheduled_shifts",
+  "x-primary-key": [
+    "id"
+  ]
+}

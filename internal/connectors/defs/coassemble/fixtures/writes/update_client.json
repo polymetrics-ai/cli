@@ -1,0 +1,9 @@
+{
+  "record": { "clientIdentifier": "fixture-client-1", "metadata": { "plan": "enterprise" } },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/headless/client/fixture-client-1",
+    "body": { "metadata": { "plan": "enterprise" } }
+  },
+  "response": { "status": 200, "body": { "clientIdentifier": "fixture-client-1" } }
+}

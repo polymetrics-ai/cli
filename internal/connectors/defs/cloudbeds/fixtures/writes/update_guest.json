@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "guestID": "guest_fixture_1", "guestFirstName": "Updated" },
+  "expect": { "method": "PUT", "path": "/putGuest" },
+  "response": { "status": 200, "body": { "success": true } }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/contracts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ctr_fixture_1", "employee_id": "emp_fixture_1", "type": "full_time", "start_date": "2026-01-01", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "ctr_fixture_2", "employee_id": "emp_fixture_2", "type": "part_time", "start_date": "2026-01-02", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "next_offset": "" }
+    }
+  }
+}

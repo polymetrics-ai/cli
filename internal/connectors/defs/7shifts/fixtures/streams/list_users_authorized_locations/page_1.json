@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value/authorized_locations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "company_id": 1001,
+          "name": "fixture name",
+          "country": "fixture country",
+          "timezone": "12:00:00",
+          "hash": "fixture hash",
+          "sun_hours_close": "12:00:00",
+          "mon_hours_close": "12:00:00",
+          "tue_hours_close": "12:00:00",
+          "wed_hours_close": "12:00:00",
+          "thu_hours_close": "12:00:00",
+          "fri_hours_close": "12:00:00",
+          "sat_hours_close": "12:00:00",
+          "sun_hours_open": "12:00:00",
+          "mon_hours_open": "12:00:00",
+          "tue_hours_open": "12:00:00",
+          "wed_hours_open": "12:00:00",
+          "thu_hours_open": "12:00:00",
+          "fri_hours_open": "12:00:00",
+          "sat_hours_open": "12:00:00",
+          "sun_is_closed": true,
+          "mon_is_closed": true,
+          "tue_is_closed": true,
+          "wed_is_closed": true,
+          "thu_is_closed": true,
+          "fri_is_closed": true,
+          "sat_is_closed": true,
+          "shift_feedback": true,
+          "department_based_budget": true,
+          "state": "fixture state",
+          "city": "fixture city",
+          "formatted_address": "fixture formatted address",
+          "place_id": "fixture-id",
+          "message": "fixture message",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z",
+          "lat": 12.34,
+          "lng": 12.34,
+          "timezone_updated": true,
+          "mapping_id": "fixture-id",
+          "holiday_pay": true,
+          "auto_send_log_book_time": "12:00:00",
+          "deleted": true
+        }
+      ]
+    }
+  }
+}

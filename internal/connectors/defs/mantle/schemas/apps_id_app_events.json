@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apps_id_app_events",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "appId": {
+      "type": "string"
+    },
+    "customerId": {
+      "type": "string",
+      "description": "The ID of the customer. If applicable to the app event."
+    },
+    "appInstallationId": {
+      "type": "string",
+      "description": "The ID of the app installation. If applicable to the app event."
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "The ID of the transaction. If applicable to the app event."
+    },
+    "previousSubscriptionId": {
+      "type": "string",
+      "description": "The ID of the previous subscription. If applicable to the app event."
+    },
+    "subscriptionId": {
+      "type": "string",
+      "description": "The ID of the subscription. If applicable to the app event."
+    },
+    "occurredAt": {
+      "type": "string",
+      "description": "The date and time the app event occurred.",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The date and time the app event was created in Mantle.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The date and time the app event was last updated. Events are not usually updated.",
+      "format": "date-time"
+    }
+  }
+}

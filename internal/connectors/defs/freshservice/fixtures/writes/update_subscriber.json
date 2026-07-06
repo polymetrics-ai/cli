@@ -1,0 +1,16 @@
+{
+  "record": {
+    "status_page_id": 123,
+    "subscriber_id": 123,
+    "name": "Fixture update_subscriber",
+    "description": "Fixture update_subscriber record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/status/pages/123/subscribers/123",
+    "body": {
+      "name": "Fixture update_subscriber",
+      "description": "Fixture update_subscriber record"
+    }
+  }
+}

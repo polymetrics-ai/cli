@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture create component"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/components",
+    "body": {
+      "name": "Fixture create component"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_component_fixture_response"
+    }
+  }
+}

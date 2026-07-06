@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company_id": "CMP_fixture_1",
+    "integration_id": 1,
+    "tracker_ids": ["TRK_fixture_1"],
+    "min_duration": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/integration_triggers.json",
+    "body": {
+      "company_id": "CMP_fixture_1",
+      "integration_id": 1,
+      "tracker_ids": ["TRK_fixture_1"],
+      "min_duration": 1
+    }
+  },
+  "response": { "status": 201, "body": { "id": 1, "company_id": "CMP_fixture_1" } }
+}

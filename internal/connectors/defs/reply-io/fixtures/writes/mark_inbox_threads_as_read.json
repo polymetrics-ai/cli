@@ -1,0 +1,18 @@
+{
+  "record": {
+    "threadIds": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/inbox/threads/mark-as-read",
+    "body": {
+      "threadIds": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

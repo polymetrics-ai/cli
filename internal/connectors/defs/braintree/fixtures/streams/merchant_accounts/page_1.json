@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/merchant_accounts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "merchant_accounts": [
+        { "id": "merchant_account_fixture_1", "status": "active", "currency_iso_code": "USD", "default": true }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date_modification",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "ref": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "price_ttc": { "type": ["string", "null"] },
+    "tva_tx": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "status_buy": { "type": ["string", "null"] },
+    "stock_reel": { "type": ["string", "null"] },
+    "date_creation": { "type": ["integer", "null"] },
+    "date_modification": { "type": ["integer", "null"] }
+  }
+}

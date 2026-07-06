@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clients",
+    "query": {
+      "page": "1",
+      "per-page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "client_id": 5,
+        "name": "Fixture Client",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

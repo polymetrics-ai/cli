@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_zones",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string", "description": "IANA time zone identifier, e.g. America/New_York." },
+    "display_name": { "type": ["string", "null"] },
+    "abbreviation": { "type": ["string", "null"] },
+    "utc_offset": { "type": ["integer", "null"] },
+    "dst": { "type": ["boolean", "null"] }
+  }
+}

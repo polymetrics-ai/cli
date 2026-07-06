@@ -1,0 +1,621 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerGroups/search",
+    "query": {
+      "searchCriteria[currentPage]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "code": "Fixture Group 1",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 2,
+          "code": "Fixture Group 2",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 3,
+          "code": "Fixture Group 3",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 4,
+          "code": "Fixture Group 4",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 5,
+          "code": "Fixture Group 5",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 6,
+          "code": "Fixture Group 6",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 7,
+          "code": "Fixture Group 7",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 8,
+          "code": "Fixture Group 8",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 9,
+          "code": "Fixture Group 9",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 10,
+          "code": "Fixture Group 10",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 11,
+          "code": "Fixture Group 11",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 12,
+          "code": "Fixture Group 12",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 13,
+          "code": "Fixture Group 13",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 14,
+          "code": "Fixture Group 14",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 15,
+          "code": "Fixture Group 15",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 16,
+          "code": "Fixture Group 16",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 17,
+          "code": "Fixture Group 17",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 18,
+          "code": "Fixture Group 18",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 19,
+          "code": "Fixture Group 19",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 20,
+          "code": "Fixture Group 20",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 21,
+          "code": "Fixture Group 21",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 22,
+          "code": "Fixture Group 22",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 23,
+          "code": "Fixture Group 23",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 24,
+          "code": "Fixture Group 24",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 25,
+          "code": "Fixture Group 25",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 26,
+          "code": "Fixture Group 26",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 27,
+          "code": "Fixture Group 27",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 28,
+          "code": "Fixture Group 28",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 29,
+          "code": "Fixture Group 29",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 30,
+          "code": "Fixture Group 30",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 31,
+          "code": "Fixture Group 31",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 32,
+          "code": "Fixture Group 32",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 33,
+          "code": "Fixture Group 33",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 34,
+          "code": "Fixture Group 34",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 35,
+          "code": "Fixture Group 35",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 36,
+          "code": "Fixture Group 36",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 37,
+          "code": "Fixture Group 37",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 38,
+          "code": "Fixture Group 38",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 39,
+          "code": "Fixture Group 39",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 40,
+          "code": "Fixture Group 40",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 41,
+          "code": "Fixture Group 41",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 42,
+          "code": "Fixture Group 42",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 43,
+          "code": "Fixture Group 43",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 44,
+          "code": "Fixture Group 44",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 45,
+          "code": "Fixture Group 45",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 46,
+          "code": "Fixture Group 46",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 47,
+          "code": "Fixture Group 47",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 48,
+          "code": "Fixture Group 48",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 49,
+          "code": "Fixture Group 49",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 50,
+          "code": "Fixture Group 50",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 51,
+          "code": "Fixture Group 51",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 52,
+          "code": "Fixture Group 52",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 53,
+          "code": "Fixture Group 53",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 54,
+          "code": "Fixture Group 54",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 55,
+          "code": "Fixture Group 55",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 56,
+          "code": "Fixture Group 56",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 57,
+          "code": "Fixture Group 57",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 58,
+          "code": "Fixture Group 58",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 59,
+          "code": "Fixture Group 59",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 60,
+          "code": "Fixture Group 60",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 61,
+          "code": "Fixture Group 61",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 62,
+          "code": "Fixture Group 62",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 63,
+          "code": "Fixture Group 63",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 64,
+          "code": "Fixture Group 64",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 65,
+          "code": "Fixture Group 65",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 66,
+          "code": "Fixture Group 66",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 67,
+          "code": "Fixture Group 67",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 68,
+          "code": "Fixture Group 68",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 69,
+          "code": "Fixture Group 69",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 70,
+          "code": "Fixture Group 70",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 71,
+          "code": "Fixture Group 71",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 72,
+          "code": "Fixture Group 72",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 73,
+          "code": "Fixture Group 73",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 74,
+          "code": "Fixture Group 74",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 75,
+          "code": "Fixture Group 75",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 76,
+          "code": "Fixture Group 76",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 77,
+          "code": "Fixture Group 77",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 78,
+          "code": "Fixture Group 78",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 79,
+          "code": "Fixture Group 79",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 80,
+          "code": "Fixture Group 80",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 81,
+          "code": "Fixture Group 81",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 82,
+          "code": "Fixture Group 82",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 83,
+          "code": "Fixture Group 83",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 84,
+          "code": "Fixture Group 84",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 85,
+          "code": "Fixture Group 85",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 86,
+          "code": "Fixture Group 86",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 87,
+          "code": "Fixture Group 87",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 88,
+          "code": "Fixture Group 88",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 89,
+          "code": "Fixture Group 89",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 90,
+          "code": "Fixture Group 90",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 91,
+          "code": "Fixture Group 91",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 92,
+          "code": "Fixture Group 92",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 93,
+          "code": "Fixture Group 93",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 94,
+          "code": "Fixture Group 94",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 95,
+          "code": "Fixture Group 95",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 96,
+          "code": "Fixture Group 96",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 97,
+          "code": "Fixture Group 97",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 98,
+          "code": "Fixture Group 98",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 99,
+          "code": "Fixture Group 99",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        },
+        {
+          "id": 100,
+          "code": "Fixture Group 100",
+          "tax_class_id": 3,
+          "tax_class_name": "Retail Customer"
+        }
+      ],
+      "search_criteria": {
+        "page_size": 100,
+        "current_page": 1
+      },
+      "total_count": 101
+    }
+  }
+}

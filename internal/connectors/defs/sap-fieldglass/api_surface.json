@@ -1,0 +1,15 @@
+{
+  "api": "SAP Fieldglass REST API",
+  "docs": "https://api.sap.com/package/SAPFieldglass/rest",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full SAP Fieldglass surface (assignments, invoices, statements of work, write endpoints, etc.) is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/workers", "covered_by": { "stream": "workers" } },
+    { "method": "GET", "path": "/api/v1/job_postings", "covered_by": { "stream": "job_postings" } },
+    { "method": "GET", "path": "/api/v1/time_sheets", "covered_by": { "stream": "time_sheets" } },
+    { "method": "GET", "path": "/api/v1/assignments", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/statements_of_work", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "GET", "path": "/api/v1/invoices", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } },
+    { "method": "POST", "path": "/api/v1/time_sheets", "excluded": { "category": "out_of_scope", "reason": "Pass B capability expansion" } }
+  ]
+}

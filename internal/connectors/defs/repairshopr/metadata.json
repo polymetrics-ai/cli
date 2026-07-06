@@ -1,0 +1,22 @@
+{
+  "name": "repairshopr",
+  "display_name": "RepairShopr",
+  "description": "Reads RepairShopr customers, tickets, invoices, estimates, and assets through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-docs.repairshopr.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external RepairShopr API read of customer and shop-management data"
+  }
+}

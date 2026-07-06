@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/members"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        {
+          "id": "job_member_fixture_1",
+          "name": "Fixture Job Member",
+          "email": "job.member.fixture@example.test"
+        }
+      ]
+    }
+  }
+}

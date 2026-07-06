@@ -1,0 +1,29 @@
+{
+  "api": "Apify Dataset legacy connector hook surface",
+  "docs": "https://docs.apify.com/api/v2",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy apify-dataset connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/apify-dataset, which delegates to internal/connectors/apify-dataset until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/apify-dataset item_collection read path",
+      "covered_by": {
+        "stream": "item_collection"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/apify-dataset dataset_collection read path",
+      "covered_by": {
+        "stream": "dataset_collection"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/apify-dataset dataset read path",
+      "covered_by": {
+        "stream": "dataset"
+      }
+    }
+  ]
+}

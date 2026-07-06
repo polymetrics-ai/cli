@@ -10,22 +10,45 @@ SYNOPSIS
   pm credentials add <name> --connector serpstat [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Serpstat SEO domain keyword and competitor data through the Serpstat API.
+  Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serpstat JSON-RPC-over-HTTP API. Read-only.
+
+ICON
+  asset: icons/serpstat.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  domain
+  page_size
+  pages_to_fetch
+  region_id
+  api_key (secret)
+
+ETL STREAMS
+  domain_keywords:
+    primary key: keyword, url
+    fields: keyword(), position(), updated_at(), url()
+  domain_competitors:
+    primary key: domain
+    fields: domain(), visibility()
+  domain_urls:
+    primary key: url
+    fields: keywords(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Serpstat API read of domain keyword/competitor/top-URL SEO metrics
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

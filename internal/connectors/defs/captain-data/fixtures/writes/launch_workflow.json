@@ -1,0 +1,17 @@
+{
+  "record": {
+    "workflow_uid": "workflows_fixture_1",
+    "parameters": { "search_url": "https://example.com/fixture" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workflows/workflows_fixture_1/launch",
+    "body": {
+      "parameters": { "search_url": "https://example.com/fixture" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "job_uid": "jobs_fixture_1", "status": "running" }
+  }
+}

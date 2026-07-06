@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment-terms",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "paymentTermsNumber": 1,
+          "name": "Net 30",
+          "paymentTermsType": "netCash",
+          "duration": 30
+        }
+      ]
+    }
+  }
+}

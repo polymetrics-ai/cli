@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/locations" },
+  "response": {
+    "status": 200,
+    "body": { "locations": [] }
+  }
+}

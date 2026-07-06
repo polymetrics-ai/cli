@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/crm/account/list" },
+  "response": {
+    "status": 200,
+    "body": { "response": { "total_result": 0, "page": 1, "count": 0, "items": [] } }
+  }
+}

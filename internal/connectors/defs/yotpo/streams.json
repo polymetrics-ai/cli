@@ -1,0 +1,98 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Yotpo-Token", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/core/v3/stores/{{ config.store_id }}/products" },
+    "error_map": [
+      { "status": 401, "hint": "yotpo access_token is missing or invalid; re-run pm credentials add yotpo" },
+      { "status": 403, "hint": "yotpo store account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "yotpo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/core/v3/stores/{{ config.store_id }}/products",
+      "records": { "path": "products" },
+      "projection": "passthrough",
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "product_variants",
+      "path": "/core/v3/stores/{{ config.store_id }}/products/{{ config.product_id }}/variants",
+      "records": { "path": "variants" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/product_variants.json"
+    },
+    {
+      "name": "collections",
+      "path": "/core/v3/stores/{{ config.store_id }}/collections",
+      "records": { "path": "collections" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "customers",
+      "path": "/core/v3/stores/{{ config.store_id }}/customers",
+      "records": { "path": "customers" },
+      "projection": "passthrough",
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "orders",
+      "path": "/core/v3/stores/{{ config.store_id }}/orders",
+      "records": { "path": "orders" },
+      "projection": "passthrough",
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "webhook_targets",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets",
+      "records": { "path": "webhook_targets" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_targets.json"
+    },
+    {
+      "name": "webhook_filters",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters",
+      "records": { "path": "webhook_filters" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_filters.json"
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions",
+      "records": { "path": "webhook_subscriptions" },
+      "projection": "passthrough",
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.yotpo_id }}"
+      },
+      "schema": "schemas/webhook_subscriptions.json"
+    }
+  ]
+}

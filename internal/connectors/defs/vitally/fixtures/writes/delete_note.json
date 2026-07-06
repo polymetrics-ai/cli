@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "note_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/resources/notes/note_fixture_1"
+  }
+}

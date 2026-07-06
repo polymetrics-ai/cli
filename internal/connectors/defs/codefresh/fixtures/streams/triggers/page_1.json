@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hermes/triggers"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "event": "registry:dockerhub:fixture-org:fixture-image:push:fixture-event-id-1",
+        "pipeline": "5f8a1c2b3d4e5f6a7b8c9d01",
+        "filters": {
+          "tag": "latest"
+        },
+        "event-data": {
+          "account": "fixture-account-id",
+          "description": "Docker Hub fixture-org/fixture-image push event",
+          "endpoint": "https://g.codefresh.io/nomios/dockerhub?account=fixture-account-id&secret=fixtureval",
+          "help": "Docker Hub webhooks fire when an image is built in, pushed or a new tag is added to your repository.",
+          "secret": "fixtureval",
+          "status": "active",
+          "type": "registry",
+          "uri": "registry:dockerhub:fixture-org:fixture-image:push:fixture-event-id-1"
+        }
+      }
+    ]
+  }
+}

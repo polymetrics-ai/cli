@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leave_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "icon": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "budget": { "type": ["number", "null"] },
+    "default": { "type": ["boolean", "null"] },
+    "unpaidLeave": { "type": ["boolean", "null"] },
+    "leaveInDays": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

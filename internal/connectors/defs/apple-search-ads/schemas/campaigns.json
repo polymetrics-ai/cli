@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modification_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "org_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "serving_status": { "type": ["string", "null"] },
+    "display_status": { "type": ["string", "null"] },
+    "ad_channel_type": { "type": ["string", "null"] },
+    "supply_sources": { "type": ["array", "null"] },
+    "billing_event": { "type": ["string", "null"] },
+    "daily_budget_amount": { "type": ["object", "null"] },
+    "budget_amount": { "type": ["object", "null"] },
+    "countries_or_regions": { "type": ["array", "null"] },
+    "creation_time": { "type": ["string", "null"] },
+    "modification_time": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

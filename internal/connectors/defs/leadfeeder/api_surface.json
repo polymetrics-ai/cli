@@ -1,0 +1,52 @@
+{
+  "api": "Leadfeeder JSON:API (https://api.leadfeeder.com)",
+  "docs": "https://docs.leadfeeder.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: all 4 legacy-parity read streams (accounts, leads, visits, custom_feeds); every other Leadfeeder resource (users, feed rules, webhook/integration management, and all write/mutation endpoints) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/leads",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/visits",
+      "covered_by": {
+        "stream": "visits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/custom-feeds",
+      "covered_by": {
+        "stream": "custom_feeds"
+      }
+    },
+    {
+      "method": "*",
+      "path": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST/PATCH/DELETE",
+      "path": "all Leadfeeder mutation endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy itself is read-only (capabilities.write: false)"
+      }
+    }
+  ]
+}

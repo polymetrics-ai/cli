@@ -1,0 +1,116 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/roles/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "assignmentType": "CLIENT",
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "label": "label_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "status": "ACTIVE",
+      "type": "ACCESS_CERTIFICATIONS_ADMIN",
+      "_embedded": {
+        "targets": {
+          "groups": [
+            {
+              "created": "2026-01-01T00:00:00Z",
+              "id": "id_fixture",
+              "lastMembershipUpdated": "2026-01-01T00:00:00Z",
+              "lastUpdated": "2026-01-01T00:00:00Z",
+              "objectClass": [
+                "object_clas_fixture"
+              ],
+              "profile": {
+                "description": "description_fixture",
+                "name": "name_fixture"
+              },
+              "type": "APP_GROUP",
+              "_embedded": {
+                "stats": {
+                  "usersCount": {},
+                  "appsCount": {},
+                  "groupPushMappingsCount": {},
+                  "hasAdminPrivlege": {}
+                },
+                "app": {
+                  "id": {},
+                  "name": {},
+                  "label": {},
+                  "signOnMode": {}
+                }
+              },
+              "_links": {
+                "apps": {
+                  "hints": {},
+                  "href": {},
+                  "name": {},
+                  "templated": {},
+                  "type": {}
+                },
+                "logo": [
+                  {}
+                ],
+                "source": {
+                  "hints": {},
+                  "href": {},
+                  "name": {},
+                  "templated": {},
+                  "type": {}
+                },
+                "users": {
+                  "hints": {},
+                  "href": {},
+                  "name": {},
+                  "templated": {},
+                  "type": {}
+                }
+              }
+            }
+          ],
+          "catalog": {
+            "apps": [
+              {
+                "category": "category_fixture",
+                "description": "description_fixture",
+                "displayName": "display_name_fixture",
+                "features": [
+                  {}
+                ],
+                "id": "id_fixture",
+                "lastUpdated": "2026-01-01T00:00:00Z",
+                "name": "name_fixture",
+                "signOnModes": [
+                  {}
+                ],
+                "status": "ACTIVE",
+                "verificationStatus": "verification_status_fixture",
+                "website": "website_fixture",
+                "_links": {
+                  "logo": {},
+                  "self": {}
+                }
+              }
+            ]
+          }
+        }
+      },
+      "_links": {
+        "assignee": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

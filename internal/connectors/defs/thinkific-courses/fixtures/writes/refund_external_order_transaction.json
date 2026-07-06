@@ -1,0 +1,22 @@
+{
+  "record": {
+    "order_id": "order_id_fixture",
+    "name": "Fixture",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/external_orders/order_id_fixture/transactions/refund",
+    "body": {
+      "name": "Fixture",
+      "description": "Fixture description"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

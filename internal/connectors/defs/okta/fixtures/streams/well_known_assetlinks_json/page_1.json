@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/.well-known/assetlinks.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {}
+    ]
+  }
+}

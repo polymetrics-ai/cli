@@ -1,0 +1,84 @@
+{
+  "api": "LinkedIn Marketing API (https://api.linkedin.com/rest)",
+  "docs": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full LinkedIn Marketing surface (analytics/reporting finders, audiences, conversions, lead gen forms, video ads, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/adAccounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adAccountGroups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adCampaignGroups",
+      "covered_by": {
+        "stream": "campaign_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adCampaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/creatives",
+      "covered_by": {
+        "stream": "creatives"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adAnalytics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/conversions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/adTargetingFacets",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/adAccounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/adCampaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    }
+  ]
+}

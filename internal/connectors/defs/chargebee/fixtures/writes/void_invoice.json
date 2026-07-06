@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "inv_fixture_1",
+    "comment": "fixture void"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/inv_fixture_1/void"
+  }
+}

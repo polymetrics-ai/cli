@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/company_information"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "address": {
+        "city": "fixture_value",
+        "line1": "fixture_value",
+        "line2": "fixture_value",
+        "state": "fixture_value"
+      },
+      "displayName": "Fixture Name",
+      "legalName": "Fixture Name",
+      "phone": "fixture_value"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "actions": [
+    {
+      "name": "update_widget",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "widgets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "low"
+    }
+  ]
+}

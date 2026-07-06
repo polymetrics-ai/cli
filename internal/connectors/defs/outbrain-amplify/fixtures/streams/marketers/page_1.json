@@ -1,0 +1,1018 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/marketers",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "marketers": [
+        {
+          "id": "mkt_fixture_1",
+          "name": "Fixture Marketer 1",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 100,
+          "clicks": 10,
+          "spend": 12.34
+        },
+        {
+          "id": "mkt_fixture_2",
+          "name": "Fixture Marketer 2",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 200,
+          "clicks": 20,
+          "spend": 24.68
+        },
+        {
+          "id": "mkt_fixture_3",
+          "name": "Fixture Marketer 3",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 300,
+          "clicks": 30,
+          "spend": 37.02
+        },
+        {
+          "id": "mkt_fixture_4",
+          "name": "Fixture Marketer 4",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 400,
+          "clicks": 40,
+          "spend": 49.36
+        },
+        {
+          "id": "mkt_fixture_5",
+          "name": "Fixture Marketer 5",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 500,
+          "clicks": 50,
+          "spend": 61.7
+        },
+        {
+          "id": "mkt_fixture_6",
+          "name": "Fixture Marketer 6",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 600,
+          "clicks": 60,
+          "spend": 74.04
+        },
+        {
+          "id": "mkt_fixture_7",
+          "name": "Fixture Marketer 7",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 700,
+          "clicks": 70,
+          "spend": 86.38
+        },
+        {
+          "id": "mkt_fixture_8",
+          "name": "Fixture Marketer 8",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 800,
+          "clicks": 80,
+          "spend": 98.72
+        },
+        {
+          "id": "mkt_fixture_9",
+          "name": "Fixture Marketer 9",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 900,
+          "clicks": 90,
+          "spend": 111.06
+        },
+        {
+          "id": "mkt_fixture_10",
+          "name": "Fixture Marketer 10",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 1000,
+          "clicks": 100,
+          "spend": 123.4
+        },
+        {
+          "id": "mkt_fixture_11",
+          "name": "Fixture Marketer 11",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 1100,
+          "clicks": 110,
+          "spend": 135.74
+        },
+        {
+          "id": "mkt_fixture_12",
+          "name": "Fixture Marketer 12",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 1200,
+          "clicks": 120,
+          "spend": 148.08
+        },
+        {
+          "id": "mkt_fixture_13",
+          "name": "Fixture Marketer 13",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 1300,
+          "clicks": 130,
+          "spend": 160.42
+        },
+        {
+          "id": "mkt_fixture_14",
+          "name": "Fixture Marketer 14",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 1400,
+          "clicks": 140,
+          "spend": 172.76
+        },
+        {
+          "id": "mkt_fixture_15",
+          "name": "Fixture Marketer 15",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 1500,
+          "clicks": 150,
+          "spend": 185.1
+        },
+        {
+          "id": "mkt_fixture_16",
+          "name": "Fixture Marketer 16",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 1600,
+          "clicks": 160,
+          "spend": 197.44
+        },
+        {
+          "id": "mkt_fixture_17",
+          "name": "Fixture Marketer 17",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 1700,
+          "clicks": 170,
+          "spend": 209.78
+        },
+        {
+          "id": "mkt_fixture_18",
+          "name": "Fixture Marketer 18",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 1800,
+          "clicks": 180,
+          "spend": 222.12
+        },
+        {
+          "id": "mkt_fixture_19",
+          "name": "Fixture Marketer 19",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 1900,
+          "clicks": 190,
+          "spend": 234.46
+        },
+        {
+          "id": "mkt_fixture_20",
+          "name": "Fixture Marketer 20",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 2000,
+          "clicks": 200,
+          "spend": 246.8
+        },
+        {
+          "id": "mkt_fixture_21",
+          "name": "Fixture Marketer 21",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 2100,
+          "clicks": 210,
+          "spend": 259.14
+        },
+        {
+          "id": "mkt_fixture_22",
+          "name": "Fixture Marketer 22",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 2200,
+          "clicks": 220,
+          "spend": 271.48
+        },
+        {
+          "id": "mkt_fixture_23",
+          "name": "Fixture Marketer 23",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 2300,
+          "clicks": 230,
+          "spend": 283.82
+        },
+        {
+          "id": "mkt_fixture_24",
+          "name": "Fixture Marketer 24",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 2400,
+          "clicks": 240,
+          "spend": 296.16
+        },
+        {
+          "id": "mkt_fixture_25",
+          "name": "Fixture Marketer 25",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 2500,
+          "clicks": 250,
+          "spend": 308.5
+        },
+        {
+          "id": "mkt_fixture_26",
+          "name": "Fixture Marketer 26",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 2600,
+          "clicks": 260,
+          "spend": 320.84
+        },
+        {
+          "id": "mkt_fixture_27",
+          "name": "Fixture Marketer 27",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 2700,
+          "clicks": 270,
+          "spend": 333.18
+        },
+        {
+          "id": "mkt_fixture_28",
+          "name": "Fixture Marketer 28",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 2800,
+          "clicks": 280,
+          "spend": 345.52
+        },
+        {
+          "id": "mkt_fixture_29",
+          "name": "Fixture Marketer 29",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 2900,
+          "clicks": 290,
+          "spend": 357.86
+        },
+        {
+          "id": "mkt_fixture_30",
+          "name": "Fixture Marketer 30",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 3000,
+          "clicks": 300,
+          "spend": 370.2
+        },
+        {
+          "id": "mkt_fixture_31",
+          "name": "Fixture Marketer 31",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 3100,
+          "clicks": 310,
+          "spend": 382.54
+        },
+        {
+          "id": "mkt_fixture_32",
+          "name": "Fixture Marketer 32",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 3200,
+          "clicks": 320,
+          "spend": 394.88
+        },
+        {
+          "id": "mkt_fixture_33",
+          "name": "Fixture Marketer 33",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 3300,
+          "clicks": 330,
+          "spend": 407.22
+        },
+        {
+          "id": "mkt_fixture_34",
+          "name": "Fixture Marketer 34",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 3400,
+          "clicks": 340,
+          "spend": 419.56
+        },
+        {
+          "id": "mkt_fixture_35",
+          "name": "Fixture Marketer 35",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 3500,
+          "clicks": 350,
+          "spend": 431.9
+        },
+        {
+          "id": "mkt_fixture_36",
+          "name": "Fixture Marketer 36",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 3600,
+          "clicks": 360,
+          "spend": 444.24
+        },
+        {
+          "id": "mkt_fixture_37",
+          "name": "Fixture Marketer 37",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 3700,
+          "clicks": 370,
+          "spend": 456.58
+        },
+        {
+          "id": "mkt_fixture_38",
+          "name": "Fixture Marketer 38",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 3800,
+          "clicks": 380,
+          "spend": 468.92
+        },
+        {
+          "id": "mkt_fixture_39",
+          "name": "Fixture Marketer 39",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 3900,
+          "clicks": 390,
+          "spend": 481.26
+        },
+        {
+          "id": "mkt_fixture_40",
+          "name": "Fixture Marketer 40",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 4000,
+          "clicks": 400,
+          "spend": 493.6
+        },
+        {
+          "id": "mkt_fixture_41",
+          "name": "Fixture Marketer 41",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 4100,
+          "clicks": 410,
+          "spend": 505.94
+        },
+        {
+          "id": "mkt_fixture_42",
+          "name": "Fixture Marketer 42",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 4200,
+          "clicks": 420,
+          "spend": 518.28
+        },
+        {
+          "id": "mkt_fixture_43",
+          "name": "Fixture Marketer 43",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 4300,
+          "clicks": 430,
+          "spend": 530.62
+        },
+        {
+          "id": "mkt_fixture_44",
+          "name": "Fixture Marketer 44",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 4400,
+          "clicks": 440,
+          "spend": 542.96
+        },
+        {
+          "id": "mkt_fixture_45",
+          "name": "Fixture Marketer 45",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 4500,
+          "clicks": 450,
+          "spend": 555.3
+        },
+        {
+          "id": "mkt_fixture_46",
+          "name": "Fixture Marketer 46",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 4600,
+          "clicks": 460,
+          "spend": 567.64
+        },
+        {
+          "id": "mkt_fixture_47",
+          "name": "Fixture Marketer 47",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 4700,
+          "clicks": 470,
+          "spend": 579.98
+        },
+        {
+          "id": "mkt_fixture_48",
+          "name": "Fixture Marketer 48",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 4800,
+          "clicks": 480,
+          "spend": 592.32
+        },
+        {
+          "id": "mkt_fixture_49",
+          "name": "Fixture Marketer 49",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 4900,
+          "clicks": 490,
+          "spend": 604.66
+        },
+        {
+          "id": "mkt_fixture_50",
+          "name": "Fixture Marketer 50",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 5000,
+          "clicks": 500,
+          "spend": 617.0
+        },
+        {
+          "id": "mkt_fixture_51",
+          "name": "Fixture Marketer 51",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 5100,
+          "clicks": 510,
+          "spend": 629.34
+        },
+        {
+          "id": "mkt_fixture_52",
+          "name": "Fixture Marketer 52",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 5200,
+          "clicks": 520,
+          "spend": 641.68
+        },
+        {
+          "id": "mkt_fixture_53",
+          "name": "Fixture Marketer 53",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 5300,
+          "clicks": 530,
+          "spend": 654.02
+        },
+        {
+          "id": "mkt_fixture_54",
+          "name": "Fixture Marketer 54",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 5400,
+          "clicks": 540,
+          "spend": 666.36
+        },
+        {
+          "id": "mkt_fixture_55",
+          "name": "Fixture Marketer 55",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 5500,
+          "clicks": 550,
+          "spend": 678.7
+        },
+        {
+          "id": "mkt_fixture_56",
+          "name": "Fixture Marketer 56",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 5600,
+          "clicks": 560,
+          "spend": 691.04
+        },
+        {
+          "id": "mkt_fixture_57",
+          "name": "Fixture Marketer 57",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 5700,
+          "clicks": 570,
+          "spend": 703.38
+        },
+        {
+          "id": "mkt_fixture_58",
+          "name": "Fixture Marketer 58",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 5800,
+          "clicks": 580,
+          "spend": 715.72
+        },
+        {
+          "id": "mkt_fixture_59",
+          "name": "Fixture Marketer 59",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 5900,
+          "clicks": 590,
+          "spend": 728.06
+        },
+        {
+          "id": "mkt_fixture_60",
+          "name": "Fixture Marketer 60",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 6000,
+          "clicks": 600,
+          "spend": 740.4
+        },
+        {
+          "id": "mkt_fixture_61",
+          "name": "Fixture Marketer 61",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 6100,
+          "clicks": 610,
+          "spend": 752.74
+        },
+        {
+          "id": "mkt_fixture_62",
+          "name": "Fixture Marketer 62",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 6200,
+          "clicks": 620,
+          "spend": 765.08
+        },
+        {
+          "id": "mkt_fixture_63",
+          "name": "Fixture Marketer 63",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 6300,
+          "clicks": 630,
+          "spend": 777.42
+        },
+        {
+          "id": "mkt_fixture_64",
+          "name": "Fixture Marketer 64",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 6400,
+          "clicks": 640,
+          "spend": 789.76
+        },
+        {
+          "id": "mkt_fixture_65",
+          "name": "Fixture Marketer 65",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 6500,
+          "clicks": 650,
+          "spend": 802.1
+        },
+        {
+          "id": "mkt_fixture_66",
+          "name": "Fixture Marketer 66",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 6600,
+          "clicks": 660,
+          "spend": 814.44
+        },
+        {
+          "id": "mkt_fixture_67",
+          "name": "Fixture Marketer 67",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 6700,
+          "clicks": 670,
+          "spend": 826.78
+        },
+        {
+          "id": "mkt_fixture_68",
+          "name": "Fixture Marketer 68",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 6800,
+          "clicks": 680,
+          "spend": 839.12
+        },
+        {
+          "id": "mkt_fixture_69",
+          "name": "Fixture Marketer 69",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 6900,
+          "clicks": 690,
+          "spend": 851.46
+        },
+        {
+          "id": "mkt_fixture_70",
+          "name": "Fixture Marketer 70",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 7000,
+          "clicks": 700,
+          "spend": 863.8
+        },
+        {
+          "id": "mkt_fixture_71",
+          "name": "Fixture Marketer 71",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 7100,
+          "clicks": 710,
+          "spend": 876.14
+        },
+        {
+          "id": "mkt_fixture_72",
+          "name": "Fixture Marketer 72",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 7200,
+          "clicks": 720,
+          "spend": 888.48
+        },
+        {
+          "id": "mkt_fixture_73",
+          "name": "Fixture Marketer 73",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 7300,
+          "clicks": 730,
+          "spend": 900.82
+        },
+        {
+          "id": "mkt_fixture_74",
+          "name": "Fixture Marketer 74",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 7400,
+          "clicks": 740,
+          "spend": 913.16
+        },
+        {
+          "id": "mkt_fixture_75",
+          "name": "Fixture Marketer 75",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 7500,
+          "clicks": 750,
+          "spend": 925.5
+        },
+        {
+          "id": "mkt_fixture_76",
+          "name": "Fixture Marketer 76",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 7600,
+          "clicks": 760,
+          "spend": 937.84
+        },
+        {
+          "id": "mkt_fixture_77",
+          "name": "Fixture Marketer 77",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 7700,
+          "clicks": 770,
+          "spend": 950.18
+        },
+        {
+          "id": "mkt_fixture_78",
+          "name": "Fixture Marketer 78",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 7800,
+          "clicks": 780,
+          "spend": 962.52
+        },
+        {
+          "id": "mkt_fixture_79",
+          "name": "Fixture Marketer 79",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 7900,
+          "clicks": 790,
+          "spend": 974.86
+        },
+        {
+          "id": "mkt_fixture_80",
+          "name": "Fixture Marketer 80",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 8000,
+          "clicks": 800,
+          "spend": 987.2
+        },
+        {
+          "id": "mkt_fixture_81",
+          "name": "Fixture Marketer 81",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 8100,
+          "clicks": 810,
+          "spend": 999.54
+        },
+        {
+          "id": "mkt_fixture_82",
+          "name": "Fixture Marketer 82",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 8200,
+          "clicks": 820,
+          "spend": 1011.88
+        },
+        {
+          "id": "mkt_fixture_83",
+          "name": "Fixture Marketer 83",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 8300,
+          "clicks": 830,
+          "spend": 1024.22
+        },
+        {
+          "id": "mkt_fixture_84",
+          "name": "Fixture Marketer 84",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 8400,
+          "clicks": 840,
+          "spend": 1036.56
+        },
+        {
+          "id": "mkt_fixture_85",
+          "name": "Fixture Marketer 85",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 8500,
+          "clicks": 850,
+          "spend": 1048.9
+        },
+        {
+          "id": "mkt_fixture_86",
+          "name": "Fixture Marketer 86",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 8600,
+          "clicks": 860,
+          "spend": 1061.24
+        },
+        {
+          "id": "mkt_fixture_87",
+          "name": "Fixture Marketer 87",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 8700,
+          "clicks": 870,
+          "spend": 1073.58
+        },
+        {
+          "id": "mkt_fixture_88",
+          "name": "Fixture Marketer 88",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 8800,
+          "clicks": 880,
+          "spend": 1085.92
+        },
+        {
+          "id": "mkt_fixture_89",
+          "name": "Fixture Marketer 89",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 8900,
+          "clicks": 890,
+          "spend": 1098.26
+        },
+        {
+          "id": "mkt_fixture_90",
+          "name": "Fixture Marketer 90",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 9000,
+          "clicks": 900,
+          "spend": 1110.6
+        },
+        {
+          "id": "mkt_fixture_91",
+          "name": "Fixture Marketer 91",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 9100,
+          "clicks": 910,
+          "spend": 1122.94
+        },
+        {
+          "id": "mkt_fixture_92",
+          "name": "Fixture Marketer 92",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 9200,
+          "clicks": 920,
+          "spend": 1135.28
+        },
+        {
+          "id": "mkt_fixture_93",
+          "name": "Fixture Marketer 93",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 9300,
+          "clicks": 930,
+          "spend": 1147.62
+        },
+        {
+          "id": "mkt_fixture_94",
+          "name": "Fixture Marketer 94",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 9400,
+          "clicks": 940,
+          "spend": 1159.96
+        },
+        {
+          "id": "mkt_fixture_95",
+          "name": "Fixture Marketer 95",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 9500,
+          "clicks": 950,
+          "spend": 1172.3
+        },
+        {
+          "id": "mkt_fixture_96",
+          "name": "Fixture Marketer 96",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 9600,
+          "clicks": 960,
+          "spend": 1184.64
+        },
+        {
+          "id": "mkt_fixture_97",
+          "name": "Fixture Marketer 97",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 9700,
+          "clicks": 970,
+          "spend": 1196.98
+        },
+        {
+          "id": "mkt_fixture_98",
+          "name": "Fixture Marketer 98",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 9800,
+          "clicks": 980,
+          "spend": 1209.32
+        },
+        {
+          "id": "mkt_fixture_99",
+          "name": "Fixture Marketer 99",
+          "enabled": true,
+          "status": "active",
+          "created_at": "2026-01-01",
+          "impressions": 9900,
+          "clicks": 990,
+          "spend": 1221.66
+        },
+        {
+          "id": "mkt_fixture_100",
+          "name": "Fixture Marketer 100",
+          "enabled": false,
+          "status": "paused",
+          "created_at": "2026-01-01",
+          "impressions": 10000,
+          "clicks": 1000,
+          "spend": 1234.0
+        }
+      ],
+      "totalResults": 101
+    }
+  }
+}

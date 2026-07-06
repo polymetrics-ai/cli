@@ -1,0 +1,26 @@
+{
+  "record": {
+    "webhooks": [
+      {
+        "post_url": "https://example.com/fixture-webhook-new",
+        "event_types": ["subscriber.created"]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/webhooks",
+    "body": {
+      "webhooks": [
+        {
+          "post_url": "https://example.com/fixture-webhook-new",
+          "event_types": ["subscriber.created"]
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "webhooks": [{ "id": "webhook_fixture_new", "post_url": "https://example.com/fixture-webhook-new" }] }
+  }
+}

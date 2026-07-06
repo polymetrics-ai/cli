@@ -1,0 +1,5 @@
+{
+  "record": { "id": 51 },
+  "expect": { "method": "DELETE", "path": "/tasks/51" },
+  "response": { "status": 200, "body": {} }
+}

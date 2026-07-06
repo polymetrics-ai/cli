@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads PagerDuty incidents, users, services, and teams through the REST API.
 
+ICON
+  asset: icons/pagerduty.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.pagerduty.com/api-reference/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  incidents:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), id(), incident_number(), status(), title()
+  users:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), email(), id(), name(), role()
+  services:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), description(), id(), name(), status()
+  teams:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), description(), id(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external PagerDuty API read of incident, user, service, and team data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "postListings": "permission/allow"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/users/update_permissions",
+    "body": {
+      "id": "user_fixture_1",
+      "postListings": "permission/allow"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "user_fixture_1", "type": "user" } }
+  }
+}

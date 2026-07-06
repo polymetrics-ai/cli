@@ -1,0 +1,11 @@
+{
+  "record": {
+    "hook_id": 1,
+    "active": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/hooks/1",
+    "body": { "active": false }
+  }
+}

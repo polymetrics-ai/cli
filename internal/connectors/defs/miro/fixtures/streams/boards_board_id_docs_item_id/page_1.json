@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/docs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "data": {
+        "contentType": "html",
+        "content": "content_fixture",
+        "contentVersion": 1.25
+      },
+      "position": {
+        "origin": "center",
+        "relativeTo": "canvas_center",
+        "x": 1.25,
+        "y": 1.25
+      },
+      "createdAt": "2026-01-01T00:00:00Z",
+      "createdBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "modifiedAt": "2026-01-01T00:00:00Z",
+      "modifiedBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "parent": {
+        "id": "id_fixture",
+        "links": {
+          "self": "self_fixture"
+        }
+      },
+      "links": {
+        "related": "related_fixture",
+        "self": "self_fixture"
+      },
+      "type": "type_fixture"
+    }
+  }
+}

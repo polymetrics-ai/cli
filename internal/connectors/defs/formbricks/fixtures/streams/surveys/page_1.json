@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/management/surveys" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "srv_fixture_1",
+          "name": "Fixture Survey One",
+          "type": "link",
+          "status": "inProgress",
+          "environmentId": "env_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "srv_fixture_2",
+          "name": "Fixture Survey Two",
+          "type": "app",
+          "status": "completed",
+          "environmentId": "env_fixture_1",
+          "createdAt": "2026-01-02T00:00:00.000Z",
+          "updatedAt": "2026-01-03T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

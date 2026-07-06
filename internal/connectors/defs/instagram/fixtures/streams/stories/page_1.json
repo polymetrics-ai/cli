@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/stories",
+    "query": {
+      "fields": "id,caption,media_type,media_product_type,media_url,permalink,thumbnail_url,timestamp,username",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "story_fixture_1",
+          "caption": "Fixture story 1",
+          "media_type": "IMAGE",
+          "media_product_type": "STORY",
+          "media_url": "https://fixture.example.com/story1.jpg",
+          "permalink": "https://instagram.com/stories/fixture_account/fixture_1",
+          "thumbnail_url": "https://fixture.example.com/story1_thumb.jpg",
+          "timestamp": "2026-01-03T00:00:00+0000",
+          "username": "fixture_account"
+        }
+      ]
+    }
+  }
+}

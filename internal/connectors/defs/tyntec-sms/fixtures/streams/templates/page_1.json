@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/sms/v1/templates", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "templates": [
+        { "id": "tpl_fixture_1", "name": "Fixture Template One" },
+        { "id": "tpl_fixture_2", "name": "Fixture Template Two" }
+      ]
+    }
+  }
+}

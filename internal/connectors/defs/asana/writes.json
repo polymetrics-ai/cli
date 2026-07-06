@@ -1,0 +1,339 @@
+{
+  "actions": [
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["name", "workspace"],
+            "properties": {
+              "name": { "type": "string" },
+              "notes": { "type": "string" },
+              "html_notes": { "type": "string" },
+              "completed": { "type": "boolean" },
+              "due_at": { "type": "string" },
+              "due_on": { "type": "string" },
+              "start_on": { "type": "string" },
+              "assignee": { "type": "string" },
+              "assignee_section": { "type": "string" },
+              "parent": { "type": "string" },
+              "workspace": { "type": "string" },
+              "projects": { "type": "array", "items": { "type": "string" } },
+              "tags": { "type": "array", "items": { "type": "string" } },
+              "followers": { "type": "array", "items": { "type": "string" } },
+              "custom_fields": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new task visible to the whole team/project; low risk, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid", "data"],
+        "properties": {
+          "gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "notes": { "type": "string" },
+              "html_notes": { "type": "string" },
+              "completed": { "type": "boolean" },
+              "due_at": { "type": "string" },
+              "due_on": { "type": "string" },
+              "start_on": { "type": "string" },
+              "assignee": { "type": "string" },
+              "assignee_section": { "type": "string" },
+              "parent": { "type": "string" },
+              "custom_fields": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; overwrites task fields (e.g. can mark completed, reassign, reschedule); approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid"],
+        "properties": {
+          "gid": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a task; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "notes": { "type": "string" },
+              "html_notes": { "type": "string" },
+              "color": { "type": "string" },
+              "due_on": { "type": "string" },
+              "start_on": { "type": "string" },
+              "public": { "type": "boolean" },
+              "privacy_setting": { "type": "string" },
+              "team": { "type": "string" },
+              "workspace": { "type": "string" },
+              "owner": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new project visible to the team/workspace; low risk, no approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid", "data"],
+        "properties": {
+          "gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "notes": { "type": "string" },
+              "archived": { "type": "boolean" },
+              "color": { "type": "string" },
+              "due_on": { "type": "string" },
+              "start_on": { "type": "string" },
+              "public": { "type": "boolean" },
+              "owner": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; overwrites project fields (can archive, reassign owner); approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid"],
+        "properties": {
+          "gid": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a project and its association with its tasks; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_section",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/sections",
+      "path_fields": ["project_gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_gid", "data"],
+        "properties": {
+          "project_gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "insert_before": { "type": "string" },
+              "insert_after": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new section in a project's board/list view; low risk, no approval required"
+    },
+    {
+      "name": "update_section",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sections/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid", "data"],
+        "properties": {
+          "gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; renames a section; low risk, no approval required"
+    },
+    {
+      "name": "delete_section",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sections/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid"],
+        "properties": {
+          "gid": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a section (Asana requires the section be empty of tasks first); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "color": { "type": "string" },
+              "notes": { "type": "string" },
+              "workspace": { "type": "string" },
+              "followers": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new workspace-visible tag; low risk, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid", "data"],
+        "properties": {
+          "gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "color": { "type": "string" },
+              "notes": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; renames/recolors a tag visible workspace-wide; low risk, no approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.gid }}",
+      "path_fields": ["gid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["gid"],
+        "properties": {
+          "gid": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a tag, removed from every task that carries it; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/stories",
+      "path_fields": ["task_gid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["task_gid", "data"],
+        "properties": {
+          "task_gid": { "type": "string" },
+          "data": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "html_text": { "type": "string" },
+              "is_pinned": { "type": "boolean" },
+              "sticker_name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; posts a comment visible to everyone with access to the task; approval required"
+    }
+  ]
+}

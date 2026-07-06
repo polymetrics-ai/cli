@@ -1,0 +1,345 @@
+{
+  "actions": [
+    {
+      "name": "create_pipeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/pipelines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "cluster_id", "repository"],
+        "properties": {
+          "name": { "type": "string" },
+          "cluster_id": { "type": "string" },
+          "repository": { "type": "string" },
+          "configuration": { "type": "string" },
+          "steps": { "type": "array" },
+          "description": { "type": "string" },
+          "default_branch": { "type": "string" },
+          "visibility": { "type": "string" },
+          "tags": { "type": "array" }
+        }
+      },
+      "risk": "creates a new CI/CD pipeline scoped to a cluster and repository; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_pipeline",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.slug }}",
+      "path_fields": ["slug"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" },
+          "name": { "type": "string" },
+          "repository": { "type": "string" },
+          "configuration": { "type": "string" },
+          "description": { "type": "string" },
+          "default_branch": { "type": "string" },
+          "visibility": { "type": "string" },
+          "cluster_id": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing pipeline's repository, configuration, or visibility; a changed configuration/repository affects every future build"
+    },
+    {
+      "name": "archive_pipeline",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.slug }}/archive",
+      "path_fields": ["slug"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "archives a pipeline, hiding it from the default pipeline list and blocking new builds until unarchived"
+    },
+    {
+      "name": "unarchive_pipeline",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.slug }}/unarchive",
+      "path_fields": ["slug"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "restores a previously archived pipeline to active/buildable status"
+    },
+    {
+      "name": "delete_pipeline",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.slug }}",
+      "path_fields": ["slug"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently deletes a pipeline and its build history; irreversible"
+    },
+    {
+      "name": "create_build",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds",
+      "path_fields": ["pipeline_slug"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pipeline_slug", "commit", "branch"],
+        "properties": {
+          "pipeline_slug": { "type": "string" },
+          "commit": { "type": "string" },
+          "branch": { "type": "string" },
+          "message": { "type": "string" },
+          "author": { "type": "object" },
+          "env": { "type": "object" },
+          "meta_data": { "type": "object" },
+          "clean_checkout": { "type": "boolean" },
+          "ignore_pipeline_branch_filters": { "type": "boolean" }
+        }
+      },
+      "risk": "immediately triggers a new CI/CD build on the target pipeline/branch; consumes agent capacity and may run arbitrary pipeline-defined commands"
+    },
+    {
+      "name": "cancel_build",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.number }}/cancel",
+      "path_fields": ["pipeline_slug", "number"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pipeline_slug", "number"],
+        "properties": {
+          "pipeline_slug": { "type": "string" },
+          "number": { "type": "integer" }
+        }
+      },
+      "risk": "cancels a running or scheduled build; any in-progress jobs are terminated immediately"
+    },
+    {
+      "name": "rebuild_build",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.number }}/rebuild",
+      "path_fields": ["pipeline_slug", "number"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pipeline_slug", "number"],
+        "properties": {
+          "pipeline_slug": { "type": "string" },
+          "number": { "type": "integer" }
+        }
+      },
+      "risk": "triggers a full re-run of a completed build on new agent capacity; may run arbitrary pipeline-defined commands again"
+    },
+    {
+      "name": "create_annotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.build_number }}/annotations",
+      "path_fields": ["pipeline_slug", "build_number"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["pipeline_slug", "build_number", "body"],
+        "properties": {
+          "pipeline_slug": { "type": "string" },
+          "build_number": { "type": "integer" },
+          "body": { "type": "string" },
+          "style": { "type": "string" },
+          "context": { "type": "string" },
+          "append": { "type": "boolean" }
+        }
+      },
+      "risk": "posts a visible HTML/Markdown annotation onto a build's detail page; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "retry_job",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/jobs/{{ record.job_id }}/retry",
+      "path_fields": ["job_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["job_id"],
+        "properties": {
+          "job_id": { "type": "string" }
+        }
+      },
+      "risk": "re-runs a single failed/finished job on new agent capacity, without re-running the rest of the build"
+    },
+    {
+      "name": "unblock_job",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/jobs/{{ record.job_id }}/unblock",
+      "path_fields": ["job_id"],
+      "body_type": "json",
+      "body_fields": ["fields", "unblocker"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["job_id"],
+        "properties": {
+          "job_id": { "type": "string" },
+          "fields": { "type": "object" },
+          "unblocker": { "type": "string" }
+        }
+      },
+      "risk": "releases a manual 'block' pipeline step, allowing the build to continue past it immediately"
+    },
+    {
+      "name": "stop_agent",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/agents/{{ record.id }}/stop",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["force"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "force": { "type": "boolean" }
+        }
+      },
+      "risk": "stops an agent; force=true cancels any job it is currently processing"
+    },
+    {
+      "name": "pause_agent",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/agents/{{ record.id }}/pause",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["note", "timeout_in_minutes"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "note": { "type": "string" },
+          "timeout_in_minutes": { "type": "integer" }
+        }
+      },
+      "risk": "pauses an agent so it stops picking up new jobs until resumed or the timeout elapses"
+    },
+    {
+      "name": "resume_agent",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/organizations/{{ config.organization }}/agents/{{ record.id }}/resume",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "resumes a previously paused agent so it can pick up new jobs again"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ config.organization }}/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "privacy": { "type": "string" },
+          "is_default_team": { "type": "boolean" },
+          "default_member_role": { "type": "string" }
+        }
+      },
+      "risk": "creates a new team; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/organizations/{{ config.organization }}/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "privacy": { "type": "string" },
+          "default_member_role": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing team's name, privacy, or default permissions; a privacy change from visible to secret hides membership immediately"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ config.organization }}/teams/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently deletes a team and its pipeline/member associations; irreversible"
+    }
+  ]
+}

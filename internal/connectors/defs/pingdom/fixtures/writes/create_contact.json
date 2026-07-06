@@ -1,0 +1,15 @@
+{
+  "record": {
+    "name": "Fixture Contact",
+    "notification_targets": { "email": [{ "severity": "HIGH", "address": "fixture1@example.com" }] }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/alerting/contacts",
+    "body": {
+      "name": "Fixture Contact",
+      "notification_targets": { "email": [{ "severity": "HIGH", "address": "fixture1@example.com" }] }
+    }
+  },
+  "response": { "status": 200, "body": { "contact": { "id": "700010" } } }
+}

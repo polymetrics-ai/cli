@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/headless/users",
+    "query": { "page": "0", "length": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "identifier": "fixture-user-1",
+        "clientIdentifier": "fixture-client-1",
+        "name": "Fixture Learner One",
+        "avatar": "https://cdn.coassemble.example/avatar/fixture-user-1.png",
+        "testMode": false,
+        "created": "2026-01-01T00:00:00.000Z",
+        "updated": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/devices",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "serial": "Q2XX-FIX1-0001",
+        "name": "Fixture AP 1",
+        "model": "MR46",
+        "mac": "00:11:22:33:44:01",
+        "networkId": "N_fixture_1",
+        "productType": "wireless",
+        "lat": 37.7749,
+        "lng": -122.4194,
+        "address": "Fixture Address 1",
+        "firmware": "wireless-29-7",
+        "tags": ["fixture"]
+      }
+    ]
+  }
+}

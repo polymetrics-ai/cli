@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "statuses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "is_default": { "type": ["boolean", "null"] },
+    "is_open": { "type": ["boolean", "null"] },
+    "allow_comments": { "type": ["boolean", "null"] },
+    "hex_color": { "type": ["string", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

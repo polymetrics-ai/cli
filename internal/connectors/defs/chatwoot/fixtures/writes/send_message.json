@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": 101,
+    "content": "Fixture reply message",
+    "message_type": "outgoing",
+    "private": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/101/messages",
+    "body": {
+      "content": "Fixture reply message",
+      "message_type": "outgoing",
+      "private": false
+    }
+  }
+}

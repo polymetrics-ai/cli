@@ -1,0 +1,15 @@
+{
+  "record": {
+    "category_id": 123,
+    "name": "Fixture restore_solution_category",
+    "description": "Fixture restore_solution_category record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/solutions/categories/123/restore",
+    "body": {
+      "name": "Fixture restore_solution_category",
+      "description": "Fixture restore_solution_category record"
+    }
+  }
+}

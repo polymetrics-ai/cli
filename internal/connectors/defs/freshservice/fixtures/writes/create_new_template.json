@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_new_template",
+    "description": "Fixture create_new_template record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/post-incident-reports/templates",
+    "body": {
+      "name": "Fixture create_new_template",
+      "description": "Fixture create_new_template record"
+    }
+  }
+}

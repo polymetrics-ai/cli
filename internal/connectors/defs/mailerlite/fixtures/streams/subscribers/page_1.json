@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/subscribers", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "subscriber_fixture_1",
+          "email": "fixture1@example.com",
+          "status": "active",
+          "source": "api",
+          "sent": 5,
+          "opens_count": 3,
+          "clicks_count": 1,
+          "open_rate": 0.6,
+          "click_rate": 0.2,
+          "ip_address": "198.51.100.1",
+          "subscribed_at": "2026-01-01T00:00:00Z",
+          "unsubscribed_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "fields": { "name": "Fixture One" }
+        },
+        {
+          "id": "subscriber_fixture_2",
+          "email": "fixture2@example.com",
+          "status": "active",
+          "source": "api",
+          "sent": 3,
+          "opens_count": 2,
+          "clicks_count": 0,
+          "open_rate": 0.67,
+          "click_rate": 0.0,
+          "ip_address": "198.51.100.2",
+          "subscribed_at": "2026-01-02T00:00:00Z",
+          "unsubscribed_at": null,
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "fields": { "name": "Fixture Two" }
+        }
+      ],
+      "meta": { "next_cursor": "cursor_fixture_1" }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Search Console Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google OAuth 2.0 access token with Search Console read scope. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.googleapis.com/webmasters/v3",
+      "description": "Search Console API base URL override for tests or proxies."
+    },
+    "site_urls": {
+      "type": "string",
+      "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. Required for those streams only; sites itself is account-scoped and does not reference it."
+    },
+    "site_url": {
+      "type": "string",
+      "description": "Single Search Console site property for site_details and sitemap_details."
+    },
+    "feedpath": {
+      "type": "string",
+      "description": "Sitemap feed URL/path for sitemap_details."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "default": "2021-01-01",
+      "description": "YYYY-MM-DD lower bound for search_analytics_* streams. The incremental cursor (previously-synced date), when present, overrides this on a repeat sync."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "YYYY-MM-DD upper bound for search_analytics_* streams. Defaults to today (UTC) when unset."
+    },
+    "search_type": {
+      "type": "string",
+      "default": "web",
+      "description": "Search Analytics searchType/type filter (web, image, video, news, discover, googleNews)."
+    },
+    "data_state": {
+      "type": "string",
+      "description": "Search Analytics dataState filter (final or all). Omitted when unset, matching the API's own default."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 25000,
+      "description": "Search Analytics rowLimit per page. Search Console caps this at 25000."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Maximum pages fetched per site for search_analytics_* streams. A positive integer, or 'all'/'unlimited' (default) for no cap."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "settings": {
+      "well_known_url": "https://example.invalid/fixture"
+    },
+    "type": "type_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/security-events-providers",
+    "body": {
+      "name": "name_fixture",
+      "settings": {
+        "well_known_url": "https://example.invalid/fixture"
+      },
+      "type": "type_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

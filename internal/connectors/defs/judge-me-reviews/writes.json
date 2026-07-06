@@ -1,0 +1,408 @@
+{
+  "actions": [
+    {
+      "name": "create_review",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reviews",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "shop_domain": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "rating": {
+            "type": [
+              "integer",
+              "number"
+            ]
+          },
+          "body": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "reviewer_name_format": {
+            "type": "string"
+          },
+          "cf_answers": {
+            "type": "array"
+          },
+          "picture_urls": {
+            "type": "array"
+          },
+          "ip_addr": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "shop_domain",
+          "platform",
+          "name",
+          "email",
+          "rating",
+          "body"
+        ]
+      },
+      "risk": "creates a public web review in Judge.me; approval required"
+    },
+    {
+      "name": "update_review",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/reviews/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "curated": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "curated"
+        ]
+      },
+      "risk": "publishes or hides a Judge.me review by changing curated status; approval required"
+    },
+    {
+      "name": "update_reviewer",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/reviewers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "reviewer": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "reviewer"
+        ]
+      },
+      "risk": "creates or updates reviewer identity fields in Judge.me; approval required"
+    },
+    {
+      "name": "request_reviewer_data",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/reviewers/data_request",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer": {
+            "type": "object"
+          },
+          "orders_requested": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "customer"
+        ]
+      },
+      "risk": "submits a Judge.me reviewer data request; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks",
+      "body_fields": [
+        "key",
+        "url"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "url"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes a Judge.me webhook subscription; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhook": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "webhook"
+        ]
+      },
+      "risk": "creates a Judge.me webhook subscription; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "webhook": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "webhook"
+        ]
+      },
+      "risk": "updates a Judge.me webhook subscription; approval required"
+    },
+    {
+      "name": "bulk_create_webhooks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks/bulk_create",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhooks": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "webhooks"
+        ]
+      },
+      "risk": "creates multiple Judge.me webhook subscriptions; approval required"
+    },
+    {
+      "name": "update_shop",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/shops",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string"
+          },
+          "custom_domain": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string"
+          }
+        },
+        "minProperties": 1
+      },
+      "risk": "updates Judge.me shop profile fields; approval required"
+    },
+    {
+      "name": "uninstall_shop",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/shops",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "uninstalls the shop from Judge.me; destructive approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_checkout_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shops",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "external_product_id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "create_from": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "content",
+          "external_product_id",
+          "create_from",
+          "customer"
+        ]
+      },
+      "risk": "creates a checkout comment in Judge.me Checkout Comments; approval required"
+    },
+    {
+      "name": "create_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/replies",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "review_id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "send_reply_email": {
+            "type": "boolean"
+          },
+          "reply": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "review_id",
+          "reply"
+        ]
+      },
+      "risk": "creates a public reply on a Judge.me review; approval required"
+    },
+    {
+      "name": "create_private_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/private_replies",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "review_id": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "send_private_email": {
+            "type": "boolean"
+          },
+          "private_reply": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "review_id",
+          "private_reply"
+        ]
+      },
+      "risk": "creates a private email reply for a Judge.me review; approval required"
+    }
+  ]
+}

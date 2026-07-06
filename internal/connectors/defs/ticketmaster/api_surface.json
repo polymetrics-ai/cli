@@ -1,0 +1,52 @@
+{
+  "api": "Ticketmaster Discovery API v2 (https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/)",
+  "docs": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Discovery API surface (venue detail, attraction detail, suggest/autocomplete, images, event-to-attraction expansion, etc.) is out of scope outside this connector's current declared surface. ticketmaster is read-only in legacy (Capabilities.Write is false) so no writes.json.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/events.json",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/venues.json",
+      "covered_by": {
+        "stream": "venues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attractions.json",
+      "covered_by": {
+        "stream": "attractions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/classifications.json",
+      "covered_by": {
+        "stream": "classifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suggest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

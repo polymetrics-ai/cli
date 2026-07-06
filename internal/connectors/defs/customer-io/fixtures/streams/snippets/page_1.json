@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/snippets" },
+  "response": {
+    "status": 200,
+    "body": {
+      "snippets": [
+        { "name": "fixture_snippet_one", "value": "Hello {{customer.first_name}}", "updated_at": 1767225601 },
+        { "name": "fixture_snippet_two", "value": "Best regards, the team", "updated_at": 1767225602 }
+      ]
+    }
+  }
+}

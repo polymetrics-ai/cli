@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "accountNumber": 1000,
+          "name": "Fixture Account 1000",
+          "accountType": "profitAndLoss",
+          "balance": 100,
+          "blockDirectEntries": false,
+          "debitCredit": "debit",
+          "vatCode": "I25",
+          "self": "https://restapi.e-conomic.com/accounts/1000"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 1 }
+    }
+  }
+}

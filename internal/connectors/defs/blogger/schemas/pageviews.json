@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pageviews",
+  "type": "object",
+  "x-primary-key": ["blog_id", "time_range"],
+  "required": ["blog_id", "time_range"],
+  "properties": {
+    "blog_id": { "type": "string" },
+    "time_range": { "type": "string" },
+    "count": { "type": ["string", "integer", "null"] }
+  }
+}

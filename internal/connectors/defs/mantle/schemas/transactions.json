@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "date",
+    "createdAt",
+    "updatedAt",
+    "appId",
+    "type",
+    "date"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "type": {
+      "type": "string"
+    },
+    "processingFee": {
+      "type": "number"
+    },
+    "processingFeeCurrencyCode": {
+      "type": "string"
+    },
+    "netAmount": {
+      "type": "number"
+    },
+    "netAmountCurrencyCode": {
+      "type": "string"
+    },
+    "grossAmount": {
+      "type": "number"
+    },
+    "grossAmountCurrencyCode": {
+      "type": "string"
+    },
+    "billingProvider": {
+      "type": "string"
+    },
+    "billingProviderId": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subscriptionId": {
+      "type": "string"
+    },
+    "appId": {
+      "type": "string"
+    },
+    "customerId": {
+      "type": "string"
+    },
+    "appInstallationId": {
+      "type": "string"
+    }
+  }
+}

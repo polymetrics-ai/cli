@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/employees/orgchart"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "employee_node_fixture_1",
+        "name": "Fixture Employee Node",
+        "parent_id": null
+      }
+    ]
+  }
+}

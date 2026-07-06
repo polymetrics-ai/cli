@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/subscriptions.json", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "subscription": {
+          "id": 1,
+          "state": "active",
+          "customer_id": 1,
+          "product_id": 1,
+          "balance_in_cents": 0,
+          "total_revenue_in_cents": 2000,
+          "current_period_started_at": "2026-01-01T00:00:00Z",
+          "current_period_ends_at": "2026-02-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      }
+    ]
+  }
+}

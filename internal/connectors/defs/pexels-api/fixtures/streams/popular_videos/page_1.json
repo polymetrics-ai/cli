@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v1/videos/popular", "query": { "page": "1", "per_page": "40" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 40,
+      "videos": [
+        {
+          "id": 4001,
+          "url": "https://www.pexels.com/video/fixture-4001/",
+          "image": "https://images.pexels.example/4001.jpg",
+          "duration": 20,
+          "user": { "id": 502, "name": "Fixture Popular Videographer" }
+        }
+      ]
+    }
+  }
+}

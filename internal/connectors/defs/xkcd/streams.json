@@ -1,0 +1,27 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "info.0.json" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "latest",
+      "path": "info.0.json",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/latest.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "comic",
+      "path": "{{ config.comic_number }}/info.0.json",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/comic.json",
+      "projection": "passthrough"
+    }
+  ]
+}

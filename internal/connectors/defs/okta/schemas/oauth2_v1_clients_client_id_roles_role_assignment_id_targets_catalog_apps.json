@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "description": "Category for the app in the OIN catalog"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the app in the OIN catalog"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "OIN catalog app display name"
+    },
+    "features": {
+      "type": "array",
+      "description": "Features supported by the app. See app [features](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/features).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the app instance. Okta returns this property only for apps not in the OIN catalog."
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the object was last updated",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "App key name. For OIN catalog apps, this is a unique key for the app definition."
+    },
+    "signOnModes": {
+      "type": "array",
+      "description": "Authentication mode for the app. See app [signOnMode](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/signonmode).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "App status",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "verificationStatus": {
+      "type": "string",
+      "description": "OIN verification status of the catalog app"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website of the OIN catalog app"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification",
+      "properties": {
+        "logo": {
+          "type": "array",
+          "description": "List of app logo resources",
+          "items": {
+            "type": "object",
+            "description": "Link to the logo resource",
+            "properties": {
+              "hints": {
+                "type": "object",
+                "description": "Describes allowed HTTP verbs for the `href`",
+                "properties": {
+                  "allow": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PUT"
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "href": {
+                "type": "string",
+                "description": "Link URI"
+              },
+              "name": {
+                "type": "string",
+                "description": "Link name"
+              },
+              "templated": {
+                "type": "boolean",
+                "description": "Indicates whether the link object's `href` property is a URI template."
+              },
+              "type": {
+                "type": "string",
+                "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

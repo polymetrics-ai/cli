@@ -1,0 +1,40 @@
+{
+  "actions": [
+    {
+      "name": "sync_datasource",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/datasources/{{ record.datasource_id }}/sync",
+      "path_fields": ["workspace_id", "datasource_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "datasource_id"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "datasource_id": { "type": "string" }
+        }
+      },
+      "risk": "triggers an asynchronous data sync for one datasource in a workspace; low-risk (re-fetches data from the connected source, does not itself mutate any Zoho Analytics record). The documented optional CONFIG query parameter, which can carry a datasource's own username/password credential for the sync, is NOT supported by this action (see docs.md Known limits) -- only the no-CONFIG invocation shown in Zoho's own sample request is modeled"
+    },
+    {
+      "name": "refetch_view_data",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/views/{{ record.view_id }}/sync",
+      "path_fields": ["workspace_id", "view_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "view_id"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "view_id": { "type": "string" }
+        }
+      },
+      "risk": "triggers an asynchronous data refetch for one view from its available datasource; low-risk (re-fetches, does not itself mutate any Zoho Analytics record). Same CONFIG-credential limitation as sync_datasource -- see docs.md Known limits"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/timeentries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

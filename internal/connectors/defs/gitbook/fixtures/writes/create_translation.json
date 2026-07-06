@@ -1,0 +1,26 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "language": "en",
+    "source": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/translations",
+    "body": {
+      "language": "en",
+      "source": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "create_translation_fixture_1"
+    }
+  }
+}

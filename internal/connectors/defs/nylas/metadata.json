@@ -1,0 +1,22 @@
+{
+  "name": "nylas",
+  "display_name": "Nylas",
+  "description": "Reads Nylas calendars, contacts, messages, and events for a connected grant through the Nylas v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.nylas.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Nylas API read of a connected grant's calendar, contact, and message data"
+  }
+}

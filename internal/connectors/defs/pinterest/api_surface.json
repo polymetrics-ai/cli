@@ -1,0 +1,20 @@
+{
+  "api": "Pinterest API v5 (https://api.pinterest.com/v5)",
+  "docs": "https://developers.pinterest.com/docs/api/v5/",
+  "reviewed_at": "2026-07-03",
+  "scope": "fresh migration: the 5 legacy-parity read streams only; legacy internal/connectors/pinterest is read-only (Capabilities.Write: false, no write.go), so there are no write endpoints in or out of scope. The full Pinterest v5 surface (pins, pin analytics, catalogs, conversion events, user account, media uploads, etc.) is out of scope until a capability-expansion pass.",
+  "endpoints": [
+    { "method": "GET", "path": "/v5/ad_accounts", "covered_by": { "stream": "ad_accounts" } },
+    { "method": "GET", "path": "/v5/boards", "covered_by": { "stream": "boards" } },
+    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/ad_groups", "covered_by": { "stream": "ad_groups" } },
+    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/audiences", "covered_by": { "stream": "audiences" } },
+    { "method": "POST", "path": "/v5/oauth/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 refresh-token exchange, consumed internally by the pinterest AuthHook, not a syncable object stream" } },
+    { "method": "GET", "path": "/v5/pins", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
+    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/ads", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
+    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/campaigns/analytics", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
+    { "method": "GET", "path": "/v5/catalogs", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
+    { "method": "POST", "path": "/v5/ad_accounts/{ad_account_id}/events", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
+    { "method": "GET", "path": "/v5/user_account", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "currencies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "decimal_points": { "type": ["integer", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "active_flag": { "type": ["boolean", "null"] },
+    "is_custom_flag": { "type": ["boolean", "null"] }
+  }
+}

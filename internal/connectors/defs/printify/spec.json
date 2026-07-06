@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Printify Connection Specification",
+  "type": "object",
+  "required": [
+    "api_token"
+  ],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Printify personal access token, sent as Authorization: Bearer <api_token>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.printify.com",
+      "description": "Printify API root URL override for tests or proxies. Paths include /v1 or /v2."
+    },
+    "shop_id": {
+      "type": "string",
+      "description": "Printify shop ID for shop-scoped streams and writes."
+    },
+    "blueprint_id": {
+      "type": "string",
+      "description": "Catalog blueprint ID for blueprint detail, print-provider, variant, and shipping streams."
+    },
+    "print_provider_id": {
+      "type": "string",
+      "description": "Print provider ID for provider detail and blueprint/provider subresource streams."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Product ID for product detail streams."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Order ID for order detail streams."
+    },
+    "image_id": {
+      "type": "string",
+      "description": "Uploaded image ID for upload detail streams."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Webhook ID for webhook write actions."
+    },
+    "show_out_of_stock": {
+      "type": "string",
+      "description": "Optional catalog variants out-of-stock flag; use the API documented value 0 or 1."
+    },
+    "order_status": {
+      "type": "string",
+      "description": "Optional order list status filter."
+    },
+    "order_sku": {
+      "type": "string",
+      "description": "Optional order list SKU filter."
+    }
+  }
+}

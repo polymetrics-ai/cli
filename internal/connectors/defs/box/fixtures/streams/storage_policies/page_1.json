@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/storage_policies",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "id": "storage_policy_fixture_1", "type": "storage_policy", "name": "Fixture US Storage Policy" }
+      ],
+      "limit": 100,
+      "next_marker": null
+    }
+  }
+}

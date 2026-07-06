@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/athlete/activities", "query": { "page": "2", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1101,
+        "name": "Fixture Activity 101",
+        "type": "Ride",
+        "sport_type": "Ride",
+        "distance": 20000,
+        "moving_time": 3000,
+        "elapsed_time": 3200,
+        "total_elevation_gain": 180,
+        "start_date": "2026-01-02T18:00:00Z",
+        "start_date_local": "2026-01-02T18:00:00Z",
+        "timezone": "(GMT+00:00) UTC",
+        "average_speed": 6.6,
+        "max_speed": 12.0,
+        "kudos_count": 3,
+        "achievement_count": 0
+      }
+    ]
+  }
+}

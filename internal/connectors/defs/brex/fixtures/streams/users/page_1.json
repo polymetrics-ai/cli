@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v2/users", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "usr_fixture_1", "first_name": "Fixture", "last_name": "One", "email": "fixture1@example.com", "status": "ACTIVE", "manager_id": null, "department_id": "dept_fixture_1" },
+        { "id": "usr_fixture_2", "first_name": "Fixture", "last_name": "Two", "email": "fixture2@example.com", "status": "ACTIVE", "manager_id": "usr_fixture_1", "department_id": "dept_fixture_1" }
+      ],
+      "next_cursor": null
+    }
+  }
+}

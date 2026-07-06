@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "profile",
+      "attributes": {
+        "name": "Fixture Update Profile"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/profiles/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "profile",
+        "attributes": {
+          "name": "Fixture Update Profile"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

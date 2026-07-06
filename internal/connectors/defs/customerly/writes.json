@@ -1,0 +1,179 @@
+{
+  "actions": [
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users?user_id={{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Customerly user and every conversation/survey/campaign record tied to them; approval required"
+    },
+    {
+      "name": "delete_lead",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads?email={{ record.email }}",
+      "path_fields": ["email"],
+      "body_type": "none",
+      "delete": { "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Customerly lead and every associated record; approval required"
+    },
+    {
+      "name": "unsubscribe_user",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/unsubscribe/{{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id"],
+        "properties": {
+          "user_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; unsubscribes a live user from Customerly messaging; approval required"
+    },
+    {
+      "name": "add_tag",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tag"],
+        "properties": {
+          "tag": { "type": "string" },
+          "untag": { "type": "boolean" },
+          "users": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "leads": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "risk": "external mutation; adds or removes a tag on one or more live users/leads"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags",
+      "body_type": "json",
+      "body_fields": ["tag"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tag"],
+        "properties": {
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; permanently removes a tag definition from the app; it is un-applied from every contact that carried it; approval required"
+    },
+    {
+      "name": "send_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["from", "to", "content"],
+        "properties": {
+          "from": { "type": "object" },
+          "to": { "type": "object" },
+          "content": { "type": "string" },
+          "attachments": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "risk": "sends a user-visible message from Customerly on the sender's behalf; may notify the recipient"
+    },
+    {
+      "name": "add_user_attributes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/add-attributes/{{ record.user_id }}",
+      "path_fields": ["user_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_id", "attributes"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "attributes": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; adds/overwrites custom attribute values on a live user"
+    },
+    {
+      "name": "add_company_attributes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/company/add-attributes/{{ record.company_id }}",
+      "path_fields": ["company_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "company_name": { "type": "string" },
+          "attributes": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; adds/overwrites custom attribute values (and optionally renames) a live company"
+    },
+    {
+      "name": "add_user_to_company",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/users/add-to-company",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "company_name": { "type": "string" },
+          "company_attributes": { "type": "array" },
+          "internal_user_id": { "type": "integer" },
+          "user_id": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; links a live user to a company, creating the company if it does not already exist"
+    }
+  ]
+}

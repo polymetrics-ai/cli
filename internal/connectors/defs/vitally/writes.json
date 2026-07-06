@@ -1,0 +1,315 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/accounts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["externalId", "name"],
+        "properties": {
+          "externalId": { "type": "string" },
+          "name": { "type": "string" },
+          "organizationId": { "type": "string" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "creates a new customer-success account visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/accounts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "organizationId": { "type": "string" },
+          "accountOwnerId": { "type": ["string", "null"] },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing customer-success account's fields/traits, visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["externalId"],
+        "properties": {
+          "externalId": { "type": "string" },
+          "accountIds": { "type": "array", "items": { "type": "string" } },
+          "organizationIds": { "type": "array", "items": { "type": "string" } },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "avatar": { "type": "string" },
+          "unsubscribedFromConversations": { "type": "boolean" },
+          "traits": { "type": "object" },
+          "joinDate": { "type": "string" }
+        }
+      },
+      "risk": "creates a new user record visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "avatar": { "type": "string" },
+          "unsubscribedFromConversations": { "type": "boolean" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing user's fields/traits, visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["note", "noteDate"],
+        "properties": {
+          "externalId": { "type": "string" },
+          "note": { "type": "string" },
+          "noteDate": { "type": "string" },
+          "subject": { "type": "string" },
+          "authorId": { "type": "string" },
+          "categoryId": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "creates a customer-success note visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "update_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/notes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "note": { "type": "string" },
+          "noteDate": { "type": "string" },
+          "subject": { "type": "string" },
+          "authorId": { "type": "string" },
+          "categoryId": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "The full tag set to apply; omitting this array leaves existing tags unchanged, but including it with a partial list REPLACES all tags (Vitally's own documented behavior, ported verbatim -- not this bundle's choice)." },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing customer-success note visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resources/notes/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "archives/deletes a customer-success note; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/conversations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subject", "messages"],
+        "properties": {
+          "externalId": { "type": "string" },
+          "subject": { "type": "string" },
+          "messages": { "type": "array" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "creates a historical conversation record visible to the vendor's CS team; does not send outbound messages to real participants (Vitally's own documented behavior); external mutation, approval required"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/conversations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "subject": { "type": "string" },
+          "messages": { "type": "array" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing conversation record (new messages inserted, existing ones updated by externalId); external mutation, approval required"
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resources/conversations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "risk": "permanently deletes a conversation and all its messages; external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "accountId"],
+        "properties": {
+          "externalId": { "type": "string" },
+          "name": { "type": "string" },
+          "accountId": { "type": "string" },
+          "organizationId": { "type": "string" },
+          "description": { "type": "string" },
+          "assignedToId": { "type": "string" },
+          "completedById": { "type": "string" },
+          "dueDate": { "type": "string" },
+          "completedAt": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "categoryId": { "type": "string" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "creates a customer-success task visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "accountId": { "type": "string" },
+          "organizationId": { "type": "string" },
+          "description": { "type": "string" },
+          "assignedToId": { "type": "string" },
+          "completedById": { "type": "string" },
+          "dueDate": { "type": "string" },
+          "completedAt": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "categoryId": { "type": "string" },
+          "traits": { "type": "object" }
+        }
+      },
+      "risk": "updates an existing customer-success task visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "create_nps_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resources/npsResponses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["userId", "respondedAt", "score"],
+        "properties": {
+          "userId": { "type": "string" },
+          "respondedAt": { "type": "string" },
+          "score": { "type": "integer" },
+          "externalId": { "type": "string" },
+          "feedback": { "type": "string" }
+        }
+      },
+      "risk": "creates (or, if externalId already exists, upserts -- Vitally's own documented behavior) an NPS response visible to the vendor's CS team; external mutation, approval required"
+    },
+    {
+      "name": "update_nps_response",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resources/npsResponses/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "score": { "type": "integer" },
+          "feedback": { "type": "string" },
+          "respondedAt": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing NPS response visible to the vendor's CS team; external mutation, approval required"
+    }
+  ]
+}

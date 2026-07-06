@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/api/spatialzipcode" },
+  "response": {
+    "status": 200,
+    "body": {
+      "ZipCodes": [
+        {
+          "ZipCode": "85328",
+          "ConnectDate": "2/20/2003",
+          "DisconnectDate": "12/31/2030",
+          "IsActive": "True"
+        },
+        {
+          "ZipCode": "93624",
+          "ConnectDate": "2/20/2003",
+          "DisconnectDate": "12/31/2030",
+          "IsActive": "True"
+        }
+      ]
+    }
+  }
+}

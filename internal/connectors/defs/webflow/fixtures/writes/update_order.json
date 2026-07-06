@@ -1,0 +1,27 @@
+{
+  "record": {
+    "orderId": "order_fixture_1",
+    "comment": "Fragile - handle with care",
+    "shippingProvider": "fixture-carrier",
+    "shippingTracking": "FIXTURE-TRACK-123",
+    "shippingTrackingURL": "https://example.test/track/FIXTURE-TRACK-123"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/sites/synthetic-conformance-value/orders/order_fixture_1",
+    "body": {
+      "comment": "Fragile - handle with care",
+      "shippingProvider": "fixture-carrier",
+      "shippingTracking": "FIXTURE-TRACK-123",
+      "shippingTrackingURL": "https://example.test/track/FIXTURE-TRACK-123"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orderId": "order_fixture_1",
+      "status": "unfulfilled",
+      "comment": "Fragile - handle with care"
+    }
+  }
+}

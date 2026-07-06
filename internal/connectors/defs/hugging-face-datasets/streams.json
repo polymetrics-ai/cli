@@ -1,0 +1,35 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}", "when": "{{ secrets.api_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ secrets.token }}" },
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/is-valid", "query": { "dataset": "{{ config.dataset_name }}" } },
+    "error_map": [
+      { "status": 401, "hint": "hugging-face-datasets access token is missing or invalid for a gated/private dataset; re-run pm credentials add hugging-face-datasets" },
+      { "status": 429, "class": "rate_limited", "hint": "hugging-face-datasets rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "splits",
+      "path": "/splits",
+      "query": { "dataset": "{{ config.dataset_name }}" },
+      "records": { "path": "splits" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/splits.json"
+    },
+    {
+      "name": "sizes",
+      "path": "/size",
+      "query": { "dataset": "{{ config.dataset_name }}" },
+      "records": { "path": "size.splits" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/sizes.json"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "company-fixture-101",
+        "name": "Fixture Company 101",
+        "email": "contact101@example.com",
+        "phase": "live",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

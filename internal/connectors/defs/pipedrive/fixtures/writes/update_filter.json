@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1, "name": "Fixture Filter Updated", "conditions": { "glue": "and", "conditions": [] } },
+  "expect": {
+    "method": "PUT",
+    "path": "/filters/1",
+    "body": { "name": "Fixture Filter Updated", "conditions": { "glue": "and", "conditions": [] } }
+  },
+  "response": { "status": 200, "body": { "success": true, "data": { "id": 1, "name": "Fixture Filter Updated" } } }
+}

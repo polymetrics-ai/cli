@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stock-requests",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "stock_requests_fixture_1",
+        "name": "Fixture stock requests",
+        "title": "Fixture stock requests",
+        "sku": "SKU-FIXTURE-1",
+        "email": "fixture@example.invalid",
+        "status": "fixture",
+        "updated_at": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

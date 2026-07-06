@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "course_reviews",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "rating": { "type": ["number", "null"] },
+    "title": { "type": ["string", "null"] },
+    "review_text": { "type": ["string", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "course_id": { "type": ["integer", "null"] },
+    "approved": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

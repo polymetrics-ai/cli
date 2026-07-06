@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/inbound/fba/2024-03-20/inboundPlans/synthetic-conformance-value/shipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "amazonReferenceId": "amazonReferenceId-fixture-1",
+      "contactInformation": {},
+      "dates": {},
+      "destination": {},
+      "freightInformation": {},
+      "name": "name-fixture-1",
+      "placementOptionId": "placementOptionId-fixture-1",
+      "selectedDeliveryWindow": {},
+      "selectedTransportationOptionId": "selectedTransportationOptionId-fixture-1",
+      "selfShipAppointmentDetails": [],
+      "shipmentConfirmationId": "shipmentConfirmationId-fixture-1",
+      "shipmentId": "shipmentId-fixture-1",
+      "source": {},
+      "status": "status-fixture-1",
+      "trackingDetails": {},
+      "inbound_plan_id": "inbound_plan_id-fixture-1",
+      "shipment_id": "shipment_id-fixture-1"
+    }
+  }
+}

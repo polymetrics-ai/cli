@@ -1,0 +1,40 @@
+{
+  "record": {
+    "name": "Fixture Trading LLC",
+    "company_ref": "fixture-company",
+    "mailing_address": {
+      "street_address": "1 Market St",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94105",
+      "country_code": "US"
+    },
+    "ref": "fixture-entity"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/network/company_entities",
+    "body": {
+      "name": "Fixture Trading LLC",
+      "company_ref": "fixture-company",
+      "mailing_address": {
+        "street_address": "1 Market St",
+        "city": "San Francisco",
+        "state": "CA",
+        "zip": "94105",
+        "country_code": "US"
+      },
+      "ref": "fixture-entity"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/company_entity",
+        "id": 9281
+      }
+    }
+  }
+}

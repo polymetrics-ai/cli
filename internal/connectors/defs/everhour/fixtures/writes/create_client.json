@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Client Co"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/clients",
+    "body": {
+      "name": "Fixture Client Co"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "cl_fixture_1", "name": "Fixture Client Co" }
+  }
+}

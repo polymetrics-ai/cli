@@ -1,0 +1,5 @@
+{
+  "record": { "account_id": 11, "notes": "Fixture call notes", "date": "2026-03-02T09:00:00Z" },
+  "expect": { "method": "POST", "path": "/calls" },
+  "response": { "status": 201, "body": { "meeting_id": "call_fixture_1" } }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "avni",
+  "display_name": "Avni",
+  "description": "Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic authentication.",
+  "integration_type": "api",
+  "docs_url": "https://avniproject.org/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Avni API read of subjects and encounters",
+    "approval": "none; read-only source connector"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "coupons",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "discount_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "discount_percentage": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "discount_amount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "currency_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duration_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valid_till": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "apply_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "updated_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds. Note: Chargebee's /coupons list endpoint does not support sort_by[asc]=updated_at (only created_at); updated_at[after] filtering still works for incremental correctness, ordering within a page is not guaranteed."
+    },
+    "redemptions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "deleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  }
+}

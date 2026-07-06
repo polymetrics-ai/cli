@@ -1,0 +1,10 @@
+{
+  "record": {
+    "metadata_type": "products",
+    "name": "Fixture Product"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metadata_object"
+  }
+}

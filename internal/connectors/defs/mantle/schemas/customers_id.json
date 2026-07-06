@@ -1,0 +1,597 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "An object of billing address fields, keyed by field name."
+    },
+    "domain": {
+      "type": "string"
+    },
+    "shopifyDomain": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "firstInteractionAt": {
+      "type": "string",
+      "description": "The date and time of the first interaction with the customer, such as the first time they installed an app.",
+      "format": "date-time"
+    },
+    "customFields": {
+      "type": "object",
+      "description": "An object of custom fields, keyed by the custom field name."
+    },
+    "appInstallations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "An app installation represents a customer's installation of an app. The corresponding App can be found under the app property.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "installedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "uninstalledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trialStartsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trialExpiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "app": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "displayName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "createdAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "iconUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "slug": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "development": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "apiClientId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "platform": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "createdAt"
+            ]
+          },
+          "averageMonthlyRevenue": {
+            "type": "number"
+          },
+          "lifetimeValue": {
+            "type": "number"
+          },
+          "last30Revenue": {
+            "type": "number"
+          },
+          "customFields": {
+            "type": "object",
+            "description": "An object of custom fields, keyed by the custom field name."
+          },
+          "churnPrediction": {
+            "type": "number",
+            "description": "The churn prediction for the customer. 0 being high risk, 3 being low risk."
+          },
+          "churnPredictionLabel": {
+            "type": "object",
+            "description": "A label lookup for the churnPrediction, such as { label: \"0 - 2 weeks\", status: \"critical\" } for churnPrediction 0."
+          },
+          "platformId": {
+            "type": "string",
+            "description": "The ID of the customer on the platform, such as the Shopify Shop ID."
+          },
+          "trafficSource": {
+            "type": "string",
+            "description": "The original traffic source of the customer, if available."
+          },
+          "subscription": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "plan": {
+                "type": "object"
+              },
+              "lineItems": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "active": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "cancelOn": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "billingCycleAnchor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "currentPeriodStart": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "currentPeriodEnd": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "trialStartsAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "trialExpiresAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "activatedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "canceledAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "frozenAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "featuresOrder": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "createdAt": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "confirmationUrl": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "shopifySubscription": {
+                "type": "object"
+              },
+              "usageCappedAmount": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "usageBalanceUsed": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "appliedDiscount": {
+                "type": "object"
+              },
+              "subtotal": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "total": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "presentmentSubtotal": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "presentmentTotal": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "companyId": {
+      "type": "string",
+      "description": "The ID of the company this customer belongs to, if any."
+    },
+    "industry": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The industry classification of the customer. Falls back to ShopifyShop industry if not set directly."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The date and time of the creation of the customer.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The date and time of the last update to the customer.",
+      "format": "date-time"
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "The label for the contact for this customer. Only set in customer API objects."
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "customers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The customer ID"
+                },
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "socialProfiles": {
+            "type": "array",
+            "description": "Array of JSON objects containing social links or profiles.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The type of social profile.",
+                  "enum": [
+                    "linkedin",
+                    "x",
+                    "facebook",
+                    "instagram",
+                    "website"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The URL of the social profile."
+                }
+              }
+            }
+          },
+          "secondaryEmails": {
+            "type": "array",
+            "description": "Array of secondary email addresses for the contact.",
+            "items": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "accountOwners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of account owner relationship",
+            "enum": [
+              "account_manager",
+              "sales",
+              "customer_support"
+            ]
+          },
+          "hasCommission": {
+            "type": "boolean",
+            "description": "Whether this account owner has commission enabled"
+          },
+          "commissionPercentage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The commission percentage for this account owner"
+          },
+          "commissionEndsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the commission ends for this account owner",
+            "format": "date-time"
+          },
+          "managementFeePercentage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The management fee percentage for this account owner. When set, the owner earns this percentage of MRR as a management fee when not actively earning commission."
+          },
+          "appCommissions": {
+            "type": "array",
+            "description": "Per-app commission overrides. When set, these rates apply instead of the customer-level commission for transactions from the specified app.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "deals": {
+      "type": "array",
+      "description": "Lightweight summaries of the customer's non-archived deals. Use the Deals endpoints for full details.",
+      "items": {
+        "type": "object",
+        "description": "A lightweight deal summary embedded in customer responses. For full deal details, use the Deals endpoints.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "amountCurrencyCode": {
+            "type": "string"
+          },
+          "firstInteractionAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "closingAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "closedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dealStage": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "stage": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "ref": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "subtotal": { "type": ["string", "null"] },
+    "gst": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] },
+    "is_overdue": { "type": ["boolean", "null"] },
+    "is_sent": { "type": ["boolean", "null"] },
+    "property": { "type": ["string", "null"] },
+    "task": { "type": ["string", "null"] }
+  }
+}

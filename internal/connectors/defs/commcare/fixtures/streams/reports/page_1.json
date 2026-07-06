@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/simplereportconfiguration/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "columns": [
+          { "column_id": "district", "display": "District", "type": "field" }
+        ],
+        "filters": [
+          { "datatype": "string", "slug": "closed" }
+        ],
+        "title": "Fixture Report",
+        "id": "report_fixture_1",
+        "resource_uri": "/a/synthetic-conformance-value/api/simplereportconfiguration/v1/report_fixture_1/"
+      }
+    ]
+  }
+}

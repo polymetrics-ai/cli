@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/data/eod", "query": { "page": "1", "limit": "100", "symbols": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "ticker": "AAPL", "date": "2026-01-01", "close": 123.45 }
+      ]
+    }
+  }
+}

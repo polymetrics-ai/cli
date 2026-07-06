@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "opportunities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "party_id": { "type": ["integer", "null"] },
+    "milestone_id": { "type": ["integer", "null"] },
+    "milestone_name": { "type": ["string", "null"] },
+    "value_amount": { "type": ["number", "null"] },
+    "value_currency": { "type": ["string", "null"] },
+    "probability": { "type": ["number", "null"] },
+    "expected_close_on": { "type": ["string", "null"] },
+    "closed_on": { "type": ["string", "null"] },
+    "lost_reason": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

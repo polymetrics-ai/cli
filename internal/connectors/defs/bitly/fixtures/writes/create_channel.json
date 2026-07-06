@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Channel",
+    "group_guid": "grp_fixture_1",
+    "campaign_guid": "cmp_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels",
+    "body": {
+      "name": "Fixture Channel",
+      "group_guid": "grp_fixture_1",
+      "campaign_guid": "cmp_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "guid": "chn_fixture_1" }
+  }
+}

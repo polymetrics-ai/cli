@@ -12,20 +12,42 @@ SYNOPSIS
 DESCRIPTION
   Reads PaperSign documents, templates, and recipients through the REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  documents:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), id(), name(), status(), updated_at()
+  templates:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), id(), name(), updated_at()
+  recipients:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), document_id(), email(), id(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external PaperSign API read of document, template, and recipient data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

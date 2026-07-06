@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "serviceprincipals",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "app_id": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "service_principal_type": { "type": ["string", "null"] },
+    "account_enabled": { "type": ["boolean", "null"] },
+    "app_owner_organization_id": { "type": ["string", "null"] },
+    "sign_in_audience": { "type": ["string", "null"] }
+  }
+}

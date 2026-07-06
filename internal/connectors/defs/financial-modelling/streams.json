@@ -1,0 +1,301 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/stock-screener", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "financial-modelling api key is missing or invalid; re-run pm credentials add financial-modelling" },
+      { "status": 403, "hint": "financial-modelling account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "financial-modelling rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "stock_screener",
+      "path": "/stock-screener",
+      "query": {
+        "exchange": { "template": "{{ config.exchange }}", "omit_when_absent": true },
+        "marketCapMoreThan": { "template": "{{ config.marketcapmorethan }}", "omit_when_absent": true },
+        "marketCapLowerThan": { "template": "{{ config.marketcaplowerthan }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": {
+        "company_name": "{{ record.companyName }}",
+        "market_cap": "{{ record.marketCap }}",
+        "last_annual_dividend": "{{ record.lastAnnualDividend }}",
+        "exchange_short_name": "{{ record.exchangeShortName }}",
+        "is_etf": "{{ record.isEtf }}",
+        "is_actively_trading": "{{ record.isActivelyTrading }}"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 1000
+      },
+      "schema": "schemas/stock_screener.json"
+    },
+    {
+      "name": "delisted_companies",
+      "path": "/delisted-companies",
+      "records": { "path": "" },
+      "computed_fields": {
+        "company_name": "{{ record.companyName }}",
+        "ipo_date": "{{ record.ipoDate }}",
+        "delisted_date": "{{ record.delistedDate }}"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "schema": "schemas/delisted_companies.json"
+    },
+    {
+      "name": "stocks",
+      "path": "/stock/list",
+      "records": { "path": "" },
+      "computed_fields": {
+        "exchange_short_name": "{{ record.exchangeShortName }}"
+      },
+      "schema": "schemas/stocks.json"
+    },
+    {
+      "name": "etfs",
+      "path": "/etf/list",
+      "records": { "path": "" },
+      "computed_fields": {
+        "exchange_short_name": "{{ record.exchangeShortName }}"
+      },
+      "schema": "schemas/etfs.json"
+    },
+    {
+      "name": "market_indexes",
+      "path": "/quotes/index",
+      "records": { "path": "" },
+      "computed_fields": {
+        "changes_percentage": "{{ record.changesPercentage }}",
+        "day_low": "{{ record.dayLow }}",
+        "day_high": "{{ record.dayHigh }}",
+        "year_high": "{{ record.yearHigh }}",
+        "year_low": "{{ record.yearLow }}",
+        "price_avg50": "{{ record.priceAvg50 }}",
+        "price_avg200": "{{ record.priceAvg200 }}",
+        "avg_volume": "{{ record.avgVolume }}",
+        "previous_close": "{{ record.previousClose }}"
+      },
+      "schema": "schemas/market_indexes.json"
+    },
+    {
+      "name": "sp500_constituent",
+      "path": "/sp500_constituent",
+      "records": { "path": "" },
+      "computed_fields": {
+        "sub_sector": "{{ record.subSector }}",
+        "head_quarter": "{{ record.headQuarter }}",
+        "date_first_added": "{{ record.dateFirstAdded }}",
+        "founded": "{{ record.founded }}"
+      },
+      "schema": "schemas/sp500_constituent.json"
+    },
+    {
+      "name": "earnings_calendar",
+      "path": "/earning_calendar",
+      "records": { "path": "" },
+      "computed_fields": {
+        "eps_estimated": "{{ record.epsEstimated }}",
+        "revenue_estimated": "{{ record.revenueEstimated }}",
+        "updated_from_date": "{{ record.updatedFromDate }}",
+        "fiscal_date_ending": "{{ record.fiscalDateEnding }}"
+      },
+      "schema": "schemas/earnings_calendar.json"
+    },
+    {
+      "name": "company_profile",
+      "path": "/profile/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "company_name": "{{ record.companyName }}",
+        "exchange_short_name": "{{ record.exchangeShortName }}",
+        "market_cap": "{{ record.mktCap }}",
+        "last_div": "{{ record.lastDiv }}",
+        "is_etf": "{{ record.isEtf }}",
+        "is_actively_trading": "{{ record.isActivelyTrading }}",
+        "is_adr": "{{ record.isAdr }}",
+        "is_fund": "{{ record.isFund }}",
+        "full_time_employees": "{{ record.fullTimeEmployees }}",
+        "ipo_date": "{{ record.ipoDate }}"
+      },
+      "schema": "schemas/company_profile.json"
+    },
+    {
+      "name": "quote",
+      "path": "/quote/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "changes_percentage": "{{ record.changesPercentage }}",
+        "day_low": "{{ record.dayLow }}",
+        "day_high": "{{ record.dayHigh }}",
+        "year_high": "{{ record.yearHigh }}",
+        "year_low": "{{ record.yearLow }}",
+        "market_cap": "{{ record.marketCap }}",
+        "price_avg50": "{{ record.priceAvg50 }}",
+        "price_avg200": "{{ record.priceAvg200 }}",
+        "avg_volume": "{{ record.avgVolume }}",
+        "previous_close": "{{ record.previousClose }}",
+        "eps": "{{ record.eps }}",
+        "pe": "{{ record.pe }}",
+        "earnings_announcement": "{{ record.earningsAnnouncement }}",
+        "shares_outstanding": "{{ record.sharesOutstanding }}"
+      },
+      "schema": "schemas/quote.json"
+    },
+    {
+      "name": "historical_price",
+      "path": "/historical-price-full/{{ fanout.id }}",
+      "records": { "path": "historical" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "adj_close": "{{ record.adjClose }}",
+        "change_percent": "{{ record.changePercent }}"
+      },
+      "schema": "schemas/historical_price.json"
+    },
+    {
+      "name": "income_statement",
+      "path": "/income-statement/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "reported_currency": "{{ record.reportedCurrency }}",
+        "fiscal_year": "{{ record.fiscalYear }}",
+        "filling_date": "{{ record.fillingDate }}",
+        "accepted_date": "{{ record.acceptedDate }}",
+        "calendar_year": "{{ record.calendarYear }}",
+        "gross_profit": "{{ record.grossProfit }}",
+        "gross_profit_ratio": "{{ record.grossProfitRatio }}",
+        "net_income": "{{ record.netIncome }}",
+        "net_income_ratio": "{{ record.netIncomeRatio }}",
+        "eps_diluted": "{{ record.epsdiluted }}",
+        "operating_income": "{{ record.operatingIncome }}",
+        "operating_income_ratio": "{{ record.operatingIncomeRatio }}"
+      },
+      "schema": "schemas/income_statement.json"
+    },
+    {
+      "name": "balance_sheet_statement",
+      "path": "/balance-sheet-statement/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "reported_currency": "{{ record.reportedCurrency }}",
+        "fiscal_year": "{{ record.fiscalYear }}",
+        "filling_date": "{{ record.fillingDate }}",
+        "accepted_date": "{{ record.acceptedDate }}",
+        "calendar_year": "{{ record.calendarYear }}",
+        "total_assets": "{{ record.totalAssets }}",
+        "total_liabilities": "{{ record.totalLiabilities }}",
+        "total_equity": "{{ record.totalEquity }}",
+        "total_current_assets": "{{ record.totalCurrentAssets }}",
+        "total_current_liabilities": "{{ record.totalCurrentLiabilities }}",
+        "cash_and_cash_equivalents": "{{ record.cashAndCashEquivalents }}"
+      },
+      "schema": "schemas/balance_sheet_statement.json"
+    },
+    {
+      "name": "cash_flow_statement",
+      "path": "/cash-flow-statement/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "reported_currency": "{{ record.reportedCurrency }}",
+        "fiscal_year": "{{ record.fiscalYear }}",
+        "filling_date": "{{ record.fillingDate }}",
+        "accepted_date": "{{ record.acceptedDate }}",
+        "calendar_year": "{{ record.calendarYear }}",
+        "operating_cash_flow": "{{ record.operatingCashFlow }}",
+        "net_cash_provided_by_operating_activities": "{{ record.netCashProvidedByOperatingActivities }}",
+        "capital_expenditure": "{{ record.capitalExpenditure }}",
+        "free_cash_flow": "{{ record.freeCashFlow }}",
+        "net_change_in_cash": "{{ record.netChangeInCash }}"
+      },
+      "schema": "schemas/cash_flow_statement.json"
+    },
+    {
+      "name": "key_metrics",
+      "path": "/key-metrics/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "calendar_year": "{{ record.calendarYear }}",
+        "market_cap": "{{ record.marketCap }}",
+        "enterprise_value": "{{ record.enterpriseValue }}",
+        "pe_ratio": "{{ record.peRatio }}",
+        "pb_ratio": "{{ record.pbRatio }}",
+        "current_ratio": "{{ record.currentRatio }}",
+        "debt_to_equity": "{{ record.debtToEquity }}",
+        "roe": "{{ record.roe }}",
+        "free_cash_flow_yield": "{{ record.freeCashFlowYield }}",
+        "revenue_per_share": "{{ record.revenuePerShare }}"
+      },
+      "schema": "schemas/key_metrics.json"
+    },
+    {
+      "name": "financial_ratios",
+      "path": "/ratios/{{ fanout.id }}",
+      "records": { "path": "" },
+      "fan_out": {
+        "ids_from": { "config_key": "symbols" },
+        "into": { "path_var": "symbol" },
+        "stamp_field": "symbol"
+      },
+      "computed_fields": {
+        "calendar_year": "{{ record.calendarYear }}",
+        "current_ratio": "{{ record.currentRatio }}",
+        "quick_ratio": "{{ record.quickRatio }}",
+        "gross_profit_margin": "{{ record.grossProfitMargin }}",
+        "net_profit_margin": "{{ record.netProfitMargin }}",
+        "return_on_equity": "{{ record.returnOnEquity }}",
+        "return_on_assets": "{{ record.returnOnAssets }}",
+        "debt_ratio": "{{ record.debtRatio }}",
+        "price_earnings_ratio": "{{ record.priceEarningsRatio }}",
+        "dividend_yield": "{{ record.dividendYield }}"
+      },
+      "schema": "schemas/financial_ratios.json"
+    }
+  ]
+}

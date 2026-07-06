@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "comp_type": { "type": ["string", "null"] },
+    "employment_type": { "type": ["string", "null"] },
+    "hire_date": { "type": ["string", "null"] },
+    "annual_salary": { "type": ["string", "null"] },
+    "pay_rate": { "type": ["string", "null"] },
+    "termination_date": { "type": ["string", "null"] },
+    "termination_type": { "type": ["string", "null"] },
+    "working_hours_per_week": { "type": ["string", "number", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "person": { "type": ["object", "null"] }
+  }
+}

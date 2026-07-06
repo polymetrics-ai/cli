@@ -9,15 +9,13 @@ import {
 
 import { ConnectorHeader } from '@/components/docs/connector/connector-header';
 import { CapabilityMatrix } from '@/components/docs/connector/capability-matrix';
-import { ConfigTable } from '@/components/docs/connector/config-table';
-import { DocLinks } from '@/components/docs/connector/doc-links';
 import { CliExample } from '@/components/docs/connector/cli-example';
-import { ConnectorSetup } from '@/components/docs/connector/connector-setup';
 import { ConnectorStatusSummary } from '@/components/docs/connector/connector-status-summary';
-import { connectorEnrichment } from '@/lib/connectors.enrichment.generated';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { Table, TBody, TD, TH, THead, TR } from '@/components/ui/table';
 import { CopyMarkdown } from '@/components/docs/copy-markdown';
+import { BundleMarkdown } from '@/components/docs/connector/bundle-markdown';
 
 // ── Static params — all connector slugs ───────────────────────────────────
 
@@ -37,8 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!c) return { title: 'Connector not found' };
 
   const description =
-    c.notes ||
-    `${c.name} is a ${c.releaseStage} ${c.type} connector in the ${c.category} category.`;
+    c.description ||
+    `${c.name} exposes ${c.streams.length} ETL streams and ${c.writeActions.length} write actions.`;
 
   return {
     title: `${c.name} connector`,
@@ -74,17 +72,94 @@ function SectionHeading({
   );
 }
 
-// ── Sync mode label formatter ─────────────────────────────────────────────
+// ── Connector data tables ─────────────────────────────────────────────────
 
-function formatSyncMode(mode: string): string {
-  const map: Record<string, string> = {
-    full_refresh: 'Full refresh',
-    incremental: 'Incremental',
-    append: 'Append',
-    overwrite: 'Overwrite',
-    deduped_history: 'Deduped history',
-  };
-  return map[mode] ?? mode.replace(/_/g, ' ');
+function EmptyTableNote({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="border border-line-structure bg-surface-1 px-3 py-2.5 text-[13px] italic text-text-tertiary">
+      {children}
+    </p>
+  );
+}
+
+function StreamsTable({ connector }: { connector: NonNullable<ReturnType<typeof connectorBySlug>> }) {
+  if (connector.streams.length === 0) {
+    return (
+      <EmptyTableNote>
+        This bundle does not declare static streams. Dynamic schemas may be discovered at runtime.
+      </EmptyTableNote>
+    );
+  }
+
+  return (
+    <Table>
+      <THead>
+        <TR>
+          <TH>Stream</TH>
+          <TH>Primary key</TH>
+          <TH>Cursor</TH>
+          <TH>Incremental</TH>
+        </TR>
+      </THead>
+      <TBody>
+        {connector.streams.map((stream) => (
+          <TR key={stream.name}>
+            <TD>
+              <span className="break-words font-mono text-[12px] text-text-primary">
+                {stream.name}
+              </span>
+            </TD>
+            <TD className="font-mono text-[12px] text-text-tertiary">
+              {stream.primaryKey.length > 0 ? stream.primaryKey.join(', ') : '—'}
+            </TD>
+            <TD className="font-mono text-[12px] text-text-tertiary">
+              {stream.cursor || '—'}
+            </TD>
+            <TD>
+              <Badge variant={stream.incremental ? 'status-enabled' : 'category'}>
+                {stream.incremental ? 'Yes' : 'No'}
+              </Badge>
+            </TD>
+          </TR>
+        ))}
+      </TBody>
+    </Table>
+  );
+}
+
+function WriteActionsTable({ connector }: { connector: NonNullable<ReturnType<typeof connectorBySlug>> }) {
+  if (connector.writeActions.length === 0) return null;
+
+  return (
+    <Table>
+      <THead>
+        <TR>
+          <TH>Action</TH>
+          <TH>Method</TH>
+          <TH>Kind</TH>
+        </TR>
+      </THead>
+      <TBody>
+        {connector.writeActions.map((action) => (
+          <TR key={action.name}>
+            <TD>
+              <span className="break-words font-mono text-[12px] text-text-primary">
+                {action.name}
+              </span>
+            </TD>
+            <TD className="font-mono text-[12px] text-text-tertiary">
+              {action.method || '—'}
+            </TD>
+            <TD>
+              <Badge variant={action.kind === 'delete' ? 'release-beta' : 'category'}>
+                {action.kind || 'action'}
+              </Badge>
+            </TD>
+          </TR>
+        ))}
+      </TBody>
+    </Table>
+  );
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────
@@ -138,7 +213,7 @@ export default async function ConnectorPage({ params }: Props) {
         <section className="min-w-0" aria-labelledby="section-status">
           <SectionHeading
             id="section-status"
-            description="Runtime availability and catalog metadata for this connector."
+            description="Bundle metadata generated from the connector definition files."
           >
             Status
           </SectionHeading>
@@ -146,71 +221,24 @@ export default async function ConnectorPage({ params }: Props) {
           <div className="mt-3 grid min-w-0 gap-3 sm:grid-cols-2">
             <Card muted className="px-3 py-2.5">
               <p className="font-mono text-[10px] uppercase tracking-wider text-text-tertiary">
-                Runtime status
+                Description
               </p>
               <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
-                {c.status === 'enabled' ? (
-                  <span className="font-medium text-line-cta">Enabled; ETL is available.</span>
-                ) : (
-                  <span>
-                    Catalog metadata is available; ETL is not enabled until the native Go port
-                    passes conformance.
-                  </span>
-                )}
+                {c.description}
               </p>
             </Card>
             <Card muted className="px-3 py-2.5">
               <p className="font-mono text-[10px] uppercase tracking-wider text-text-tertiary">
-                pm connector name
+                Connector name
               </p>
               <code className="mt-1 block break-words font-mono text-[13px] text-text-primary">
-                {c.pmName || c.slug}
+                {c.slug}
               </code>
             </Card>
           </div>
-          {c.notes && (
-            <p className="mt-3 border border-line-structure bg-surface-1 px-3 py-2.5 text-[13px] leading-relaxed text-text-tertiary">
-              {c.notes}
-            </p>
-          )}
         </section>
 
-        {/* ③ Configuration */}
-        <section className="min-w-0" aria-labelledby="section-configuration">
-          <SectionHeading
-            id="section-configuration"
-            description="Field names, required flags, and secret boundaries from the connector catalog."
-          >
-            Configuration
-          </SectionHeading>
-          <ConfigTable config={c.config} secrets={c.secrets} />
-          {c.secrets.length > 0 && (
-            <p className="mt-3 text-[12px] font-mono leading-relaxed text-text-tertiary">
-              Secret field names:{' '}
-              {c.secrets.map((s, i) => (
-                <span key={s}>
-                  <code className="bg-surface-2 border border-line-structure px-1">{s}</code>
-                  {i < c.secrets.length - 1 ? ', ' : ''}
-                </span>
-              ))}
-            </p>
-          )}
-        </section>
-
-        {/* ④ Setup & authentication — shown whenever verified enrichment exists */}
-        {connectorEnrichment(c.slug) && (
-          <section className="min-w-0" aria-labelledby="section-setup">
-            <SectionHeading
-              id="section-setup"
-              description="Provider-side prerequisites, authentication shape, and verified source links."
-            >
-              Setup &amp; authentication
-            </SectionHeading>
-            <ConnectorSetup connector={c} />
-          </section>
-        )}
-
-        {/* ⑤ CLI usage */}
+        {/* ③ CLI usage */}
         <section className="min-w-0" aria-labelledby="section-cli-usage">
           <SectionHeading
             id="section-cli-usage"
@@ -221,50 +249,50 @@ export default async function ConnectorPage({ params }: Props) {
           <CliExample connector={c} />
         </section>
 
-        {/* ⑥ Capabilities */}
+        {/* ④ Capabilities */}
         <section className="min-w-0" aria-labelledby="section-capabilities">
           <SectionHeading
             id="section-capabilities"
-            description="Runtime operations currently exposed by pm for this connector."
+            description="Operations declared by the connector bundle."
           >
             Capabilities
           </SectionHeading>
           <CapabilityMatrix capabilities={c.capabilities} />
         </section>
 
-        {/* ⑦ Sync modes */}
-        <section className="min-w-0" aria-labelledby="section-sync-modes">
-          <SectionHeading id="section-sync-modes">Sync modes</SectionHeading>
-          <div className="flex flex-wrap gap-2">
-            {c.syncModes.length > 0 ? (
-              c.syncModes.map((mode) => (
-                <Badge key={mode} variant="category">
-                  {formatSyncMode(mode)}
-                </Badge>
-              ))
-            ) : (
-              <span className="text-[13px] text-text-tertiary italic">No sync modes listed.</span>
-            )}
-          </div>
-          <p className="mt-3 text-[13px] text-text-secondary">
-            <span className="font-semibold">Incremental syncs: </span>
-            {c.incremental ? (
-              <span className="text-line-cta">Supported</span>
-            ) : (
-              <span className="text-text-tertiary">Not supported</span>
-            )}
-          </p>
+        {/* ⑤ ETL streams */}
+        <section className="min-w-0" aria-labelledby="section-etl-streams">
+          <SectionHeading
+            id="section-etl-streams"
+            description="Readable streams declared by streams.json, with schema-derived primary keys and cursors."
+          >
+            ETL Streams
+          </SectionHeading>
+          <StreamsTable connector={c} />
         </section>
 
-        {/* ⑧ Official documentation */}
-        <section className="min-w-0" aria-labelledby="section-documentation">
+        {/* ⑥ Reverse ETL write actions */}
+        {c.writeActions.length > 0 && (
+          <section className="min-w-0" aria-labelledby="section-write-actions">
+            <SectionHeading
+              id="section-write-actions"
+              description="Reverse-ETL actions declared by writes.json."
+            >
+              Reverse-ETL Write Actions
+            </SectionHeading>
+            <WriteActionsTable connector={c} />
+          </section>
+        )}
+
+        {/* ⑦ Bundle documentation */}
+        <section className="min-w-0" aria-labelledby="section-bundle-docs">
           <SectionHeading
-            id="section-documentation"
-            description="Vendor documentation links carried by the catalog."
+            id="section-bundle-docs"
+            description="Human-readable notes parsed from docs.md, with the verbatim source kept for agents."
           >
-            Official documentation
+            Bundle notes
           </SectionHeading>
-          <DocLinks docs={c.docs} appDocUrl={c.appDocUrl} />
+          <BundleMarkdown connector={c} markdown={c.docsMd} />
         </section>
       </div>
     </article>

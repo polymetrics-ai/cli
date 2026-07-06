@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/claims",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "alwaysIncludeInToken": true,
+        "claimType": "IDENTITY",
+        "conditions": {
+          "scopes": [
+            "scope_fixture"
+          ]
+        },
+        "group_filter_type": "CONTAINS",
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "status": "ACTIVE",
+        "system": true,
+        "value": "value_fixture",
+        "valueType": "EXPRESSION",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

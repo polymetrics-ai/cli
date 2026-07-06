@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/commentThreads",
+    "query": {
+      "part": "snippet",
+      "maxResults": "100",
+      "videoId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "ct_fixture_1",
+          "snippet": { "topLevelComment": { "snippet": { "textDisplay": "Fixture comment one", "publishedAt": "2026-01-01T00:00:00Z" } } }
+        },
+        {
+          "id": "ct_fixture_2",
+          "snippet": { "topLevelComment": { "snippet": { "textDisplay": "Fixture comment two", "publishedAt": "2026-01-02T00:00:00Z" } } }
+        }
+      ]
+    }
+  }
+}

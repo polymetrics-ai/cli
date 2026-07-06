@@ -1,0 +1,20 @@
+{
+  "record": {
+    "collection_id": "synthetic-conformance-value",
+    "organization": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/collections/synthetic-conformance-value/transfer",
+    "body": {
+      "organization": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "transfer_collection_fixture_1"
+    }
+  }
+}

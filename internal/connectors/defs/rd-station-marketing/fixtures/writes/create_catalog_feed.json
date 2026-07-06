@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "Fixture Catalog",
+    "url": "https://example.com/catalog.json",
+    "format": "json"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/catalog_feeds",
+    "body": {
+      "name": "Fixture Catalog",
+      "url": "https://example.com/catalog.json",
+      "format": "json"
+    }
+  },
+  "response": { "status": 200, "body": { "id": 1 } }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "profile",
+  "type": "object",
+  "x-primary-key": ["email_address"],
+  "required": ["email_address"],
+  "properties": {
+    "email_address": { "type": "string", "description": "Renamed from raw emailAddress; also this stream's primary key. This is a single-record, unpaginated mailbox-identity resource (one row per sync -- there is exactly one profile per authenticated user_id)." },
+    "messages_total": { "type": ["integer", "null"] },
+    "threads_total": { "type": ["integer", "null"] },
+    "history_id": { "type": ["string", "null"], "description": "Renamed from raw historyId; the current mailbox historyId snapshot at profile-read time. Google publishes historyId as a uint64-formatted STRING, matching the history stream's own id field type." }
+  }
+}

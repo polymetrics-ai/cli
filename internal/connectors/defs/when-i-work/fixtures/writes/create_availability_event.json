@@ -1,0 +1,10 @@
+{
+  "record": {
+    "start_time": "2026-01-01T09:00:00Z",
+    "type": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/2/availabilityevents"
+  }
+}

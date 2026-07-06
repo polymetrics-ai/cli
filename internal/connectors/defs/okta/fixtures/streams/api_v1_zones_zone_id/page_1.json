@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/zones/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "system": true,
+      "type": "DYNAMIC",
+      "usage": "BLOCKLIST",
+      "_links": {
+        "activate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

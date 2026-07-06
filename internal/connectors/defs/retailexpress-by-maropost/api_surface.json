@@ -1,0 +1,59 @@
+{
+  "api": "Retail Express by Maropost API v2 (https://<account>.retailexpress.com.au/api/v2)",
+  "docs": "https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Retail Express surface (purchase orders, suppliers, gift cards, loyalty, webhooks) is out of scope outside this connector's current declared surface. Retail Express by Maropost is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v2/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stock-levels",
+      "covered_by": {
+        "stream": "stock_levels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stores",
+      "covered_by": {
+        "stream": "stores"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/orders",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/products/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "no allow-listed reverse-ETL writes; Retail Express connector is read-only"
+      }
+    }
+  ]
+}

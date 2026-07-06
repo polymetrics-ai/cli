@@ -1,0 +1,23 @@
+{
+  "name": "getlago",
+  "display_name": "Lago",
+  "description": "Reads Lago customers, invoices, subscriptions, plans, and billable metrics through the Lago REST API.",
+  "integration_type": "api",
+  "docs_url": "https://doc.getlago.com/api-reference/intro",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Lago API read of billing and subscription data",
+    "approval": "none; read-only source connector"
+  }
+}

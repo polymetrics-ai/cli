@@ -1,0 +1,211 @@
+{
+  "api": "openFDA API (https://api.fda.gov)",
+  "docs": "https://open.fda.gov/apis/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion over the current official openFDA dataset API surface. All documented JSON dataset GET endpoints are covered as read streams; openFDA exposes no write/mutation API.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/drug/event.json",
+      "covered_by": {
+        "stream": "drug_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/label.json",
+      "covered_by": {
+        "stream": "drug_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/enforcement.json",
+      "covered_by": {
+        "stream": "drug_enforcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/event.json",
+      "covered_by": {
+        "stream": "device_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/food/enforcement.json",
+      "covered_by": {
+        "stream": "food_enforcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/animalandveterinary/event.json",
+      "covered_by": {
+        "stream": "animalandveterinary_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cosmetic/event.json",
+      "covered_by": {
+        "stream": "cosmetic_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/food/event.json",
+      "covered_by": {
+        "stream": "food_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/ndc.json",
+      "covered_by": {
+        "stream": "drug_ndc"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/drugsfda.json",
+      "covered_by": {
+        "stream": "drug_drugsfda"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/shortages.json",
+      "covered_by": {
+        "stream": "drug_shortages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drug/orangebook.json",
+      "covered_by": {
+        "stream": "drug_orangebook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/510k.json",
+      "covered_by": {
+        "stream": "device_510k"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/pma.json",
+      "covered_by": {
+        "stream": "device_pma"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/udi.json",
+      "covered_by": {
+        "stream": "device_udi"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/enforcement.json",
+      "covered_by": {
+        "stream": "device_enforcement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/recall.json",
+      "covered_by": {
+        "stream": "device_recall"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/classification.json",
+      "covered_by": {
+        "stream": "device_classification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/registrationlisting.json",
+      "covered_by": {
+        "stream": "device_registrationlisting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/device/covid19serology.json",
+      "covered_by": {
+        "stream": "device_covid19serology"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tobacco/problem.json",
+      "covered_by": {
+        "stream": "tobacco_problem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tobacco/researchdigitalads.json",
+      "covered_by": {
+        "stream": "tobacco_researchdigitalads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tobacco/researchpreventionads.json",
+      "covered_by": {
+        "stream": "tobacco_researchpreventionads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tobacco/researchsmokefree.json",
+      "covered_by": {
+        "stream": "tobacco_researchsmokefree"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transparency/crl.json",
+      "covered_by": {
+        "stream": "transparency_crl"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other/historicaldocument.json",
+      "covered_by": {
+        "stream": "other_historicaldocument"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other/nsde.json",
+      "covered_by": {
+        "stream": "other_nsde"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other/substance.json",
+      "covered_by": {
+        "stream": "other_substance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/other/unii.json",
+      "covered_by": {
+        "stream": "other_unii"
+      }
+    }
+  ]
+}

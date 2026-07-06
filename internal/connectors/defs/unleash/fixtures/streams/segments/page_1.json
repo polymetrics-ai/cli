@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/admin/segments", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        { "id": "seg_fixture_1", "name": "Beta users" },
+        { "id": "seg_fixture_2", "name": "Enterprise" }
+      ]
+    }
+  }
+}

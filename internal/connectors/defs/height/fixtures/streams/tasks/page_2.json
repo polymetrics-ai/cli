@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "usePagination": "true", "after": "task_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "id": "task_fixture_3",
+          "model": "task",
+          "index": 3,
+          "name": "Fixture task 3",
+          "description": "fixture task three",
+          "status": "done",
+          "completed": true,
+          "completedAt": "2026-01-03T00:00:00.000Z",
+          "deleted": false,
+          "url": "https://height.app/fixture/task_fixture_3",
+          "createdAt": "2026-01-03T00:00:00.000Z",
+          "createdUserId": "user_fixture_1",
+          "lastActivityAt": "2026-01-03T00:00:00.000Z",
+          "listIds": ["list_fixture_1"],
+          "assigneesIds": ["user_fixture_1"],
+          "parentTaskId": null
+        }
+      ],
+      "nextPageToken": null
+    }
+  }
+}

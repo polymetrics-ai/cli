@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/tags", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 2,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 1,
+          "name": "tags-fixture-1",
+          "repository": 1,
+          "full_size": 4096,
+          "digest": "sha256:fixture1",
+          "media_type": "application/vnd.docker.distribution.manifest.v2+json",
+          "content_type": "image",
+          "tag_status": "active",
+          "last_updated": "2026-01-01T00:00:00Z",
+          "last_pushed": "2026-01-01T00:00:00Z",
+          "last_updater_username": "fixtureuser"
+        },
+        {
+          "id": 2,
+          "name": "tags-fixture-2",
+          "repository": 2,
+          "full_size": 8192,
+          "digest": "sha256:fixture2",
+          "media_type": "application/vnd.docker.distribution.manifest.v2+json",
+          "content_type": "image",
+          "tag_status": "active",
+          "last_updated": "2026-01-02T00:00:00Z",
+          "last_pushed": "2026-01-02T00:00:00Z",
+          "last_updater_username": "fixtureuser"
+        }
+      ]
+    }
+  }
+}

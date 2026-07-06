@@ -1,0 +1,28 @@
+{
+  "record": {
+    "account": {},
+    "emails": {},
+    "linkedIn": {},
+    "calls": {},
+    "contacts": {},
+    "beta": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v3/settings",
+    "body": {
+      "account": {},
+      "emails": {},
+      "linkedIn": {},
+      "calls": {},
+      "contacts": {},
+      "beta": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

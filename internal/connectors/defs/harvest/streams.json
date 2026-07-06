@@ -1,0 +1,347 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Harvest-Account-Id": "{{ config.account_id }}"
+    },
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next_page"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/clients"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "harvest api_token is missing or invalid; re-run pm credentials add harvest"
+      },
+      {
+        "status": 403,
+        "hint": "harvest account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "harvest rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "clients",
+      "path": "/clients",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "clients"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "path": "/projects",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "projects"
+      },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "tasks"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "users"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "time_entries",
+      "path": "/time_entries",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "time_entries"
+      },
+      "computed_fields": {
+        "user_id": "{{ record.user.id }}",
+        "client_id": "{{ record.client.id }}",
+        "project_id": "{{ record.project.id }}",
+        "task_id": "{{ record.task.id }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/time_entries.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "contacts" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "company",
+      "path": "/company",
+      "pagination": { "type": "none" },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/company.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "invoices" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}",
+        "creator_id": "{{ record.creator.id }}",
+        "creator_name": "{{ record.creator.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "estimates",
+      "path": "/estimates",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "estimates" },
+      "computed_fields": {
+        "client_id": "{{ record.client.id }}",
+        "client_name": "{{ record.client.name }}",
+        "creator_id": "{{ record.creator.id }}",
+        "creator_name": "{{ record.creator.name }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/estimates.json"
+    },
+    {
+      "name": "expenses",
+      "path": "/expenses",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "expenses" },
+      "computed_fields": {
+        "user_id": "{{ record.user.id }}",
+        "client_id": "{{ record.client.id }}",
+        "project_id": "{{ record.project.id }}",
+        "expense_category_id": "{{ record.expense_category.id }}",
+        "invoice_id": "{{ record.invoice.id }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/expenses.json"
+    },
+    {
+      "name": "invoice_item_categories",
+      "path": "/invoice_item_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "invoice_item_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/invoice_item_categories.json"
+    },
+    {
+      "name": "estimate_item_categories",
+      "path": "/estimate_item_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "estimate_item_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/estimate_item_categories.json"
+    },
+    {
+      "name": "expense_categories",
+      "path": "/expense_categories",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "expense_categories" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/expense_categories.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "roles" },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "task_assignments",
+      "path": "/task_assignments",
+      "query": {
+        "per_page": "{{ config.page_size }}",
+        "updated_since": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": { "path": "task_assignments" },
+      "computed_fields": {
+        "project_id": "{{ record.project.id }}",
+        "task_id": "{{ record.task.id }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "start_config_key": "start_date",
+        "request_param": "updated_since"
+      },
+      "schema": "schemas/task_assignments.json"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/automations",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "automations": [
+        {
+          "actions": [
+
+          ],
+          "active": true,
+          "conditions": {
+          },
+          "created_at": "2026-01-01T00:00:00Z",
+          "default": true,
+          "id": 1,
+          "position": 7,
+          "raw_title": "fixture_raw_title",
+          "title": "fixture_title",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

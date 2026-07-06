@@ -1,0 +1,18 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "installation_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/integrations/synthetic-conformance-value/installations/synthetic-conformance-value/sites/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "uninstall_integration_from_site_fixture_1"
+    }
+  }
+}

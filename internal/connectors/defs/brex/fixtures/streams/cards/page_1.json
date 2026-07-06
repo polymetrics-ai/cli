@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/cards",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "card_fixture_1",
+          "owner": {
+            "type": "USER",
+            "user_id": "user_fixture_1"
+          },
+          "status": "ACTIVE",
+          "last_four": "1234",
+          "card_name": "Fixture Card",
+          "card_type": "PHYSICAL",
+          "limit_type": "MONTHLY",
+          "spend_controls": null,
+          "billing_address": {
+            "line1": "1 Fixture St",
+            "city": "Fixtureville",
+            "state": "CA",
+            "postalCode": "94000",
+            "country": "US"
+          },
+          "mailing_address": null,
+          "expiration_date": {
+            "month": 12,
+            "year": 2030
+          },
+          "has_been_transferred": false,
+          "budget_id": null
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/companies", "query": { "limit": "100", "cursor": "cursor_fixture_token_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 3,
+          "name": "Fixture Restaurant Group 3",
+          "country_code": "US",
+          "currency": "USD",
+          "timezone": "America/New_York",
+          "active": false,
+          "created": "2026-01-03T00:00:00+00:00",
+          "modified": "2026-01-03T00:00:00+00:00"
+        }
+      ],
+      "meta": { "cursor": { "next": null } }
+    }
+  }
+}

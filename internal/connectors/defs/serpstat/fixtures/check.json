@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "",
+    "body": {
+      "id": 1,
+      "method": "SerpstatDomainProcedure.getKeywords",
+      "params": { "domain": "serpstat.com", "se": "g_us", "page": 1, "size": 10 }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "result": { "data": [] } }
+  }
+}

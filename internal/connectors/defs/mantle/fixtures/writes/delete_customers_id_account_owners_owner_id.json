@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "owner_id": "owner_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/customers/id_fixture/account_owners/owner_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

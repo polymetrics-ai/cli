@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/featured_carousel"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widget": "<div class=\"jdgm-carousel\">Featured reviews</div>"
+    }
+  }
+}

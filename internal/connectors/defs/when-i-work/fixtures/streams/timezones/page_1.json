@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/timezones" },
+  "response": {
+    "status": 200,
+    "body": {
+      "timezone": [
+        { "timezone_id": 1, "timezone_name": "Fixture Standard Time", "offset": -6, "olson_id": "Fixture/City" }
+      ]
+    }
+  }
+}

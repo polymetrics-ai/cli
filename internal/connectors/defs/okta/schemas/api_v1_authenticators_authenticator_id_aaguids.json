@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "aaguid": {
+      "type": "string",
+      "description": "A unique 128-bit identifier that's assigned to a specific model of security key or authenticator"
+    },
+    "attestationRootCertificates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x5c": {
+            "type": "string",
+            "description": "X.509 certificate chain"
+          },
+          "x5t#S256": {
+            "type": "string",
+            "description": "SHA-256 hash (thumbprint) of the X.509 certificate"
+          },
+          "iss": {
+            "type": "string",
+            "description": "Issuer of certificate"
+          },
+          "exp": {
+            "type": "string",
+            "description": "Expiry date of certificate"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "authenticatorCharacteristics": {
+      "type": "object",
+      "description": "Contains additional properties about custom AAGUID.",
+      "properties": {
+        "fipsCompliant": {
+          "type": "boolean",
+          "description": "Indicates whether the authenticator meets Federal Information Processing Standards (FIPS) compliance requirements"
+        },
+        "hardwareProtected": {
+          "type": "boolean",
+          "description": "Indicates whether the authenticator stores the private key on a hardware component"
+        },
+        "platformAttached": {
+          "type": "boolean",
+          "description": "Indicates whether the custom AAGUID is built into the authenticator (`true`) or if it's a separate, external authenticator"
+        }
+      },
+      "additionalProperties": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The product name associated with the AAGUID"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "name"
+  ]
+}

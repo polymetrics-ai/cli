@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "page[number]": "2",
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "job_fixture_101",
+          "type": "jobs",
+          "attributes": {
+            "title": "Fixture Job 101",
+            "created-at": "2026-01-18T00:00:00Z"
+          }
+        }
+      ]
+    }
+  }
+}

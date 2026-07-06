@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/general/compact"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "name": "Fixture Corp",
+        "columns": [
+          "Industry",
+          "Employees"
+        ],
+        "data": [
+          [
+            "Software",
+            1000
+          ]
+        ]
+      }
+    ]
+  }
+}

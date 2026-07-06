@@ -1,0 +1,21 @@
+{
+  "record": {
+    "collection_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value",
+    "role": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/collections/synthetic-conformance-value/permissions/users/synthetic-conformance-value",
+    "body": {
+      "role": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "update_user_permission_in_collection_fixture_1"
+    }
+  }
+}

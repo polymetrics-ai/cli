@@ -1,0 +1,11 @@
+{
+  "record": {
+    "propertyID": "prop_fixture_1",
+    "roomBlockType": "group",
+    "startDate": "2026-02-01",
+    "endDate": "2026-02-05",
+    "rooms": [{ "roomTypeID": "roomtype_fixture_1", "quantity": 5 }]
+  },
+  "expect": { "method": "POST", "path": "/postRoomBlock" },
+  "response": { "status": 200, "body": { "success": true, "roomBlockID": "block_fixture_new" } }
+}

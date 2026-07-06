@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "Fixture Pardot record",
+    "matchEmail": "fixture@example.com",
+    "prospect": {
+      "email": "fixture@example.com"
+    },
+    "fields": [
+      "id",
+      "email"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/prospects/do/upsertLatestByEmail",
+    "body": {
+      "name": "Fixture Pardot record",
+      "matchEmail": "fixture@example.com",
+      "prospect": {
+        "email": "fixture@example.com"
+      },
+      "fields": [
+        "id",
+        "email"
+      ]
+    }
+  }
+}

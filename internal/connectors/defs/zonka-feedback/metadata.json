@@ -1,0 +1,25 @@
+{
+  "name": "zonka-feedback",
+  "display_name": "Zonka Feedback",
+  "description": "Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, users, workspaces, stats, and distribution logs; writes responses, contacts, survey sends, and tasks through the Zonka Feedback REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.zonkafeedback.com/docs/api-and-webhooks",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Zonka Feedback API read of response, survey, contact, device, task, location, user, workspace, stats, and distribution log data",
+    "write": "external Zonka Feedback API mutations that add or update responses, upsert contacts, send surveys over email/SMS/WhatsApp, and create, update, or delete tasks",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

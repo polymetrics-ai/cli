@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/payslips",
+    "query": {
+      "page_index": "1",
+      "items_per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "payslip_fixture_1",
+            "employee_id": "emp_fixture_1",
+            "period_start": "2026-01-01",
+            "period_end": "2026-01-15",
+            "gross_pay": 1000
+          }
+        ],
+        "page_index": 1,
+        "item_per_page": 100,
+        "total_items": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

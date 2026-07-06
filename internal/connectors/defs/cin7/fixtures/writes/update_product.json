@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ID": "prod_fixture_1",
+    "Name": "Fixture Product Renamed",
+    "Status": "Active"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/product",
+    "body": {
+      "ID": "prod_fixture_1",
+      "Name": "Fixture Product Renamed",
+      "Status": "Active"
+    }
+  }
+}

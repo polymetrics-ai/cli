@@ -1,0 +1,2922 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "api_key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 20
+    },
+    "check": {
+      "method": "GET",
+      "path": "/movie/popular"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "tmdb api_key is missing or invalid; re-run pm credentials add tmdb"
+      },
+      {
+        "status": 404,
+        "hint": "tmdb resource not found"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "tmdb rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "popular_movies",
+      "path": "/movie/popular",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/popular_movies.json"
+    },
+    {
+      "name": "now_playing_movies",
+      "path": "/movie/now_playing",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/now_playing_movies.json"
+    },
+    {
+      "name": "search_movies",
+      "path": "/search/movie",
+      "query": {
+        "query": "{{ config.query }}",
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_movies.json"
+    },
+    {
+      "name": "movie_details",
+      "path": "/movie/{{ config.movie_id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_details.json"
+    },
+    {
+      "name": "account_details",
+      "path": "/account/{{ fanout.id }}",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_details.json"
+    },
+    {
+      "name": "account_get_favorites",
+      "path": "/account/{{ fanout.id }}/favorite/movies",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_get_favorites.json"
+    },
+    {
+      "name": "account_favorite_tv",
+      "path": "/account/{{ fanout.id }}/favorite/tv",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_favorite_tv.json"
+    },
+    {
+      "name": "account_lists",
+      "path": "/account/{{ fanout.id }}/lists",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_lists.json"
+    },
+    {
+      "name": "account_rated_movies",
+      "path": "/account/{{ fanout.id }}/rated/movies",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_rated_movies.json"
+    },
+    {
+      "name": "account_rated_tv",
+      "path": "/account/{{ fanout.id }}/rated/tv",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_rated_tv.json"
+    },
+    {
+      "name": "account_rated_tv_episodes",
+      "path": "/account/{{ fanout.id }}/rated/tv/episodes",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_rated_tv_episodes.json"
+    },
+    {
+      "name": "account_watchlist_movies",
+      "path": "/account/{{ fanout.id }}/watchlist/movies",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_watchlist_movies.json"
+    },
+    {
+      "name": "account_watchlist_tv",
+      "path": "/account/{{ fanout.id }}/watchlist/tv",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "account_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "account_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_watchlist_tv.json"
+    },
+    {
+      "name": "certification_movie_list",
+      "path": "/certification/movie/list",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/certification_movie_list.json"
+    },
+    {
+      "name": "certifications_tv_list",
+      "path": "/certification/tv/list",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/certifications_tv_list.json"
+    },
+    {
+      "name": "changes_movie_list",
+      "path": "/movie/changes",
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/changes_movie_list.json"
+    },
+    {
+      "name": "changes_people_list",
+      "path": "/person/changes",
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/changes_people_list.json"
+    },
+    {
+      "name": "changes_tv_list",
+      "path": "/tv/changes",
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/changes_tv_list.json"
+    },
+    {
+      "name": "collection_details",
+      "path": "/collection/{{ fanout.id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collection_details.json"
+    },
+    {
+      "name": "collection_images",
+      "path": "/collection/{{ fanout.id }}/images",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collection_images.json"
+    },
+    {
+      "name": "collection_translations",
+      "path": "/collection/{{ fanout.id }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "collection_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "collection_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/collection_translations.json"
+    },
+    {
+      "name": "company_details",
+      "path": "/company/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "company_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "company_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_details.json"
+    },
+    {
+      "name": "company_alternative_names",
+      "path": "/company/{{ fanout.id }}/alternative_names",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "company_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "company_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_alternative_names.json"
+    },
+    {
+      "name": "company_images",
+      "path": "/company/{{ fanout.id }}/images",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "company_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "company_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_images.json"
+    },
+    {
+      "name": "configuration_details",
+      "path": "/configuration",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_details.json"
+    },
+    {
+      "name": "configuration_countries",
+      "path": "/configuration/countries",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_countries.json"
+    },
+    {
+      "name": "configuration_jobs",
+      "path": "/configuration/jobs",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_jobs.json"
+    },
+    {
+      "name": "configuration_languages",
+      "path": "/configuration/languages",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_languages.json"
+    },
+    {
+      "name": "configuration_timezones",
+      "path": "/configuration/timezones",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/configuration_timezones.json"
+    },
+    {
+      "name": "credit_details",
+      "path": "/credit/{{ fanout.id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "credit_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "credit_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/credit_details.json"
+    },
+    {
+      "name": "discover_movie",
+      "path": "/discover/movie",
+      "query": {
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "primary_release_year": {
+          "template": "{{ config.primary_release_year }}",
+          "omit_when_absent": true
+        },
+        "region": {
+          "template": "{{ config.region }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        },
+        "watch_region": {
+          "template": "{{ config.watch_region }}",
+          "omit_when_absent": true
+        },
+        "with_watch_providers": {
+          "template": "{{ config.with_watch_providers }}",
+          "omit_when_absent": true
+        },
+        "year": {
+          "template": "{{ config.year }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/discover_movie.json"
+    },
+    {
+      "name": "discover_tv",
+      "path": "/discover/tv",
+      "query": {
+        "first_air_date_year": {
+          "template": "{{ config.first_air_date_year }}",
+          "omit_when_absent": true
+        },
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        },
+        "watch_region": {
+          "template": "{{ config.watch_region }}",
+          "omit_when_absent": true
+        },
+        "with_watch_providers": {
+          "template": "{{ config.with_watch_providers }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/discover_tv.json"
+    },
+    {
+      "name": "find_by_id",
+      "path": "/find/{{ fanout.id }}",
+      "query": {
+        "external_source": "{{ config.external_source }}",
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "external_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "external_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/find_by_id.json"
+    },
+    {
+      "name": "genre_movie_list",
+      "path": "/genre/movie/list",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/genre_movie_list.json"
+    },
+    {
+      "name": "genre_tv_list",
+      "path": "/genre/tv/list",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/genre_tv_list.json"
+    },
+    {
+      "name": "guest_session_rated_movies",
+      "path": "/guest_session/{{ fanout.id }}/rated/movies",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "guest_session_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "guest_session_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/guest_session_rated_movies.json"
+    },
+    {
+      "name": "guest_session_rated_tv",
+      "path": "/guest_session/{{ fanout.id }}/rated/tv",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "guest_session_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "guest_session_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/guest_session_rated_tv.json"
+    },
+    {
+      "name": "guest_session_rated_tv_episodes",
+      "path": "/guest_session/{{ fanout.id }}/rated/tv/episodes",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.sort_by }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "guest_session_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "guest_session_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/guest_session_rated_tv_episodes.json"
+    },
+    {
+      "name": "keyword_details",
+      "path": "/keyword/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "keyword_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "keyword_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/keyword_details.json"
+    },
+    {
+      "name": "keyword_movies",
+      "path": "/keyword/{{ fanout.id }}/movies",
+      "query": {
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "keyword_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "keyword_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/keyword_movies.json"
+    },
+    {
+      "name": "list_check_item_status",
+      "path": "/list/{{ fanout.id }}/item_status",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "list_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "list_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_check_item_status.json"
+    },
+    {
+      "name": "list_details",
+      "path": "/list/{{ fanout.id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "list_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "list_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_details.json"
+    },
+    {
+      "name": "movie_top_rated_list",
+      "path": "/movie/top_rated",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "region": {
+          "template": "{{ config.region }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_top_rated_list.json"
+    },
+    {
+      "name": "movie_upcoming_list",
+      "path": "/movie/upcoming",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "region": {
+          "template": "{{ config.region }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_upcoming_list.json"
+    },
+    {
+      "name": "movie_account_states",
+      "path": "/movie/{{ config.movie_id }}/account_states",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "guest_session_id": {
+          "template": "{{ config.guest_session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_account_states.json"
+    },
+    {
+      "name": "movie_alternative_titles",
+      "path": "/movie/{{ config.movie_id }}/alternative_titles",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_alternative_titles.json"
+    },
+    {
+      "name": "movie_changes",
+      "path": "/movie/{{ config.movie_id }}/changes",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_changes.json"
+    },
+    {
+      "name": "movie_credits",
+      "path": "/movie/{{ config.movie_id }}/credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_credits.json"
+    },
+    {
+      "name": "movie_external_ids",
+      "path": "/movie/{{ config.movie_id }}/external_ids",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_external_ids.json"
+    },
+    {
+      "name": "movie_images",
+      "path": "/movie/{{ config.movie_id }}/images",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_images.json"
+    },
+    {
+      "name": "movie_keywords",
+      "path": "/movie/{{ config.movie_id }}/keywords",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_keywords.json"
+    },
+    {
+      "name": "movie_latest_id",
+      "path": "/movie/latest",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_latest_id.json"
+    },
+    {
+      "name": "movie_lists",
+      "path": "/movie/{{ config.movie_id }}/lists",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_lists.json"
+    },
+    {
+      "name": "movie_recommendations",
+      "path": "/movie/{{ config.movie_id }}/recommendations",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_recommendations.json"
+    },
+    {
+      "name": "movie_release_dates",
+      "path": "/movie/{{ config.movie_id }}/release_dates",
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_release_dates.json"
+    },
+    {
+      "name": "movie_reviews",
+      "path": "/movie/{{ config.movie_id }}/reviews",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_reviews.json"
+    },
+    {
+      "name": "movie_similar",
+      "path": "/movie/{{ config.movie_id }}/similar",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_similar.json"
+    },
+    {
+      "name": "movie_translations",
+      "path": "/movie/{{ config.movie_id }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_translations.json"
+    },
+    {
+      "name": "movie_videos",
+      "path": "/movie/{{ config.movie_id }}/videos",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_videos.json"
+    },
+    {
+      "name": "movie_watch_providers",
+      "path": "/movie/{{ config.movie_id }}/watch/providers",
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/movie_watch_providers.json"
+    },
+    {
+      "name": "network_details",
+      "path": "/network/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "network_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "network_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/network_details.json"
+    },
+    {
+      "name": "details_copy",
+      "path": "/network/{{ fanout.id }}/alternative_names",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "network_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "network_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/details_copy.json"
+    },
+    {
+      "name": "alternative_names_copy",
+      "path": "/network/{{ fanout.id }}/images",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "network_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "network_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/alternative_names_copy.json"
+    },
+    {
+      "name": "person_popular_list",
+      "path": "/person/popular",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_popular_list.json"
+    },
+    {
+      "name": "person_details",
+      "path": "/person/{{ fanout.id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_details.json"
+    },
+    {
+      "name": "person_changes",
+      "path": "/person/{{ fanout.id }}/changes",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_changes.json"
+    },
+    {
+      "name": "person_combined_credits",
+      "path": "/person/{{ fanout.id }}/combined_credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_combined_credits.json"
+    },
+    {
+      "name": "person_external_ids",
+      "path": "/person/{{ fanout.id }}/external_ids",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_external_ids.json"
+    },
+    {
+      "name": "person_images",
+      "path": "/person/{{ fanout.id }}/images",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_images.json"
+    },
+    {
+      "name": "person_latest_id",
+      "path": "/person/latest",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_latest_id.json"
+    },
+    {
+      "name": "person_movie_credits",
+      "path": "/person/{{ fanout.id }}/movie_credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_movie_credits.json"
+    },
+    {
+      "name": "person_tv_credits",
+      "path": "/person/{{ fanout.id }}/tv_credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_tv_credits.json"
+    },
+    {
+      "name": "person_tagged_images",
+      "path": "/person/{{ fanout.id }}/tagged_images",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/person_tagged_images.json"
+    },
+    {
+      "name": "translations",
+      "path": "/person/{{ fanout.id }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "person_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "person_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/translations.json"
+    },
+    {
+      "name": "review_details",
+      "path": "/review/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "review_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "review_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/review_details.json"
+    },
+    {
+      "name": "search_collection",
+      "path": "/search/collection",
+      "query": {
+        "query": "{{ config.query }}",
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "region": {
+          "template": "{{ config.region }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_collection.json"
+    },
+    {
+      "name": "search_company",
+      "path": "/search/company",
+      "query": {
+        "query": "{{ config.query }}"
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_company.json"
+    },
+    {
+      "name": "search_keyword",
+      "path": "/search/keyword",
+      "query": {
+        "query": "{{ config.query }}"
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_keyword.json"
+    },
+    {
+      "name": "search_multi",
+      "path": "/search/multi",
+      "query": {
+        "query": "{{ config.query }}",
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_multi.json"
+    },
+    {
+      "name": "search_person",
+      "path": "/search/person",
+      "query": {
+        "query": "{{ config.query }}",
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_person.json"
+    },
+    {
+      "name": "search_tv",
+      "path": "/search/tv",
+      "query": {
+        "query": "{{ config.query }}",
+        "first_air_date_year": {
+          "template": "{{ config.first_air_date_year }}",
+          "omit_when_absent": true
+        },
+        "include_adult": {
+          "template": "{{ config.include_adult }}",
+          "omit_when_absent": true
+        },
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "year": {
+          "template": "{{ config.year }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/search_tv.json"
+    },
+    {
+      "name": "trending_all",
+      "path": "/trending/all/day",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trending_all.json"
+    },
+    {
+      "name": "trending_movies",
+      "path": "/trending/movie/day",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trending_movies.json"
+    },
+    {
+      "name": "trending_people",
+      "path": "/trending/person/day",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trending_people.json"
+    },
+    {
+      "name": "trending_tv",
+      "path": "/trending/tv/day",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/trending_tv.json"
+    },
+    {
+      "name": "tv_series_airing_today_list",
+      "path": "/tv/airing_today",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_airing_today_list.json"
+    },
+    {
+      "name": "tv_series_on_the_air_list",
+      "path": "/tv/on_the_air",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_on_the_air_list.json"
+    },
+    {
+      "name": "tv_series_popular_list",
+      "path": "/tv/popular",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_popular_list.json"
+    },
+    {
+      "name": "tv_series_top_rated_list",
+      "path": "/tv/top_rated",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_top_rated_list.json"
+    },
+    {
+      "name": "tv_series_details",
+      "path": "/tv/{{ fanout.id }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_details.json"
+    },
+    {
+      "name": "tv_series_account_states",
+      "path": "/tv/{{ fanout.id }}/account_states",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "guest_session_id": {
+          "template": "{{ config.guest_session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_account_states.json"
+    },
+    {
+      "name": "tv_series_aggregate_credits",
+      "path": "/tv/{{ fanout.id }}/aggregate_credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_aggregate_credits.json"
+    },
+    {
+      "name": "tv_series_alternative_titles",
+      "path": "/tv/{{ fanout.id }}/alternative_titles",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_alternative_titles.json"
+    },
+    {
+      "name": "tv_series_changes",
+      "path": "/tv/{{ fanout.id }}/changes",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_changes.json"
+    },
+    {
+      "name": "tv_series_content_ratings",
+      "path": "/tv/{{ fanout.id }}/content_ratings",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_content_ratings.json"
+    },
+    {
+      "name": "tv_series_credits",
+      "path": "/tv/{{ fanout.id }}/credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_credits.json"
+    },
+    {
+      "name": "tv_series_episode_groups",
+      "path": "/tv/{{ fanout.id }}/episode_groups",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_episode_groups.json"
+    },
+    {
+      "name": "tv_series_external_ids",
+      "path": "/tv/{{ fanout.id }}/external_ids",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_external_ids.json"
+    },
+    {
+      "name": "tv_series_images",
+      "path": "/tv/{{ fanout.id }}/images",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_images.json"
+    },
+    {
+      "name": "tv_series_keywords",
+      "path": "/tv/{{ fanout.id }}/keywords",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_keywords.json"
+    },
+    {
+      "name": "tv_series_latest_id",
+      "path": "/tv/latest",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_latest_id.json"
+    },
+    {
+      "name": "lists_copy",
+      "path": "/tv/{{ fanout.id }}/lists",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/lists_copy.json"
+    },
+    {
+      "name": "tv_series_recommendations",
+      "path": "/tv/{{ fanout.id }}/recommendations",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_recommendations.json"
+    },
+    {
+      "name": "tv_series_reviews",
+      "path": "/tv/{{ fanout.id }}/reviews",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_reviews.json"
+    },
+    {
+      "name": "tv_series_screened_theatrically",
+      "path": "/tv/{{ fanout.id }}/screened_theatrically",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_screened_theatrically.json"
+    },
+    {
+      "name": "tv_series_similar",
+      "path": "/tv/{{ fanout.id }}/similar",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_similar.json"
+    },
+    {
+      "name": "tv_series_translations",
+      "path": "/tv/{{ fanout.id }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_translations.json"
+    },
+    {
+      "name": "tv_series_videos",
+      "path": "/tv/{{ fanout.id }}/videos",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_videos.json"
+    },
+    {
+      "name": "tv_series_watch_providers",
+      "path": "/tv/{{ fanout.id }}/watch/providers",
+      "records": {
+        "path": "results"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "series_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "series_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_series_watch_providers.json"
+    },
+    {
+      "name": "tv_season_details",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_details.json"
+    },
+    {
+      "name": "tv_season_account_states",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/account_states",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "guest_session_id": {
+          "template": "{{ config.guest_session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_account_states.json"
+    },
+    {
+      "name": "tv_season_aggregate_credits",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/aggregate_credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_aggregate_credits.json"
+    },
+    {
+      "name": "tv_season_changes_by_id",
+      "path": "/tv/season/{{ fanout.id }}/changes",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "season_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "season_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_changes_by_id.json"
+    },
+    {
+      "name": "tv_season_credits",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_credits.json"
+    },
+    {
+      "name": "tv_season_external_ids",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/external_ids",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_external_ids.json"
+    },
+    {
+      "name": "tv_season_images",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/images",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_images.json"
+    },
+    {
+      "name": "tv_season_translations",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_translations.json"
+    },
+    {
+      "name": "tv_season_videos",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/videos",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_videos.json"
+    },
+    {
+      "name": "tv_season_watch_providers",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/watch/providers",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_season_watch_providers.json"
+    },
+    {
+      "name": "tv_episode_details",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_details.json"
+    },
+    {
+      "name": "tv_episode_account_states",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/account_states",
+      "query": {
+        "session_id": {
+          "template": "{{ config.session_id }}",
+          "omit_when_absent": true
+        },
+        "guest_session_id": {
+          "template": "{{ config.guest_session_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_account_states.json"
+    },
+    {
+      "name": "tv_episode_changes_by_id",
+      "path": "/tv/episode/{{ fanout.id }}/changes",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "episode_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "episode_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_changes_by_id.json"
+    },
+    {
+      "name": "tv_episode_credits",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/credits",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_credits.json"
+    },
+    {
+      "name": "tv_episode_external_ids",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/external_ids",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_external_ids.json"
+    },
+    {
+      "name": "tv_episode_images",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/images",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_images.json"
+    },
+    {
+      "name": "tv_episode_translations",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/translations",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_translations.json"
+    },
+    {
+      "name": "tv_episode_videos",
+      "path": "/tv/{{ config.series_id }}/season/{{ config.season_number }}/episode/{{ config.episode_number }}/videos",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_videos.json"
+    },
+    {
+      "name": "tv_episode_group_details",
+      "path": "/tv/episode_group/{{ fanout.id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "fan_out": {
+        "ids_from": {
+          "config_key": "tv_episode_group_ids"
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "tv_episode_group_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tv_episode_group_details.json"
+    },
+    {
+      "name": "watch_providers_available_regions",
+      "path": "/watch/providers/regions",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/watch_providers_available_regions.json"
+    },
+    {
+      "name": "watch_providers_movie_list",
+      "path": "/watch/providers/movie",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "watch_region": {
+          "template": "{{ config.watch_region }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/watch_providers_movie_list.json"
+    },
+    {
+      "name": "watch_provider_tv_list",
+      "path": "/watch/providers/tv",
+      "query": {
+        "language": {
+          "template": "{{ config.language }}",
+          "omit_when_absent": true
+        },
+        "watch_region": {
+          "template": "{{ config.watch_region }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/watch_provider_tv_list.json"
+    }
+  ]
+}

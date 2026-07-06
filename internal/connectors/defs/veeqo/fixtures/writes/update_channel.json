@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 45465,
+    "name": "Updated Channel"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/channels/45465"
+  }
+}

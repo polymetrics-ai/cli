@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/deliveries/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "delivery": {
+        "id": "id_fixture",
+        "emailId": "fixture@example.com",
+        "email": {
+          "id": "email_fixture_id"
+        },
+        "status": "fixture",
+        "audienceSize": 1,
+        "audienceCriteria": {
+          "id": "audience_criteria_fixture_id"
+        },
+        "error": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "stats": {
+          "total": 1,
+          "sent": 1,
+          "delivered": 1,
+          "failed": 1,
+          "pending": 1,
+          "opened": 1,
+          "clicked": 1,
+          "bounced": 1,
+          "unsubscribed": 1,
+          "complained": 1
+        },
+        "recentEvents": [
+          {
+            "id": "recent_event_fixture_id"
+          }
+        ],
+        "recentDeliveries": [
+          {
+            "id": "recent_deliverie_fixture_id"
+          }
+        ]
+      }
+    }
+  }
+}

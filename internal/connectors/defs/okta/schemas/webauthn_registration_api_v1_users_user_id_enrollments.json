@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "created": {
+      "type": "string",
+      "description": "Timestamp indicating when the factor was enrolled",
+      "format": "date-time"
+    },
+    "factorType": {
+      "type": "string",
+      "description": "Type of factor",
+      "enum": [
+        "call",
+        "email",
+        "push",
+        "question",
+        "signed_nonce",
+        "sms",
+        "token",
+        "token:hardware",
+        "token:hotp",
+        "token:software:totp",
+        "u2f",
+        "web",
+        "webauthn"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the factor"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp indicating when the factor was last updated",
+      "format": "date-time"
+    },
+    "profile": {
+      "type": "object",
+      "description": "Specific attributes related to the factor",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "CUSTOM",
+        "DUO",
+        "FIDO",
+        "GOOGLE",
+        "OKTA",
+        "RSA",
+        "SYMANTEC",
+        "YUBICO"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the factor",
+      "enum": [
+        "ACTIVE",
+        "DISABLED",
+        "ENROLLED",
+        "EXPIRED",
+        "INACTIVE",
+        "NOT_SETUP",
+        "PENDING_ACTIVATION"
+      ]
+    },
+    "vendorName": {
+      "type": "string",
+      "description": "Name of the factor vendor. This is usually the same as the provider."
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

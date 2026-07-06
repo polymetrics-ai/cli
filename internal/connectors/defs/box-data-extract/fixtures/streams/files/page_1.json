@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/folders/synthetic-conformance-value/items",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "id": "files_fixture_1", "type": "file", "name": "fixture-1.pdf" },
+        { "id": "files_fixture_2", "type": "file", "name": "fixture-2.pdf" }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "total_count": 2
+    }
+  }
+}

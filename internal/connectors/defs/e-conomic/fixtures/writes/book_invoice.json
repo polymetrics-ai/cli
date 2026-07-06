@@ -1,0 +1,18 @@
+{
+  "record": {
+    "draftInvoice": { "draftInvoiceNumber": 1, "self": "https://restapi.e-conomic.com/invoices/drafts/1" },
+    "bookWithNumber": 7
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/booked",
+    "body": {
+      "draftInvoice": { "draftInvoiceNumber": 1, "self": "https://restapi.e-conomic.com/invoices/drafts/1" },
+      "bookWithNumber": 7
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "bookedInvoiceNumber": 7, "self": "https://restapi.e-conomic.com/invoices/booked/7" }
+  }
+}

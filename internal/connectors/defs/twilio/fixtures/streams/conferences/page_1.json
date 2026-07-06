@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences.json",
+    "query": {
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "conferences": [
+        {
+          "sid": "CF_fixture_1",
+          "account_sid": "AC_fixture",
+          "friendly_name": "fixture-conference-1",
+          "date_created": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2026 00:00:00 +0000",
+          "status": "completed",
+          "region": "us1"
+        }
+      ],
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 50
+    }
+  }
+}

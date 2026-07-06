@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/reviews",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "employee": {
+            "id": "reviews_fixture_1",
+            "employeeNumber": "FIX-1",
+            "employeeName": "Fixture reviews 1"
+          },
+          "reviewGroup": {
+            "id": "reviews_fixture_1",
+            "name": "Fixture reviews 1"
+          },
+          "reviewCycle": {
+            "id": "reviews_fixture_1",
+            "name": "Fixture reviews 1"
+          },
+          "summary": null,
+          "ratings": [],
+          "status": 1,
+          "id": "reviews_fixture_1"
+        },
+        {
+          "employee": {
+            "id": "reviews_fixture_2",
+            "employeeNumber": "FIX-2",
+            "employeeName": "Fixture reviews 2"
+          },
+          "reviewGroup": {
+            "id": "reviews_fixture_2",
+            "name": "Fixture reviews 2"
+          },
+          "reviewCycle": {
+            "id": "reviews_fixture_2",
+            "name": "Fixture reviews 2"
+          },
+          "summary": null,
+          "ratings": [],
+          "status": 1,
+          "id": "reviews_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/reviews",
+      "lastPage": "https://example.invalid/keka/reviews",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

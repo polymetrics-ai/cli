@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_comments",
+  "type": "object",
+  "x-primary-key": ["CommentId"],
+  "x-cursor-field": "DateCreated",
+  "required": ["CommentId"],
+  "properties": {
+    "CommentId": { "type": "string" },
+    "CommentedBy": { "type": ["string", "null"] },
+    "DateCreated": { "type": ["string", "null"] },
+    "EntryId": { "type": ["string", "null"] },
+    "Text": { "type": ["string", "null"] }
+  }
+}

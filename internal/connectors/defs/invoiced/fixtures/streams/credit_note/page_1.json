@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/credit_notes/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "note",
+      "created_at": 1767225600,
+      "updated_at": 1767225601,
+      "notes": "Fixture note"
+    }
+  }
+}

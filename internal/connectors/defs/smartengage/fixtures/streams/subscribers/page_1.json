@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscribers/list/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "subscribers-1",
+        "avatar_id": "avatar-1",
+        "name": "Fixture subscribers 1"
+      },
+      {
+        "id": "subscribers-2",
+        "avatar_id": "avatar-2",
+        "name": "Fixture subscribers 2"
+      }
+    ]
+  }
+}

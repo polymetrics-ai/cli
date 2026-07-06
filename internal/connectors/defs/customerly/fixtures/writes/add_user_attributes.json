@@ -1,0 +1,11 @@
+{
+  "record": {
+    "user_id": "1001",
+    "attributes": { "plan": "pro" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/add-attributes/1001"
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

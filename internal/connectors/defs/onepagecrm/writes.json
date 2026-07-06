@@ -1,0 +1,4304 @@
+{
+  "actions": [
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id",
+          "first_name"
+        ],
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "company_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "bcc_email": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific user; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "create_lead_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lead_sources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "counts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "total_count": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new lead source; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_lead_source",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lead_sources/{{ record.lead_source_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_source_id",
+          "id"
+        ],
+        "properties": {
+          "lead_source_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "counts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "total_count": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific lead source; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "lead_source_id"
+      ]
+    },
+    {
+      "name": "delete_lead_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lead_sources/{{ record.lead_source_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_source_id"
+        ],
+        "properties": {
+          "lead_source_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific lead source; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "lead_source_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/statuses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new status; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/statuses/{{ record.status_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "status_id",
+          "id"
+        ],
+        "properties": {
+          "status_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific status; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "status_id"
+      ]
+    },
+    {
+      "name": "delete_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/statuses/{{ record.status_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "status_id"
+        ],
+        "properties": {
+          "status_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific status; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "status_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_deal_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/deal_fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new deal field; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_deal_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/deal_fields/{{ record.deal_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deal_field_id",
+          "id"
+        ],
+        "properties": {
+          "deal_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific deal field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "deal_field_id"
+      ]
+    },
+    {
+      "name": "delete_deal_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deal_fields/{{ record.deal_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deal_field_id"
+        ],
+        "properties": {
+          "deal_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific deal field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "deal_field_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new custom field; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/custom_fields/{{ record.custom_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_field_id",
+          "id"
+        ],
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific custom field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "custom_field_id"
+      ]
+    },
+    {
+      "name": "delete_custom_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_fields/{{ record.custom_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_field_id"
+        ],
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific custom field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "custom_field_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_company_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/company_fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new company field; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_company_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/company_fields/{{ record.company_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_field_id",
+          "id"
+        ],
+        "properties": {
+          "company_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific company field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_field_id"
+      ]
+    },
+    {
+      "name": "delete_company_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/company_fields/{{ record.company_field_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_field_id"
+        ],
+        "properties": {
+          "company_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific company field; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_field_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_predefined_action",
+      "kind": "create",
+      "method": "POST",
+      "path": "/predefined_actions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "days": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new predefined action; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_predefined_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/predefined_actions/{{ record.predefined_action_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_action_id",
+          "id"
+        ],
+        "properties": {
+          "predefined_action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "days": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific predefined action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_action_id"
+      ]
+    },
+    {
+      "name": "delete_predefined_action",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/predefined_actions/{{ record.predefined_action_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_action_id"
+        ],
+        "properties": {
+          "predefined_action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific predefined action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_action_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_predefined_action_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/predefined_action_groups",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "action_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new predefined action group; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_predefined_action_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/predefined_action_groups/{{ record.predefined_action_group_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_action_group_id",
+          "text"
+        ],
+        "properties": {
+          "predefined_action_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "action_ids": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific predefined action group; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_action_group_id"
+      ]
+    },
+    {
+      "name": "delete_predefined_action_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/predefined_action_groups/{{ record.predefined_action_group_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_action_group_id"
+        ],
+        "properties": {
+          "predefined_action_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific predefined action group; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_action_group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_predefined_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/predefined_items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "cost": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new predefined item; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_predefined_item",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/predefined_items/{{ record.predefined_item_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_item_id",
+          "name"
+        ],
+        "properties": {
+          "predefined_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "cost": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "price": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific predefined item; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_item_id"
+      ]
+    },
+    {
+      "name": "delete_predefined_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/predefined_items/{{ record.predefined_item_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_item_id"
+        ],
+        "properties": {
+          "predefined_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific predefined item; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_item_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_predefined_item_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/predefined_item_groups",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "deal_items": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new predefined item group; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "delete_predefined_item_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/predefined_item_groups/{{ record.predefined_item_group_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "predefined_item_group_id"
+        ],
+        "properties": {
+          "predefined_item_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific predefined item group; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "predefined_item_group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "linked_deal_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new note; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_note",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/notes/{{ record.note_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "note_id",
+          "contact_id"
+        ],
+        "properties": {
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "linked_deal_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific note; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notes/{{ record.note_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "note_id"
+        ],
+        "properties": {
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific note; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "note_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_note_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes/{{ record.note_id }}/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "note_id",
+          "reference_id"
+        ],
+        "properties": {
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "reference_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "reference_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create attachment and assign it to an existing note; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "note_id"
+      ]
+    },
+    {
+      "name": "create_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "call_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a call; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_call",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calls/{{ record.call_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_id",
+          "contact_id"
+        ],
+        "properties": {
+          "call_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "call_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific call; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "call_id"
+      ]
+    },
+    {
+      "name": "delete_call",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calls/{{ record.call_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_id"
+        ],
+        "properties": {
+          "call_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific call; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "call_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_call_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls/{{ record.call_id }}/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_id",
+          "reference_id"
+        ],
+        "properties": {
+          "call_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "reference_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "reference_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create attachment and assign it to an existing call; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "call_id"
+      ]
+    },
+    {
+      "name": "create_meeting",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meetings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "meeting_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "place": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a meeting; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_meeting",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/meetings/{{ record.meeting_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "meeting_id",
+          "contact_id"
+        ],
+        "properties": {
+          "meeting_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "meeting_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "place": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific meeting; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "meeting_id"
+      ]
+    },
+    {
+      "name": "delete_meeting",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/meetings/{{ record.meeting_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "meeting_id"
+        ],
+        "properties": {
+          "meeting_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific meeting; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "meeting_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_meeting_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meetings/{{ record.meeting_id }}/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "meeting_id",
+          "reference_id"
+        ],
+        "properties": {
+          "meeting_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "reference_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "reference_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create attachment and assign it to an existing meeting; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "meeting_id"
+      ]
+    },
+    {
+      "name": "create_deal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/deals",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "owner_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "pipeline_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "sales_pipeline_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new deal; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_deal",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/deals/{{ record.deal_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deal_id",
+          "contact_id"
+        ],
+        "properties": {
+          "deal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "owner_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "pipeline_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "sales_pipeline_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific deal; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "deal_id"
+      ]
+    },
+    {
+      "name": "delete_deal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/deals/{{ record.deal_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deal_id"
+        ],
+        "properties": {
+          "deal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific deal; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "deal_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_deal_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/deals/{{ record.deal_id }}/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deal_id",
+          "reference_id"
+        ],
+        "properties": {
+          "deal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "reference_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "reference_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create attachment and assign it to an existing deal; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "deal_id"
+      ]
+    },
+    {
+      "name": "create_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "reference_id"
+        ],
+        "properties": {
+          "reference_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "reference_type": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new attachment; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_attachment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachment_id",
+          "attachment"
+        ],
+        "properties": {
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "attachment": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Sets/updates attachment custom file name; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "attachment_id"
+      ]
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachment_id"
+        ],
+        "properties": {
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific attachment; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "pin_attachment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/attachments/{{ record.attachment_id }}/pin",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachment_id"
+        ],
+        "properties": {
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Pin attachment to its owner contact through its note/call/deal; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "unpin_attachment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/attachments/{{ record.attachment_id }}/unpin",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachment_id"
+        ],
+        "properties": {
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Unpin attachment from its owner contact through its note/call/deal; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_relationship_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/relationship_types",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "variants"
+        ],
+        "properties": {
+          "variants": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new relationship type; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_relationship_type",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/relationship_types/{{ record.relationship_type_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "relationship_type_id",
+          "variants"
+        ],
+        "properties": {
+          "relationship_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "variants": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific relationship type; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "relationship_type_id"
+      ]
+    },
+    {
+      "name": "delete_relationship_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/relationship_types/{{ record.relationship_type_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "relationship_type_id"
+        ],
+        "properties": {
+          "relationship_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a relationship type; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "relationship_type_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_action",
+      "kind": "create",
+      "method": "POST",
+      "path": "/actions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "assignee_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a new action; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id",
+          "contact_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "assignee_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ]
+    },
+    {
+      "name": "delete_action",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/actions/{{ record.action_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "unassign_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/unassign",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Unassign a specific action (from the currently assigned user); external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "mark_as_done_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/mark_as_done",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Mark a specific action as complete; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "undo_completion_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/undo_completion",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Undo action completion; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "promote_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/promote",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Specify action to be promoted as the logged API users next action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "revert_promotion_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/revert_promotion",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Undo action promotion; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "swap_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/actions/{{ record.action_id }}/swap",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "action_id"
+        ],
+        "properties": {
+          "action_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Specify action to be swapped in as the logged API users next action; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "action_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/companies/{{ record.company_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "name"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific company; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id"
+      ]
+    },
+    {
+      "name": "create_company_linked_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/linked_contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contact_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Link a contact to a specific company; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id"
+      ]
+    },
+    {
+      "name": "delete_company_linked_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.company_id }}/linked_contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "contact_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Unlink a contact from a company; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id",
+        "contact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "enable_company_synced_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies/{{ record.company_id }}/synced_status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id",
+          "status_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Enable company status sync; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id"
+      ]
+    },
+    {
+      "name": "delete_company_synced_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.company_id }}/synced_status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Disable company status sync; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_company_logo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.company_id }}/logo",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "company_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete logo in then given company; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "company_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "job_title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a contact; external OnePageCRM mutation, approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "title"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "first_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "last_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "job_title": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contact_contact_photo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}/contact_photo",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Remove a contact's photo; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_contact_to_google_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/google_contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Save a specific OnePageCRM contact to Google Contacts; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_contact_action",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/actions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "assignee_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "assignee_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create an action for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "create_contact_deal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/deals",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "owner_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "owner_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "stage": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a deal for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "create_contact_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/notes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "text"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "linked_deal_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "user_ids_to_notify": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a note for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "create_contact_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/calls",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "call_time_int"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "call_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "call_result": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a call for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "create_contact_meeting",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/meetings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "meeting_time_int"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "meeting_time_int": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "place": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "user_ids_to_notify": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a meeting for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "create_contact_relationship",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/relationships",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "relationship_type_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "relationship_type_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "related_contacts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Create a relationships for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "update_relationship",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/relationships/{{ record.relationship_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "relationship_id",
+          "relationship_type_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "relationship_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "relationship_type_id": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "related_contacts": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Update a specific relationship; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "relationship_id"
+      ]
+    },
+    {
+      "name": "delete_contact_relationship",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}/relationships/{{ record.relationship_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "relationship_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "relationship_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a relationship; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "relationship_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "assign_contact_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/assign_tag/{{ record.tag_name }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "tag_name"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tag_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Assign a tag to a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "tag_name"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "unassign_contact_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/unassign_tag/{{ record.tag_name }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "tag_name"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tag_name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Remove a tag from a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "tag_name"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "change_contact_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/change_status/{{ record.status_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "status_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Change the status of a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "status_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "change_contact_owner",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/change_owner/{{ record.owner_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "owner_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "owner_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Change the owner of a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id",
+        "owner_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "star_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/star",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Apply a star to a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "unstar_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/unstar",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Remove star from a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "close_sales_cycle_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/close_sales_cycle",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "comment"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "comment": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Close the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "force_close_sales_cycle_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/force_close_sales_cycle",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "comment"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "comment": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Force close the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "reopen_sales_cycle_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/reopen_sales_cycle",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Reopen the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "split_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.contact_id }}/split",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "contact_id",
+          "company_name"
+        ],
+        "properties": {
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "company_name": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "Split a contact from their current company (and potentially to a new company); external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "contact_id"
+      ]
+    },
+    {
+      "name": "mark_as_read_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notifications/{{ record.notification_id }}/mark_as_read",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "notification_id"
+        ],
+        "properties": {
+          "notification_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Marks given notification as read; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "notification_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "mark_all_notifications_as_read",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notifications/mark_all_as_read",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+
+        ],
+        "properties": {
+        }
+      },
+      "risk": "Marks all users' notifications as read; external OnePageCRM mutation, approval required",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "Delete a specific webhook; external OnePageCRM mutation, approval required",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    }
+  ]
+}

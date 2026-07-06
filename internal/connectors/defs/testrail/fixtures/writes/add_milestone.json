@@ -1,0 +1,9 @@
+{
+  "record": { "project_id": 1, "name": "Fixture Milestone", "description": "Fixture milestone description", "due_on": 1767225600 },
+  "expect": {
+    "method": "POST",
+    "path": "/index.php",
+    "body": { "name": "Fixture Milestone", "description": "Fixture milestone description", "due_on": 1767225600 }
+  },
+  "response": { "status": 200, "body": { "id": 2, "project_id": 1, "name": "Fixture Milestone" } }
+}

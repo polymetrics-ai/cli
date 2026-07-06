@@ -1,0 +1,8 @@
+{
+  "record": { "id": "acc_fixture_1", "name": "Fixture Account Updated" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/Accounts/acc_fixture_1",
+    "body": { "name": "Fixture Account Updated" }
+  }
+}

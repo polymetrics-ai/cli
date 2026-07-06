@@ -1,0 +1,19 @@
+{
+  "record": {
+    "data": {
+      "type": "jobs",
+      "attributes": { "title": "Fixture Job Title", "pitch": "Fixture pitch" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/jobs",
+    "body": {
+      "data": {
+        "type": "jobs",
+        "attributes": { "title": "Fixture Job Title", "pitch": "Fixture pitch" }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "job_fixture_new", "type": "jobs" } } }
+}

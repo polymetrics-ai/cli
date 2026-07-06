@@ -1,0 +1,1282 @@
+{
+  "actions": [
+    {
+      "name": "create_client_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/clients",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a noCRM client folder visible to account users; external mutation, approval required"
+    },
+    {
+      "name": "update_client_folder",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/clients/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a noCRM client folder; external mutation, approval required"
+    },
+    {
+      "name": "delete_client_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/clients/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a noCRM client folder; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/category",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a noCRM category/tag grouping; account configuration mutation, approval required"
+    },
+    {
+      "name": "create_predefined_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/predefined_tags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a predefined tag available in noCRM; account taxonomy mutation, approval required"
+    },
+    {
+      "name": "create_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "is_duplicate": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates a noCRM custom field; account schema mutation, approval required"
+    },
+    {
+      "name": "create_lead",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tags": {
+            "type": "array"
+          },
+          "step": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "creates a live noCRM lead and may assign ownership/tags/step; external CRM mutation, approval required"
+    },
+    {
+      "name": "duplicate_lead",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/duplicate_lead",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "duplicates a live noCRM lead; external CRM mutation, approval required"
+    },
+    {
+      "name": "update_lead",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/leads/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "step": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "amount": {
+            "type": [
+              "number",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "updates a live noCRM lead; external CRM mutation, approval required"
+    },
+    {
+      "name": "assign_lead",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/assign",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "assigns a live noCRM lead to a user and can trigger notifications; external CRM mutation, approval required"
+    },
+    {
+      "name": "add_lead_to_client_folder",
+      "kind": "update",
+      "method": "POST",
+      "path": "/leads/{{ record.id }}/add_to_client",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "client_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "client_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "links a live lead to a client folder; external CRM mutation, approval required"
+    },
+    {
+      "name": "delete_lead",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a live noCRM lead; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_multiple_leads",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/delete_multiple",
+      "body_fields": [
+        "ids"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "properties": {
+          "ids": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "bulk-deletes live noCRM leads; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_lead_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads/{{ record.lead_id }}/comments",
+      "path_fields": [
+        "lead_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "content"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "activity_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "adds a comment to a live noCRM lead; external CRM mutation, approval required"
+    },
+    {
+      "name": "update_lead_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/leads/{{ record.lead_id }}/comments/{{ record.id }}",
+      "path_fields": [
+        "lead_id",
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "activity_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "updates a lead comment in noCRM; external CRM mutation, approval required"
+    },
+    {
+      "name": "delete_lead_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/{{ record.lead_id }}/comments/{{ record.id }}",
+      "path_fields": [
+        "lead_id",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a noCRM lead comment; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_lead_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/leads/{{ record.lead_id }}/attachments/{{ record.id }}",
+      "path_fields": [
+        "lead_id",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes an attachment from a live noCRM lead; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "send_lead_email_from_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads/{{ record.lead_id }}/emails/send_email_from_template",
+      "path_fields": [
+        "lead_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "email_template_id",
+          "from_user_id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "email_template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "from_user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "sends an email from a noCRM template to a lead; external communication mutation, approval required"
+    },
+    {
+      "name": "create_lead_follow_up_from_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leads/{{ record.lead_id }}/follow_ups/create_from_template",
+      "path_fields": [
+        "lead_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lead_id",
+          "post_sales_template_id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "post_sales_template_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "creates post-sales tasks for a live noCRM lead; workflow mutation, approval required"
+    },
+    {
+      "name": "create_prospecting_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spreadsheets",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title",
+          "content"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "array"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array"
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "privacy": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a noCRM prospecting list and optional rows/tags/owner; external CRM mutation, approval required"
+    },
+    {
+      "name": "assign_prospecting_list",
+      "kind": "update",
+      "method": "POST",
+      "path": "/spreadsheets/{{ record.id }}/assign",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "assigns a prospecting list to a user; external CRM mutation, approval required"
+    },
+    {
+      "name": "create_prospecting_list_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/comments",
+      "path_fields": [
+        "spreadsheet_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "content"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "activity_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "adds a comment to a noCRM prospecting list; external CRM mutation, approval required"
+    },
+    {
+      "name": "create_prospect_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows/{{ record.prospect_id }}/comments",
+      "path_fields": [
+        "spreadsheet_id",
+        "prospect_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "prospect_id",
+          "content"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "prospect_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "activity_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "adds a comment to a prospect row; external CRM mutation, approval required"
+    },
+    {
+      "name": "update_prospect_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows/{{ record.prospect_id }}/comments/{{ record.id }}",
+      "path_fields": [
+        "spreadsheet_id",
+        "prospect_id",
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "prospect_id",
+          "id"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "prospect_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "activity_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "updates a prospect-row comment; external CRM mutation, approval required"
+    },
+    {
+      "name": "create_prospects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows",
+      "path_fields": [
+        "spreadsheet_id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "content"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "content": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "adds prospect rows to a noCRM prospecting list; external CRM mutation, approval required"
+    },
+    {
+      "name": "update_prospect_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows/{{ record.id }}/update_fields",
+      "path_fields": [
+        "spreadsheet_id",
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "id",
+          "fields"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "fields": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates named fields on a prospect row; external CRM mutation, approval required"
+    },
+    {
+      "name": "create_lead_from_prospect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows/{{ record.id }}/create_lead",
+      "path_fields": [
+        "spreadsheet_id",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "id"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "converts a prospect row into a live noCRM lead; external CRM mutation, approval required"
+    },
+    {
+      "name": "delete_prospect",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spreadsheets/{{ record.spreadsheet_id }}/rows/{{ record.id }}",
+      "path_fields": [
+        "spreadsheet_id",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spreadsheet_id",
+          "id"
+        ],
+        "properties": {
+          "spreadsheet_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a prospect row from a prospecting list; destructive external mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "lastname",
+          "firstname",
+          "email"
+        ],
+        "properties": {
+          "lastname": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "is_admin": {
+            "type": "boolean"
+          },
+          "dont_send_email": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates a noCRM user account and can send activation email depending on payload; administrative mutation, approval required"
+    },
+    {
+      "name": "disable_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.id }}/disable",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "disables a noCRM user account; administrative mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a noCRM team; administrative mutation, approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/teams/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a noCRM team; administrative mutation, approval required"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "deletes a noCRM team; destructive administrative mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_team_member",
+      "kind": "update",
+      "method": "POST",
+      "path": "/teams/{{ record.id }}/add_member",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "is_manager": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "adds a user to a noCRM team and can change manager status; administrative mutation, approval required"
+    },
+    {
+      "name": "remove_team_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.id }}/remove_member",
+      "path_fields": [
+        "id"
+      ],
+      "body_fields": [
+        "user_id"
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "removes a user from a noCRM team; administrative mutation, approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "event",
+          "target_type",
+          "target"
+        ],
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "target_type": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a noCRM webhook/notification destination; outbound data delivery mutation, approval required"
+    },
+    {
+      "name": "activate_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}/activate",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "activates a noCRM webhook/notification destination; outbound data delivery mutation, approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "disables or removes a noCRM webhook/notification destination; external mutation, approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

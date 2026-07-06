@@ -1,0 +1,10 @@
+{
+  "api": "GNews API v4 (https://gnews.io/api/v4)",
+  "docs": "https://gnews.io/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2-fan-out migration: the 2 legacy-parity read streams only (search, top_headlines); legacy ships no writes (capabilities.write is false).",
+  "endpoints": [
+    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
+    { "method": "GET", "path": "/top-headlines", "covered_by": { "stream": "top_headlines" } }
+  ]
+}

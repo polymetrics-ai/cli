@@ -1,0 +1,15 @@
+{
+  "record": {
+    "identifier": "email",
+    "value": "fixture.update@example.com",
+    "name": "Fixture Updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/contacts/email:fixture.update@example.com",
+    "body": {
+      "name": "Fixture Updated"
+    }
+  },
+  "response": { "status": 200, "body": { "uuid": "contact_update_fixture_1" } }
+}

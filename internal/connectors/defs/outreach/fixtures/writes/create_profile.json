@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "profile",
+      "attributes": {
+        "name": "Fixture Create Profile"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/profiles",
+    "body": {
+      "data": {
+        "type": "profile",
+        "attributes": {
+          "name": "Fixture Create Profile"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

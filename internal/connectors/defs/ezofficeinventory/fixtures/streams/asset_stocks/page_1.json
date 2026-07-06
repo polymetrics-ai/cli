@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stock_assets.api",
+    "query": {
+      "page": "1",
+      "per_page": "25",
+      "show_image_urls": "true",
+      "show_document_urls": "true",
+      "include_custom_fields": "true",
+      "show_document_details": "true"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "assets": [
+        {
+          "identifier": 3001,
+          "name": "Fixture Stock Item",
+          "description": "fixture record",
+          "asset_type": "Stock Asset",
+          "group_id": 30,
+          "location_id": 100,
+          "location_name": "HQ",
+          "assigned_to_user_email": "fixture1@example.com",
+          "assigned_to_user_name": "Fixture One",
+          "price": "20.00",
+          "purchased_on": "2026-01-01",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "total_pages": 1,
+      "page": 1
+    }
+  }
+}

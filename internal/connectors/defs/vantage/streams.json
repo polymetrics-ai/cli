@@ -1,0 +1,212 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/v2/costs" },
+    "error_map": [
+      { "status": 401, "class": "auth_failed", "hint": "vantage access_token is missing or invalid; re-run pm credentials add vantage" },
+      { "status": 403, "hint": "vantage account lacks access for this request" },
+      { "status": 422, "class": "invalid_request", "hint": "vantage rejected the request body; check required fields" },
+      { "status": 429, "class": "rate_limited", "hint": "vantage rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "costs",
+      "path": "/v2/costs",
+      "records": { "path": "costs" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "service": "{{ record.service }}",
+        "amount": "{{ record.amount }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/costs.json"
+    },
+    {
+      "name": "cost_reports",
+      "path": "/v2/cost_reports",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "cost_reports" },
+      "schema": "schemas/cost_reports.json"
+    },
+    {
+      "name": "budgets",
+      "path": "/v2/budgets",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "budgets" },
+      "schema": "schemas/budgets.json"
+    },
+    {
+      "name": "folders",
+      "path": "/v2/folders",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "folders" },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "name": "dashboards",
+      "path": "/v2/dashboards",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "dashboards" },
+      "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "business_metrics",
+      "path": "/v2/business_metrics",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "business_metrics" },
+      "schema": "schemas/business_metrics.json"
+    },
+    {
+      "name": "resource_reports",
+      "path": "/v2/resource_reports",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "resource_reports" },
+      "schema": "schemas/resource_reports.json"
+    },
+    {
+      "name": "recommendations",
+      "path": "/v2/recommendations",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "recommendations" },
+      "schema": "schemas/recommendations.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v2/teams",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "saved_filters",
+      "path": "/v2/saved_filters",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "saved_filters" },
+      "schema": "schemas/saved_filters.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/v2/workspaces",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "workspaces" },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "virtual_tag_configs",
+      "path": "/v2/virtual_tag_configs",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "virtual_tag_configs" },
+      "schema": "schemas/virtual_tag_configs.json"
+    },
+    {
+      "name": "tags",
+      "path": "/v2/tags",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "tags" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "cost_alerts",
+      "path": "/v2/cost_alerts",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "cost_alerts" },
+      "schema": "schemas/cost_alerts.json"
+    },
+    {
+      "name": "budget_alerts",
+      "path": "/v2/budget_alerts",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "budget_alerts" },
+      "schema": "schemas/budget_alerts.json"
+    },
+    {
+      "name": "anomaly_alerts",
+      "path": "/v2/anomaly_alerts",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "anomaly_alerts" },
+      "schema": "schemas/anomaly_alerts.json"
+    },
+    {
+      "name": "managed_accounts",
+      "path": "/v2/managed_accounts",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "managed_accounts" },
+      "schema": "schemas/managed_accounts.json"
+    },
+    {
+      "name": "financial_commitments",
+      "path": "/v2/financial_commitments",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "financial_commitments" },
+      "schema": "schemas/financial_commitments.json"
+    },
+    {
+      "name": "segments",
+      "path": "/v2/segments",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "segments" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "report_notifications",
+      "path": "/v2/report_notifications",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "report_notifications" },
+      "schema": "schemas/report_notifications.json"
+    },
+    {
+      "name": "recommendation_views",
+      "path": "/v2/recommendation_views",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "recommendation_views" },
+      "schema": "schemas/recommendation_views.json"
+    },
+    {
+      "name": "network_flow_reports",
+      "path": "/v2/network_flow_reports",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "network_flow_reports" },
+      "schema": "schemas/network_flow_reports.json"
+    },
+    {
+      "name": "kubernetes_efficiency_reports",
+      "path": "/v2/kubernetes_efficiency_reports",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "kubernetes_efficiency_reports" },
+      "schema": "schemas/kubernetes_efficiency_reports.json"
+    },
+    {
+      "name": "anomaly_notifications",
+      "path": "/v2/anomaly_notifications",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "anomaly_notifications" },
+      "schema": "schemas/anomaly_notifications.json"
+    },
+    {
+      "name": "canvases",
+      "path": "/v2/canvases",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "canvases" },
+      "schema": "schemas/canvases.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/v2/invoices",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "invoices" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/v2/integrations",
+      "pagination": { "type": "next_url", "next_url_path": "links.next" },
+      "records": { "path": "integrations" },
+      "schema": "schemas/integrations.json"
+    }
+  ]
+}

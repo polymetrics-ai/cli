@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/outlets", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "outlet_fixture_1",
+          "version": 4000,
+          "name": "Fixture Outlet",
+          "currency": "USD",
+          "currency_symbol": "$",
+          "default_tax_id": "tax_fixture_1",
+          "display_prices": "inclusive",
+          "time_zone": "America/New_York"
+        }
+      ],
+      "version": { "min": 4000, "max": null }
+    }
+  }
+}

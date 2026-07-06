@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/exchanges", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "limit": 100, "offset": 100, "count": 1, "total": 101 },
+      "data": [
+        {
+          "mic": "XTKS",
+          "name": "Tokyo Stock Exchange",
+          "acronym": "TSE",
+          "country": "Japan",
+          "country_code": "JP",
+          "city": "Tokyo",
+          "website": "https://www.jpx.co.jp",
+          "currency": { "code": "JPY", "symbol": "¥", "name": "Japanese Yen" },
+          "timezone": { "timezone": "Asia/Tokyo", "abbr": "JST" }
+        }
+      ]
+    }
+  }
+}

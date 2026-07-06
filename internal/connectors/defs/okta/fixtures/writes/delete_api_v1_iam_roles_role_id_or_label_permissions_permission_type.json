@@ -1,0 +1,14 @@
+{
+  "record": {
+    "role_id_or_label": "synthetic-conformance-value",
+    "permission_type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/iam/roles/synthetic-conformance-value/permissions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

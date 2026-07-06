@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the organization"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the organization"
+    },
+    "customerTags": {
+      "type": "array",
+      "description": "Tags associated with the organization's customers",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contactTags": {
+      "type": "array",
+      "description": "Tags associated with the organization's contacts",
+      "items": {
+        "type": "string"
+      }
+    },
+    "currentInstallation": {
+      "type": "object",
+      "properties": {
+        "accessScopes": {
+          "type": "array",
+          "description": "Access scopes for the current installation",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

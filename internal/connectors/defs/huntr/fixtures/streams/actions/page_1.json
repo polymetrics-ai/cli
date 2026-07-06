@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/actions", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "action_fixture_1",
+          "actionType": "MEMBER_DEACTIVATED",
+          "memberId": "mem_fixture_1",
+          "candidateId": "cand_fixture_1",
+          "activityId": "act_fixture_1",
+          "createdAt": 1767225601,
+          "date": 1767225601
+        }
+      ],
+      "next": null
+    }
+  }
+}

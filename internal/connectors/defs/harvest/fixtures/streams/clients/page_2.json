@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/clients", "query": { "updated_since": "2020-01-01T00:00:00Z", "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "clients": [
+        { "id": 3, "name": "Initech Fixture LLC", "is_active": true, "address": "789 Fixture Blvd.", "statement_key": "key_3", "currency": "USD", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "per_page": 2,
+      "total_pages": 2,
+      "total_entries": 3,
+      "next_page": null,
+      "previous_page": 1,
+      "page": 2
+    }
+  }
+}

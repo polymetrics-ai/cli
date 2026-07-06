@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/macro-groups"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "title": "fixture-macro_groups",
+          "created_at": "fixture-macro_groups",
+          "updated_at": "fixture-macro_groups"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

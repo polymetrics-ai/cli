@@ -1,0 +1,14 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "cancellation_token": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/cancel",
+    "body": {
+      "event_id": "fixture_event_id",
+      "cancellation_token": "2026-01-01T00:00:00Z"
+    }
+  }
+}

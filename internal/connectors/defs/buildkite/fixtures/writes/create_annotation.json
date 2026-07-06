@@ -1,0 +1,20 @@
+{
+  "record": {
+    "pipeline_slug": "fixture-web",
+    "build_number": 41,
+    "body": "<p>Fixture annotation</p>",
+    "style": "info"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web/builds/41/annotations",
+    "body": {
+      "body": "<p>Fixture annotation</p>",
+      "style": "info"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

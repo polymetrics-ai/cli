@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture New Brand Terms" },
+  "expect": {
+    "method": "POST",
+    "path": "/pronunciation-dictionaries",
+    "body": { "name": "Fixture New Brand Terms" }
+  },
+  "response": { "status": 201, "body": { "pronunciation_dictionary_id": "pd_fixture_new" } }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "head": "feature-1",
+    "base": "main",
+    "title": "Fixture PR",
+    "body": "Fixture PR body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls",
+    "body": {
+      "head": "feature-1",
+      "base": "main",
+      "title": "Fixture PR",
+      "body": "Fixture PR body"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "number": 42 }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "id": 1001 },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/headless/course/1001/restore"
+  },
+  "response": { "status": 200, "body": { "id": 1001, "deleted": false } }
+}

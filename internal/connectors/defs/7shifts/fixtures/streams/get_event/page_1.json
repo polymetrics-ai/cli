@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/events/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "event_type": "general",
+        "location_ids": [
+          1001
+        ],
+        "start_date": "2026-01-01",
+        "start_time": "12:00:00",
+        "end_time": "12:00:00",
+        "end_date": "2026-01-01",
+        "title": "fixture title",
+        "is_multi_day": true,
+        "all_day": true,
+        "start": [
+          {
+            "location_id": 1001,
+            "date_time": "2026-01-01"
+          }
+        ],
+        "end": [
+          {
+            "location_id": 1001,
+            "date_time": "2026-01-01"
+          }
+        ],
+        "description": "fixture description",
+        "color": "fixture color",
+        "recurrence": "fixture recurrence"
+      }
+    }
+  }
+}

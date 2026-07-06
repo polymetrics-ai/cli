@@ -1,0 +1,9 @@
+{
+  "record": {
+    "budget_token": "bgt_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/budgets/bgt_fixture_1"
+  }
+}

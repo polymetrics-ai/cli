@@ -1,0 +1,15 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "group_or_external_id": "synthetic-conformance-value",
+    "member_external_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/groups/synthetic-conformance-value/membership/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

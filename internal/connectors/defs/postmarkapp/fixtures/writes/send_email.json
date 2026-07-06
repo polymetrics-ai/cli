@@ -1,0 +1,18 @@
+{
+  "record": {
+    "From": "sender@example.com",
+    "To": "receiver@example.com",
+    "Subject": "Fixture subject",
+    "TextBody": "Fixture body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/email",
+    "body": {
+      "From": "sender@example.com",
+      "To": "receiver@example.com",
+      "Subject": "Fixture subject",
+      "TextBody": "Fixture body"
+    }
+  }
+}

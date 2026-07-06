@@ -1,0 +1,20 @@
+{
+  "record": {
+    "contactIds": [],
+    "acceptPartial": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/email-validations/estimate",
+    "body": {
+      "contactIds": [],
+      "acceptPartial": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

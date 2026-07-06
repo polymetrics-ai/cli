@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/reports",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reports": [
+        {
+          "id": 1,
+          "name": "Fixture Report 1",
+          "type": "AGREEMENT_SUMMARY",
+          "organizationId": 42
+        },
+        {
+          "id": 2,
+          "name": "Fixture Report 2",
+          "type": "ACTIVITY",
+          "organizationId": 42
+        }
+      ]
+    }
+  }
+}

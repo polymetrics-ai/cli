@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Script",
+    "description": "desc",
+    "page_scopes": [
+      "landing_pages"
+    ],
+    "category": "analytics"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/site_scripts/1",
+    "body": {
+      "name": "Fixture Script",
+      "description": "desc",
+      "page_scopes": [
+        "landing_pages"
+      ],
+      "category": "analytics"
+    }
+  }
+}

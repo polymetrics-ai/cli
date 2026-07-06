@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture New API Key"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/api_key"
+  }
+}

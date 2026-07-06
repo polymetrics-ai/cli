@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/getRoomTypes", "query": { "pageNumber": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "roomTypeID": "roomtype_fixture_1",
+          "propertyID": "prop_fixture_1",
+          "roomTypeName": "Fixture Room Type",
+          "roomTypeNameShort": "FRT",
+          "roomTypeDescription": "Deterministic fixture room type.",
+          "isPrivate": false,
+          "maxGuests": 4,
+          "adultsIncluded": 2,
+          "childrenIncluded": 2
+        }
+      ],
+      "count": 1
+    }
+  }
+}

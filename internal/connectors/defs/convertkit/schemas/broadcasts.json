@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "broadcasts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "subject": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "public": { "type": "boolean" },
+    "published_at": { "type": ["string", "null"] },
+    "created_at": { "type": "string" }
+  }
+}

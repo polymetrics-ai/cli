@@ -7,7 +7,14 @@ description: IP2WHOIS connector knowledge and safe action guide.
 
 ## Purpose
 
-Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing flattened whois, nameservers, and contacts streams.
+Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.
+
+## Icon
+
+- asset: icons/ip2whois.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.ip2whois.com/developers-api
 
 ## Capabilities
 
@@ -16,17 +23,42 @@ Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing fla
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- domains
+- mode
+- api_key (secret)
+
+## ETL Streams
+
+- whois:
+  - primary key: domain
+  - cursor: update_date
+  - fields: admin_email(), admin_name(), billing_email(), billing_name(), create_date(), domain(), domain_age(), domain_id(), expire_date(), nameservers(), registrant_country(), registrant_email(), registrant_name(), registrant_organization(), registrar_iana_id(), registrar_name(), registrar_url(), status(), tech_email(), tech_name(), update_date(), whois_server()
+- contacts_registrant:
+  - primary key: domain, role
+  - fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+- contacts_admin:
+  - primary key: domain, role
+  - fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+- contacts_tech:
+  - primary key: domain, role
+  - fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+- contacts_billing:
+  - primary key: domain, role
+  - fields: city(), country(), domain(), email(), fax(), name(), organization(), phone(), region(), role(), street_address(), zip_code()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external IP2WHOIS API read of WHOIS records for the configured domain set
+- approval: none; read-only, no reverse-ETL write surface
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +80,3 @@ pm connectors inspect ip2whois --json
 - Run pm connectors inspect ip2whois before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

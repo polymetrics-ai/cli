@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/Contacts", "query": { "top": "100", "skip": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "CONTACT_ID": 101,
+        "FIRST_NAME": "Fixture101",
+        "LAST_NAME": "Example",
+        "EMAIL_ADDRESS": "fixture101@example.com",
+        "PHONE": "+1-555-0100",
+        "ORGANISATION_ID": 105,
+        "TITLE": "Fixture Contact",
+        "DATE_CREATED_UTC": "2026-01-02 00:00:00",
+        "DATE_UPDATED_UTC": "2026-01-02 00:00:00"
+      }
+    ]
+  }
+}

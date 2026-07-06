@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/members",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "active": true,
+          "email": "fixture@example.invalid",
+          "lastActivityAt": "2026-01-01T00:00:00Z",
+          "license": "advanced",
+          "licenseAssignedAt": "2026-01-01T00:00:00Z",
+          "role": "organization_internal_admin",
+          "type": "organization-member",
+          "adminRoles": [
+            {
+              "type": "prebuilt",
+              "name": "name_fixture"
+            }
+          ]
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

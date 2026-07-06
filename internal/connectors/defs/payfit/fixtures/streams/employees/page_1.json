@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/employees", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "emp_fixture_1", "first_name": "Ada", "last_name": "Fixture", "email": "fixture1@example.com", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "emp_fixture_2", "first_name": "Grace", "last_name": "Fixture", "email": "fixture2@example.com", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "next_offset": "2" }
+    }
+  }
+}

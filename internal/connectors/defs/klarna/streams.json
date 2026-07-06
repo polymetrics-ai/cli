@@ -1,0 +1,79 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "size",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/settlements/v1/payouts", "query": { "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "klarna username/password is missing or invalid; re-run pm credentials add klarna" },
+      { "status": 429, "class": "rate_limited", "hint": "klarna rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "payouts",
+      "path": "/settlements/v1/payouts",
+      "records": { "path": "payouts" },
+      "computed_fields": {
+        "payout_reference": "{{ record.payout_reference }}",
+        "currency_code": "{{ record.currency_code }}",
+        "payment_reference": "{{ record.payment_reference }}",
+        "merchant_settlement_type": "{{ record.merchant_settlement_type }}",
+        "totals": "{{ record.totals }}",
+        "settlement_amount": "{{ record.totals.settlement_amount }}"
+      },
+      "schema": "schemas/payouts.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/settlements/v1/transactions",
+      "records": { "path": "transactions" },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "payout_details",
+      "path": "/settlements/v1/payouts/{{ fanout.id }}",
+      "records": { "path": "", "single_object": true },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": { "config_key": "payment_references" },
+        "into": { "path_var": "payment_reference" }
+      },
+      "schema": "schemas/payout_details.json"
+    },
+    {
+      "name": "payout_summaries",
+      "path": "/settlements/v1/payouts/summary",
+      "query": {
+        "start_date": "{{ config.summary_start_date }}",
+        "end_date": "{{ config.summary_end_date }}",
+        "currency_code": { "template": "{{ config.summary_currency_code }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/payout_summaries.json"
+    },
+    {
+      "name": "payout_summary",
+      "path": "/settlements/v1/payouts",
+      "records": { "path": "payouts" },
+      "computed_fields": {
+        "payout_reference": "{{ record.payout_reference }}",
+        "currency_code": "{{ record.currency_code }}",
+        "settlement_amount": "{{ record.totals.settlement_amount }}",
+        "sale_amount": "{{ record.totals.sale_amount }}",
+        "return_amount": "{{ record.totals.return_amount }}",
+        "fee_amount": "{{ record.totals.fee_amount }}"
+      },
+      "schema": "schemas/payout_summary.json"
+    }
+  ]
+}

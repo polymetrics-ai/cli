@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "preventBruteForceLockoutFromUnknownDevices": {
+      "type": "boolean",
+      "description": "Prevents brute-force lockout from unknown devices for the password authenticator."
+    }
+  },
+  "additionalProperties": true
+}

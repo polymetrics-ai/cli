@@ -1,0 +1,15 @@
+{
+  "record": {
+    "alert_id": 123,
+    "name": "Fixture acknowledge_alert",
+    "description": "Fixture acknowledge_alert record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ams/alerts/123/acknowledge",
+    "body": {
+      "name": "Fixture acknowledge_alert",
+      "description": "Fixture acknowledge_alert record"
+    }
+  }
+}

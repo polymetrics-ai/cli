@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture create_change_task",
+    "description": "Fixture create_change_task record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/changes/123/tasks",
+    "body": {
+      "name": "Fixture create_change_task",
+      "description": "Fixture create_change_task record"
+    }
+  }
+}

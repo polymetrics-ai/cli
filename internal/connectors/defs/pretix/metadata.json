@@ -1,0 +1,23 @@
+{
+  "name": "pretix",
+  "display_name": "Pretix",
+  "description": "Reads pretix organizers, events, items, and orders through the pretix REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.pretix.eu/en/latest/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external pretix API read of organizer, event, item, and order data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

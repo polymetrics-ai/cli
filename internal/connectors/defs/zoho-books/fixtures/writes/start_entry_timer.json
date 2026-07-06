@@ -1,0 +1,16 @@
+{
+  "record": {
+    "time_entry_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/timeentries/synthetic-conformance-value/timer/start"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

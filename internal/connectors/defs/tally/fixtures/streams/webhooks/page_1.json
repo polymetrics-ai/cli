@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "webhook_fixture_1",
+          "formId": "form_fixture_1",
+          "url": "https://example.com/webhooks/tally",
+          "signingSecret": null,
+          "httpHeaders": null,
+          "eventTypes": [
+            "FORM_RESPONSE"
+          ],
+          "externalSubscriber": null,
+          "isEnabled": true,
+          "lastSyncedAt": null,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "limit": 100,
+      "hasMore": false,
+      "totalCount": 1
+    }
+  }
+}

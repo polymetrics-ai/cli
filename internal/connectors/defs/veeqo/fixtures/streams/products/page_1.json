@@ -1,0 +1,715 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 20000,
+        "title": "Fixture Product 0",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20001,
+        "title": "Fixture Product 1",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20002,
+        "title": "Fixture Product 2",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20003,
+        "title": "Fixture Product 3",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20004,
+        "title": "Fixture Product 4",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20005,
+        "title": "Fixture Product 5",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20006,
+        "title": "Fixture Product 6",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20007,
+        "title": "Fixture Product 7",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20008,
+        "title": "Fixture Product 8",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20009,
+        "title": "Fixture Product 9",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20010,
+        "title": "Fixture Product 10",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20011,
+        "title": "Fixture Product 11",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20012,
+        "title": "Fixture Product 12",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20013,
+        "title": "Fixture Product 13",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20014,
+        "title": "Fixture Product 14",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20015,
+        "title": "Fixture Product 15",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20016,
+        "title": "Fixture Product 16",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20017,
+        "title": "Fixture Product 17",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20018,
+        "title": "Fixture Product 18",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20019,
+        "title": "Fixture Product 19",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20020,
+        "title": "Fixture Product 20",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20021,
+        "title": "Fixture Product 21",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20022,
+        "title": "Fixture Product 22",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20023,
+        "title": "Fixture Product 23",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20024,
+        "title": "Fixture Product 24",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20025,
+        "title": "Fixture Product 25",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20026,
+        "title": "Fixture Product 26",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20027,
+        "title": "Fixture Product 27",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20028,
+        "title": "Fixture Product 28",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20029,
+        "title": "Fixture Product 29",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20030,
+        "title": "Fixture Product 30",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20031,
+        "title": "Fixture Product 31",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20032,
+        "title": "Fixture Product 32",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20033,
+        "title": "Fixture Product 33",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20034,
+        "title": "Fixture Product 34",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20035,
+        "title": "Fixture Product 35",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20036,
+        "title": "Fixture Product 36",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20037,
+        "title": "Fixture Product 37",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20038,
+        "title": "Fixture Product 38",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20039,
+        "title": "Fixture Product 39",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20040,
+        "title": "Fixture Product 40",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20041,
+        "title": "Fixture Product 41",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20042,
+        "title": "Fixture Product 42",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20043,
+        "title": "Fixture Product 43",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20044,
+        "title": "Fixture Product 44",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20045,
+        "title": "Fixture Product 45",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20046,
+        "title": "Fixture Product 46",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20047,
+        "title": "Fixture Product 47",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20048,
+        "title": "Fixture Product 48",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20049,
+        "title": "Fixture Product 49",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20050,
+        "title": "Fixture Product 50",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20051,
+        "title": "Fixture Product 51",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20052,
+        "title": "Fixture Product 52",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20053,
+        "title": "Fixture Product 53",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20054,
+        "title": "Fixture Product 54",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20055,
+        "title": "Fixture Product 55",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20056,
+        "title": "Fixture Product 56",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20057,
+        "title": "Fixture Product 57",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20058,
+        "title": "Fixture Product 58",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20059,
+        "title": "Fixture Product 59",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20060,
+        "title": "Fixture Product 60",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20061,
+        "title": "Fixture Product 61",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20062,
+        "title": "Fixture Product 62",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20063,
+        "title": "Fixture Product 63",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20064,
+        "title": "Fixture Product 64",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20065,
+        "title": "Fixture Product 65",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20066,
+        "title": "Fixture Product 66",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20067,
+        "title": "Fixture Product 67",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20068,
+        "title": "Fixture Product 68",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20069,
+        "title": "Fixture Product 69",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20070,
+        "title": "Fixture Product 70",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20071,
+        "title": "Fixture Product 71",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20072,
+        "title": "Fixture Product 72",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20073,
+        "title": "Fixture Product 73",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20074,
+        "title": "Fixture Product 74",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20075,
+        "title": "Fixture Product 75",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20076,
+        "title": "Fixture Product 76",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20077,
+        "title": "Fixture Product 77",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20078,
+        "title": "Fixture Product 78",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20079,
+        "title": "Fixture Product 79",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20080,
+        "title": "Fixture Product 80",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20081,
+        "title": "Fixture Product 81",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20082,
+        "title": "Fixture Product 82",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20083,
+        "title": "Fixture Product 83",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20084,
+        "title": "Fixture Product 84",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20085,
+        "title": "Fixture Product 85",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20086,
+        "title": "Fixture Product 86",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20087,
+        "title": "Fixture Product 87",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20088,
+        "title": "Fixture Product 88",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20089,
+        "title": "Fixture Product 89",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20090,
+        "title": "Fixture Product 90",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20091,
+        "title": "Fixture Product 91",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20092,
+        "title": "Fixture Product 92",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20093,
+        "title": "Fixture Product 93",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20094,
+        "title": "Fixture Product 94",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20095,
+        "title": "Fixture Product 95",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20096,
+        "title": "Fixture Product 96",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20097,
+        "title": "Fixture Product 97",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20098,
+        "title": "Fixture Product 98",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": 20099,
+        "title": "Fixture Product 99",
+        "notes": "",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

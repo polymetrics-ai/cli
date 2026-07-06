@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "view_count": { "type": ["string", "null"], "description": "YouTube's real wire shape returns viewCount as a numeric-string, not a JSON number." }
+  }
+}

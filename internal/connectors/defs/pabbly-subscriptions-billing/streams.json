@@ -1,0 +1,70 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next_page"
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "pabbly-subscriptions-billing credentials are missing or invalid; re-run pm credentials add pabbly-subscriptions-billing" },
+      { "status": 403, "hint": "pabbly-subscriptions-billing account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pabbly-subscriptions-billing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "plans",
+      "path": "/plans",
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/plans.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "page": "1",
+        "per_page": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "pagination": { "type": "none" },
+      "records": { "path": "data" },
+      "projection": "passthrough",
+      "schema": "schemas/products.json"
+    }
+  ]
+}

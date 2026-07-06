@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["user_id", "email"],
+  "x-cursor-field": "last_update",
+  "required": ["user_id"],
+  "properties": {
+    "user_id": { "type": ["integer", "null"] },
+    "crmhero_user_id": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "username": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "sub_active": { "type": ["boolean", "null"] },
+    "sub_status": { "type": ["string", "null"] },
+    "create_date": { "type": ["string", "null"] },
+    "last_update": { "type": ["string", "null"] },
+    "first_seen_at": { "type": ["string", "null"] },
+    "last_activity": { "type": ["string", "null"] }
+  }
+}

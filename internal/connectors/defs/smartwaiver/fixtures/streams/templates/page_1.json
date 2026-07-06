@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v4/templates",
+    "query": { "limit": "synthetic-conformance-value", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "templates": {
+        "templates": [
+          {
+            "templateId": "tp_fixture_1",
+            "title": "Fixture Template One",
+            "publishedVersion": 3,
+            "publishedOn": "2026-01-01T00:00:00Z",
+            "webUrl": "https://waiver.smartwaiver.com/w/fixture1/web/",
+            "kioskUrl": "https://waiver.smartwaiver.com/w/fixture1/kiosk/"
+          },
+          {
+            "templateId": "tp_fixture_2",
+            "title": "Fixture Template Two",
+            "publishedVersion": 1,
+            "publishedOn": "2026-01-02T00:00:00Z",
+            "webUrl": "https://waiver.smartwaiver.com/w/fixture2/web/",
+            "kioskUrl": "https://waiver.smartwaiver.com/w/fixture2/kiosk/"
+          }
+        ]
+      }
+    }
+  }
+}

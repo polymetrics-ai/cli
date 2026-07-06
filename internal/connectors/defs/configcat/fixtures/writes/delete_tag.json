@@ -1,0 +1,7 @@
+{
+  "record": { "tagId": 1 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/tags/1"
+  }
+}

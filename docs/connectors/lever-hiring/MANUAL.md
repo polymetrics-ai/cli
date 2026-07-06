@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  access_token (secret)
+  api_key (secret)
+
+ETL STREAMS
+  opportunities:
+    primary key: id
+    cursor: createdAt
+    fields: archivedAt(), createdAt(), emails(), headline(), id(), lastInteractionAt(), name(), origin(), sources(), stage(), tags(), updatedAt()
+  postings:
+    primary key: id
+    cursor: createdAt
+    fields: categories(), createdAt(), hiringManager(), id(), owner(), state(), text(), updatedAt(), user()
+  users:
+    primary key: id
+    cursor: createdAt
+    fields: accessRole(), createdAt(), deactivatedAt(), email(), id(), name(), username()
+  requisitions:
+    primary key: id
+    cursor: createdAt
+    fields: createdAt(), headcountHired(), headcountTotal(), id(), name(), owner(), requisitionCode(), status(), updatedAt()
+  stages:
+    primary key: id
+    fields: id(), text()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Lever API read of candidate and hiring pipeline data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

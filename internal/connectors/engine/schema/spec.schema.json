@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "spec.json",
+  "type": "object",
+  "required": ["type", "properties"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "title": { "type": "string" },
+    "type": { "type": "string", "enum": ["object"] },
+    "required": { "type": "array", "items": { "type": "string" } },
+    "properties": { "type": "object" }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/r/synthetic-conformance-value/new", "query": { "limit": "1", "raw_json": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": { "children": [], "after": null }
+    }
+  }
+}

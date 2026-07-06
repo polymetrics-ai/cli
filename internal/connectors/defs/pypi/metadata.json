@@ -1,0 +1,23 @@
+{
+  "name": "pypi",
+  "display_name": "PyPI",
+  "description": "Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-free.",
+  "integration_type": "api",
+  "docs_url": "https://warehouse.pypa.io/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external PyPI JSON API read of public package metadata",
+    "approval": "none; read-only public package registry API"
+  }
+}

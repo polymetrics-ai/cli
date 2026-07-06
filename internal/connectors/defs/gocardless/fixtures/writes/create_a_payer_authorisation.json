@@ -1,0 +1,20 @@
+{
+  "record": {
+    "payer_authorisations": {
+      "description": "Synthetic create_a_payer_authorisation fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payer_authorisations",
+    "body": {
+      "payer_authorisations": {
+        "description": "Synthetic create_a_payer_authorisation fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

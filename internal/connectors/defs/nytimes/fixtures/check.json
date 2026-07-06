@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/mostpopular/v2/viewed/synthetic-conformance-value.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "OK",
+      "copyright": "Copyright (c) 2026 The New York Times Company. All Rights Reserved.",
+      "num_results": 1,
+      "results": [
+        { "id": 1001, "url": "https://www.nytimes.com/fixture/1", "title": "Fixture 1", "abstract": "Fixture abstract 1", "byline": "By Fixture Author", "section": "Technology", "source": "New York Times", "type": "Article", "published_date": "2026-01-01", "updated": "2026-01-01 12:00:00", "uri": "nyt://article/fixture-1" }
+      ]
+    }
+  }
+}

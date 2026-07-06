@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "journals",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "entry_type": { "type": ["string", "null"] },
+    "from_account": { "type": ["string", "null"] },
+    "to_account": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "qty": { "type": ["string", "null"] },
+    "price": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "settle_date": { "type": ["string", "null"] },
+    "system_date": { "type": ["string", "null"] },
+    "net_amount": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

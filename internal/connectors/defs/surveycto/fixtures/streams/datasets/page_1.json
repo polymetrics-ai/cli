@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/datasets",
+    "query": { "limit": "1000" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 2,
+      "limit": 1000,
+      "data": [
+        {
+          "id": "form_ids",
+          "title": "form_ids",
+          "discriminator": "DATA",
+          "groupId": 51,
+          "allowOfflineUpdates": false,
+          "uniqueRecordField": null,
+          "fieldNames": "id,formId",
+          "createdOn": "2026-01-01T00:00:00Z",
+          "modifiedOn": "2026-01-01T00:00:00Z",
+          "status": "READY",
+          "version": 1
+        }
+      ],
+      "nextCursor": "form_ids"
+    }
+  }
+}

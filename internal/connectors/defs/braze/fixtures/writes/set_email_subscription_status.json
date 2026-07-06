@@ -1,0 +1,15 @@
+{
+  "record": {
+    "email": "fixture@example.com",
+    "subscription_state": "subscribed"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/email/status",
+    "body": {
+      "email": "fixture@example.com",
+      "subscription_state": "subscribed"
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

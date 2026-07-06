@@ -1,0 +1,14 @@
+{
+  "record": {
+    "webhook_integration_id": "webhook_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/integrations/webhooks/webhook_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/monitor-alerts",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "monitor_alert_fixture_1",
+        "name": "Fixture monitor_alert_fixture_1",
+        "type": "email"
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "tyntec-sms",
+  "display_name": "tyntec SMS",
+  "description": "Reads tyntec SMS messages, templates, sender IDs, and delivery reports through API list endpoints, and sends approved SMS messages through the Messaging API.",
+  "integration_type": "api",
+  "docs_url": "https://api.tyntec.com/reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external tyntec SMS API read of messages, templates, sender IDs, and delivery reports",
+    "write": "sends billable SMS messages to recipient phone numbers; approval required before delivery",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

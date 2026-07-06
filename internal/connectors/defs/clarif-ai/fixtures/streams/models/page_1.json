@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value/models",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": {
+        "code": 10000,
+        "description": "Ok"
+      },
+      "models": [
+        {
+          "id": "model_fixture_1",
+          "name": "Fixture Model 1",
+          "user_id": "fixture-user",
+          "app_id": "app_fixture_1",
+          "model_type_id": "visual-classifier",
+          "visibility": {
+            "gettable": 10
+          },
+          "created_at": "2026-01-01T00:00:00Z",
+          "modified_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

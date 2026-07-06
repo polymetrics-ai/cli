@@ -1,0 +1,110 @@
+{
+  "actions": [
+    {
+      "name": "add_booking",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wa-api/addBooking?restid={{ config.restid }}&start_time={{ record.start_time }}&amount={{ record.amount }}&date={{ record.date }}&mealid={{ record.mealid }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["start_time", "amount", "date", "mealid"],
+        "properties": {
+          "start_time": { "type": "string", "description": "HH:MM start time." },
+          "amount": { "type": "string", "description": "Number of persons." },
+          "date": { "type": "string", "description": "YYYY-MM-DD booking date." },
+          "mealid": { "type": "string", "description": "A valid meal id from the meals stream." }
+        }
+      },
+      "risk": "creates a new restaurant reservation, visible to restaurant staff and the guest; external mutation, approval required"
+    },
+    {
+      "name": "set_booking_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wa-api/setBookingStatus?restid={{ config.restid }}&bookingId={{ record.id }}&status={{ record.status }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["arrived", "guest_left", "paid", "all_seated", "deleted", "undelete"] }
+        }
+      },
+      "risk": "changes a reservation's status (including marking it deleted); external mutation, approval required"
+    },
+    {
+      "name": "edit_booking",
+      "kind": "update",
+      "method": "POST",
+      "path": "/wa-api/editBooking?restid={{ config.restid }}&bookingId={{ record.id }}&start_time={{ record.start_time }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "start_time"],
+        "properties": {
+          "id": { "type": "string" },
+          "start_time": { "type": "string", "description": "New HH:MM start time (the real API also accepts optional sign/end_time/mealid/comment edit keys, not modeled here -- see docs.md Known limits: the write dialect's path templating has no way to make a field optional, unlike stream.Query's opt-in omit_when_absent form)." }
+        }
+      },
+      "risk": "edits an existing reservation's start time; external mutation, approval required"
+    },
+    {
+      "name": "add_guest",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wa-api/addGuest?restid={{ config.restid }}&firstname={{ record.firstname }}&lastname={{ record.lastname }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["firstname", "lastname"],
+        "properties": {
+          "firstname": { "type": "string" },
+          "lastname": { "type": "string" }
+        }
+      },
+      "risk": "creates a new guest record; external mutation, approval required"
+    },
+    {
+      "name": "add_to_queue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wa-api/queue/add?restid={{ config.restid }}&name={{ record.name }}&amount={{ record.amount }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "amount"],
+        "properties": {
+          "name": { "type": "string", "description": "Guest full name." },
+          "amount": { "type": "string", "description": "Number of persons." }
+        }
+      },
+      "risk": "adds a guest to the restaurant's walk-in queue; external mutation, approval required"
+    },
+    {
+      "name": "delete_from_queue",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/wa-api/queue/delete?restid={{ config.restid }}&queue_id={{ record.queue_id }}",
+      "path_fields": ["queue_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["queue_id"],
+        "properties": {
+          "queue_id": { "type": "string" }
+        }
+      },
+      "risk": "removes a guest from the restaurant's walk-in queue; external mutation, approval required"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/accounts", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "acc_fixture_1", "platform": "youtube", "status": "connected", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

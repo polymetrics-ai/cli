@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/comments", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idcomment": 1001,
+        "body": "Fixture comment body",
+        "author_type": "user",
+        "author": { "iduser": 201, "username": "fixture_user", "full_name": "Fixture User" },
+        "source_type": "picklist",
+        "source": { "idpicklist": 601, "picklistid": "P2026-0001" },
+        "mentions": []
+      }
+    ]
+  }
+}

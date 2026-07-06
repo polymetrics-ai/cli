@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Fixture Supplier ApS",
+    "currency": "DKK",
+    "paymentTerms": {
+      "paymentTermsNumber": 1
+    },
+    "group": {
+      "supplierGroupNumber": 1
+    },
+    "vatZone": {
+      "vatZoneNumber": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/suppliers"
+  }
+}

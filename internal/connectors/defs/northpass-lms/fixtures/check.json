@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/courses" },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "links": { "next": null } }
+  }
+}

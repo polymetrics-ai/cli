@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets"
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "budgets": [] } }
+  }
+}

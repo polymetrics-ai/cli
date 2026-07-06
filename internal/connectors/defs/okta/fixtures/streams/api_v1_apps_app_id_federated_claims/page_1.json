@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/federated-claims",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "created": "2026-01-01T00:00:00Z",
+        "expression": "expression_fixture",
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "name": "name_fixture"
+      }
+    ]
+  }
+}

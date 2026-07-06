@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "Fixture Dashboard List"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/dashboard/lists/manual"
+  }
+}

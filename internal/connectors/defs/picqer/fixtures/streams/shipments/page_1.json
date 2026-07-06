@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/shipments", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idshipment": 1,
+        "idpicklist": 601,
+        "idorder": 301,
+        "idreturn": null,
+        "idpackaging": 1,
+        "idshippingprovider": 1,
+        "provider": "PostNL",
+        "providername": "PostNL",
+        "weight": 2000,
+        "cancelled": false,
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:00:00Z",
+        "parcels": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "estimate_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/estimates/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

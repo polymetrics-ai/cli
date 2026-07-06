@@ -6,12 +6,11 @@ import { ArrowRight, Cable, Database, FileJson, Filter, Search } from 'lucide-re
 import {
   CONNECTOR_CATALOG,
   CONNECTOR_CATALOG_COUNT,
-  CONNECTOR_SOURCES,
-  CONNECTOR_DESTINATIONS,
+  CONNECTOR_CAPABILITY_COUNTS,
   CONNECTOR_CATEGORY_COUNTS,
   type ConnectorMeta,
 } from '@/lib/connectors.catalog.generated';
-import { Badge, statusVariant, typeVariant } from '@/components/ui/badge';
+import { Badge, releaseVariant } from '@/components/ui/badge';
 import { ConnectorIcon } from '@/components/docs/connector/connector-icon';
 import { Button } from '@/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
@@ -31,10 +30,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   file: 'File',
   vectorstore: 'Vector store',
   message_queue: 'Message queue',
+  queue: 'Queue',
+  accounting: 'Accounting',
   other: 'Other',
 };
 
-type TypeFilter = 'all' | 'source' | 'destination';
+type CapabilityFilter = 'all' | 'read' | 'write' | 'query' | 'cdc' | 'dynamicSchema';
 
 function ConnectorCard({ c }: { c: ConnectorMeta }) {
   return (
@@ -55,26 +56,27 @@ function ConnectorCard({ c }: { c: ConnectorMeta }) {
         )}
       </div>
       <p className="line-clamp-2 text-[12px] leading-relaxed text-text-tertiary">
-        {c.notes ||
-          `${c.name} exposes ${c.config.length} config fields, ${c.secrets.length} secret fields, and ${c.docs.length} catalog doc links.`}
+        {c.description ||
+          `${c.name} exposes ${c.streams.length} ETL streams and ${c.writeActions.length} write actions.`}
       </p>
       <div className="grid grid-cols-3 border border-line-structure bg-line-structure text-[10px] text-text-tertiary">
         <span className="bg-surface-bg px-2 py-1 font-mono">
-          {c.config.length} config
+          {c.streams.length} streams
         </span>
         <span className="bg-surface-bg px-2 py-1 font-mono">
-          {c.secrets.length} secret
+          {c.writeActions.length} writes
         </span>
         <span className="bg-surface-bg px-2 py-1 font-mono">
-          {c.docs.length} docs
+          {c.docsMd ? 'docs.md' : 'no docs'}
         </span>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        <Badge variant={typeVariant(c.type)}>{c.type}</Badge>
         <Badge variant="category">{CATEGORY_LABELS[c.category] ?? c.category}</Badge>
-        <Badge variant={statusVariant(c.status)}>
-          {c.status === 'enabled' ? 'enabled' : 'planned'}
+        <Badge variant={releaseVariant(c.releaseStage)}>
+          {c.releaseStage === 'ga' ? 'GA' : c.releaseStage}
         </Badge>
+        {c.capabilities.read && <Badge variant="capability">read</Badge>}
+        {c.capabilities.write && <Badge variant="capability">write</Badge>}
       </div>
       <span className="mt-1 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-text-disabled transition-colors group-hover:text-line-cta">
         Open connector
@@ -86,7 +88,7 @@ function ConnectorCard({ c }: { c: ConnectorMeta }) {
 
 export function ConnectorBrowser() {
   const [query, setQuery] = useState('');
-  const [type, setType] = useState<TypeFilter>('all');
+  const [capability, setCapability] = useState<CapabilityFilter>('all');
   const [category, setCategory] = useState<string>('all');
 
   const categories = useMemo(
@@ -97,16 +99,19 @@ export function ConnectorBrowser() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return CONNECTOR_CATALOG.filter((c) => {
-      if (type !== 'all' && c.type !== type) return false;
+      if (capability !== 'all' && !c.capabilities[capability]) return false;
       if (category !== 'all' && c.category !== category) return false;
       if (!q) return true;
       return (
         c.name.toLowerCase().includes(q) ||
         c.slug.toLowerCase().includes(q) ||
-        c.category.toLowerCase().includes(q)
+        c.category.toLowerCase().includes(q) ||
+        c.capabilityLabels.join(' ').toLowerCase().includes(q) ||
+        c.streams.some((stream) => stream.name.toLowerCase().includes(q)) ||
+        c.writeActions.some((action) => action.name.toLowerCase().includes(q))
       );
     });
-  }, [query, type, category]);
+  }, [query, capability, category]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -120,18 +125,18 @@ export function ConnectorBrowser() {
             Search every connector page
           </h1>
           <p className="mt-3 max-w-[70ch] text-[14px] leading-relaxed text-text-tertiary">
-            Browse generated docs for {CONNECTOR_CATALOG_COUNT} source and destination connectors,
-            including setup notes, auth fields, official docs links, and machine-readable data.
+            Browse generated docs for {CONNECTOR_CATALOG_COUNT} connector bundles,
+            including capabilities, ETL streams, reverse-ETL write actions, and machine-readable data.
           </p>
         </div>
         <div className="grid border-b border-line-structure text-[12px] text-text-tertiary sm:grid-cols-3">
           <div className="flex items-center gap-2 border-b border-line-structure px-4 py-3 sm:border-b-0 sm:border-r">
             <Cable className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
-            {CONNECTOR_SOURCES} sources
+            {CONNECTOR_CAPABILITY_COUNTS.read} readable
           </div>
           <div className="flex items-center gap-2 border-b border-line-structure px-4 py-3 sm:border-b-0 sm:border-r">
             <Database className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
-            {CONNECTOR_DESTINATIONS} destinations
+            {CONNECTOR_CAPABILITY_COUNTS.write} writable
           </div>
           <div className="flex items-center gap-2 px-4 py-3">
             <FileJson className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
@@ -148,7 +153,7 @@ export function ConnectorBrowser() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search names, slugs, categories, or auth fields..."
+              placeholder="Search names, slugs, streams, actions, or capabilities..."
               aria-label="Search connectors"
               className="font-sans text-[14px] text-text-primary placeholder:text-text-disabled"
             />
@@ -162,21 +167,21 @@ export function ConnectorBrowser() {
 
             <ToggleGroup
               type="single"
-              value={type}
+              value={capability}
               onValueChange={(value) => {
-                if (value) setType(value as TypeFilter);
+                if (value) setCapability(value as CapabilityFilter);
               }}
               variant="outline"
               spacing={1}
               className="flex w-full flex-wrap"
             >
-              {(['all', 'source', 'destination'] as TypeFilter[]).map((t) => (
+              {(['all', 'read', 'write', 'query', 'cdc', 'dynamicSchema'] as CapabilityFilter[]).map((t) => (
                 <ToggleGroupItem
                   key={t}
                   value={t}
                   className="border-line-structure bg-surface-bg px-3 font-sans text-[12px] text-text-secondary data-[state=on]:border-line-cta data-[state=on]:bg-surface-2 data-[state=on]:text-line-cta"
                 >
-                  {t === 'all' ? 'All types' : t === 'source' ? 'Sources' : 'Destinations'}
+                  {t === 'all' ? 'All capabilities' : t === 'dynamicSchema' ? 'Dynamic schema' : t}
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -206,7 +211,7 @@ export function ConnectorBrowser() {
           variant="quiet"
           onClick={() => {
             setQuery('');
-            setType('all');
+            setCapability('all');
             setCategory('all');
           }}
           className="w-fit"
@@ -226,7 +231,7 @@ export function ConnectorBrowser() {
               No connectors match
             </EmptyTitle>
             <EmptyDescription className="text-[14px] text-text-tertiary">
-              Try a vendor name, connector slug, auth field, type, or category.
+              Try a vendor name, connector slug, stream, action, capability, or category.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>

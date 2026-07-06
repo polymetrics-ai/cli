@@ -1,0 +1,35 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/backstage/oauth/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/backstage/api/1.0/{{ config.account_id }}/campaigns", "query": { "page": "1", "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "taboola client_id/client_secret are missing or invalid; re-run pm credentials add taboola" },
+      { "status": 403, "hint": "taboola account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "taboola rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/backstage/api/1.0/{{ config.account_id }}/campaigns",
+      "records": { "path": "results" },
+      "schema": "schemas/campaigns.json"
+    }
+  ]
+}

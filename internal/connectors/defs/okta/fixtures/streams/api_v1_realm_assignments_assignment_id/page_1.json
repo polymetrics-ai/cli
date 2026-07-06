@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/realm-assignments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "actions": {
+        "assignUserToRealm": {
+          "realmId": "realm_id_fixture"
+        }
+      },
+      "conditions": {
+        "expression": {
+          "value": "value_fixture"
+        },
+        "profileSourceId": "profile_source_id_fixture"
+      },
+      "created": "2026-01-01T00:00:00Z",
+      "domains": [
+        "domain_fixture"
+      ],
+      "id": "id_fixture",
+      "isDefault": true,
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "priority": 1,
+      "status": "ACTIVE",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

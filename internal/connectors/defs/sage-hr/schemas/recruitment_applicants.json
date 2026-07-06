@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "recruitment_applicants",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "position_id": { "type": ["string", "null"], "description": "Stamped by the fan_out over recruitment_positions; a string (the fan_out id reference always resolves to a string), not the numeric position id type." },
+    "full_name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "disqualified_date": { "type": ["string", "null"] },
+    "hired_date": { "type": ["string", "null"] },
+    "stage": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/blogs/fixture_blog_1/pages", "query": { "maxResults": "100", "pageToken": "fixture_page_2_token" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "blogger#pageList",
+      "items": [
+        {
+          "kind": "blogger#page",
+          "id": "page_fixture_2",
+          "blog": { "id": "fixture_blog_1" },
+          "title": "Fixture Page 2",
+          "content": "<p>Fixture page content 2</p>",
+          "url": "https://fixtureblog.blogspot.com/p/page-2.html",
+          "published": "2026-01-03T00:00:00Z",
+          "updated": "2026-01-04T00:00:00Z",
+          "author": { "id": "author_fixture_2", "displayName": "Fixture Author Two" },
+          "status": "LIVE"
+        }
+      ]
+    }
+  }
+}

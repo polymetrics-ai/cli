@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchase_order_by_number",
+  "type": "object",
+  "x-primary-key": [
+    "PurchaseOrderID"
+  ],
+  "properties": {
+    "Contact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "LineItems": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DeliveryDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LineAmountTypes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchaseOrderNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BrandingThemeID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SentToContact": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "DeliveryAddress": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AttentionTo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Telephone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DeliveryInstructions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ExpectedArrivalDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PurchaseOrderID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CurrencyRate": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "SubTotal": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalTax": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "TotalDiscount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "HasAttachments": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "StatusAttributeString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Warnings": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "purchase_order_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

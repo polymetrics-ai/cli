@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["jnid"],
+  "x-cursor-field": "date_updated",
+  "required": ["jnid"],
+  "properties": {
+    "jnid": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "first_name": { "type": ["string", "null"] },
+    "last_name": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "mobile_phone": { "type": ["string", "null"] },
+    "home_phone": { "type": ["string", "null"] },
+    "work_phone": { "type": ["string", "null"] },
+    "address_line1": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state_text": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "country_name": { "type": ["string", "null"] },
+    "status_name": { "type": ["string", "null"] },
+    "record_type_name": { "type": ["string", "null"] },
+    "sales_rep_name": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_archived": { "type": ["boolean", "null"] },
+    "date_created": { "type": ["integer", "null"] },
+    "date_updated": { "type": ["integer", "null"] }
+  }
+}

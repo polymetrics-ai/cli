@@ -1,0 +1,27 @@
+{
+  "name": "uptick",
+  "display_name": "Uptick",
+  "description": "Reads Uptick field service management data through the Uptick REST API using OAuth2 password-grant auth.",
+  "integration_type": "api",
+  "docs_url": "https://support.uptickhq.com/en/articles/6728314-uptick-api-overview-and-patch-notes",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Uptick field service management API reads for tasks, clients, properties, invoices, assets, quotes, purchase orders, forms, users, teams, and stock items",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for uptick (the AuthHook's real OAuth2 password-grant path) -- conformance's synthetic config has no real username/password round-trip and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

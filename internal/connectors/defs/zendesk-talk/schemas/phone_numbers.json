@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "phone_numbers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "number": { "type": ["string", "null"] },
+    "display_number": { "type": ["string", "null"] },
+    "nickname": { "type": ["string", "null"] },
+    "country_code": { "type": ["string", "null"] },
+    "toll_free": { "type": ["boolean", "null"] },
+    "voice_enabled": { "type": ["boolean", "null"] },
+    "sms_enabled": { "type": ["boolean", "null"] },
+    "recorded": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

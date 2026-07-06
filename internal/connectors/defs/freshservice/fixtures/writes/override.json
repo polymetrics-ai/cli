@@ -1,0 +1,17 @@
+{
+  "record": {
+    "workspace_id": 123,
+    "schedule_id": 123,
+    "shift_id": 123,
+    "name": "Fixture override",
+    "description": "Fixture override record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/oncall/ws/123/schedules/123/shifts/123/rosters/override",
+    "body": {
+      "name": "Fixture override",
+      "description": "Fixture override record"
+    }
+  }
+}

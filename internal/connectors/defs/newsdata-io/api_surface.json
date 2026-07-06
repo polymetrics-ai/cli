@@ -1,0 +1,12 @@
+{
+  "api": "NewsData.io API v1 (https://newsdata.io/api/1)",
+  "docs": "https://newsdata.io/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (latest, crypto, archive, sources); NewsData.io is read-only with no reverse-ETL write surface.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/1/latest", "covered_by": { "stream": "latest" } },
+    { "method": "GET", "path": "/api/1/crypto", "covered_by": { "stream": "crypto" } },
+    { "method": "GET", "path": "/api/1/archive", "covered_by": { "stream": "archive" } },
+    { "method": "GET", "path": "/api/1/sources", "covered_by": { "stream": "sources" } }
+  ]
+}

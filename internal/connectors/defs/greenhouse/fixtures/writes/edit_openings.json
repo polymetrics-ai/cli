@@ -1,0 +1,14 @@
+{
+  "record": {
+    "job_id": "job_id_fixture",
+    "opening_id": "opening_id_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/jobs/job_id_fixture/openings/opening_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

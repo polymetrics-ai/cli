@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/lists/list_fixture_2/contacts.json" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "contact_fixture_2",
+        "email": "contact2@example.com",
+        "first_name": "First2",
+        "last_name": "Last2",
+        "confirmed": "false",
+        "image_url": "https://example.com/avatar2.png"
+      }
+    ]
+  }
+}

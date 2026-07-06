@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Employment Hero Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Employment Hero access token, sent as Authorization: Bearer <api_key>. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.employmenthero.com/api",
+      "description": "Employment Hero API root. Keep /api as the root; stream paths include /v1 or /v2."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Employment Hero organisation UUID used for organisation-scoped endpoints. The official docs call this organisation_id."
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Employee UUID used for single employee-scoped streams and write actions."
+    },
+    "employee_ids": {
+      "type": "string",
+      "description": "Comma-separated employee UUIDs used by single-object employee detail streams that cannot fan out through a separately paginated ID request."
+    },
+    "member_ids": {
+      "type": "string",
+      "description": "Comma-separated member UUIDs used by member_form_responses fan-out."
+    },
+    "certification_id": {
+      "type": "string"
+    },
+    "form_id": {
+      "type": "string"
+    },
+    "response_id": {
+      "type": "string"
+    },
+    "template_id": {
+      "type": "string"
+    },
+    "goal_id": {
+      "type": "string"
+    },
+    "key_result_id": {
+      "type": "string"
+    },
+    "leave_request_id": {
+      "type": "string"
+    },
+    "payslip_id": {
+      "type": "string"
+    },
+    "rostered_shift_id": {
+      "type": "string"
+    },
+    "unavailability_id": {
+      "type": "string"
+    }
+  }
+}

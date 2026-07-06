@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/products/synthetic-conformance-value/properties", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "property_fixture_1", "product_id": "synthetic-conformance-value", "name": "property fixture 1", "display_name": "Fixture 1", "type": "fixture", "created_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

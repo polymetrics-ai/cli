@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_activity"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "activity_fixture_1",
+          "day": "2026-01-01",
+          "score": 76,
+          "timestamp": "2026-01-01T00:00:00+00:00"
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

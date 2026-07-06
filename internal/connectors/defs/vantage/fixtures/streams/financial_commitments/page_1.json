@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/financial_commitments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "financial_commitments": [
+        {
+          "token": "fc_fixture_1",
+          "provider": "aws",
+          "commitment_type": "reserved_instance",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "self": "https://api.vantage.sh/v2/financial_commitments?page=1"
+      }
+    }
+  }
+}

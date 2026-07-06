@@ -1,0 +1,31 @@
+{
+  "record": {
+    "audio_url": "https://example.com/audio/fixture-upload.mp3",
+    "punctuate": true,
+    "speaker_labels": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/transcript",
+    "body": {
+      "audio_url": "https://example.com/audio/fixture-upload.mp3",
+      "punctuate": true,
+      "speaker_labels": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_transcript_new",
+      "status": "queued",
+      "audio_url": "https://example.com/audio/fixture-upload.mp3",
+      "text": null,
+      "webhook_auth": false,
+      "auto_highlights": false,
+      "redact_pii": false,
+      "summarization": false,
+      "language_confidence_threshold": 0.7,
+      "language_confidence": null
+    }
+  }
+}

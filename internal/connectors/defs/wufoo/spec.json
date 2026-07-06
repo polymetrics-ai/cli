@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wufoo Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Wufoo API key, sent as the HTTP Basic username (password is the literal 'pass'). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://example.wufoo.com/api/v3",
+      "description": "Wufoo API base URL, e.g. https://<subdomain>.wufoo.com/api/v3. Defaults to a placeholder subdomain; override with your account's actual subdomain."
+    },
+    "form_hash": {
+      "type": "string",
+      "description": "Wufoo form hash to read/write against; required for the form_fields, entries, form_comments streams and the submit_entry/add_webhook/delete_webhook writes, substituted into /forms/<form_hash>/... paths."
+    },
+    "report_hash": {
+      "type": "string",
+      "description": "Wufoo report hash to read against; required for the report_fields, report_entries, report_widgets streams, substituted into /reports/<report_hash>/... paths."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "1",
+      "description": "Maximum pages to read; matches legacy's default of 1 page when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/launchpads", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "lp_fixture_1",
+        "name": "Fixture Launchpad One",
+        "type": "launchpad",
+        "published": true,
+        "frequency": "always",
+        "tag_ids": [],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "lp_fixture_2",
+        "name": "Fixture Launchpad Two",
+        "type": "launchpad",
+        "published": true,
+        "frequency": "always",
+        "tag_ids": ["tag_fixture_3"],
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

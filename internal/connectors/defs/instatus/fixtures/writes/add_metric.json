@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture add metric"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/metrics",
+    "body": {
+      "name": "Fixture add metric"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_metric_fixture_response"
+    }
+  }
+}

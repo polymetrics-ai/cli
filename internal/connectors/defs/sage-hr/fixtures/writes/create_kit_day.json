@@ -1,0 +1,5 @@
+{
+  "record": { "employee_id": 1, "policy_id": 1, "date": "2026-02-15" },
+  "expect": { "method": "POST", "path": "/leave-management/kit-days" },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

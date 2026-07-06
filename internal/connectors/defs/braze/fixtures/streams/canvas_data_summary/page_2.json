@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/canvas/data_summary",
+    "query": { "canvas_id": "canvas_fixture_1", "page": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "name": "Fixture Canvas 1",
+      "data": [
+        { "time": "2026-01-01T00:00:00Z", "total_stats": { "revenue": 0, "conversions": 0 } }
+      ]
+    }
+  }
+}

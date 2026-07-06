@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/orders" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "number": "SO-1001",
+        "status": "shipped",
+        "created_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 1002,
+        "number": "SO-1002",
+        "status": "pending",
+        "created_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

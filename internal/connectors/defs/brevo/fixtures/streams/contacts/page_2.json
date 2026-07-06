@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": 101,
+          "email": "fixture101@example.com",
+          "emailBlacklisted": false,
+          "smsBlacklisted": false,
+          "createdAt": "2026-01-01T00:00:00.000+00:00",
+          "modifiedAt": "2026-01-18T00:00:00.000+00:00",
+          "listIds": [
+            1
+          ],
+          "attributes": {
+            "FIRSTNAME": "Fixture101"
+          }
+        }
+      ],
+      "count": 101
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ccx/api/hcm/v1/synthetic-conformance-value/organizations", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "org-1", "descriptor": "Fixture Org One", "type": "supervisory" },
+        { "id": "org-2", "descriptor": "Fixture Org Two", "type": "cost_center" }
+      ]
+    }
+  }
+}

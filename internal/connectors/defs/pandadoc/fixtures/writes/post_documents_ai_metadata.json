@@ -1,0 +1,35 @@
+{
+  "record": {
+    "name": "Fixture post_documents_ai_metadata",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/beta/documents/ai-metadata",
+    "body": {
+      "name": "Fixture post_documents_ai_metadata",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_ai_metadata_response",
+      "status": "ok"
+    }
+  }
+}

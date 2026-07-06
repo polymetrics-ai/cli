@@ -10,22 +10,1247 @@ SYNOPSIS
   pm credentials add <name> --connector firehydrant [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads FireHydrant incidents, services, teams, environments, and functionalities through the FireHydrant REST API.
+  Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireHydrant mutations through declarative write actions.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  action_slug
+  alert_id
+  audience_id
+  base_url
+  by_connection_id
+  change_event_id
+  change_id
+  comment_id
+  condition_id
+  config_id
+  connection_id
+  conversation_id
+  emoji_action_id
+  environment_id
+  event_id
+  execution_id
+  field
+  field_id
+  field_map_id
+  functionality_id
+  generated_summary_id
+  get_zendesk_customer_support_issue_ticket_id
+  id
+  incident_id
+  incident_role_id
+  infra_id
+  infra_type
+  integration_id
+  integration_slug
+  language_code
+  map_id
+  measurement_definition_id
+  member_id
+  nunc_connection_id
+  page_size
+  priority_slug
+  question_id
+  report_id
+  resource_type
+  retrospective_id
+  retrospective_template_id
+  rotation_id
+  runbook_id
+  saved_search_id
+  schedule_id
+  scheduled_maintenance_id
+  search_zendesk_tickets_query
+  selected_value
+  service_dependency_id
+  service_id
+  severity_slug
+  slug
+  status_update_template_id
+  step_id
+  task_id
+  task_list_id
+  team_id
+  ticket_id
+  ticketing_project_id
+  transposer_slug
+  type
+  user_id
+  webhook_id
+  api_token (secret)
+
+ETL STREAMS
+  incidents:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), current_milestone(), description(), id(), name(), number(), priority(), resolved_at(), severity(), started_at(), summary(), updated_at()
+  services:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), name(), service_tier(), slug(), updated_at()
+  teams:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), name(), slug(), updated_at()
+  environments:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), name(), updated_at()
+  functionalities:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), name(), slug(), updated_at()
+  append_form_data_on_selected_value_get:
+  get_ai_incident_summary_vote_status:
+  get_ai_preferences:
+  get_alert:
+  get_audience:
+  get_audience_summary:
+  get_audit_event:
+  get_aws_cloudtrail_batch:
+  get_aws_connection:
+  get_bootstrap:
+  get_call_route:
+  get_change_event:
+  get_checklist_template:
+  get_comment:
+  get_conference_bridge_translation:
+  get_configuration_options:
+  get_current_user:
+  get_environment:
+  get_form_configuration:
+  get_functionality:
+  get_inbound_field_map:
+  get_incident:
+  get_incident_channel:
+  get_incident_event:
+  get_incident_relationships:
+  get_incident_retrospective_field:
+  get_incident_role:
+  get_incident_task:
+  get_incident_type:
+  get_incident_user:
+  get_integration:
+  get_lifecycle_measurement_definition:
+  get_mean_time_report:
+  get_member_default_audience:
+  get_notification_policy:
+  get_nunc_connection:
+  get_on_call_schedule_rotation:
+  get_on_call_shift:
+  get_options_for_field:
+  get_post_mortem_question:
+  get_post_mortem_report:
+  get_priority:
+  get_retrospective_template:
+  get_role:
+  get_runbook:
+  get_runbook_action_field_options:
+  get_runbook_execution:
+  get_runbook_execution_step_script:
+  get_saved_search:
+  get_scheduled_maintenance:
+  get_service:
+  get_service_dependencies:
+  get_service_dependency:
+  get_severity:
+  get_severity_matrix:
+  get_severity_matrix_condition:
+  get_signals_alert_grouping_configuration:
+  get_signals_email_target:
+  get_signals_event_source:
+  get_signals_grouped_metrics:
+  get_signals_hacker_mode:
+  get_signals_heartbeat_endpoint_configuration:
+  get_signals_ingest_url:
+  get_signals_mttx_analytics:
+  get_signals_noise_analytics:
+  get_signals_timeseries_analytics:
+  get_signals_webhook_target:
+  get_slack_emoji_action:
+  get_status_update_template:
+  get_statuspage_connection:
+  get_support_hours_schedule:
+  get_task_list:
+  get_team:
+  get_team_escalation_policy:
+  get_team_on_call_schedule:
+  get_team_signal_rule:
+  get_ticket:
+  get_ticketing_field_map:
+  get_ticketing_form_configuration:
+  get_ticketing_priority:
+  get_ticketing_project:
+  get_ticketing_project_config:
+  get_user:
+  get_vote_status:
+  get_webhook:
+  get_zendesk_customer_support_issue:
+  list_alerts:
+  list_audience_summaries:
+  list_audiences:
+  list_audit_events:
+  list_authed_providers:
+  list_available_inbound_field_maps:
+  list_available_ticketing_field_maps:
+  list_aws_cloudtrail_batch_events:
+  list_aws_cloudtrail_batches:
+  list_aws_connections:
+  list_call_routes:
+  list_change_events:
+  list_change_identities:
+  list_change_types:
+  list_changes:
+  list_checklist_templates:
+  list_comment_reactions:
+  list_comments:
+  list_connection_statuses:
+  list_connection_statuses_by_slug:
+  list_connection_statuses_by_slug_and_id:
+  list_connections:
+  list_current_user_permissions:
+  list_custom_field_definitions:
+  list_custom_field_select_options:
+  list_email_subscribers:
+  list_entitlements:
+  list_environment_functionalities:
+  list_environment_services:
+  list_field_map_available_fields:
+  list_functionality_environments:
+  list_functionality_services:
+  list_inbound_field_maps:
+  list_incident_alerts:
+  list_incident_attachments:
+  list_incident_change_events:
+  list_incident_conference_bridges:
+  list_incident_events:
+  list_incident_impacts:
+  list_incident_links:
+  list_incident_metrics:
+  list_incident_milestones:
+  list_incident_retrospectives:
+  list_incident_role_assignments:
+  list_incident_roles:
+  list_incident_status_pages:
+  list_incident_tags:
+  list_incident_tasks:
+  list_incident_types:
+  list_infrastructure_metrics:
+  list_infrastructure_type_metrics:
+  list_infrastructures:
+  list_integrations:
+  list_lifecycle_measurement_definitions:
+  list_lifecycle_phases:
+  list_notification_policy_settings:
+  list_nunc_connections:
+  list_organization_on_call_schedules:
+  list_permissions:
+  list_post_mortem_questions:
+  list_post_mortem_reasons:
+  list_post_mortem_reports:
+  list_priorities:
+  list_processing_log_entries:
+  list_retrospective_metrics:
+  list_retrospective_templates:
+  list_retrospectives:
+  list_roles:
+  list_runbook_actions:
+  list_runbook_executions:
+  list_runbooks:
+  list_saved_searches:
+  list_scheduled_maintenances:
+  list_schedules:
+  list_service_available_downstream_dependencies:
+  list_service_available_upstream_dependencies:
+  list_service_environments:
+  list_severities:
+  list_severity_matrix_conditions:
+  list_severity_matrix_impacts:
+  list_signals_alert_grouping_configurations:
+  list_signals_email_targets:
+  list_signals_event_sources:
+  list_signals_heartbeat_endpoint_configurations:
+  list_signals_transposers:
+  list_signals_webhook_targets:
+  list_similar_incidents:
+  list_slack_emoji_actions:
+  list_slack_usergroups:
+  list_slack_workspaces:
+  list_status_update_templates:
+  list_statuspage_connection_pages:
+  list_statuspage_connections:
+  list_task_lists:
+  list_team_call_routes:
+  list_team_escalation_policies:
+  list_team_on_call_schedules:
+  list_team_permissions:
+  list_team_signal_rules:
+  list_ticket_tags:
+  list_ticketing_custom_definitions:
+  list_ticketing_priorities:
+  list_ticketing_projects:
+  list_tickets:
+  list_transcript_entries:
+  list_user_involvement_metrics:
+  list_user_notification_settings_by_user_id:
+  list_user_owned_services:
+  list_users:
+  list_webhook_deliveries:
+  list_webhooks:
+  search_confluence_spaces:
+  search_slack_channels:
+  search_zendesk_tickets:
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  archive_audience:
+    endpoint: DELETE /audiences/{{ record.audience_id }}
+    required fields: audience_id
+    risk: Archive audience; this may remove or archive FireHydrant data.
+  bulk_update_incident_milestones:
+    endpoint: PUT /incidents/{{ record.incident_id }}/milestones/bulk_update
+    required fields: incident_id
+    risk: Update milestone times through the FireHydrant API.
+  close_incident:
+    endpoint: PUT /incidents/{{ record.incident_id }}/close
+    required fields: incident_id
+    risk: Close an incident through the FireHydrant API.
+  convert_incident_task:
+    endpoint: POST /incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}/convert
+    required fields: task_id, incident_id
+    risk: Convert a task to a follow-up through the FireHydrant API.
+  copy_on_call_schedule_rotation:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}/copy
+    required fields: rotation_id, team_id, schedule_id
+    risk: Copy an on-call schedule's rotation through the FireHydrant API.
+  create_audience:
+    endpoint: POST /audiences
+    risk: Create audience through the FireHydrant API.
+  create_change:
+    endpoint: POST /changes
+    risk: Create a new change entry through the FireHydrant API.
+  create_change_event:
+    endpoint: POST /changes/events
+    risk: Create a change event through the FireHydrant API.
+  create_change_identity:
+    endpoint: POST /changes/{{ record.change_id }}/identities
+    required fields: change_id
+    risk: Create an identity for a change entry through the FireHydrant API.
+  create_checklist_template:
+    endpoint: POST /checklist_templates
+    risk: Create a checklist template through the FireHydrant API.
+  create_comment:
+    endpoint: POST /conversations/{{ record.conversation_id }}/comments
+    required fields: conversation_id
+    risk: Create a conversation comment through the FireHydrant API.
+  create_comment_reaction:
+    endpoint: POST /conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}/reactions
+    required fields: conversation_id, comment_id
+    risk: Create a reaction for a conversation comment through the FireHydrant API.
+  create_connection:
+    endpoint: POST /integrations/connections/{{ record.slug }}
+    required fields: slug
+    risk: Create a new integration connection through the FireHydrant API.
+  create_custom_field_definition:
+    endpoint: POST /custom_fields/definitions
+    risk: Create a custom field definition through the FireHydrant API.
+  create_email_subscriber:
+    endpoint: POST /nunc_connections/{{ record.nunc_connection_id }}/subscribers
+    required fields: nunc_connection_id
+    risk: Add subscribers to a status page through the FireHydrant API.
+  create_environment:
+    endpoint: POST /environments
+    risk: Create an environment through the FireHydrant API.
+  create_functionality:
+    endpoint: POST /functionalities
+    risk: Create a functionality through the FireHydrant API.
+  create_inbound_field_map:
+    endpoint: POST /ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps
+    required fields: ticketing_project_id
+    risk: Create inbound field map for a ticketing project through the FireHydrant API.
+  create_incident:
+    endpoint: POST /incidents
+    risk: Create an incident through the FireHydrant API.
+  create_incident_alert:
+    endpoint: POST /incidents/{{ record.incident_id }}/alerts
+    required fields: incident_id
+    risk: Attach an alert to an incident through the FireHydrant API.
+  create_incident_change_event:
+    endpoint: POST /incidents/{{ record.incident_id }}/related_change_events
+    required fields: incident_id
+    risk: Add a related change to an incident through the FireHydrant API.
+  create_incident_chat_message:
+    endpoint: POST /incidents/{{ record.incident_id }}/generic_chat_messages
+    required fields: incident_id
+    risk: Add a chat message to an incident through the FireHydrant API.
+  create_incident_impact:
+    endpoint: POST /incidents/{{ record.incident_id }}/impact/{{ record.type }}
+    required fields: incident_id, type
+    risk: Add impacted infrastructure to an incident through the FireHydrant API.
+  create_incident_link:
+    endpoint: POST /incidents/{{ record.incident_id }}/links
+    required fields: incident_id
+    risk: Add a link to an incident through the FireHydrant API.
+  create_incident_note:
+    endpoint: POST /incidents/{{ record.incident_id }}/notes
+    required fields: incident_id
+    risk: Add a note to an incident through the FireHydrant API.
+  create_incident_retrospective:
+    endpoint: POST /incidents/{{ record.incident_id }}/retrospectives
+    required fields: incident_id
+    risk: Create a new retrospective on the incident using the template through the FireHydrant API.
+  create_incident_retrospective_dynamic_input:
+    endpoint: POST /incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields/{{ record.field_id }}/inputs
+    required fields: retrospective_id, field_id, incident_id
+    risk: Add a new dynamic input field to a retrospective's dynamic input group field through the FireHydrant API.
+  create_incident_retrospective_field:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields
+    required fields: retrospective_id, incident_id
+    risk: Appends a new incident retrospective field to an incident retrospective through the FireHydrant API.
+  create_incident_role:
+    endpoint: POST /incident_roles
+    risk: Create an incident role through the FireHydrant API.
+  create_incident_role_assignment:
+    endpoint: POST /incidents/{{ record.incident_id }}/role_assignments
+    required fields: incident_id
+    risk: Assign a user to an incident through the FireHydrant API.
+  create_incident_status_page:
+    endpoint: POST /incidents/{{ record.incident_id }}/status_pages
+    required fields: incident_id
+    risk: Add a status page to an incident through the FireHydrant API.
+  create_incident_task:
+    endpoint: POST /incidents/{{ record.incident_id }}/tasks
+    required fields: incident_id
+    risk: Create an incident task through the FireHydrant API.
+  create_incident_task_list:
+    endpoint: POST /incidents/{{ record.incident_id }}/task_lists
+    required fields: incident_id
+    risk: Add tasks from a task list to an incident through the FireHydrant API.
+  create_incident_team_assignment:
+    endpoint: POST /incidents/{{ record.incident_id }}/team_assignments
+    required fields: incident_id
+    risk: Assign a team to an incident through the FireHydrant API.
+  create_incident_type:
+    endpoint: POST /incident_types
+    risk: Create an incident type through the FireHydrant API.
+  create_lifecycle_measurement_definition:
+    endpoint: POST /lifecycles/measurement_definitions
+    risk: Create a measurement definition through the FireHydrant API.
+  create_lifecycle_milestone:
+    endpoint: POST /lifecycles/milestones
+    risk: Create a milestone through the FireHydrant API.
+  create_notification_policy:
+    endpoint: POST /signals/notification_policy_items
+    risk: Create a notification policy through the FireHydrant API.
+  create_nunc_component_group:
+    endpoint: POST /nunc_connections/{{ record.nunc_connection_id }}/component_groups
+    required fields: nunc_connection_id
+    risk: Create a component group for a status page through the FireHydrant API.
+  create_nunc_connection:
+    endpoint: POST /nunc_connections
+    risk: Create a status page through the FireHydrant API.
+  create_nunc_link:
+    endpoint: POST /nunc_connections/{{ record.nunc_connection_id }}/links
+    required fields: nunc_connection_id
+    risk: Add link to a status page through the FireHydrant API.
+  create_nunc_subscription:
+    endpoint: POST /nunc/subscriptions
+    risk: Create a status page subscription through the FireHydrant API.
+  create_on_call_schedule_rotation:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations
+    required fields: team_id, schedule_id
+    risk: Create a new on-call rotation through the FireHydrant API.
+  create_on_call_shift:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts
+    required fields: team_id, schedule_id
+    risk: Create a shift for an on-call schedule through the FireHydrant API.
+  create_post_mortem_reason:
+    endpoint: POST /post_mortems/reports/{{ record.report_id }}/reasons
+    required fields: report_id
+    risk: Create a contributing factor for a retrospective report through the FireHydrant API.
+  create_post_mortem_report:
+    endpoint: POST /post_mortems/reports
+    risk: Create a retrospective report through the FireHydrant API.
+  create_priority:
+    endpoint: POST /priorities
+    risk: Create a priority through the FireHydrant API.
+  create_retrospective_template:
+    endpoint: POST /retrospective_templates
+    risk: Create a retrospective template through the FireHydrant API.
+  create_role:
+    endpoint: POST /roles
+    risk: Create a role through the FireHydrant API.
+  create_runbook:
+    endpoint: POST /runbooks
+    risk: Create a runbook through the FireHydrant API.
+  create_runbook_execution:
+    endpoint: POST /runbooks/executions
+    risk: Create a runbook execution through the FireHydrant API.
+  create_saved_search:
+    endpoint: POST /saved_searches/{{ record.resource_type }}
+    required fields: resource_type
+    risk: Create a saved search through the FireHydrant API.
+  create_scheduled_maintenance:
+    endpoint: POST /scheduled_maintenances
+    risk: Create a scheduled maintenance event through the FireHydrant API.
+  create_service:
+    endpoint: POST /services
+    risk: Create a service through the FireHydrant API.
+  create_service_checklist_response:
+    endpoint: POST /services/{{ record.service_id }}/checklist_response/{{ record.checklist_id }}
+    required fields: service_id, checklist_id
+    risk: Record a response for a checklist item through the FireHydrant API.
+  create_service_dependency:
+    endpoint: POST /service_dependencies
+    risk: Create a service dependency through the FireHydrant API.
+  create_service_links:
+    endpoint: POST /services/service_links
+    risk: Create multiple services linked to external services through the FireHydrant API.
+  create_severity:
+    endpoint: POST /severities
+    risk: Create a severity through the FireHydrant API.
+  create_severity_matrix_condition:
+    endpoint: POST /severity_matrix/conditions
+    risk: Create a severity matrix condition through the FireHydrant API.
+  create_severity_matrix_impact:
+    endpoint: POST /severity_matrix/impacts
+    risk: Create a severity matrix impact through the FireHydrant API.
+  create_signals_alert_grouping_configuration:
+    endpoint: POST /signals/grouping
+    risk: Create an alert grouping configuration. through the FireHydrant API.
+  create_signals_email_target:
+    endpoint: POST /signals/email_targets
+    risk: Create an email target for signals through the FireHydrant API.
+  create_signals_event_source:
+    endpoint: PUT /signals/event_sources
+    risk: Create an event source for Signals through the FireHydrant API.
+  create_signals_heartbeat_endpoint_configuration:
+    endpoint: POST /signals/heartbeat_endpoints
+    risk: Create a heartbeat endpoint configuration through the FireHydrant API.
+  create_signals_page:
+    endpoint: POST /page/signals
+    risk: Page a user, team, on-call schedule, or escalation policy through the FireHydrant API.
+  create_signals_webhook_target:
+    endpoint: POST /signals/webhook_targets
+    risk: Create a webhook target through the FireHydrant API.
+  create_slack_emoji_action:
+    endpoint: POST /integrations/slack/connections/{{ record.connection_id }}/emoji_actions
+    required fields: connection_id
+    risk: Create a new Slack emoji action through the FireHydrant API.
+  create_status_update_template:
+    endpoint: POST /status_update_templates
+    risk: Create a status update template through the FireHydrant API.
+  create_task_list:
+    endpoint: POST /task_lists
+    risk: Create a task list through the FireHydrant API.
+  create_team:
+    endpoint: POST /teams
+    risk: Create a team through the FireHydrant API.
+  create_team_call_route:
+    endpoint: POST /teams/{{ record.team_id }}/call_routes
+    required fields: team_id
+    risk: Create a call route for a team through the FireHydrant API.
+  create_team_escalation_policy:
+    endpoint: POST /teams/{{ record.team_id }}/escalation_policies
+    required fields: team_id
+    risk: Create an escalation policy for a team through the FireHydrant API.
+  create_team_on_call_schedule:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules
+    required fields: team_id
+    risk: Create an on-call schedule for a team through the FireHydrant API.
+  create_team_signal_rule:
+    endpoint: POST /teams/{{ record.team_id }}/signal_rules
+    required fields: team_id
+    risk: Create a Signals rule through the FireHydrant API.
+  create_ticket:
+    endpoint: POST /ticketing/tickets
+    risk: Create a ticket through the FireHydrant API.
+  create_ticketing_custom_definition:
+    endpoint: POST /ticketing/custom_fields/definitions
+    risk: Create a ticketing custom field through the FireHydrant API.
+  create_ticketing_field_map:
+    endpoint: POST /ticketing/projects/{{ record.ticketing_project_id }}/field_maps
+    required fields: ticketing_project_id
+    risk: Create a field mapping for a ticketing project through the FireHydrant API.
+  create_ticketing_priority:
+    endpoint: POST /ticketing/priorities
+    risk: Create a ticketing priority through the FireHydrant API.
+  create_ticketing_project_config:
+    endpoint: POST /ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations
+    required fields: ticketing_project_id
+    risk: Create a ticketing project configuration through the FireHydrant API.
+  create_webhook:
+    endpoint: POST /webhooks
+    risk: Create a webhook through the FireHydrant API.
+  debug_signals_expression:
+    endpoint: POST /signals/debugger
+    risk: Debug Signals expressions through the FireHydrant API.
+  delete_call_route:
+    endpoint: DELETE /signals/call_routes/{{ record.id }}
+    required fields: id
+    risk: Delete a call route; this may remove or archive FireHydrant data.
+  delete_change:
+    endpoint: DELETE /changes/{{ record.change_id }}
+    required fields: change_id
+    risk: Archive a change entry; this may remove or archive FireHydrant data.
+  delete_change_event:
+    endpoint: DELETE /changes/events/{{ record.change_event_id }}
+    required fields: change_event_id
+    risk: Delete a change event; this may remove or archive FireHydrant data.
+  delete_change_identity:
+    endpoint: DELETE /changes/{{ record.change_id }}/identities/{{ record.identity_id }}
+    required fields: identity_id, change_id
+    risk: Delete an identity from a change entry; this may remove or archive FireHydrant data.
+  delete_checklist_template:
+    endpoint: DELETE /checklist_templates/{{ record.id }}
+    required fields: id
+    risk: Archive a checklist template; this may remove or archive FireHydrant data.
+  delete_comment:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}
+    required fields: comment_id, conversation_id
+    risk: Archive a conversation comment; this may remove or archive FireHydrant data.
+  delete_comment_reaction:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}
+    required fields: reaction_id, conversation_id, comment_id
+    risk: Delete a reaction from a conversation comment; this may remove or archive FireHydrant data.
+  delete_custom_field_definition:
+    endpoint: DELETE /custom_fields/definitions/{{ record.field_id }}
+    required fields: field_id
+    risk: Delete a custom field definition; this may remove or archive FireHydrant data.
+  delete_environment:
+    endpoint: DELETE /environments/{{ record.environment_id }}
+    required fields: environment_id
+    risk: Archive an environment; this may remove or archive FireHydrant data.
+  delete_functionality:
+    endpoint: DELETE /functionalities/{{ record.functionality_id }}
+    required fields: functionality_id
+    risk: Archive a functionality; this may remove or archive FireHydrant data.
+  delete_inbound_field_map:
+    endpoint: DELETE /ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps/{{ record.map_id }}
+    required fields: map_id, ticketing_project_id
+    risk: Archive inbound field map for a ticketing project; this may remove or archive FireHydrant data.
+  delete_incident:
+    endpoint: DELETE /incidents/{{ record.incident_id }}
+    required fields: incident_id
+    risk: Archive an incident; this may remove or archive FireHydrant data.
+  delete_incident_alert:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/alerts/{{ record.incident_alert_id }}
+    required fields: incident_alert_id, incident_id
+    risk: Remove an alert from an incident; this may remove or archive FireHydrant data.
+  delete_incident_chat_message:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/generic_chat_messages/{{ record.message_id }}
+    required fields: message_id, incident_id
+    risk: Delete a chat message from an incident; this may remove or archive FireHydrant data.
+  delete_incident_event:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/events/{{ record.event_id }}
+    required fields: incident_id, event_id
+    risk: Delete an incident event; this may remove or archive FireHydrant data.
+  delete_incident_impact:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/impact/{{ record.type }}/{{ record.id }}
+    required fields: incident_id, type, id
+    risk: Remove impacted infrastructure from an incident; this may remove or archive FireHydrant data.
+  delete_incident_link:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/links/{{ record.link_id }}
+    required fields: link_id, incident_id
+    risk: Remove a link from an incident; this may remove or archive FireHydrant data.
+  delete_incident_role:
+    endpoint: DELETE /incident_roles/{{ record.incident_role_id }}
+    required fields: incident_role_id
+    risk: Archive an incident role; this may remove or archive FireHydrant data.
+  delete_incident_role_assignment:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/role_assignments/{{ record.role_assignment_id }}
+    required fields: incident_id, role_assignment_id
+    risk: Unassign a user from an incident; this may remove or archive FireHydrant data.
+  delete_incident_status_page:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/status_pages/{{ record.status_page_id }}
+    required fields: status_page_id, incident_id
+    risk: Remove a status page from an incident; this may remove or archive FireHydrant data.
+  delete_incident_task:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}
+    required fields: task_id, incident_id
+    risk: Delete an incident task; this may remove or archive FireHydrant data.
+  delete_incident_type:
+    endpoint: DELETE /incident_types/{{ record.id }}
+    required fields: id
+    risk: Archive an incident type; this may remove or archive FireHydrant data.
+  delete_lifecycle_measurement_definition:
+    endpoint: DELETE /lifecycles/measurement_definitions/{{ record.measurement_definition_id }}
+    required fields: measurement_definition_id
+    risk: Archive a measurement definition; this may remove or archive FireHydrant data.
+  delete_lifecycle_milestone:
+    endpoint: DELETE /lifecycles/milestones/{{ record.milestone_id }}
+    required fields: milestone_id
+    risk: Delete a milestone; this may remove or archive FireHydrant data.
+  delete_notification_policy:
+    endpoint: DELETE /signals/notification_policy_items/{{ record.id }}
+    required fields: id
+    risk: Delete a notification policy; this may remove or archive FireHydrant data.
+  delete_nunc_component_group:
+    endpoint: DELETE /nunc_connections/{{ record.nunc_connection_id }}/component_groups/{{ record.group_id }}
+    required fields: nunc_connection_id, group_id
+    risk: Delete a status page component group; this may remove or archive FireHydrant data.
+  delete_nunc_connection:
+    endpoint: DELETE /nunc_connections/{{ record.nunc_connection_id }}
+    required fields: nunc_connection_id
+    risk: Delete a status page; this may remove or archive FireHydrant data.
+  delete_nunc_image:
+    endpoint: DELETE /nunc_connections/{{ record.nunc_connection_id }}/images/{{ record.type }}
+    required fields: nunc_connection_id, type
+    risk: Delete an image from a status page; this may remove or archive FireHydrant data.
+  delete_nunc_link:
+    endpoint: DELETE /nunc_connections/{{ record.nunc_connection_id }}/links/{{ record.link_id }}
+    required fields: nunc_connection_id, link_id
+    risk: Delete a status page link; this may remove or archive FireHydrant data.
+  delete_nunc_subscription:
+    endpoint: DELETE /nunc/subscriptions/{{ record.unsubscribe_token }}
+    required fields: unsubscribe_token
+    risk: Unsubscribe from status page notifications; this may remove or archive FireHydrant data.
+  delete_on_call_schedule_rotation:
+    endpoint: DELETE /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}
+    required fields: rotation_id, team_id, schedule_id
+    risk: Delete an on-call schedule's rotation; this may remove or archive FireHydrant data.
+  delete_on_call_shift:
+    endpoint: DELETE /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts/{{ record.id }}
+    required fields: id, team_id, schedule_id
+    risk: Delete an on-call shift from a team schedule; this may remove or archive FireHydrant data.
+  delete_post_mortem_reason:
+    endpoint: DELETE /post_mortems/reports/{{ record.report_id }}/reasons/{{ record.reason_id }}
+    required fields: report_id, reason_id
+    risk: Delete a contributing factor from a retrospective report; this may remove or archive FireHydrant data.
+  delete_priority:
+    endpoint: DELETE /priorities/{{ record.priority_slug }}
+    required fields: priority_slug
+    risk: Delete a priority; this may remove or archive FireHydrant data.
+  delete_retrospective_template:
+    endpoint: DELETE /retrospective_templates/{{ record.retrospective_template_id }}
+    required fields: retrospective_template_id
+    risk: Delete a retrospective template; this may remove or archive FireHydrant data.
+  delete_role:
+    endpoint: DELETE /roles/{{ record.id }}
+    required fields: id
+    risk: Delete a role; this may remove or archive FireHydrant data.
+  delete_runbook:
+    endpoint: DELETE /runbooks/{{ record.runbook_id }}
+    required fields: runbook_id
+    risk: Delete a runbook; this may remove or archive FireHydrant data.
+  delete_saved_search:
+    endpoint: DELETE /saved_searches/{{ record.resource_type }}/{{ record.saved_search_id }}
+    required fields: resource_type, saved_search_id
+    risk: Delete a saved search; this may remove or archive FireHydrant data.
+  delete_scheduled_maintenance:
+    endpoint: DELETE /scheduled_maintenances/{{ record.scheduled_maintenance_id }}
+    required fields: scheduled_maintenance_id
+    risk: Delete a scheduled maintenance event; this may remove or archive FireHydrant data.
+  delete_service:
+    endpoint: DELETE /services/{{ record.service_id }}
+    required fields: service_id
+    risk: Delete a service; this may remove or archive FireHydrant data.
+  delete_service_dependency:
+    endpoint: DELETE /service_dependencies/{{ record.service_dependency_id }}
+    required fields: service_dependency_id
+    risk: Delete a service dependency; this may remove or archive FireHydrant data.
+  delete_service_link:
+    endpoint: DELETE /services/{{ record.service_id }}/service_links/{{ record.remote_id }}
+    required fields: service_id, remote_id
+    risk: Delete a service link; this may remove or archive FireHydrant data.
+  delete_severity:
+    endpoint: DELETE /severities/{{ record.severity_slug }}
+    required fields: severity_slug
+    risk: Delete a severity; this may remove or archive FireHydrant data.
+  delete_severity_matrix_condition:
+    endpoint: DELETE /severity_matrix/conditions/{{ record.condition_id }}
+    required fields: condition_id
+    risk: Delete a severity matrix condition; this may remove or archive FireHydrant data.
+  delete_severity_matrix_impact:
+    endpoint: DELETE /severity_matrix/impacts/{{ record.impact_id }}
+    required fields: impact_id
+    risk: Delete a severity matrix impact; this may remove or archive FireHydrant data.
+  delete_signals_alert_grouping_configuration:
+    endpoint: DELETE /signals/grouping/{{ record.id }}
+    required fields: id
+    risk: Delete an alert grouping configuration.; this may remove or archive FireHydrant data.
+  delete_signals_email_target:
+    endpoint: DELETE /signals/email_targets/{{ record.id }}
+    required fields: id
+    risk: Delete a signal email target; this may remove or archive FireHydrant data.
+  delete_signals_event_source:
+    endpoint: DELETE /signals/event_sources/{{ record.transposer_slug }}
+    required fields: transposer_slug
+    risk: Delete an event source for Signals; this may remove or archive FireHydrant data.
+  delete_signals_heartbeat_endpoint_configuration:
+    endpoint: DELETE /signals/heartbeat_endpoints/{{ record.id }}
+    required fields: id
+    risk: Delete a heartbeat endpoint configuration; this may remove or archive FireHydrant data.
+  delete_signals_webhook_target:
+    endpoint: DELETE /signals/webhook_targets/{{ record.id }}
+    required fields: id
+    risk: Delete a webhook target; this may remove or archive FireHydrant data.
+  delete_slack_emoji_action:
+    endpoint: DELETE /integrations/slack/connections/{{ record.connection_id }}/emoji_actions/{{ record.emoji_action_id }}
+    required fields: connection_id, emoji_action_id
+    risk: Delete a Slack emoji action; this may remove or archive FireHydrant data.
+  delete_status_update_template:
+    endpoint: DELETE /status_update_templates/{{ record.status_update_template_id }}
+    required fields: status_update_template_id
+    risk: Delete a status update template; this may remove or archive FireHydrant data.
+  delete_statuspage_connection:
+    endpoint: DELETE /integrations/statuspage/connections/{{ record.connection_id }}
+    required fields: connection_id
+    risk: Delete a Statuspage connection; this may remove or archive FireHydrant data.
+  delete_support_hours_schedule:
+    endpoint: DELETE /teams/{{ record.team_id }}/support_hours_schedule
+    required fields: team_id
+    risk: Delete a specific support hours schedule; this may remove or archive FireHydrant data.
+  delete_task_list:
+    endpoint: DELETE /task_lists/{{ record.task_list_id }}
+    required fields: task_list_id
+    risk: Delete a task list; this may remove or archive FireHydrant data.
+  delete_team:
+    endpoint: DELETE /teams/{{ record.team_id }}
+    required fields: team_id
+    risk: Archive a team; this may remove or archive FireHydrant data.
+  delete_team_escalation_policy:
+    endpoint: DELETE /teams/{{ record.team_id }}/escalation_policies/{{ record.id }}
+    required fields: team_id, id
+    risk: Delete an escalation policy for a team; this may remove or archive FireHydrant data.
+  delete_team_on_call_schedule:
+    endpoint: DELETE /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}
+    required fields: team_id, schedule_id
+    risk: Delete an on-call schedule for a team; this may remove or archive FireHydrant data.
+  delete_team_signal_rule:
+    endpoint: DELETE /teams/{{ record.team_id }}/signal_rules/{{ record.id }}
+    required fields: team_id, id
+    risk: Delete a Signals rule; this may remove or archive FireHydrant data.
+  delete_ticket:
+    endpoint: DELETE /ticketing/tickets/{{ record.ticket_id }}
+    required fields: ticket_id
+    risk: Archive a ticket; this may remove or archive FireHydrant data.
+  delete_ticketing_custom_definition:
+    endpoint: DELETE /ticketing/custom_fields/definitions/{{ record.field_id }}
+    required fields: field_id
+    risk: Delete a ticketing custom field; this may remove or archive FireHydrant data.
+  delete_ticketing_field_map:
+    endpoint: DELETE /ticketing/projects/{{ record.ticketing_project_id }}/field_maps/{{ record.map_id }}
+    required fields: map_id, ticketing_project_id
+    risk: Archive a field map for a ticketing project; this may remove or archive FireHydrant data.
+  delete_ticketing_priority:
+    endpoint: DELETE /ticketing/priorities/{{ record.id }}
+    required fields: id
+    risk: Delete a ticketing priority; this may remove or archive FireHydrant data.
+  delete_ticketing_project_config:
+    endpoint: DELETE /ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations/{{ record.config_id }}
+    required fields: ticketing_project_id, config_id
+    risk: Archive a ticketing project configuration; this may remove or archive FireHydrant data.
+  delete_transcript_entry:
+    endpoint: DELETE /incidents/{{ record.incident_id }}/transcript/{{ record.transcript_id }}
+    required fields: transcript_id, incident_id
+    risk: Delete a transcript from an incident; this may remove or archive FireHydrant data.
+  delete_webhook:
+    endpoint: DELETE /webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: Delete a webhook; this may remove or archive FireHydrant data.
+  generate_audience_summary:
+    endpoint: POST /audiences/{{ record.audience_id }}/summaries/{{ record.incident_id }}
+    required fields: audience_id, incident_id
+    risk: Generate summary (async) through the FireHydrant API.
+  ingest_catalog_data:
+    endpoint: POST /catalogs/{{ record.catalog_id }}/ingest
+    required fields: catalog_id
+    risk: Ingest service catalog data through the FireHydrant API.
+  override_on_call_schedule_rotation_shifts:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}/overrides
+    required fields: rotation_id, team_id, schedule_id
+    risk: Override one or more shifts in an on-call rotation through the FireHydrant API.
+  preview_on_call_schedule_rotation:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/preview
+    required fields: team_id, schedule_id
+    risk: Preview an on-call rotation through the FireHydrant API.
+  preview_team_on_call_schedule:
+    endpoint: POST /teams/{{ record.team_id }}/on_call_schedules/preview
+    required fields: team_id
+    risk: Preview a new on-call schedule for a team through the FireHydrant API.
+  publish_nunc_connection:
+    endpoint: POST /nunc_connections/{{ record.nunc_connection_id }}/publish
+    required fields: nunc_connection_id
+    risk: Publish a status page through the FireHydrant API.
+  publish_post_mortem_report:
+    endpoint: POST /post_mortems/reports/{{ record.report_id }}/publish
+    required fields: report_id
+    risk: Publish a retrospective report through the FireHydrant API.
+  refresh_connection:
+    endpoint: PATCH /integrations/connections/{{ record.slug }}/{{ record.connection_id }}/refresh
+    required fields: slug, connection_id
+    risk: Refresh an integration connection's incident role schedules through the FireHydrant API.
+  reorder_post_mortem_reasons:
+    endpoint: PUT /post_mortems/reports/{{ record.report_id }}/reasons/order
+    required fields: report_id
+    risk: Reorder a contributing factor for a retrospective report through the FireHydrant API.
+  resolve_incident:
+    endpoint: PUT /incidents/{{ record.incident_id }}/resolve
+    required fields: incident_id
+    risk: Resolve an incident through the FireHydrant API.
+  restore_audience:
+    endpoint: PATCH /audiences/{{ record.audience_id }}/restore
+    required fields: audience_id
+    risk: Restore audience through the FireHydrant API.
+  set_member_default_audience:
+    endpoint: PUT /audiences/member/{{ record.member_id }}/default
+    required fields: member_id
+    risk: Set default audience through the FireHydrant API.
+  share_incident_retrospectives:
+    endpoint: POST /incidents/{{ record.incident_id }}/retrospectives/share
+    required fields: incident_id
+    risk: Share an incident's retrospective through the FireHydrant API.
+  test_slack_channel:
+    endpoint: PUT /integrations/slack/channels/{{ record.id }}/test
+    required fields: id
+    risk: Test a Slack channel through the FireHydrant API.
+  unarchive_incident:
+    endpoint: POST /incidents/{{ record.incident_id }}/unarchive
+    required fields: incident_id
+    risk: Unarchive an incident through the FireHydrant API.
+  unpublish_nunc_connection:
+    endpoint: POST /nunc_connections/{{ record.nunc_connection_id }}/unpublish
+    required fields: nunc_connection_id
+    risk: Unpublish a status page through the FireHydrant API.
+  update_ai_preferences:
+    endpoint: PATCH /ai/preferences
+    risk: Update AI preferences through the FireHydrant API.
+  update_audience:
+    endpoint: PATCH /audiences/{{ record.audience_id }}
+    required fields: audience_id
+    risk: Update audience through the FireHydrant API.
+  update_authed_provider:
+    endpoint: PATCH /integrations/authed_providers/{{ record.integration_slug }}/{{ record.connection_id }}/{{ record.authed_provider_id }}
+    required fields: integration_slug, connection_id, authed_provider_id
+    risk: Get an authed provider through the FireHydrant API.
+  update_aws_cloudtrail_batch:
+    endpoint: PATCH /integrations/aws/cloudtrail_batches/{{ record.id }}
+    required fields: id
+    risk: Update a CloudTrail batch through the FireHydrant API.
+  update_aws_connection:
+    endpoint: PATCH /integrations/aws/connections/{{ record.id }}
+    required fields: id
+    risk: Update an AWS connection through the FireHydrant API.
+  update_call_route:
+    endpoint: PATCH /signals/call_routes/{{ record.id }}
+    required fields: id
+    risk: Update a call route through the FireHydrant API.
+  update_change:
+    endpoint: PATCH /changes/{{ record.change_id }}
+    required fields: change_id
+    risk: Update a change entry through the FireHydrant API.
+  update_change_event:
+    endpoint: PATCH /changes/events/{{ record.change_event_id }}
+    required fields: change_event_id
+    risk: Update a change event through the FireHydrant API.
+  update_change_identity:
+    endpoint: PATCH /changes/{{ record.change_id }}/identities/{{ record.identity_id }}
+    required fields: identity_id, change_id
+    risk: Update an identity for a change entry through the FireHydrant API.
+  update_checklist_template:
+    endpoint: PATCH /checklist_templates/{{ record.id }}
+    required fields: id
+    risk: Update a checklist template through the FireHydrant API.
+  update_comment:
+    endpoint: PATCH /conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}
+    required fields: comment_id, conversation_id
+    risk: Update a conversation comment through the FireHydrant API.
+  update_connection:
+    endpoint: PATCH /integrations/connections/{{ record.slug }}/{{ record.connection_id }}
+    required fields: slug, connection_id
+    risk: Update an integration connection through the FireHydrant API.
+  update_custom_field_definition:
+    endpoint: PATCH /custom_fields/definitions/{{ record.field_id }}
+    required fields: field_id
+    risk: Update a custom field definition through the FireHydrant API.
+  update_environment:
+    endpoint: PATCH /environments/{{ record.environment_id }}
+    required fields: environment_id
+    risk: Update an environment through the FireHydrant API.
+  update_field_map:
+    endpoint: PATCH /integrations/field_maps/{{ record.field_map_id }}
+    required fields: field_map_id
+    risk: Update field mapping through the FireHydrant API.
+  update_functionality:
+    endpoint: PATCH /functionalities/{{ record.functionality_id }}
+    required fields: functionality_id
+    risk: Update a functionality through the FireHydrant API.
+  update_inbound_field_map:
+    endpoint: PUT /ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps/{{ record.map_id }}
+    required fields: map_id, ticketing_project_id
+    risk: Update inbound field map for a ticketing project through the FireHydrant API.
+  update_incident:
+    endpoint: PATCH /incidents/{{ record.incident_id }}
+    required fields: incident_id
+    risk: Update an incident through the FireHydrant API.
+  update_incident_alert_primary:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/alerts/{{ record.incident_alert_id }}/primary
+    required fields: incident_alert_id, incident_id
+    risk: Set an alert as primary for an incident through the FireHydrant API.
+  update_incident_change_event:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/related_change_events/{{ record.related_change_event_id }}
+    required fields: related_change_event_id, incident_id
+    risk: Update a change attached to an incident through the FireHydrant API.
+  update_incident_chat_message:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/generic_chat_messages/{{ record.message_id }}
+    required fields: message_id, incident_id
+    risk: Update a chat message on an incident through the FireHydrant API.
+  update_incident_event:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/events/{{ record.event_id }}
+    required fields: incident_id, event_id
+    risk: Update an incident event through the FireHydrant API.
+  update_incident_impact_patch:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/impact
+    required fields: incident_id
+    risk: Update impacts for an incident through the FireHydrant API.
+  update_incident_impact_put:
+    endpoint: PUT /incidents/{{ record.incident_id }}/impact
+    required fields: incident_id
+    risk: Update impacts for an incident through the FireHydrant API.
+  update_incident_link:
+    endpoint: PUT /incidents/{{ record.incident_id }}/links/{{ record.link_id }}
+    required fields: link_id, incident_id
+    risk: Update the external incident link through the FireHydrant API.
+  update_incident_note:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/notes/{{ record.note_id }}
+    required fields: note_id, incident_id
+    risk: Update a note through the FireHydrant API.
+  update_incident_retrospective:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}
+    required fields: retrospective_id, incident_id
+    risk: Update a retrospective on the incident through the FireHydrant API.
+  update_incident_retrospective_field:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields/{{ record.field_id }}
+    required fields: retrospective_id, field_id, incident_id
+    risk: Update the value on a retrospective field through the FireHydrant API.
+  update_incident_role:
+    endpoint: PATCH /incident_roles/{{ record.incident_role_id }}
+    required fields: incident_role_id
+    risk: Update an incident role through the FireHydrant API.
+  update_incident_task:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}
+    required fields: task_id, incident_id
+    risk: Update an incident task through the FireHydrant API.
+  update_incident_type:
+    endpoint: PATCH /incident_types/{{ record.id }}
+    required fields: id
+    risk: Update an incident type through the FireHydrant API.
+  update_lifecycle_measurement_definition:
+    endpoint: PATCH /lifecycles/measurement_definitions/{{ record.measurement_definition_id }}
+    required fields: measurement_definition_id
+    risk: Update a measurement definition through the FireHydrant API.
+  update_lifecycle_milestone:
+    endpoint: PATCH /lifecycles/milestones/{{ record.milestone_id }}
+    required fields: milestone_id
+    risk: Update a milestone through the FireHydrant API.
+  update_notification_policy:
+    endpoint: PATCH /signals/notification_policy_items/{{ record.id }}
+    required fields: id
+    risk: Update a notification policy through the FireHydrant API.
+  update_nunc_component_group:
+    endpoint: PATCH /nunc_connections/{{ record.nunc_connection_id }}/component_groups/{{ record.group_id }}
+    required fields: nunc_connection_id, group_id
+    risk: Update a status page component group through the FireHydrant API.
+  update_nunc_connection:
+    endpoint: PUT /nunc_connections/{{ record.nunc_connection_id }}
+    required fields: nunc_connection_id
+    risk: Update a status page through the FireHydrant API.
+  update_nunc_link:
+    endpoint: PATCH /nunc_connections/{{ record.nunc_connection_id }}/links/{{ record.link_id }}
+    required fields: nunc_connection_id, link_id
+    risk: Update a status page link through the FireHydrant API.
+  update_on_call_schedule_rotation:
+    endpoint: PATCH /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}
+    required fields: rotation_id, team_id, schedule_id
+    risk: Update an on-call schedule's rotation through the FireHydrant API.
+  update_on_call_shift:
+    endpoint: PATCH /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts/{{ record.id }}
+    required fields: id, team_id, schedule_id
+    risk: Update an on-call shift for a team schedule through the FireHydrant API.
+  update_post_mortem_field:
+    endpoint: PATCH /post_mortems/reports/{{ record.report_id }}/fields/{{ record.field_id }}
+    required fields: field_id, report_id
+    risk: Update a retrospective field through the FireHydrant API.
+  update_post_mortem_questions:
+    endpoint: PUT /post_mortems/questions
+    risk: Update retrospective questions through the FireHydrant API.
+  update_post_mortem_reason:
+    endpoint: PATCH /post_mortems/reports/{{ record.report_id }}/reasons/{{ record.reason_id }}
+    required fields: report_id, reason_id
+    risk: Update a contributing factor in a retrospective report through the FireHydrant API.
+  update_post_mortem_report:
+    endpoint: PATCH /post_mortems/reports/{{ record.report_id }}
+    required fields: report_id
+    risk: Update a retrospective report through the FireHydrant API.
+  update_priority:
+    endpoint: PATCH /priorities/{{ record.priority_slug }}
+    required fields: priority_slug
+    risk: Update a priority through the FireHydrant API.
+  update_retrospective_template:
+    endpoint: PATCH /retrospective_templates/{{ record.retrospective_template_id }}
+    required fields: retrospective_template_id
+    risk: Update a retrospective template through the FireHydrant API.
+  update_role:
+    endpoint: PATCH /roles/{{ record.id }}
+    required fields: id
+    risk: Update a role through the FireHydrant API.
+  update_runbook:
+    endpoint: PUT /runbooks/{{ record.runbook_id }}
+    required fields: runbook_id
+    risk: Update a runbook through the FireHydrant API.
+  update_runbook_execution_step:
+    endpoint: PUT /runbooks/executions/{{ record.execution_id }}/steps/{{ record.step_id }}
+    required fields: execution_id, step_id
+    risk: Update a runbook step execution through the FireHydrant API.
+  update_runbook_execution_step_script:
+    endpoint: PUT /runbooks/executions/{{ record.execution_id }}/steps/{{ record.step_id }}/script/{{ record.state }}
+    required fields: execution_id, step_id, state
+    risk: Update a script step's execution status through the FireHydrant API.
+  update_saved_search:
+    endpoint: PATCH /saved_searches/{{ record.resource_type }}/{{ record.saved_search_id }}
+    required fields: resource_type, saved_search_id
+    risk: Update a saved search through the FireHydrant API.
+  update_scheduled_maintenance:
+    endpoint: PATCH /scheduled_maintenances/{{ record.scheduled_maintenance_id }}
+    required fields: scheduled_maintenance_id
+    risk: Update a scheduled maintenance event through the FireHydrant API.
+  update_service:
+    endpoint: PATCH /services/{{ record.service_id }}
+    required fields: service_id
+    risk: Update a service through the FireHydrant API.
+  update_service_dependency:
+    endpoint: PATCH /service_dependencies/{{ record.service_dependency_id }}
+    required fields: service_dependency_id
+    risk: Update a service dependency through the FireHydrant API.
+  update_severity:
+    endpoint: PATCH /severities/{{ record.severity_slug }}
+    required fields: severity_slug
+    risk: Update a severity through the FireHydrant API.
+  update_severity_matrix:
+    endpoint: PATCH /severity_matrix
+    risk: Update severity matrix through the FireHydrant API.
+  update_severity_matrix_condition:
+    endpoint: PATCH /severity_matrix/conditions/{{ record.condition_id }}
+    required fields: condition_id
+    risk: Update a severity matrix condition through the FireHydrant API.
+  update_severity_matrix_impact:
+    endpoint: PATCH /severity_matrix/impacts/{{ record.impact_id }}
+    required fields: impact_id
+    risk: Update a severity matrix impact through the FireHydrant API.
+  update_signals_alert:
+    endpoint: PATCH /signals/alerts/{{ record.id }}
+    required fields: id
+    risk: Update a Signal alert through the FireHydrant API.
+  update_signals_alert_grouping_configuration:
+    endpoint: PATCH /signals/grouping/{{ record.id }}
+    required fields: id
+    risk: Update an alert grouping configuration. through the FireHydrant API.
+  update_signals_email_target:
+    endpoint: PATCH /signals/email_targets/{{ record.id }}
+    required fields: id
+    risk: Update an email target through the FireHydrant API.
+  update_signals_heartbeat_endpoint_configuration:
+    endpoint: PATCH /signals/heartbeat_endpoints/{{ record.id }}
+    required fields: id
+    risk: Update a heartbeat endpoint configuration through the FireHydrant API.
+  update_signals_webhook_target:
+    endpoint: PATCH /signals/webhook_targets/{{ record.id }}
+    required fields: id
+    risk: Update a webhook target through the FireHydrant API.
+  update_slack_emoji_action:
+    endpoint: PATCH /integrations/slack/connections/{{ record.connection_id }}/emoji_actions/{{ record.emoji_action_id }}
+    required fields: connection_id, emoji_action_id
+    risk: Update a Slack emoji action through the FireHydrant API.
+  update_status_update_template:
+    endpoint: PATCH /status_update_templates/{{ record.status_update_template_id }}
+    required fields: status_update_template_id
+    risk: Update a status update template through the FireHydrant API.
+  update_statuspage_connection:
+    endpoint: PATCH /integrations/statuspage/connections/{{ record.connection_id }}
+    required fields: connection_id
+    risk: Update a Statuspage connection through the FireHydrant API.
+  update_support_hours_schedule:
+    endpoint: PATCH /teams/{{ record.team_id }}/support_hours_schedule
+    required fields: team_id
+    risk: Update support hours schedule through the FireHydrant API.
+  update_task_list:
+    endpoint: PATCH /task_lists/{{ record.task_list_id }}
+    required fields: task_list_id
+    risk: Update a task list through the FireHydrant API.
+  update_team:
+    endpoint: PATCH /teams/{{ record.team_id }}
+    required fields: team_id
+    risk: Update a team through the FireHydrant API.
+  update_team_escalation_policy:
+    endpoint: PATCH /teams/{{ record.team_id }}/escalation_policies/{{ record.id }}
+    required fields: team_id, id
+    risk: Update an escalation policy for a team through the FireHydrant API.
+  update_team_on_call_schedule:
+    endpoint: PATCH /teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}
+    required fields: team_id, schedule_id
+    risk: Update an on-call schedule for a team through the FireHydrant API.
+  update_team_signal_rule:
+    endpoint: PATCH /teams/{{ record.team_id }}/signal_rules/{{ record.id }}
+    required fields: team_id, id
+    risk: Update a Signals rule through the FireHydrant API.
+  update_ticket:
+    endpoint: PATCH /ticketing/tickets/{{ record.ticket_id }}
+    required fields: ticket_id
+    risk: Update a ticket through the FireHydrant API.
+  update_ticketing_custom_definition:
+    endpoint: PATCH /ticketing/custom_fields/definitions/{{ record.field_id }}
+    required fields: field_id
+    risk: Update a ticketing custom field through the FireHydrant API.
+  update_ticketing_field_map:
+    endpoint: PATCH /ticketing/projects/{{ record.ticketing_project_id }}/field_maps/{{ record.map_id }}
+    required fields: map_id, ticketing_project_id
+    risk: Update a field map for a ticketing project through the FireHydrant API.
+  update_ticketing_priority:
+    endpoint: PATCH /ticketing/priorities/{{ record.id }}
+    required fields: id
+    risk: Update a ticketing priority through the FireHydrant API.
+  update_ticketing_project_config:
+    endpoint: PATCH /ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations/{{ record.config_id }}
+    required fields: ticketing_project_id, config_id
+    risk: Update configuration for a ticketing project through the FireHydrant API.
+  update_transcript_attribution:
+    endpoint: PUT /incidents/{{ record.incident_id }}/transcript/attribution
+    required fields: incident_id
+    risk: Update the attribution of a transcript through the FireHydrant API.
+  update_vote:
+    endpoint: PATCH /incidents/{{ record.incident_id }}/events/{{ record.event_id }}/votes
+    required fields: incident_id, event_id
+    risk: Update votes through the FireHydrant API.
+  update_webhook:
+    endpoint: PATCH /webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: Update a webhook through the FireHydrant API.
+  validate_incident_tags:
+    endpoint: POST /incident_tags/validate
+    risk: Validate incident tags through the FireHydrant API.
+  vote_ai_incident_summary:
+    endpoint: PUT /ai/summarize_incident/{{ record.incident_id }}/{{ record.generated_summary_id }}/vote
+    required fields: incident_id, generated_summary_id
+    risk: Vote on an AI-generated incident summary through the FireHydrant API.
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external FireHydrant API reads across incidents, catalog, alerts, teams, runbooks, metrics, integrations, and configuration resources
+  write risk: creates, updates, archives, deletes, triggers, and otherwise mutates FireHydrant resources through documented JSON/no-body REST endpoints
+  approval: reverse ETL writes require plan preview and approval token before execution
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +1264,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect firehydrant before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

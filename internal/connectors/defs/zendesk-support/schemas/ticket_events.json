@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "description": "Unique identifier for the ticket event",
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ticket_id": {
+      "description": "The ID of the ticket associated with this event",
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "timestamp": {
+      "description": "Unix timestamp of when the event was created",
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "created_at": {
+      "description": "ISO 8601 datetime when the event was created",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "updater_id": {
+      "description": "The ID of the user or system that triggered the event",
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "via": {
+      "description": "How the event was initiated (e.g., web, API, rule)",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "via_reference_id": {
+      "description": "Reference ID for the via channel",
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "system": {
+      "description": "System information about the event",
+      "type": [
+        "null",
+        "object"
+      ],
+      "additionalProperties": true
+    },
+    "child_events": {
+      "description": "List of child events associated with this ticket event",
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "event_type": {
+      "description": "The type of the ticket event",
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

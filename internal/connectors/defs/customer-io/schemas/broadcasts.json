@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "broadcasts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "created": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated": { "type": "integer", "description": "Unix seconds." }
+  }
+}

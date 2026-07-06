@@ -1,0 +1,24 @@
+{
+  "record": {
+    "feature_request_id": "synthetic-conformance-value",
+    "account_ids": [
+
+    ],
+    "visible": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feature-requests/synthetic-conformance-value/set-portal-visibility",
+    "body": {
+      "account_ids": [
+
+      ],
+      "visible": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

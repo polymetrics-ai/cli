@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/employees/updatefields"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "profileFields": [
+          {
+            "id": "employee_update_fields_fixture_1",
+            "fieldName": "Fixture employee update fields 1",
+            "required": false,
+            "fieldType": 3,
+            "isSystemDefined": true,
+            "fieldOptions": [],
+            "countryCode": null
+          },
+          {
+            "id": "employee_update_fields_fixture_2",
+            "fieldName": "Fixture employee update fields 2",
+            "required": false,
+            "fieldType": 3,
+            "isSystemDefined": true,
+            "fieldOptions": [],
+            "countryCode": null
+          }
+        ],
+        "jobFields": [
+          {
+            "id": "employee_update_fields_fixture_1",
+            "fieldName": "Fixture employee update fields 1",
+            "required": false,
+            "fieldType": 3,
+            "isSystemDefined": true,
+            "fieldOptions": [],
+            "countryCode": null
+          },
+          {
+            "id": "employee_update_fields_fixture_2",
+            "fieldName": "Fixture employee update fields 2",
+            "required": false,
+            "fieldType": 3,
+            "isSystemDefined": true,
+            "fieldOptions": [],
+            "countryCode": null
+          }
+        ]
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

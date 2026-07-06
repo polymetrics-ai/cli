@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ChargeDesk Connection Specification",
+  "type": "object",
+  "required": ["password"],
+  "properties": {
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ChargeDesk secret API key, used as the HTTP Basic auth username (blank password) unless username is also set. Never logged."
+    },
+    "username": {
+      "type": "string",
+      "description": "Optional explicit HTTP Basic auth username override; when set, password is sent as its Basic auth password instead of a blank password."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.chargedesk.com/v1",
+      "description": "ChargeDesk API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

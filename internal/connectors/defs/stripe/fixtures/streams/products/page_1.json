@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "prod_fixture_1",
+          "object": "product",
+          "created": 1767225601,
+          "updated": 1767225601,
+          "name": "Fixture Widget",
+          "description": "conformance fixture product",
+          "active": true,
+          "type": "service",
+          "livemode": false
+        }
+      ]
+    }
+  }
+}

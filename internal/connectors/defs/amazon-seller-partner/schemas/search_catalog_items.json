@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search_catalog_items",
+  "type": "object",
+  "properties": {
+    "asin": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object"
+    },
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "productTypes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "salesRanks": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "summaries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "variations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "vendorDetails": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

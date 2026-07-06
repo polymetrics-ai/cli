@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/ng/api/servicesV2" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "SUCCESS",
+      "data": {
+        "totalPages": 1,
+        "totalItems": 1,
+        "pageItemCount": 1,
+        "pageSize": 50,
+        "pageIndex": 0,
+        "empty": false,
+        "content": [
+          { "service": { "identifier": "svc_fixture_1", "orgIdentifier": "org_fixture_1", "projectIdentifier": "proj_fixture_1", "accountIdentifier": "acct_fixture", "name": "Service One", "description": "fixture service", "deleted": false } }
+        ]
+      }
+    }
+  }
+}

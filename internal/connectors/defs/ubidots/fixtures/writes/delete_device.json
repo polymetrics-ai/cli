@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "dev_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v2.0/devices/dev_fixture_1/"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/overtimecarry" },
+  "response": {
+    "status": 200,
+    "body": {
+      "overtimecarry": [
+        { "users_id": 1, "year": 2026, "hours": 5.5, "note": "conformance fixture overtime carry" }
+      ]
+    }
+  }
+}

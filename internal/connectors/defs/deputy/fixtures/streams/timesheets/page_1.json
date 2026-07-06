@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/my/timesheets"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "Id": 1,
+        "Employee": 1,
+        "OperationalUnit": 1,
+        "Date": "2026-01-01",
+        "StartTime": 1767225600,
+        "EndTime": 1767254400,
+        "TotalTime": 8.0,
+        "IsInProgress": false,
+        "Created": "2026-01-01T00:00:00",
+        "Modified": "2026-01-01T08:00:00"
+      },
+      {
+        "Id": 2,
+        "Employee": 2,
+        "OperationalUnit": 1,
+        "Date": "2026-01-02",
+        "StartTime": 1767312000,
+        "EndTime": null,
+        "TotalTime": 3.5,
+        "IsInProgress": true,
+        "Created": "2026-01-02T00:00:00",
+        "Modified": "2026-01-02T03:30:00"
+      }
+    ]
+  }
+}

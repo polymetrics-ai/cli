@@ -1,0 +1,42 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "" },
+    "error_map": [
+      { "status": 401, "hint": "serpstat api_key is missing or invalid; re-run pm credentials add serpstat" },
+      { "status": 403, "hint": "serpstat account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "serpstat API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "domain_keywords",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "result.data" },
+      "schema": "schemas/domain_keywords.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
+    },
+    {
+      "name": "domain_competitors",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "result.data" },
+      "schema": "schemas/domain_competitors.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
+    },
+    {
+      "name": "domain_urls",
+      "method": "POST",
+      "path": "",
+      "records": { "path": "result.data" },
+      "schema": "schemas/domain_urls.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/hooks/serpstat/hooks_test.go -- Pass B addition with no legacy internal/connectors/serpstat equivalent, so no paritytest coverage exists for this stream specifically (only domain_keywords/domain_competitors have a legacy parity baseline)" }
+    }
+  ]
+}

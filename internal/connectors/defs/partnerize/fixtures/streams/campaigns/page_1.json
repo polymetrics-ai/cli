@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "campaign_fixture_1",
+          "name": "Fixture Campaign 1",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "total_count": 1 }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "visits",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "visit_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string" },
+    "visit_length": { "type": ["integer", "null"] },
+    "pageviews": { "type": ["integer", "null"] },
+    "source": { "type": ["string", "null"] },
+    "referring_url": { "type": ["string", "null"] },
+    "hostname": { "type": ["string", "null"] },
+    "visit_date": { "type": ["string", "null"] },
+    "started_at": { "type": ["string", "null"] },
+    "ended_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "user_id": { "type": ["string", "null"], "description": "Mapped from the raw API's userId field." },
+    "workspace_id": { "type": ["string", "null"], "description": "Mapped from the raw API's workspaceId field." },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stages": [
+        {
+          "slug": "applied",
+          "name": "Applied"
+        }
+      ]
+    }
+  }
+}

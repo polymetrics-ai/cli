@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "expenses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "purchased_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "memo": { "type": ["string", "null"] },
+    "location_id": { "type": ["string", "null"] },
+    "department_id": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "merchant_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "purchased_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "original_amount": { "type": ["object", "null"] }
+  }
+}

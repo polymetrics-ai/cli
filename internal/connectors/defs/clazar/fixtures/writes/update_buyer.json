@@ -1,0 +1,8 @@
+{
+  "record": { "id": "buyer_fixture_1", "custom_properties": { "tier": "gold" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/buyers/buyer_fixture_1/",
+    "body": { "custom_properties": { "tier": "gold" } }
+  }
+}

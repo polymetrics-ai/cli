@@ -1,0 +1,20 @@
+{
+  "record": {
+    "timeTrackingId": "fixture_id",
+    "hoursWorked": 12.34,
+    "holidayId": 1001
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/timetracking/adjust",
+    "body": {
+      "timeTrackingId": "fixture_id",
+      "hoursWorked": 12.34,
+      "holidayId": 1001
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

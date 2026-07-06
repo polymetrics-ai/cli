@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/products/mine" },
+  "response": {
+    "status": 200,
+    "body": { "111": { "id": 111, "name": "Fixture App" } }
+  }
+}

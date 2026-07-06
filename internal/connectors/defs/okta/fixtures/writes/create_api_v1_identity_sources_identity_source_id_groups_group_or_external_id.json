@@ -1,0 +1,26 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "group_or_external_id": "synthetic-conformance-value",
+    "externalId": "external_id_fixture",
+    "profile": {
+      "description": "description_fixture",
+      "displayName": "display_name_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/groups/synthetic-conformance-value",
+    "body": {
+      "externalId": "external_id_fixture",
+      "profile": {
+        "description": "description_fixture",
+        "displayName": "display_name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

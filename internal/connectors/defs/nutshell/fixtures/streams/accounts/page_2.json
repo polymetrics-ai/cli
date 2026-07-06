@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": 501,
+          "entityType": "Account",
+          "name": "Fixture Account 501",
+          "industryId": 1,
+          "accountTypeId": 1,
+          "url": "https://example.com",
+          "isHotLead": false,
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:21+0000"
+        }
+      ]
+    }
+  }
+}

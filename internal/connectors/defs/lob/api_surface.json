@@ -1,0 +1,107 @@
+{
+  "api": "Lob API v1 (https://api.lob.com/v1)",
+  "docs": "https://docs.lob.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Lob surface (creating/sending mailpieces, templates, campaigns, webhooks, bank account verification writes, US Autocompletion, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/addresses",
+      "covered_by": {
+        "stream": "addresses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/postcards",
+      "covered_by": {
+        "stream": "postcards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/letters",
+      "covered_by": {
+        "stream": "letters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/checks",
+      "covered_by": {
+        "stream": "checks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/bank_accounts",
+      "covered_by": {
+        "stream": "bank_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/addresses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/postcards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/letters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/checks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/templates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/bank_accounts/{id}/verify",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/us_verifications",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "address verification utility call, not a syncable object stream"
+      }
+    }
+  ]
+}

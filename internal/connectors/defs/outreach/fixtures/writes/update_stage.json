@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "stage",
+      "attributes": {
+        "name": "Fixture Update Stage"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/stages/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "stage",
+        "attributes": {
+          "name": "Fixture Update Stage"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

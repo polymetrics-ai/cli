@@ -1,0 +1,24 @@
+{
+  "name": "nocrm",
+  "display_name": "noCRM",
+  "description": "Reads noCRM.io CRM objects and exposes declarative write actions for supported noCRM API v2 mutations.",
+  "integration_type": "api",
+  "docs_url": "https://www.nocrm.io/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external noCRM API read of sales lead and pipeline data",
+    "write": "external noCRM API mutations can create, update, assign, email, disable, or delete live CRM/admin records",
+    "approval": "write actions require explicit approval; reads require none"
+  }
+}

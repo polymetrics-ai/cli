@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/segments", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "seg_fixture_1",
+          "type": "segment",
+          "attributes": { "name": "Fixture Segment 1", "is_active": true, "is_processing": false, "created": "2026-01-01T00:00:00Z", "updated": "2026-01-01T00:00:00Z" }
+        },
+        {
+          "id": "seg_fixture_2",
+          "type": "segment",
+          "attributes": { "name": "Fixture Segment 2", "is_active": false, "is_processing": true, "created": "2026-01-02T00:00:00Z", "updated": "2026-01-02T00:00:00Z" }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

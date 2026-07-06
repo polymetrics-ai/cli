@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture User",
+    "role": "admin",
+    "email": "fixture-user@example.com"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/account/users",
+    "body": {
+      "id": 1,
+      "name": "Fixture User",
+      "role": "admin",
+      "email": "fixture-user@example.com"
+    }
+  }
+}

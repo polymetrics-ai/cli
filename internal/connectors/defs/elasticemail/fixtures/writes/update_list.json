@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ListName": "Fixture List",
+    "NewListName": "Renamed Fixture List",
+    "AllowUnsubscribe": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/Fixture List",
+    "body": {
+      "NewListName": "Renamed Fixture List",
+      "AllowUnsubscribe": false
+    }
+  }
+}

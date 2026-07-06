@@ -1,0 +1,80 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/{{ config.account_id }}/users" },
+    "error_map": [
+      { "status": 401, "hint": "timely bearer_token is missing or invalid; re-run pm credentials add timely" },
+      { "status": 403, "hint": "timely account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "timely rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/{{ config.account_id }}/users",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "projects",
+      "path": "/{{ config.account_id }}/projects",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "clients",
+      "path": "/{{ config.account_id }}/clients",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "events",
+      "path": "/{{ config.account_id }}/events",
+      "query": {
+        "since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "hours",
+      "path": "/{{ config.account_id }}/hours",
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "project_id": "{{ record.project.id }}",
+        "user_id": "{{ record.user.id }}"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/hours.json"
+    },
+    {
+      "name": "labels",
+      "path": "/{{ config.account_id }}/labels",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "teams",
+      "path": "/{{ config.account_id }}/teams",
+      "records": { "path": "." },
+      "projection": "passthrough",
+      "schema": "schemas/teams.json"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "description": "fixture",
+    "dealStages": [
+      {
+        "id": "id_fixture",
+        "name": "fixture",
+        "displayOrder": 1,
+        "stage": "fixture",
+        "weight": 1.23,
+        "trigger": "fixture"
+      }
+    ],
+    "defaultAcquisitionChannel": "fixture",
+    "defaultAcquisitionSource": "fixture",
+    "defaultDealOwnerId": "default_deal_owner_id_fixture",
+    "isDefaultDealFlow": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/deal_flows/id_fixture",
+    "body": {
+      "name": "fixture",
+      "description": "fixture",
+      "dealStages": [
+        {
+          "id": "id_fixture",
+          "name": "fixture",
+          "displayOrder": 1,
+          "stage": "fixture",
+          "weight": 1.23,
+          "trigger": "fixture"
+        }
+      ],
+      "defaultAcquisitionChannel": "fixture",
+      "defaultAcquisitionSource": "fixture",
+      "defaultDealOwnerId": "default_deal_owner_id_fixture",
+      "isDefaultDealFlow": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

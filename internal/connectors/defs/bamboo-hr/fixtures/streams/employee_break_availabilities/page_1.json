@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/employees/synthetic-conformance-value/break-availabilities"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "availabilityType": "anytime",
+        "available": true,
+        "availableAfterMinutesWorked": 1001,
+        "availableAt": "2026-01-01T00:00:00Z",
+        "availableIn": 1001,
+        "calculatedAt": "2026-01-01T00:00:00Z",
+        "duration": 1001
+      }
+    ]
+  }
+}

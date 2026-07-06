@@ -1,0 +1,18 @@
+{
+  "api": "Box Platform REST API (https://api.box.com/2.0), OpenAPI 3.0 spec at https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
+  "docs": "https://developer.box.com/reference/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, scoped to the connector-configured folder (box_folder_id) and its immediate children only — this connector's config surface has no mechanism to enumerate arbitrary Box files/folders beyond that one folder, matching this bundle's original narrower purpose (folder-scoped file data extraction) as distinct from the sibling box bundle's account/enterprise-level scope. 2 read streams (files, file_details — a fan_out detail-GET over every id the files stream returns) and 1 write action (update_file) are implemented. Every other Box endpoint is out of scope for the reasons stated per-entry below; the file-content-management/binary-payload/account-admin surface this connector was never scoped to reach in the first place is unchanged from the pre-expansion bundle.",
+  "endpoints": [
+    { "method": "GET", "path": "/folders/{folder_id}/items", "covered_by": { "stream": "files" } },
+    { "method": "GET", "path": "/files/{file_id}", "covered_by": { "stream": "file_details" } },
+    { "method": "PUT", "path": "/files/{file_id}", "covered_by": { "write": "update_file" } },
+    { "method": "POST", "path": "/oauth2/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 client-credentials token exchange, not a syncable object stream" } },
+    { "method": "GET", "path": "(no real endpoint — legacy file_text)", "excluded": { "category": "out_of_scope", "reason": "legacy's file_text stream has NO live HTTP implementation at all — Read() unconditionally returns an error outside fixture mode ('box-data-extract file_text live read requires fixture mode or a safe extraction service'); there is no real Box endpoint being called to port. Box's real extracted-text mechanism (GET /files/{file_id} with the x-rep-hints: [extracted_text] header, an async job-polling representation-generation flow) is a distinct, considerably more complex shape than a plain declarative GET this dialect cannot express without a Tier-2 StreamHook (async polling, a non-standard request header, and a representation-status retry loop) — ENGINE_GAP if pursued in a future increment, not silently approximated here. See docs.md's Known limits." } },
+    { "method": "GET", "path": "/files/{file_id}/content", "excluded": { "category": "binary_payload", "reason": "returns the raw file byte stream, not a JSON record; no declarative binary-payload shape exists in this dialect" } },
+    { "method": "DELETE", "path": "/files/{file_id}", "excluded": { "category": "destructive_admin", "reason": "irreversible file deletion; not a safe generic write target for a data-extraction-focused connector" } },
+    { "method": "POST", "path": "/files/{file_id}/copy", "excluded": { "category": "out_of_scope", "reason": "file copy is a content-management action outside this connector's read/rename-focused scope" } },
+    { "method": "GET", "path": "/files/{file_id}/metadata", "excluded": { "category": "out_of_scope", "reason": "custom metadata instance listing on a file is a distinct catalog shape (arbitrary caller-defined key/value schema per enterprise) judged lower-value than file_details' fixed field set this pass; candidate for a future increment" } },
+    { "method": "GET", "path": "/files/{file_id}/versions", "excluded": { "category": "out_of_scope", "reason": "per-file version history is a fan_out-of-a-fan_out shape (list files, then list each file's versions) judged lower-value than file_details this pass" } }
+  ]
+}

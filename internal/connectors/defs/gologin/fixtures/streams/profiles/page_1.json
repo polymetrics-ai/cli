@@ -1,0 +1,347 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/browser/v2",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "profiles": [
+        {
+          "id": "profile_fixture_1",
+          "name": "Fixture Profile 1",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "profile_fixture_2",
+          "name": "Fixture Profile 2",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:02Z"
+        },
+        {
+          "id": "profile_fixture_3",
+          "name": "Fixture Profile 3",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:03Z"
+        },
+        {
+          "id": "profile_fixture_4",
+          "name": "Fixture Profile 4",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:04Z"
+        },
+        {
+          "id": "profile_fixture_5",
+          "name": "Fixture Profile 5",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:05Z"
+        },
+        {
+          "id": "profile_fixture_6",
+          "name": "Fixture Profile 6",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:06Z"
+        },
+        {
+          "id": "profile_fixture_7",
+          "name": "Fixture Profile 7",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:07Z"
+        },
+        {
+          "id": "profile_fixture_8",
+          "name": "Fixture Profile 8",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:08Z"
+        },
+        {
+          "id": "profile_fixture_9",
+          "name": "Fixture Profile 9",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:09Z"
+        },
+        {
+          "id": "profile_fixture_10",
+          "name": "Fixture Profile 10",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:10Z"
+        },
+        {
+          "id": "profile_fixture_11",
+          "name": "Fixture Profile 11",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:11Z"
+        },
+        {
+          "id": "profile_fixture_12",
+          "name": "Fixture Profile 12",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:12Z"
+        },
+        {
+          "id": "profile_fixture_13",
+          "name": "Fixture Profile 13",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:13Z"
+        },
+        {
+          "id": "profile_fixture_14",
+          "name": "Fixture Profile 14",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:14Z"
+        },
+        {
+          "id": "profile_fixture_15",
+          "name": "Fixture Profile 15",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:15Z"
+        },
+        {
+          "id": "profile_fixture_16",
+          "name": "Fixture Profile 16",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:16Z"
+        },
+        {
+          "id": "profile_fixture_17",
+          "name": "Fixture Profile 17",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:17Z"
+        },
+        {
+          "id": "profile_fixture_18",
+          "name": "Fixture Profile 18",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:18Z"
+        },
+        {
+          "id": "profile_fixture_19",
+          "name": "Fixture Profile 19",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:19Z"
+        },
+        {
+          "id": "profile_fixture_20",
+          "name": "Fixture Profile 20",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:20Z"
+        },
+        {
+          "id": "profile_fixture_21",
+          "name": "Fixture Profile 21",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:21Z"
+        },
+        {
+          "id": "profile_fixture_22",
+          "name": "Fixture Profile 22",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:22Z"
+        },
+        {
+          "id": "profile_fixture_23",
+          "name": "Fixture Profile 23",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:23Z"
+        },
+        {
+          "id": "profile_fixture_24",
+          "name": "Fixture Profile 24",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:24Z"
+        },
+        {
+          "id": "profile_fixture_25",
+          "name": "Fixture Profile 25",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:25Z"
+        },
+        {
+          "id": "profile_fixture_26",
+          "name": "Fixture Profile 26",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:26Z"
+        },
+        {
+          "id": "profile_fixture_27",
+          "name": "Fixture Profile 27",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:27Z"
+        },
+        {
+          "id": "profile_fixture_28",
+          "name": "Fixture Profile 28",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:28Z"
+        },
+        {
+          "id": "profile_fixture_29",
+          "name": "Fixture Profile 29",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:29Z"
+        },
+        {
+          "id": "profile_fixture_30",
+          "name": "Fixture Profile 30",
+          "notes": "fixture record",
+          "role": "owner",
+          "os": "win",
+          "browserType": "chrome",
+          "folderName": "Fixtures",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:30Z"
+        }
+      ],
+      "allProfilesCount": 31
+    }
+  }
+}

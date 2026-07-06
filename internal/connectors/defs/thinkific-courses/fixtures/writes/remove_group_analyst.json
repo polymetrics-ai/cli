@@ -1,0 +1,17 @@
+{
+  "record": {
+    "group_id": "group_id_fixture",
+    "user_id": "user_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/groups/group_id_fixture/analysts/user_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

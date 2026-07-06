@@ -1,0 +1,17 @@
+{
+  "record": {
+    "sendAsEmail": "fixture-alias@example.com",
+    "signature": "<p>Fixture patched signature</p>"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/synthetic-conformance-value/settings/sendAs/fixture-alias@example.com",
+    "body": {
+      "signature": "<p>Fixture patched signature</p>"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "sendAsEmail": "fixture-alias@example.com", "signature": "<p>Fixture patched signature</p>" }
+  }
+}

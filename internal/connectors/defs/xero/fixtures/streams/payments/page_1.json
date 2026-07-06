@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/Payments", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "Payments": [
+        {
+          "PaymentID": "payment_fixture_1",
+          "PaymentType": "ACCRECPAYMENT",
+          "Status": "AUTHORISED",
+          "Amount": 50.0,
+          "Reference": "Fixture payment",
+          "CurrencyRate": 1.0,
+          "Date": "2026-01-01T00:00:00",
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "insurance": {
+      "to_address": { "id": "adr_fixture_to" },
+      "from_address": { "id": "adr_fixture_from" },
+      "tracking_code": "TRACK1",
+      "carrier": "USPS",
+      "reference": "fixture-insurance",
+      "amount": "100.00"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/insurances",
+    "body": {
+      "insurance": {
+        "to_address": { "id": "adr_fixture_to" },
+        "from_address": { "id": "adr_fixture_from" },
+        "tracking_code": "TRACK1",
+        "carrier": "USPS",
+        "reference": "fixture-insurance",
+        "amount": "100.00"
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "ins_fixture_new", "object": "Insurance" } }
+}

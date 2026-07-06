@@ -1,0 +1,64 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/attendance",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "attendance_fixture_1",
+          "employeeNumber": "FIX-1",
+          "employeeIdentifier": "attendance_fixture_1",
+          "attendanceDate": "2026-01-01T00:00:00Z",
+          "dayType": 2,
+          "leaveDayStatus": 1,
+          "shiftStartTime": "2026-01-01T00:00:00Z",
+          "shiftEndTime": "2026-01-01T00:00:00Z",
+          "shiftDuration": 9,
+          "shiftBreakDuration": 1,
+          "shiftEffectiveDuration": 9,
+          "totalGrossHours": 1,
+          "totalEffectiveHours": 1,
+          "totalBreakDuration": 1,
+          "firstInOfTheDay": null,
+          "lastOutOfTheDay": null
+        },
+        {
+          "id": "attendance_fixture_2",
+          "employeeNumber": "FIX-2",
+          "employeeIdentifier": "attendance_fixture_2",
+          "attendanceDate": "2026-01-01T00:00:00Z",
+          "dayType": 2,
+          "leaveDayStatus": 1,
+          "shiftStartTime": "2026-01-01T00:00:00Z",
+          "shiftEndTime": "2026-01-01T00:00:00Z",
+          "shiftDuration": 9,
+          "shiftBreakDuration": 1,
+          "shiftEffectiveDuration": 9,
+          "totalGrossHours": 1,
+          "totalEffectiveHours": 1,
+          "totalBreakDuration": 1,
+          "firstInOfTheDay": null,
+          "lastOutOfTheDay": null
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/attendance",
+      "lastPage": "https://example.invalid/keka/attendance",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

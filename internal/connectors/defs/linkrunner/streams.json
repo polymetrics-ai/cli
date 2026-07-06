@@ -1,0 +1,52 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "linkrunner-key", "value": "{{ secrets.linkrunner-key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/campaigns" },
+    "error_map": [
+      { "status": 401, "hint": "linkrunner linkrunner-key is missing or invalid; re-run pm credentials add linkrunner" },
+      { "status": 403, "hint": "linkrunner credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "linkrunner rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": {
+        "filter": { "template": "{{ config.filter }}", "omit_when_absent": true },
+        "channel": { "template": "{{ config.channel }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.campaigns" },
+      "incremental": {
+        "cursor_field": "update_at"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "attributed_users",
+      "path": "/attributed-users",
+      "query": {
+        "display_id": "{{ config.display_id }}",
+        "start_timestamp": { "template": "{{ config.start_timestamp }}", "omit_when_absent": true },
+        "end_timestamp": { "template": "{{ config.end_timestamp }}", "omit_when_absent": true },
+        "timezone": { "template": "{{ config.timezone }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.users" },
+      "incremental": {
+        "cursor_field": "attributed_at"
+      },
+      "schema": "schemas/attributed_users.json"
+    }
+  ]
+}

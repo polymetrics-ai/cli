@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "appsessions",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_created",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "href": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status_summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_completed": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_size": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "application": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

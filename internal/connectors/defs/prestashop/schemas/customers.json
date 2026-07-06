@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "id_default_group": {
+      "type": "integer"
+    },
+    "id_lang": {
+      "type": "integer"
+    },
+    "firstname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "newsletter": {
+      "type": "boolean"
+    },
+    "date_add": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "date_upd": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "date_upd"
+}

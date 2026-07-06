@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["yotpo_id"],
+  "x-cursor-field": "order_date",
+  "properties": {
+    "yotpo_id": { "type": ["integer", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "order_number": { "type": ["string", "null"] },
+    "order_name": { "type": ["string", "null"] },
+    "order_date": { "type": ["string", "null"] },
+    "checkout_token": { "type": ["string", "null"] },
+    "payment_method": { "type": ["string", "null"] },
+    "total_price": { "type": ["integer", "null"] },
+    "subtotal_price": { "type": ["integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "landing_site_url": { "type": ["string", "null"] },
+    "payment_status": { "type": ["string", "null"] },
+    "cancellation": { "type": ["object", "null"] },
+    "customer": { "type": ["object", "null"] },
+    "billing_address": { "type": ["object", "null"] },
+    "shipping_address": { "type": ["object", "null"] },
+    "customer_locale": { "type": ["string", "null"] },
+    "custom_properties": { "type": ["object", "null"] },
+    "fulfillments": { "type": ["array", "null"] },
+    "line_items": { "type": ["array", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

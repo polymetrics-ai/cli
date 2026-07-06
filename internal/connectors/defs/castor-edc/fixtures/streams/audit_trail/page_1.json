@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/audit-trail", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "audit_trail": [
+          {
+            "uuid": "audit_fixture_1",
+            "datetime": "2026-01-01T00:00:00Z",
+            "event_type": "Study created",
+            "user_id": "user_fixture_1",
+            "user_name": "Fixture One",
+            "user_email": "fixture1@example.com",
+            "event_details": { "field": "status", "old_value": null, "new_value": "active" }
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

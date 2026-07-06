@@ -1,0 +1,23 @@
+{
+  "name": "bluetally",
+  "display_name": "BlueTally",
+  "description": "Reads BlueTally IT asset management data (assets, employees, licenses, maintenances, accessories) through the BlueTally REST API.",
+  "integration_type": "api",
+  "docs_url": "https://bluetally.readme.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external BlueTally API read of IT asset management data",
+    "approval": "none; read-only API"
+  }
+}

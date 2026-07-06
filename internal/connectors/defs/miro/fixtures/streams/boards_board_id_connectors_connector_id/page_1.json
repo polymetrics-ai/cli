@@ -1,0 +1,65 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/connectors/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "captions": [
+        {
+          "content": "content_fixture",
+          "position": "position_fixture",
+          "textAlignVertical": "top"
+        }
+      ],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "createdBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "endItem": {
+        "id": "id_fixture",
+        "links": {
+          "self": "self_fixture"
+        },
+        "position": {
+          "x": "x_fixture",
+          "y": "y_fixture"
+        }
+      },
+      "id": "id_fixture",
+      "isSupported": true,
+      "links": {
+        "self": "self_fixture"
+      },
+      "modifiedAt": "2026-01-01T00:00:00Z",
+      "modifiedBy": {
+        "id": "id_fixture",
+        "type": "type_fixture"
+      },
+      "shape": "curved",
+      "startItem": {
+        "id": "id_fixture",
+        "links": {
+          "self": "self_fixture"
+        },
+        "position": {
+          "x": "x_fixture",
+          "y": "y_fixture"
+        }
+      },
+      "style": {
+        "color": "#ffffff",
+        "endStrokeCap": "none",
+        "fontSize": "font_size_fixture",
+        "startStrokeCap": "none",
+        "strokeColor": "#ffffff",
+        "strokeStyle": "normal",
+        "strokeWidth": "stroke_width_fixture",
+        "textOrientation": "horizontal"
+      },
+      "type": "type_fixture"
+    }
+  }
+}

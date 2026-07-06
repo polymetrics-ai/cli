@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/internal/api/v2/trafficTypes/ws/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "tt_fixture_1", "name": "user", "displayAttributeId": null },
+      { "id": "tt_fixture_2", "name": "account", "displayAttributeId": "account_name" }
+    ]
+  }
+}

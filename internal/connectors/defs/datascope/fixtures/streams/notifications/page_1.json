@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/notifications", "query": { "limit": "200", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "type": "form_completed",
+        "url": "https://www.mydatascope.com/fixtures/1",
+        "form_name": "Form 1",
+        "form_code": "F-1",
+        "user": "Fixture User 1",
+        "created_at": "01/01/2026 00:01"
+      }
+    ]
+  }
+}

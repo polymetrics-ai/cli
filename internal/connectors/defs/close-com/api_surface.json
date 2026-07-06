@@ -1,0 +1,2358 @@
+{
+  "api": "Close REST API v1 (https://api.close.com/api/v1)",
+  "docs": "https://developer.close.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented Close API endpoint (OpenAPI 3.1 spec at https://developer.close.com/openapi.json, 297 operations) is enumerated below, covered by a stream/write or explicitly excluded with a specific reason. Close's own OpenAPI spec publishes empty/generic request+response body schemas for most non-CRM-core resources (pipelines, statuses, groups, roles, custom fields, tasks, etc.) \u2014 schemas for those streams/writes were derived from documented query-parameter names, discriminated-union request bodies (e.g. CreateTask), and cross-referenced enum/sub-schema types (e.g. OpportunityStatusType) rather than a fully-typed response body.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/activity/",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/call/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Call-activity listing; the base activities stream (GET /activity/) already returns every activity type including calls with a shared field envelope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/call/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "logs an external call event; telephony-integration write, no demonstrated demand distinct from ordinary activity sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/call/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-call-activity detail already reachable via the call-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/call/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a call activity's disposition/notes; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/call/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a call activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/created/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Created-activity listing; a system-generated audit-trail subtype already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/created/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-created-activity detail already reachable via the created-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/custom/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Custom-Activity-instance listing; requires a specific custom_activity_type_id filter to be useful and the underlying custom activity TYPE definitions themselves (GET /custom_activity/) are out of scope below, so instances of an undefined type have no stable schema to declare"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/custom/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a custom-activity-type instance; deferred alongside the custom-activity-type read decision above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/custom/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom-activity detail already reachable via the custom-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/custom/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom-activity instance; deferred alongside the custom-activity-type decision"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/custom/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a custom-activity instance; deferred alongside the custom-activity-type decision"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Email-activity listing; already visible in the base activities stream's shared envelope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates/logs an email activity; email-sending write, no demonstrated demand distinct from ordinary activity sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/email/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-email-activity detail already reachable via the email-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/email/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an email activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/email/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an email activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/emailthread/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed EmailThread-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/emailthread/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-emailthread-activity detail already reachable via the emailthread-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/emailthread/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an email thread activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/form_submission/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed FormSubmission-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/form_submission/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-form_submission-activity detail already reachable via the form_submission-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/form_submission/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a form-submission activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/lead_merge/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed LeadMerge-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/lead_merge/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-lead_merge-activity detail already reachable via the lead_merge-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/meeting/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Meeting-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/meeting/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-meeting-activity detail already reachable via the meeting-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/meeting/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a meeting activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/meeting/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a meeting activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/meeting/{id}/integration/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates/updates a third-party calendar-integration link on a meeting; integration-config write, not ordinary record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/note/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed Note-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/note/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a note activity; no demonstrated write demand distinct from ordinary activity sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/note/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-note-activity detail already reachable via the note-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/note/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a note activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/note/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a note activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/sms/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed SMS-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/sms/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends/logs an SMS activity; messaging write, no demonstrated demand distinct from ordinary activity sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/sms/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-sms-activity detail already reachable via the sms-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/sms/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an SMS activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/sms/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an SMS activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/status_change/lead/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed LeadStatusChange-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/status_change/lead/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a lead status-change activity record directly; the update_lead write already changes status_id and generates this activity as a side effect on the real Close backend"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/status_change/lead/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status_change_lead-activity detail already reachable via the status_change_lead-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/status_change/lead/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a lead status-change activity record; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/status_change/opportunity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed OpportunityStatusChange-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/status_change/opportunity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an opportunity status-change activity record directly; update_opportunity's status_id write already generates this as a side effect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/status_change/opportunity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status_change_opportunity-activity detail already reachable via the status_change_opportunity-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/status_change/opportunity/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an opportunity status-change activity record; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/task_completed/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed TaskCompleted-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/task_completed/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task_completed-activity detail already reachable via the task_completed-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/task_completed/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a task-completed activity record; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/whatsapp_message/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "typed WhatsAppMessage-activity listing; already visible in the base activities stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/activity/whatsapp_message/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends/logs a WhatsApp message activity; messaging write, no demonstrated demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/whatsapp_message/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-whatsapp_message-activity detail already reachable via the whatsapp_message-activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activity/whatsapp_message/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a WhatsApp message activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/activity/whatsapp_message/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a WhatsApp message activity; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocked_phone_number/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "call-blocking configuration listing; account-security feature, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocked_phone_number/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "blocks a phone number; account-security configuration write, no demonstrated demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocked_phone_number/settings/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "call-blocking settings; account-security configuration, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blocked_phone_number/settings/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates call-blocking settings; account-security configuration write, no demonstrated demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocked_phone_number/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-blocked_phone_number detail already reachable via the blocked_phone_numbers stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/blocked_phone_number/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a blocked-phone-number entry; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blocked_phone_number/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unblocks a phone number; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/delete/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-action job listing; asynchronous batch-operation metadata, not a per-record data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk_action/delete/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "initiates an irreversible bulk delete of every record matching a saved search in one call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/delete/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-bulk_action_delete-job detail already reachable via the bulk_action_delete-jobs stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/edit/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-action job listing; asynchronous batch-operation metadata, not a per-record data resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk_action/edit/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "initiates a bulk field edit across every record matching a saved search in one call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/edit/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-bulk_action_edit-job detail already reachable via the bulk_action_edit-jobs stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-action job listing; asynchronous batch-operation metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk_action/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "initiates a bulk email send; messaging campaign write, no demonstrated demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/email/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-bulk_action_email-job detail already reachable via the bulk_action_email-jobs stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/sequence_subscription/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-action job listing; asynchronous batch-operation metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk_action/sequence_subscription/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-subscribes many contacts to a sequence; sequence-automation write, no demonstrated demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_action/sequence_subscription/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-bulk_action_sequence_subscription-job detail already reachable via the bulk_action_sequence_subscription-jobs stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comment/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "internal team-collaboration comment listing; narrow collaboration-note resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/comment/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a collaboration comment; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comment/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-comment detail already reachable via the comments stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/comment/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a comment; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/comment/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a comment; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comment_thread/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "comment-thread listing; layered over the comment resource already out of scope above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comment_thread/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-comment_thread detail already reachable via the comment_threads stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connected_account/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists connected email/calendar/Zoom OAuth integrations; exposes third-party account-linkage metadata requiring elevated integration-management scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connected_account/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-connected_account detail already reachable via the connected_accounts stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact/",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact/",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-contact detail already reachable via the contacts stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contact/{id}/",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact/{id}/",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-activity-TYPE-definition listing (org-level schema, not activity instances); no demonstrated read demand distinct from the base activities stream's own type discrimination"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_activity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new custom-activity type; workspace-schema-configuration action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_activity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_activity-type detail already reachable via the custom_activity-types stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_activity/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom-activity type; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_activity/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a custom-activity type and every activity instance of it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/activity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "activity-level custom-field definitions; narrower analogue of the covered lead/contact/opportunity custom-field streams, deferred since activity custom fields are keyed per custom-activity-type (itself out of scope above)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/activity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an activity custom-field definition; workspace-schema-configuration action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/activity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_activity detail already reachable via the custom_field_activitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/activity/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an activity custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/activity/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes an activity custom-field definition and all its recorded values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/contact/",
+      "covered_by": {
+        "stream": "custom_fields_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/contact/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new contact custom-field DEFINITION; no demonstrated write demand alongside the read-only custom_fields_contact stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/contact/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_contact detail already reachable via the custom_field_contacts stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/contact/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a contact custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/contact/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a contact custom-field definition and all its recorded values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/custom_object_type/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "custom-field definitions scoped to a specific Custom Object Type; Custom Objects themselves are out of scope below, so this is deferred with them"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/custom_object_type/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a custom-object custom-field definition; deferred alongside Custom Objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/custom_object_type/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_custom_object_type detail already reachable via the custom_field_custom_object_types stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/custom_object_type/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a custom-object custom-field definition; deferred alongside Custom Objects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/custom_object_type/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a custom-object custom-field definition; deferred alongside Custom Objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/lead/",
+      "covered_by": {
+        "stream": "custom_fields_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/lead/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new lead custom-field DEFINITION (workspace schema change); no demonstrated write demand alongside the read-only custom_fields_lead stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/lead/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_lead detail already reachable via the custom_field_leads stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/lead/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a lead custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/lead/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a lead custom-field definition and all its recorded values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/opportunity/",
+      "covered_by": {
+        "stream": "custom_fields_opportunity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/opportunity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new opportunity custom-field DEFINITION; no demonstrated write demand alongside the read-only custom_fields_opportunity stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/opportunity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_opportunity detail already reachable via the custom_field_opportunitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/opportunity/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an opportunity custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/opportunity/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes an opportunity custom-field definition and all its recorded values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/shared/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "shared (cross-object) custom-field definition listing; narrower variant of the per-object custom-field streams already covered, no demonstrated additional read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/shared/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a shared custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/shared/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_field_shared detail already reachable via the custom_field_shareds stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/shared/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a shared custom-field definition; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/shared/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a shared custom-field definition and all its recorded values across every associated object type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/shared/{scf_id}/association/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "associates a shared custom field with an object type; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "fetches a shared custom-field association; workspace-schema-configuration read, no demonstrated demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a shared custom-field association; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "disassociates a shared custom field; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field_schema/{object_type}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "retrieves the full custom-field SCHEMA (layout/ordering) for an object type; a workspace-configuration view over fields already covered individually via custom_field/<object>"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_field_schema/{object_type}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reorders/reconfigures a custom-field schema layout; workspace-configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Custom Object instances are entirely user-defined shapes (a distinct schema per organization's own Custom Object Type configuration); no single dialect-expressible record_schema can be declared without per-organization introspection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_object/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a Custom Object instance; deferred alongside the read decision above (undefined per-org schema)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_object detail already reachable via the custom_objects stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_object/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a Custom Object instance; deferred alongside Custom Objects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a Custom Object instance; deferred alongside Custom Objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_type/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Custom Object TYPE definitions (org-level schema); no demonstrated read demand distinct from the (also out-of-scope) instances themselves"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_object_type/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new Custom Object Type; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_type/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-custom_object_type detail already reachable via the custom_object_types stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_object_type/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a Custom Object Type; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_type/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a Custom Object Type and every instance of it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dialer/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Power Dialer session listing; a premium telephony-add-on feature not enabled on every Close plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dialer/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-dialer detail already reachable via the dialers stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_template/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email-template listing; outbound-messaging configuration object, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email_template/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an email template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_template/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-email_template detail already reachable via the email_templates stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/email_template/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an email template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/email_template/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an email template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_template/{id}/render/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renders an email template against a lead/contact for preview; a computed-preview action, not a data listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/enrich_field/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "AI-powered field enrichment is a paid Close add-on feature with per-call billing; an imperative enrichment action, not ordinary record sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "30-day rolling audit-event log; a short-retention change-feed, not a stable syncable data resource (a scheduled sync could easily miss events between runs with no replay guarantee)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/event/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-event detail already reachable via the events stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lists asynchronous bulk-export JOBS (metadata about a background CSV/export process), not the exported data itself"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/lead/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lists lead-export job metadata, not lead records themselves (already covered by the leads stream)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/lead/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "initiates an asynchronous bulk lead export job; the leads stream already provides equivalent data via ordinary paginated GET"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/lead/{id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single lead-export job status/metadata, not record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/opportunity/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lists opportunity-export job metadata, not opportunity records themselves (already covered by the opportunities stream)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/opportunity/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "initiates an asynchronous bulk opportunity export job; the opportunities stream already provides equivalent data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/opportunity/{id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single opportunity-export job status/metadata, not record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/{id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single export job status/metadata, not record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files/upload/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "generates a signed S3 POST policy for a subsequent raw multipart file upload; no dialect-expressible binary-upload flow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/form/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lead-capture web-form configuration listing; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/form/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-form detail already reachable via the forms stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/group/",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/group/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new user group; no demonstrated write demand alongside the read-only groups stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/group/{group_id}/member/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "adds a user to a group; access-control/membership-management action, admin-scoped"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/group/{group_id}/member/{user_id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a user from a group; access-control/membership-management action, admin-scoped"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/group/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-group detail already reachable via the groups stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/group/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a group's name/membership; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/group/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a group; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "third-party integration-link listing (e.g. linked external records); narrow integration-metadata resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an integration link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_link/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-integration_link detail already reachable via the integration_links stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integration_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an integration link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integration_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an integration link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lead/",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lead/",
+      "covered_by": {
+        "write": "create_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lead/merge/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly merges two leads into one, permanently discarding the duplicate's identity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lead/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-lead detail already reachable via the leads stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lead/{id}/",
+      "covered_by": {
+        "write": "update_lead"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lead/{id}/",
+      "covered_by": {
+        "write": "delete_lead"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "returns the authenticated user's own profile; a subset of the same fields already reachable via the users stream's own record for that user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/membership/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates an organization membership (invites/adds a user to the org); billing-seat-consuming admin action"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/membership/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk-updates memberships; admin-scoped access-control action"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/membership/{id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a membership's role/permissions; admin-scoped access-control action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/membership/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly removes a user's membership/access to the organization; billing-seat/access-revocation admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/membership/{id}/pinned_views/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user pinned-smart-view UI preference; not organizational data, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/membership/{id}/pinned_views/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a per-user UI preference; not organizational data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunity/",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opportunity/",
+      "covered_by": {
+        "write": "create_opportunity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-opportunity detail already reachable via the opportunitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/opportunity/{id}/",
+      "covered_by": {
+        "write": "update_opportunity"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/opportunity/{id}/",
+      "covered_by": {
+        "write": "delete_opportunity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organization/{id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization-level billing/plan/legal settings; admin-scoped account configuration, not per-record CRM data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organization/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "updates organization-wide billing/plan/legal settings; admin-scoped, blanket account-level mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outcome/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "call/SMS disposition-outcome configuration listing; narrow taxonomy resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/outcome/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a disposition outcome; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/outcome/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-outcome detail already reachable via the outcomes stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/outcome/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a disposition outcome; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/outcome/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a disposition outcome; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone_number/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "organization's provisioned telephony phone-number inventory; telephony-admin-scoped resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/phone_number/request/internal/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "provisions a new phone number, a billing-consuming telephony-admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone_number/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-phone_number detail already reachable via the phone_numbers stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/phone_number/{id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reconfigures a provisioned phone number; telephony-admin action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/phone_number/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly releases a provisioned phone number"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline/",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pipeline/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new pipeline; workspace-schema-configuration action, no demonstrated write demand alongside the read-only pipelines stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipeline/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-pipeline detail already reachable via the pipelines stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/pipeline/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a pipeline's stages/name; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pipeline/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a pipeline and detaches every opportunity that referenced its statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/playbook/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sales-playbook (guided sequence) configuration listing; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/playbook/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a playbook; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/playbook/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-playbook detail already reachable via the playbooks stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/playbook/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a playbook; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/playbook/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a playbook; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/playbook/{id}/archive/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "archives a playbook; narrow status-toggle action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/playbook/{id}/unarchive/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unarchives a playbook; narrow status-toggle action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report/activity/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated activity-metrics report document, not a listing of underlying activity records (already covered by the activities stream)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/activity/metrics/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "lists the predefined metric NAMES usable in activity reports; report-configuration metadata, not record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/custom/{org_id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates a custom Explorer report document, not a record listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report/funnel/opportunity/stages/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated funnel-by-stage report document, not a record listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report/funnel/opportunity/totals/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated funnel-totals report document, not a record listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/sent_emails/{org_id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated sent-emails report document, not a record listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/statuses/lead/{org_id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated lead status-change report document; the underlying events are already covered by the activities stream's LeadStatusChange activity type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/report/statuses/opportunity/{org_id}/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "generates an aggregated opportunity status-change report document; the underlying events are already covered by the activities stream's OpportunityStatusChange activity type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/role/",
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/role/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new permission role; access-control-configuration admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/role/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-role detail already reachable via the roles stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/role/{id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a permission role's grants; access-control-configuration admin action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/role/{id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a permission role; access-control-configuration admin action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saved_search/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Smart View (saved search query) listing; a per-user UI configuration object, not CRM record data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/saved_search/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a Smart View; per-user UI configuration, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/saved_search/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-saved_search detail already reachable via the saved_searchs stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/saved_search/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a Smart View; per-user UI configuration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/saved_search/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a Smart View; per-user UI configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduling_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "user meeting-scheduling-link configuration listing; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheduling_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheduling_link/integration/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates/updates a scheduling link via an external OAuth calendar integration; third-party-integration-scoped action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scheduling_link/integration/{source_id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes an OAuth-integration-backed scheduling link; third-party-integration-scoped action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduling_link/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-scheduling_link detail already reachable via the scheduling_links stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scheduling_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scheduling_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/send_as/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Send-As email-alias association listing; narrow email-configuration resource, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/send_as/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a Send-As association; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/send_as/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a Send-As association by allowed user; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/send_as/bulk/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk-edits Send-As associations; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/send_as/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-send_as detail already reachable via the send_ass stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/send_as/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a Send-As association by id; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sequence/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "email/SMS drip-sequence configuration listing; sales-automation configuration object, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sequence/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a sequence; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sequence/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-sequence detail already reachable via the sequences stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sequence/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a sequence; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sequence/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a sequence; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sequence_subscription/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sequence-subscription listing; sales-automation state, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sequence_subscription/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "subscribes a contact to a sequence; sales-automation-trigger action, not ordinary record sync"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sequence_subscription/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-sequence_subscription detail already reachable via the sequence_subscriptions stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sequence_subscription/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a sequence subscription; sales-automation action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sequence_subscription/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unsubscribes/deletes a sequence subscription; sales-automation action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_scheduling_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "team-shared scheduling-link configuration listing; no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shared_scheduling_link/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a shared scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared_scheduling_link/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-shared_scheduling_link detail already reachable via the shared_scheduling_links stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shared_scheduling_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a shared scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shared_scheduling_link/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a shared scheduling link; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shared_scheduling_link_association/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "maps a shared scheduling link to a user; configuration action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shared_scheduling_link_association/unmap/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unmaps a shared scheduling link from a user; configuration action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms_template/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "SMS-template listing; outbound-messaging configuration, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms_template/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an SMS template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms_template/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-sms_template detail already reachable via the sms_templates stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms_template/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an SMS template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms_template/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an SMS template; no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status/lead/",
+      "covered_by": {
+        "stream": "lead_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/status/lead/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new lead status; workspace-schema-configuration action, no demonstrated write demand alongside the read-only lead_statuses stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status/lead/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status_lead detail already reachable via the status_leads stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/status/lead/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renames a lead status; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/status/lead/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes a lead status; every lead currently on it loses a valid status_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status/opportunity/",
+      "covered_by": {
+        "stream": "opportunity_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/status/opportunity/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a new opportunity status; workspace-schema-configuration action, no demonstrated write demand alongside the read-only opportunity_statuses stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status/opportunity/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-status_opportunity detail already reachable via the status_opportunitys stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/status/opportunity/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "renames an opportunity status; workspace-schema-configuration action"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/status/opportunity/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly deletes an opportunity status; every opportunity currently on it loses a valid status_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/task/",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/task/",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/task/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-updates every task matching a filter in one call; no per-record targeting, higher blast radius than the covered single-task update_task write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/task/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-task detail already reachable via the tasks stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/task/{id}/",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/task/{id}/",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/unsubscribe/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unsubscribed-email-address listing; email-compliance configuration, no demonstrated read demand"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/unsubscribe/email/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "unsubscribes an email address; email-compliance action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/unsubscribe/email/{email_address}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "resubscribes an email address; email-compliance action, no demonstrated write demand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/availability/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-user live availability-status listing; a real-time presence signal, not stable syncable record data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{id}/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user detail already reachable via the users stream's listing; no separate stream needed for one extra fetch shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhook/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook subscription management; push-delivery configuration, not a pollable data resource this connector's pull-sync model reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhook/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhook/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook subscription detail; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhook/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhook/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a webhook subscription; not applicable to this connector's pull-sync model"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/reports/activated_counts",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        [
+          1728561200,
+          1
+        ]
+      ],
+      "id": 1,
+      "name": "Fixture activated_counts_report"
+    }
+  }
+}

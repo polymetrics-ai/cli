@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/clauses",
+    "query": { "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "organizationClauses": [
+        {
+          "id": 1,
+          "version": 1,
+          "title": "Fixture Clause 1",
+          "description": "Deterministic fixture record.",
+          "presignedUrl": "https://example.com/clause1",
+          "numberOfTemplatesLinked": 2,
+          "createdAt": 1735689600000
+        },
+        {
+          "id": 2,
+          "version": 1,
+          "title": "Fixture Clause 2",
+          "description": "Deterministic fixture record.",
+          "presignedUrl": "https://example.com/clause2",
+          "numberOfTemplatesLinked": 0,
+          "createdAt": 1735689600000
+        }
+      ],
+      "totalCount": 2
+    }
+  }
+}

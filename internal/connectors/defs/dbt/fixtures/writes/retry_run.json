@@ -1,0 +1,9 @@
+{
+  "record": {
+    "run_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/runs/1/retry/"
+  }
+}

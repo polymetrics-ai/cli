@@ -1,0 +1,83 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "max",
+      "start_page": 1,
+      "page_size": 10
+    },
+    "check": { "method": "GET", "path": "/search" },
+    "error_map": [
+      { "status": 401, "hint": "gnews api key is missing or invalid; re-run pm credentials add gnews" },
+      { "status": 403, "hint": "gnews api key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "gnews rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "search",
+      "path": "/search",
+      "query": {
+        "q": { "template": "{{ config.query }}", "default": "news" },
+        "lang": { "template": "{{ config.language }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.country }}", "omit_when_absent": true },
+        "in": { "template": "{{ config.in }}", "omit_when_absent": true },
+        "nullable": { "template": "{{ config.nullable }}", "omit_when_absent": true },
+        "sortby": { "template": "{{ config.sortby }}", "omit_when_absent": true },
+        "from": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "articles" },
+      "incremental": {
+        "cursor_field": "published_at",
+        "request_param": "from",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "published_at": "{{ record.publishedAt }}",
+        "source_id": "{{ record.source.id }}",
+        "source_name": "{{ record.source.name }}",
+        "source_url": "{{ record.source.url }}",
+        "source_country": "{{ record.source.country }}"
+      },
+      "schema": "schemas/search.json"
+    },
+    {
+      "name": "top_headlines",
+      "path": "/top-headlines",
+      "query": {
+        "topic": { "template": "{{ config.top_headlines_topic }}", "omit_when_absent": true },
+        "q": { "template": "{{ config.top_headlines_query }}", "omit_when_absent": true },
+        "lang": { "template": "{{ config.language }}", "omit_when_absent": true },
+        "country": { "template": "{{ config.country }}", "omit_when_absent": true },
+        "in": { "template": "{{ config.in }}", "omit_when_absent": true },
+        "nullable": { "template": "{{ config.nullable }}", "omit_when_absent": true },
+        "sortby": { "template": "{{ config.sortby }}", "omit_when_absent": true },
+        "from": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "articles" },
+      "incremental": {
+        "cursor_field": "published_at",
+        "request_param": "from",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "published_at": "{{ record.publishedAt }}",
+        "source_id": "{{ record.source.id }}",
+        "source_name": "{{ record.source.name }}",
+        "source_url": "{{ record.source.url }}",
+        "source_country": "{{ record.source.country }}"
+      },
+      "schema": "schemas/top_headlines.json"
+    }
+  ]
+}

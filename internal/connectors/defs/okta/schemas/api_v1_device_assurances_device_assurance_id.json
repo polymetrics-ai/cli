@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "createdBy": {
+      "type": "string"
+    },
+    "createdDate": {
+      "type": "string"
+    },
+    "devicePostureChecks": {
+      "type": "object",
+      "description": "<x-lifecycle-container><x-lifecycle class=\"ea\"></x-lifecycle></x-lifecycle-container>Represents the Device Posture Checks configuration for the device assurance policy",
+      "properties": {
+        "include": {
+          "type": "array",
+          "description": "An array of key-value pairs that include the device posture check `variableName` key",
+          "items": {
+            "type": "object",
+            "properties": {
+              "variableName": {
+                "type": "string",
+                "description": "The device posture check key"
+              },
+              "value": {
+                "type": "string",
+                "description": "The device posture check value"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "displayRemediationMode": {
+      "type": "string",
+      "description": "Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance",
+      "enum": [
+        "HIDE",
+        "SHOW"
+      ]
+    },
+    "gracePeriod": {
+      "type": "object",
+      "description": "Represents the Grace Period configuration for the device assurance policy",
+      "properties": {
+        "expiry": {
+          "type": "string",
+          "description": "An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations) formatted date and time.",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string",
+          "description": "Represents the type of Grace Period configured for the device assurance policy",
+          "enum": [
+            "BY_DATE_TIME",
+            "BY_DURATION"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "lastUpdate": {
+      "type": "string"
+    },
+    "lastUpdatedBy": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the device assurance policy"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "ANDROID",
+        "CHROMEOS",
+        "IOS",
+        "MACOS",
+        "WINDOWS"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "You Need A Budget (YNAB) Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "YNAB personal access token, sent as a Bearer token (Authorization: Bearer <api_key>). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ynab.com/v1",
+      "description": "YNAB API base URL override for tests or proxies."
+    },
+    "budget_id": {
+      "type": "string",
+      "default": "last-used",
+      "description": "YNAB budget ID scoping the 'accounts' and 'transactions' streams; defaults to YNAB's 'last-used' budget alias."
+    },
+    "since_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional YYYY-MM-DD lower bound passed as the 'since_date' query param on 'accounts'/'transactions' reads."
+    },
+    "limit": {
+      "type": "string",
+      "description": "Optional 'limit' query param passed through verbatim on 'accounts'/'transactions' reads."
+    },
+    "month": {
+      "type": "string",
+      "description": "YYYY-MM-01 month identifier (or the 'current' alias) required by the 'months' stream's per-month detail path; also accepted by scheduled-transaction reads' since_date-equivalent narrowing is not applicable here (months has no since_date param)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

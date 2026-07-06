@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/trading/accounts/acct_fixture_1/orders", "query": { "status": "all" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "order_fixture_1",
+        "symbol": "FIX1",
+        "asset_class": "us_equity",
+        "qty": "1",
+        "notional": null,
+        "filled_qty": "1",
+        "filled_avg_price": "100.00",
+        "order_class": "simple",
+        "order_type": "market",
+        "type": "market",
+        "side": "buy",
+        "time_in_force": "day",
+        "limit_price": null,
+        "stop_price": null,
+        "status": "filled",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:01Z",
+        "submitted_at": "2026-01-01T00:00:00Z",
+        "filled_at": "2026-01-01T00:00:01Z",
+        "canceled_at": null
+      }
+    ]
+  }
+}

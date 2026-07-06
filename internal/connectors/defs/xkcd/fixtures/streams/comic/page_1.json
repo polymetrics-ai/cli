@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/info.0.json" },
+  "response": {
+    "status": 200,
+    "body": {
+      "month": "9",
+      "num": 614,
+      "link": "",
+      "year": "2009",
+      "news": "",
+      "safe_title": "Woodpecker",
+      "transcript": "fixture transcript text",
+      "alt": "fixture alt text",
+      "img": "https://imgs.xkcd.com/comics/woodpecker.png",
+      "title": "Woodpecker",
+      "day": "9"
+    }
+  }
+}

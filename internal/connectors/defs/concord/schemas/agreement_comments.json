@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreement_comments",
+  "type": "object",
+  "x-primary-key": ["comment_uuid"],
+  "required": ["comment_uuid"],
+  "properties": {
+    "comment_uuid": { "type": "string" },
+    "uuid": { "type": ["string", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "reply": { "type": ["array", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "createdBy": { "type": ["object", "null"] },
+    "commentedText": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "version": { "type": ["integer", "null"] },
+    "resolved": { "type": ["boolean", "null"] },
+    "agreement_id": { "type": ["string", "null"] }
+  }
+}

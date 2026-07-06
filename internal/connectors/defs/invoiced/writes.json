@@ -1,0 +1,1768 @@
+{
+  "actions": [
+    {
+      "name": "create_charge",
+      "kind": "create",
+      "method": "POST",
+      "path": "/charges",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "High-impact Invoiced mutation: Create a charge.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/contacts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a contact.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customers/{{ record.customer_id }}/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "contact_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a contact.",
+      "path_fields": [
+        "customer_id",
+        "contact_id"
+      ]
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}/contacts/{{ record.contact_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "contact_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "contact_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a contact.",
+      "path_fields": [
+        "customer_id",
+        "contact_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupons",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a coupon."
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "coupon_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a coupon.",
+      "path_fields": [
+        "coupon_id"
+      ]
+    },
+    {
+      "name": "delete_coupon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "coupon_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a coupon.",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_credit_balance_adjustment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/credit_balance_adjustments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a credit balance adjustment."
+    },
+    {
+      "name": "update_credit_balance_adjustment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/credit_balance_adjustments/{{ record.credit_balance_adjustment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_balance_adjustment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_balance_adjustment_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a credit balance adjustment.",
+      "path_fields": [
+        "credit_balance_adjustment_id"
+      ]
+    },
+    {
+      "name": "delete_credit_balance_adjustment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/credit_balance_adjustments/{{ record.credit_balance_adjustment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_balance_adjustment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_balance_adjustment_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a credit balance adjustment.",
+      "path_fields": [
+        "credit_balance_adjustment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_credit_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/credit_notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a credit note."
+    },
+    {
+      "name": "update_credit_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/credit_notes/{{ record.credit_note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_note_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a credit note.",
+      "path_fields": [
+        "credit_note_id"
+      ]
+    },
+    {
+      "name": "send_credit_note_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/credit_notes/{{ record.credit_note_id }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_note_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send a credit note email.",
+      "path_fields": [
+        "credit_note_id"
+      ]
+    },
+    {
+      "name": "void_credit_note",
+      "kind": "update",
+      "method": "POST",
+      "path": "/credit_notes/{{ record.credit_note_id }}/void",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_note_id"
+        ]
+      },
+      "risk": "Destructive Invoiced mutation: Void a credit note.",
+      "path_fields": [
+        "credit_note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_credit_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/credit_notes/{{ record.credit_note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "credit_note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "credit_note_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a credit note.",
+      "path_fields": [
+        "credit_note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a customer."
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a customer.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "send_statement_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send a statement email.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "send_statement_sms",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/text_messages",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send a statement SMS.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "send_statement_letter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/letters",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send a statement letter.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a customer.",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_estimate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/estimates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create an estimate."
+    },
+    {
+      "name": "update_an_estimate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/estimates/{{ record.estimate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "estimate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "estimate_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update an estimate.",
+      "path_fields": [
+        "estimate_id"
+      ]
+    },
+    {
+      "name": "send_estimate_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/estimates/{{ record.estimate_id }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "estimate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "estimate_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send an estimate email.",
+      "path_fields": [
+        "estimate_id"
+      ]
+    },
+    {
+      "name": "void_estimate",
+      "kind": "update",
+      "method": "POST",
+      "path": "/estimates/{{ record.estimate_id }}/void",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "estimate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "estimate_id"
+        ]
+      },
+      "risk": "Destructive Invoiced mutation: Void an estimate.",
+      "path_fields": [
+        "estimate_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_estimate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/estimates/{{ record.estimate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "estimate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "estimate_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete an estimate.",
+      "path_fields": [
+        "estimate_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "convert_estimate_to_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/estimates/{{ record.estimate_id }}/invoice",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "estimate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "estimate_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Convert an estimate to an invoice.",
+      "path_fields": [
+        "estimate_id"
+      ]
+    },
+    {
+      "name": "delete_file",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/files/{{ record.file_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "file_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a file.",
+      "path_fields": [
+        "file_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create an invoice."
+    },
+    {
+      "name": "update_an_invoice",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/invoices/{{ record.invoice_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update an invoice.",
+      "path_fields": [
+        "invoice_id"
+      ]
+    },
+    {
+      "name": "send_invoice_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send an invoice email.",
+      "path_fields": [
+        "invoice_id"
+      ]
+    },
+    {
+      "name": "send_invoice_sms",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/text_messages",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send an invoice SMS.",
+      "path_fields": [
+        "invoice_id"
+      ]
+    },
+    {
+      "name": "send_invoice_letter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/letters",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send an invoice letter.",
+      "path_fields": [
+        "invoice_id"
+      ]
+    },
+    {
+      "name": "pay_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/pay",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "High-impact Invoiced mutation: Pay an invoice.",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_consolidated_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/consolidate_invoices",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a consolidated invoice.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "void_invoice",
+      "kind": "update",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/void",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Destructive Invoiced mutation: Void an invoice.",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_invoice",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/invoices/{{ record.invoice_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete an invoice.",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_an_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/items",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create an item."
+    },
+    {
+      "name": "update_an_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/items/{{ record.item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "item_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update an item.",
+      "path_fields": [
+        "item_id"
+      ]
+    },
+    {
+      "name": "delete_an_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/items/{{ record.item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "item_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete an item.",
+      "path_fields": [
+        "item_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_customer_line_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/line_items",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a metered line item.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "update_customer_line_item",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/customers/{{ record.customer_id }}/line_items/{{ record.line_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "line_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "line_item_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a metered line item.",
+      "path_fields": [
+        "customer_id",
+        "line_item_id"
+      ]
+    },
+    {
+      "name": "delete_customer_line_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}/line_items/{{ record.line_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "line_item_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "line_item_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a metered line item.",
+      "path_fields": [
+        "customer_id",
+        "line_item_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_customer_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/invoices",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a metered invoice.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a note."
+    },
+    {
+      "name": "update_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "note_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a note.",
+      "path_fields": [
+        "note_id"
+      ]
+    },
+    {
+      "name": "delete_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "note_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a note.",
+      "path_fields": [
+        "note_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_payment_plan",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/payment_plan",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a payment plan.",
+      "path_fields": [
+        "invoice_id"
+      ]
+    },
+    {
+      "name": "cancel_payment_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/invoices/{{ record.invoice_id }}/payment_plan",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "invoice_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Cancel a payment plan.",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_payment_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers/{{ record.customer_id }}/payment_sources",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Create a payment source.",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_card_payment_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}/cards/{{ record.card_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "card_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "card_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete card payment source.",
+      "path_fields": [
+        "customer_id",
+        "card_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_bank_account_payment_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}/bank_accounts/{{ record.bank_account_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "bank_account_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "bank_account_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete bank account payment source.",
+      "path_fields": [
+        "customer_id",
+        "bank_account_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a payment."
+    },
+    {
+      "name": "update_payment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/payments/{{ record.payment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a payment.",
+      "path_fields": [
+        "payment_id"
+      ]
+    },
+    {
+      "name": "send_a_payment_receipt_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payments/{{ record.payment_id }}/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Send a payment receipt email.",
+      "path_fields": [
+        "payment_id"
+      ]
+    },
+    {
+      "name": "delete_payment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/payments/{{ record.payment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "payment_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a payment.",
+      "path_fields": [
+        "payment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/plans",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a plan."
+    },
+    {
+      "name": "update_plan",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/plans/{{ record.plan_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "plan_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a plan.",
+      "path_fields": [
+        "plan_id"
+      ]
+    },
+    {
+      "name": "delete_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/plans/{{ record.plan_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "plan_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a plan.",
+      "path_fields": [
+        "plan_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "refund_charge",
+      "kind": "update",
+      "method": "POST",
+      "path": "/charges/{{ record.charge_id }}/refunds",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "charge_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "charge_id"
+        ]
+      },
+      "risk": "High-impact Invoiced mutation: Refund a charge.",
+      "path_fields": [
+        "charge_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a subscription."
+    },
+    {
+      "name": "preview_subscription",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/subscriptions/preview",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Preview a subscription."
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ]
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "subscription_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Cancel a subscription.",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a task."
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "task_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a task.",
+      "path_fields": [
+        "task_id"
+      ]
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "task_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a task.",
+      "path_fields": [
+        "task_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_tax_rate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tax_rates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Invoiced mutation: Create a tax rate."
+    },
+    {
+      "name": "update_tax_rate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tax_rates/{{ record.tax_rate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tax_rate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tax_rate_id"
+        ]
+      },
+      "risk": "Invoiced mutation: Update a tax rate.",
+      "path_fields": [
+        "tax_rate_id"
+      ]
+    },
+    {
+      "name": "delete_tax_rate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tax_rates/{{ record.tax_rate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tax_rate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tax_rate_id"
+        ]
+      },
+      "risk": "Deletes or cancels Invoiced data: Delete a tax rate.",
+      "path_fields": [
+        "tax_rate_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    }
+  ]
+}

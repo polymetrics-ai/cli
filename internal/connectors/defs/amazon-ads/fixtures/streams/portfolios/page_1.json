@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/portfolios",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "portfolioId": 778899001,
+        "name": "Fixture portfolio 1",
+        "state": "enabled",
+        "inBudget": true
+      },
+      {
+        "portfolioId": 778899002,
+        "name": "Fixture portfolio 2",
+        "state": "enabled",
+        "inBudget": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_physical_subtype",
+    "description": "Fixture create_physical_subtype record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/itam/physical-subtypes",
+    "body": {
+      "name": "Fixture create_physical_subtype",
+      "description": "Fixture create_physical_subtype record"
+    }
+  }
+}

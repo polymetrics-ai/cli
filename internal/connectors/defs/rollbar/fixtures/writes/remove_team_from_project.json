@@ -1,0 +1,17 @@
+{
+  "record": {
+    "team_id": "synthetic-conformance-value",
+    "project_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/1/team/synthetic-conformance-value/project/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

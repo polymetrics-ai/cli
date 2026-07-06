@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spotler CRM Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Spotler CRM API key, sent as the X-API-Key header value. Never logged. Used only by the legacy-parity contacts/accounts/opportunities/tasks streams; see access_token for the real CRM API v4's own OAuth2 access token, required by every other stream this bundle declares."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Spotler CRM (Really Simple Systems) API v4 OAuth2 access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged. Preferred over api_key when both are present; required by every stream added in this pass (activities, campaigns, cases, documents, opportunity_lines) since those target the real, live CRM API v4 host directly."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.spotlercrm.com/api/v1",
+      "description": "Spotler CRM API base URL override for tests or proxies. Only affects the legacy-parity contacts/accounts/opportunities/tasks streams; every other stream targets the real CRM API v4 host directly (https://apiv4.reallysimplesystems.com) and does not consult this value — see docs.md's Known limits."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/organizations/synthetic-conformance-value/events/", "query": { "expand": "venue,ticket_classes", "continuation": "event_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": false, "continuation": "event_cursor_2" },
+      "events": [
+        {
+          "id": "event_fixture_3",
+          "name": { "text": "Fixture Demo", "html": "<p>Fixture Demo</p>" },
+          "description": { "text": "Fixture demo event", "html": "<p>Fixture demo event</p>" },
+          "url": "https://www.eventbrite.com/e/fixture-demo",
+          "start": { "timezone": "UTC", "local": "2026-01-03T00:00:00", "utc": "2026-01-03T00:00:00Z" },
+          "end": { "timezone": "UTC", "local": "2026-01-03T04:00:00", "utc": "2026-01-03T04:00:00Z" },
+          "created": "2026-01-01T00:00:00Z",
+          "changed": "2026-01-03T00:00:00Z",
+          "published": "2026-01-01T00:00:00Z",
+          "status": "draft",
+          "currency": "USD",
+          "online_event": false,
+          "listed": false,
+          "organization_id": "org_fixture_1",
+          "venue_id": "venue_fixture_1",
+          "capacity": 50
+        }
+      ]
+    }
+  }
+}

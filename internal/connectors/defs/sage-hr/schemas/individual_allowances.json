@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "individual_allowances",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "full_name": { "type": ["string", "null"] },
+    "eligibilities": { "type": ["array", "null"] }
+  }
+}

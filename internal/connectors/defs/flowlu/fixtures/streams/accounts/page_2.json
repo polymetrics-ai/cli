@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/crm/account/list",
+    "query": {
+      "page": "2",
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "total_result": 101,
+        "page": 2,
+        "count": 100,
+        "items": [
+          {
+            "id": 101,
+            "type": 1,
+            "name": "Fixture Account 101",
+            "first_name": "First101",
+            "last_name": "Last101",
+            "email": "fixture101@example.com",
+            "phone": "+10000000101",
+            "active": 1,
+            "owner_id": 10,
+            "created_date": "2026-01-01 00:00:00",
+            "updated_date": "2026-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

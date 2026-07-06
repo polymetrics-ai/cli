@@ -1,0 +1,1772 @@
+{
+  "api": "Sentry Web API v0 (https://docs.sentry.io/api/)",
+  "docs": "https://docs.sentry.io/api/ and https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B blocked audit: full current Sentry OpenAPI path list is enumerated. The four legacy read streams remain covered; additional streams/writes are excluded with concrete reasons because this shard may not edit the existing Sentry StreamHook or shared engine dialect.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/config/integrations/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/environments/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/eventids/{event_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/events-timeseries/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/events/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/external-users/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/integrations/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/external-issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/values/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/install-details/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/{artifact_id}/size-analysis/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/profiling/chunks/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/profiling/flamegraph/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/project-keys/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/projects/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/projects/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/projects/{project_id_or_slug}/detectors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/relay_usage/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/release-threshold-statuses/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/",
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commitfiles/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commits/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/deploys/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/deploys/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/replay-count/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/replay-selectors/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/replays/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/replays/{replay_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/repos/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/repos/{repo_id}/commits/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/sentry-app-installations/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/sentry-apps/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/sessions/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/shortids/{issue_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/spike-protections/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/spike-protections/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/stats_v2/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/stats-summary/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/tags/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/teams/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/teams/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/trace-items/attributes/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/trace-meta/{trace_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/trace/{trace_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/user-teams/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/{environment}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/{environment}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/attachments/{attachment_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/{event_id}/source-map-debug/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/files/dsyms/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/filters/{filter_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/monitors/{monitor_id_or_slug}/checkins/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/ownership/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/ownership/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/size-analysis/status-check-rules/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprod/snapshots/status-check-rules/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/build-distribution/latest/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/profiling/profiles/{profile_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/commits/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/recording-segments/{segment_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/viewed-by/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/{job_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/repo/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/stats/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/tags/{key}/values/",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/users/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/seer/models/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/sentry-app-installations/{uuid}/external-issues/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      }
+    }
+  ]
+}

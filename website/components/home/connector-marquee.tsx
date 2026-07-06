@@ -72,7 +72,7 @@ export function ConnectorMarquee({ compact = false }: { compact?: boolean }) {
                 Connector catalog
               </span>
               <span className="mt-0.5 block text-[12px] leading-snug text-text-tertiary">
-                Source and destination connector list, not customer logos.
+                Bundle-generated connector list, not customer logos.
               </span>
             </span>
           </div>
@@ -101,7 +101,7 @@ export function ConnectorMarquee({ compact = false }: { compact?: boolean }) {
         <Row items={rowBottom} reverse duration="640s" />
       </div>
       <p className="text-[12px] text-text-tertiary">
-        {CONNECTOR_CATALOG_COUNT} catalog connectors share a Go HTTP &amp; database toolkit.
+        {CONNECTOR_CATALOG_COUNT} connector bundles share a Go HTTP &amp; database toolkit.
         Missing one?{' '}
         <a
           href="https://github.com/polymetrics-ai/cli/issues"

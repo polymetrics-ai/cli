@@ -1,0 +1,7 @@
+{
+  "api": "In-process deterministic generator — not a REST API",
+  "docs": "https://faker.readthedocs.io/en/master/",
+  "reviewed_at": "2026-07-03",
+  "scope": "This connector makes no network calls at all: it generates deterministic synthetic users/purchases/products records in-process from a count/seed formula. There is no REST endpoint surface to enumerate — Check/Catalog/Read are pure Go, not HTTP requests against any wire protocol. This api_surface.json intentionally has zero endpoints entries, matching the Tier-3 minimal-surface pattern for non-REST connectors (design §B.7, see native/postgres's identical zero-endpoint precedent).",
+  "endpoints": []
+}

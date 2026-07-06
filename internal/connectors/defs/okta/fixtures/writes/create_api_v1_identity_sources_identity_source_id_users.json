@@ -1,0 +1,35 @@
+{
+  "record": {
+    "identity_source_id": "synthetic-conformance-value",
+    "externalId": "external_id_fixture",
+    "profile": {
+      "email": "fixture@example.invalid",
+      "firstName": "first_name_fixture",
+      "homeAddress": "home_address_fixture",
+      "lastName": "last_name_fixture",
+      "mobilePhone": "mobile_phone_fixture",
+      "secondEmail": "fixture@example.invalid",
+      "userName": "user_name_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/users",
+    "body": {
+      "externalId": "external_id_fixture",
+      "profile": {
+        "email": "fixture@example.invalid",
+        "firstName": "first_name_fixture",
+        "homeAddress": "home_address_fixture",
+        "lastName": "last_name_fixture",
+        "mobilePhone": "mobile_phone_fixture",
+        "secondEmail": "fixture@example.invalid",
+        "userName": "user_name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

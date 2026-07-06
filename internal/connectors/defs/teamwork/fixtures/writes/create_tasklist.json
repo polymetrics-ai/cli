@@ -1,0 +1,9 @@
+{
+  "record": { "project_id": "1", "todo-list": { "name": "Fixture New Tasklist", "description": "Fixture tasklist description" } },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/tasklists.json",
+    "body": { "todo-list": { "name": "Fixture New Tasklist", "description": "Fixture tasklist description" } }
+  },
+  "response": { "status": 201, "body": { "id": "2" } }
+}

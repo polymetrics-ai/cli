@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/knowledge-bases/synthetic-conformance-value/articles",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value",
+          "title": "fixture-articles",
+          "slug": "fixture-articles",
+          "created_at": "fixture-articles"
+        }
+      ],
+      "request_id": "req_fixture",
+      "pagination": {
+        "cursor": null,
+        "has_next_page": false
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "comments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "date": { "type": "string", "format": "date-time" },
+    "content": { "type": ["string", "null"] },
+    "postId": { "type": ["string", "null"] },
+    "featureRequestId": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "userEmail": { "type": ["string", "null"] },
+    "userFirstName": { "type": ["string", "null"] },
+    "userLastName": { "type": ["string", "null"] }
+  }
+}

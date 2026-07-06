@@ -1,0 +1,10 @@
+{
+  "data": [
+    {
+      "record_id": "fixture",
+      "fields": {
+        "fixture": "value"
+      }
+    }
+  ]
+}

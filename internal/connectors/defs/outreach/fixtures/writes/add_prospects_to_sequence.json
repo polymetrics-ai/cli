@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "addprospectstosequence",
+      "attributes": {
+        "name": "Fixture Add Prospects To Sequence"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsAddToSequence",
+    "body": {
+      "data": {
+        "type": "addprospectstosequence",
+        "attributes": {
+          "name": "Fixture Add Prospects To Sequence"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

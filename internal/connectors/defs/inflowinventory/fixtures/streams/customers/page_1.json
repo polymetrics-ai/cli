@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/customers"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "customerId": "cust_fixture_1",
+        "name": "Fixture Customer 1",
+        "contactName": "Contact One",
+        "email": "fixture1@example.com",
+        "phone": "+1-555-0100",
+        "fax": null,
+        "isActive": true,
+        "remarks": "fixture record",
+        "pricingSchemeId": "price_fixture_1",
+        "taxingSchemeId": "tax_fixture_1",
+        "timestamp": "AAAAAAAAC1k="
+      },
+      {
+        "customerId": "cust_fixture_2",
+        "name": "Fixture Customer 2",
+        "contactName": "Contact Two",
+        "email": "fixture2@example.com",
+        "phone": "+1-555-0101",
+        "fax": null,
+        "isActive": true,
+        "remarks": "fixture record",
+        "pricingSchemeId": "price_fixture_1",
+        "taxingSchemeId": "tax_fixture_1",
+        "timestamp": "AAAAAAAAC2k="
+      }
+    ]
+  }
+}

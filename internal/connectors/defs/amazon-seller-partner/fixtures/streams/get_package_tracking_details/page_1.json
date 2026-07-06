@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/tracking",
+    "query": {
+      "packageNumber": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "trackingEvents": [
+          {
+            "eventDate": "eventDate-fixture-1",
+            "eventAddress": {},
+            "eventCode": "eventCode-fixture-1",
+            "eventDescription": "eventDescription-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

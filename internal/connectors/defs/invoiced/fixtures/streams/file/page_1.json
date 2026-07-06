@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/files/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "file",
+      "created_at": 1767225600,
+      "updated_at": 1767225601,
+      "name": "invoice.pdf",
+      "size": 1024,
+      "type": "application/pdf",
+      "url": "https://example.com/invoice.pdf"
+    }
+  }
+}

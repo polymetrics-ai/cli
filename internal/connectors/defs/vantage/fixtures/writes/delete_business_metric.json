@@ -1,0 +1,9 @@
+{
+  "record": {
+    "business_metric_token": "bm_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/business_metrics/bm_fixture_1"
+  }
+}

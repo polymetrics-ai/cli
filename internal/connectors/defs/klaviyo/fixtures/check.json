@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts" },
+  "response": {
+    "status": 200,
+    "body": { "data": [{ "id": "acct_fixture_1", "type": "account", "attributes": { "contact_information": { "organization_name": "Fixture Co" } } }] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_item_review_trends",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string"
+    },
+    "trendMetrics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "asin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

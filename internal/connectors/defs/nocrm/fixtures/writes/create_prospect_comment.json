@@ -1,0 +1,18 @@
+{
+  "record": {
+    "spreadsheet_id": "234",
+    "prospect_id": "345",
+    "content": "Fixture content",
+    "activity_id": "42",
+    "is_pinned": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spreadsheets/234/rows/345/comments",
+    "body": {
+      "content": "Fixture content",
+      "activity_id": "42",
+      "is_pinned": true
+    }
+  }
+}

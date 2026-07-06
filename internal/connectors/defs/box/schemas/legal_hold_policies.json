@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "legal_hold_policies",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "policy_name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "filter_started_at": { "type": ["string", "null"] },
+    "filter_ended_at": { "type": ["string", "null"] },
+    "assignment_counts": { "type": ["object", "null"] },
+    "created_by": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "modified_at": { "type": ["string", "null"] }
+  }
+}

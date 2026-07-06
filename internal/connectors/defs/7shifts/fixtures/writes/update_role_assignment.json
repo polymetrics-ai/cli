@@ -1,0 +1,24 @@
+{
+  "record": {
+    "role_id": 1001,
+    "user_id": 1001,
+    "skill_level": 1,
+    "sort": 1001,
+    "primary": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/role_assignments/1001",
+    "body": {
+      "skill_level": 1,
+      "sort": 1001,
+      "primary": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

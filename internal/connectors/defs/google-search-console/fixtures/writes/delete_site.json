@@ -1,0 +1,15 @@
+{
+  "record": {
+    "site_url": "https://fixture.example.com/"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/sites/https://fixture.example.com/"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "error": "not_found"
+    }
+  }
+}

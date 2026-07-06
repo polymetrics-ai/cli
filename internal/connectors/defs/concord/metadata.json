@@ -1,0 +1,24 @@
+{
+  "name": "concord",
+  "display_name": "Concord",
+  "description": "Reads and writes Concord contract lifecycle management data: agreements (and their metadata/summary/comments/activities/members/versions/attachments sub-resources), organizations, folders, reports, tags, clauses, approvals, groups, members, events, subscription, branding, and automated templates through the Concord REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.concordnow.com/api/rest/1/docs",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Concord API read of contract lifecycle management data (agreements and sub-resources, organizations, folders, reports, tags, clauses, approvals, groups, members, events, subscription, branding)",
+    "write": "external mutation of Concord folders, reports, clauses, groups, and company approval workflows (create/update/delete); does not create, sign, or modify agreements themselves",
+    "approval": "required for delete_folder/delete_report/delete_clause/delete_approval (destructive); create/update actions are lower risk but still mutate shared organization configuration"
+  }
+}

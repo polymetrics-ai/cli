@@ -1,0 +1,18 @@
+{
+  "record": {
+    "user_id": 1,
+    "group_names": [
+      "New Group 1"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/group_users",
+    "body": {
+      "user_id": 1,
+      "group_names": [
+        "New Group 1"
+      ]
+    }
+  }
+}

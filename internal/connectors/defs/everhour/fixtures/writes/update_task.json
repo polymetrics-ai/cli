@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "t_fixture_1",
+    "name": "Fixture Task One Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tasks/t_fixture_1",
+    "body": {
+      "name": "Fixture Task One Renamed"
+    }
+  }
+}

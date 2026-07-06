@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/rest_mode_period/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "rest_mode_period_detail_fixture_1",
+      "end_day": "2026-01-01",
+      "end_time": "2026-01-01T00:00:00+00:00",
+      "episodes": [],
+      "start_day": "2026-01-01",
+      "start_time": "2026-01-01T00:00:00+00:00"
+    }
+  }
+}

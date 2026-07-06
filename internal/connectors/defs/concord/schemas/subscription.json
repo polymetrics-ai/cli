@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscription",
+  "type": "object",
+  "x-primary-key": ["subscriptionId"],
+  "required": ["subscriptionId"],
+  "properties": {
+    "subscriptionName": { "type": ["string", "null"] },
+    "subscriptionId": { "type": "string" },
+    "customerId": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "seats": { "type": ["array", "null"] },
+    "type": { "type": ["string", "null"] },
+    "featureLevel": { "type": ["string", "null"] }
+  }
+}

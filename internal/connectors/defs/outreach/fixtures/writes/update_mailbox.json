@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "mailbox",
+      "attributes": {
+        "name": "Fixture Update Mailbox"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/mailboxes/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "mailbox",
+        "attributes": {
+          "name": "Fixture Update Mailbox"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

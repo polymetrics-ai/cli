@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/identity-sources/synthetic-conformance-value/groups/synthetic-conformance-value/membership",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "memberExternalIds": [
+        "member_external_id_fixture"
+      ]
+    }
+  }
+}

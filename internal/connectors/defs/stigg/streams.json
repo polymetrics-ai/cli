@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "POST", "path": "/graphql" },
+    "error_map": [
+      { "status": 401, "hint": "stigg api_key is missing or invalid; re-run pm credentials add stigg" },
+      { "status": 403, "hint": "stigg account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "stigg API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "method": "POST",
+      "path": "/graphql",
+      "records": { "path": "data.products" },
+      "schema": "schemas/products.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+    },
+    {
+      "name": "plans",
+      "method": "POST",
+      "path": "/graphql",
+      "records": { "path": "data.plans" },
+      "schema": "schemas/plans.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+    },
+    {
+      "name": "customers",
+      "method": "POST",
+      "path": "/graphql",
+      "records": { "path": "data.customers" },
+      "schema": "schemas/customers.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+    },
+    {
+      "name": "subscriptions",
+      "method": "POST",
+      "path": "/graphql",
+      "records": { "path": "data.subscriptions" },
+      "schema": "schemas/subscriptions.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+    }
+  ]
+}

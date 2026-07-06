@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/case/v2/",
+    "query": { "indices.parent": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "matching_records": 1,
+      "next": null,
+      "cases": [
+        {
+          "domain": "synthetic-conformance-value",
+          "case_id": "case_v2_child_fixture_1",
+          "case_type": "assignment",
+          "case_name": "Fixture child",
+          "external_id": "child_fixture_1",
+          "owner_id": "mobile_worker_fixture_1",
+          "indexed_on": "2026-05-05T00:00:00.000000Z",
+          "closed": false,
+          "date_closed": null,
+          "properties": { "assignment_type": "primary" },
+          "indices": {
+            "parent": {
+              "case_id": "synthetic-conformance-value",
+              "case_type": "patient",
+              "relationship": "child"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

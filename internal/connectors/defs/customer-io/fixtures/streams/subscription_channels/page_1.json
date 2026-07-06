@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/subscription_channels" },
+  "response": {
+    "status": 200,
+    "body": {
+      "channels": [
+        { "id": 1, "type": "email", "name": "Email", "description": "Email delivery channel", "subscribed_by_default": true },
+        { "id": 2, "type": "push", "name": "Push", "description": "Push notification channel", "subscribed_by_default": false }
+      ]
+    }
+  }
+}

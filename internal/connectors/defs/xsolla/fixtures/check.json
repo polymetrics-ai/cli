@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/search.json",
+    "query": { "limit": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

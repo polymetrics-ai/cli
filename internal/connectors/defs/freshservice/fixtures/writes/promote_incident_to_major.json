@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture promote_incident_to_major",
+    "description": "Fixture promote_incident_to_major record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/promote",
+    "body": {
+      "name": "Fixture promote_incident_to_major",
+      "description": "Fixture promote_incident_to_major record"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "client_id": "synthetic-conformance-value",
+    "type": "ACCESS_CERTIFICATIONS_ADMIN"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/oauth2/v1/clients/synthetic-conformance-value/roles",
+    "body": {
+      "type": "ACCESS_CERTIFICATIONS_ADMIN"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

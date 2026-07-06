@@ -1,0 +1,7 @@
+{
+  "record": { "environmentId": "env_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/environments/env_fixture_1"
+  }
+}

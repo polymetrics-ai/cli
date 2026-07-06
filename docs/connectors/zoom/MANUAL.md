@@ -12,20 +12,44 @@ SYNOPSIS
 DESCRIPTION
   Reads Zoom users, meetings, and webinars through the Zoom REST API.
 
+ICON
+  asset: icons/zoom.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.zoom.us/docs/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  user_id
+  access_token (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: email(), id(), name(), updated_at()
+  meetings:
+    primary key: id
+    fields: email(), id(), name(), updated_at()
+  webinars:
+    primary key: id
+    fields: email(), id(), name(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoom API read of user, meeting, and webinar data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

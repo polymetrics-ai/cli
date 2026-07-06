@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/characteristic",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "url": "https://pokeapi.co/api/v2/characteristic/1/"
+        }
+      ]
+    }
+  }
+}

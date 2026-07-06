@@ -1,0 +1,15 @@
+{
+  "record": {
+    "asset_type_id": 123,
+    "name": "Fixture update_an_asset_type",
+    "description": "Fixture update_an_asset_type record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/asset_types/123",
+    "body": {
+      "name": "Fixture update_an_asset_type",
+      "description": "Fixture update_an_asset_type record"
+    }
+  }
+}

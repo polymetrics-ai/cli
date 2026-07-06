@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/upstream/opportunities", "query": { "locationId": "synthetic-conformance-value", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "opportunities": [
+        {
+          "id": "op_fixture_1",
+          "name": "Fixture Opportunity 1",
+          "pipelineId": "pl_fixture_1",
+          "pipelineStageId": "stg_fixture_1",
+          "status": "open",
+          "monetaryValue": 100,
+          "contactId": "ct_fixture_1",
+          "assignedTo": "user_fixture_1",
+          "source": "fixture",
+          "dateAdded": "2026-01-01T00:00:00Z",
+          "dateUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "op_fixture_2",
+          "name": "Fixture Opportunity 2",
+          "pipelineId": "pl_fixture_1",
+          "pipelineStageId": "stg_fixture_2",
+          "status": "won",
+          "monetaryValue": 200,
+          "contactId": "ct_fixture_2",
+          "assignedTo": "user_fixture_2",
+          "source": "fixture",
+          "dateAdded": "2026-01-02T00:00:00Z",
+          "dateUpdated": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": { "nextPageUrl": null }
+    }
+  }
+}

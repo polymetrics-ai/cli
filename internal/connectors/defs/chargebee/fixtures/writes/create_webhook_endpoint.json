@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Webhook",
+    "url": "https://fixture.example.com/webhooks/chargebee"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook_endpoints"
+  }
+}

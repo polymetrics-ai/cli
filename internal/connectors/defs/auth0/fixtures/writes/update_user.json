@@ -1,0 +1,21 @@
+{
+  "record": {
+    "user_id": "auth0|fixture_user_1",
+    "name": "Fixture User Updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/users/auth0|fixture_user_1",
+    "body": {
+      "name": "Fixture User Updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "user_id": "auth0|fixture_user_1",
+      "name": "Fixture User Updated",
+      "updated_at": "2026-01-02T00:00:00.000Z"
+    }
+  }
+}

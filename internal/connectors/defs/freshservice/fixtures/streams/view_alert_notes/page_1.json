@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ams/alerts/synthetic-conformance-value/notes",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "alert_notes": [
+        {
+          "id": "view_alert_notes",
+          "name": "Fixture view_alert_notes",
+          "subject": "Fixture view_alert_notes",
+          "description": "Fixture view_alert_notes record",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

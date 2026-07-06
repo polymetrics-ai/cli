@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_delivery_window_options",
+  "type": "object",
+  "properties": {
+    "availabilityType": {
+      "type": "string"
+    },
+    "deliveryWindowOptionId": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string"
+    },
+    "validUntil": {
+      "type": "string"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VWO Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.vwo.com/api/v2",
+      "description": "VWO API base URL. Defaults to the public VWO API v2 host (confirmed current and correct against the live OpenAPI spec published at developers.wingify.com, which documents the identical https://app.wingify.com/api/v2 host family)."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "VWO personal API token, generated at https://app.wingify.com/#/developers/tokens. Pass B correction: the real, currently-documented API's OpenAPI security scheme is an apiKey header named 'token' (bare token value, no prefix) -- sent as 'token: <api_key>' -- NOT the 'Authorization: Token <api_key>' shape this bundle previously (and legacy) sent. Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "default": "current",
+      "description": "VWO workspace/account id used as the {account_id} path segment on every request (Pass B correction: the real API's campaigns endpoints are ALWAYS account-scoped, e.g. /accounts/{account_id}/campaigns -- legacy's bare /campaigns path targeted a URL shape the real API does not expose). Defaults to the literal 'current', VWO's own documented keyword for 'the Main Workspace of the authenticated token' -- so no additional required config is introduced versus legacy's zero-config behavior. Set to a specific numeric workspace id to target a sub-account instead."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional start_date query parameter passed through to the campaigns endpoint verbatim (RFC3339). Not used as a stateful incremental cursor by legacy. NOTE: this is not a real VWO query parameter (the real 'Get all campaigns' endpoint has no date-range filter at all -- see docs.md); it is preserved here only for config-shape backward compatibility with the original migration and is a silent no-op against the real API, same as it always effectively was."
+    },
+    "campaign_type": {
+      "type": "string",
+      "enum": ["ab", "multivariate", "split", "targeting", "heatmap", "conversion", "usability", "survey", "analysis", "analyze-heatmap", "recording", "form-analysis", "mobile-ab", "server-ab", "feature-rollout", "feature-test", "experience"],
+      "description": "Optional campaign-type filter, sent as the real API's 'type' query parameter only when configured (Pass B full-surface expansion of the campaigns endpoint's documented type filter)."
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["website", "full-stack", "mobile-app"],
+      "description": "Optional platform filter, sent as the real API's 'platform' query parameter only when configured (Pass B full-surface expansion)."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 25,
+      "description": "Sent as the real API's 'limit' query parameter (Pass B full-surface expansion). VWO's documented default is 25."
+    }
+  }
+}

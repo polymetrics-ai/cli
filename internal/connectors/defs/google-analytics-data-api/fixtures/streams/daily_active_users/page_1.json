@@ -1,0 +1,11 @@
+{
+  "data": [
+    {
+      "property_id": "fixture",
+      "date": "fixture",
+      "activeUsers": 1.5,
+      "newUsers": 1.5,
+      "sessions": 1.5
+    }
+  ]
+}

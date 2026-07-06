@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "name": "Fixture Addon",
+    "code": "fixture-addon",
+    "price": 10,
+    "billing_cycle": "lifetime",
+    "billing_period": "m"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/addon/product_fixture_1"
+  }
+}

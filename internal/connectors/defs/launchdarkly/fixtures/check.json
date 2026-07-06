@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/projects", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "items": [{ "_id": "proj_fixture_1", "key": "fixture-proj", "name": "Fixture Project", "tags": [] }], "totalCount": 1 }
+  }
+}

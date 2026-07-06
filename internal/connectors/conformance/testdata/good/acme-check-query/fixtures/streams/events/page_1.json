@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": {} },
+  "response": { "status": 200, "body": { "data": [ { "id": "1", "name": "a" } ] } }
+}

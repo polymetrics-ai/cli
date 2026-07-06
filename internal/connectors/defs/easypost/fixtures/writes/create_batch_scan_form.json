@@ -1,0 +1,5 @@
+{
+  "record": { "id": "batch_fixture_1" },
+  "expect": { "method": "POST", "path": "/batches/batch_fixture_1/scan_form" },
+  "response": { "status": 200, "body": { "id": "sf_fixture_batch_1", "object": "ScanForm" } }
+}

@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/contacts" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "type": "PERSON",
+        "created_time": 1767225601,
+        "updated_time": 1767225601,
+        "star_value": 0,
+        "lead_score": 10,
+        "tags": ["fixture"],
+        "properties": [],
+        "owner": { "id": "fixture-owner-1" }
+      },
+      {
+        "id": 2,
+        "type": "PERSON",
+        "created_time": 1767225602,
+        "updated_time": 1767225602,
+        "star_value": 0,
+        "lead_score": 20,
+        "tags": ["fixture"],
+        "properties": [],
+        "owner": { "id": "fixture-owner-1" },
+        "cursor": "fixture_cursor_abc"
+      }
+    ]
+  }
+}

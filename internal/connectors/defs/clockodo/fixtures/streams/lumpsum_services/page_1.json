@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/v2/lumpsumservices" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lumpSumServices": [
+        {
+          "id": 1,
+          "name": "Fixture Lump Sum Service",
+          "price": 100.0,
+          "unit": "piece",
+          "number": "5001",
+          "active": true,
+          "note": "conformance fixture lump-sum service"
+        }
+      ]
+    }
+  }
+}

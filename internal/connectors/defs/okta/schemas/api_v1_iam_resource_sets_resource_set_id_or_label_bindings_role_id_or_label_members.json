@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "members": {
+      "type": "array",
+      "description": "The members of the role resource set binding. If there are more than 100 members for the binding, then the `_links.next` resource is returned with the next list of members.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "description": "Timestamp when the member was created",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "description": "Role resource set binding member ID"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "description": "Timestamp when the member was last updated",
+            "format": "date-time"
+          },
+          "_links": {
+            "type": "object",
+            "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+            "properties": {
+              "self": {
+                "type": "object",
+                "description": "Link to the resource (self)",
+                "properties": {
+                  "hints": {
+                    "type": "object",
+                    "description": "Describes allowed HTTP verbs for the `href`",
+                    "properties": {
+                      "allow": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "href": {
+                    "type": "string",
+                    "description": "Link URI"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Link name"
+                  },
+                  "templated": {
+                    "type": "boolean",
+                    "description": "Indicates whether the link object's `href` property is a URI template."
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "next": {
+          "type": "object",
+          "description": "Link to the next list of binding members for the specified role and resource set",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "binding": {
+          "type": "object",
+          "description": "Link to the binding resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

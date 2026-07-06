@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/voices",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "voice_name": "fixture-anna", "face_id": "replica_fixture_1", "audio_url": null, "tags": [] }
+      ]
+    }
+  }
+}

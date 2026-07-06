@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailjet SMS Connection Specification",
+  "type": "object",
+  "required": ["token"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mailjet SMS API Bearer token. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.mailjet.com/v4",
+      "description": "Mailjet SMS API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Unix-seconds lower bound sent as the FromTS query param on list/count streams."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Unix-seconds upper bound sent as the ToTS query param on list/count streams."
+    },
+    "status_code": {
+      "type": "string",
+      "description": "Optional Mailjet SMS StatusCode filter for message list/count requests; use the API's comma-separated code format when filtering multiple statuses."
+    },
+    "recipient": {
+      "type": "string",
+      "description": "Optional To filter for message list/count requests."
+    },
+    "sms_ids": {
+      "type": "string",
+      "description": "Optional IDs filter for the sms list stream; use Mailjet's comma-separated ID format."
+    },
+    "sms_id": {
+      "type": "string",
+      "description": "SMS message id used by the sms_message detail stream."
+    },
+    "export_job_id": {
+      "type": "string",
+      "description": "Mailjet export job id used by the sms_export detail stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

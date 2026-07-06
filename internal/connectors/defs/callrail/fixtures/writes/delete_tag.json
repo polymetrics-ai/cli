@@ -1,0 +1,8 @@
+{
+  "record": { "id": "TAG_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/tags/TAG_fixture_1.json"
+  },
+  "response": { "status": 204, "body": {} }
+}

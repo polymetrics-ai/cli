@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": ["Fixture Post"],
+    "content": ["Fixture content"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/posts",
+    "body": {
+      "title": ["Fixture Post"],
+      "content": ["Fixture content"]
+    }
+  }
+}

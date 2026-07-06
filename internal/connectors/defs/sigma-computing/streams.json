@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "nextPage"
+    },
+    "check": { "method": "GET", "path": "/v2/workbooks" },
+    "error_map": [
+      { "status": 401, "hint": "sigma-computing access_token secret is missing or invalid; re-run pm credentials add sigma-computing" },
+      { "status": 403, "hint": "sigma-computing account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sigma-computing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "workbooks",
+      "path": "/v2/workbooks",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/workbooks.json"
+    },
+    {
+      "name": "datasets",
+      "path": "/v2/datasets",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/datasets.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v2/teams",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "members",
+      "path": "/v2/members",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.displayName }}",
+        "updated_at": "{{ coalesce record.updatedAt record.updated_at }}"
+      },
+      "schema": "schemas/members.json"
+    }
+  ]
+}

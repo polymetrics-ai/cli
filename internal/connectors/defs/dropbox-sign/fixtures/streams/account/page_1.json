@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/account" },
+  "response": {
+    "status": 200,
+    "body": {
+      "account": {
+        "account_id": "acct_fixture_1",
+        "email_address": "fixture1@example.com",
+        "is_paid_hs": true,
+        "is_paid_hf": false,
+        "role_code": "a",
+        "locale": "en-US"
+      }
+    }
+  }
+}

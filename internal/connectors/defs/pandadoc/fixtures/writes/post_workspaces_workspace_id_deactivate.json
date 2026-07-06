@@ -1,0 +1,36 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "name": "Fixture post_workspaces_workspace_id_deactivate",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/workspaces/workspace_id_fixture/deactivate",
+    "body": {
+      "name": "Fixture post_workspaces_workspace_id_deactivate",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_workspaces_workspace_id_deactivate_response",
+      "status": "ok"
+    }
+  }
+}

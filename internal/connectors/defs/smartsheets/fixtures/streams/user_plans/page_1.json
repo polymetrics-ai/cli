@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value/plans",
+    "query": {
+      "maxItems": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 12345,
+          "name": "Fixture user_plans",
+          "type": "user_plans",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

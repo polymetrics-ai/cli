@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/inspection-areas" },
+  "response": {
+    "status": 200,
+    "body": { "inspectionAreas": [] }
+  }
+}

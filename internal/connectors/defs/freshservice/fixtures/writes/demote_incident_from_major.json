@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture demote_incident_from_major",
+    "description": "Fixture demote_incident_from_major record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/demote",
+    "body": {
+      "name": "Fixture demote_incident_from_major",
+      "description": "Fixture demote_incident_from_major record"
+    }
+  }
+}

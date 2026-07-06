@@ -1,0 +1,34 @@
+{
+  "record": {
+    "handle": "fixture",
+    "title": "fixture",
+    "shortDescription": "fixture",
+    "defaultLocale": "fixture",
+    "visibility": "public",
+    "customDomain": "fixture",
+    "useCustomDomain": true,
+    "repositoryIds": [
+      "repository_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/sites",
+    "body": {
+      "handle": "fixture",
+      "title": "fixture",
+      "shortDescription": "fixture",
+      "defaultLocale": "fixture",
+      "visibility": "public",
+      "customDomain": "fixture",
+      "useCustomDomain": true,
+      "repositoryIds": [
+        "repository_id_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

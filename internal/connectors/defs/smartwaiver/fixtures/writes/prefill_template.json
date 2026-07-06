@@ -1,0 +1,31 @@
+{
+  "record": {
+    "template_id": "tp_fixture_1",
+    "expiration": 30000,
+    "adult": true,
+    "email": "fixture1@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v4/templates/tp_fixture_1/prefill",
+    "body": {
+      "expiration": 30000,
+      "adult": true,
+      "email": "fixture1@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "version": 4,
+      "id": "fixture-req-id-prefill-0001",
+      "ts": "2026-01-01T00:00:00Z",
+      "type": "prefill",
+      "prefill": {
+        "uuid": "pf_fixture_1",
+        "expiration": 30000,
+        "url": "https://waiver.smartwaiver.com/p/pf_fixture_1/"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sections",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "webTitle": { "type": ["string", "null"] },
+    "webUrl": { "type": ["string", "null"] },
+    "apiUrl": { "type": ["string", "null"] },
+    "editions": { "type": ["array", "null"] }
+  }
+}

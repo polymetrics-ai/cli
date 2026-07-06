@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/forms", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "items": [], "page": 1, "limit": 1, "total": 0, "hasMore": false }
+  }
+}

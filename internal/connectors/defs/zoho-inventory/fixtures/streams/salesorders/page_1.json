@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/salesorders",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "salesorders": [
+        {
+          "salesorder_id": "salesorder_fixture_1",
+          "salesorder_number": "SO-FIXTURE-1",
+          "customer_id": "contact_fixture_1",
+          "customer_name": "Fixture Customer 1",
+          "status": "confirmed",
+          "date": "2026-01-01",
+          "shipment_date": "2026-01-02",
+          "currency_code": "USD",
+          "total": 125.5,
+          "balance": 0,
+          "created_time": "2026-01-01T00:00:00+0000",
+          "last_modified_time": "2026-01-01T00:00:00+0000"
+        },
+        {
+          "salesorder_id": "salesorder_fixture_2",
+          "salesorder_number": "SO-FIXTURE-2",
+          "customer_id": "contact_fixture_2",
+          "customer_name": "Fixture Customer 2",
+          "status": "draft",
+          "date": "2026-01-01",
+          "shipment_date": "2026-01-02",
+          "currency_code": "USD",
+          "total": 250.0,
+          "balance": 250.0,
+          "created_time": "2026-01-01T00:00:00+0000",
+          "last_modified_time": "2026-01-01T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

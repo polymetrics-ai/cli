@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "suppliers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "x-cursor-field": "lastUpdated",
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "vatNumber": { "type": ["string", "null"] },
+    "ean": { "type": ["string", "null"] },
+    "address": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "telephoneAndFaxNumber": { "type": ["string", "null"] },
+    "corporateIdentificationNumber": { "type": ["string", "null"] },
+    "balance": { "type": ["number", "null"] },
+    "lastUpdated": { "type": ["string", "null"] }
+  }
+}

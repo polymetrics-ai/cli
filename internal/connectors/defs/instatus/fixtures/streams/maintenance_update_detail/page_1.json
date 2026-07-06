@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/synthetic-conformance-value/maintenances/synthetic-conformance-value/maintenance-updates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "maintenance_update_fixture_1",
+      "name": "Fixture maintenance_update_fixture_1",
+      "message": "Fixture maintenance update"
+    }
+  }
+}

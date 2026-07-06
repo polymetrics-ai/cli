@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/reports/daily_sales_and_labor",
+    "query": {
+      "start_date": "2020-01-01T00:00:00Z",
+      "end_date": "synthetic-conformance-value",
+      "location_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "date": "2026-01-01",
+          "actual_sales": 1001,
+          "projected_sales": 1001,
+          "actual_labor_cost": 1001,
+          "projected_labor_cost": 1001,
+          "sales_per_labor_hour": 12.34,
+          "projected_sales_per_labor_hour": 12.34,
+          "items_per_labor_hour": 12.34,
+          "projected_items_per_labor_hour": 12.34,
+          "labor_percent": 12.34,
+          "projected_sales_override": 12.34,
+          "location_id": 1001,
+          "department_id": 1001,
+          "actual_items": 1001,
+          "projected_items": 1001,
+          "projected_items_override": 1001,
+          "labor_target": 12.34,
+          "actual_labor_minutes": 1001,
+          "projected_labor_minutes": 1001,
+          "actual_ot_minutes": 1001
+        }
+      ]
+    }
+  }
+}

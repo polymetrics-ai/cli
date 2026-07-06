@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/embed",
+    "query": {
+      "url": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_embed_by_url_in_space_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_embed_by_url_in_space",
+      "name": "Fixture get_embed_by_url_in_space",
+      "status": "active",
+      "operation_id": "getEmbedByUrlInSpace"
+    }
+  }
+}

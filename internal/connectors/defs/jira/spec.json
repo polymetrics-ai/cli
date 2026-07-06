@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jira Connection Specification",
+  "type": "object",
+  "required": ["email", "api_token", "base_url"],
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Atlassian account email used as the Basic auth username."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Jira API token, sent as the Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Jira Cloud site base URL, e.g. https://your-company.atlassian.net. Legacy derives this from a bare `domain` config value; this bundle requires the full base_url directly instead (no derived-default mechanism exists for a non-literal default — see docs.md Known limits)."
+    }
+  }
+}

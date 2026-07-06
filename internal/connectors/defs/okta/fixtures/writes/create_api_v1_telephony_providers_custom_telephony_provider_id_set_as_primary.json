@@ -1,0 +1,13 @@
+{
+  "record": {
+    "custom_telephony_provider_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/telephony-providers/synthetic-conformance-value/setAsPrimary"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/senders", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "email": "fixture1@example.com", "name": "Fixture Sender 1" },
+      { "email": "fixture2@example.com", "name": "Fixture Sender 2" }
+    ]
+  }
+}

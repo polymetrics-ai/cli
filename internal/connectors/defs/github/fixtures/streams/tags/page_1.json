@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/tags",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "v1.0.0",
+        "zipball_url": "https://api.github.com/repos/octocat/hello-world/zipball/v1.0.0",
+        "tarball_url": "https://api.github.com/repos/octocat/hello-world/tarball/v1.0.0",
+        "commit": {
+          "sha": "abc123",
+          "url": "https://api.github.com/repos/octocat/hello-world/commits/abc123"
+        },
+        "node_id": "T_kwDOFixture1"
+      }
+    ]
+  }
+}

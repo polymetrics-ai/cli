@@ -1,0 +1,25 @@
+{
+  "name": "postmarkapp",
+  "display_name": "Postmark App",
+  "description": "Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.",
+  "integration_type": "api",
+  "docs_url": "https://postmarkapp.com/developer",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Postmark API read of message, bounce, template, stream, stats, webhook, suppression, and inbound-rule data",
+    "write": "sends emails and mutates Postmark templates, message streams, server settings, webhooks, inbound rules, suppressions, and inbound message processing state",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

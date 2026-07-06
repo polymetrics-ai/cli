@@ -1,0 +1,30 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "item_id": "synthetic-conformance-value",
+    "parent": {
+      "id": "id_fixture"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/boards/synthetic-conformance-value/items/synthetic-conformance-value",
+    "body": {
+      "parent": {
+        "id": "id_fixture"
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

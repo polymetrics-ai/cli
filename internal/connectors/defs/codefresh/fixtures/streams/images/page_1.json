@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/images",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "docs": [
+        {
+          "_id": "0000000000000000000000000000000000fix1",
+          "created": "2026-01-01T00:00:00Z",
+          "imageName": "fixture-org/fixture-image",
+          "branch": "main",
+          "sha": "0000000000000000000000000000000000fix1",
+          "commit": "fixture commit message",
+          "commitURL": "https://github.com/fixture-org/fixture-repo/commit/0000000000000000000000000000000000fix1",
+          "tags": [],
+          "service": {
+            "_id": "000000000000000000000001",
+            "name": "fixture-org/fixture-repo/fixture-image"
+          },
+          "imageDisplayName": "fixture-org/fixture-image",
+          "size": 123456789,
+          "repo": "fixture-org/fixture-repo"
+        }
+      ],
+      "total": 1,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}

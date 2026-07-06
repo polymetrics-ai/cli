@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "custom", "hook": "chift" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "size",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/consumers", "query": { "size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "chift client_id/client_secret/account_id is missing or invalid; re-run pm credentials add chift" },
+      { "status": 403, "hint": "chift account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "chift rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "consumers",
+      "path": "/consumers",
+      "records": { "path": "" },
+      "schema": "schemas/consumers.json"
+    },
+    {
+      "name": "connections",
+      "path": "/connections",
+      "records": { "path": "" },
+      "schema": "schemas/connections.json"
+    },
+    {
+      "name": "syncs",
+      "path": "/syncs",
+      "records": { "path": "" },
+      "schema": "schemas/syncs.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/integrations",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/integrations.json"
+    },
+    {
+      "name": "datastores",
+      "path": "/datastores",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/datastores.json"
+    },
+    {
+      "name": "webhook_definitions",
+      "path": "/webhooks",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/webhook_definitions.json"
+    }
+  ]
+}

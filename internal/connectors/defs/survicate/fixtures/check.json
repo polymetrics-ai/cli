@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/surveys", "query": { "items_per_page": "1" } },
+  "response": { "status": 200, "body": { "pagination_data": { "has_more": false, "next_url": null }, "data": [] } }
+}

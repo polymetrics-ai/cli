@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/pages/error/default"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contentSecurityPolicySetting": {
+        "mode": "enforced",
+        "reportUri": "https://example.invalid/fixture",
+        "srcList": [
+          "src_list_fixture"
+        ]
+      }
+    }
+  }
+}

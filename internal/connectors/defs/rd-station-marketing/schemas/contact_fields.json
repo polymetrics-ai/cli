@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_fields",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "uuid": { "type": ["string", "null"] },
+    "api_identifier": { "type": ["string", "null"] },
+    "custom_field": { "type": ["boolean", "null"] },
+    "data_type": { "type": ["string", "null"] },
+    "name": { "type": ["object", "null"] },
+    "label": { "type": ["object", "null"] },
+    "presentation_type": { "type": ["string", "null"] },
+    "validation_rules": { "type": ["object", "null"] }
+  }
+}

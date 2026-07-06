@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/members/synthetic-conformance-value/sso"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "set_user_as_sso_member_for_organization_fixture_1"
+    }
+  }
+}

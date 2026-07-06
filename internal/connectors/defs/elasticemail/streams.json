@@ -1,0 +1,123 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-ElasticEmail-ApiKey", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/lists" },
+    "error_map": [
+      { "status": 401, "hint": "elasticemail api_key is missing or invalid; re-run pm credentials add elasticemail" },
+      { "status": 429, "class": "rate_limited", "hint": "elasticemail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "" },
+      "incremental": {
+        "cursor_field": "DateUpdated"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": { "path": "" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "lists",
+      "path": "/lists",
+      "records": { "path": "" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "records": { "path": "" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": { "path": "" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "domains",
+      "path": "/domains",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/domains.json"
+    },
+    {
+      "name": "suppressions",
+      "path": "/suppressions",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions.json"
+    },
+    {
+      "name": "suppressions_bounces",
+      "path": "/suppressions/bounces",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_bounces.json"
+    },
+    {
+      "name": "suppressions_complaints",
+      "path": "/suppressions/complaints",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_complaints.json"
+    },
+    {
+      "name": "suppressions_unsubscribes",
+      "path": "/suppressions/unsubscribes",
+      "records": { "path": "" },
+      "schema": "schemas/suppressions_unsubscribes.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhook",
+      "records": { "path": "" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "files",
+      "path": "/files",
+      "records": { "path": "" },
+      "schema": "schemas/files.json"
+    },
+    {
+      "name": "inbound_routes",
+      "path": "/inboundroute",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/inbound_routes.json"
+    },
+    {
+      "name": "sub_accounts",
+      "path": "/subaccounts",
+      "records": { "path": "" },
+      "schema": "schemas/sub_accounts.json"
+    },
+    {
+      "name": "statistics_campaigns",
+      "path": "/statistics/campaigns",
+      "records": { "path": "" },
+      "schema": "schemas/statistics_campaigns.json"
+    },
+    {
+      "name": "statistics_channels",
+      "path": "/statistics/channels",
+      "records": { "path": "" },
+      "schema": "schemas/statistics_channels.json"
+    }
+  ]
+}

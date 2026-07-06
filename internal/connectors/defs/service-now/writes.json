@@ -1,0 +1,139 @@
+{
+  "actions": [
+    {
+      "name": "create_incident",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/now/table/incident",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "short_description": { "type": "string" },
+          "description": { "type": "string" },
+          "state": { "type": "string" },
+          "priority": { "type": "string" },
+          "urgency": { "type": "string" },
+          "impact": { "type": "string" },
+          "assignment_group": { "type": "string" },
+          "assigned_to": { "type": "string" },
+          "caller_id": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      },
+      "risk": "creates a new incident record; low-risk external mutation (a new ticket), no approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/now/table/sys_user",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user_name"],
+        "properties": {
+          "user_name": { "type": "string" },
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "active": { "type": "string" },
+          "department": { "type": "string" }
+        }
+      },
+      "risk": "creates a new ServiceNow user account record; a new user account granted whatever role/ACL defaults the instance applies is a higher-scrutiny mutation than an incident/group create"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/now/table/sys_user_group",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "active": { "type": "string" },
+          "manager": { "type": "string" }
+        }
+      },
+      "risk": "creates a new user group record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_incident",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/now/table/incident/{{ record.sys_id }}",
+      "path_fields": ["sys_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sys_id"],
+        "properties": {
+          "sys_id": { "type": "string" },
+          "short_description": { "type": "string" },
+          "description": { "type": "string" },
+          "state": { "type": "string" },
+          "priority": { "type": "string" },
+          "urgency": { "type": "string" },
+          "impact": { "type": "string" },
+          "assignment_group": { "type": "string" },
+          "assigned_to": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing incident's recorded fields (only fields present in the submitted record are changed; ServiceNow's Table API PATCH/PUT both modify only the submitted fields, never the whole record) by sys_id"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/now/table/sys_user/{{ record.sys_id }}",
+      "path_fields": ["sys_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sys_id"],
+        "properties": {
+          "sys_id": { "type": "string" },
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "active": { "type": "string" },
+          "department": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing user account's profile fields by sys_id, including active (deactivating a user's account revokes their instance access); higher-scrutiny than incident/group updates"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/now/table/sys_user_group/{{ record.sys_id }}",
+      "path_fields": ["sys_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sys_id"],
+        "properties": {
+          "sys_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "active": { "type": "string" },
+          "manager": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing group's recorded fields by sys_id, including active/manager; can change who is considered the group's membership owner"
+    }
+  ]
+}

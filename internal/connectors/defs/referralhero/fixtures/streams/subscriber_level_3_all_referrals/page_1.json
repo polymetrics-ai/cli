@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/subscribers/synthetic-conformance-value/level_3_all_referrals",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "subscribers_retrieved",
+        "subscribers": [
+          {
+            "id": "sub_level3_all_fixture_1",
+            "name": "Level Three Fixture",
+            "email": "level3.fixture@example.com",
+            "referral_status": "confirmed",
+            "level_2_confirmed_referrals": 0,
+            "level_3_confirmed_referrals": 0,
+            "created_at": 1723452705,
+            "last_updated_at": 1723452705
+          }
+        ],
+        "pagination": {
+          "total_pages": 1,
+          "current_page": 1,
+          "per_page": 50,
+          "total_objects": 1
+        }
+      },
+      "calls_left": null,
+      "timestamp": 1723457099
+    }
+  }
+}

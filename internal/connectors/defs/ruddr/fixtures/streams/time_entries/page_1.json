@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/workspaces/synthetic-conformance-value/time_entries", "query": { "page": "1", "page_size": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "te_fixture_1", "name": "Fixture time entry", "project_id": "project_fixture_1", "hours": 3.5 }
+      ],
+      "next": null,
+      "previous": null
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/locations" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Location 1", "city": "Lisbon", "country": "PT" }
+    ]
+  }
+}

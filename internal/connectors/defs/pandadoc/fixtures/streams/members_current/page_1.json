@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v1/members/current"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "members_current_fixture_1",
+          "name": "Fixture members_current",
+          "status": "fixture",
+          "date_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

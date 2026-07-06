@@ -1,0 +1,15 @@
+{
+  "record": {
+    "email": "freshchat-user@example.com",
+    "first_name": "Fixture",
+    "last_name": "User"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "email": "freshchat-user@example.com",
+      "first_name": "Fixture"
+    }
+  }
+}

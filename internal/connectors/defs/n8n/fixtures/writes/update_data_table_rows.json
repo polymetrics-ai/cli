@@ -1,0 +1,41 @@
+{
+  "record": {
+    "data_table_id": "dt_fixture_1",
+    "filter": {
+      "filters": [
+        {
+          "columnName": "name",
+          "condition": "eq",
+          "value": "Fixture Row"
+        }
+      ]
+    },
+    "data": {
+      "name": "Updated Row"
+    },
+    "returnData": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/data-tables/dt_fixture_1/rows/update",
+    "body": {
+      "filter": {
+        "filters": [
+          {
+            "columnName": "name",
+            "condition": "eq",
+            "value": "Fixture Row"
+          }
+        ]
+      },
+      "data": {
+        "name": "Updated Row"
+      },
+      "returnData": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

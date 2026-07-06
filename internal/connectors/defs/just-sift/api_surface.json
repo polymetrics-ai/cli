@@ -1,0 +1,10 @@
+{
+  "api": "JustSift (Sift) API v1 (https://api.justsift.com/v1)",
+  "docs": "https://sift.com/developers/docs/curl/apis-overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; any other JustSift surface is out of scope until Pass B",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/search/people", "covered_by": { "stream": "peoples" } },
+    { "method": "GET", "path": "/v1/fields/person", "covered_by": { "stream": "fields" } }
+  ]
+}

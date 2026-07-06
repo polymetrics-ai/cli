@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/ticket_classes/", "query": { "expand": "venue,ticket_classes" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": true, "continuation": "ticket_class_cursor_2" },
+      "ticket_classes": [
+        {
+          "id": "ticket_class_fixture_1",
+          "event_id": "event_fixture_1",
+          "name": { "text": "General Admission", "html": "<p>General Admission</p>" },
+          "description": { "text": "Standard entry", "html": "<p>Standard entry</p>" },
+          "cost": { "display": "$10.00", "value": 1000, "currency": "USD" },
+          "fee": { "display": "$1.00", "value": 100, "currency": "USD" },
+          "quantity_total": 100,
+          "quantity_sold": 40,
+          "free": false,
+          "hidden": false,
+          "on_sale_status": "AVAILABLE"
+        },
+        {
+          "id": "ticket_class_fixture_2",
+          "event_id": "event_fixture_1",
+          "name": { "text": "VIP", "html": "<p>VIP</p>" },
+          "description": { "text": "VIP access", "html": "<p>VIP access</p>" },
+          "cost": { "display": "$50.00", "value": 5000, "currency": "USD" },
+          "fee": { "display": "$5.00", "value": 500, "currency": "USD" },
+          "quantity_total": 20,
+          "quantity_sold": 20,
+          "free": false,
+          "hidden": false,
+          "on_sale_status": "SOLD_OUT"
+        }
+      ]
+    }
+  }
+}

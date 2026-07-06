@@ -1,0 +1,227 @@
+{
+  "actions": [
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project"],
+        "properties": {
+          "project": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "startDate": { "type": "string" },
+              "endDate": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new project; low-risk external mutation, no approval required. Body is wrapped under a top-level \"project\" key (Teamwork's V1 API convention) — the record itself must carry that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive."
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "project"],
+        "properties": {
+          "id": { "type": "string" },
+          "project": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing project's name or description; visible to every project member"
+    },
+    {
+      "name": "create_tasklist",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/tasklists.json",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "todo-list"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "todo-list": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new task list under the target project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasklists/{{ record.tasklist_id }}/tasks.json",
+      "path_fields": ["tasklist_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tasklist_id", "todo-item"],
+        "properties": {
+          "tasklist_id": { "type": "string" },
+          "todo-item": {
+            "type": "object",
+            "required": ["content"],
+            "properties": {
+              "content": { "type": "string" },
+              "description": { "type": "string" },
+              "priority": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new task in the target task list; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "todo-item"],
+        "properties": {
+          "id": { "type": "string" },
+          "todo-item": {
+            "type": "object",
+            "properties": {
+              "content": { "type": "string" },
+              "description": { "type": "string" },
+              "priority": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing task's content, description, or priority"
+    },
+    {
+      "name": "complete_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/{{ record.id }}/complete.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "marks an existing task as complete; a visible, notifiable state change for every task follower"
+    },
+    {
+      "name": "create_milestone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/milestones.json",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "milestone"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "milestone": {
+            "type": "object",
+            "required": ["title", "deadline"],
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "deadline": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new milestone under the target project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_company",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company"],
+        "properties": {
+          "company": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "address_one": { "type": "string" },
+              "phone": { "type": "string" },
+              "website": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "creates a new company record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_time_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/time_entries.json",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "time-entry"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "time-entry": {
+            "type": "object",
+            "required": ["description", "date", "hours", "minutes", "person-id"],
+            "properties": {
+              "description": { "type": "string" },
+              "date": { "type": "string" },
+              "time": { "type": "string" },
+              "hours": { "type": "string" },
+              "minutes": { "type": "string" },
+              "person-id": { "type": "string" },
+              "isbillable": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "logs a new time entry against the target project; contributes to billable-hours totals and any linked invoice"
+    }
+  ]
+}

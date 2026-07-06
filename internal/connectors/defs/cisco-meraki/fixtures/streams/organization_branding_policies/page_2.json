@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/brandingPolicies"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "Fixture Branding Policy 1",
+        "enabled": true,
+        "adminSettings": { "appliesTo": "All admins" },
+        "helpSettings": {},
+        "customLogo": { "enabled": false }
+      }
+    ]
+  }
+}

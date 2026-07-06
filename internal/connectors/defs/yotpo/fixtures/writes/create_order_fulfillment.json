@@ -1,0 +1,24 @@
+{
+  "record": {
+    "order_yotpo_id": "300001",
+    "fulfillment": {
+      "external_id": "fulfillment-fixture-new",
+      "fulfillment_date": "2026-01-16T00:00:00Z",
+      "status": "success",
+      "fulfilled_items": [ { "external_product_id": "ext-fixture-1", "quantity": 1 } ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/orders/300001/fulfillments",
+    "body": {
+      "fulfillment": {
+        "external_id": "fulfillment-fixture-new",
+        "fulfillment_date": "2026-01-16T00:00:00Z",
+        "status": "success",
+        "fulfilled_items": [ { "external_product_id": "ext-fixture-1", "quantity": 1 } ]
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "fulfillment": { "yotpo_id": 666666 } } }
+}

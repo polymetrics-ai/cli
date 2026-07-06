@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gorgias Connection Specification",
+  "type": "object",
+  "required": ["base_url", "username", "password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Gorgias account's API base URL, e.g. https://<domain>.gorgias.com/api (domain_name-derived base URL is not supported by this bundle; supply the full API root here)."
+    },
+    "username": {
+      "type": "string",
+      "description": "Gorgias account email used for HTTP Basic auth (sent as the Basic auth username)."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Gorgias API key used for HTTP Basic auth (sent as the Basic auth password); never logged."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Version": "{{ config.api_version }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "x-api-key", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/upstream/pipelines", "query": { "locationId": "{{ config.location_id }}" } },
+    "error_map": [
+      { "status": 401, "hint": "high-level api_key is missing or invalid; re-run pm credentials add high-level" },
+      { "status": 429, "class": "rate_limited", "hint": "high-level rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "pipelines",
+      "path": "/upstream/pipelines",
+      "query": {
+        "locationId": "{{ config.location_id }}"
+      },
+      "records": { "path": "pipelines" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/upstream/contacts",
+      "query": {
+        "locationId": "{{ config.location_id }}",
+        "limit": "100"
+      },
+      "records": { "path": "contacts" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "meta.nextPageUrl"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/upstream/opportunities",
+      "query": {
+        "locationId": "{{ config.location_id }}",
+        "limit": "100"
+      },
+      "records": { "path": "opportunities" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "meta.nextPageUrl"
+      },
+      "schema": "schemas/opportunities.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/upstream/customfields",
+      "query": {
+        "locationId": "{{ config.location_id }}"
+      },
+      "records": { "path": "customFields" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "form_submissions",
+      "path": "/upstream/form-submissions",
+      "query": {
+        "locationId": "{{ config.location_id }}",
+        "limit": "100"
+      },
+      "records": { "path": "submissions" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "meta.nextPageUrl"
+      },
+      "schema": "schemas/form_submissions.json"
+    }
+  ]
+}

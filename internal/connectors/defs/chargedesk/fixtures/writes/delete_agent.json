@@ -1,0 +1,9 @@
+{
+  "record": {
+    "email": "agent-fixture@example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/agents/agent-fixture@example.com"
+  }
+}

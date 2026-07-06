@@ -1,0 +1,21 @@
+{
+  "name": "smartwaiver",
+  "display_name": "Smartwaiver",
+  "description": "Reads Smartwaiver waivers, checkins, templates, published keys, user info, and account settings; sends prefill/SMS/webhook mutations through the Smartwaiver API.",
+  "integration_type": "api",
+  "docs_url": "https://api.smartwaiver.com/docs/v4/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "read-only waiver/checkin/template/published-key/user/settings data from a connected Smartwaiver account",
+    "write": "configures the account's webhook delivery endpoint, resends a waiver's webhook notification, sends an outbound SMS waiver-signing link to a real phone number, and generates a prefilled waiver-signing link carrying participant PII",
+    "approval": "required for all 4 write actions (set_webhook_config, resend_webhook, send_sms, prefill_template); read is unapproved"
+  }
+}

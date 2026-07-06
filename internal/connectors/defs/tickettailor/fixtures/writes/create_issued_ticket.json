@@ -1,0 +1,11 @@
+{
+  "record": {
+    "full_name": "Fixture Attendee",
+    "event_id": "ev_fixture_1",
+    "ticket_type_id": "tt_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issued_tickets"
+  }
+}

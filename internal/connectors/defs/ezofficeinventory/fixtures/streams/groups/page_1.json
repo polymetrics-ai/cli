@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/assets/classification_view.api",
+    "query": { "page": "1", "per_page": "25", "show_document_details": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        {
+          "group": {
+            "id": 10,
+            "name": "IT Equipment",
+            "description": "fixture group",
+            "active": true,
+            "asset_depreciation_mode": "monthly",
+            "assets_count": 42,
+            "company_id": 1,
+            "hidden_on_web_store": false,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        },
+        {
+          "group": {
+            "id": 11,
+            "name": "Furniture",
+            "description": "fixture group",
+            "active": true,
+            "asset_depreciation_mode": "none",
+            "assets_count": 7,
+            "company_id": 1,
+            "hidden_on_web_store": false,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z"
+          }
+        }
+      ],
+      "total_pages": 1,
+      "page": 1
+    }
+  }
+}

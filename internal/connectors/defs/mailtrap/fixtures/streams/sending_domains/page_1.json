@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/sending_domains",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 30,
+          "domain_name": "example.com",
+          "demo": false,
+          "status": "verified"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user",
+  "type": "object",
+  "x-primary-key": ["accountId"],
+  "required": ["accountId"],
+  "properties": {
+    "accountId": { "type": "string" },
+    "username": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "merchantId": { "type": ["string", "null"] },
+    "role": { "type": ["string", "null"] }
+  }
+}

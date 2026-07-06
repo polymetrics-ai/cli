@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sources",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "icon": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "category": { "type": ["array", "null"] },
+    "language": { "type": ["array", "null"] },
+    "country": { "type": ["array", "null"] }
+  }
+}

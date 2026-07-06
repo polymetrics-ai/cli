@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/business-units/synthetic-conformance-value/reviews", "query": { "perPage": "1", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "reviews": [] }
+  }
+}

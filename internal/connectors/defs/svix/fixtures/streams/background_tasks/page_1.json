@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/background-task", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "qtask_fixture_1",
+          "task": "endpoint.replay",
+          "status": "finished",
+          "data": {},
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "iterator": "",
+      "done": true
+    }
+  }
+}

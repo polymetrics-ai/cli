@@ -1,0 +1,21 @@
+{
+  "record": {
+    "location_id": 1001,
+    "start_date": "2026-01-01",
+    "report_type": "sales",
+    "end_date": "2026-01-01"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/company/synthetic-conformance-value/location/1001/forecast_override",
+    "body": {
+      "start_date": "2026-01-01",
+      "report_type": "sales",
+      "end_date": "2026-01-01"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

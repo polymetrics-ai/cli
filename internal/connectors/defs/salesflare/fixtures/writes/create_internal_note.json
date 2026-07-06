@@ -1,0 +1,5 @@
+{
+  "record": { "content": "Fixture internal note", "account_id": 11 },
+  "expect": { "method": "POST", "path": "/messages" },
+  "response": { "status": 201, "body": { "message_id": "msg_fixture_1" } }
+}

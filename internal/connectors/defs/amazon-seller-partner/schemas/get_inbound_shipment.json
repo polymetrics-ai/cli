@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_inbound_shipment",
+  "type": "object",
+  "properties": {
+    "carrierCode": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "destinationAddress": {
+      "type": "object"
+    },
+    "externalReferenceId": {
+      "type": "string"
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "originAddress": {
+      "type": "object"
+    },
+    "receivedQuantity": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipBy": {
+      "type": "string"
+    },
+    "shipmentContainerQuantities": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "shipmentSkuQuantities": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "destinationRegion": {
+      "type": "string"
+    },
+    "shipmentStatus": {
+      "type": "string"
+    },
+    "trackingId": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "warehouseReferenceId": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

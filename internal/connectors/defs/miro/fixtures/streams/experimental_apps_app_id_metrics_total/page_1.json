@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2-experimental/apps/synthetic-conformance-value/metrics-total"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uniqueUsers": 1,
+      "uniqueRecurringUsers": 1,
+      "uniqueOrganizations": 1,
+      "installations": 1,
+      "uninstallations": 1
+    }
+  }
+}

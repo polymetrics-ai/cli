@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/meta/versions/whatsnew",
+    "query": {
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "country": "us",
+        "version": "1.0.0",
+        "whats_new": "Fixture what's new 1",
+        "last_modified": "2026-01-01T00:00:00Z"
+      },
+      {
+        "ext_id": "ios:1001",
+        "country": "gb",
+        "version": "1.0.1",
+        "whats_new": "Fixture what's new 2",
+        "last_modified": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

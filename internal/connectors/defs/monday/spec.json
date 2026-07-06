@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monday Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.monday.com/v2",
+      "description": "monday.com GraphQL API base URL override for tests or proxies. Defaults to https://api.monday.com/v2."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "monday.com personal API token, sent verbatim (no Bearer prefix) as the Authorization header. Provide either api_token or access_token."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "monday.com OAuth access token, sent verbatim (no Bearer prefix) as the Authorization header. Provide either api_token or access_token."
+    },
+    "api_version": {
+      "type": "string",
+      "description": "Optional monday.com API-Version header value (e.g. 2024-01). Omitted entirely when unset."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per GraphQL page (1-500)."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/monday/hooks.go's StreamHook (mondayMaxPages) — NOT a declarative streams.json field (monday's pagination is entirely hook-driven, so there is no PaginationSpec.MaxPages to wire this into). Permissive parse, never errors: an empty value, \"all\", \"unlimited\", or any non-positive-integer string means unbounded (0, the same as leaving this unset); a positive integer string caps the page count at that value. Was previously consumed by the hook but undeclared here (a dead-config-surface gap the S3 engine mini-wave carried-minor cleanup closed) — see docs.md Known limits."
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "custom_fields",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_value": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "default_values": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_read_only": {
+      "type": [
+        "boolean",
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "number_metadata": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "object_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "select_metadata": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

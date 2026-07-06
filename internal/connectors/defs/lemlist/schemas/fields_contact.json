@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fields_contact",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "label": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "crmField": { "type": ["string", "null"] }
+  }
+}

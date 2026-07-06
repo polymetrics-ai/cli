@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture create monitor"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/monitors",
+    "body": {
+      "name": "Fixture create monitor"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_monitor_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders/v0/orders/synthetic-conformance-value/orderItems"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "OrderItems": [
+          {
+            "ASIN": "ASIN-fixture-1",
+            "SellerSKU": "SellerSKU-fixture-1",
+            "OrderItemId": "OrderItemId-fixture-1",
+            "AssociatedItems": [],
+            "Title": "Title-fixture-1",
+            "QuantityOrdered": 1,
+            "QuantityShipped": 1,
+            "ProductInfo": {},
+            "PointsGranted": {},
+            "ItemPrice": {},
+            "ShippingPrice": {},
+            "ItemTax": {},
+            "ShippingTax": {},
+            "ShippingDiscount": {},
+            "ShippingDiscountTax": {},
+            "PromotionDiscount": {},
+            "PromotionDiscountTax": {},
+            "PromotionIds": [],
+            "CODFee": {},
+            "CODFeeDiscount": {},
+            "IsGift": "IsGift-fixture-1",
+            "ConditionNote": "ConditionNote-fixture-1",
+            "ConditionId": "ConditionId-fixture-1",
+            "ConditionSubtypeId": "ConditionSubtypeId-fixture-1",
+            "ScheduledDeliveryStartDate": "ScheduledDeliveryStartDate-fixture-1",
+            "ScheduledDeliveryEndDate": "ScheduledDeliveryEndDate-fixture-1",
+            "PriceDesignation": "PriceDesignation-fixture-1",
+            "TaxCollection": {},
+            "SerialNumberRequired": false,
+            "IsTransparency": false,
+            "IossNumber": "IossNumber-fixture-1",
+            "StoreChainStoreId": "StoreChainStoreId-fixture-1",
+            "DeemedResellerCategory": "DeemedResellerCategory-fixture-1",
+            "BuyerInfo": {},
+            "BuyerRequestedCancel": {},
+            "SerialNumbers": [],
+            "SubstitutionPreferences": {},
+            "Measurement": {},
+            "ShippingConstraints": {},
+            "AmazonPrograms": {},
+            "order_id": "order_id-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

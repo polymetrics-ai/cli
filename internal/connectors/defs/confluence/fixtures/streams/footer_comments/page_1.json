@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/footer-comments",
+    "query": {
+      "limit": "25",
+      "body-format": "storage"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "fc_fixture_1",
+          "status": "current",
+          "title": "re: Fixture Page 1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "parentCommentId": "",
+          "version": {
+            "number": 1
+          }
+        },
+        {
+          "id": "fc_fixture_2",
+          "status": "current",
+          "title": "re: Fixture Page 1",
+          "pageId": "pages_fixture_1",
+          "blogPostId": "",
+          "parentCommentId": "fc_fixture_1",
+          "version": {
+            "number": 1
+          }
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

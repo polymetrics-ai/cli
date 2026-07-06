@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/avatars/list"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "avatars-1",
+        "avatar_id": "avatar-1",
+        "name": "Fixture avatars 1"
+      },
+      {
+        "id": "avatars-2",
+        "avatar_id": "avatar-2",
+        "name": "Fixture avatars 2"
+      }
+    ]
+  }
+}

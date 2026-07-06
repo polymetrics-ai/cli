@@ -1,0 +1,8 @@
+{
+  "record": { "Name": "Fixture Brand" },
+  "expect": {
+    "method": "POST",
+    "path": "/ref/brand",
+    "body": { "Name": "Fixture Brand" }
+  }
+}

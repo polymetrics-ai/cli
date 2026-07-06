@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "s_fixture_1",
+    "published_at": "2026-01-02T00:00:00Z"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/edit/surveys/s_fixture_1"
+  }
+}

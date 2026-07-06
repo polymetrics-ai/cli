@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/device-integrations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "displayName": "display_name_fixture",
+      "id": "id_fixture",
+      "metadata": {
+        "type": "CHROME",
+        "serviceAccountName": "service_account_name_fixture",
+        "serviceAccountEmail": "fixture@example.invalid"
+      },
+      "name": "com.android.zero.trust",
+      "platform": "ANDROID",
+      "status": "ACTIVE",
+      "_links": {
+        "activate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

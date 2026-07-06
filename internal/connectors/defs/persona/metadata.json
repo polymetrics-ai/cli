@@ -1,0 +1,24 @@
+{
+  "name": "persona",
+  "display_name": "Persona",
+  "description": "Reads Persona inquiries, accounts, reports, transactions, and cases, and performs lifecycle mutations (redact, inquiry approve/decline/expire/resume, report re-run/pause/resume-monitoring, transaction biometrics redaction), through the Persona REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.withpersona.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Persona API read of inquiry, account, report, transaction, and case data; identity-verification data may include PII (names, government IDs, selfies, addresses)",
+    "write": "external mutation of Persona identity-verification records: redact_inquiry/redact_account/redact_case/redact_report/redact_transaction permanently and irreversibly delete PII (Persona's own docs: \"This action cannot be undone\"); redact_transaction_biometrics does the same for biometric data only; approve_inquiry/decline_inquiry finalize an identity-verification decision and trigger any associated workflows/webhooks; expire_inquiry/resume_inquiry affect whether an individual can continue an in-progress verification flow; rerun_report triggers a new metered/billed report run; pause_report_monitoring/resume_report_monitoring toggle continuous monitoring on a report",
+    "approval": "required for all writes; the 6 redact_*/redact_transaction_biometrics actions are destructive and irreversible (PII deletion), approve_inquiry/decline_inquiry make a final identity decision with downstream workflow/webhook side effects, and rerun_report has a metered billing side effect"
+  }
+}

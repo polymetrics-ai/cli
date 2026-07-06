@@ -1,0 +1,40 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "owner_id": "owner_id_fixture",
+    "type": "account_manager",
+    "hasCommission": true,
+    "commissionPercentage": 1.23,
+    "commissionEndsAt": "2026-01-01T00:00:00Z",
+    "managementFeePercentage": 1.23,
+    "appCommissions": [
+      {
+        "appId": "app_id_fixture",
+        "commissionPercentage": 1.23,
+        "commissionEndsAt": "2026-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/customers/id_fixture/account_owners/owner_id_fixture",
+    "body": {
+      "type": "account_manager",
+      "hasCommission": true,
+      "commissionPercentage": 1.23,
+      "commissionEndsAt": "2026-01-01T00:00:00Z",
+      "managementFeePercentage": 1.23,
+      "appCommissions": [
+        {
+          "appId": "app_id_fixture",
+          "commissionPercentage": 1.23,
+          "commissionEndsAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

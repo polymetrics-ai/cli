@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "me",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string", "description": "Environment id, or organizationId copied into id for organization-scoped API keys." },
+    "type": { "type": ["string", "null"] },
+    "project": { "type": ["object", "null"] },
+    "organization_id": { "type": ["string", "null"], "description": "Mapped from the raw API's organizationId field." },
+    "organization_access": { "type": ["object", "null"], "description": "Mapped from the raw API's organizationAccess field." },
+    "environment_permissions": { "type": ["array", "null"], "description": "Mapped from the raw API's environmentPermissions field." },
+    "app_setup_completed": { "type": ["boolean", "null"], "description": "Mapped from the raw API's appSetupCompleted field." },
+    "website_setup_completed": { "type": ["boolean", "null"], "description": "Mapped from the raw API's websiteSetupCompleted field." },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

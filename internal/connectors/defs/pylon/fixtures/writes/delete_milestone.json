@@ -1,0 +1,14 @@
+{
+  "record": {
+    "milestone_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/milestones/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

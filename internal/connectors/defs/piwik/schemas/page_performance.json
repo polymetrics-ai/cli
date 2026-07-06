@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik PagePerformance.get Report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "required": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    },
+    "avg_page_load_time": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_dom_completion": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_dom_processing": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_network": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_on_load": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_server": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "avg_time_transfer": {
+      "type": [
+        "number",
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_items",
+  "type": "object",
+  "properties": {
+    "ShipmentId": {
+      "type": "string"
+    },
+    "SellerSKU": {
+      "type": "string"
+    },
+    "FulfillmentNetworkSKU": {
+      "type": "string"
+    },
+    "QuantityShipped": {
+      "type": "integer"
+    },
+    "QuantityReceived": {
+      "type": "integer"
+    },
+    "QuantityInCase": {
+      "type": "integer"
+    },
+    "ReleaseDate": {
+      "type": "string"
+    },
+    "PrepDetailsList": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "SellerSKU"
+  ]
+}

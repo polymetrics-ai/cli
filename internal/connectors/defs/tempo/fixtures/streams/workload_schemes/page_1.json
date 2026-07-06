@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/workload-schemes", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": 1, "name": "Fixture Scheme 1", "description": "fixture workload scheme", "defaultScheme": false }
+      ],
+      "metadata": { "count": 1, "offset": 0, "limit": 50 }
+    }
+  }
+}

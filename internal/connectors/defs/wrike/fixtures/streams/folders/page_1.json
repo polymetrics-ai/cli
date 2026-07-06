@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/folders", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "folder_fixture_1", "title": "Fixture Folder 1", "updatedDate": "2026-01-01T00:00:00Z" },
+        { "id": "folder_fixture_2", "title": "Fixture Folder 2", "updatedDate": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

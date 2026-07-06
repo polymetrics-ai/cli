@@ -1,0 +1,15 @@
+{
+  "record": {
+    "object_id": 123,
+    "name": "Fixture create_custom_object_record",
+    "description": "Fixture create_custom_object_record record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/objects/123/records",
+    "body": {
+      "name": "Fixture create_custom_object_record",
+      "description": "Fixture create_custom_object_record record"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/incidents" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "incident_fixture_1",
+          "tinyId": "1",
+          "message": "Fixture incident",
+          "description": "Deterministic fixture record.",
+          "status": "open",
+          "priority": "P2",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T01:00:00Z",
+          "ownerTeam": { "id": "team_fixture_1", "name": "Fixture Team" },
+          "impactedServices": ["service_fixture_1"],
+          "tags": ["fixture"],
+          "responders": []
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

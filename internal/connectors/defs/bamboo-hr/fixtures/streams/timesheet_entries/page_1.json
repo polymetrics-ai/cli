@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time_tracking/timesheet_entries",
+    "query": {
+      "start": "synthetic-conformance-value",
+      "end": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "type": "fixture_value",
+        "approved": true,
+        "approvedAt": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "date": "2026-01-01T00:00:00Z",
+        "employeeId": 1001,
+        "end": "fixture_value"
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "api": "Mode legacy connector hook surface",
+  "docs": "https://mode.com/developer/api-reference/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy mode connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/mode, which delegates to internal/connectors/mode until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode spaces read path",
+      "covered_by": {
+        "stream": "spaces"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode reports read path",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode data_sources read path",
+      "covered_by": {
+        "stream": "data_sources"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode groups read path",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mode memberships read path",
+      "covered_by": {
+        "stream": "memberships"
+      }
+    }
+  ]
+}

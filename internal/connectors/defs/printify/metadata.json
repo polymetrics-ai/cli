@@ -1,0 +1,25 @@
+{
+  "name": "printify",
+  "display_name": "Printify",
+  "description": "Reads and writes Printify shops, catalog resources, products, orders, uploads, and webhooks through the Printify public API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.printify.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Printify API read of shop, catalog, product, order, upload, and webhook metadata",
+    "write": "creates, updates, publishes, unpublishes, deletes, archives, disconnects, submits, cancels, and simulates Printify resources depending on the selected write action",
+    "approval": "reverse ETL writes require plan preview and approval token; destructive product/order/shop/upload/webhook actions are marked destructive"
+  }
+}

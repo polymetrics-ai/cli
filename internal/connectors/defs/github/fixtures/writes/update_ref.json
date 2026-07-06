@@ -1,0 +1,8 @@
+{
+  "record": { "ref": "heads/fixture-branch", "sha": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d", "force": true },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/git/refs/heads/fixture-branch",
+    "body": { "sha": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d", "force": true }
+  }
+}

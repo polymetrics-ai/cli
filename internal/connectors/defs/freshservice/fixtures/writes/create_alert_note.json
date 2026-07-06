@@ -1,0 +1,15 @@
+{
+  "record": {
+    "alert_id": 123,
+    "name": "Fixture create_alert_note",
+    "description": "Fixture create_alert_note record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ams/alerts/123/notes",
+    "body": {
+      "name": "Fixture create_alert_note",
+      "description": "Fixture create_alert_note record"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [],
+      "speakers": [],
+      "days": [],
+      "halls": [],
+      "tracks": [
+        { "id": 758136, "name": "Fixture Track", "color": "#336699" }
+      ],
+      "workshops": [],
+      "pauses": []
+    }
+  }
+}

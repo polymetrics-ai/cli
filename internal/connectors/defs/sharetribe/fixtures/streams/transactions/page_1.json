@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/transactions/query", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "transaction_1", "type": "transaction", "attributes": { "lastTransition": "transition/confirm-payment" }, "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

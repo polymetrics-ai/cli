@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/models", "query": { "limit": "synthetic-conformance-value", "after": "meta-llama/Llama-3.1-70B" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        { "id": "meta-llama/Llama-3.1-405B", "object": "model", "created": 1767225603, "owned_by": "nebius" }
+      ]
+    }
+  }
+}

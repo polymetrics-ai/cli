@@ -1,0 +1,24 @@
+{
+  "name": "pennylane",
+  "display_name": "Pennylane",
+  "description": "Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, products, categories, transactions, and bank accounts, and writes customer/supplier/product/category mutations through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://pennylane.readme.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Pennylane API read of accounting data (customers, invoices, suppliers, products, categories, transactions, bank accounts)",
+    "write": "external mutation; creates/updates company and individual customers, suppliers, products, and analytical categories in Pennylane's accounting ledger",
+    "approval": "approval required before writes"
+  }
+}

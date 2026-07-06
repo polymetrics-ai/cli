@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "tags": [
+      "fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/affiliates/id_fixture/addTags",
+    "body": {
+      "tags": [
+        "fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

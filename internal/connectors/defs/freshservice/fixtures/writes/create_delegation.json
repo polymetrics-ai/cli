@@ -1,0 +1,15 @@
+{
+  "record": {
+    "user_id": 123,
+    "name": "Fixture create_delegation",
+    "description": "Fixture create_delegation record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/123/delegation",
+    "body": {
+      "name": "Fixture create_delegation",
+      "description": "Fixture create_delegation record"
+    }
+  }
+}

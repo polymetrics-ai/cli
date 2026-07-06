@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/invoices", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "invoice": {
+            "id": "inv_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "status": "paid",
+            "currency_code": "USD",
+            "total": 1000,
+            "amount_paid": 1000,
+            "amount_due": 0,
+            "date": 1767225600,
+            "due_date": 1767312000,
+            "paid_at": 1767229200,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AppFollow Connection Specification",
+  "type": "object",
+  "required": ["api_secret"],
+  "properties": {
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AppFollow API token, sent as the X-AppFollow-API-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.appfollow.io/api/v2",
+      "description": "AppFollow API base URL override for tests or proxies."
+    },
+    "app_collection_ids": {
+      "type": "string",
+      "description": "Comma-separated list of AppFollow app collection ids to fan out over for the app_lists stream (one GET /account/apps/app request per id, forwarded as apps_id). Required for app_lists; legacy's auto-discovery fallback (listing /account/apps when unset) is not modeled here — see docs.md Known limits."
+    },
+    "ext_ids": {
+      "type": "string",
+      "description": "Comma-separated list of AppFollow app external ids (ext_id) to fan out over for the ratings/reviews/reviews_summary/keywords/rankings/versions/versions_whatsnew/ratings_history streams (one request per id, forwarded as ext_id). Required for all of those streams."
+    },
+    "report_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date (YYYY-MM-DD) for the reviews and reviews_summary streams' required from/to date-range filter."
+    },
+    "report_to": {
+      "type": "string",
+      "format": "date",
+      "description": "End date (YYYY-MM-DD) for the reviews and reviews_summary streams' required from/to date-range filter."
+    },
+    "report_country": {
+      "type": "string",
+      "default": "us",
+      "description": "Two-letter store country code for the versions stream's required country filter."
+    },
+    "report_store": {
+      "type": "string",
+      "default": "itunes",
+      "description": "Store code (itunes/google_play) for the ratings_history stream's required store filter."
+    }
+  }
+}

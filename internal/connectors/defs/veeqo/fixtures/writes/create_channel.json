@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture Channel",
+    "type_code": "direct"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels"
+  }
+}

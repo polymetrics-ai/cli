@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/cpdRequirementSummaries",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 1001,
+        "totalPages": 2,
+        "page": 2,
+        "perPage": 1000
+      },
+      "results": [
+        {
+          "audienceRequirementId": "64b6f4a8c2e4a1b9d3f2c1001",
+          "audienceId": "5f9d88d6e1b2a34c56d1001",
+          "requiredMinutes": 660,
+          "createdAt": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

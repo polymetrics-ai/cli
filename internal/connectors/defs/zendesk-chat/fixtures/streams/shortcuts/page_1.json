@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/shortcuts" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "greeting", "options": "public", "message": "Hello, how can I help?", "tags": ["greeting"], "scope": "agent" }
+    ]
+  }
+}

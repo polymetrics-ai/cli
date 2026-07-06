@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "devices",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "organization_id": { "type": ["integer", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "system_name": { "type": ["string", "null"] },
+    "dns_name": { "type": ["string", "null"] },
+    "node_class": { "type": ["string", "null"] },
+    "offline": { "type": ["boolean", "null"] },
+    "approval_status": { "type": ["string", "null"] }
+  }
+}

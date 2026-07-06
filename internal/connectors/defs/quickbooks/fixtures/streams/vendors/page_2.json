@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/company/synthetic-conformance-value/query",
+    "query": { "query": "SELECT * FROM Vendor STARTPOSITION 3 MAXRESULTS 2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "QueryResponse": {
+        "Vendor": [
+          { "Id": "3", "DisplayName": "Fixture Vendor 3", "Active": false, "Balance": 25.0 }
+        ]
+      }
+    }
+  }
+}

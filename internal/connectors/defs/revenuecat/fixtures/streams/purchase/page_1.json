@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/purchases/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "purchase",
+      "customer_id": "cust_fixture_1",
+      "product_id": "prod_fixture_1",
+      "purchased_at": 1735689600000,
+      "status": "active",
+      "store_purchase_identifier": "store_purchase_fixture_1"
+    }
+  }
+}

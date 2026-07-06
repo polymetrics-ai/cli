@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscriptions",
+  "type": "object",
+  "x-primary-key": ["lago_id"],
+  "x-cursor-field": "created_at",
+  "required": ["lago_id"],
+  "properties": {
+    "lago_id": { "type": "string" },
+    "external_id": { "type": ["string", "null"] },
+    "lago_customer_id": { "type": ["string", "null"] },
+    "external_customer_id": { "type": ["string", "null"] },
+    "plan_code": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "billing_time": { "type": ["string", "null"] },
+    "started_at": { "type": ["string", "null"] },
+    "terminated_at": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

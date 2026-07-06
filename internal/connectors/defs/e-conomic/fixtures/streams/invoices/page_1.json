@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/invoices/booked", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "bookedInvoiceNumber": 1,
+          "date": "2026-01-01",
+          "currency": "DKK",
+          "netAmount": 1000,
+          "grossAmount": 1250,
+          "vatAmount": 250,
+          "remainder": 0,
+          "dueDate": "2026-01-31",
+          "customer": { "customerNumber": 1 },
+          "paymentTerms": { "paymentTermsNumber": 1 },
+          "self": "https://restapi.e-conomic.com/invoices/booked/1"
+        }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 1 }
+    }
+  }
+}

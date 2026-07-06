@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "responses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "survey": { "type": ["object", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] },
+    "ip_address": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "ticket": { "type": ["object", "null"] },
+    "team_members": { "type": ["array", "null"], "items": { "type": "object" } },
+    "customer": { "type": ["object", "null"] },
+    "answers": { "type": ["array", "null"], "items": { "type": "object" } },
+    "source": { "type": ["string", "null"] }
+  }
+}

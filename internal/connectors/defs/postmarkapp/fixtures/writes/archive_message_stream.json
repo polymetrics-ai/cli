@@ -1,0 +1,9 @@
+{
+  "record": {
+    "message_stream_id": "message_stream_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/message-streams/message_stream_id_fixture/archive"
+  }
+}

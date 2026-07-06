@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/collaborators/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "collaborator_1",
+      "name": "Fixture collaborator"
+    }
+  }
+}

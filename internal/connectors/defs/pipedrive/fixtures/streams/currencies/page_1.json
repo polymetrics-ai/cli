@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/currencies" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "code": "USD",
+          "name": "US Dollar",
+          "decimal_points": 2,
+          "symbol": "$",
+          "active_flag": true,
+          "is_custom_flag": false
+        }
+      ]
+    }
+  }
+}

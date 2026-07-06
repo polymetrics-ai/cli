@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pylon Connection Specification",
+  "type": "object",
+  "required": [
+    "api_token"
+  ],
+  "properties": {
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pylon API token, sent as an OAuth-style Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.usepylon.com",
+      "description": "Pylon API base URL. Defaults to https://api.usepylon.com."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "RFC3339 lower bound sent as the updated_after query parameter on every request, when set. Matches legacy's optional start_date passthrough."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode marker; fixture is used only by legacy native connector tests."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon account_relationships streams."
+    },
+    "call_recording_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon call_recording streams."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon contact streams."
+    },
+    "custom_fields_object_type": {
+      "type": "string",
+      "description": "Required object_type query parameter for custom_fields."
+    },
+    "custom_field_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon custom_field streams."
+    },
+    "custom_object_type": {
+      "type": "string",
+      "description": "Path parameter used by Pylon custom_objects streams."
+    },
+    "feature_request_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon feature_request streams."
+    },
+    "issue_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon issue streams."
+    },
+    "knowledge_base_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon knowledge_base streams."
+    },
+    "article_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon article streams."
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon collection streams."
+    },
+    "macro_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon macro streams."
+    },
+    "milestone_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon milestone streams."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon project streams."
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon survey streams."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon tag streams."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon task streams."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon team streams."
+    },
+    "ticket_form_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon ticket_form streams."
+    },
+    "training_data_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon training_data_detail streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon user streams."
+    },
+    "custom_object_id": {
+      "type": "string",
+      "description": "Path parameter used by Pylon custom_object streams."
+    }
+  }
+}

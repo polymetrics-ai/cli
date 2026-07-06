@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "commerce_income_payouts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": ["string", "null"] },
+    "platform": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "payout_date": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

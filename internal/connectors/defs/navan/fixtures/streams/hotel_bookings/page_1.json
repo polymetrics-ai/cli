@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "HOTEL", "page": "0", "size": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "bk_fixture_h1",
+          "bookingId": "BK-H001",
+          "bookingType": "HOTEL",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONFH001",
+          "currency": "USD",
+          "grandTotal": 150,
+          "basePrice": 140,
+          "bookingFee": 10,
+          "destination": "SFO",
+          "startDate": "2026-01-01T00:00:00.000Z",
+          "endDate": "2026-01-03T00:00:00.000Z",
+          "created": "2026-01-01T00:00:00.000Z",
+          "lastModified": "2026-01-01T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        }
+      ]
+    }
+  }
+}

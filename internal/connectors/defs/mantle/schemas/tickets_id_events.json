@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets_id_events",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "type",
+    "actorType",
+    "occurredAt",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the event."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of thread event",
+      "enum": [
+        "contact_added",
+        "contact_removed",
+        "agent_assigned",
+        "team_assigned",
+        "inbox_assigned",
+        "customer_assigned",
+        "app_assigned",
+        "status_changed",
+        "priority_changed",
+        "channel_changed",
+        "loop_opened",
+        "loop_closed",
+        "loop_reopened",
+        "authenticated",
+        "unauthenticated",
+        "customer_auto_linked_unverified",
+        "locked",
+        "unlocked",
+        "auto_closed_from_resolved",
+        "locked_reply_dropped",
+        "locked_reply_forked_to_new_ticket",
+        "email_received",
+        "message",
+        "internal_note"
+      ]
+    },
+    "oldValue": {
+      "type": "object",
+      "description": "The previous value (for change events)."
+    },
+    "newValue": {
+      "type": "object",
+      "description": "The new value (for change events)."
+    },
+    "actorType": {
+      "type": "string",
+      "description": "The type of actor who triggered the event.",
+      "enum": [
+        "customer",
+        "agent",
+        "system"
+      ]
+    },
+    "agent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "threadMessageId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "ID of the associated thread message"
+    },
+    "occurredAt": {
+      "type": "string",
+      "description": "When the event occurred.",
+      "format": "date-time"
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "When the event was created.",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "quickbooks",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "query": {
+        "query": "SELECT * FROM Customer STARTPOSITION 1 MAXRESULTS 1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "quickbooks OAuth refresh grant failed or access token expired; re-run pm credentials add quickbooks"
+      },
+      {
+        "status": 403,
+        "hint": "quickbooks app lacks access for this realm/scope"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "quickbooks API rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "records": { "path": "QueryResponse.Customer" },
+      "schema": "schemas/customers.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (QuickBooks Query API STARTPOSITION/MAXRESULTS pagination state embedded in a single query string value); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go" }
+    },
+    {
+      "name": "invoices",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "records": { "path": "QueryResponse.Invoice" },
+      "schema": "schemas/invoices.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (QuickBooks Query API STARTPOSITION/MAXRESULTS pagination state embedded in a single query string value); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go" }
+    },
+    {
+      "name": "payments",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "records": { "path": "QueryResponse.Payment" },
+      "schema": "schemas/payments.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (QuickBooks Query API STARTPOSITION/MAXRESULTS pagination state embedded in a single query string value); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go" }
+    },
+    {
+      "name": "accounts",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "records": { "path": "QueryResponse.Account" },
+      "schema": "schemas/accounts.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (QuickBooks Query API STARTPOSITION/MAXRESULTS pagination state embedded in a single query string value); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go" }
+    },
+    {
+      "name": "vendors",
+      "path": "v3/company/{{ config.realm_id }}/query",
+      "records": { "path": "QueryResponse.Vendor" },
+      "schema": "schemas/vendors.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (QuickBooks Query API STARTPOSITION/MAXRESULTS pagination state embedded in a single query string value); hook-covered, proven live by archived parity evidence for quickbooks and internal/connectors/hooks/quickbooks/hooks_test.go" }
+    }
+  ]
+}

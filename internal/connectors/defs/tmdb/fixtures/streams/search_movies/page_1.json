@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search/movie",
+    "query": { "page": "1", "query": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 201,
+          "title": "Search Fixture 1",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 5.5
+        },
+        {
+          "id": 202,
+          "title": "Search Fixture 2",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-02",
+          "vote_average": 9.0
+        }
+      ],
+      "page": 1,
+      "total_pages": 1,
+      "total_results": 2
+    }
+  }
+}

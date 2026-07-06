@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metadata_templates/enterprise",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "metadata_template_fixture_1",
+          "type": "metadata_template",
+          "scope": "enterprise",
+          "templateKey": "fixtureTemplate",
+          "displayName": "Fixture Template",
+          "hidden": false,
+          "fields": [{ "type": "string", "key": "fixtureField", "displayName": "Fixture Field" }],
+          "copyInstanceOnItemCopy": false
+        }
+      ],
+      "limit": 100,
+      "next_marker": null
+    }
+  }
+}

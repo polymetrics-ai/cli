@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/filings/list",
+    "query": {
+      "page": "1",
+      "per-page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "page": 1,
+      "perPage": 100
+    }
+  }
+}

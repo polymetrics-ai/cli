@@ -1,0 +1,713 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "customerNumber": 1,
+          "name": "Fixture Customer 1",
+          "currency": "DKK",
+          "email": "fixture1@example.com",
+          "lastUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "customerNumber": 2,
+          "name": "Fixture Customer 2",
+          "currency": "DKK",
+          "email": "fixture2@example.com",
+          "lastUpdated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "customerNumber": 3,
+          "name": "Fixture Customer 3",
+          "currency": "DKK",
+          "email": "fixture3@example.com",
+          "lastUpdated": "2026-01-03T00:00:00Z"
+        },
+        {
+          "customerNumber": 4,
+          "name": "Fixture Customer 4",
+          "currency": "DKK",
+          "email": "fixture4@example.com",
+          "lastUpdated": "2026-01-04T00:00:00Z"
+        },
+        {
+          "customerNumber": 5,
+          "name": "Fixture Customer 5",
+          "currency": "DKK",
+          "email": "fixture5@example.com",
+          "lastUpdated": "2026-01-05T00:00:00Z"
+        },
+        {
+          "customerNumber": 6,
+          "name": "Fixture Customer 6",
+          "currency": "DKK",
+          "email": "fixture6@example.com",
+          "lastUpdated": "2026-01-06T00:00:00Z"
+        },
+        {
+          "customerNumber": 7,
+          "name": "Fixture Customer 7",
+          "currency": "DKK",
+          "email": "fixture7@example.com",
+          "lastUpdated": "2026-01-07T00:00:00Z"
+        },
+        {
+          "customerNumber": 8,
+          "name": "Fixture Customer 8",
+          "currency": "DKK",
+          "email": "fixture8@example.com",
+          "lastUpdated": "2026-01-08T00:00:00Z"
+        },
+        {
+          "customerNumber": 9,
+          "name": "Fixture Customer 9",
+          "currency": "DKK",
+          "email": "fixture9@example.com",
+          "lastUpdated": "2026-01-09T00:00:00Z"
+        },
+        {
+          "customerNumber": 10,
+          "name": "Fixture Customer 10",
+          "currency": "DKK",
+          "email": "fixture10@example.com",
+          "lastUpdated": "2026-01-10T00:00:00Z"
+        },
+        {
+          "customerNumber": 11,
+          "name": "Fixture Customer 11",
+          "currency": "DKK",
+          "email": "fixture11@example.com",
+          "lastUpdated": "2026-01-11T00:00:00Z"
+        },
+        {
+          "customerNumber": 12,
+          "name": "Fixture Customer 12",
+          "currency": "DKK",
+          "email": "fixture12@example.com",
+          "lastUpdated": "2026-01-12T00:00:00Z"
+        },
+        {
+          "customerNumber": 13,
+          "name": "Fixture Customer 13",
+          "currency": "DKK",
+          "email": "fixture13@example.com",
+          "lastUpdated": "2026-01-13T00:00:00Z"
+        },
+        {
+          "customerNumber": 14,
+          "name": "Fixture Customer 14",
+          "currency": "DKK",
+          "email": "fixture14@example.com",
+          "lastUpdated": "2026-01-14T00:00:00Z"
+        },
+        {
+          "customerNumber": 15,
+          "name": "Fixture Customer 15",
+          "currency": "DKK",
+          "email": "fixture15@example.com",
+          "lastUpdated": "2026-01-15T00:00:00Z"
+        },
+        {
+          "customerNumber": 16,
+          "name": "Fixture Customer 16",
+          "currency": "DKK",
+          "email": "fixture16@example.com",
+          "lastUpdated": "2026-01-16T00:00:00Z"
+        },
+        {
+          "customerNumber": 17,
+          "name": "Fixture Customer 17",
+          "currency": "DKK",
+          "email": "fixture17@example.com",
+          "lastUpdated": "2026-01-17T00:00:00Z"
+        },
+        {
+          "customerNumber": 18,
+          "name": "Fixture Customer 18",
+          "currency": "DKK",
+          "email": "fixture18@example.com",
+          "lastUpdated": "2026-01-18T00:00:00Z"
+        },
+        {
+          "customerNumber": 19,
+          "name": "Fixture Customer 19",
+          "currency": "DKK",
+          "email": "fixture19@example.com",
+          "lastUpdated": "2026-01-19T00:00:00Z"
+        },
+        {
+          "customerNumber": 20,
+          "name": "Fixture Customer 20",
+          "currency": "DKK",
+          "email": "fixture20@example.com",
+          "lastUpdated": "2026-01-20T00:00:00Z"
+        },
+        {
+          "customerNumber": 21,
+          "name": "Fixture Customer 21",
+          "currency": "DKK",
+          "email": "fixture21@example.com",
+          "lastUpdated": "2026-01-21T00:00:00Z"
+        },
+        {
+          "customerNumber": 22,
+          "name": "Fixture Customer 22",
+          "currency": "DKK",
+          "email": "fixture22@example.com",
+          "lastUpdated": "2026-01-22T00:00:00Z"
+        },
+        {
+          "customerNumber": 23,
+          "name": "Fixture Customer 23",
+          "currency": "DKK",
+          "email": "fixture23@example.com",
+          "lastUpdated": "2026-01-23T00:00:00Z"
+        },
+        {
+          "customerNumber": 24,
+          "name": "Fixture Customer 24",
+          "currency": "DKK",
+          "email": "fixture24@example.com",
+          "lastUpdated": "2026-01-24T00:00:00Z"
+        },
+        {
+          "customerNumber": 25,
+          "name": "Fixture Customer 25",
+          "currency": "DKK",
+          "email": "fixture25@example.com",
+          "lastUpdated": "2026-01-25T00:00:00Z"
+        },
+        {
+          "customerNumber": 26,
+          "name": "Fixture Customer 26",
+          "currency": "DKK",
+          "email": "fixture26@example.com",
+          "lastUpdated": "2026-01-26T00:00:00Z"
+        },
+        {
+          "customerNumber": 27,
+          "name": "Fixture Customer 27",
+          "currency": "DKK",
+          "email": "fixture27@example.com",
+          "lastUpdated": "2026-01-27T00:00:00Z"
+        },
+        {
+          "customerNumber": 28,
+          "name": "Fixture Customer 28",
+          "currency": "DKK",
+          "email": "fixture28@example.com",
+          "lastUpdated": "2026-01-28T00:00:00Z"
+        },
+        {
+          "customerNumber": 29,
+          "name": "Fixture Customer 29",
+          "currency": "DKK",
+          "email": "fixture29@example.com",
+          "lastUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "customerNumber": 30,
+          "name": "Fixture Customer 30",
+          "currency": "DKK",
+          "email": "fixture30@example.com",
+          "lastUpdated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "customerNumber": 31,
+          "name": "Fixture Customer 31",
+          "currency": "DKK",
+          "email": "fixture31@example.com",
+          "lastUpdated": "2026-01-03T00:00:00Z"
+        },
+        {
+          "customerNumber": 32,
+          "name": "Fixture Customer 32",
+          "currency": "DKK",
+          "email": "fixture32@example.com",
+          "lastUpdated": "2026-01-04T00:00:00Z"
+        },
+        {
+          "customerNumber": 33,
+          "name": "Fixture Customer 33",
+          "currency": "DKK",
+          "email": "fixture33@example.com",
+          "lastUpdated": "2026-01-05T00:00:00Z"
+        },
+        {
+          "customerNumber": 34,
+          "name": "Fixture Customer 34",
+          "currency": "DKK",
+          "email": "fixture34@example.com",
+          "lastUpdated": "2026-01-06T00:00:00Z"
+        },
+        {
+          "customerNumber": 35,
+          "name": "Fixture Customer 35",
+          "currency": "DKK",
+          "email": "fixture35@example.com",
+          "lastUpdated": "2026-01-07T00:00:00Z"
+        },
+        {
+          "customerNumber": 36,
+          "name": "Fixture Customer 36",
+          "currency": "DKK",
+          "email": "fixture36@example.com",
+          "lastUpdated": "2026-01-08T00:00:00Z"
+        },
+        {
+          "customerNumber": 37,
+          "name": "Fixture Customer 37",
+          "currency": "DKK",
+          "email": "fixture37@example.com",
+          "lastUpdated": "2026-01-09T00:00:00Z"
+        },
+        {
+          "customerNumber": 38,
+          "name": "Fixture Customer 38",
+          "currency": "DKK",
+          "email": "fixture38@example.com",
+          "lastUpdated": "2026-01-10T00:00:00Z"
+        },
+        {
+          "customerNumber": 39,
+          "name": "Fixture Customer 39",
+          "currency": "DKK",
+          "email": "fixture39@example.com",
+          "lastUpdated": "2026-01-11T00:00:00Z"
+        },
+        {
+          "customerNumber": 40,
+          "name": "Fixture Customer 40",
+          "currency": "DKK",
+          "email": "fixture40@example.com",
+          "lastUpdated": "2026-01-12T00:00:00Z"
+        },
+        {
+          "customerNumber": 41,
+          "name": "Fixture Customer 41",
+          "currency": "DKK",
+          "email": "fixture41@example.com",
+          "lastUpdated": "2026-01-13T00:00:00Z"
+        },
+        {
+          "customerNumber": 42,
+          "name": "Fixture Customer 42",
+          "currency": "DKK",
+          "email": "fixture42@example.com",
+          "lastUpdated": "2026-01-14T00:00:00Z"
+        },
+        {
+          "customerNumber": 43,
+          "name": "Fixture Customer 43",
+          "currency": "DKK",
+          "email": "fixture43@example.com",
+          "lastUpdated": "2026-01-15T00:00:00Z"
+        },
+        {
+          "customerNumber": 44,
+          "name": "Fixture Customer 44",
+          "currency": "DKK",
+          "email": "fixture44@example.com",
+          "lastUpdated": "2026-01-16T00:00:00Z"
+        },
+        {
+          "customerNumber": 45,
+          "name": "Fixture Customer 45",
+          "currency": "DKK",
+          "email": "fixture45@example.com",
+          "lastUpdated": "2026-01-17T00:00:00Z"
+        },
+        {
+          "customerNumber": 46,
+          "name": "Fixture Customer 46",
+          "currency": "DKK",
+          "email": "fixture46@example.com",
+          "lastUpdated": "2026-01-18T00:00:00Z"
+        },
+        {
+          "customerNumber": 47,
+          "name": "Fixture Customer 47",
+          "currency": "DKK",
+          "email": "fixture47@example.com",
+          "lastUpdated": "2026-01-19T00:00:00Z"
+        },
+        {
+          "customerNumber": 48,
+          "name": "Fixture Customer 48",
+          "currency": "DKK",
+          "email": "fixture48@example.com",
+          "lastUpdated": "2026-01-20T00:00:00Z"
+        },
+        {
+          "customerNumber": 49,
+          "name": "Fixture Customer 49",
+          "currency": "DKK",
+          "email": "fixture49@example.com",
+          "lastUpdated": "2026-01-21T00:00:00Z"
+        },
+        {
+          "customerNumber": 50,
+          "name": "Fixture Customer 50",
+          "currency": "DKK",
+          "email": "fixture50@example.com",
+          "lastUpdated": "2026-01-22T00:00:00Z"
+        },
+        {
+          "customerNumber": 51,
+          "name": "Fixture Customer 51",
+          "currency": "DKK",
+          "email": "fixture51@example.com",
+          "lastUpdated": "2026-01-23T00:00:00Z"
+        },
+        {
+          "customerNumber": 52,
+          "name": "Fixture Customer 52",
+          "currency": "DKK",
+          "email": "fixture52@example.com",
+          "lastUpdated": "2026-01-24T00:00:00Z"
+        },
+        {
+          "customerNumber": 53,
+          "name": "Fixture Customer 53",
+          "currency": "DKK",
+          "email": "fixture53@example.com",
+          "lastUpdated": "2026-01-25T00:00:00Z"
+        },
+        {
+          "customerNumber": 54,
+          "name": "Fixture Customer 54",
+          "currency": "DKK",
+          "email": "fixture54@example.com",
+          "lastUpdated": "2026-01-26T00:00:00Z"
+        },
+        {
+          "customerNumber": 55,
+          "name": "Fixture Customer 55",
+          "currency": "DKK",
+          "email": "fixture55@example.com",
+          "lastUpdated": "2026-01-27T00:00:00Z"
+        },
+        {
+          "customerNumber": 56,
+          "name": "Fixture Customer 56",
+          "currency": "DKK",
+          "email": "fixture56@example.com",
+          "lastUpdated": "2026-01-28T00:00:00Z"
+        },
+        {
+          "customerNumber": 57,
+          "name": "Fixture Customer 57",
+          "currency": "DKK",
+          "email": "fixture57@example.com",
+          "lastUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "customerNumber": 58,
+          "name": "Fixture Customer 58",
+          "currency": "DKK",
+          "email": "fixture58@example.com",
+          "lastUpdated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "customerNumber": 59,
+          "name": "Fixture Customer 59",
+          "currency": "DKK",
+          "email": "fixture59@example.com",
+          "lastUpdated": "2026-01-03T00:00:00Z"
+        },
+        {
+          "customerNumber": 60,
+          "name": "Fixture Customer 60",
+          "currency": "DKK",
+          "email": "fixture60@example.com",
+          "lastUpdated": "2026-01-04T00:00:00Z"
+        },
+        {
+          "customerNumber": 61,
+          "name": "Fixture Customer 61",
+          "currency": "DKK",
+          "email": "fixture61@example.com",
+          "lastUpdated": "2026-01-05T00:00:00Z"
+        },
+        {
+          "customerNumber": 62,
+          "name": "Fixture Customer 62",
+          "currency": "DKK",
+          "email": "fixture62@example.com",
+          "lastUpdated": "2026-01-06T00:00:00Z"
+        },
+        {
+          "customerNumber": 63,
+          "name": "Fixture Customer 63",
+          "currency": "DKK",
+          "email": "fixture63@example.com",
+          "lastUpdated": "2026-01-07T00:00:00Z"
+        },
+        {
+          "customerNumber": 64,
+          "name": "Fixture Customer 64",
+          "currency": "DKK",
+          "email": "fixture64@example.com",
+          "lastUpdated": "2026-01-08T00:00:00Z"
+        },
+        {
+          "customerNumber": 65,
+          "name": "Fixture Customer 65",
+          "currency": "DKK",
+          "email": "fixture65@example.com",
+          "lastUpdated": "2026-01-09T00:00:00Z"
+        },
+        {
+          "customerNumber": 66,
+          "name": "Fixture Customer 66",
+          "currency": "DKK",
+          "email": "fixture66@example.com",
+          "lastUpdated": "2026-01-10T00:00:00Z"
+        },
+        {
+          "customerNumber": 67,
+          "name": "Fixture Customer 67",
+          "currency": "DKK",
+          "email": "fixture67@example.com",
+          "lastUpdated": "2026-01-11T00:00:00Z"
+        },
+        {
+          "customerNumber": 68,
+          "name": "Fixture Customer 68",
+          "currency": "DKK",
+          "email": "fixture68@example.com",
+          "lastUpdated": "2026-01-12T00:00:00Z"
+        },
+        {
+          "customerNumber": 69,
+          "name": "Fixture Customer 69",
+          "currency": "DKK",
+          "email": "fixture69@example.com",
+          "lastUpdated": "2026-01-13T00:00:00Z"
+        },
+        {
+          "customerNumber": 70,
+          "name": "Fixture Customer 70",
+          "currency": "DKK",
+          "email": "fixture70@example.com",
+          "lastUpdated": "2026-01-14T00:00:00Z"
+        },
+        {
+          "customerNumber": 71,
+          "name": "Fixture Customer 71",
+          "currency": "DKK",
+          "email": "fixture71@example.com",
+          "lastUpdated": "2026-01-15T00:00:00Z"
+        },
+        {
+          "customerNumber": 72,
+          "name": "Fixture Customer 72",
+          "currency": "DKK",
+          "email": "fixture72@example.com",
+          "lastUpdated": "2026-01-16T00:00:00Z"
+        },
+        {
+          "customerNumber": 73,
+          "name": "Fixture Customer 73",
+          "currency": "DKK",
+          "email": "fixture73@example.com",
+          "lastUpdated": "2026-01-17T00:00:00Z"
+        },
+        {
+          "customerNumber": 74,
+          "name": "Fixture Customer 74",
+          "currency": "DKK",
+          "email": "fixture74@example.com",
+          "lastUpdated": "2026-01-18T00:00:00Z"
+        },
+        {
+          "customerNumber": 75,
+          "name": "Fixture Customer 75",
+          "currency": "DKK",
+          "email": "fixture75@example.com",
+          "lastUpdated": "2026-01-19T00:00:00Z"
+        },
+        {
+          "customerNumber": 76,
+          "name": "Fixture Customer 76",
+          "currency": "DKK",
+          "email": "fixture76@example.com",
+          "lastUpdated": "2026-01-20T00:00:00Z"
+        },
+        {
+          "customerNumber": 77,
+          "name": "Fixture Customer 77",
+          "currency": "DKK",
+          "email": "fixture77@example.com",
+          "lastUpdated": "2026-01-21T00:00:00Z"
+        },
+        {
+          "customerNumber": 78,
+          "name": "Fixture Customer 78",
+          "currency": "DKK",
+          "email": "fixture78@example.com",
+          "lastUpdated": "2026-01-22T00:00:00Z"
+        },
+        {
+          "customerNumber": 79,
+          "name": "Fixture Customer 79",
+          "currency": "DKK",
+          "email": "fixture79@example.com",
+          "lastUpdated": "2026-01-23T00:00:00Z"
+        },
+        {
+          "customerNumber": 80,
+          "name": "Fixture Customer 80",
+          "currency": "DKK",
+          "email": "fixture80@example.com",
+          "lastUpdated": "2026-01-24T00:00:00Z"
+        },
+        {
+          "customerNumber": 81,
+          "name": "Fixture Customer 81",
+          "currency": "DKK",
+          "email": "fixture81@example.com",
+          "lastUpdated": "2026-01-25T00:00:00Z"
+        },
+        {
+          "customerNumber": 82,
+          "name": "Fixture Customer 82",
+          "currency": "DKK",
+          "email": "fixture82@example.com",
+          "lastUpdated": "2026-01-26T00:00:00Z"
+        },
+        {
+          "customerNumber": 83,
+          "name": "Fixture Customer 83",
+          "currency": "DKK",
+          "email": "fixture83@example.com",
+          "lastUpdated": "2026-01-27T00:00:00Z"
+        },
+        {
+          "customerNumber": 84,
+          "name": "Fixture Customer 84",
+          "currency": "DKK",
+          "email": "fixture84@example.com",
+          "lastUpdated": "2026-01-28T00:00:00Z"
+        },
+        {
+          "customerNumber": 85,
+          "name": "Fixture Customer 85",
+          "currency": "DKK",
+          "email": "fixture85@example.com",
+          "lastUpdated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "customerNumber": 86,
+          "name": "Fixture Customer 86",
+          "currency": "DKK",
+          "email": "fixture86@example.com",
+          "lastUpdated": "2026-01-02T00:00:00Z"
+        },
+        {
+          "customerNumber": 87,
+          "name": "Fixture Customer 87",
+          "currency": "DKK",
+          "email": "fixture87@example.com",
+          "lastUpdated": "2026-01-03T00:00:00Z"
+        },
+        {
+          "customerNumber": 88,
+          "name": "Fixture Customer 88",
+          "currency": "DKK",
+          "email": "fixture88@example.com",
+          "lastUpdated": "2026-01-04T00:00:00Z"
+        },
+        {
+          "customerNumber": 89,
+          "name": "Fixture Customer 89",
+          "currency": "DKK",
+          "email": "fixture89@example.com",
+          "lastUpdated": "2026-01-05T00:00:00Z"
+        },
+        {
+          "customerNumber": 90,
+          "name": "Fixture Customer 90",
+          "currency": "DKK",
+          "email": "fixture90@example.com",
+          "lastUpdated": "2026-01-06T00:00:00Z"
+        },
+        {
+          "customerNumber": 91,
+          "name": "Fixture Customer 91",
+          "currency": "DKK",
+          "email": "fixture91@example.com",
+          "lastUpdated": "2026-01-07T00:00:00Z"
+        },
+        {
+          "customerNumber": 92,
+          "name": "Fixture Customer 92",
+          "currency": "DKK",
+          "email": "fixture92@example.com",
+          "lastUpdated": "2026-01-08T00:00:00Z"
+        },
+        {
+          "customerNumber": 93,
+          "name": "Fixture Customer 93",
+          "currency": "DKK",
+          "email": "fixture93@example.com",
+          "lastUpdated": "2026-01-09T00:00:00Z"
+        },
+        {
+          "customerNumber": 94,
+          "name": "Fixture Customer 94",
+          "currency": "DKK",
+          "email": "fixture94@example.com",
+          "lastUpdated": "2026-01-10T00:00:00Z"
+        },
+        {
+          "customerNumber": 95,
+          "name": "Fixture Customer 95",
+          "currency": "DKK",
+          "email": "fixture95@example.com",
+          "lastUpdated": "2026-01-11T00:00:00Z"
+        },
+        {
+          "customerNumber": 96,
+          "name": "Fixture Customer 96",
+          "currency": "DKK",
+          "email": "fixture96@example.com",
+          "lastUpdated": "2026-01-12T00:00:00Z"
+        },
+        {
+          "customerNumber": 97,
+          "name": "Fixture Customer 97",
+          "currency": "DKK",
+          "email": "fixture97@example.com",
+          "lastUpdated": "2026-01-13T00:00:00Z"
+        },
+        {
+          "customerNumber": 98,
+          "name": "Fixture Customer 98",
+          "currency": "DKK",
+          "email": "fixture98@example.com",
+          "lastUpdated": "2026-01-14T00:00:00Z"
+        },
+        {
+          "customerNumber": 99,
+          "name": "Fixture Customer 99",
+          "currency": "DKK",
+          "email": "fixture99@example.com",
+          "lastUpdated": "2026-01-15T00:00:00Z"
+        },
+        {
+          "customerNumber": 100,
+          "name": "Fixture Customer 100",
+          "currency": "DKK",
+          "email": "fixture100@example.com",
+          "lastUpdated": "2026-01-16T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

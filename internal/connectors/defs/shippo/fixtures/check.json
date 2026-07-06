@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/addresses", "query": { "results": "1", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "next": null, "previous": null }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TikTok Campaign",
+  "type": "object",
+  "x-primary-key": ["campaign_id"],
+  "x-cursor-field": "modify_time",
+  "properties": {
+    "campaign_id": { "type": "string" },
+    "campaign_name": { "type": "string" },
+    "advertiser_id": { "type": "string" },
+    "objective_type": { "type": "string" },
+    "budget": { "type": "number" },
+    "budget_mode": { "type": "string" },
+    "operation_status": { "type": "string" },
+    "create_time": { "type": "string" },
+    "modify_time": { "type": "string" }
+  }
+}

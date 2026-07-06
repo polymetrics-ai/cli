@@ -1,0 +1,62 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/email/campaigns"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "type": "manual",
+        "status": "draft",
+        "subject": "fixture",
+        "previewText": "fixture",
+        "html": "<p>Fixture</p>",
+        "plainText": "fixture",
+        "format": "html",
+        "appId": "app_id_fixture",
+        "senderId": "sender_id_fixture",
+        "layoutId": "layout_id_fixture",
+        "unsubscribeGroupId": "unsubscribe_group_id_fixture",
+        "thumbnail": "fixture",
+        "sentCount": 1,
+        "deliveredCount": 1,
+        "openCount": 1,
+        "clickCount": 1,
+        "sender": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "from": "fixture@example.com",
+          "replyTo": "fixture@example.com",
+          "address": {
+            "id": "address_fixture_id"
+          },
+          "appId": "app_id_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "layout": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "format": "fixture",
+          "defaultLayout": true,
+          "thumbnail": "fixture",
+          "appId": "app_id_fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "unsubscribeGroup": {
+          "id": "unsubscribe_group_fixture_id"
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": ""
+    }
+  }
+}

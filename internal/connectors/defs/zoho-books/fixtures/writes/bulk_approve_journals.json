@@ -1,0 +1,16 @@
+{
+  "record": {
+    "journal_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journals/approve"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

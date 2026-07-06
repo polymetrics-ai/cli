@@ -1,0 +1,15 @@
+{
+  "record": {
+    "name": "Fixture note",
+    "body": "Fixture note body",
+    "trigger": "always"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/organizations/synthetic-conformance-value/knowledge/notes",
+    "body": {
+      "name": "Fixture note",
+      "body": "Fixture note body"
+    }
+  }
+}

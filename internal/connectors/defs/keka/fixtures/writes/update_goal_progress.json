@@ -1,0 +1,31 @@
+{
+  "record": {
+    "currentValue": "fixture_current_value_1",
+    "status": "1",
+    "updatedBy": "2026-01-01T00:00:00Z",
+    "note": "fixture_note_1",
+    "goal_id": "fixture_goal_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/pms/goals/fixture_goal_id/progress",
+    "body": {
+      "currentValue": "fixture_current_value_1",
+      "status": "1",
+      "updatedBy": "2026-01-01T00:00:00Z",
+      "note": "fixture_note_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_goal_progress_fixture_1",
+        "name": "Fixture update goal progress"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

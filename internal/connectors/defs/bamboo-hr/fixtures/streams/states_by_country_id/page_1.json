@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/provinces/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "options": [
+        {
+          "id": 1001,
+          "iso": "fixture_value",
+          "label": "fixture_value",
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

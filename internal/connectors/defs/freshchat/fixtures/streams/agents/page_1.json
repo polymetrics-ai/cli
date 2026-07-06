@@ -1,0 +1,867 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/agents",
+    "query": {
+      "page": "1",
+      "items_per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agents": [
+        {
+          "id": "agents_fixture_1",
+          "email": "fixture1@example.com",
+          "first_name": "Fixture1",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_2",
+          "email": "fixture2@example.com",
+          "first_name": "Fixture2",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_3",
+          "email": "fixture3@example.com",
+          "first_name": "Fixture3",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_4",
+          "email": "fixture4@example.com",
+          "first_name": "Fixture4",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_5",
+          "email": "fixture5@example.com",
+          "first_name": "Fixture5",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_6",
+          "email": "fixture6@example.com",
+          "first_name": "Fixture6",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_7",
+          "email": "fixture7@example.com",
+          "first_name": "Fixture7",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_8",
+          "email": "fixture8@example.com",
+          "first_name": "Fixture8",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_9",
+          "email": "fixture9@example.com",
+          "first_name": "Fixture9",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_10",
+          "email": "fixture10@example.com",
+          "first_name": "Fixture10",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_11",
+          "email": "fixture11@example.com",
+          "first_name": "Fixture11",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_12",
+          "email": "fixture12@example.com",
+          "first_name": "Fixture12",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_13",
+          "email": "fixture13@example.com",
+          "first_name": "Fixture13",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_14",
+          "email": "fixture14@example.com",
+          "first_name": "Fixture14",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_15",
+          "email": "fixture15@example.com",
+          "first_name": "Fixture15",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_16",
+          "email": "fixture16@example.com",
+          "first_name": "Fixture16",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_17",
+          "email": "fixture17@example.com",
+          "first_name": "Fixture17",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_18",
+          "email": "fixture18@example.com",
+          "first_name": "Fixture18",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_19",
+          "email": "fixture19@example.com",
+          "first_name": "Fixture19",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_20",
+          "email": "fixture20@example.com",
+          "first_name": "Fixture20",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_21",
+          "email": "fixture21@example.com",
+          "first_name": "Fixture21",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_22",
+          "email": "fixture22@example.com",
+          "first_name": "Fixture22",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-23T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_23",
+          "email": "fixture23@example.com",
+          "first_name": "Fixture23",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-24T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_24",
+          "email": "fixture24@example.com",
+          "first_name": "Fixture24",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-25T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_25",
+          "email": "fixture25@example.com",
+          "first_name": "Fixture25",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-26T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_26",
+          "email": "fixture26@example.com",
+          "first_name": "Fixture26",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-27T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_27",
+          "email": "fixture27@example.com",
+          "first_name": "Fixture27",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-28T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_28",
+          "email": "fixture28@example.com",
+          "first_name": "Fixture28",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_29",
+          "email": "fixture29@example.com",
+          "first_name": "Fixture29",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_30",
+          "email": "fixture30@example.com",
+          "first_name": "Fixture30",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-03T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_31",
+          "email": "fixture31@example.com",
+          "first_name": "Fixture31",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-04T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_32",
+          "email": "fixture32@example.com",
+          "first_name": "Fixture32",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-05T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_33",
+          "email": "fixture33@example.com",
+          "first_name": "Fixture33",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-06T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_34",
+          "email": "fixture34@example.com",
+          "first_name": "Fixture34",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-07T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_35",
+          "email": "fixture35@example.com",
+          "first_name": "Fixture35",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-08T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_36",
+          "email": "fixture36@example.com",
+          "first_name": "Fixture36",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-09T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_37",
+          "email": "fixture37@example.com",
+          "first_name": "Fixture37",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-10T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_38",
+          "email": "fixture38@example.com",
+          "first_name": "Fixture38",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-11T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_39",
+          "email": "fixture39@example.com",
+          "first_name": "Fixture39",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-12T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_40",
+          "email": "fixture40@example.com",
+          "first_name": "Fixture40",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-13T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_41",
+          "email": "fixture41@example.com",
+          "first_name": "Fixture41",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-14T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_42",
+          "email": "fixture42@example.com",
+          "first_name": "Fixture42",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-15T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_43",
+          "email": "fixture43@example.com",
+          "first_name": "Fixture43",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-16T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_44",
+          "email": "fixture44@example.com",
+          "first_name": "Fixture44",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-17T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_45",
+          "email": "fixture45@example.com",
+          "first_name": "Fixture45",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-18T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_46",
+          "email": "fixture46@example.com",
+          "first_name": "Fixture46",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-19T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_47",
+          "email": "fixture47@example.com",
+          "first_name": "Fixture47",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-20T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_48",
+          "email": "fixture48@example.com",
+          "first_name": "Fixture48",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-21T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_49",
+          "email": "fixture49@example.com",
+          "first_name": "Fixture49",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "id": "agents_fixture_50",
+          "email": "fixture50@example.com",
+          "first_name": "Fixture50",
+          "last_name": "User",
+          "avatar": null,
+          "biography": "fixture record",
+          "is_deactivated": false,
+          "is_deleted": false,
+          "social_profiles": [],
+          "groups": [
+            "group_fixture_1"
+          ],
+          "role_id": "role_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-23T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

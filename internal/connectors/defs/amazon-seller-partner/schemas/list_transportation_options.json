@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_transportation_options",
+  "type": "object",
+  "properties": {
+    "carrier": {
+      "type": "object"
+    },
+    "carrierAppointment": {
+      "type": "object"
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "quote": {
+      "type": "object"
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "shippingMode": {
+      "type": "string"
+    },
+    "shippingSolution": {
+      "type": "string"
+    },
+    "transportationOptionId": {
+      "type": "string"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipmentId"
+  ]
+}

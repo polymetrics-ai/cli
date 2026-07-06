@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Exchange Rates API Connection Specification",
+  "type": "object",
+  "required": ["access_key"],
+  "properties": {
+    "access_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "exchangeratesapi.io access key, sent as the access_key query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.exchangeratesapi.io/v1",
+      "description": "Exchange Rates API base URL override for tests or proxies."
+    },
+    "base": {
+      "type": "string",
+      "description": "Optional base currency code applied to the latest and symbols requests (the API's optional 'base' query parameter)."
+    },
+    "convert_from": {
+      "type": "string",
+      "description": "Source currency code for the convert stream (the API's required 'from' query parameter). Only read when the convert stream itself is synced."
+    },
+    "convert_to": {
+      "type": "string",
+      "description": "Target currency code for the convert stream (the API's required 'to' query parameter). Only read when the convert stream itself is synced."
+    },
+    "convert_amount": {
+      "type": "string",
+      "description": "Amount to convert for the convert stream (the API's required 'amount' query parameter, sent verbatim as a string). Only read when the convert stream itself is synced."
+    },
+    "convert_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional historical date (YYYY-MM-DD) for the convert stream (the API's optional 'date' query parameter); omitted for a live-rate conversion when unset."
+    },
+    "timeseries_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive window start date (YYYY-MM-DD) for the timeseries stream (the API's required 'start_date' query parameter). Only read when the timeseries stream itself is synced."
+    },
+    "timeseries_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive window end date (YYYY-MM-DD) for the timeseries stream (the API's required 'end_date' query parameter). Only read when the timeseries stream itself is synced."
+    },
+    "fluctuation_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive window start date (YYYY-MM-DD) for the fluctuation stream (the API's required 'start_date' query parameter). Only read when the fluctuation stream itself is synced."
+    },
+    "fluctuation_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Inclusive window end date (YYYY-MM-DD) for the fluctuation stream (the API's required 'end_date' query parameter). Only read when the fluctuation stream itself is synced."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 4001,
+    "color": "#0000FF"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tags/4001",
+    "body": {
+      "color": "#0000FF"
+    }
+  }
+}

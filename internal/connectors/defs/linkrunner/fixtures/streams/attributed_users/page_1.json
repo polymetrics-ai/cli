@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/attributed-users",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "users": [
+          {
+            "attributed_at": "2026-01-01T00:00:00Z",
+            "campaign_display_id": "camp_fixture_1",
+            "campaign_name": "Fixture Campaign One",
+            "link": "https://lr.example/c/1",
+            "installed_at": "2026-01-01T00:05:00Z",
+            "store_click_at": "2026-01-01T00:01:00Z",
+            "ad_set_id": "adset_1",
+            "user_data": { "id": "user_1", "email": "fixture1@example.com" }
+          }
+        ]
+      }
+    }
+  }
+}

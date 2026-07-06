@@ -1,0 +1,21 @@
+{
+  "name": "uppromote",
+  "display_name": "UpPromote",
+  "description": "Reads affiliates, programs, coupons, referrals, and payments from the UpPromote API, and writes affiliate/referral/coupon/payment/webhook-subscription lifecycle mutations.",
+  "integration_type": "api",
+  "docs_url": "https://uppromote.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external UpPromote API read of affiliate, program, coupon, referral, and payment data",
+    "write": "external mutation of UpPromote affiliates, referrals, coupons, payments, and webhook subscriptions; no destructive deletes are modeled",
+    "approval": "none required; every modeled write is a create/approve/assign/mark-paid style mutation, not a destructive delete"
+  }
+}

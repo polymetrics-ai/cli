@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/predefined_tags", "query": { "offset": "0" } },
+  "response": { "status": 200, "body": [ { "id": 20, "name": "partner", "category_id": 10 } ] }
+}

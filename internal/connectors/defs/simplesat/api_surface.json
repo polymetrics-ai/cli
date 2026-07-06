@@ -1,0 +1,25 @@
+{
+  "api": "Simplesat API (v1) (https://developer.simplesat.io/api)",
+  "docs": "https://developer.simplesat.io/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion. The live, current API is v1 (raw OpenAPI spec fetched 2026-07-03 from https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml). Legacy's own endpoints (bare `answers/`, `surveys/`, `questions/`, `customers/`, `tickets/` with a `results` envelope) are the deprecated v0 API (linked from v1's own docs as 'API v0 (deprecated)'); v1 replaces every one of those with a versioned `/api/v1/...` path, a `next`/`previous`/`count` pagination envelope, and a per-resource plural key (`answers`/`surveys`/`questions`/`customers`) instead of a uniform `results` key. This bundle migrates onto v1 throughout: every stream below hits the real, current v1 endpoint. v1 has no standalone `tickets` list endpoint at all (a v1 \"ticket\" is a nested sub-object of a `response`, exposed only inside `responses`' own read/write endpoints) — legacy's `tickets` stream concept is superseded by the new `responses` stream, which carries the same ticket data (`ticket.id`/`external_id`/`subject`/`custom_attributes`) as a nested field, not a parity loss. Every documented v1 endpoint is accounted for below, `covered_by` a stream/write or `excluded` with a real reason; `capabilities.write` flips to `true` for the 6 new write actions.",
+  "endpoints": [
+    { "method": "POST", "path": "/api/v1/answers/search", "covered_by": { "stream": "answers" } },
+    { "method": "GET", "path": "/api/v1/answers/{answer_id}", "excluded": { "category": "duplicate_of", "reason": "single-record detail fetch for a resource the answers stream (POST /api/v1/answers/search with no filter body, listing every answer) already lists in full; no additional data is reachable only through this endpoint" } },
+    { "method": "PUT", "path": "/api/v1/answers/{answer_id}", "covered_by": { "write": "update_answer" } },
+    { "method": "GET", "path": "/api/v1/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/api/v1/customers/{customer_id}", "excluded": { "category": "duplicate_of", "reason": "single-record detail fetch for a resource the customers stream (GET /api/v1/customers) already lists in full" } },
+    { "method": "POST", "path": "/api/v1/customers", "covered_by": { "write": "create_or_update_customer" } },
+    { "method": "PUT", "path": "/api/v1/customers/{customer_id}", "covered_by": { "write": "update_customer" } },
+    { "method": "POST", "path": "/api/v1/customers/bulk", "excluded": { "category": "duplicate_of", "reason": "batch upsert of an array of customers wrapped in a single {\"customers\":[...]} request body; the engine's write dialect issues exactly one HTTP request per record with no batch/array-body primitive, so this is not independently expressible — create_or_update_customer already covers the identical per-record upsert capability, just not batched into one request" } },
+    { "method": "GET", "path": "/api/v1/team-members/{team_member_id}", "excluded": { "category": "out_of_scope", "reason": "v1 publishes no list/search endpoint for team members at all (only this single-id detail GET and the create-or-update POST below) — there is no documented way to enumerate team member ids to iterate this endpoint over, so it cannot back a list stream" } },
+    { "method": "POST", "path": "/api/v1/team-members", "covered_by": { "write": "create_or_update_team_member" } },
+    { "method": "GET", "path": "/api/v1/responses/{response_id}", "excluded": { "category": "duplicate_of", "reason": "single-record detail fetch for a resource the responses stream (POST /api/v1/responses/search with no filter body, listing every response) already lists in full, including its nested ticket/customer/team_members/answers sub-objects" } },
+    { "method": "POST", "path": "/api/v1/responses/search", "covered_by": { "stream": "responses" } },
+    { "method": "POST", "path": "/api/v1/responses/create-or-update", "covered_by": { "write": "create_or_update_response" } },
+    { "method": "PUT", "path": "/api/v1/responses/{response_id}/update", "covered_by": { "write": "update_response" } },
+    { "method": "GET", "path": "/api/v1/surveys", "covered_by": { "stream": "surveys" } },
+    { "method": "POST", "path": "/api/v1/surveys/{survey_token}/email", "covered_by": { "write": "send_survey_email" } },
+    { "method": "GET", "path": "/api/v1/questions", "covered_by": { "stream": "questions" } }
+  ]
+}

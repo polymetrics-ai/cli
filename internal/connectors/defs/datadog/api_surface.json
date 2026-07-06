@@ -1,0 +1,1846 @@
+{
+  "api": "Datadog API v1 (https://docs.datadoghq.com/api/latest/) \u2014 the connector's docs_url/base_url-targeted surface",
+  "docs": "https://docs.datadoghq.com/api/latest/ (canonical reference); OpenAPI spec cross-checked at https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml, fetched 2026-07-04",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every one of the 235 documented Datadog API v1 operations (the exact surface published at docs.datadoghq.com/api/latest/'s v1 section, cross-checked against DataDog's own published OpenAPI v1 spec) is enumerated below, each covered_by a stream/write or excluded with a specific reason. 12 streams (monitors/dashboards/dashboard_lists/users/slo/slo_corrections/downtimes/notebooks/organizations/hosts/synthetics_tests/synthetics_locations/synthetics_variables/api_keys/application_keys) and 20 writes now cover every practical GET-list/detail resource and every dialect-expressible mutation this API version supports. The Datadog v2 API (a separate, vastly larger ~1383-operation surface spanning entirely distinct product areas \u2014 Security Monitoring, Cloud Cost Management, Case Management, LLM Observability, Incidents, Teams, Static Analysis, Status Pages, Feature Flags, App Builder, On-Call, Org Groups/Roles/Service Accounts identity administration, and dozens more \u2014 none of which this connector's docs_url/base_url ever targeted) is out of scope for this pass; see docs.md's Known limits for the v1-vs-v2 scope-boundary rationale (the same reasoning applied to the dbt bundle's v2-vs-v3 boundary in this same wave).",
+  "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/aws",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (AWS account role ARN), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (AWS account role ARN), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (AWS account role ARN), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/aws",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (AWS account role ARN), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws/available_namespace_rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS integration configuration metadata, not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/aws/event_bridge",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration wiring (EventBridge source), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws/event_bridge",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration wiring (EventBridge source), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/event_bridge",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration wiring (EventBridge source), not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/aws/filtering",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS integration tag-filter configuration, not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws/filtering",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS integration tag-filter configuration, not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/filtering",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS integration tag-filter configuration, not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/aws/generate_new_external_id",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "rotates the AWS integration's cross-account trust external id; integration-credential management, not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/aws/logs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS Logs integration wiring (Lambda ARN), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws/logs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS Logs integration wiring (Lambda ARN), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/logs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS Logs integration wiring (Lambda ARN), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/logs/check_async",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "async permission-check utility for AWS Logs integration wiring, not a data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/aws/logs/services",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static catalog of AWS-log-ready service names, not account data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/logs/services",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "AWS Logs integration wiring (enable log collection per service), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/aws/logs/services_async",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "async permission-check utility for AWS Logs integration wiring, not a data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/validate",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "credential validation is already exercised by this bundle's own check.path (GET /api/v1/dashboard); an equivalent auth-only ping, not an independent data resource"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/azure",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (Azure tenant/client secret), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/azure",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (Azure tenant/client secret), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/azure",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (Azure tenant/client secret), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/azure",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (Azure tenant/client secret), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/azure/host_filters",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Azure integration host-filter configuration, not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard/lists/manual",
+      "covered_by": {
+        "stream": "dashboard_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dashboard/lists/manual",
+      "covered_by": {
+        "write": "create_dashboard_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/lists/manual/{list_id}",
+      "covered_by": {
+        "write": "delete_dashboard_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard/lists/manual/{list_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-dashboard-list detail is a strict subset of the dashboard_lists stream's already-read per-list fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/dashboard/lists/manual/{list_id}",
+      "covered_by": {
+        "write": "update_dashboard_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/dashboard",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-deletes MULTIPLE dashboards by id list in one call; delete_dashboard already covers the single-dashboard case with the same real effect, per-item risk framing, and idempotent-delete semantics this dialect models well; the bulk variant's higher blast radius has no corresponding single-call safety rail in this dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/dashboard",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "restores previously soft-deleted dashboards by id list within a limited recovery window; a narrow admin-recovery action with no corresponding read state this bundle tracks (deleted dashboards are absent from the dashboards stream, so there is nothing to select a record from for this action)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dashboard",
+      "covered_by": {
+        "write": "create_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dashboard/public",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a PUBLIC, unauthenticated shareable dashboard URL; a distinct higher-risk sharing feature from ordinary dashboard CRUD, not implemented in this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/public/{token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "manages public-dashboard-sharing revocation; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard/public/{token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reads a public-dashboard-sharing configuration; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/dashboard/public/{token}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutates a public-dashboard-sharing configuration; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/public/{token}/invitation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "manages public-dashboard email invitations; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard/public/{token}/invitation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reads public-dashboard email invitations; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dashboard/public/{token}/invitation",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "sends a public-dashboard email invitation; see the public-dashboard creation exclusion above"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/dashboard/{dashboard_id}",
+      "covered_by": {
+        "write": "delete_dashboard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dashboard/{dashboard_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-dashboard detail (full widget definitions) is a strict superset only in widget-body detail of the dashboards stream's own per-record fields; the catalog-level dashboards stream already reads every dashboard's identity/metadata, and reading each dashboard's full widget body individually is a per-parent-id fan-out this bundle does not need for catalog-level sync parity"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/dashboard/{dashboard_id}",
+      "covered_by": {
+        "write": "update_dashboard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/downtime",
+      "covered_by": {
+        "stream": "downtimes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/downtime",
+      "covered_by": {
+        "write": "create_downtime"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/downtime/cancel/by_scope",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "cancels every downtime matching a scope string in one call; cancel_downtime already covers the single-downtime-by-id case with the same real effect and a clearer per-record risk framing"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/downtime/{downtime_id}",
+      "covered_by": {
+        "write": "cancel_downtime"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/downtime/{downtime_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-downtime detail is a strict subset of the downtimes stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/downtime/{downtime_id}",
+      "covered_by": {
+        "write": "update_downtime"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor/{monitor_id}/downtimes",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-monitor downtime lookup is a filtered view of the same records the downtimes stream already reads in full (each downtime record carries its own monitor_id/monitor_tags)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real endpoint requires BOTH start and end as mandatory POSIX-timestamp query parameters; end has no fixed/derivable value (the real use is always \"now\") and the engine's template Vars environment has no resolvable \"current time\" reference (grep confirms no time.Now()-equivalent anywhere in engine/{interpolate,read}.go, the same gap documented for datascope's windowed streams) \u2014 ENGINE_GAP, not a scoping choice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/events",
+      "covered_by": {
+        "write": "create_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/events/{event_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-event detail depends on first reading the events list, which is itself excluded above (ENGINE_GAP: no resolvable current-time reference for the required end parameter)"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/gcp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (GCP service account key), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/gcp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (GCP service account key), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/gcp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (GCP service account key), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/gcp",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cloud-provider integration credential management (GCP service account key), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/host/{host_name}/mute",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutes ALL monitors for a host by hostname (a host-scoped alert-suppression action with its own recovery-timeout semantics), a materially different shape from create_downtime's scope-list model; not implemented this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/host/{host_name}/unmute",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "reverses the host-mute action above; excluded for the same reason (action not implemented)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/hosts",
+      "covered_by": {
+        "stream": "hosts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/hosts/totals",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "a bare active/total host count already derivable by counting the hosts stream's own records; no independent record shape"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "publishes Datadog's own outbound IP address ranges for firewall allow-listing (a static, non-account-scoped reference document), not Datadog account/organization data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/api_key",
+      "covered_by": {
+        "stream": "api_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/api_key",
+      "covered_by": {
+        "write": "create_api_key"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/api_key/{key}",
+      "covered_by": {
+        "write": "delete_api_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/api_key/{key}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-API-key detail is a strict subset of the api_keys stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/api_key/{key}",
+      "covered_by": {
+        "write": "update_api_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/application_key",
+      "covered_by": {
+        "stream": "application_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/application_key",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates an application key SCOPED TO THE CALLING USER (no name-only account-level equivalent to api_key's create); mints a new personal credential on behalf of whichever identity the connector authenticates as, an identity-management action rather than an account-data mutation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/application_key/{key}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "revokes a personal application key; identity-management action, not an account-data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/application_key/{key}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-application-key detail is a strict subset of the application_keys stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/application_key/{key}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "renames a personal application key; identity-management action, not an account-data mutation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logs-queries/list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "full-text log SEARCH (a query surface with its own filter/facet grammar and huge result volumes), a fundamentally different shape from this bundle's catalog/config-resource streams; log data ingestion/search is out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/input",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "log-ingestion endpoint (accepts arbitrary externally-supplied log payloads for injection into the organization's log pipeline); a data-ingestion write with no corresponding read/catalog shape, out of scope for a configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/index-order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index processing order); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/logs/config/index-order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index processing order); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/indexes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logs/config/indexes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/logs/config/indexes/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/indexes/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/logs/config/indexes/{name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/pipeline-order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (pipeline processing order); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/logs/config/pipeline-order",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (pipeline processing order); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logs/config/pipelines",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/distribution_points",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "metrics-ingestion endpoint (submits distribution-point metric payloads); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists every ACTIVE METRIC NAME reporting in the last 24h \u2014 a potentially enormous, high-cardinality, constantly-changing set (unlike this bundle's bounded config-resource streams: monitors, dashboards, SLOs, etc.); metrics catalog/timeseries data is a fundamentally different product surface (Datadog's dedicated Metrics product), out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/{metric_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-metric metadata depends on first enumerating metric names, which is itself excluded above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/metrics/{metric_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutates a single metric's metadata (unit, description); depends on the excluded metrics-catalog surface above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "queries TIMESERIES METRIC DATA POINTS (raw numeric telemetry over a time range) \u2014 an analytics/query surface, not a catalog resource; fundamentally different from this bundle's bounded config-resource streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "full-text search across metrics/tags/hosts; a search surface, not an independent catalog resource, and depends on the excluded metrics-catalog surface above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/series",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "metrics-ingestion endpoint (submits metric data points); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor",
+      "covered_by": {
+        "stream": "monitors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monitor",
+      "covered_by": {
+        "write": "create_monitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor/can_delete",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a pre-flight eligibility check (whether given monitor ids can be safely deleted), not a data resource; delete_monitor's own request/response already reports the real outcome of an actual delete attempt"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor/groups/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "monitor GROUP search (multi-alert monitor group state), a distinct, more specialized query surface than the monitors stream's own catalog listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor/search",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "monitor search-by-query is a filtered view over the same records the monitors stream already reads in full"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monitor/validate",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "validates a monitor definition WITHOUT creating it (a dry-run utility), not a data mutation; create_monitor's own request already validates server-side on the real create call"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/monitor/{monitor_id}",
+      "covered_by": {
+        "write": "delete_monitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monitor/{monitor_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-monitor detail is a strict subset of the monitors stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/monitor/{monitor_id}",
+      "covered_by": {
+        "write": "update_monitor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monitor/{monitor_id}/validate",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "validates an existing monitor's current definition without mutating it (a dry-run utility), not a data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notebooks",
+      "covered_by": {
+        "stream": "notebooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/notebooks",
+      "covered_by": {
+        "write": "create_notebook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/notebooks/{notebook_id}",
+      "covered_by": {
+        "write": "delete_notebook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/notebooks/{notebook_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-notebook detail (full cell content) is a strict superset only in cell-body detail of the notebooks stream's own per-record catalog fields; reading every notebook's full cell content individually is a per-parent-id fan-out this bundle does not need for catalog-level sync parity"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/notebooks/{notebook_id}",
+      "covered_by": {
+        "write": "update_notebook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new CHILD ORGANIZATION under a multi-org account; a rare account-hierarchy administration action, not ordinary connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-organization detail is a strict subset of the organizations stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/org/{public_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "mutates organization-level billing/SAML/security settings; account-admin scope, not ordinary connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/{public_id}/downgrade",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "irreversibly spins off/downgrades a child organization's subscription tier; a rare, high-impact account-hierarchy action outside this connector's scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/{public_id}/idp_metadata",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "uploads SAML identity-provider metadata for the organization; security/identity-administration action, not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/pagerduty/configuration/services",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (PagerDuty service objects), not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (PagerDuty service objects), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (PagerDuty service objects), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (PagerDuty service objects), not connector data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/security_analytics/signals/{signal_id}/add_to_incident",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Security Monitoring is a separate, dedicated Datadog product surface (signal triage workflow, mostly v2-only) with no corresponding read/catalog stream in this bundle; out of scope for this configuration-focused connector \u2014 see docs.md's Known limits for the v1-vs-v2 scope boundary"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/security_analytics/signals/{signal_id}/assignee",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Security Monitoring triage action; see the add_to_incident exclusion above"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/security_analytics/signals/{signal_id}/state",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Security Monitoring triage action; see the add_to_incident exclusion above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/check_run",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "service-check-ingestion endpoint (submits a check-status telemetry event); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/correction",
+      "covered_by": {
+        "stream": "slo_corrections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/slo/correction",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates an SLO correction (excludes a time window from an SLO's error-budget calculation); no dialect-expressible write action implemented this pass, a candidate for a future increment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/slo/correction/{slo_correction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes an SLO correction; see the create exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/correction/{slo_correction_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-SLO-correction detail is a strict subset of the slo_corrections stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/slo/correction/{slo_correction_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates an SLO correction; see the create exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo",
+      "covered_by": {
+        "stream": "slo"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/slo",
+      "covered_by": {
+        "write": "create_slo"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/slo/bulk_delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-deletes SLO TIMEFRAMES across multiple SLO ids in one call; delete_slo already covers the single-SLO-by-id case with the same real effect and a clearer per-record risk framing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/can_delete",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "a pre-flight eligibility check (whether given SLO ids can be safely deleted), not a data resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/search",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "SLO search-by-query is a filtered view over the same records the slo stream already reads in full"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/slo/{slo_id}",
+      "covered_by": {
+        "write": "delete_slo"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/{slo_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-SLO detail is a strict subset of the slo stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/slo/{slo_id}",
+      "covered_by": {
+        "write": "update_slo"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/{slo_id}/corrections",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-SLO correction lookup is a filtered view of the same records the slo_corrections stream already reads in full (each correction record carries its own slo_id)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/slo/{slo_id}/history",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "SLO error-budget/status HISTORY (a timeseries-shaped analytics resource keyed by time range), a fundamentally different shape from this bundle's bounded config-resource streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (Slack channel routing), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (Slack channel routing), not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (Slack channel routing), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (Slack channel routing), not connector data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (Slack channel routing), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph/snapshot",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "renders and returns a graph image (PNG) snapshot URL for a metric query; an image-rendering utility, not a structured JSON list/detail record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/ci/batch/{batch_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "CI/CD-triggered test-batch run RESULTS (a run-history resource keyed by an opaque batch id from a CI pipeline invocation), not a catalog resource this bundle's synthetics_tests stream already covers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/locations",
+      "covered_by": {
+        "stream": "synthetics_locations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/private-locations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "provisions a customer-hosted Synthetics private-location worker; infrastructure-provisioning action, not ordinary connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/synthetics/private-locations/{location_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "de-provisions a customer-hosted Synthetics private-location worker; infrastructure action, not ordinary connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/private-locations/{location_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reads a customer-hosted Synthetics private-location worker's config (may include connection secrets); infrastructure-scoped, not ordinary connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/private-locations/{location_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "mutates a customer-hosted Synthetics private-location worker's config; infrastructure action, not ordinary connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/settings/default_locations",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the account's default-location LIST is a strict subset of the synthetics_locations stream's already-read location catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests",
+      "covered_by": {
+        "stream": "synthetics_tests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/api",
+      "covered_by": {
+        "write": "create_synthetics_api_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/api/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-API-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/tests/api/{public_id}",
+      "covered_by": {
+        "write": "update_synthetics_api_test"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/browser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Browser tests require a recorded step sequence authored through Datadog's own visual test recorder; there is no practical way to construct one via a declarative record body, unlike API tests' plain HTTP-request config \u2014 no dialect-expressible write for this test type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/browser/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-browser-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/tests/browser/{public_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutates a browser test's recorded step sequence; see the browser-test-creation exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/browser/{public_id}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "browser-test RUN RESULTS (a run-history/results resource with its own pass/fail timeline), a fundamentally different shape from the synthetics_tests catalog stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/browser/{public_id}/results/{result_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single browser-test run result; see the results-list exclusion above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/delete",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "bulk-deletes MULTIPLE Synthetics tests by id list in one call; no corresponding single-test delete write is implemented this pass because delete affects the actively-scheduled probe (a live-monitoring side effect not yet modeled for this resource, unlike create/update)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/mobile",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mobile tests require a recorded step sequence authored through Datadog's mobile app testing tooling; same shape gap as browser tests above, no dialect-expressible write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/mobile/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-mobile-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/tests/mobile/{public_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutates a mobile test's recorded step sequence; see the mobile-test-creation exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/search",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Synthetics test search-by-query is a filtered view over the same records the synthetics_tests stream already reads in full"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/trigger",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers an on-demand, out-of-schedule Synthetics test run; a run-control action for a resource whose catalog (not run-history) is this bundle's scope, no dialect-expressible write implemented this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/trigger/ci",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "triggers Synthetics test runs specifically from a CI/CD pipeline context (extra CI-provenance metadata in the request); see the generic trigger exclusion above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/tests/uptimes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "fetches aggregate UPTIME METRICS for multiple tests over a time range; an analytics/metrics resource, not a catalog resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "generic single-test detail (any test type) is a strict subset of the synthetics_tests stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/synthetics/tests/{public_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "generic partial-update-by-type endpoint; update_synthetics_api_test already covers the API-test case this bundle models, and browser/mobile test mutation is out of scope per the type-specific exclusions above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/{public_id}/results",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "API-test RUN RESULTS (a run-history/results resource with its own pass/fail timeline), a fundamentally different shape from the synthetics_tests catalog stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/tests/{public_id}/results/{result_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single API-test run result; see the results-list exclusion above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/tests/{public_id}/status",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "pauses/resumes a test's ACTIVE PROBING SCHEDULE; a run-control toggle for a resource whose catalog (not schedule-state control) is this bundle's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/variables",
+      "covered_by": {
+        "stream": "synthetics_variables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/synthetics/variables",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "creates a Synthetics global variable; some variable values are marked secure/secret-shaped at the API's own discretion (is_fido/is_totp/secure flags), and this bundle does not yet model a write-only-credential write action for this resource type, unlike SSH-tunnel's documented precedent in the dbt bundle \u2014 candidate for a future increment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/synthetics/variables/{variable_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "deletes a Synthetics global variable; see the create exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/synthetics/variables/{variable_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-variable detail is a strict subset of the synthetics_variables stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/synthetics/variables/{variable_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "updates a Synthetics global variable; see the create exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags/hosts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the real response is a map of TAG NAME to an ARRAY OF HOSTNAMES (`{\"tags\": {\"<tag>\": [\"host1\", \"host2\"]}}`) \u2014 an object whose VALUES are arrays, not objects; the engine's records.keyed_object flag explodes a keyed object's OBJECT-valued entries into records and does not apply when values are arrays, and there is no other declarative shape for a tag-to-hostnames map \u2014 ENGINE_GAP, not a scoping choice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/tags/hosts/{host_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutates tags for a single host; depends on the excluded host-tags catalog surface above for any meaningful record-shaped read/write pairing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags/hosts/{host_name}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-host tag lookup is a scalar array response (list of tag strings for one host), a narrower view of the same excluded host-tags surface above; no independent catalog shape"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tags/hosts/{host_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "adds tags to a single host; see the host-tags catalog exclusion above"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/tags/hosts/{host_name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "replaces tags on a single host; see the host-tags catalog exclusion above"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/daily_custom_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/daily_custom_reports/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monthly_custom_reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/monthly_custom_reports/{report_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/analyzed_logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/audit_logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/aws_lambda",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/billable-summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/ci-app",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/cspm",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/cws",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/dbm",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/fargate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/hosts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/hourly-attribution",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/incident-management",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/indexed-spans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/ingested-spans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/iot",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/logs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/logs-by-retention",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/logs_by_index",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/monthly-attribution",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/network_flows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/network_hosts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/online-archive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/profiling",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/rum",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/rum_sessions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/sds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/snmp",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/summary",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/synthetics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/synthetics_api",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/synthetics_browser",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/timeseries",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/usage/top_avg_metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/user",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/user",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/user/{user_handle}",
+      "covered_by": {
+        "write": "disable_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/user/{user_handle}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-user detail is a strict subset of the users stream's already-read per-record fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/user/{user_handle}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/webhooks/configuration/custom-variables",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook custom template variables), not connector data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook custom template variables), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook custom template variables), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook custom template variables), not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/integration/webhooks/configuration/webhooks",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "registers an outbound webhook URL of the caller's choosing as part of THIRD-PARTY INTEGRATION configuration (distinct product area from ordinary connector writes), not implemented this pass"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook registration), not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook registration), not connector data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "third-party integration wiring (webhook registration), not connector data"
+      }
+    }
+  ]
+}

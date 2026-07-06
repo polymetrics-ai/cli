@@ -1,0 +1,22 @@
+{
+  "record": {
+    "email": "fixture-user@example.com",
+    "first_name": "Fixture",
+    "last_name": "User"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/users",
+    "body": {
+      "email": "fixture-user@example.com",
+      "first_name": "Fixture",
+      "last_name": "User"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "user_fixture_new"
+    }
+  }
+}

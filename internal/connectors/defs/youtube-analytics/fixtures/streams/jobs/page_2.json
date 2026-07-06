@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "pageSize": "100",
+      "pageToken": "page2token"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": [
+        {
+          "id": "job_fixture_3",
+          "reportTypeId": "playlist_basic_a2",
+          "name": "Fixture Job Three",
+          "createTime": "2026-01-03T00:00:00Z",
+          "expireTime": "2026-04-03T00:00:00Z",
+          "systemManaged": true
+        }
+      ]
+    }
+  }
+}

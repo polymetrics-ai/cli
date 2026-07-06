@@ -1,0 +1,320 @@
+{
+  "api": "Printify public REST API v1/v2",
+  "docs": "https://developers.printify.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "All documented Printify GET list/detail endpoints are covered as streams; all bearer-auth JSON/bodyless POST/PUT/DELETE endpoints expressible by the declarative write dialect are covered as write actions. OAuth app lifecycle endpoints are excluded as non-data endpoints.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/shops.json",
+      "covered_by": {
+        "stream": "shops"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/shops/{shop_id}/connection.json",
+      "covered_by": {
+        "write": "disconnect_shop"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/blueprints.json",
+      "covered_by": {
+        "stream": "blueprints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/blueprints/{blueprint_id}.json",
+      "covered_by": {
+        "stream": "blueprint_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers.json",
+      "covered_by": {
+        "stream": "blueprint_print_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/variants.json",
+      "covered_by": {
+        "stream": "blueprint_variants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json",
+      "covered_by": {
+        "stream": "shipping_profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/print_providers.json",
+      "covered_by": {
+        "stream": "print_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalog/print_providers/{print_provider_id}.json",
+      "covered_by": {
+        "stream": "print_provider_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/products.json",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/products/{product_id}.json",
+      "covered_by": {
+        "stream": "product_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/products/{product_id}/gpsr.json",
+      "covered_by": {
+        "stream": "product_gpsr"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/products.json",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/shops/{shop_id}/products/{product_id}.json",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/shops/{shop_id}/products/{product_id}.json",
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/products/{product_id}/publish.json",
+      "covered_by": {
+        "write": "publish_product"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/products/{product_id}/publishing_succeeded.json",
+      "covered_by": {
+        "write": "mark_product_publishing_succeeded"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/products/{product_id}/publishing_failed.json",
+      "covered_by": {
+        "write": "mark_product_publishing_failed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/products/{product_id}/unpublish.json",
+      "covered_by": {
+        "write": "unpublish_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/orders.json",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/orders/{order_id}.json",
+      "covered_by": {
+        "stream": "order_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/orders.json",
+      "covered_by": {
+        "write": "submit_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/express.json",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "Navigation entry duplicates the documented /v1/shops/{shop_id}/orders/express.json endpoint table."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/orders/express.json",
+      "covered_by": {
+        "write": "submit_express_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/orders/{order_id}/send_to_production.json",
+      "covered_by": {
+        "write": "send_order_to_production"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/orders/shipping.json",
+      "covered_by": {
+        "write": "calculate_order_shipping"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/orders/{order_id}/cancel.json",
+      "covered_by": {
+        "write": "cancel_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/uploads.json",
+      "covered_by": {
+        "stream": "uploads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/uploads/{image_id}.json",
+      "covered_by": {
+        "stream": "upload_detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/uploads/images.json",
+      "covered_by": {
+        "write": "upload_image"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/uploads/{image_id}/archive.json",
+      "covered_by": {
+        "write": "archive_uploaded_image"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shops/{shop_id}/webhooks.json",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/webhooks.json",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}.json",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}.json",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shops/{shop_id}/webhooks/{webhook_id}/simulate",
+      "covered_by": {
+        "write": "simulate_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json",
+      "covered_by": {
+        "stream": "v2_shipping_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/standard.json",
+      "covered_by": {
+        "stream": "v2_shipping_standard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/priority.json",
+      "covered_by": {
+        "stream": "v2_shipping_priority"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/express.json",
+      "covered_by": {
+        "stream": "v2_shipping_express"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping/economy.json",
+      "covered_by": {
+        "stream": "v2_shipping_economy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/app/oauth/accept",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth app authorization callback endpoint; not an ETL data surface."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/app/oauth/tokens",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth app token exchange endpoint; credential lifecycle, not connector records."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/app/oauth/tokens/refresh",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth app token refresh endpoint; credential lifecycle, not connector records."
+      }
+    }
+  ]
+}

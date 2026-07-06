@@ -1,0 +1,15 @@
+{
+  "record": {
+    "article_id": 123,
+    "name": "Fixture send_article_to_approval",
+    "description": "Fixture send_article_to_approval record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/solutions/articles/123/send_for_approval",
+    "body": {
+      "name": "Fixture send_article_to_approval",
+      "description": "Fixture send_article_to_approval record"
+    }
+  }
+}

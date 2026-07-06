@@ -1,0 +1,21 @@
+{
+  "record": {
+    "training_type_id": "fixture_id",
+    "name": "Fixture Name",
+    "required": true,
+    "description": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/training/type/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "required": true,
+      "description": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

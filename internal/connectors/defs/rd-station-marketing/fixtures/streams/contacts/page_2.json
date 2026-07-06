@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "page": "2", "page_size": "125" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "uuid": "contact_fixture_126",
+          "email": "fixture126@example.com",
+          "name": "Fixture 126",
+          "created_at": "2026-01-05T00:00:00Z",
+          "updated_at": "2026-01-06T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_page": "" }
+    }
+  }
+}

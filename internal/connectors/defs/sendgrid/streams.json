@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "_metadata.next"
+    },
+    "check": { "method": "GET", "path": "/marketing/lists", "query": { "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "sendgrid api_key is missing or invalid; re-run pm credentials add sendgrid" },
+      { "status": 403, "hint": "sendgrid api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sendgrid rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lists",
+      "path": "/marketing/lists",
+      "query": { "page_size": "100" },
+      "records": { "path": "result" },
+      "schema": "schemas/lists.json"
+    },
+    {
+      "name": "segments",
+      "path": "/marketing/segments/2.0",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/marketing/contacts",
+      "query": { "page_size": "100" },
+      "records": { "path": "result" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "suppression_bounces",
+      "path": "/suppression/bounces",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "records": { "path": "." },
+      "schema": "schemas/suppression_bounces.json"
+    }
+  ]
+}

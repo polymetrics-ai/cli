@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/notebooks",
+    "query": { "start": "0", "count": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "type": "notebooks",
+          "attributes": {
+            "name": "Fixture Notebook 1",
+            "created": "2026-01-01T00:00:00Z",
+            "modified": "2026-01-01T00:05:00Z",
+            "author": { "handle": "fixture@example.com", "name": "Fixture Author" }
+          }
+        }
+      ]
+    }
+  }
+}

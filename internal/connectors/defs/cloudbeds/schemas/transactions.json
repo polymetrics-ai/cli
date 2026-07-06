@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["transactionID"],
+  "required": ["transactionID"],
+  "properties": {
+    "transactionID": { "type": "string" },
+    "propertyID": { "type": ["string", "null"] },
+    "reservationID": { "type": ["string", "null"] },
+    "guestID": { "type": ["string", "null"] },
+    "guestName": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "transactionCategory": { "type": ["string", "null"] },
+    "transactionType": { "type": ["string", "null"] },
+    "transactionCode": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "transactionDateTime": { "type": ["string", "null"] },
+    "transactionDateTimeUTC": { "type": ["string", "null"] }
+  }
+}

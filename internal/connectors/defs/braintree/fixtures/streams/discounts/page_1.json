@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/discounts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "discounts": [
+        { "id": "discount_fixture_1", "name": "Fixture discount", "amount": "2.00", "kind": "discount" }
+      ]
+    }
+  }
+}

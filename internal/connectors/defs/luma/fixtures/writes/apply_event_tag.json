@@ -1,0 +1,18 @@
+{
+  "record": {
+    "tag": "fixture",
+    "event_ids": [
+      "fixture_event_id"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/calendars/event-tags/apply",
+    "body": {
+      "tag": "fixture",
+      "event_ids": [
+        "fixture_event_id"
+      ]
+    }
+  }
+}

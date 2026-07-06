@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "custom_data",
+  "type": "object",
+  "properties": {
+    "customData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "resourceId": {
+            "type": "string",
+            "description": "The ID of the resource"
+          },
+          "resourceType": {
+            "type": "string",
+            "description": "The type of resource",
+            "enum": [
+              "customer",
+              "ticket",
+              "conversation",
+              "deal"
+            ]
+          },
+          "key": {
+            "type": "string",
+            "description": "The custom data key in 'namespace.key' format"
+          },
+          "value": {},
+          "type": {
+            "type": "string",
+            "description": "The data type of this custom data field",
+            "enum": [
+              "string",
+              "boolean",
+              "url",
+              "date",
+              "date_time",
+              "json",
+              "number_integer",
+              "number_decimal",
+              "select_single",
+              "select_multiple"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the custom data field"
+          },
+          "options": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "For select_single and select_multiple types, the list of allowed option values",
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

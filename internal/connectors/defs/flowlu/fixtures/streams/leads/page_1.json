@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/crm/lead/list", "query": { "page": "1", "count": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "total_result": 1,
+        "page": 1,
+        "count": 100,
+        "items": [
+          {
+            "id": 1,
+            "name": "Fixture Lead One",
+            "title": "Fixture Lead Title 1",
+            "stage_id": 2,
+            "pipeline_id": 1,
+            "budget": "1000.00",
+            "owner_id": 10,
+            "active": 1,
+            "created_date": "2026-01-01 00:00:00",
+            "updated_date": "2026-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

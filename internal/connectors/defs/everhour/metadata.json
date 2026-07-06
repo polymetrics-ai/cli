@@ -1,0 +1,24 @@
+{
+  "name": "everhour",
+  "display_name": "Everhour",
+  "description": "Reads Everhour projects, clients, team members, team time records, per-project tasks and sections, time-off types, time-off allocations, expenses, expense categories, and invoices, and writes client/project/task/section/time-record/expense mutations, through the Everhour REST API.",
+  "integration_type": "api",
+  "docs_url": "https://everhour.docs.apiary.io/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Everhour API read of project, client, member, time, task, section, time-off, expense, and invoice data",
+    "write": "external mutation of clients, projects, tasks, sections, time records, and expenses; deletes are irreversible and time-record/expense mutations can affect client billing/invoicing, every write ships with an explicit per-action risk string",
+    "approval": "required for every delete_* action, archive_project, and update_time_record (time entries may already be invoiced/locked); create/update of clients, projects, tasks, sections, time records, and expenses are low-risk"
+  }
+}

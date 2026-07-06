@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "contact_fixture_1",
+    "name": "Fixture Contact Updated",
+    "email": "fixture.updated@example.com",
+    "phone_number": "415-555-0101"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/network/contacts/contact_fixture_1",
+    "body": {
+      "name": "Fixture Contact Updated",
+      "email": "fixture.updated@example.com",
+      "phone_number": "415-555-0101"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/network/contact",
+        "id": "contact_fixture_1"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "name": "Fixture add maintenance",
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/page_id_fixture_1/maintenances",
+    "body": {
+      "name": "Fixture add maintenance",
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "add_maintenance_fixture_response"
+    }
+  }
+}

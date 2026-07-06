@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/dashboard" },
+  "response": {
+    "status": 200,
+    "body": {
+      "dashboards": [
+        {
+          "id": "fixture-dash-1",
+          "title": "Fixture Dashboard 1",
+          "description": "Fixture record",
+          "layout_type": "ordered",
+          "url": "/dashboard/fixture-dash-1",
+          "author_handle": "fixture1@example.com",
+          "created_at": "2026-01-01T00:00:00Z",
+          "modified_at": "2026-01-01T00:00:00Z",
+          "is_read_only": false
+        },
+        {
+          "id": "fixture-dash-2",
+          "title": "Fixture Dashboard 2",
+          "description": "Fixture record",
+          "layout_type": "free",
+          "url": "/dashboard/fixture-dash-2",
+          "author_handle": "fixture2@example.com",
+          "created_at": "2026-01-02T00:00:00Z",
+          "modified_at": "2026-01-02T00:00:00Z",
+          "is_read_only": true
+        }
+      ]
+    }
+  }
+}

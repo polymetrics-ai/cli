@@ -1,0 +1,9 @@
+{
+  "record": { "organization": "fixture-org" },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/forks",
+    "body": { "organization": "fixture-org" }
+  },
+  "response": { "status": 202, "body": { "id": 2 } }
+}

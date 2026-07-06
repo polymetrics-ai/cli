@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_content_update_preview",
+  "type": "object",
+  "properties": {
+    "contentUpdatePreviewId": {
+      "type": "string"
+    },
+    "expiration": {
+      "type": "string"
+    },
+    "requestedUpdates": {
+      "type": "object"
+    },
+    "transportationOption": {
+      "type": "object"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    },
+    "content_update_preview_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

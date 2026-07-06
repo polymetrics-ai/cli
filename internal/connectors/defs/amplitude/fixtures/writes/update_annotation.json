@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 5001,
+    "label": "Fixture Launch Updated",
+    "details": "updated fixture annotation"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/3/annotations/5001",
+    "body": {
+      "label": "Fixture Launch Updated",
+      "details": "updated fixture annotation"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 5001, "label": "Fixture Launch Updated" } }
+  }
+}

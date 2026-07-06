@@ -1,0 +1,72 @@
+{
+  "api": "Drip API v2 (https://api.getdrip.com/v2)",
+  "docs": "https://developer.drip.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-researched against developer.drip.com's full endpoint index (accounts, single-email/email-series campaigns, custom fields, conversions/goals, events, forms, orders (legacy)/shopper-activity (v3), subscribers, tags, users, workflows/workflow-triggers, webhooks) plus the drip-ruby/drip-php SDK sources for exact request/response shapes. 7 read streams (the 4 pre-existing plus workflows/forms/webhooks) and 14 write actions covering subscriber/tag/event/broadcast/workflow-state/webhook lifecycle mutation. Excluded: email-series campaign activate/pause/subscribe (a distinct, more complex multi-step drip-sequence resource than the modeled workflow/broadcast shapes, and not part of legacy's original 4 streams), legacy orders + v3 shopper-activity batch endpoints (e-commerce event ingestion requiring a cart/product/order domain model this bundle does not otherwise touch), custom_field_identifiers/goals/event_actions (schema-introspection lists, not object data), users/me (authenticated-user identity, not account data), and the tags list endpoint (GET /tags returns a BARE JSON STRING ARRAY {\"tags\": [\"a\", \"b\"]}, which connsdk.RecordsAt silently yields ZERO records for — the exact same non-object-array-element gap documented for ip2whois's nameservers field in conventions.md §5 ledger item 12 — so tags are covered only via the apply_tag/remove_tag WRITE actions, which need no list extraction).",
+  "endpoints": [
+    { "method": "GET", "path": "/{account_id}/subscribers", "covered_by": { "stream": "subscribers" } },
+    { "method": "GET", "path": "/{account_id}/subscribers/{subscriber_id}", "excluded": { "category": "duplicate_of", "reason": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/{account_id}/subscribers/{subscriber_id}/campaign_subscriptions", "excluded": { "category": "out_of_scope", "reason": "per-subscriber campaign-membership sub-resource; a join view derivable from the subscribers/campaigns streams already synced, not a distinct top-level object" } },
+    { "method": "POST", "path": "/{account_id}/subscribers", "covered_by": { "write": "create_or_update_subscriber" } },
+    { "method": "POST", "path": "/{account_id}/subscribers/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-subscriber batch upsert over the same collection create_or_update_subscriber already covers per-record; this dialect's per-record write model already expresses the single-subscriber shape this endpoint's batch array wraps" } },
+    { "method": "DELETE", "path": "/{account_id}/subscribers/{subscriber_id}", "covered_by": { "write": "delete_subscriber" } },
+    { "method": "POST", "path": "/{account_id}/unsubscribes", "covered_by": { "write": "unsubscribe_subscriber" } },
+    { "method": "POST", "path": "/{account_id}/unsubscribes/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-subscriber batch unsubscribe; unsubscribe_subscriber already covers the single-subscriber shape this endpoint's batch array wraps" } },
+
+    { "method": "GET", "path": "/{account_id}/tags", "excluded": { "category": "out_of_scope", "reason": "returns a BARE JSON STRING ARRAY ({\"tags\": [\"Customer\", \"SEO\"]}), not an array of objects; connsdk.RecordsAt only extracts array elements that decode as a JSON object, so every element here would be silently dropped, yielding zero records — the identical gap class documented for ip2whois's nameservers field (conventions.md ledger item 12), not a scoping choice. Tag mutation is still covered via apply_tag/remove_tag below, which operate per-subscriber and need no list extraction." } },
+    { "method": "POST", "path": "/{account_id}/subscribers/{subscriber_id}/tags", "covered_by": { "write": "apply_tag" } },
+    { "method": "DELETE", "path": "/{account_id}/subscribers/{subscriber_id}/tags/{tag}", "covered_by": { "write": "remove_tag" } },
+
+    { "method": "GET", "path": "/{account_id}/custom_field_identifiers", "excluded": { "category": "non_data_endpoint", "reason": "lists the names of custom fields ever set on any subscriber; schema/field-name introspection, not object data itself" } },
+
+    { "method": "GET", "path": "/{account_id}/goals", "excluded": { "category": "out_of_scope", "reason": "conversion-goal definition list; marketing-analytics configuration, not core CRM/subscriber-shaped data prioritized this pass" } },
+    { "method": "GET", "path": "/{account_id}/goals/{conversion_id}", "excluded": { "category": "duplicate_of", "reason": "single-conversion-goal detail; same scope narrowing as the goals list" } },
+
+    { "method": "POST", "path": "/{account_id}/events", "covered_by": { "write": "record_event" } },
+    { "method": "POST", "path": "/{account_id}/events/batches", "excluded": { "category": "out_of_scope", "reason": "bulk multi-event batch recording; record_event already covers the single-event shape this endpoint's batch array wraps" } },
+    { "method": "GET", "path": "/{account_id}/event_actions", "excluded": { "category": "non_data_endpoint", "reason": "lists the distinct custom event action names ever recorded; schema/name introspection, not event object data itself" } },
+
+    { "method": "GET", "path": "/{account_id}/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/{account_id}/forms/{form_id}", "excluded": { "category": "duplicate_of", "reason": "single-form detail; identical record shape to the forms list stream's per-item object, already covered by that stream" } },
+
+    { "method": "POST", "path": "/{account_id}/orders", "excluded": { "category": "out_of_scope", "reason": "legacy e-commerce order-tracking API; superseded by the v3 shopper_activity endpoints and not part of a CRM-shaped record/mutation model this pass targets" } },
+    { "method": "POST", "path": "/{account_id}/orders/batches", "excluded": { "category": "out_of_scope", "reason": "legacy batch order-tracking; same scope narrowing as the single-order endpoint" } },
+    { "method": "POST", "path": "/{account_id}/shopper_activity/cart/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce cart-activity ingestion; requires a cart/line-item domain model this connector's read streams do not otherwise expose or need" } },
+    { "method": "POST", "path": "/{account_id}/shopper_activity/order/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce order-activity ingestion; same domain-model scope narrowing as cart/batch" } },
+    { "method": "POST", "path": "/{account_id}/shopper_activity/product/batch", "excluded": { "category": "out_of_scope", "reason": "e-commerce product-activity ingestion; same domain-model scope narrowing as cart/batch" } },
+
+    { "method": "GET", "path": "/{account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/{account_id}/campaigns/{campaign_id}", "excluded": { "category": "duplicate_of", "reason": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/activate", "excluded": { "category": "out_of_scope", "reason": "activates an email-series (drip-sequence) campaign; campaigns were not part of legacy's write surface and this multi-step-sequence resource is out of scope for this pass's write coverage, unlike the simpler single-broadcast and single-workflow state toggles this pass does cover" } },
+    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/pause", "excluded": { "category": "out_of_scope", "reason": "pauses an email-series campaign; same scope narrowing as activate" } },
+    { "method": "GET", "path": "/{account_id}/campaigns/{campaign_id}/subscribers", "excluded": { "category": "duplicate_of", "reason": "campaign-scoped filtered view of the same subscriber records the subscribers stream already reads in full" } },
+    { "method": "POST", "path": "/{account_id}/campaigns/{campaign_id}/subscribers", "excluded": { "category": "out_of_scope", "reason": "subscribes a person to an email-series campaign; same email-series-write scope narrowing as activate/pause" } },
+
+    { "method": "GET", "path": "/{account_id}/broadcasts", "covered_by": { "stream": "broadcasts" } },
+    { "method": "GET", "path": "/{account_id}/broadcasts/{broadcast_id}", "excluded": { "category": "duplicate_of", "reason": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/{account_id}/broadcasts", "covered_by": { "write": "create_broadcast" } },
+    { "method": "PATCH", "path": "/{account_id}/broadcasts/{broadcast_id}", "covered_by": { "write": "update_broadcast" } },
+    { "method": "DELETE", "path": "/{account_id}/broadcasts/{broadcast_id}", "covered_by": { "write": "delete_broadcast" } },
+    { "method": "POST", "path": "/{account_id}/broadcasts/{broadcast_id}/send_test", "excluded": { "category": "out_of_scope", "reason": "sends a one-off test-send copy of a draft broadcast to a preview address; a preview/QA action, not a syncable record mutation" } },
+
+    { "method": "GET", "path": "/{account_id}/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "GET", "path": "/{account_id}/workflows/{workflow_id}", "excluded": { "category": "duplicate_of", "reason": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/activate", "covered_by": { "write": "activate_workflow" } },
+    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/pause", "covered_by": { "write": "pause_workflow" } },
+    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/subscribers", "excluded": { "category": "out_of_scope", "reason": "starts a specific person on a workflow, a distinct enrollment action from the workflow-level activate/pause state toggles this pass covers; out of scope for this pass's write coverage" } },
+    { "method": "POST", "path": "/{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove", "excluded": { "category": "out_of_scope", "reason": "removes one person from a workflow; same per-enrollment scope narrowing as the subscribe endpoint" } },
+    { "method": "GET", "path": "/{account_id}/workflow_triggers", "excluded": { "category": "out_of_scope", "reason": "workflow-trigger configuration list; automation-config metadata, not CRM-shaped object data" } },
+    { "method": "POST", "path": "/{account_id}/workflow_triggers", "excluded": { "category": "out_of_scope", "reason": "creates a workflow trigger; automation-config mutation, out of scope for this pass" } },
+    { "method": "POST", "path": "/{account_id}/workflow_triggers/{trigger_id}", "excluded": { "category": "out_of_scope", "reason": "updates a workflow trigger; automation-config mutation, out of scope for this pass" } },
+
+    { "method": "GET", "path": "/{account_id}/webhooks", "covered_by": { "stream": "webhooks" } },
+    { "method": "GET", "path": "/{account_id}/webhooks/{webhook_id}", "excluded": { "category": "duplicate_of", "reason": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/{account_id}/webhooks", "covered_by": { "write": "create_webhook" } },
+    { "method": "DELETE", "path": "/{account_id}/webhooks/{webhook_id}", "covered_by": { "write": "delete_webhook" } },
+
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/accounts/{account_id}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/users/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user identity introspection, not a syncable object stream" } }
+  ]
+}

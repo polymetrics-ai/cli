@@ -1,0 +1,21 @@
+{
+  "name": "zapsign",
+  "display_name": "ZapSign",
+  "description": "Reads and writes ZapSign documents, signers, templates, and webhooks.",
+  "integration_type": "api",
+  "docs_url": "https://docs.zapsign.com.br/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external ZapSign account read of documents, signers, templates, and webhooks",
+    "write": "external mutation: creates documents from templates, cancels/deletes documents, adds/updates/removes signers, and manages webhook subscriptions that receive live document-event data",
+    "approval": "required for all write actions; read access uses a read-only API token with no approval needed"
+  }
+}

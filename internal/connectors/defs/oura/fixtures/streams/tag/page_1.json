@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/tag"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tag_fixture_1",
+          "day": "2026-01-01",
+          "text": "fixture_text",
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "tags": []
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

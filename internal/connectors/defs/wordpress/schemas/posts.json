@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "posts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "date": { "type": ["string", "null"] },
+    "date_gmt": { "type": ["string", "null"] },
+    "guid": { "type": ["object", "null"] },
+    "modified": { "type": ["string", "null"] },
+    "modified_gmt": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "title": { "type": ["object", "null"] },
+    "content": { "type": ["object", "null"] },
+    "excerpt": { "type": ["object", "null"] },
+    "author": { "type": ["integer", "null"] },
+    "featured_media": { "type": ["integer", "null"] },
+    "comment_status": { "type": ["string", "null"] },
+    "ping_status": { "type": ["string", "null"] },
+    "sticky": { "type": ["boolean", "null"] },
+    "template": { "type": ["string", "null"] },
+    "format": { "type": ["string", "null"] },
+    "categories": { "type": ["array", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "_links": { "type": ["object", "null"] }
+  }
+}

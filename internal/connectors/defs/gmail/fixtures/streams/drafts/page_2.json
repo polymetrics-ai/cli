@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users/me/drafts", "query": { "maxResults": "100", "pageToken": "page2token" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "drafts": [
+        { "id": "draft_fixture_3", "message": { "id": "msg_draft_3", "threadId": "thread_draft_3" } }
+      ],
+      "resultSizeEstimate": 3
+    }
+  }
+}

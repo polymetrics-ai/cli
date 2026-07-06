@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/customers/search", "query": { "searchCriteria[currentPage]": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "group_id": 1,
+          "email": "fixture1@example.com",
+          "firstname": "Fixture",
+          "lastname": "One",
+          "store_id": 1,
+          "website_id": 1,
+          "created_at": "2026-01-01 00:00:00",
+          "updated_at": "2026-01-01 00:00:00"
+        },
+        {
+          "id": 2,
+          "group_id": 1,
+          "email": "fixture2@example.com",
+          "firstname": "Fixture",
+          "lastname": "Two",
+          "store_id": 1,
+          "website_id": 1,
+          "created_at": "2026-01-02 00:00:00",
+          "updated_at": "2026-01-02 00:00:00"
+        }
+      ],
+      "search_criteria": { "page_size": 100, "current_page": 1 },
+      "total_count": 2
+    }
+  }
+}

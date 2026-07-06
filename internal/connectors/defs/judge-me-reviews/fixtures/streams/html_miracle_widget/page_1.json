@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/html_miracle"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "html": "<div class=\"jdgm-miracle\">Essential widget HTML</div>"
+    }
+  }
+}

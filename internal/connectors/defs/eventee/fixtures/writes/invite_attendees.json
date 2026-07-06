@@ -1,0 +1,35 @@
+{
+  "record": {
+    "users": [
+      {
+        "email": "attendee@example.test",
+        "first_name": "Fixture",
+        "last_name": "Attendee",
+        "send_email": false,
+        "group_id": 81,
+        "tickets": [
+          { "number": "FIXTURE-1", "title": "General Admission", "type": "qr" }
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/attendee/invite",
+    "body": {
+      "users": [
+        {
+          "email": "attendee@example.test",
+          "first_name": "Fixture",
+          "last_name": "Attendee",
+          "send_email": false,
+          "group_id": 81,
+          "tickets": [
+            { "number": "FIXTURE-1", "title": "General Admission", "type": "qr" }
+          ]
+        }
+      ]
+    }
+  },
+  "response": { "status": 200, "body": { "url": "https://example.com/event/fixture", "qr_code": "https://example.com/qr.png" } }
+}

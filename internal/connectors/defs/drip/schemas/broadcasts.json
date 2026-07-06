@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "broadcasts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "from_name": { "type": ["string", "null"] },
+    "from_email": { "type": ["string", "null"] },
+    "send_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

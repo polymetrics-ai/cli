@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/commerce/store_pages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "storePages": [
+        { "id": "storepage_fixture_1", "title": "Fixture Store Page One", "urlSlug": "shop", "isEnabled": true }
+      ],
+      "pagination": { "nextPageCursor": "fixture-sp-cursor-2", "hasNextPage": true }
+    }
+  }
+}

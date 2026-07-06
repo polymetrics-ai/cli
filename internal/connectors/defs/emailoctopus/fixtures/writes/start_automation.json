@@ -1,0 +1,17 @@
+{
+  "record": {
+    "automation_id": "automation_fixture_1",
+    "list_member_id": "contact_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/automations/automation_fixture_1/queue",
+    "body": {
+      "list_member_id": "contact_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

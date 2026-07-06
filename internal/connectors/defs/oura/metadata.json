@@ -1,0 +1,23 @@
+{
+  "name": "oura",
+  "display_name": "Oura",
+  "description": "Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag, workout, session, and device-configuration data.",
+  "integration_type": "api",
+  "docs_url": "https://cloud.ouraring.com/v2/docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Oura API read of personal wellness and health data, including profile, sleep, activity, readiness, heart-rate, tags, workouts, sessions, and device configuration",
+    "approval": "none; this bundle is read-only and excludes app-level webhook subscription mutations"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "acct_fixture_1",
+    "name": "Renamed Fixture Account",
+    "traits": { "plan": "enterprise" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/accounts/acct_fixture_1",
+    "body": {
+      "name": "Renamed Fixture Account",
+      "traits": { "plan": "enterprise" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "acct_fixture_1", "name": "Renamed Fixture Account" }
+  }
+}

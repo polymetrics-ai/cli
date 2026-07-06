@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collections",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "bytes": { "type": ["integer", "null"] },
+    "rows": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated_at": { "type": ["integer", "null"], "description": "Unix seconds." }
+  }
+}

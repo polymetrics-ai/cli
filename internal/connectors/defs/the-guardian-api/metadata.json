@@ -1,0 +1,23 @@
+{
+  "name": "the-guardian-api",
+  "display_name": "The Guardian API",
+  "description": "Reads Guardian content search results through the Guardian Open Platform Content API.",
+  "integration_type": "api",
+  "docs_url": "https://open-platform.theguardian.com/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Guardian Open Platform API read of published content search results",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

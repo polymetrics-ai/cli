@@ -1,0 +1,129 @@
+{
+  "type": "object",
+  "properties": {
+    "total_completed_percentage": {
+      "type": "integer"
+    },
+    "total_in_progress_percentage": {
+      "type": "integer"
+    },
+    "total_incomplete_percentage": {
+      "type": "integer"
+    },
+    "report_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "date": {
+      "type": "string",
+      "description": "A date with YYYY-MM-DD format",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "has_recent_task_completed": {
+      "type": "boolean"
+    },
+    "task_lists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "completion_status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "in_progress",
+              "incomplete"
+            ]
+          },
+          "total_tasks_completed": {
+            "type": "integer"
+          },
+          "total_tasks": {
+            "type": "integer"
+          },
+          "completion_percentage": {
+            "type": "integer"
+          },
+          "is_overdue": {
+            "type": "boolean",
+            "description": "True when the task list's due time is before `report_time`."
+          },
+          "minutes_overdue": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Whole minutes elapsed since the due time. `null` when not overdue."
+          },
+          "minutes_until_due": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Whole minutes remaining until the due time. `null` when already overdue."
+          },
+          "departments": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Names of departments assigned to the task list. `null` when no department assignments exist.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "roles": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Names of roles assigned to the task list. `null` when no role assignments exist.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "completion_status",
+          "total_tasks_completed",
+          "total_tasks",
+          "completion_percentage",
+          "is_overdue",
+          "minutes_overdue",
+          "minutes_until_due",
+          "departments",
+          "roles"
+        ]
+      }
+    }
+  },
+  "required": [
+    "total_completed_percentage",
+    "total_in_progress_percentage",
+    "total_incomplete_percentage",
+    "report_time",
+    "date",
+    "has_recent_task_completed",
+    "task_lists"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_task_list_daily_summary",
+  "x-primary-key": [
+    "date"
+  ]
+}

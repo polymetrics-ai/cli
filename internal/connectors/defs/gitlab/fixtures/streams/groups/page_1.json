@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/groups", "query": { "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 10,
+        "name": "group-fixture-1",
+        "path": "group-fixture-1",
+        "full_path": "acme/group-fixture-1",
+        "full_name": "Acme / Group Fixture 1",
+        "description": "fixture group",
+        "visibility": "private",
+        "web_url": "https://gitlab.com/groups/acme/group-fixture-1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "parent_id": null
+      }
+    ]
+  }
+}

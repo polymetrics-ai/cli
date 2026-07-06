@@ -1,0 +1,117 @@
+{
+  "api": "BlueTally REST API v1 (https://app.bluetallyapp.com/api/v1)",
+  "docs": "https://developer.bluetally.com/reference/getting-started-with-your-api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every documented BlueTally resource (assets, employees, licenses, maintenances, accessories, components, consumables, categories, departments, depreciations, locations, manufacturers, products, statuses, suppliers, audits, activity, tenants) is now a read stream. Every BlueTally create/update/delete/check-in/check-out mutation sends its payload entirely as QUERY-STRING parameters (verified against the connector's published OpenAPI spec at developer.bluetally.com/branches/1.0/apis/bluetally-api.json: every POST/PUT operation's parameters are declared 'in':'query', none declare a requestBody) -- the engine's write dialect (engine/bundle.go WriteAction.BodyType: json|form|none) has no query-string body construction mechanism, so no BlueTally mutation can be expressed as a writes.json action without silently sending a wrong-shaped request. This is ENGINE_GAP (docs/migration/conventions.md §6 taxonomy): a Tier-1 workaround (body_type: json or form) would post an empty/incorrect body while the real params sit unset in the query string, silently diverging from the documented contract. capabilities.write stays false; writes.json is not shipped. GET /{resource}/{id} single-record detail endpoints are excluded as duplicate_of their sibling list stream (a sync connector reads the full list; the per-id lookup is redundant surface for this use case, not a distinct capability).",
+  "endpoints": [
+    { "method": "GET", "path": "/assets", "covered_by": { "stream": "assets" } },
+    { "method": "GET", "path": "/assets/{id}", "excluded": { "category": "duplicate_of", "reason": "single-asset lookup by id; fully covered by the assets list stream" } },
+    { "method": "POST", "path": "/assets", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-asset sends every field as a query-string parameter (OpenAPI parameters[].in == query, no requestBody); the engine's write dialect only supports json/form/none request bodies, so this mutation cannot be expressed without silently diverging from BlueTally's real wire contract" } },
+    { "method": "PUT", "path": "/assets/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-asset sends every field as a query-string parameter, same gap as create-asset" } },
+    { "method": "DELETE", "path": "/assets/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: delete-asset accepts an optional tenant_id query parameter only, but is grouped with the rest of this resource's write surface, which is blocked by the same query-parameter body gap; a path-only delete with no query support beyond tenant_id is possible in principle but is deferred alongside its sibling create/update actions to keep the resource's write semantics consistent (all-or-nothing per resource)" } },
+
+    { "method": "GET", "path": "/employees", "covered_by": { "stream": "employees" } },
+    { "method": "GET", "path": "/employees/{id}", "excluded": { "category": "duplicate_of", "reason": "single-employee lookup by id; fully covered by the employees list stream" } },
+    { "method": "POST", "path": "/employees", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-employee sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-employee sends every field as a query-string parameter, same gap as create-employee" } },
+    { "method": "DELETE", "path": "/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/licenses", "covered_by": { "stream": "licenses" } },
+    { "method": "GET", "path": "/licenses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-license lookup by id; fully covered by the licenses list stream" } },
+    { "method": "POST", "path": "/licenses", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-license sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/licenses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-license sends every field as a query-string parameter, same gap as create-license" } },
+    { "method": "DELETE", "path": "/licenses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/maintenances", "covered_by": { "stream": "maintenances" } },
+    { "method": "GET", "path": "/maintenances/{id}", "excluded": { "category": "duplicate_of", "reason": "single-maintenance lookup by id; fully covered by the maintenances list stream" } },
+    { "method": "POST", "path": "/maintenances", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-maintenance sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/maintenances/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-maintenance sends every field as a query-string parameter, same gap as create-maintenance" } },
+    { "method": "DELETE", "path": "/maintenances/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/accessories", "covered_by": { "stream": "accessories" } },
+    { "method": "GET", "path": "/accessories/{id}", "excluded": { "category": "duplicate_of", "reason": "single-accessory lookup by id; fully covered by the accessories list stream" } },
+    { "method": "POST", "path": "/accessories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-accessory sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/accessories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-accessory sends every field as a query-string parameter, same gap as create-accessory" } },
+    { "method": "DELETE", "path": "/accessories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/components", "covered_by": { "stream": "components" } },
+    { "method": "GET", "path": "/components/{id}", "excluded": { "category": "duplicate_of", "reason": "single-component lookup by id; fully covered by the components list stream" } },
+    { "method": "POST", "path": "/components", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-component sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/components/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-component sends every field as a query-string parameter, same gap as create-component" } },
+    { "method": "DELETE", "path": "/components/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/consumables", "covered_by": { "stream": "consumables" } },
+    { "method": "GET", "path": "/consumables/{id}", "excluded": { "category": "duplicate_of", "reason": "single-consumable lookup by id; fully covered by the consumables list stream" } },
+    { "method": "POST", "path": "/consumables", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-consumable sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/consumables/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-consumable sends every field as a query-string parameter, same gap as create-consumable" } },
+    { "method": "DELETE", "path": "/consumables/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/categories/{id}", "excluded": { "category": "duplicate_of", "reason": "single-category lookup by id; fully covered by the categories list stream" } },
+    { "method": "POST", "path": "/categories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-category sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/categories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-category sends every field as a query-string parameter, same gap as create-category" } },
+    { "method": "DELETE", "path": "/categories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/departments", "covered_by": { "stream": "departments" } },
+    { "method": "GET", "path": "/departments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-department lookup by id; fully covered by the departments list stream" } },
+    { "method": "POST", "path": "/departments", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-department sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/departments/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-department sends every field as a query-string parameter, same gap as create-department" } },
+    { "method": "DELETE", "path": "/departments/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/depreciations", "covered_by": { "stream": "depreciations" } },
+    { "method": "GET", "path": "/depreciations/{id}", "excluded": { "category": "duplicate_of", "reason": "single-depreciation lookup by id; fully covered by the depreciations list stream" } },
+    { "method": "POST", "path": "/depreciations", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-depreciation sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/depreciations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-depreciation sends every field as a query-string parameter, same gap as create-depreciation" } },
+    { "method": "DELETE", "path": "/depreciations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/locations", "covered_by": { "stream": "locations" } },
+    { "method": "GET", "path": "/locations/{id}", "excluded": { "category": "duplicate_of", "reason": "single-location lookup by id; fully covered by the locations list stream" } },
+    { "method": "POST", "path": "/locations", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-location sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/locations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-location sends every field as a query-string parameter, same gap as create-location" } },
+    { "method": "DELETE", "path": "/locations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/manufacturers", "covered_by": { "stream": "manufacturers" } },
+    { "method": "GET", "path": "/manufacturers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-manufacturer lookup by id; fully covered by the manufacturers list stream" } },
+    { "method": "POST", "path": "/manufacturers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-manufacturer sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/manufacturers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-manufacturer sends every field as a query-string parameter, same gap as create-manufacturer" } },
+    { "method": "DELETE", "path": "/manufacturers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/products/{id}", "excluded": { "category": "duplicate_of", "reason": "single-product lookup by id; fully covered by the products list stream" } },
+    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-product sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-product sends every field as a query-string parameter, same gap as create-product" } },
+    { "method": "DELETE", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/statuses", "covered_by": { "stream": "statuses" } },
+    { "method": "GET", "path": "/statuses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-status lookup by id; fully covered by the statuses list stream" } },
+    { "method": "POST", "path": "/statuses", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-status sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/statuses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-status sends every field as a query-string parameter, same gap as create-status" } },
+    { "method": "DELETE", "path": "/statuses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
+    { "method": "GET", "path": "/suppliers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-supplier lookup by id; fully covered by the suppliers list stream" } },
+    { "method": "POST", "path": "/suppliers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-supplier sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/suppliers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-supplier sends every field as a query-string parameter, same gap as create-supplier" } },
+    { "method": "DELETE", "path": "/suppliers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/audits", "covered_by": { "stream": "audits" } },
+    { "method": "GET", "path": "/audits/{id}", "excluded": { "category": "duplicate_of", "reason": "single-audit lookup by id; fully covered by the audits list stream" } },
+    { "method": "POST", "path": "/audits", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-audit sends every field as a query-string parameter; see assets POST for the full explanation" } },
+    { "method": "PUT", "path": "/audits/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-audit sends every field as a query-string parameter, same gap as create-audit" } },
+    { "method": "DELETE", "path": "/audits/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
+
+    { "method": "GET", "path": "/activity", "covered_by": { "stream": "activity" } },
+
+    { "method": "GET", "path": "/tenants", "covered_by": { "stream": "tenants" } },
+
+    { "method": "POST", "path": "/checkin/accessory", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-accessory sends every field as a query-string parameter, same gap as the resource create/update actions; check-in/check-out are stateful inventory-movement actions layered atop the CRUD resources, not additional data resources" } },
+    { "method": "POST", "path": "/checkin/asset", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkin/component", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-component sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkin/license", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-license sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkout/accessory", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-accessory sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkout/asset", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkout/component", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-component sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkout/consumable", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-consumable sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
+    { "method": "POST", "path": "/checkout/license", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-license sends every field as a query-string parameter; see checkin/accessory for the full explanation" } }
+  ]
+}

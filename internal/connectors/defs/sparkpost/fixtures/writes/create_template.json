@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "fixture_template",
+    "content": {
+      "subject": "hi",
+      "from": "sender@example.com",
+      "text": "hello"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates"
+  }
+}

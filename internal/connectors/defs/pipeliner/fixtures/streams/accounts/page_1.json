@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/entities/Accounts",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "acc_fixture_1",
+          "name": "Fixture Account 1",
+          "status": "active",
+          "modified": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": "acc_fixture_2",
+          "name": "Fixture Account 2",
+          "status": "active",
+          "modified": "2026-01-01T00:00:02Z"
+        },
+        {
+          "id": "acc_fixture_3",
+          "name": "Fixture Account 3",
+          "status": "active",
+          "modified": "2026-01-01T00:00:03Z"
+        },
+        {
+          "id": "acc_fixture_4",
+          "name": "Fixture Account 4",
+          "status": "active",
+          "modified": "2026-01-01T00:00:04Z"
+        },
+        {
+          "id": "acc_fixture_5",
+          "name": "Fixture Account 5",
+          "status": "active",
+          "modified": "2026-01-01T00:00:05Z"
+        },
+        {
+          "id": "acc_fixture_6",
+          "name": "Fixture Account 6",
+          "status": "active",
+          "modified": "2026-01-01T00:00:06Z"
+        },
+        {
+          "id": "acc_fixture_7",
+          "name": "Fixture Account 7",
+          "status": "active",
+          "modified": "2026-01-01T00:00:07Z"
+        },
+        {
+          "id": "acc_fixture_8",
+          "name": "Fixture Account 8",
+          "status": "active",
+          "modified": "2026-01-01T00:00:08Z"
+        },
+        {
+          "id": "acc_fixture_9",
+          "name": "Fixture Account 9",
+          "status": "active",
+          "modified": "2026-01-01T00:00:09Z"
+        },
+        {
+          "id": "acc_fixture_10",
+          "name": "Fixture Account 10",
+          "status": "active",
+          "modified": "2026-01-01T00:00:10Z"
+        },
+        {
+          "id": "acc_fixture_11",
+          "name": "Fixture Account 11",
+          "status": "active",
+          "modified": "2026-01-01T00:00:11Z"
+        },
+        {
+          "id": "acc_fixture_12",
+          "name": "Fixture Account 12",
+          "status": "active",
+          "modified": "2026-01-01T00:00:12Z"
+        },
+        {
+          "id": "acc_fixture_13",
+          "name": "Fixture Account 13",
+          "status": "active",
+          "modified": "2026-01-01T00:00:13Z"
+        },
+        {
+          "id": "acc_fixture_14",
+          "name": "Fixture Account 14",
+          "status": "active",
+          "modified": "2026-01-01T00:00:14Z"
+        },
+        {
+          "id": "acc_fixture_15",
+          "name": "Fixture Account 15",
+          "status": "active",
+          "modified": "2026-01-01T00:00:15Z"
+        },
+        {
+          "id": "acc_fixture_16",
+          "name": "Fixture Account 16",
+          "status": "active",
+          "modified": "2026-01-01T00:00:16Z"
+        },
+        {
+          "id": "acc_fixture_17",
+          "name": "Fixture Account 17",
+          "status": "active",
+          "modified": "2026-01-01T00:00:17Z"
+        },
+        {
+          "id": "acc_fixture_18",
+          "name": "Fixture Account 18",
+          "status": "active",
+          "modified": "2026-01-01T00:00:18Z"
+        },
+        {
+          "id": "acc_fixture_19",
+          "name": "Fixture Account 19",
+          "status": "active",
+          "modified": "2026-01-01T00:00:19Z"
+        },
+        {
+          "id": "acc_fixture_20",
+          "name": "Fixture Account 20",
+          "status": "active",
+          "modified": "2026-01-01T00:00:20Z"
+        },
+        {
+          "id": "acc_fixture_21",
+          "name": "Fixture Account 21",
+          "status": "active",
+          "modified": "2026-01-01T00:00:21Z"
+        },
+        {
+          "id": "acc_fixture_22",
+          "name": "Fixture Account 22",
+          "status": "active",
+          "modified": "2026-01-01T00:00:22Z"
+        },
+        {
+          "id": "acc_fixture_23",
+          "name": "Fixture Account 23",
+          "status": "active",
+          "modified": "2026-01-01T00:00:23Z"
+        },
+        {
+          "id": "acc_fixture_24",
+          "name": "Fixture Account 24",
+          "status": "active",
+          "modified": "2026-01-01T00:00:24Z"
+        },
+        {
+          "id": "acc_fixture_25",
+          "name": "Fixture Account 25",
+          "status": "active",
+          "modified": "2026-01-01T00:00:25Z"
+        },
+        {
+          "id": "acc_fixture_26",
+          "name": "Fixture Account 26",
+          "status": "active",
+          "modified": "2026-01-01T00:00:26Z"
+        },
+        {
+          "id": "acc_fixture_27",
+          "name": "Fixture Account 27",
+          "status": "active",
+          "modified": "2026-01-01T00:00:27Z"
+        },
+        {
+          "id": "acc_fixture_28",
+          "name": "Fixture Account 28",
+          "status": "active",
+          "modified": "2026-01-01T00:00:28Z"
+        },
+        {
+          "id": "acc_fixture_29",
+          "name": "Fixture Account 29",
+          "status": "active",
+          "modified": "2026-01-01T00:00:29Z"
+        },
+        {
+          "id": "acc_fixture_30",
+          "name": "Fixture Account 30",
+          "status": "active",
+          "modified": "2026-01-01T00:00:30Z"
+        },
+        {
+          "id": "acc_fixture_31",
+          "name": "Fixture Account 31",
+          "status": "active",
+          "modified": "2026-01-01T00:00:31Z"
+        },
+        {
+          "id": "acc_fixture_32",
+          "name": "Fixture Account 32",
+          "status": "active",
+          "modified": "2026-01-01T00:00:32Z"
+        },
+        {
+          "id": "acc_fixture_33",
+          "name": "Fixture Account 33",
+          "status": "active",
+          "modified": "2026-01-01T00:00:33Z"
+        },
+        {
+          "id": "acc_fixture_34",
+          "name": "Fixture Account 34",
+          "status": "active",
+          "modified": "2026-01-01T00:00:34Z"
+        },
+        {
+          "id": "acc_fixture_35",
+          "name": "Fixture Account 35",
+          "status": "active",
+          "modified": "2026-01-01T00:00:35Z"
+        },
+        {
+          "id": "acc_fixture_36",
+          "name": "Fixture Account 36",
+          "status": "active",
+          "modified": "2026-01-01T00:00:36Z"
+        },
+        {
+          "id": "acc_fixture_37",
+          "name": "Fixture Account 37",
+          "status": "active",
+          "modified": "2026-01-01T00:00:37Z"
+        },
+        {
+          "id": "acc_fixture_38",
+          "name": "Fixture Account 38",
+          "status": "active",
+          "modified": "2026-01-01T00:00:38Z"
+        },
+        {
+          "id": "acc_fixture_39",
+          "name": "Fixture Account 39",
+          "status": "active",
+          "modified": "2026-01-01T00:00:39Z"
+        },
+        {
+          "id": "acc_fixture_40",
+          "name": "Fixture Account 40",
+          "status": "active",
+          "modified": "2026-01-01T00:00:40Z"
+        },
+        {
+          "id": "acc_fixture_41",
+          "name": "Fixture Account 41",
+          "status": "active",
+          "modified": "2026-01-01T00:00:41Z"
+        },
+        {
+          "id": "acc_fixture_42",
+          "name": "Fixture Account 42",
+          "status": "active",
+          "modified": "2026-01-01T00:00:42Z"
+        },
+        {
+          "id": "acc_fixture_43",
+          "name": "Fixture Account 43",
+          "status": "active",
+          "modified": "2026-01-01T00:00:43Z"
+        },
+        {
+          "id": "acc_fixture_44",
+          "name": "Fixture Account 44",
+          "status": "active",
+          "modified": "2026-01-01T00:00:44Z"
+        },
+        {
+          "id": "acc_fixture_45",
+          "name": "Fixture Account 45",
+          "status": "active",
+          "modified": "2026-01-01T00:00:45Z"
+        },
+        {
+          "id": "acc_fixture_46",
+          "name": "Fixture Account 46",
+          "status": "active",
+          "modified": "2026-01-01T00:00:46Z"
+        },
+        {
+          "id": "acc_fixture_47",
+          "name": "Fixture Account 47",
+          "status": "active",
+          "modified": "2026-01-01T00:00:47Z"
+        },
+        {
+          "id": "acc_fixture_48",
+          "name": "Fixture Account 48",
+          "status": "active",
+          "modified": "2026-01-01T00:00:48Z"
+        },
+        {
+          "id": "acc_fixture_49",
+          "name": "Fixture Account 49",
+          "status": "active",
+          "modified": "2026-01-01T00:00:49Z"
+        },
+        {
+          "id": "acc_fixture_50",
+          "name": "Fixture Account 50",
+          "status": "active",
+          "modified": "2026-01-01T00:00:50Z"
+        },
+        {
+          "id": "acc_fixture_51",
+          "name": "Fixture Account 51",
+          "status": "active",
+          "modified": "2026-01-01T00:00:51Z"
+        },
+        {
+          "id": "acc_fixture_52",
+          "name": "Fixture Account 52",
+          "status": "active",
+          "modified": "2026-01-01T00:00:52Z"
+        },
+        {
+          "id": "acc_fixture_53",
+          "name": "Fixture Account 53",
+          "status": "active",
+          "modified": "2026-01-01T00:00:53Z"
+        },
+        {
+          "id": "acc_fixture_54",
+          "name": "Fixture Account 54",
+          "status": "active",
+          "modified": "2026-01-01T00:00:54Z"
+        },
+        {
+          "id": "acc_fixture_55",
+          "name": "Fixture Account 55",
+          "status": "active",
+          "modified": "2026-01-01T00:00:55Z"
+        },
+        {
+          "id": "acc_fixture_56",
+          "name": "Fixture Account 56",
+          "status": "active",
+          "modified": "2026-01-01T00:00:56Z"
+        },
+        {
+          "id": "acc_fixture_57",
+          "name": "Fixture Account 57",
+          "status": "active",
+          "modified": "2026-01-01T00:00:57Z"
+        },
+        {
+          "id": "acc_fixture_58",
+          "name": "Fixture Account 58",
+          "status": "active",
+          "modified": "2026-01-01T00:00:58Z"
+        },
+        {
+          "id": "acc_fixture_59",
+          "name": "Fixture Account 59",
+          "status": "active",
+          "modified": "2026-01-01T00:00:59Z"
+        },
+        {
+          "id": "acc_fixture_60",
+          "name": "Fixture Account 60",
+          "status": "active",
+          "modified": "2026-01-01T00:00:60Z"
+        },
+        {
+          "id": "acc_fixture_61",
+          "name": "Fixture Account 61",
+          "status": "active",
+          "modified": "2026-01-01T00:00:61Z"
+        },
+        {
+          "id": "acc_fixture_62",
+          "name": "Fixture Account 62",
+          "status": "active",
+          "modified": "2026-01-01T00:00:62Z"
+        },
+        {
+          "id": "acc_fixture_63",
+          "name": "Fixture Account 63",
+          "status": "active",
+          "modified": "2026-01-01T00:00:63Z"
+        },
+        {
+          "id": "acc_fixture_64",
+          "name": "Fixture Account 64",
+          "status": "active",
+          "modified": "2026-01-01T00:00:64Z"
+        },
+        {
+          "id": "acc_fixture_65",
+          "name": "Fixture Account 65",
+          "status": "active",
+          "modified": "2026-01-01T00:00:65Z"
+        },
+        {
+          "id": "acc_fixture_66",
+          "name": "Fixture Account 66",
+          "status": "active",
+          "modified": "2026-01-01T00:00:66Z"
+        },
+        {
+          "id": "acc_fixture_67",
+          "name": "Fixture Account 67",
+          "status": "active",
+          "modified": "2026-01-01T00:00:67Z"
+        },
+        {
+          "id": "acc_fixture_68",
+          "name": "Fixture Account 68",
+          "status": "active",
+          "modified": "2026-01-01T00:00:68Z"
+        },
+        {
+          "id": "acc_fixture_69",
+          "name": "Fixture Account 69",
+          "status": "active",
+          "modified": "2026-01-01T00:00:69Z"
+        },
+        {
+          "id": "acc_fixture_70",
+          "name": "Fixture Account 70",
+          "status": "active",
+          "modified": "2026-01-01T00:00:70Z"
+        },
+        {
+          "id": "acc_fixture_71",
+          "name": "Fixture Account 71",
+          "status": "active",
+          "modified": "2026-01-01T00:00:71Z"
+        },
+        {
+          "id": "acc_fixture_72",
+          "name": "Fixture Account 72",
+          "status": "active",
+          "modified": "2026-01-01T00:00:72Z"
+        },
+        {
+          "id": "acc_fixture_73",
+          "name": "Fixture Account 73",
+          "status": "active",
+          "modified": "2026-01-01T00:00:73Z"
+        },
+        {
+          "id": "acc_fixture_74",
+          "name": "Fixture Account 74",
+          "status": "active",
+          "modified": "2026-01-01T00:00:74Z"
+        },
+        {
+          "id": "acc_fixture_75",
+          "name": "Fixture Account 75",
+          "status": "active",
+          "modified": "2026-01-01T00:00:75Z"
+        },
+        {
+          "id": "acc_fixture_76",
+          "name": "Fixture Account 76",
+          "status": "active",
+          "modified": "2026-01-01T00:00:76Z"
+        },
+        {
+          "id": "acc_fixture_77",
+          "name": "Fixture Account 77",
+          "status": "active",
+          "modified": "2026-01-01T00:00:77Z"
+        },
+        {
+          "id": "acc_fixture_78",
+          "name": "Fixture Account 78",
+          "status": "active",
+          "modified": "2026-01-01T00:00:78Z"
+        },
+        {
+          "id": "acc_fixture_79",
+          "name": "Fixture Account 79",
+          "status": "active",
+          "modified": "2026-01-01T00:00:79Z"
+        },
+        {
+          "id": "acc_fixture_80",
+          "name": "Fixture Account 80",
+          "status": "active",
+          "modified": "2026-01-01T00:00:80Z"
+        },
+        {
+          "id": "acc_fixture_81",
+          "name": "Fixture Account 81",
+          "status": "active",
+          "modified": "2026-01-01T00:00:81Z"
+        },
+        {
+          "id": "acc_fixture_82",
+          "name": "Fixture Account 82",
+          "status": "active",
+          "modified": "2026-01-01T00:00:82Z"
+        },
+        {
+          "id": "acc_fixture_83",
+          "name": "Fixture Account 83",
+          "status": "active",
+          "modified": "2026-01-01T00:00:83Z"
+        },
+        {
+          "id": "acc_fixture_84",
+          "name": "Fixture Account 84",
+          "status": "active",
+          "modified": "2026-01-01T00:00:84Z"
+        },
+        {
+          "id": "acc_fixture_85",
+          "name": "Fixture Account 85",
+          "status": "active",
+          "modified": "2026-01-01T00:00:85Z"
+        },
+        {
+          "id": "acc_fixture_86",
+          "name": "Fixture Account 86",
+          "status": "active",
+          "modified": "2026-01-01T00:00:86Z"
+        },
+        {
+          "id": "acc_fixture_87",
+          "name": "Fixture Account 87",
+          "status": "active",
+          "modified": "2026-01-01T00:00:87Z"
+        },
+        {
+          "id": "acc_fixture_88",
+          "name": "Fixture Account 88",
+          "status": "active",
+          "modified": "2026-01-01T00:00:88Z"
+        },
+        {
+          "id": "acc_fixture_89",
+          "name": "Fixture Account 89",
+          "status": "active",
+          "modified": "2026-01-01T00:00:89Z"
+        },
+        {
+          "id": "acc_fixture_90",
+          "name": "Fixture Account 90",
+          "status": "active",
+          "modified": "2026-01-01T00:00:90Z"
+        },
+        {
+          "id": "acc_fixture_91",
+          "name": "Fixture Account 91",
+          "status": "active",
+          "modified": "2026-01-01T00:00:91Z"
+        },
+        {
+          "id": "acc_fixture_92",
+          "name": "Fixture Account 92",
+          "status": "active",
+          "modified": "2026-01-01T00:00:92Z"
+        },
+        {
+          "id": "acc_fixture_93",
+          "name": "Fixture Account 93",
+          "status": "active",
+          "modified": "2026-01-01T00:00:93Z"
+        },
+        {
+          "id": "acc_fixture_94",
+          "name": "Fixture Account 94",
+          "status": "active",
+          "modified": "2026-01-01T00:00:94Z"
+        },
+        {
+          "id": "acc_fixture_95",
+          "name": "Fixture Account 95",
+          "status": "active",
+          "modified": "2026-01-01T00:00:95Z"
+        },
+        {
+          "id": "acc_fixture_96",
+          "name": "Fixture Account 96",
+          "status": "active",
+          "modified": "2026-01-01T00:00:96Z"
+        },
+        {
+          "id": "acc_fixture_97",
+          "name": "Fixture Account 97",
+          "status": "active",
+          "modified": "2026-01-01T00:00:97Z"
+        },
+        {
+          "id": "acc_fixture_98",
+          "name": "Fixture Account 98",
+          "status": "active",
+          "modified": "2026-01-01T00:00:98Z"
+        },
+        {
+          "id": "acc_fixture_99",
+          "name": "Fixture Account 99",
+          "status": "active",
+          "modified": "2026-01-01T00:00:99Z"
+        },
+        {
+          "id": "acc_fixture_100",
+          "name": "Fixture Account 100",
+          "status": "active",
+          "modified": "2026-01-01T00:00:100Z"
+        }
+      ]
+    }
+  }
+}

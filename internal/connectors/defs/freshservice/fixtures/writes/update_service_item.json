@@ -1,0 +1,15 @@
+{
+  "record": {
+    "service_item_id": 123,
+    "name": "Fixture update_service_item",
+    "description": "Fixture update_service_item record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/service-catalog/items/123",
+    "body": {
+      "name": "Fixture update_service_item",
+      "description": "Fixture update_service_item record"
+    }
+  }
+}

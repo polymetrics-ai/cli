@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/manufacturers",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "name": "Fixture manufacturer 51",
+        "url": "https://example.com",
+        "support_url": "https://example.com/support",
+        "support_phone": "+15550100",
+        "support_email": "support@example.com",
+        "logo": "www.test.com",
+        "notes": "",
+        "number_of_assets": 1,
+        "number_of_accessories": 0,
+        "number_of_components": 0,
+        "number_of_consumables": 0,
+        "number_of_licenses": 0,
+        "number_of_products": 0,
+        "assets": [],
+        "accessories": [],
+        "components": [],
+        "consumables": [],
+        "licenses": [],
+        "products": [],
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

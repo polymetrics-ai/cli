@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Board export job.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the board export job.",
+      "format": "uuid"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

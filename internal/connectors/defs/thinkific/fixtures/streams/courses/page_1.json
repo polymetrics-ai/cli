@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/courses",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Fixture Course 1",
+          "slug": "fixture-course-1",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "name": "Fixture Course 2",
+          "slug": "fixture-course-2",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "name": "Fixture Course 3",
+          "slug": "fixture-course-3",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "name": "Fixture Course 4",
+          "slug": "fixture-course-4",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "name": "Fixture Course 5",
+          "slug": "fixture-course-5",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "name": "Fixture Course 6",
+          "slug": "fixture-course-6",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "name": "Fixture Course 7",
+          "slug": "fixture-course-7",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "name": "Fixture Course 8",
+          "slug": "fixture-course-8",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "name": "Fixture Course 9",
+          "slug": "fixture-course-9",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "name": "Fixture Course 10",
+          "slug": "fixture-course-10",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "name": "Fixture Course 11",
+          "slug": "fixture-course-11",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "name": "Fixture Course 12",
+          "slug": "fixture-course-12",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "name": "Fixture Course 13",
+          "slug": "fixture-course-13",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "name": "Fixture Course 14",
+          "slug": "fixture-course-14",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "name": "Fixture Course 15",
+          "slug": "fixture-course-15",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "name": "Fixture Course 16",
+          "slug": "fixture-course-16",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "name": "Fixture Course 17",
+          "slug": "fixture-course-17",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "name": "Fixture Course 18",
+          "slug": "fixture-course-18",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "name": "Fixture Course 19",
+          "slug": "fixture-course-19",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "name": "Fixture Course 20",
+          "slug": "fixture-course-20",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "name": "Fixture Course 21",
+          "slug": "fixture-course-21",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "name": "Fixture Course 22",
+          "slug": "fixture-course-22",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "name": "Fixture Course 23",
+          "slug": "fixture-course-23",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "name": "Fixture Course 24",
+          "slug": "fixture-course-24",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "name": "Fixture Course 25",
+          "slug": "fixture-course-25",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "name": "Fixture Course 26",
+          "slug": "fixture-course-26",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "name": "Fixture Course 27",
+          "slug": "fixture-course-27",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "name": "Fixture Course 28",
+          "slug": "fixture-course-28",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "name": "Fixture Course 29",
+          "slug": "fixture-course-29",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "name": "Fixture Course 30",
+          "slug": "fixture-course-30",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "name": "Fixture Course 31",
+          "slug": "fixture-course-31",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "name": "Fixture Course 32",
+          "slug": "fixture-course-32",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "name": "Fixture Course 33",
+          "slug": "fixture-course-33",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "name": "Fixture Course 34",
+          "slug": "fixture-course-34",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "name": "Fixture Course 35",
+          "slug": "fixture-course-35",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "name": "Fixture Course 36",
+          "slug": "fixture-course-36",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "name": "Fixture Course 37",
+          "slug": "fixture-course-37",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "name": "Fixture Course 38",
+          "slug": "fixture-course-38",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "name": "Fixture Course 39",
+          "slug": "fixture-course-39",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "name": "Fixture Course 40",
+          "slug": "fixture-course-40",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "name": "Fixture Course 41",
+          "slug": "fixture-course-41",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "name": "Fixture Course 42",
+          "slug": "fixture-course-42",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "name": "Fixture Course 43",
+          "slug": "fixture-course-43",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "name": "Fixture Course 44",
+          "slug": "fixture-course-44",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "name": "Fixture Course 45",
+          "slug": "fixture-course-45",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "name": "Fixture Course 46",
+          "slug": "fixture-course-46",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "name": "Fixture Course 47",
+          "slug": "fixture-course-47",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "name": "Fixture Course 48",
+          "slug": "fixture-course-48",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "name": "Fixture Course 49",
+          "slug": "fixture-course-49",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "name": "Fixture Course 50",
+          "slug": "fixture-course-50",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": 51,
+          "name": "Fixture Course 51",
+          "slug": "fixture-course-51",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": 52,
+          "name": "Fixture Course 52",
+          "slug": "fixture-course-52",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": 53,
+          "name": "Fixture Course 53",
+          "slug": "fixture-course-53",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": 54,
+          "name": "Fixture Course 54",
+          "slug": "fixture-course-54",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": 55,
+          "name": "Fixture Course 55",
+          "slug": "fixture-course-55",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": 56,
+          "name": "Fixture Course 56",
+          "slug": "fixture-course-56",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 57,
+          "name": "Fixture Course 57",
+          "slug": "fixture-course-57",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 58,
+          "name": "Fixture Course 58",
+          "slug": "fixture-course-58",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": 59,
+          "name": "Fixture Course 59",
+          "slug": "fixture-course-59",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": 60,
+          "name": "Fixture Course 60",
+          "slug": "fixture-course-60",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": 61,
+          "name": "Fixture Course 61",
+          "slug": "fixture-course-61",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": 62,
+          "name": "Fixture Course 62",
+          "slug": "fixture-course-62",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": 63,
+          "name": "Fixture Course 63",
+          "slug": "fixture-course-63",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": 64,
+          "name": "Fixture Course 64",
+          "slug": "fixture-course-64",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": 65,
+          "name": "Fixture Course 65",
+          "slug": "fixture-course-65",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": 66,
+          "name": "Fixture Course 66",
+          "slug": "fixture-course-66",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": 67,
+          "name": "Fixture Course 67",
+          "slug": "fixture-course-67",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": 68,
+          "name": "Fixture Course 68",
+          "slug": "fixture-course-68",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": 69,
+          "name": "Fixture Course 69",
+          "slug": "fixture-course-69",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": 70,
+          "name": "Fixture Course 70",
+          "slug": "fixture-course-70",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": 71,
+          "name": "Fixture Course 71",
+          "slug": "fixture-course-71",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": 72,
+          "name": "Fixture Course 72",
+          "slug": "fixture-course-72",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": 73,
+          "name": "Fixture Course 73",
+          "slug": "fixture-course-73",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": 74,
+          "name": "Fixture Course 74",
+          "slug": "fixture-course-74",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": 75,
+          "name": "Fixture Course 75",
+          "slug": "fixture-course-75",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": 76,
+          "name": "Fixture Course 76",
+          "slug": "fixture-course-76",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": 77,
+          "name": "Fixture Course 77",
+          "slug": "fixture-course-77",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": 78,
+          "name": "Fixture Course 78",
+          "slug": "fixture-course-78",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": 79,
+          "name": "Fixture Course 79",
+          "slug": "fixture-course-79",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": 80,
+          "name": "Fixture Course 80",
+          "slug": "fixture-course-80",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": 81,
+          "name": "Fixture Course 81",
+          "slug": "fixture-course-81",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": 82,
+          "name": "Fixture Course 82",
+          "slug": "fixture-course-82",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": 83,
+          "name": "Fixture Course 83",
+          "slug": "fixture-course-83",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": 84,
+          "name": "Fixture Course 84",
+          "slug": "fixture-course-84",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 85,
+          "name": "Fixture Course 85",
+          "slug": "fixture-course-85",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 86,
+          "name": "Fixture Course 86",
+          "slug": "fixture-course-86",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": 87,
+          "name": "Fixture Course 87",
+          "slug": "fixture-course-87",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": 88,
+          "name": "Fixture Course 88",
+          "slug": "fixture-course-88",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": 89,
+          "name": "Fixture Course 89",
+          "slug": "fixture-course-89",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": 90,
+          "name": "Fixture Course 90",
+          "slug": "fixture-course-90",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": 91,
+          "name": "Fixture Course 91",
+          "slug": "fixture-course-91",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": 92,
+          "name": "Fixture Course 92",
+          "slug": "fixture-course-92",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": 93,
+          "name": "Fixture Course 93",
+          "slug": "fixture-course-93",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": 94,
+          "name": "Fixture Course 94",
+          "slug": "fixture-course-94",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": 95,
+          "name": "Fixture Course 95",
+          "slug": "fixture-course-95",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": 96,
+          "name": "Fixture Course 96",
+          "slug": "fixture-course-96",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": 97,
+          "name": "Fixture Course 97",
+          "slug": "fixture-course-97",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": 98,
+          "name": "Fixture Course 98",
+          "slug": "fixture-course-98",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": 99,
+          "name": "Fixture Course 99",
+          "slug": "fixture-course-99",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": 100,
+          "name": "Fixture Course 100",
+          "slug": "fixture-course-100",
+          "created_at": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

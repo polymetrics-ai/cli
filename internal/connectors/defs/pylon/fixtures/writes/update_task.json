@@ -1,0 +1,14 @@
+{
+  "record": {
+    "task_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/tasks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

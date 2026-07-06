@@ -1,0 +1,61 @@
+{
+  "api": "Marketo REST API (tenant-specific identity host, https://developers.marketo.com/rest-api/)",
+  "docs": "https://developers.marketo.com/rest-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 migration: the 3 legacy-parity read streams only (leads, programs, activities); Marketo's write/lead-database-bulk-import surface is out of scope for this read-only migration, matching legacy's own read-only Write stub",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads.json",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs.json",
+      "covered_by": {
+        "stream": "programs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities.json",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "write/upsert surface; legacy is read-only, no write parity to migrate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/campaigns.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/lists.json",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/identity/oauth/token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token issuance; this connector expects a caller-supplied access_token and does not refresh tokens itself, matching legacy"
+      }
+    }
+  ]
+}

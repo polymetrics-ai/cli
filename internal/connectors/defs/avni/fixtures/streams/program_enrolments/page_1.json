@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/programEnrolments",
+    "query": { "page_size": "synthetic-conformance-value", "start_date": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "enrolments_fixture_1", "subject_id": "subjects_fixture_1", "program": "Fixture Program", "enrolment_date_time": "2026-01-01T00:00:00Z", "exit_date_time": null, "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "enrolments_fixture_2", "subject_id": "subjects_fixture_2", "program": "Fixture Program", "enrolment_date_time": "2026-01-02T00:00:00Z", "exit_date_time": null, "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page": ""
+    }
+  }
+}

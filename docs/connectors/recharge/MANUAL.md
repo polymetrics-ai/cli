@@ -10,22 +10,44 @@ SYNOPSIS
   pm credentials add <name> --connector recharge [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Recharge customers, subscriptions, and orders through the Recharge REST API. Read-only.
+  Reads Recharge customers, subscriptions, and orders through the Recharge REST API.
+
+ICON
+  asset: icons/recharge.svg
+  source: official
+  review_status: official_verified
+  review_url: https://docs.getrecharge.com/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  api_version
+  base_url
+  mode
+  access_token (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    fields: created_at(), email(), id(), updated_at()
+  subscriptions:
+    primary key: id
+    fields: created_at(), customer_id(), id(), status(), updated_at()
+  orders:
+    primary key: id
+    fields: created_at(), customer_id(), id(), status(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Recharge API read of customer, subscription, and order data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

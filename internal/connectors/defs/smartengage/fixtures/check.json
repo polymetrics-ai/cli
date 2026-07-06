@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/avatars/list" },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

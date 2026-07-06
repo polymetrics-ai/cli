@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "indices",
+  "type": "object",
+  "x-primary-key": ["index"],
+  "required": ["index"],
+  "properties": {
+    "index": { "type": "string", "description": "Index name, from the _cat/indices?format=json row's index field." },
+    "docs.count": { "type": ["string", "null"], "description": "Document count, from the _cat/indices row's literal docs.count key (not nested -- Elasticsearch's _cat API uses a dotted string as the JSON key name itself)." }
+  }
+}

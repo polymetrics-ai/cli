@@ -1,0 +1,230 @@
+{
+  "actions": [
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectName"],
+        "properties": {
+          "projectName": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new Codefresh project; approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "destructive; irreversible deletion of a Codefresh project; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_pipeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pipelines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["metadata"],
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "project": { "type": "string" }
+            }
+          },
+          "spec": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates a new Codefresh pipeline; approval required"
+    },
+    {
+      "name": "update_pipeline",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/pipelines/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "metadata"],
+        "properties": {
+          "name": { "type": "string" },
+          "metadata": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" }
+            }
+          },
+          "spec": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; replaces an existing Codefresh pipeline's spec; approval required"
+    },
+    {
+      "name": "delete_pipeline",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pipelines/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "destructive; irreversible deletion of a Codefresh pipeline; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "run_pipeline",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/pipelines/run/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "branch": { "type": "string" },
+          "variables": { "type": "object" },
+          "options": {
+            "type": "object",
+            "properties": {
+              "noCache": { "type": "boolean" },
+              "noCfCache": { "type": "boolean" },
+              "resetVolume": { "type": "boolean" },
+              "enableNotifications": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; triggers a real Codefresh pipeline run (build minutes/resources consumed); approval required"
+    },
+    {
+      "name": "create_context",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contexts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["metadata", "spec"],
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" }
+            }
+          },
+          "type": { "type": "string" },
+          "spec": {
+            "type": "object",
+            "properties": {
+              "data": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new Codefresh shared context (may hold configuration values); approval required"
+    },
+    {
+      "name": "delete_context",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contexts/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "destructive; irreversible deletion of a Codefresh shared context; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/agents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "runtimes": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; registers a new Codefresh runner agent; approval required"
+    },
+    {
+      "name": "delete_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agent/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "destructive; irreversible deregistration of a Codefresh runner agent; approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "gainsight-px",
+  "display_name": "Gainsight PX",
+  "description": "Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Gainsight PX (aptrinsic) API read of account, user, feature, and segment data"
+  }
+}

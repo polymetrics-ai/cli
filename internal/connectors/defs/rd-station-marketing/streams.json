@@ -1,0 +1,197 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 125
+    },
+    "check": { "method": "GET", "path": "/contacts", "query": { "page": "1", "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "rd-station-marketing access_token is missing or invalid; re-run pm credentials add rd-station-marketing" },
+      { "status": 403, "hint": "rd-station-marketing account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "rd-station-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "contacts" },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "segmentations",
+      "path": "/segmentations",
+      "records": { "path": "segmentations" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/segmentations.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": { "path": "events" },
+      "incremental": {
+        "cursor_field": "created_at"
+      },
+      "computed_fields": {
+        "id": "{{ record.uuid }}",
+        "event_type": "{{ record.event_type }}"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "landing_pages",
+      "path": "/landing_pages",
+      "records": { "path": "landing_pages" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/landing_pages.json"
+    },
+    {
+      "name": "email_templates",
+      "path": "/email_templates",
+      "records": { "path": "email_templates" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/email_templates.json"
+    },
+    {
+      "name": "contact_detail",
+      "path": "/contacts/{{ config.contact_identifier }}:{{ config.contact_identifier_value }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/contact_detail.json"
+    },
+    {
+      "name": "segmentation_contacts",
+      "path": "/segmentations/{{ config.segmentation_id }}/contacts",
+      "records": { "path": "contacts" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/segmentation_contacts.json"
+    },
+    {
+      "name": "contact_conversion_events",
+      "path": "/contacts/{{ config.contact_uuid }}/events",
+      "query": { "event_type": "CONVERSION" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "computed_fields": {
+        "id": "{{ record.event_identifier }}",
+        "email": "{{ record.payload.email }}",
+        "name": "{{ record.payload.name }}",
+        "phone": "{{ record.payload.phone }}"
+      },
+      "schema": "schemas/contact_events.json"
+    },
+    {
+      "name": "contact_opportunity_events",
+      "path": "/contacts/{{ config.contact_uuid }}/events",
+      "query": { "event_type": "OPPORTUNITY" },
+      "records": { "path": "." },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "",
+        "start_page": 1,
+        "page_size": 10
+      },
+      "computed_fields": {
+        "id": "{{ record.event_identifier }}",
+        "email": "{{ record.payload.email }}",
+        "name": "{{ record.payload.name }}",
+        "phone": "{{ record.payload.phone }}"
+      },
+      "schema": "schemas/contact_events.json"
+    },
+    {
+      "name": "contact_funnel",
+      "path": "/contacts/{{ config.contact_identifier }}:{{ config.contact_identifier_value }}/funnels/default",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ config.contact_identifier }}:{{ config.contact_identifier_value }}"
+      },
+      "schema": "schemas/contact_funnel.json"
+    },
+    {
+      "name": "contact_fields",
+      "path": "/contacts/fields",
+      "records": { "path": "fields" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.uuid }}"
+      },
+      "schema": "schemas/contact_fields.json"
+    },
+    {
+      "name": "analytics_conversions",
+      "path": "/analytics/conversions",
+      "records": { "path": "conversions" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_conversions.json"
+    },
+    {
+      "name": "analytics_emails",
+      "path": "/analytics/emails",
+      "records": { "path": "emails" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_emails.json"
+    },
+    {
+      "name": "analytics_funnel",
+      "path": "/analytics/funnel",
+      "records": { "path": "funnel" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_funnel.json"
+    },
+    {
+      "name": "analytics_workflow_emails",
+      "path": "/analytics/workflow_emails",
+      "records": { "path": "workflow_email_statistics" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/analytics_workflow_emails.json"
+    },
+    {
+      "name": "catalog_feeds",
+      "path": "/catalog_feeds",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "schema": "schemas/catalog_feeds.json"
+    },
+    {
+      "name": "catalog_feed",
+      "path": "/catalog_feeds/{{ config.catalog_feed_id }}",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/catalog_feeds.json"
+    }
+  ]
+}

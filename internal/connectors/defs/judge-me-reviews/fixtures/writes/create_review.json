@@ -1,0 +1,24 @@
+{
+  "record": {
+    "shop_domain": "example.myshopify.com",
+    "platform": "shopify",
+    "name": "Fixture Reviewer",
+    "email": "reviewer@example.com",
+    "rating": 5,
+    "body": "Fixture review body",
+    "title": "Fixture review title",
+    "id": 999999
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reviews",
+    "body": {
+      "shop_domain": "example.myshopify.com",
+      "platform": "shopify",
+      "name": "Fixture Reviewer",
+      "email": "reviewer@example.com",
+      "rating": 5,
+      "body": "Fixture review body"
+    }
+  }
+}

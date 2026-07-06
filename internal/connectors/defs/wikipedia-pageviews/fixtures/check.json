@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/rest_v1/metrics/pageviews/per-article/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/daily/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": []
+    }
+  }
+}

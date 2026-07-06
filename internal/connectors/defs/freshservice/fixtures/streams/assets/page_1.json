@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/assets", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "assets": [
+        {
+          "id": 5001,
+          "display_id": 101,
+          "name": "Fixture asset 1",
+          "asset_type_id": 7000,
+          "asset_tag": "TAG-1",
+          "impact": "low",
+          "user_id": 1001,
+          "department_id": 4000,
+          "agent_id": 2001,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "time_off_id": 1001,
+    "status_action_message": "fixture status action message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/time_off/1001/approve",
+    "body": {
+      "status_action_message": "fixture status action message"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/definitions/2020-09-01/productTypes",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "productTypes": [
+        {
+          "name": "name-fixture-1",
+          "displayName": "displayName-fixture-1",
+          "marketplaceIds": []
+        }
+      ]
+    }
+  }
+}

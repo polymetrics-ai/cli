@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_inventory",
+  "type": "object",
+  "properties": {
+    "expirationDetails": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "inventoryDetails": {
+      "type": "object"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "totalInboundQuantity": {
+      "type": "integer"
+    },
+    "totalOnhandQuantity": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "sku"
+  ]
+}

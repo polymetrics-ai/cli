@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Box Data Extract Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Box OAuth2 client-credentials client_id. Used only for the token exchange; never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Box OAuth2 client-credentials client_secret. Used only for the token exchange; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.box.com/2.0",
+      "description": "Box API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.box.com/oauth2/token",
+      "description": "Box OAuth2 token endpoint override for tests or proxies."
+    },
+    "box_subject_type": {
+      "type": "string",
+      "default": "enterprise",
+      "description": "Box token-scoping subject type: 'enterprise' (application service account) or 'user'. Sent as the box_subject_type token-request form param."
+    },
+    "box_subject_id": {
+      "type": "string",
+      "description": "Box token-scoping subject id: the enterprise id (box_subject_type=enterprise) or user id (box_subject_type=user). Sent as the box_subject_id token-request form param."
+    },
+    "box_folder_id": {
+      "type": "string",
+      "default": "0",
+      "description": "Box folder id for the files stream (folders/{box_folder_id}/items); defaults to the root folder (0)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

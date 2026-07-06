@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/c/synthetic-conformance-value/sources", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "sources": [
+        { "id": 1, "name": "Referral" },
+        { "id": 2, "name": "LinkedIn" }
+      ]
+    }
+  }
+}

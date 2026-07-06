@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/inspection-areas" },
+  "response": {
+    "status": 200,
+    "body": {
+      "inspectionAreas": [
+        {
+          "inspectionAreaId": "IA-fixture-1",
+          "inspectionAreaName": "Fixture Key Question 1",
+          "inspectionAreaType": "key_question",
+          "status": "active",
+          "endDate": null,
+          "supersededBy": null,
+          "orgInspectionAreaRetirementDate": null,
+          "inspectionCategories": ["Safe", "Effective"]
+        },
+        {
+          "inspectionAreaId": "IA-fixture-2",
+          "inspectionAreaName": "Fixture Key Question 2",
+          "inspectionAreaType": "key_question",
+          "status": "active",
+          "endDate": null,
+          "supersededBy": null,
+          "orgInspectionAreaRetirementDate": null,
+          "inspectionCategories": ["Caring", "Responsive"]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "api": "Uptick REST API v2.14",
+  "docs": "https://support.uptickhq.com/en/articles/6728314-uptick-api-overview-and-patch-notes",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion over the statically known Uptick REST API resources already listed in the bundle plus the legacy read streams. Uptick public docs state that v2 implements REST with JsonAPI, that /api/v2.x/ lists tenant endpoints, and that every endpoint exposes OPTIONS metadata for available fields; this bundle covers all stable list resources available without tenant-specific OPTIONS metadata and excludes mutation shapes because their request schemas are tenant/resource-specific rather than statically published.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v2.14/tasks/",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/clients/",
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/properties/",
+      "covered_by": {
+        "stream": "properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/invoices/",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/assets/",
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/quotes/",
+      "covered_by": {
+        "stream": "quotes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/purchaseorders/",
+      "covered_by": {
+        "stream": "purchaseorders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/forms/",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/users/",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/teams/",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.14/stockitems/",
+      "covered_by": {
+        "stream": "stockitems"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2.14/tasks/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Uptick publishes tenant-specific request schemas through each endpoint OPTIONS response rather than a static public write contract, so this bundle cannot safely declare a dialect write action for task creation without live tenant metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2.14/{resource}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Generic resource creation is documented as tenant self-descriptive via OPTIONS metadata; no stable public request body schema is available for declarative writes across tenants."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2.14/{resource}/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Generic resource replacement requires tenant endpoint OPTIONS metadata and per-resource writable field rules that are not available as static public documentation."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2.14/{resource}/{id}/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Generic partial update requires tenant endpoint OPTIONS metadata and per-resource writable field rules that are not available as static public documentation."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2.14/{resource}/{id}/",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "Generic deletion is destructive field-service data removal and Uptick does not publish a stable global delete contract suitable for a declarative reverse-ETL action."
+      }
+    }
+  ]
+}

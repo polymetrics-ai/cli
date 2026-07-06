@@ -1,0 +1,806 @@
+{
+  "api": "Shutterstock REST API (https://api-reference.shutterstock.com/)",
+  "docs": "https://api-reference.shutterstock.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B reviewed the static Shutterstock API reference generated 2026-07-01 and enumerated 109 documented operations (74 GET, 35 POST/PATCH/DELETE). Covered endpoints include legacy media search streams, additional media/editorial/catalog/contributor/license/subscription reads, and collection/lightbox create/update/delete/item-add writes. Exclusions are limited to reference/search-helper endpoints, OAuth/test endpoints, rights-bearing licensing or binary download operations, binary upload, and DELETE item-removal endpoints that require write query parameters not present in the dialect.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/images/search",
+      "covered_by": {
+        "stream": "images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/search/suggestions",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/search/suggestions",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "search/suggestion helper expressed as POST but not a persistent remote mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/categories",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/{id}/similar",
+      "covered_by": {
+        "stream": "list_similar_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/recommendations",
+      "covered_by": {
+        "stream": "get_image_recommendations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/updated",
+      "covered_by": {
+        "stream": "get_updated_images"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bulk_search/images",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "search/suggestion helper expressed as POST but not a persistent remote mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images",
+      "covered_by": {
+        "stream": "get_image_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/{id}",
+      "covered_by": {
+        "stream": "get_image"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/licenses",
+      "covered_by": {
+        "stream": "get_image_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/licenses/{id}/downloads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/collections",
+      "covered_by": {
+        "write": "create_image_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/collections",
+      "covered_by": {
+        "stream": "get_image_collection_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/collections/{id}",
+      "covered_by": {
+        "stream": "get_image_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/collections/{id}",
+      "covered_by": {
+        "write": "rename_image_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/images/collections/{id}",
+      "covered_by": {
+        "write": "delete_image_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/images/collections/{id}/items",
+      "covered_by": {
+        "write": "add_image_collection_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/images/collections/{id}/items",
+      "covered_by": {
+        "stream": "get_image_collection_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/images/collections/{id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/search",
+      "covered_by": {
+        "stream": "videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/search/suggestions",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{id}/similar",
+      "covered_by": {
+        "stream": "find_similar_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/updated",
+      "covered_by": {
+        "stream": "get_updated_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos",
+      "covered_by": {
+        "stream": "get_video_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{id}",
+      "covered_by": {
+        "stream": "get_video"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/categories",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/licenses",
+      "covered_by": {
+        "stream": "get_video_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/licenses/{id}/downloads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/collections",
+      "covered_by": {
+        "write": "create_video_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/collections",
+      "covered_by": {
+        "stream": "get_video_collection_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/collections/{id}",
+      "covered_by": {
+        "stream": "get_video_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/collections/{id}",
+      "covered_by": {
+        "write": "rename_video_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/videos/collections/{id}",
+      "covered_by": {
+        "write": "delete_video_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/collections/{id}/items",
+      "covered_by": {
+        "write": "add_video_collection_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/collections/{id}/items",
+      "covered_by": {
+        "stream": "get_video_collection_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/videos/collections/{id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/search",
+      "covered_by": {
+        "stream": "audio"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/genres",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/instruments",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/moods",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio",
+      "covered_by": {
+        "stream": "get_track_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{id}",
+      "covered_by": {
+        "stream": "get_track"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/licenses",
+      "covered_by": {
+        "stream": "get_track_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/licenses/{id}/downloads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/collections",
+      "covered_by": {
+        "write": "create_audio_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/collections",
+      "covered_by": {
+        "stream": "get_track_collection_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/collections/{id}",
+      "covered_by": {
+        "stream": "get_track_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/collections/{id}",
+      "covered_by": {
+        "write": "rename_audio_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/audio/collections/{id}",
+      "covered_by": {
+        "write": "delete_audio_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/collections/{id}/items",
+      "covered_by": {
+        "write": "add_audio_collection_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/collections/{id}/items",
+      "covered_by": {
+        "stream": "get_track_collection_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/audio/collections/{id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sfx/search",
+      "covered_by": {
+        "stream": "search_sfx"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sfx/{id}",
+      "covered_by": {
+        "stream": "get_sfx"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sfx",
+      "covered_by": {
+        "stream": "get_sfx_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sfx/licenses",
+      "covered_by": {
+        "stream": "get_sfx_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sfx/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sfx/licenses/{id}/downloads",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/search",
+      "covered_by": {
+        "stream": "search_editorial_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/updated",
+      "covered_by": {
+        "stream": "get_updated_editorial_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/categories",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/{id}",
+      "covered_by": {
+        "stream": "get_editorial_image"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images",
+      "covered_by": {
+        "stream": "get_editorial_image_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/licenses",
+      "covered_by": {
+        "stream": "get_editorial_image_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/editorial/images/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/livefeeds",
+      "covered_by": {
+        "stream": "get_editorial_image_livefeeds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/livefeeds/{id}",
+      "covered_by": {
+        "stream": "get_editorial_image_livefeed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/images/livefeeds/{id}/items",
+      "covered_by": {
+        "stream": "get_editorial_image_livefeed_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/{id}",
+      "covered_by": {
+        "stream": "get_editorial"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/editorial/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/livefeeds",
+      "covered_by": {
+        "stream": "get_editorial_livefeeds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/livefeeds/{id}",
+      "covered_by": {
+        "stream": "get_editorial_livefeed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/livefeeds/{id}/items",
+      "covered_by": {
+        "stream": "get_editorial_livefeed_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/search",
+      "covered_by": {
+        "stream": "search_editorial"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/categories",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/updated",
+      "covered_by": {
+        "stream": "get_updated_editorial"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/videos/search",
+      "covered_by": {
+        "stream": "search_editorial_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/videos/categories",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/videos/{id}",
+      "covered_by": {
+        "stream": "get_editorial_video"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/videos",
+      "covered_by": {
+        "stream": "get_editorial_video_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/editorial/videos/licenses",
+      "covered_by": {
+        "stream": "get_editorial_video_license_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/editorial/videos/licenses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cv/images",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "computer-vision image upload endpoint requires file/binary upload semantics outside the JSON/form write dialect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cv/similar/images",
+      "covered_by": {
+        "stream": "get_similar_cv_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cv/similar/videos",
+      "covered_by": {
+        "stream": "get_similar_cv_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cv/keywords",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/search",
+      "covered_by": {
+        "stream": "search_catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/collections",
+      "covered_by": {
+        "stream": "get_collections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/collections",
+      "covered_by": {
+        "write": "create_catalog_collection"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/catalog/collections/{collection_id}",
+      "covered_by": {
+        "write": "update_catalog_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/catalog/collections/{collection_id}",
+      "covered_by": {
+        "write": "delete_catalog_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/collections/{collection_id}/items",
+      "covered_by": {
+        "write": "add_catalog_collection_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/catalog/collections/{collection_id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contributors",
+      "covered_by": {
+        "stream": "get_contributors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contributors/{contributor_id}",
+      "covered_by": {
+        "stream": "get_contributor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contributors/{contributor_id}/collections",
+      "covered_by": {
+        "stream": "get_contributor_collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contributors/{contributor_id}/collections/{id}",
+      "covered_by": {
+        "stream": "get_contributor_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contributors/{contributor_id}/collections/{id}/items",
+      "covered_by": {
+        "stream": "get_contributor_collection_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/user",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user or access-token introspection endpoint, not a syncable business object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/user/access_token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user or access-token introspection endpoint, not a syncable business object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/user/subscriptions",
+      "covered_by": {
+        "stream": "get_user_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/test",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "test or OAuth browser/token endpoint, not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/test/validate",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "test or OAuth browser/token endpoint, not connector data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/oauth/authorize",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "test or OAuth browser/token endpoint, not connector data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/oauth/access_token",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange endpoint; credentials are managed outside connector write actions"
+      }
+    }
+  ]
+}

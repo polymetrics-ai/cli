@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lever Hiring Connection Specification",
+  "type": "object",
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Lever OAuth2 access token. Sent as Authorization: Bearer <access_token>. Preferred over api_key when both are present (matches legacy precedence). Never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Lever API key. Sent as the HTTP Basic auth username with a blank password (Lever's documented API-key auth convention). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.lever.co/v1",
+      "description": "Lever Data API base URL override for tests, proxies, or a sandbox environment (https://api.sandbox.lever.co/v1)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

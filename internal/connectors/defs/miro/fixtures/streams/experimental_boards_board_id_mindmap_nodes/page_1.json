@@ -1,0 +1,70 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2-experimental/boards/synthetic-conformance-value/mindmap_nodes",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "id_fixture",
+          "data": {
+            "nodeView": {
+              "type": "type_fixture",
+              "data": {
+                "content": "content_fixture"
+              },
+              "style": {
+                "color": "#ffffff",
+                "fillOpacity": "fill_opacity_fixture",
+                "fontSize": "font_size_fixture"
+              }
+            },
+            "isRoot": true,
+            "direction": "start"
+          },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "createdBy": {
+            "id": "id_fixture",
+            "type": "type_fixture"
+          },
+          "modifiedAt": "2026-01-01T00:00:00Z",
+          "modifiedBy": {
+            "id": "id_fixture",
+            "type": "type_fixture"
+          },
+          "parent": {
+            "id": "id_fixture",
+            "links": {
+              "self": "self_fixture"
+            }
+          },
+          "links": {
+            "related": "related_fixture",
+            "self": "self_fixture"
+          },
+          "type": "type_fixture",
+          "style": {
+            "nodeColor": "#ffffff",
+            "shape": "pill",
+            "fontSize": "font_size_fixture"
+          }
+        }
+      ],
+      "total": 1,
+      "size": 1,
+      "limit": 50,
+      "links": {
+        "first": "first_fixture",
+        "last": "last_fixture",
+        "next": "next_fixture",
+        "prev": "prev_fixture",
+        "self": "self_fixture"
+      }
+    }
+  }
+}

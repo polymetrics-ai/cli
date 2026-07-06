@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mercado Ads Connection Specification",
+  "type": "object",
+  "required": [
+    "client_id",
+    "client_refresh_token",
+    "client_secret",
+    "lookback_days"
+  ],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true
+    },
+    "client_refresh_token": {
+      "type": "string",
+      "x-secret": true
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Cannot exceed 90 days from current day for Product Ads"
+    },
+    "lookback_days": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Cannot exceed 90 days from current day for Product Ads, and 90 days from \"End Date\" on Brand and Display Ads"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

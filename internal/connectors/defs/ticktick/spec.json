@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TickTick Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "TickTick OAuth access token, sent as a Bearer token (Authorization: Bearer <token>). Never logged. Takes precedence over client_access_token and access_token when more than one is configured."
+    },
+    "client_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Fallback TickTick OAuth access token, used only when bearer_token is not configured. Sent as a Bearer token. Never logged. Takes precedence over access_token when both are configured."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Fallback TickTick OAuth access token, used only when neither bearer_token nor client_access_token is configured. Sent as a Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ticktick.com/open/v1",
+      "description": "TickTick Open API base URL override for tests or proxies."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "TickTick project id the 'tasks' stream reads (GET /project/{project_id}/data). Required for the 'tasks' stream."
+    }
+  }
+}

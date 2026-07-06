@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/versions/synthetic-conformance-value",
+    "query": {
+      "environment": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        [
+          1728561200,
+          1
+        ]
+      ],
+      "id": 1,
+      "name": "Fixture version"
+    }
+  }
+}

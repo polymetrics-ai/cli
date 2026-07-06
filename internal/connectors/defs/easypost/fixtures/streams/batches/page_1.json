@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/batches", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "batches": [
+        {
+          "id": "batch_fixture_1",
+          "object": "Batch",
+          "mode": "test",
+          "state": "created",
+          "num_shipments": 1,
+          "reference": "fixture-batch",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "scan_form": null,
+          "shipments": [
+            { "id": "shp_fixture_1", "batch_status": "created", "batch_message": null, "reference": "fixture-shipment", "tracking_code": null }
+          ],
+          "status": {
+            "created": 1,
+            "queued_for_purchase": 0,
+            "creation_failed": 0,
+            "postage_purchased": 0,
+            "postage_purchase_failed": 0
+          },
+          "pickup": null,
+          "label_url": null
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

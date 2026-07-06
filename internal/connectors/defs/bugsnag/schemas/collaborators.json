@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collaborators",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "is_admin": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "last_request_at": { "type": ["string", "null"], "format": "date-time" },
+    "two_factor_enabled": { "type": ["boolean", "null"] },
+    "pending_invitation": { "type": ["boolean", "null"] }
+  }
+}

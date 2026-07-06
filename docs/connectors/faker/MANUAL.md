@@ -12,6 +12,11 @@ SYNOPSIS
 DESCRIPTION
   Generates deterministic sample users, purchases, and products without network access.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api

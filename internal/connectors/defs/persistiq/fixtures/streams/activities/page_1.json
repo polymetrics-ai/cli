@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/activities", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        { "id": "activity_fixture_1", "name": "Fixture Activity", "email": null, "status": "completed" }
+      ]
+    }
+  }
+}

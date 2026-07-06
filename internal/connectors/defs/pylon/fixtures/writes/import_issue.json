@@ -1,0 +1,25 @@
+{
+  "record": {
+    "title": "synthetic-conformance-value",
+    "state": "synthetic-conformance-value",
+    "messages": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import/issues",
+    "body": {
+      "title": "synthetic-conformance-value",
+      "state": "synthetic-conformance-value",
+      "messages": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

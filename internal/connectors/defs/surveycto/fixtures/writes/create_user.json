@@ -1,0 +1,7 @@
+{
+  "record": { "username": "fixture_user_2", "roleId": "role_fixture_1", "password": "fixture-pw" },
+  "expect": {
+    "method": "POST",
+    "path": "/users"
+  }
+}

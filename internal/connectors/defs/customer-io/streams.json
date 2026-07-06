@@ -1,0 +1,139 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.app_api_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "start",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/campaigns" },
+    "error_map": [
+      { "status": 401, "hint": "customer-io app_api_key is missing or invalid; re-run pm credentials add customer-io" },
+      { "status": 403, "hint": "customer-io app_api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "customer-io rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "campaigns" },
+      "incremental": { "cursor_field": "updated", "client_filtered": true },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "newsletters",
+      "path": "/newsletters",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "newsletters" },
+      "incremental": { "cursor_field": "updated", "client_filtered": true },
+      "schema": "schemas/newsletters.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "segments" },
+      "incremental": { "cursor_field": "updated", "client_filtered": true },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "broadcasts",
+      "path": "/broadcasts",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "broadcasts" },
+      "incremental": { "cursor_field": "updated", "client_filtered": true },
+      "schema": "schemas/broadcasts.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "activities" },
+      "incremental": { "cursor_field": "timestamp", "client_filtered": true },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "messages",
+      "path": "/messages",
+      "pagination": { "type": "none" },
+      "records": { "path": "messages" },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "exports",
+      "path": "/exports",
+      "pagination": { "type": "none" },
+      "records": { "path": "exports" },
+      "schema": "schemas/exports.json"
+    },
+    {
+      "name": "transactional",
+      "path": "/transactional",
+      "pagination": { "type": "none" },
+      "records": { "path": "messages" },
+      "schema": "schemas/transactional.json"
+    },
+    {
+      "name": "object_types",
+      "path": "/object_types",
+      "pagination": { "type": "none" },
+      "records": { "path": "types" },
+      "schema": "schemas/object_types.json"
+    },
+    {
+      "name": "reporting_webhooks",
+      "path": "/reporting_webhooks",
+      "pagination": { "type": "none" },
+      "records": { "path": "reporting_webhooks" },
+      "schema": "schemas/reporting_webhooks.json"
+    },
+    {
+      "name": "sender_identities",
+      "path": "/sender_identities",
+      "pagination": { "type": "none" },
+      "records": { "path": "sender_identities" },
+      "schema": "schemas/sender_identities.json"
+    },
+    {
+      "name": "snippets",
+      "path": "/snippets",
+      "pagination": { "type": "none" },
+      "records": { "path": "snippets" },
+      "schema": "schemas/snippets.json"
+    },
+    {
+      "name": "subscription_channels",
+      "path": "/subscription_channels",
+      "pagination": { "type": "none" },
+      "records": { "path": "channels" },
+      "schema": "schemas/subscription_channels.json"
+    },
+    {
+      "name": "subscription_topics",
+      "path": "/subscription_topics",
+      "pagination": { "type": "none" },
+      "records": { "path": "topics" },
+      "schema": "schemas/subscription_topics.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "pagination": { "type": "none" },
+      "records": { "path": "workspaces" },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "collections",
+      "path": "/collections",
+      "pagination": { "type": "none" },
+      "records": { "path": "collections" },
+      "schema": "schemas/collections.json"
+    }
+  ]
+}

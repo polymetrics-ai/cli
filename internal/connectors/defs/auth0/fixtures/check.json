@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/clients" },
+  "response": {
+    "status": 200,
+    "body": { "start": 0, "limit": 1, "length": 0, "total": 0, "clients": [] }
+  }
+}

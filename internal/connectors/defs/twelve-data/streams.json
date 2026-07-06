@@ -1,0 +1,52 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/quote", "query": { "symbol": "AAPL" } },
+    "error_map": [
+      { "status": 401, "hint": "twelve-data api_key is missing or invalid; re-run pm credentials add twelve-data" },
+      { "status": 429, "class": "rate_limited", "hint": "twelve-data rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "time_series",
+      "path": "/time_series",
+      "query": {
+        "symbol": "{{ config.symbol }}",
+        "interval": "{{ config.interval }}",
+        "outputsize": "{{ config.output_size }}"
+      },
+      "records": { "path": "values" },
+      "computed_fields": {
+        "symbol": "{{ config.symbol }}"
+      },
+      "schema": "schemas/time_series.json"
+    },
+    {
+      "name": "quote",
+      "path": "/quote",
+      "query": { "symbol": "{{ config.symbol }}" },
+      "records": { "path": "." },
+      "computed_fields": {
+        "symbol": "{{ config.symbol }}"
+      },
+      "schema": "schemas/quote.json"
+    },
+    {
+      "name": "stocks",
+      "path": "/stocks",
+      "records": { "path": "data" },
+      "schema": "schemas/stocks.json"
+    },
+    {
+      "name": "forex_pairs",
+      "path": "/forex_pairs",
+      "records": { "path": "data" },
+      "schema": "schemas/forex_pairs.json"
+    }
+  ]
+}

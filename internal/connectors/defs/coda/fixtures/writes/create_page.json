@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Launch Status",
+    "subtitle": "See the status of launch-related tasks."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/docs/synthetic-conformance-value/pages",
+    "body": {
+      "name": "Launch Status",
+      "subtitle": "See the status of launch-related tasks."
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": { "requestId": "req-fixture-6", "id": "canvas-fixture-1" }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/inventory",
+    "query": {
+      "maxResults": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "inventory": [
+        {
+          "expirationDetails": [],
+          "inventoryDetails": {},
+          "sku": "sku-fixture-1",
+          "totalInboundQuantity": 1,
+          "totalOnhandQuantity": 1
+        }
+      ]
+    }
+  }
+}

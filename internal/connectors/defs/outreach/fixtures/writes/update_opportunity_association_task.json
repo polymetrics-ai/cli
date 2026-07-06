@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "opportunityAssociation": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/synthetic-conformance-value/actions/updateOpportunityAssociation"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

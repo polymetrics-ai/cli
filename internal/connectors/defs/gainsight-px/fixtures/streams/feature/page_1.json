@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/feature", "query": { "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "features": [
+        {
+          "id": "feature_fixture_1",
+          "name": "Fixture Feature 1",
+          "type": "FEATURE",
+          "parentFeatureId": "",
+          "propertyKey": "AP-FIXTURE-1",
+          "status": "ACTIVE"
+        },
+        {
+          "id": "feature_fixture_2",
+          "name": "Fixture Feature 2",
+          "type": "MODULE",
+          "parentFeatureId": "feature_fixture_1",
+          "propertyKey": "AP-FIXTURE-2",
+          "status": "ACTIVE"
+        }
+      ],
+      "scrollId": ""
+    }
+  }
+}

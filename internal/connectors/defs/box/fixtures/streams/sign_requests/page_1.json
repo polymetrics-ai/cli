@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sign_requests",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "sign_request_fixture_1",
+          "type": "sign-request",
+          "status": "sent",
+          "sender_email": "sender1@example.com",
+          "signers": [{ "email": "signer1@example.com", "role": "signer" }],
+          "source_files": [{ "id": "files_fixture_1", "type": "file" }],
+          "sign_files": { "files": [{ "id": "files_fixture_1", "type": "file" }] },
+          "parent_folder": { "id": "0", "type": "folder" },
+          "prepare_url": null,
+          "signing_log": null,
+          "auto_expire_at": null,
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "finished_at": null
+        }
+      ],
+      "limit": 100,
+      "next_marker": null
+    }
+  }
+}

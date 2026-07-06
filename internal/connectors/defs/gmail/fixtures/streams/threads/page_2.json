@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users/me/threads", "query": { "maxResults": "100", "pageToken": "page2token" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "threads": [
+        { "id": "thread_fixture_3", "snippet": "Fixture thread snippet 3", "historyId": "1003" }
+      ],
+      "resultSizeEstimate": 3
+    }
+  }
+}

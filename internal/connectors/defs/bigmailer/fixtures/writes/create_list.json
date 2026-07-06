@@ -1,0 +1,13 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "name": "Fixture List"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/lists",
+    "body": {
+      "name": "Fixture List"
+    }
+  }
+}

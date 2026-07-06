@@ -1,0 +1,36 @@
+{
+  "record": {
+    "ticket": {
+      "title": "Fixture title",
+      "name": "Fixture name",
+      "email": "fixture@example.com",
+      "subject": "Fixture subject",
+      "type": "text",
+      "conditions": [
+
+      ],
+      "actions": [
+
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/tickets",
+    "body": {
+      "ticket": {
+        "title": "Fixture title",
+        "name": "Fixture name",
+        "email": "fixture@example.com",
+        "subject": "Fixture subject",
+        "type": "text",
+        "conditions": [
+
+        ],
+        "actions": [
+
+        ]
+      }
+    }
+  }
+}

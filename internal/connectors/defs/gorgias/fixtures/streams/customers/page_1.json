@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 201,
+          "external_id": "ext_201",
+          "email": "fixture1@example.com",
+          "name": "Fixture Customer 1",
+          "firstname": "Fixture",
+          "lastname": "One",
+          "language": "en",
+          "timezone": "UTC",
+          "channel": "email",
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "updated_datetime": "2026-01-02T00:00:01Z"
+        },
+        {
+          "id": 202,
+          "external_id": "ext_202",
+          "email": "fixture2@example.com",
+          "name": "Fixture Customer 2",
+          "firstname": "Fixture",
+          "lastname": "Two",
+          "language": "en",
+          "timezone": "UTC",
+          "channel": "email",
+          "created_datetime": "2026-01-01T00:00:02Z",
+          "updated_datetime": "2026-01-02T00:00:02Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

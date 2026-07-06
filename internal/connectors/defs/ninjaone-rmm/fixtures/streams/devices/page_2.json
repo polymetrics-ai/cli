@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v2/devices", "query": { "pageSize": "synthetic-conformance-value", "after": "11" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

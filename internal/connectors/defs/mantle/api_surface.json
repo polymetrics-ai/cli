@@ -1,0 +1,2327 @@
+{
+  "api": "Mantle Core API v1 (https://api.heymantle.com/v1)",
+  "docs": "https://coreapi.heymantle.dev/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from Mantle Core API ReadMe OpenAPI fragments: 133 streams, 148 write actions, and 44 documented exclusions.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_commissions",
+      "covered_by": {
+        "stream": "affiliate_commissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_commissions/{id}",
+      "covered_by": {
+        "stream": "affiliate_commissions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_payouts",
+      "covered_by": {
+        "stream": "affiliate_payouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_payouts/{id}",
+      "covered_by": {
+        "stream": "affiliate_payouts_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_programs",
+      "covered_by": {
+        "stream": "affiliate_programs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_programs/{id}",
+      "covered_by": {
+        "stream": "affiliate_programs_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_referrals",
+      "covered_by": {
+        "stream": "affiliate_referrals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliate_referrals/{id}",
+      "covered_by": {
+        "stream": "affiliate_referrals_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliates",
+      "covered_by": {
+        "stream": "affiliates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/affiliates/{id}",
+      "covered_by": {
+        "stream": "affiliates_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/affiliates/{id}/addTags",
+      "covered_by": {
+        "write": "execute_affiliates_id_add_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/affiliates/{id}/removeTags",
+      "covered_by": {
+        "write": "execute_affiliates_id_remove_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/agents",
+      "covered_by": {
+        "write": "create_agents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/ai/agents/{agentId}/runs",
+      "covered_by": {
+        "write": "create_ai_agents_agent_id_runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ai/agents/{agentId}/runs/{runId}",
+      "covered_by": {
+        "stream": "ai_agents_agent_id_runs_run_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/activeInstalls",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_active_installs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/activeSubscriptions",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_active_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/arpu",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_arpu"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/arr",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_arr"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/logoChurn",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_logo_churn"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/mrr",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_mrr"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/netInstalls",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_net_installs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/netRevenue",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_net_revenue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/netRevenueRetention",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_net_revenue_retention"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/payout",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_payout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/predictedLtv",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_predicted_ltv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/revenueChurn",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_revenue_churn"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/revenueRetention",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_revenue_retention"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/subscriptionChurn",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_subscription_churn"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/usageEvent",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_usage_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/core/v1/metrics/usageMetric",
+      "covered_by": {
+        "stream": "api_core_v1_metrics_usage_metric"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps",
+      "covered_by": {
+        "stream": "apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{appId}/checklists",
+      "covered_by": {
+        "stream": "apps_app_id_checklists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{appId}/checklists",
+      "covered_by": {
+        "write": "create_apps_app_id_checklists"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/apps/{appId}/checklists/{checklistId}",
+      "covered_by": {
+        "write": "delete_apps_app_id_checklists_checklist_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{appId}/checklists/{checklistId}",
+      "covered_by": {
+        "stream": "apps_app_id_checklists_checklist_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{appId}/checklists/{checklistId}",
+      "covered_by": {
+        "write": "update_apps_app_id_checklists_checklist_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{appId}/plans/features",
+      "covered_by": {
+        "stream": "apps_app_id_plans_features"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{appId}/plans/features",
+      "covered_by": {
+        "write": "create_apps_app_id_plans_features"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/apps/{appId}/plans/features/{featureId}",
+      "covered_by": {
+        "write": "delete_apps_app_id_plans_features_feature_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{appId}/plans/features/{featureId}",
+      "covered_by": {
+        "stream": "apps_app_id_plans_features_feature_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{appId}/plans/features/{featureId}",
+      "covered_by": {
+        "write": "update_apps_app_id_plans_features_feature_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}",
+      "covered_by": {
+        "stream": "apps_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{id}/analyze",
+      "covered_by": {
+        "write": "execute_apps_id_analyze"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/app_events",
+      "covered_by": {
+        "stream": "apps_id_app_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{id}/app_events",
+      "covered_by": {
+        "write": "create_apps_id_app_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/app_events/{appEventId}",
+      "covered_by": {
+        "stream": "apps_id_app_events_app_event_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/plans",
+      "covered_by": {
+        "stream": "apps_id_plans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{id}/plans",
+      "covered_by": {
+        "write": "create_apps_id_plans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/plans/{planId}",
+      "covered_by": {
+        "stream": "apps_id_plans_plan_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{id}/plans/{planId}",
+      "covered_by": {
+        "write": "update_apps_id_plans_plan_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{id}/plans/{planId}/archive",
+      "covered_by": {
+        "write": "update_apps_id_plans_plan_id_archive"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{id}/plans/{planId}/unarchive",
+      "covered_by": {
+        "write": "update_apps_id_plans_plan_id_unarchive"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/reviews",
+      "covered_by": {
+        "stream": "apps_id_reviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/reviews/{reviewId}",
+      "covered_by": {
+        "stream": "apps_id_reviews_review_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/skills/{skillId}",
+      "covered_by": {
+        "stream": "apps_id_skills_skill_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{id}/skills/{skillId}",
+      "covered_by": {
+        "write": "execute_apps_id_skills_skill_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/usage_metrics",
+      "covered_by": {
+        "stream": "apps_id_usage_metrics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/apps/{id}/usage_metrics",
+      "covered_by": {
+        "write": "create_apps_id_usage_metrics"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/apps/{id}/usage_metrics/{usageMetricId}",
+      "covered_by": {
+        "write": "delete_apps_id_usage_metrics_usage_metric_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/apps/{id}/usage_metrics/{usageMetricId}",
+      "covered_by": {
+        "stream": "apps_id_usage_metrics_usage_metric_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/apps/{id}/usage_metrics/{usageMetricId}",
+      "covered_by": {
+        "write": "update_apps_id_usage_metrics_usage_metric_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assistant/conversations/{id}",
+      "covered_by": {
+        "stream": "assistant_conversations_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/attachments",
+      "covered_by": {
+        "write": "create_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/channels",
+      "covered_by": {
+        "write": "create_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/charges",
+      "covered_by": {
+        "stream": "charges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies",
+      "covered_by": {
+        "write": "create_companies"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/companies/{id}",
+      "covered_by": {
+        "write": "delete_companies_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/{id}",
+      "covered_by": {
+        "stream": "companies_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/companies/{id}",
+      "covered_by": {
+        "write": "update_companies_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts",
+      "covered_by": {
+        "write": "upsert_contacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contacts_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contacts/{id}",
+      "covered_by": {
+        "stream": "contacts_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/contacts/{id}",
+      "covered_by": {
+        "write": "update_contacts_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/{id}/addTags",
+      "covered_by": {
+        "write": "execute_contacts_id_add_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/{id}/removeTags",
+      "covered_by": {
+        "write": "execute_contacts_id_remove_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_data",
+      "covered_by": {
+        "stream": "custom_data"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/custom_data",
+      "covered_by": {
+        "write": "update_custom_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customer_segments",
+      "covered_by": {
+        "stream": "customer_segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customer_segments/{id}",
+      "covered_by": {
+        "stream": "customer_segments_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers",
+      "covered_by": {
+        "write": "create_customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{id}",
+      "covered_by": {
+        "stream": "customers_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/customers/{id}",
+      "covered_by": {
+        "write": "update_customers_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{id}/account_owners",
+      "covered_by": {
+        "stream": "customers_id_account_owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/{id}/account_owners",
+      "covered_by": {
+        "write": "execute_customers_id_account_owners"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/customers/{id}/account_owners/{ownerId}",
+      "covered_by": {
+        "write": "delete_customers_id_account_owners_owner_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/customers/{id}/account_owners/{ownerId}",
+      "covered_by": {
+        "write": "update_customers_id_account_owners_owner_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/{id}/addTags",
+      "covered_by": {
+        "write": "execute_customers_id_add_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/{id}/removeTags",
+      "covered_by": {
+        "write": "execute_customers_id_remove_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/{id}/timeline",
+      "covered_by": {
+        "stream": "customers_id_timeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/custom_fields",
+      "covered_by": {
+        "stream": "customers_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/custom_fields",
+      "covered_by": {
+        "write": "create_customers_custom_fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/customers/custom_fields/{id}",
+      "covered_by": {
+        "write": "delete_customers_custom_fields_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers/custom_fields/{id}",
+      "covered_by": {
+        "stream": "customers_custom_fields_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/customers/custom_fields/{id}",
+      "covered_by": {
+        "write": "update_customers_custom_fields_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deal_activities",
+      "covered_by": {
+        "stream": "deal_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/deal_activities",
+      "covered_by": {
+        "write": "create_deal_activities"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/deal_activities/{id}",
+      "covered_by": {
+        "write": "delete_deal_activities_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deal_activities/{id}",
+      "covered_by": {
+        "stream": "deal_activities_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/deal_activities/{id}",
+      "covered_by": {
+        "write": "update_deal_activities_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deal_flows",
+      "covered_by": {
+        "stream": "deal_flows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/deal_flows",
+      "covered_by": {
+        "write": "create_deal_flows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/deal_flows/{id}",
+      "covered_by": {
+        "write": "delete_deal_flows_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deal_flows/{id}",
+      "covered_by": {
+        "stream": "deal_flows_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/deal_flows/{id}",
+      "covered_by": {
+        "write": "update_deal_flows_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deals",
+      "covered_by": {
+        "stream": "deals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/deals",
+      "covered_by": {
+        "write": "create_deals"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/deals/{id}",
+      "covered_by": {
+        "write": "delete_deals_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deals/{id}",
+      "covered_by": {
+        "stream": "deals_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/deals/{id}",
+      "covered_by": {
+        "write": "update_deals_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deals/{id}/events",
+      "covered_by": {
+        "stream": "deals_id_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/deals/{id}/events",
+      "covered_by": {
+        "write": "create_deals_id_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/deals/{id}/timeline",
+      "covered_by": {
+        "stream": "deals_id_timeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/devices",
+      "covered_by": {
+        "write": "execute_devices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/collections",
+      "covered_by": {
+        "stream": "docs_collections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/collections",
+      "covered_by": {
+        "write": "create_docs_collections"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/collections/{collection_id}",
+      "covered_by": {
+        "write": "delete_docs_collections_collection_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/collections/{collection_id}",
+      "covered_by": {
+        "write": "update_docs_collections_collection_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/groups",
+      "covered_by": {
+        "stream": "docs_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/groups",
+      "covered_by": {
+        "write": "create_docs_groups"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/groups/{group_id}",
+      "covered_by": {
+        "write": "delete_docs_groups_group_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/groups/{group_id}",
+      "covered_by": {
+        "write": "update_docs_groups_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/pages",
+      "covered_by": {
+        "stream": "docs_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/pages",
+      "covered_by": {
+        "write": "create_docs_pages"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/pages/{page_id}",
+      "covered_by": {
+        "write": "delete_docs_pages_page_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/pages/{page_id}",
+      "covered_by": {
+        "stream": "docs_pages_page_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/pages/{page_id}",
+      "covered_by": {
+        "write": "update_docs_pages_page_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/pages/{page_id}/archive",
+      "covered_by": {
+        "write": "delete_docs_pages_page_id_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/pages/{page_id}/archive",
+      "covered_by": {
+        "write": "execute_docs_pages_page_id_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/pages/{page_id}/generate",
+      "covered_by": {
+        "write": "execute_docs_pages_page_id_generate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/pages/{page_id}/publish",
+      "covered_by": {
+        "write": "delete_docs_pages_page_id_publish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/pages/{page_id}/publish",
+      "covered_by": {
+        "write": "execute_docs_pages_page_id_publish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/pages/generate",
+      "covered_by": {
+        "write": "execute_docs_pages_generate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/pages/generate/status/{jobKey}",
+      "covered_by": {
+        "stream": "docs_pages_generate_status_job_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/repositories",
+      "covered_by": {
+        "stream": "docs_repositories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/repositories/{id}",
+      "covered_by": {
+        "stream": "docs_repositories_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/repositories/{id}",
+      "covered_by": {
+        "write": "update_docs_repositories_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/repositories/{id}/redirects",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in Mantle Core API documentation; successor endpoint is documented separately."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/repositories/{id}/redirects",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in Mantle Core API documentation; successor endpoint is documented separately."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/repositories/{id}/redirects/{redirect_id}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in Mantle Core API documentation; successor endpoint is documented separately."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/repositories/{id}/redirects/{redirect_id}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in Mantle Core API documentation; successor endpoint is documented separately."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/sites",
+      "covered_by": {
+        "stream": "docs_sites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/sites",
+      "covered_by": {
+        "write": "create_docs_sites"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/sites/{id}",
+      "covered_by": {
+        "write": "delete_docs_sites_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/sites/{id}",
+      "covered_by": {
+        "stream": "docs_sites_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/sites/{id}",
+      "covered_by": {
+        "write": "update_docs_sites_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/sites/{id}/redirects",
+      "covered_by": {
+        "stream": "docs_sites_id_redirects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/sites/{id}/redirects",
+      "covered_by": {
+        "write": "create_docs_sites_id_redirects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/sites/{id}/redirects/{redirect_id}",
+      "covered_by": {
+        "write": "delete_docs_sites_id_redirects_redirect_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/sites/{id}/redirects/{redirect_id}",
+      "covered_by": {
+        "write": "update_docs_sites_id_redirects_redirect_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/docs/sites/{id}/repositories",
+      "covered_by": {
+        "write": "delete_docs_sites_id_repositories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/sites/{id}/repositories",
+      "covered_by": {
+        "stream": "docs_sites_id_repositories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/docs/sites/{id}/repositories",
+      "covered_by": {
+        "write": "execute_docs_sites_id_repositories"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/docs/sites/{id}/repositories",
+      "covered_by": {
+        "write": "update_docs_sites_id_repositories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/docs/tree",
+      "covered_by": {
+        "stream": "docs_tree"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/campaigns",
+      "covered_by": {
+        "stream": "email_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/campaigns",
+      "covered_by": {
+        "write": "create_email_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/email/campaigns/{id}",
+      "covered_by": {
+        "write": "delete_email_campaigns_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/campaigns/{id}",
+      "covered_by": {
+        "stream": "email_campaigns_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/email/campaigns/{id}",
+      "covered_by": {
+        "write": "update_email_campaigns_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/campaigns/{id}/cancel",
+      "covered_by": {
+        "write": "execute_email_campaigns_id_cancel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/campaigns/{id}/deliver",
+      "covered_by": {
+        "write": "execute_email_campaigns_id_deliver"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/campaigns/{id}/preview",
+      "covered_by": {
+        "stream": "email_campaigns_id_preview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/campaigns/{id}/send",
+      "covered_by": {
+        "write": "execute_email_campaigns_id_send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/campaigns/{id}/test",
+      "covered_by": {
+        "write": "execute_email_campaigns_id_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/deliveries",
+      "covered_by": {
+        "stream": "email_deliveries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/deliveries/{id}",
+      "covered_by": {
+        "stream": "email_deliveries_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/layouts",
+      "covered_by": {
+        "stream": "email_layouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/senders",
+      "covered_by": {
+        "stream": "email_senders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/unsubscribe_groups",
+      "covered_by": {
+        "stream": "email_unsubscribe_groups"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/email/unsubscribe_groups/{id}/members",
+      "covered_by": {
+        "write": "delete_email_unsubscribe_groups_id_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/email/unsubscribe_groups/{id}/members",
+      "covered_by": {
+        "stream": "email_unsubscribe_groups_id_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/email/unsubscribe_groups/{id}/members",
+      "covered_by": {
+        "write": "execute_email_unsubscribe_groups_id_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/email/unsubscribe_groups/{id}/members/{member_id}",
+      "covered_by": {
+        "write": "delete_email_unsubscribe_groups_id_members_member_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/entities",
+      "covered_by": {
+        "stream": "entities"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/flow/actions/runs/{id}",
+      "covered_by": {
+        "write": "update_flow_actions_runs_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/flow/extensions/actions",
+      "covered_by": {
+        "stream": "flow_extensions_actions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/flow/extensions/actions",
+      "covered_by": {
+        "write": "create_flow_extensions_actions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/flow/extensions/actions/{id}",
+      "covered_by": {
+        "write": "delete_flow_extensions_actions_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/flow/extensions/actions/{id}",
+      "covered_by": {
+        "write": "update_flow_extensions_actions_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/flow/extensions/triggers/{handle}",
+      "covered_by": {
+        "write": "delete_flow_extensions_triggers_handle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/flows",
+      "covered_by": {
+        "stream": "flows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/flows",
+      "covered_by": {
+        "write": "create_flows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/flows/{id}",
+      "covered_by": {
+        "write": "delete_flows_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/flows/{id}",
+      "covered_by": {
+        "stream": "flows_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/flows/{id}",
+      "covered_by": {
+        "write": "update_flows_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/journal_entries",
+      "covered_by": {
+        "stream": "journal_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/journal_entries",
+      "covered_by": {
+        "write": "create_journal_entries"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/journal_entries/{id}",
+      "covered_by": {
+        "write": "delete_journal_entries_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/journal_entries/{id}",
+      "covered_by": {
+        "stream": "journal_entries_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/journal_entries/{id}",
+      "covered_by": {
+        "write": "update_journal_entries_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists",
+      "covered_by": {
+        "write": "create_lists"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/lists/{id}",
+      "covered_by": {
+        "write": "delete_lists_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists/{id}",
+      "covered_by": {
+        "stream": "lists_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/lists/{id}",
+      "covered_by": {
+        "write": "update_lists_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists/{id}/add",
+      "covered_by": {
+        "write": "execute_lists_id_add"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists/{id}/remove",
+      "covered_by": {
+        "write": "execute_lists_id_remove"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings",
+      "covered_by": {
+        "stream": "meetings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings",
+      "covered_by": {
+        "write": "create_meetings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/meetings/{id}",
+      "covered_by": {
+        "write": "delete_meetings_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings/{id}",
+      "covered_by": {
+        "stream": "meetings_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/meetings/{id}",
+      "covered_by": {
+        "write": "update_meetings_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/meetings/{id}/attendees/{attendeeId}",
+      "covered_by": {
+        "write": "update_meetings_id_attendees_attendee_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/meetings/{id}/permissions",
+      "covered_by": {
+        "write": "delete_meetings_id_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings/{id}/permissions",
+      "covered_by": {
+        "stream": "meetings_id_permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/{id}/permissions",
+      "covered_by": {
+        "write": "execute_meetings_id_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings/{id}/recording-url",
+      "covered_by": {
+        "stream": "meetings_id_recording_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/{id}/task-suggestions/{suggestionId}/accept",
+      "covered_by": {
+        "write": "execute_meetings_id_task_suggestions_suggestion_id_accept"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/{id}/task-suggestions/{suggestionId}/dismiss",
+      "covered_by": {
+        "write": "execute_meetings_id_task_suggestions_suggestion_id_dismiss"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings/{id}/transcribe",
+      "covered_by": {
+        "stream": "meetings_id_transcribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/{id}/transcribe",
+      "covered_by": {
+        "write": "execute_meetings_id_transcribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/{id}/transcribe/upload",
+      "covered_by": {
+        "write": "create_meetings_id_transcribe_upload"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/meetings/{id}/visibility",
+      "covered_by": {
+        "write": "update_meetings_id_visibility"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/metrics/sales",
+      "covered_by": {
+        "stream": "metrics_sales"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notification_preferences",
+      "covered_by": {
+        "stream": "notification_preferences"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/notification_preferences",
+      "covered_by": {
+        "write": "update_notification_preferences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organization",
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscriptions/{id}",
+      "covered_by": {
+        "stream": "subscriptions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/synced_emails",
+      "covered_by": {
+        "stream": "synced_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/synced_emails",
+      "covered_by": {
+        "write": "execute_synced_emails"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/synced_emails/{id}",
+      "covered_by": {
+        "write": "delete_synced_emails_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/synced_emails/{id}",
+      "covered_by": {
+        "stream": "synced_emails_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/synced_emails/{id}",
+      "covered_by": {
+        "write": "update_synced_emails_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/synced_emails/{id}/messages",
+      "covered_by": {
+        "stream": "synced_emails_id_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/synced_emails/{id}/messages",
+      "covered_by": {
+        "write": "execute_synced_emails_id_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tasks",
+      "covered_by": {
+        "write": "create_tasks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tasks/{id}",
+      "covered_by": {
+        "write": "delete_tasks_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks/{id}",
+      "covered_by": {
+        "stream": "tasks_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tasks/{id}",
+      "covered_by": {
+        "write": "update_tasks_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks/{id}/comments",
+      "covered_by": {
+        "stream": "tasks_id_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tasks/{id}/comments",
+      "covered_by": {
+        "write": "create_tasks_id_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tasks/{id}/comments/{commentId}",
+      "covered_by": {
+        "write": "delete_tasks_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tasks/{id}/comments/{commentId}",
+      "covered_by": {
+        "write": "update_tasks_id_comments_comment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks/{id}/todo-items",
+      "covered_by": {
+        "stream": "tasks_id_todo_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tasks/{id}/todo-items",
+      "covered_by": {
+        "write": "create_tasks_id_todo_items"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tasks/{id}/todo-items/{itemId}",
+      "covered_by": {
+        "write": "delete_tasks_id_todo_items_item_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tasks/{id}/todo-items/{itemId}",
+      "covered_by": {
+        "stream": "tasks_id_todo_items_item_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tasks/{id}/todo-items/{itemId}",
+      "covered_by": {
+        "write": "update_tasks_id_todo_items_item_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets",
+      "covered_by": {
+        "write": "create_tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}",
+      "covered_by": {
+        "stream": "tickets_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tickets/{id}",
+      "covered_by": {
+        "write": "update_tickets_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets/{id}/ai-replies",
+      "covered_by": {
+        "write": "execute_tickets_id_ai_replies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}/events",
+      "covered_by": {
+        "stream": "tickets_id_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets/{id}/events",
+      "covered_by": {
+        "write": "create_tickets_id_events"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tickets/{id}/events",
+      "covered_by": {
+        "write": "update_tickets_id_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}/loops",
+      "covered_by": {
+        "stream": "tickets_id_loops"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}/loops/{loopId}",
+      "covered_by": {
+        "stream": "tickets_id_loops_loop_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}/messages",
+      "covered_by": {
+        "stream": "tickets_id_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets/{id}/messages",
+      "covered_by": {
+        "write": "create_tickets_id_messages"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tickets/{id}/messages",
+      "covered_by": {
+        "write": "update_tickets_id_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/{id}/messages/{messageId}",
+      "covered_by": {
+        "stream": "tickets_id_messages_message_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/saved_filters",
+      "covered_by": {
+        "stream": "tickets_saved_filters"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets/saved_filters",
+      "covered_by": {
+        "write": "create_tickets_saved_filters"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tickets/saved_filters/{filter_id}",
+      "covered_by": {
+        "write": "delete_tickets_saved_filters_filter_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/saved_filters/{filter_id}",
+      "covered_by": {
+        "stream": "tickets_saved_filters_filter_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tickets/saved_filters/{filter_id}",
+      "covered_by": {
+        "write": "update_tickets_saved_filters_filter_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/saved_replies",
+      "covered_by": {
+        "stream": "tickets_saved_replies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tickets/saved_replies",
+      "covered_by": {
+        "write": "create_tickets_saved_replies"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tickets/saved_replies/{reply_id}",
+      "covered_by": {
+        "write": "delete_tickets_saved_replies_reply_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickets/saved_replies/{reply_id}",
+      "covered_by": {
+        "stream": "tickets_saved_replies_reply_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/tickets/saved_replies/{reply_id}",
+      "covered_by": {
+        "write": "update_tickets_saved_replies_reply_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/timeline_comments",
+      "covered_by": {
+        "stream": "timeline_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/timeline_comments",
+      "covered_by": {
+        "write": "create_timeline_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/timeline_comments/{id}",
+      "covered_by": {
+        "write": "delete_timeline_comments_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/timeline_comments/{id}",
+      "covered_by": {
+        "stream": "timeline_comments_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/timeline_comments/{id}",
+      "covered_by": {
+        "write": "update_timeline_comments_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/transactions/{id}",
+      "covered_by": {
+        "stream": "transactions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/usage_events",
+      "covered_by": {
+        "stream": "usage_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/usage_events",
+      "covered_by": {
+        "write": "create_usage_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/{id}",
+      "covered_by": {
+        "stream": "users_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "covered_by": {
+        "write": "create_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhooks_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/webhooks/{id}",
+      "covered_by": {
+        "write": "update_webhooks_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/join_approved",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/join_denied",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/join_requested",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/joined",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/payment_requested",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/payout_pending",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/referral",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/affiliates/referral_requested",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/contacts/created",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/contacts/deleted",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/contacts/updated",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/approaching_capped_limit",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/capped_amount_updated",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/contact_added",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/contact_removed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/deactivated",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/downgraded",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/first_identify",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/installed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/one_time_charge_activated",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/platform_plan_changed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/reactivated",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/refunded",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/reinstalled",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/reviewed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/subscribed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/subscription_frozen",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/subscription_unfrozen",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/trial_expired",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/trial_extended",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/uninstalled",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/unsubscribed",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/upgraded",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/usage_charge_exceeds_limit",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/customers/usage_event",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/extensions/uninstalled",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/helpdesk/thread_assigned",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/helpdesk/thread_created",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/helpdesk/thread_message_received",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/transactions/created",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Webhook event callback payload documented for receivers; not a Mantle client endpoint to invoke."
+      }
+    }
+  ]
+}

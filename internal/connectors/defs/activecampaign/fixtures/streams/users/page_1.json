@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": "1",
+          "username": "fixtureuser",
+          "firstName": "Fixture",
+          "lastName": "User",
+          "email": "fixtureuser@example.com",
+          "phone": ""
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

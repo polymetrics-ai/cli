@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/conversions", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": { "total_count": 0 } }
+  }
+}

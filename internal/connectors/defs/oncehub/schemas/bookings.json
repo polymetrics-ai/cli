@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "bookings",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_updated_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "booking_page": { "type": ["string", "null"] },
+    "event_type": { "type": ["string", "null"] },
+    "contact": { "type": ["string", "null"] },
+    "owner": { "type": ["string", "null"] },
+    "starting_time": { "type": ["string", "null"], "format": "date-time" },
+    "duration_minutes": { "type": ["number", "null"] },
+    "customer_timezone": { "type": ["string", "null"] },
+    "location_description": { "type": ["string", "null"] },
+    "tracking_id": { "type": ["string", "null"] },
+    "in_trash": { "type": ["boolean", "null"] },
+    "creation_time": { "type": ["string", "null"], "format": "date-time" },
+    "last_updated_time": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

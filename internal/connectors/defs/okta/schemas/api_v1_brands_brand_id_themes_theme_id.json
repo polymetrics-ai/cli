@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "backgroundImage": {
+      "type": "string"
+    },
+    "emailTemplateTouchPointVariant": {
+      "type": "string",
+      "description": "Variant for email templates. You can publish a theme for email templates with different combinations of assets. Variants are preset combinations of those assets.\n",
+      "enum": [
+        "FULL_THEME",
+        "OKTA_DEFAULT"
+      ]
+    },
+    "endUserDashboardTouchPointVariant": {
+      "type": "string",
+      "description": "Variant for the Okta End-User Dashboard. You can publish a theme for end-user dashboard with different combinations of assets. Variants are preset combinations of those assets.\n",
+      "enum": [
+        "FULL_THEME",
+        "LOGO_ON_FULL_WHITE_BACKGROUND",
+        "OKTA_DEFAULT",
+        "WHITE_LOGO_BACKGROUND"
+      ]
+    },
+    "errorPageTouchPointVariant": {
+      "type": "string",
+      "description": "Variant for the error page. You can publish a theme for error page with different combinations of assets. Variants are preset combinations of those assets.\n",
+      "enum": [
+        "BACKGROUND_IMAGE",
+        "BACKGROUND_SECONDARY_COLOR",
+        "OKTA_DEFAULT"
+      ]
+    },
+    "favicon": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "loadingPageTouchPointVariant": {
+      "type": "string",
+      "description": "Variant for the Okta loading page. You can publish a theme for Okta loading page with different combinations of assets. Variants are preset combinations of those assets.\n",
+      "enum": [
+        "NONE",
+        "OKTA_DEFAULT"
+      ]
+    },
+    "logo": {
+      "type": "string"
+    },
+    "primaryColorContrastHex": {
+      "type": "string",
+      "description": "Primary color contrast hex code"
+    },
+    "primaryColorHex": {
+      "type": "string",
+      "description": "Primary color hex code"
+    },
+    "secondaryColorContrastHex": {
+      "type": "string",
+      "description": "Secondary color contrast hex code"
+    },
+    "secondaryColorHex": {
+      "type": "string",
+      "description": "Secondary color hex code"
+    },
+    "signInPageTouchPointVariant": {
+      "type": "string",
+      "description": "Variant for the Okta sign-in page. You can publish a theme for sign-in page with different combinations of assets. Variants are preset combinations of those assets.\n> **Note:**  For a non-`OKTA_DEFAULT` variant, `primaryColorHex` is used for button background color and `primaryColorContrastHex` is used to optimize the opacity for button text.\n",
+      "enum": [
+        "BACKGROUND_IMAGE",
+        "BACKGROUND_SECONDARY_COLOR",
+        "OKTA_DEFAULT"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

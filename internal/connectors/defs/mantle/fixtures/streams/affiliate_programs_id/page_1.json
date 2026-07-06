@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/affiliate_programs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "affiliateProgram": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "rules": {
+          "id": "rules_fixture_id"
+        },
+        "allowAffiliateDashboardAccess": true,
+        "requireApprovalToJoin": true,
+        "termsUrl": "https://example.com/fixture",
+        "requireTermsAcceptance": true,
+        "removeOnUninstallDays": 1,
+        "customAffiliateLink": "fixture",
+        "startCountingCommissionFrom": "2026-01-01T00:00:00Z",
+        "showInMarketplace": true,
+        "requiredAffiliateFields": {
+          "id": "required_affiliate_fields_fixture_id"
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "appId": "app_id_fixture",
+        "signupLink": "fixture",
+        "affiliatesCount": 1,
+        "groups": [
+          {
+            "id": "id_fixture",
+            "name": "fixture",
+            "rules": {
+              "id": "rules_fixture_id"
+            },
+            "showInMarketplace": true,
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

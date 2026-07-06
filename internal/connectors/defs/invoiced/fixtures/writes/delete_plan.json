@@ -1,0 +1,13 @@
+{
+  "record": {
+    "plan_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/plans/123"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

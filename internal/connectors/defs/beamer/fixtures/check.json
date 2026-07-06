@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/nps", "query": { "page": "0", "maxResults": "1" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users/me/organizations/", "query": { "expand": "venue,ticket_classes" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": true, "continuation": "org_cursor_2" },
+      "organizations": [
+        { "id": "org_fixture_1", "name": "Fixture Org One", "vertical": "default", "locale": "en_US", "image_id": "img_fixture_1" },
+        { "id": "org_fixture_2", "name": "Fixture Org Two", "vertical": "community", "locale": "en_US", "image_id": null }
+      ]
+    }
+  }
+}

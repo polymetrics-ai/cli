@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/leave-management/requests" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "status": "Approved", "status_code": "approved", "policy_id": 1, "employee_id": 1, "start_date": "2026-01-10", "end_date": "2026-01-12", "request_date": "2026-01-05", "approval_date": "2026-01-06", "hours": null },
+        { "id": 2, "status": "Pending", "status_code": "pending", "policy_id": 2, "employee_id": 2, "start_date": "2026-01-15", "end_date": "2026-01-15", "request_date": "2026-01-14", "approval_date": null, "hours": 4 }
+      ],
+      "meta": { "current_page": 1, "next_page": 2, "previous_page": null, "total_pages": 2, "per_page": 2, "total_entries": 3 }
+    }
+  }
+}

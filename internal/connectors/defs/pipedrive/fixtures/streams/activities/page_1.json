@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/activities",
+    "query": { "start": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 30,
+          "subject": "Fixture Call",
+          "type": "call",
+          "done": false,
+          "due_date": "2026-01-05",
+          "deal_id": 1,
+          "person_id": 10,
+          "org_id": 20,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00"
+        }
+      ],
+      "additional_data": {
+        "pagination": { "start": 0, "limit": 100, "more_items_in_collection": false, "next_start": null }
+      }
+    }
+  }
+}

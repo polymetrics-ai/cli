@@ -1,0 +1,26 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "change_request_id": "synthetic-conformance-value",
+    "comment_id": "synthetic-conformance-value",
+    "body": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/comments/synthetic-conformance-value/replies",
+    "body": {
+      "body": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "post_comment_reply_in_change_request_fixture_1"
+    }
+  }
+}

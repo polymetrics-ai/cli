@@ -1,0 +1,15 @@
+{
+  "record": {
+    "lead_id": "456",
+    "email_template_id": "template-1",
+    "from_user_id": "fixture-user@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/456/emails/send_email_from_template",
+    "body": {
+      "email_template_id": "template-1",
+      "from_user_id": "fixture-user@example.invalid"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/configurablereportdata/v1/synthetic-conformance-value/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "columns": [
+        { "header": "District", "slug": "district" },
+        { "header": "Visited", "slug": "number_of_children_visited" }
+      ],
+      "data": [
+        { "district": "Fixture District", "number_of_children_visited": 46 }
+      ],
+      "next_page": null,
+      "total_records": 1
+    }
+  }
+}

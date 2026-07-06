@@ -12,20 +12,47 @@ SYNOPSIS
 DESCRIPTION
   Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  account_id
+  base_url
+  end_date
+  mode
+  start_date
+  api_token (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    fields: currency(), id(), industry(), name(), status(), time_zone(), type()
+  leads:
+    primary key: id
+    cursor: last_visit_date
+    fields: city(), country(), employee_count(), first_visit_date(), id(), industry(), last_visit_date(), name(), quality(), type(), visits(), website()
+  visits:
+    primary key: id
+    cursor: visit_date
+    fields: ended_at(), hostname(), id(), pageviews(), referring_url(), source(), started_at(), type(), visit_date(), visit_length()
+  custom_feeds:
+    primary key: id
+    fields: id(), name(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Leadfeeder API read of account, lead, and visit data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

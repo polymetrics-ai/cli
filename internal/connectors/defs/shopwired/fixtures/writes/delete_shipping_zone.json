@@ -1,0 +1,14 @@
+{
+  "record": {
+    "country_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/shipping-zones/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

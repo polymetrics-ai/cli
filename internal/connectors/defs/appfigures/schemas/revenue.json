@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "revenue",
+  "type": "object",
+  "x-primary-key": ["report"],
+  "required": ["report"],
+  "properties": {
+    "report": { "type": "string" },
+    "sales": { "type": ["string", "null"] },
+    "iaps": { "type": ["string", "null"] },
+    "subscriptions": { "type": ["string", "null"] },
+    "ads": { "type": ["string", "null"] },
+    "edu": { "type": ["string", "null"] },
+    "business": { "type": ["string", "null"] },
+    "returns": { "type": ["string", "null"] },
+    "total": { "type": ["string", "null"] },
+    "gross_sales": { "type": ["string", "null"] },
+    "gross_iaps": { "type": ["string", "null"] },
+    "gross_subscriptions": { "type": ["string", "null"] },
+    "gross_edu": { "type": ["string", "null"] },
+    "gross_business": { "type": ["string", "null"] },
+    "gross_returns": { "type": ["string", "null"] },
+    "gross_total": { "type": ["string", "null"] }
+  }
+}

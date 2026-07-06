@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "subject": { "type": ["string", "null"] },
+    "from": { "type": ["string", "null"] },
+    "to": { "type": ["string", "null"] },
+    "cc": { "type": ["string", "null"] },
+    "bcc": { "type": ["string", "null"] },
+    "sequence": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "trackingEnabled": { "type": ["boolean", "null"] },
+    "linkTrackingEnabled": { "type": ["boolean", "null"] },
+    "fileTrackingEnabled": { "type": ["boolean", "null"] },
+    "created": { "type": ["string", "null"] },
+    "sent": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

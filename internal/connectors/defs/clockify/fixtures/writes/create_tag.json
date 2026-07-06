@@ -1,0 +1,7 @@
+{
+  "record": { "name": "Fixture Tag" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/workspaces/synthetic-conformance-value/tags"
+  }
+}

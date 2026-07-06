@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/apps/api/synthetic-conformance-value/multimedia/status/synthetic-conformance-value/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "complete": true,
+      "in_celery": false,
+      "progress": { "percent": 100, "current": 10, "total": 10 },
+      "errors": [],
+      "processing_id": "processing_fixture_1"
+    }
+  }
+}

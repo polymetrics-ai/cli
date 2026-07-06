@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ledger_operations",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "ledger_operation": {
+            "id": "lop_fixture_1",
+            "type": "grant",
+            "amount": "100.0",
+            "start_balance": "0.0",
+            "end_balance": "100.0",
+            "subscription_id": "sub_fixture_1",
+            "unit_id": "unit_fixture_1",
+            "unit_type": "credit_unit",
+            "created_at": 1767225600,
+            "modified_at": 1767225601
+          }
+        }
+      ]
+    }
+  }
+}

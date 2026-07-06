@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "call_notification",
+  "type": "object",
+  "x-primary-key": [
+    "sid"
+  ],
+  "properties": {
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "api_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "call_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "error_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "log": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "message_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "message_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "more_info": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_variables": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "response_body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "response_headers": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

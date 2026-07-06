@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "error": {
+      "type": "object",
+      "description": "For fine-tuning jobs that have `failed`, this will contain more information on the cause of the failure.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "param": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "finished_at": {
+      "type": "integer"
+    },
+    "hyperparameters": {
+      "type": "object",
+      "properties": {
+        "batch_size": {
+          "type": "integer",
+          "description": "Batch size for training"
+        },
+        "learning_rate": {
+          "type": "number",
+          "description": "Learning rate for training"
+        },
+        "n_epochs": {
+          "type": "integer",
+          "description": "Number of epochs for training"
+        },
+        "warmup_ratio": {
+          "type": "number",
+          "description": "Warmup ratio for learning rate"
+        },
+        "weight_decay": {
+          "type": "number",
+          "description": "Weight decay for optimizer"
+        },
+        "packing": {
+          "type": "boolean",
+          "description": "Whether to use packing for training"
+        },
+        "max_grad_norm": {
+          "type": "number",
+          "description": "Maximum gradient norm for optimizer"
+        },
+        "context_length": {
+          "type": "integer",
+          "description": "Context length for training"
+        },
+        "lora": {
+          "type": "boolean",
+          "description": "Whether to use LoRA (Low-Rank Adaptation) for training"
+        },
+        "lora_r": {
+          "type": "integer",
+          "description": "Rank for LoRA"
+        },
+        "lora_alpha": {
+          "type": "integer",
+          "description": "Alpha parameter for LoRA"
+        },
+        "lora_dropout": {
+          "type": "number",
+          "description": "Dropout rate for LoRA"
+        }
+      },
+      "additionalProperties": true
+    },
+    "method": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "supervised": {
+          "type": "object",
+          "properties": {
+            "hyperparameters": {
+              "type": "object",
+              "properties": {
+                "batch_size": {
+                  "type": "integer",
+                  "description": "Batch size for training"
+                },
+                "learning_rate": {
+                  "type": "number",
+                  "description": "Learning rate for training"
+                },
+                "n_epochs": {
+                  "type": "integer",
+                  "description": "Number of epochs for training"
+                },
+                "warmup_ratio": {
+                  "type": "number",
+                  "description": "Warmup ratio for learning rate"
+                },
+                "weight_decay": {
+                  "type": "number",
+                  "description": "Weight decay for optimizer"
+                },
+                "packing": {
+                  "type": "boolean",
+                  "description": "Whether to use packing for training"
+                },
+                "max_grad_norm": {
+                  "type": "number",
+                  "description": "Maximum gradient norm for optimizer"
+                },
+                "context_length": {
+                  "type": "integer",
+                  "description": "Context length for training"
+                },
+                "lora": {
+                  "type": "boolean",
+                  "description": "Whether to use LoRA (Low-Rank Adaptation) for training"
+                },
+                "lora_r": {
+                  "type": "integer",
+                  "description": "Rank for LoRA"
+                },
+                "lora_alpha": {
+                  "type": "integer",
+                  "description": "Alpha parameter for LoRA"
+                },
+                "lora_dropout": {
+                  "type": "number",
+                  "description": "Dropout rate for LoRA"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "integrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "wandb": {
+            "type": "object",
+            "properties": {
+              "project": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "entity": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "from_checkpoint": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "model": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string"
+    },
+    "organization_id": {
+      "type": "string"
+    },
+    "result_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "validating_files",
+        "queued",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "trained_tokens": {
+      "type": "integer"
+    },
+    "training_file": {
+      "type": "string"
+    },
+    "validation_file": {
+      "type": "string"
+    },
+    "estimated_finish": {
+      "type": "integer"
+    },
+    "trained_steps": {
+      "type": "integer"
+    },
+    "total_steps": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

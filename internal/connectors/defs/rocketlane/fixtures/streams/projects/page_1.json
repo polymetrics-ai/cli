@@ -1,0 +1,722 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "proj_fixture_1",
+          "name": "Fixture Project 1",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_1",
+          "updated_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": "proj_fixture_2",
+          "name": "Fixture Project 2",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_2",
+          "updated_at": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": "proj_fixture_3",
+          "name": "Fixture Project 3",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_3",
+          "updated_at": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": "proj_fixture_4",
+          "name": "Fixture Project 4",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_4",
+          "updated_at": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": "proj_fixture_5",
+          "name": "Fixture Project 5",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_5",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": "proj_fixture_6",
+          "name": "Fixture Project 6",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_6",
+          "updated_at": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": "proj_fixture_7",
+          "name": "Fixture Project 7",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_7",
+          "updated_at": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": "proj_fixture_8",
+          "name": "Fixture Project 8",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_8",
+          "updated_at": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": "proj_fixture_9",
+          "name": "Fixture Project 9",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_9",
+          "updated_at": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": "proj_fixture_10",
+          "name": "Fixture Project 10",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_10",
+          "updated_at": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": "proj_fixture_11",
+          "name": "Fixture Project 11",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_11",
+          "updated_at": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": "proj_fixture_12",
+          "name": "Fixture Project 12",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_12",
+          "updated_at": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": "proj_fixture_13",
+          "name": "Fixture Project 13",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_13",
+          "updated_at": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": "proj_fixture_14",
+          "name": "Fixture Project 14",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_14",
+          "updated_at": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": "proj_fixture_15",
+          "name": "Fixture Project 15",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_15",
+          "updated_at": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": "proj_fixture_16",
+          "name": "Fixture Project 16",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_16",
+          "updated_at": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": "proj_fixture_17",
+          "name": "Fixture Project 17",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_17",
+          "updated_at": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": "proj_fixture_18",
+          "name": "Fixture Project 18",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_18",
+          "updated_at": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": "proj_fixture_19",
+          "name": "Fixture Project 19",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_19",
+          "updated_at": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": "proj_fixture_20",
+          "name": "Fixture Project 20",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_20",
+          "updated_at": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": "proj_fixture_21",
+          "name": "Fixture Project 21",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_21",
+          "updated_at": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": "proj_fixture_22",
+          "name": "Fixture Project 22",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_22",
+          "updated_at": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": "proj_fixture_23",
+          "name": "Fixture Project 23",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_23",
+          "updated_at": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": "proj_fixture_24",
+          "name": "Fixture Project 24",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_24",
+          "updated_at": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": "proj_fixture_25",
+          "name": "Fixture Project 25",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_25",
+          "updated_at": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": "proj_fixture_26",
+          "name": "Fixture Project 26",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_26",
+          "updated_at": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": "proj_fixture_27",
+          "name": "Fixture Project 27",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_27",
+          "updated_at": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": "proj_fixture_28",
+          "name": "Fixture Project 28",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_28",
+          "updated_at": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": "proj_fixture_29",
+          "name": "Fixture Project 29",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_29",
+          "updated_at": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": "proj_fixture_30",
+          "name": "Fixture Project 30",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_30",
+          "updated_at": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": "proj_fixture_31",
+          "name": "Fixture Project 31",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_31",
+          "updated_at": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": "proj_fixture_32",
+          "name": "Fixture Project 32",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_32",
+          "updated_at": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": "proj_fixture_33",
+          "name": "Fixture Project 33",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_33",
+          "updated_at": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": "proj_fixture_34",
+          "name": "Fixture Project 34",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_34",
+          "updated_at": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": "proj_fixture_35",
+          "name": "Fixture Project 35",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_35",
+          "updated_at": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": "proj_fixture_36",
+          "name": "Fixture Project 36",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_36",
+          "updated_at": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": "proj_fixture_37",
+          "name": "Fixture Project 37",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_37",
+          "updated_at": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": "proj_fixture_38",
+          "name": "Fixture Project 38",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_38",
+          "updated_at": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": "proj_fixture_39",
+          "name": "Fixture Project 39",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_39",
+          "updated_at": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": "proj_fixture_40",
+          "name": "Fixture Project 40",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_40",
+          "updated_at": "2026-01-01T00:40:00Z"
+        },
+        {
+          "id": "proj_fixture_41",
+          "name": "Fixture Project 41",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_41",
+          "updated_at": "2026-01-01T00:41:00Z"
+        },
+        {
+          "id": "proj_fixture_42",
+          "name": "Fixture Project 42",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_42",
+          "updated_at": "2026-01-01T00:42:00Z"
+        },
+        {
+          "id": "proj_fixture_43",
+          "name": "Fixture Project 43",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_43",
+          "updated_at": "2026-01-01T00:43:00Z"
+        },
+        {
+          "id": "proj_fixture_44",
+          "name": "Fixture Project 44",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_44",
+          "updated_at": "2026-01-01T00:44:00Z"
+        },
+        {
+          "id": "proj_fixture_45",
+          "name": "Fixture Project 45",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_45",
+          "updated_at": "2026-01-01T00:45:00Z"
+        },
+        {
+          "id": "proj_fixture_46",
+          "name": "Fixture Project 46",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_46",
+          "updated_at": "2026-01-01T00:46:00Z"
+        },
+        {
+          "id": "proj_fixture_47",
+          "name": "Fixture Project 47",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_47",
+          "updated_at": "2026-01-01T00:47:00Z"
+        },
+        {
+          "id": "proj_fixture_48",
+          "name": "Fixture Project 48",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_48",
+          "updated_at": "2026-01-01T00:48:00Z"
+        },
+        {
+          "id": "proj_fixture_49",
+          "name": "Fixture Project 49",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_49",
+          "updated_at": "2026-01-01T00:49:00Z"
+        },
+        {
+          "id": "proj_fixture_50",
+          "name": "Fixture Project 50",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_50",
+          "updated_at": "2026-01-01T00:50:00Z"
+        },
+        {
+          "id": "proj_fixture_51",
+          "name": "Fixture Project 51",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_51",
+          "updated_at": "2026-01-01T00:51:00Z"
+        },
+        {
+          "id": "proj_fixture_52",
+          "name": "Fixture Project 52",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_52",
+          "updated_at": "2026-01-01T00:52:00Z"
+        },
+        {
+          "id": "proj_fixture_53",
+          "name": "Fixture Project 53",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_53",
+          "updated_at": "2026-01-01T00:53:00Z"
+        },
+        {
+          "id": "proj_fixture_54",
+          "name": "Fixture Project 54",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_54",
+          "updated_at": "2026-01-01T00:54:00Z"
+        },
+        {
+          "id": "proj_fixture_55",
+          "name": "Fixture Project 55",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_55",
+          "updated_at": "2026-01-01T00:55:00Z"
+        },
+        {
+          "id": "proj_fixture_56",
+          "name": "Fixture Project 56",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_56",
+          "updated_at": "2026-01-01T00:56:00Z"
+        },
+        {
+          "id": "proj_fixture_57",
+          "name": "Fixture Project 57",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_57",
+          "updated_at": "2026-01-01T00:57:00Z"
+        },
+        {
+          "id": "proj_fixture_58",
+          "name": "Fixture Project 58",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_58",
+          "updated_at": "2026-01-01T00:58:00Z"
+        },
+        {
+          "id": "proj_fixture_59",
+          "name": "Fixture Project 59",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_59",
+          "updated_at": "2026-01-01T00:59:00Z"
+        },
+        {
+          "id": "proj_fixture_60",
+          "name": "Fixture Project 60",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_60",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "proj_fixture_61",
+          "name": "Fixture Project 61",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_61",
+          "updated_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": "proj_fixture_62",
+          "name": "Fixture Project 62",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_62",
+          "updated_at": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": "proj_fixture_63",
+          "name": "Fixture Project 63",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_63",
+          "updated_at": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": "proj_fixture_64",
+          "name": "Fixture Project 64",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_64",
+          "updated_at": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": "proj_fixture_65",
+          "name": "Fixture Project 65",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_65",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": "proj_fixture_66",
+          "name": "Fixture Project 66",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_66",
+          "updated_at": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": "proj_fixture_67",
+          "name": "Fixture Project 67",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_67",
+          "updated_at": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": "proj_fixture_68",
+          "name": "Fixture Project 68",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_68",
+          "updated_at": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": "proj_fixture_69",
+          "name": "Fixture Project 69",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_69",
+          "updated_at": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": "proj_fixture_70",
+          "name": "Fixture Project 70",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_70",
+          "updated_at": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": "proj_fixture_71",
+          "name": "Fixture Project 71",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_71",
+          "updated_at": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": "proj_fixture_72",
+          "name": "Fixture Project 72",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_72",
+          "updated_at": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": "proj_fixture_73",
+          "name": "Fixture Project 73",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_73",
+          "updated_at": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": "proj_fixture_74",
+          "name": "Fixture Project 74",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_74",
+          "updated_at": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": "proj_fixture_75",
+          "name": "Fixture Project 75",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_75",
+          "updated_at": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": "proj_fixture_76",
+          "name": "Fixture Project 76",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_76",
+          "updated_at": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": "proj_fixture_77",
+          "name": "Fixture Project 77",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_77",
+          "updated_at": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": "proj_fixture_78",
+          "name": "Fixture Project 78",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_78",
+          "updated_at": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": "proj_fixture_79",
+          "name": "Fixture Project 79",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_79",
+          "updated_at": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": "proj_fixture_80",
+          "name": "Fixture Project 80",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_80",
+          "updated_at": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": "proj_fixture_81",
+          "name": "Fixture Project 81",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_81",
+          "updated_at": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": "proj_fixture_82",
+          "name": "Fixture Project 82",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_82",
+          "updated_at": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": "proj_fixture_83",
+          "name": "Fixture Project 83",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_83",
+          "updated_at": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": "proj_fixture_84",
+          "name": "Fixture Project 84",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_84",
+          "updated_at": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": "proj_fixture_85",
+          "name": "Fixture Project 85",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_85",
+          "updated_at": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": "proj_fixture_86",
+          "name": "Fixture Project 86",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_86",
+          "updated_at": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": "proj_fixture_87",
+          "name": "Fixture Project 87",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_87",
+          "updated_at": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": "proj_fixture_88",
+          "name": "Fixture Project 88",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_88",
+          "updated_at": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": "proj_fixture_89",
+          "name": "Fixture Project 89",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_89",
+          "updated_at": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": "proj_fixture_90",
+          "name": "Fixture Project 90",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_90",
+          "updated_at": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": "proj_fixture_91",
+          "name": "Fixture Project 91",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_91",
+          "updated_at": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": "proj_fixture_92",
+          "name": "Fixture Project 92",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_92",
+          "updated_at": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": "proj_fixture_93",
+          "name": "Fixture Project 93",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_93",
+          "updated_at": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": "proj_fixture_94",
+          "name": "Fixture Project 94",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_94",
+          "updated_at": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": "proj_fixture_95",
+          "name": "Fixture Project 95",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_95",
+          "updated_at": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": "proj_fixture_96",
+          "name": "Fixture Project 96",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_96",
+          "updated_at": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": "proj_fixture_97",
+          "name": "Fixture Project 97",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_97",
+          "updated_at": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": "proj_fixture_98",
+          "name": "Fixture Project 98",
+          "status": "COMPLETED",
+          "customer_id": "cust_fixture_98",
+          "updated_at": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": "proj_fixture_99",
+          "name": "Fixture Project 99",
+          "status": "ON_HOLD",
+          "customer_id": "cust_fixture_99",
+          "updated_at": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": "proj_fixture_100",
+          "name": "Fixture Project 100",
+          "status": "IN_PROGRESS",
+          "customer_id": "cust_fixture_100",
+          "updated_at": "2026-01-01T00:40:00Z"
+        }
+      ],
+      "pageInfo": {
+        "page": 1,
+        "pageSize": 100,
+        "totalRecords": 101
+      }
+    }
+  }
+}

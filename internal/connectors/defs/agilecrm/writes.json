@@ -1,0 +1,171 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["properties"],
+        "properties": {
+          "star_value": { "type": "string" },
+          "lead_score": { "type": "string" },
+          "tags": { "type": "array" },
+          "properties": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a live AgileCRM contact/company; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/edit-properties",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "properties"],
+        "properties": {
+          "id": { "type": "string" },
+          "properties": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; overwrites live AgileCRM contact property fields; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live AgileCRM contact; approval required"
+    },
+    {
+      "name": "create_deal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunity",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "expected_value": { "type": "number" },
+          "milestone": { "type": "string" },
+          "pipeline_id": { "type": "string" },
+          "probability": { "type": "integer" },
+          "close_date": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a live AgileCRM deal; approval required"
+    },
+    {
+      "name": "update_deal",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/opportunity/partial-update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "milestone": { "type": "string" },
+          "expected_value": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; overwrites live AgileCRM deal fields; approval required"
+    },
+    {
+      "name": "delete_deal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunity/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live AgileCRM deal; approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subject", "type"],
+        "properties": {
+          "subject": { "type": "string" },
+          "type": { "type": "string" },
+          "due": { "type": "integer" },
+          "priority_type": { "type": "string" },
+          "status": { "type": "string" },
+          "contacts": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a live AgileCRM task; approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tasks/partial-update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "subject": { "type": "string" },
+          "status": { "type": "string" },
+          "due": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; overwrites live AgileCRM task fields; approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live AgileCRM task; approval required"
+    }
+  ]
+}

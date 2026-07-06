@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/checkout_comments_widget"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widget": "<div class=\"jdgm-checkout-comments\">Checkout comments</div>"
+    }
+  }
+}

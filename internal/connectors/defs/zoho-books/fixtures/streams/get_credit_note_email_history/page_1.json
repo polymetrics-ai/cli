@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/creditnotes/synthetic-conformance-value/emailhistory",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "email_history": [
+        {
+          "mailhistory_id": "get_credit_note_email_history_fixture_1",
+          "name": "get_credit_note_email_history fixture 1",
+          "date": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "get_credit_note_email_history_fixture_1",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

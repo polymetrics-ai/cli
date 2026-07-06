@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "unpaid_payments",
+  "type": "object",
+  "x-primary-key": ["affiliate_id"],
+  "required": ["affiliate_id"],
+  "properties": {
+    "affiliate_id": { "type": "integer" },
+    "affiliate_email": { "type": ["string", "null"] },
+    "total_referrals": { "type": ["integer", "null"] },
+    "payment_method": { "type": ["string", "null"] },
+    "total_commission": { "type": ["number", "null"] },
+    "total_sales": { "type": ["number", "null"] },
+    "total_products": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "shp_fixture_1",
+    "ruleset_name": "ruleset_fixture",
+    "planned_ship_date": "2026-01-02",
+    "deliver_by_date": "2026-01-05"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shipments/shp_fixture_1/luma",
+    "body": {
+      "ruleset_name": "ruleset_fixture",
+      "planned_ship_date": "2026-01-02",
+      "deliver_by_date": "2026-01-05"
+    }
+  },
+  "response": { "status": 200, "body": { "id": "shp_fixture_1", "object": "Shipment" } }
+}

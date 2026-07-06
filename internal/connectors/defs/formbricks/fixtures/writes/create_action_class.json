@@ -1,0 +1,20 @@
+{
+  "record": {
+    "workspaceId": "wrk_fixture_1",
+    "name": "Fixture Action",
+    "type": "code",
+    "key": "fixture-action",
+    "description": "fixture action class"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/management/action-classes",
+    "body": {
+      "workspaceId": "wrk_fixture_1",
+      "name": "Fixture Action",
+      "type": "code",
+      "key": "fixture-action",
+      "description": "fixture action class"
+    }
+  }
+}

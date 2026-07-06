@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "authScheme": {
+      "type": "string",
+      "description": "A token is used to authenticate with the app. This property is only returned for the `TOKEN` authentication scheme.",
+      "enum": [
+        "TOKEN"
+      ]
+    },
+    "baseUrl": {
+      "type": "string",
+      "description": "Base URL"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "authScheme": {
+          "type": "string",
+          "description": "Defines the method of authentication",
+          "enum": [
+            "OAUTH2",
+            "TOKEN",
+            "UNKNOWN"
+          ]
+        },
+        "signing": {
+          "type": "object",
+          "description": "Only used for the Okta Org2Org (`okta_org2org`) app.\n\nThe signing key rotation setting.",
+          "properties": {
+            "rotationMode": {
+              "type": "string",
+              "description": "The signing key rotation setting for the provisioning connection",
+              "enum": [
+                "AUTO",
+                "MANUAL"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "status": {
+      "type": "string",
+      "description": "Provisioning connection status",
+      "enum": [
+        "DISABLED",
+        "ENABLED",
+        "UNKNOWN"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "authorize": {
+          "type": "object",
+          "description": "Link to authorize scopes",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs and guidance for the `href`",
+              "properties": {
+                "guidance": {
+                  "type": "array",
+                  "description": "Specifies the URI to invoke for granting scope consent required to complete the OAuth 2.0 connection\n",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

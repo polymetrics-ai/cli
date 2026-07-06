@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_list_1", "name": "Fixture-List-1", "displayName": "Fixture List 1", "description": "Sample list", "webUrl": "https://contoso.sharepoint.com/lists/1", "eTag": "etag-1", "createdDateTime": "2026-01-01T00:00:00Z", "lastModifiedDateTime": "2026-01-01T00:00:00Z", "list": { "template": "genericList" } }
+      ]
+    }
+  }
+}

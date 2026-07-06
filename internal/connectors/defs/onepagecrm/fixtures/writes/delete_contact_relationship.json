@@ -1,0 +1,10 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "relationship_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/fixture_id/relationships/fixture_id"
+  }
+}

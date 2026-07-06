@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Collection",
+    "description": "desc",
+    "slug": "fixture-collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/collections",
+    "body": {
+      "name": "Fixture Collection",
+      "description": "desc",
+      "slug": "fixture-collection"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/tasks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_task_1" },
+        { "gid": "fixture_task_2" }
+      ],
+      "next_page": null
+    }
+  }
+}

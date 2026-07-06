@@ -1,0 +1,22 @@
+{
+  "name": "aha",
+  "display_name": "Aha!",
+  "description": "Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and users through the Aha! REST API (read-only).",
+  "integration_type": "api",
+  "docs_url": "https://www.aha.io/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 30
+  },
+  "risk": {
+    "read": "external Aha! API read of planning and roadmap data"
+  }
+}

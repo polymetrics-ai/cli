@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/list.php"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 4,
+        "name": "Fixture segment rules 1",
+        "filter_type": "ALL",
+        "subscribers_count": 250,
+        "filter_data": [["gender", ["Equal", "women"]]]
+      },
+      {
+        "id": 5,
+        "name": "Fixture segment rules 2",
+        "filter_type": "ANY",
+        "subscribers_count": 48,
+        "filter_data": [["age", ["GreaterThan", "40"]]]
+      }
+    ]
+  }
+}

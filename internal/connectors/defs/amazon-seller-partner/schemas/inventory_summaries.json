@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "inventory_summaries",
+  "type": "object",
+  "x-primary-key": ["sellerSku"],
+  "x-cursor-field": "lastUpdatedTime",
+  "required": ["sellerSku"],
+  "properties": {
+    "sellerSku": { "type": "string" },
+    "fnSku": { "type": ["string", "null"] },
+    "asin": { "type": ["string", "null"] },
+    "condition": { "type": ["string", "null"] },
+    "productName": { "type": ["string", "null"] },
+    "totalQuantity": { "type": ["integer", "null"] },
+    "lastUpdatedTime": { "type": ["string", "null"] },
+    "inventoryDetails": { "type": ["object", "null"] }
+  }
+}

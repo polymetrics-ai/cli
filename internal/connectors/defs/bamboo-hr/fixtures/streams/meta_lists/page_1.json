@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/lists"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "fieldId": 78,
+        "name": "Department",
+        "alias": "department",
+        "manageable": true,
+        "multiple": false,
+        "options": [
+          "Engineering",
+          "Sales"
+        ]
+      },
+      {
+        "fieldId": 79,
+        "name": "Division",
+        "alias": "division",
+        "manageable": true,
+        "multiple": false,
+        "options": [
+          "Product",
+          "Operations"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "fixture-slo-1",
+    "name": "Fixture SLO Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/slo/fixture-slo-1"
+  }
+}

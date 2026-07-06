@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/getRatePlans",
+    "query": { "startDate": "synthetic-conformance-value", "endDate": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "ratePlanID": "rate_fixture_1",
+          "rateID": "rateid_fixture_1",
+          "isDerived": false,
+          "roomRate": 100.0,
+          "totalRate": 110.0,
+          "roomsAvailable": 5,
+          "roomTypeID": "roomtype_fixture_1",
+          "roomTypeName": "Fixture Room Type",
+          "propertyID": "prop_fixture_1",
+          "ratePlanNamePublic": "Fixture Rate Plan",
+          "ratePlanNamePrivate": "Fixture Rate Plan (internal)",
+          "promoCode": null,
+          "derivedType": null,
+          "derivedValue": null,
+          "baseRate": 100.0,
+          "parentRateID": null,
+          "parentRatePlanID": null,
+          "parentRatePlanNamePublic": null,
+          "parentRatePlanNamePrivate": null,
+          "daysOfWeek": null,
+          "addOns": [],
+          "roomRateDetailed": []
+        }
+      ],
+      "count": 1
+    }
+  }
+}

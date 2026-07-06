@@ -10,22 +10,47 @@ SYNOPSIS
   pm credentials add <name> --connector qualaroo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Qualaroo nudges and response records through the Qualaroo API. Read-only.
+  Reads Qualaroo nudges and reporting response records through the Qualaroo API. Read-only.
+
+ICON
+  asset: icons/qualaroo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  survey_id
+  api_key (secret)
+  api_secret (secret)
+
+ETL STREAMS
+  nudges:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), id(), name(), status(), updated_at()
+  responses:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), email(), id(), nudge_id(), updated_at()
+  survey_responses:
+    primary key: id
+    cursor: time
+    fields: answered_questions(), id(), identity(), ip_address(), page(), properties(), referrer(), time(), token(), user_agent()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Qualaroo API read of survey nudge and reporting response data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

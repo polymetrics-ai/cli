@@ -1,0 +1,15 @@
+{
+  "record": {
+    "gid": "fixture_tag_1",
+    "data": {
+      "color": "dark-blue"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tags/fixture_tag_1",
+    "body": {
+      "data": { "color": "dark-blue" }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/get",
+    "query": {
+      "event_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_event_id",
+      "hosts": [
+        {
+          "id": "fixture_id",
+          "email": "fixture@example.invalid",
+          "name": "Fixture Name",
+          "first_name": "Fixture Name",
+          "last_name": "Fixture Name",
+          "avatar_url": "https://example.invalid/image.png"
+        }
+      ]
+    }
+  }
+}

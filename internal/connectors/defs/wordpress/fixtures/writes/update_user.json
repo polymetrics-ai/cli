@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture User Updated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/users/1"
+  }
+}

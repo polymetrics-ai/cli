@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "airplanes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "registration_number": { "type": ["string", "null"] },
+    "production_line": { "type": ["string", "null"] },
+    "iata_type": { "type": ["string", "null"] },
+    "model_name": { "type": ["string", "null"] },
+    "model_code": { "type": ["string", "null"] },
+    "icao_code_hex": { "type": ["string", "null"] },
+    "plane_owner": { "type": ["string", "null"] },
+    "airline_iata_code": { "type": ["string", "null"] },
+    "plane_status": { "type": ["string", "null"] },
+    "first_flight_date": { "type": ["string", "null"] }
+  }
+}

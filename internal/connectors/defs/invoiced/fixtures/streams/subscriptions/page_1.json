@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/subscriptions", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 4001,
+        "object": "subscription",
+        "customer": 1001,
+        "plan": "monthly",
+        "status": "active",
+        "quantity": 1,
+        "start_date": 1767225600,
+        "period_start": 1767225600,
+        "period_end": 1769817600,
+        "canceled_at": null,
+        "created_at": 1767225600,
+        "updated_at": 1767225601
+      }
+    ]
+  }
+}

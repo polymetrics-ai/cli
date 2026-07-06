@@ -1,0 +1,110 @@
+{
+  "type": "object",
+  "properties": {
+    "tip_pool_uuid": {
+      "type": "string",
+      "description": "The tip pool UUID",
+      "format": "uuid"
+    },
+    "tip_pool_name": {
+      "type": "string",
+      "description": "The tip pool name"
+    },
+    "unassigned_tips": {
+      "type": "object",
+      "properties": {
+        "net_sales": {
+          "type": "integer",
+          "description": "The net sales (in cents)"
+        },
+        "cc_tips": {
+          "type": "integer",
+          "description": "Tips from credit card (in cents)"
+        },
+        "cc_tips_withheld": {
+          "type": "integer",
+          "description": "Tips from credit card withheld (in cents)"
+        },
+        "auto_grat_tips": {
+          "type": "integer",
+          "description": "Auto gratuity tips (in cents)"
+        },
+        "cash_tips": {
+          "type": "integer",
+          "description": "Tips in cash (in cents)"
+        },
+        "declared_tips": {
+          "type": "integer",
+          "description": "Declared tips (in cents)"
+        }
+      }
+    },
+    "assigned_tips": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "net_sales": {
+            "type": "integer",
+            "description": "The net sales (in cents)"
+          },
+          "cc_tips": {
+            "type": "integer",
+            "description": "Tips from credit card (in cents)"
+          },
+          "cc_tips_withheld": {
+            "type": "integer",
+            "description": "Tips from credit card withheld (in cents)"
+          },
+          "auto_grat_tips": {
+            "type": "integer",
+            "description": "Auto gratuity tips (in cents)"
+          },
+          "cash_tips": {
+            "type": "integer",
+            "description": "Tips in cash (in cents)"
+          },
+          "declared_tips": {
+            "type": "integer",
+            "description": "Declared tips (in cents)"
+          }
+        }
+      }
+    },
+    "total": {
+      "type": "object",
+      "properties": {
+        "hours_worked": {
+          "type": "number",
+          "description": "The amount of hours worked"
+        },
+        "tip_in": {
+          "type": "integer",
+          "description": "Tip in amount (in cents)"
+        },
+        "tip_out": {
+          "type": "integer",
+          "description": "Tip out amount (in cents)"
+        }
+      },
+      "required": [
+        "hours_worked",
+        "tip_in",
+        "tip_out"
+      ]
+    }
+  },
+  "required": [
+    "tip_pool_uuid",
+    "tip_pool_name",
+    "unassigned_tips",
+    "assigned_tips",
+    "total"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_tip_pool_summary_report",
+  "x-primary-key": [
+    "tip_pool_uuid"
+  ]
+}

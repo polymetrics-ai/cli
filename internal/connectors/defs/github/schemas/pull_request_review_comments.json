@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pull_request_review_comments",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "pull_request_review_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "diff_hunk": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "position": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "original_position": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "commit_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_commit_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pull_request_url": {
+      "type": "string"
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  }
+}

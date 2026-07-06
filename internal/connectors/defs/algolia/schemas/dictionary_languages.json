@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "dictionary_languages",
+  "type": "object",
+  "x-primary-key": ["language"],
+  "required": ["language"],
+  "properties": {
+    "language": { "type": "string" },
+    "plurals": { "type": ["object", "null"] },
+    "stopwords": { "type": ["object", "null"] },
+    "compounds": { "type": ["object", "null"] }
+  }
+}

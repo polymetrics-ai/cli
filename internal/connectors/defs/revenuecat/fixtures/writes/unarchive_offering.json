@@ -1,0 +1,14 @@
+{
+  "record": {
+    "offering_id": "offering_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/offerings/offering_fixture_1/actions/unarchive"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

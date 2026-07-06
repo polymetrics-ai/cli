@@ -1,0 +1,30 @@
+{
+  "record": {
+    "title": "Fixture New Episode",
+    "description": "conformance fixture episode create",
+    "summary": "fixture summary",
+    "artist": "Fixture Author",
+    "tags": "fixture,test",
+    "published_at": "2026-01-03T00:00:00Z",
+    "duration": 900,
+    "episode_number": 3,
+    "season_number": 1,
+    "explicit": false,
+    "private": true,
+    "audio_url": "https://example.com/fixture/audio.mp3"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/synthetic-conformance-value/episodes.json"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1003,
+      "title": "Fixture New Episode",
+      "published_at": "2026-01-03T00:00:00Z",
+      "duration": 900,
+      "private": true
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "company_id": "CMP_fixture_1", "phone_number": "+15555550100", "name": "Fixture Caller ID" },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/caller_ids.json",
+    "body": { "company_id": "CMP_fixture_1", "phone_number": "+15555550100", "name": "Fixture Caller ID" }
+  },
+  "response": { "status": 201, "body": { "id": 1, "verified": false } }
+}

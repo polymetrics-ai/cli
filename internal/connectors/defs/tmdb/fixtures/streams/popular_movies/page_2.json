@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/movie/popular",
+    "query": { "page": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 21,
+          "title": "Fixture Movie 21",
+          "overview": "A deterministic fixture movie overview.",
+          "release_date": "2026-01-01",
+          "vote_average": 7.5
+        }
+      ],
+      "page": 2,
+      "total_pages": 2,
+      "total_results": 21
+    }
+  }
+}

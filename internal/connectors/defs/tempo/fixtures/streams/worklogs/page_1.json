@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/worklogs", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "tempoWorklogId": 1,
+          "jiraWorklogId": 1001,
+          "issue": { "id": 5001 },
+          "timeSpentSeconds": 3600,
+          "billableSeconds": 3600,
+          "startDate": "2026-01-01",
+          "startTime": "09:00:00",
+          "description": "fixture worklog 1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "metadata": { "count": 1, "offset": 0, "limit": 50 }
+    }
+  }
+}

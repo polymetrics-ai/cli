@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/locations",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture locations 1",
+          "description": "fixture_locations_1",
+          "address": {
+            "addressLine1": "fixture_locations_1",
+            "addressLine2": "fixture_locations_1",
+            "countryCode": "FIX",
+            "city": "fixture_locations_1",
+            "state": "fixture_locations_1",
+            "zip": "fixture_locations_1"
+          },
+          "id": "locations_fixture_1"
+        },
+        {
+          "name": "Fixture locations 2",
+          "description": "fixture_locations_2",
+          "address": {
+            "addressLine1": "fixture_locations_2",
+            "addressLine2": null,
+            "countryCode": "FIX",
+            "city": "fixture_locations_2",
+            "state": "fixture_locations_2",
+            "zip": "fixture_locations_2"
+          },
+          "id": "locations_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/locations",
+      "lastPage": "https://example.invalid/keka/locations",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

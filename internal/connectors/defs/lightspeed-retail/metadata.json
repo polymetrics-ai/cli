@@ -1,0 +1,22 @@
+{
+  "name": "lightspeed-retail",
+  "display_name": "Lightspeed Retail",
+  "description": "Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and registers through the Lightspeed REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.lightspeedhq.com/retail/introduction/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Lightspeed Retail API read of product, customer, and sales data"
+  }
+}

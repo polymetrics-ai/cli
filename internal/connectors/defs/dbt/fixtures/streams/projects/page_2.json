@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/projects/",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "account_id": 1,
+          "name": "Fixture Project 101",
+          "description": "conformance fixture project",
+          "connection_id": 1,
+          "repository_id": 1,
+          "state": 1,
+          "dbt_project_subdirectory": "",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        }
+      ],
+      "status": {
+        "code": 200,
+        "is_success": true
+      },
+      "extra": {
+        "filters": {
+          "limit": 100,
+          "offset": 100
+        },
+        "pagination": {
+          "count": 1,
+          "total_count": 101
+        }
+      }
+    }
+  }
+}

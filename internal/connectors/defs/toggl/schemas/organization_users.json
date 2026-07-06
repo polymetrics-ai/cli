@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "user_id": { "type": ["integer", "null"] },
+    "avatar_url": { "type": ["string", "null"] },
+    "admin": { "type": ["boolean", "null"] },
+    "owner": { "type": ["boolean", "null"] },
+    "joined": { "type": ["boolean", "null"] },
+    "invitation_code": { "type": ["string", "null"] },
+    "inactive": { "type": ["boolean", "null"] },
+    "can_edit_email": { "type": ["boolean", "null"] },
+    "workspaces": { "type": ["array", "null"] },
+    "groups": { "type": ["array", "null"] }
+  }
+}

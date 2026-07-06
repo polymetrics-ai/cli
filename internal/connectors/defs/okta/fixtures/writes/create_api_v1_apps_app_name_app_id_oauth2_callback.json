@@ -1,0 +1,14 @@
+{
+  "record": {
+    "app_name": "synthetic-conformance-value",
+    "app_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/synthetic-conformance-value/oauth2/callback"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

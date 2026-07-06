@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value/department_assignments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "department_id": 1001,
+          "location_id": 1001,
+          "name": "fixture name",
+          "appear_on_schedule": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/lists" },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "id": "list_fixture_1",
+          "model": "list",
+          "type": "list",
+          "key": "FIX-L1",
+          "name": "Fixture List",
+          "description": "fixture list description",
+          "url": "https://height.app/fixture/list_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z",
+          "userId": "user_fixture_1",
+          "defaultList": false,
+          "visualization": "list"
+        }
+      ]
+    }
+  }
+}

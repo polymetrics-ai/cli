@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "legal_entities",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "displayName": { "type": ["string", "null"] },
+    "billingAddress": { "type": ["object", "null"] },
+    "status": { "type": ["string", "null"] },
+    "isDefault": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

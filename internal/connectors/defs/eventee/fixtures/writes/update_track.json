@@ -1,0 +1,5 @@
+{
+  "record": { "id": 758136, "name": "Updated Fixture Track", "color": "#6699CC" },
+  "expect": { "method": "PATCH", "path": "/label/758136", "body": { "name": "Updated Fixture Track", "color": "#6699CC" } },
+  "response": { "status": 200, "body": { "id": 758136, "name": "Updated Fixture Track", "color": "#6699CC" } }
+}

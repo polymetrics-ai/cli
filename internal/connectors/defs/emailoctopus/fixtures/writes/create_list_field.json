@@ -1,0 +1,21 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "label": "First name",
+    "tag": "FirstName",
+    "type": "TEXT"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/list_fixture_1/fields",
+    "body": {
+      "label": "First name",
+      "tag": "FirstName",
+      "type": "TEXT"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "label": "First name", "tag": "FirstName", "type": "TEXT" }
+  }
+}

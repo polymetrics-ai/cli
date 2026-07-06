@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/sessions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "amr": [
+        "fpt"
+      ],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "expiresAt": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "idp": {
+        "id": "id_fixture",
+        "type": "ACTIVE_DIRECTORY"
+      },
+      "lastFactorVerification": "2026-01-01T00:00:00Z",
+      "lastPasswordVerification": "fixture",
+      "login": "fixture@example.invalid",
+      "status": "ACTIVE",
+      "userId": "user_id_fixture",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

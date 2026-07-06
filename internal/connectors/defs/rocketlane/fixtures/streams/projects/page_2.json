@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects",
+    "query": {
+      "page": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "proj_fixture_101",
+          "name": "Fixture Project 101",
+          "status": "PLANNED",
+          "customer_id": "cust_fixture_101",
+          "updated_at": "2026-01-01T00:41:00Z"
+        }
+      ],
+      "pageInfo": {
+        "page": 2,
+        "pageSize": 100,
+        "totalRecords": 101
+      }
+    }
+  }
+}

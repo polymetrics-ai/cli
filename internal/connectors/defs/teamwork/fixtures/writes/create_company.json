@@ -1,0 +1,9 @@
+{
+  "record": { "company": { "name": "Fixture New Company", "website": "https://fixture-new.example.com" } },
+  "expect": {
+    "method": "POST",
+    "path": "/companies.json",
+    "body": { "company": { "name": "Fixture New Company", "website": "https://fixture-new.example.com" } }
+  },
+  "response": { "status": 201, "body": { "id": "2" } }
+}

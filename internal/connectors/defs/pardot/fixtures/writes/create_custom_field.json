@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture custom_field",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/custom-fields",
+    "body": {
+      "name": "Fixture custom_field",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

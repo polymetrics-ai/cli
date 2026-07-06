@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture add_catalog_item_to_existing_sr",
+    "description": "Fixture add_catalog_item_to_existing_sr record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/requested_items",
+    "body": {
+      "name": "Fixture add_catalog_item_to_existing_sr",
+      "description": "Fixture add_catalog_item_to_existing_sr record"
+    }
+  }
+}

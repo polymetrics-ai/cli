@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outreach Task",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "type": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object"
+    },
+    "relationships": {
+      "type": "object"
+    },
+    "links": {
+      "type": "object"
+    }
+  }
+}

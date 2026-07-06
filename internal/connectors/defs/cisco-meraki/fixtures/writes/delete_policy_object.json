@@ -1,0 +1,10 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "id": "po_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/organizations/org_1/policyObjects/po_fixture_1"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/circles", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "circles": [
+        {
+          "id": 1,
+          "name": "General Company Circle",
+          "short_name": "GCC",
+          "organization_id": 7,
+          "strategy": "Fixture strategy",
+          "links": {
+            "supported_role": 301
+          }
+        },
+        {
+          "id": 2,
+          "name": "Fixture Sub Circle",
+          "short_name": "FSC",
+          "organization_id": 7,
+          "strategy": "Fixture sub-circle strategy",
+          "links": {
+            "supported_role": 302
+          }
+        }
+      ]
+    }
+  }
+}

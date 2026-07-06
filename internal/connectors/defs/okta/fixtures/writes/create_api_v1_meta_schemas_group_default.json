@@ -1,0 +1,312 @@
+{
+  "record": {
+    "$schema": "schema_fixture",
+    "created": "2026-01-01T00:00:00Z",
+    "definitions": {
+      "base": {
+        "id": "id_fixture",
+        "properties": {
+          "description": {
+            "description": "description_fixture",
+            "enum": [
+              "enum_fixture"
+            ],
+            "externalName": "external_name_fixture",
+            "externalNamespace": "external_namespace_fixture",
+            "format": "country-code",
+            "items": {
+              "enum": [
+                "enum_fixture"
+              ],
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "type": "type_fixture"
+            },
+            "master": {
+              "priority": [
+                {
+                  "type": {},
+                  "value": {}
+                }
+              ],
+              "type": "OKTA"
+            },
+            "maxLength": 1,
+            "minLength": 1,
+            "mutability": "IMMUTABLE",
+            "oneOf": [
+              {
+                "const": "const_fixture",
+                "title": "title_fixture"
+              }
+            ],
+            "permissions": [
+              {
+                "action": "action_fixture",
+                "principal": "principal_fixture"
+              }
+            ],
+            "required": true,
+            "scope": "NONE",
+            "title": "title_fixture",
+            "type": "array",
+            "unique": true
+          },
+          "name": {
+            "description": "description_fixture",
+            "enum": [
+              "enum_fixture"
+            ],
+            "externalName": "external_name_fixture",
+            "externalNamespace": "external_namespace_fixture",
+            "format": "country-code",
+            "items": {
+              "enum": [
+                "enum_fixture"
+              ],
+              "oneOf": [
+                {
+                  "const": {},
+                  "title": {}
+                }
+              ],
+              "type": "type_fixture"
+            },
+            "master": {
+              "priority": [
+                {
+                  "type": {},
+                  "value": {}
+                }
+              ],
+              "type": "OKTA"
+            },
+            "maxLength": 1,
+            "minLength": 1,
+            "mutability": "IMMUTABLE",
+            "oneOf": [
+              {
+                "const": "const_fixture",
+                "title": "title_fixture"
+              }
+            ],
+            "permissions": [
+              {
+                "action": "action_fixture",
+                "principal": "principal_fixture"
+              }
+            ],
+            "required": true,
+            "scope": "NONE",
+            "title": "title_fixture",
+            "type": "array",
+            "unique": true
+          }
+        },
+        "required": [
+          "required_fixture"
+        ],
+        "type": "type_fixture"
+      },
+      "custom": {
+        "id": "id_fixture",
+        "properties": {},
+        "required": [
+          "required_fixture"
+        ],
+        "type": "type_fixture"
+      }
+    },
+    "description": "description_fixture",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "properties": {
+      "profile": {
+        "allOf": [
+          {
+            "$ref": "ref_fixture"
+          }
+        ]
+      }
+    },
+    "title": "title_fixture",
+    "type": "type_fixture",
+    "_links": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/meta/schemas/group/default",
+    "body": {
+      "$schema": "schema_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "definitions": {
+        "base": {
+          "id": "id_fixture",
+          "properties": {
+            "description": {
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "items": {
+                "enum": [
+                  "enum_fixture"
+                ],
+                "oneOf": [
+                  {
+                    "const": {},
+                    "title": {}
+                  }
+                ],
+                "type": "type_fixture"
+              },
+              "master": {
+                "priority": [
+                  {
+                    "type": {},
+                    "value": {}
+                  }
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": "const_fixture",
+                  "title": "title_fixture"
+                }
+              ],
+              "permissions": [
+                {
+                  "action": "action_fixture",
+                  "principal": "principal_fixture"
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            },
+            "name": {
+              "description": "description_fixture",
+              "enum": [
+                "enum_fixture"
+              ],
+              "externalName": "external_name_fixture",
+              "externalNamespace": "external_namespace_fixture",
+              "format": "country-code",
+              "items": {
+                "enum": [
+                  "enum_fixture"
+                ],
+                "oneOf": [
+                  {
+                    "const": {},
+                    "title": {}
+                  }
+                ],
+                "type": "type_fixture"
+              },
+              "master": {
+                "priority": [
+                  {
+                    "type": {},
+                    "value": {}
+                  }
+                ],
+                "type": "OKTA"
+              },
+              "maxLength": 1,
+              "minLength": 1,
+              "mutability": "IMMUTABLE",
+              "oneOf": [
+                {
+                  "const": "const_fixture",
+                  "title": "title_fixture"
+                }
+              ],
+              "permissions": [
+                {
+                  "action": "action_fixture",
+                  "principal": "principal_fixture"
+                }
+              ],
+              "required": true,
+              "scope": "NONE",
+              "title": "title_fixture",
+              "type": "array",
+              "unique": true
+            }
+          },
+          "required": [
+            "required_fixture"
+          ],
+          "type": "type_fixture"
+        },
+        "custom": {
+          "id": "id_fixture",
+          "properties": {},
+          "required": [
+            "required_fixture"
+          ],
+          "type": "type_fixture"
+        }
+      },
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "properties": {
+        "profile": {
+          "allOf": [
+            {
+              "$ref": "ref_fixture"
+            }
+          ]
+        }
+      },
+      "title": "title_fixture",
+      "type": "type_fixture",
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

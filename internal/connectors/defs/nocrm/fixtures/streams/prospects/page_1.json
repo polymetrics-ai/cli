@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/rows", "query": { "offset": "0" } },
+  "response": { "status": 200, "body": [ { "id": 1001, "spreadsheet_id": 901, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" } ] }
+}

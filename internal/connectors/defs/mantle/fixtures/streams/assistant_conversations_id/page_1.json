@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/assistant/conversations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "conversation": {
+        "id": "id_fixture",
+        "sessionId": "session_id_fixture",
+        "summary": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "user": {
+          "id": "user_fixture_id"
+        },
+        "agent": {
+          "id": "agent_fixture_id"
+        },
+        "customData": {
+          "id": "custom_data_fixture_id"
+        },
+        "messages": [
+          {
+            "id": "id_fixture",
+            "role": "user",
+            "content": "fixture",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "chartConfig": {
+              "id": "chart_config_fixture_id"
+            },
+            "actions": [
+              "fixture"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

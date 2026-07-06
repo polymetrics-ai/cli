@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/suppression-lists", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "suppression_list_fixture_2", "brand_id": "brand_fixture_2", "file_name": "suppressed_fixture_2.csv", "file_size": 2048, "created": 1767225602 }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

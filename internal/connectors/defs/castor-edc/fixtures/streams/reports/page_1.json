@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/report",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "reports": [
+          {
+            "id": "report_fixture_1",
+            "name": "Adverse Event",
+            "description": "AE report form",
+            "type": "report"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/drug/enforcement.json", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "results": { "skip": 0, "limit": 100, "total": 1 } },
+      "results": [
+        {
+          "recall_number": "D-fixture-0001-2026",
+          "status": "Ongoing",
+          "classification": "Class II",
+          "product_type": "Drugs",
+          "recalling_firm": "Fixture Pharma",
+          "reason_for_recall": "Fixture recall reason: labeling error",
+          "report_date": "20260101",
+          "recall_initiation_date": "20251215",
+          "voluntary_mandated": "Voluntary: Firm Initiated",
+          "distribution_pattern": "Nationwide",
+          "state": "NY",
+          "country": "United States"
+        }
+      ]
+    }
+  }
+}

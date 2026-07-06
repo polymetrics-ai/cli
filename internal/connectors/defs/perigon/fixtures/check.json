@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/articles/all", "query": { "size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "articles": [], "numResults": 0 }
+  }
+}

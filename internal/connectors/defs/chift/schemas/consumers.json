@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "consumers",
+  "type": "object",
+  "x-primary-key": ["consumerid"],
+  "required": ["consumerid"],
+  "properties": {
+    "consumerid": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "redirect_url": { "type": ["string", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "created_on": { "type": ["string", "null"] }
+  }
+}

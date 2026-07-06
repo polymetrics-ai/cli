@@ -1,0 +1,25 @@
+{
+  "record": {
+    "FromTS": 1767225600,
+    "ToTS": 1767312000
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sms/export",
+    "body": {
+      "FromTS": 1767225600,
+      "ToTS": 1767312000
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ID": 21315456,
+      "Status": {
+        "Code": 1,
+        "Name": "created",
+        "Description": "Export requested"
+      }
+    }
+  }
+}

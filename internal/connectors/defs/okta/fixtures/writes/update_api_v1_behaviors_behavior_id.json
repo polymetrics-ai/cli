@@ -1,0 +1,53 @@
+{
+  "record": {
+    "behavior_id": "synthetic-conformance-value",
+    "created": "2026-01-01T00:00:00Z",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "status": "ACTIVE",
+    "type": "ANOMALOUS_DEVICE",
+    "_link": {
+      "self": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/behaviors/synthetic-conformance-value",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "type": "ANOMALOUS_DEVICE",
+      "_link": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

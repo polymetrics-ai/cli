@@ -1,0 +1,17 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "name": "Fixture Template",
+    "type": "email",
+    "html": "<html><body>fixture</body></html>"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/templates",
+    "body": {
+      "name": "Fixture Template",
+      "type": "email",
+      "html": "<html><body>fixture</body></html>"
+    }
+  }
+}

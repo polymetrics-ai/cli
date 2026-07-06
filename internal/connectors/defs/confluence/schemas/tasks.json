@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "localId": { "type": ["string", "null"] },
+    "spaceId": { "type": ["string", "null"] },
+    "pageId": { "type": ["string", "null"] },
+    "blogPostId": { "type": ["string", "null"] },
+    "status": { "type": "string" },
+    "createdBy": { "type": ["string", "null"] },
+    "assignedTo": { "type": ["string", "null"] },
+    "completedBy": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] },
+    "dueAt": { "type": ["string", "null"] },
+    "completedAt": { "type": ["string", "null"] }
+  }
+}

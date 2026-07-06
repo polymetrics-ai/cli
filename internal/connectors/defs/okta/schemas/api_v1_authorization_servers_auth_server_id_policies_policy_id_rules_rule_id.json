@@ -1,0 +1,243 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "object",
+          "properties": {
+            "accessTokenLifetimeMinutes": {
+              "type": "integer",
+              "description": "Lifetime of the access token in minutes. The minimum is five minutes. The maximum is one day."
+            },
+            "inlineHook": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "refreshTokenLifetimeMinutes": {
+              "type": "integer",
+              "description": "Lifetime of the refresh token is the minimum access token lifetime."
+            },
+            "refreshTokenWindowMinutes": {
+              "type": "integer",
+              "description": "Timeframe when the refresh token is valid. The minimum is 10 minutes. The maximum is five years (2,628,000 minutes)."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "grantTypes": {
+          "type": "object",
+          "description": "Array of grant types that this condition includes. Determines the mechanism that Okta uses to authorize the creation of the tokens.",
+          "properties": {
+            "include": {
+              "type": "array",
+              "description": "Array of grant types that this condition includes.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "people": {
+          "type": "object",
+          "description": "Identifies Users and Groups that are used together",
+          "properties": {
+            "groups": {
+              "type": "object",
+              "description": "Specifies a set of Groups whose Users are to be included",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "description": "Groups to be included",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "users": {
+              "type": "object",
+              "description": "Specifies a set of Users to be included",
+              "properties": {
+                "include": {
+                  "type": "array",
+                  "description": "Users to be included",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "scopes": {
+          "type": "object",
+          "description": "Array of scopes that the condition includes",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the rule was created",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the rule"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the rule was last modified",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the rule"
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Priority of the rule"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the rule",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "system": {
+      "type": "boolean",
+      "description": "Set to `true` for system rules. You can't delete system rules."
+    },
+    "type": {
+      "type": "string",
+      "description": "Rule type",
+      "enum": [
+        "RESOURCE_ACCESS"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "activate": {
+          "type": "object",
+          "description": "Link to activate the resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "deactivate": {
+          "type": "object",
+          "description": "Link to deactivate the resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

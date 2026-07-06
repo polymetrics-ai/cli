@@ -1,0 +1,101 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/budgets" },
+    "error_map": [
+      { "status": 401, "hint": "you-need-a-budget-ynab api_key is missing or invalid; re-run pm credentials add you-need-a-budget-ynab" },
+      { "status": 429, "class": "rate_limited", "hint": "ynab rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "budgets",
+      "path": "/budgets",
+      "records": { "path": "data.budgets" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ record.last_modified_on }}"
+      },
+      "schema": "schemas/budgets.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/budgets/{{ config.budget_id }}/accounts",
+      "records": { "path": "data.accounts" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ coalesce record.last_modified_on record.updated_at }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "transactions",
+      "path": "/budgets/{{ config.budget_id }}/transactions",
+      "records": { "path": "data.transactions" },
+      "query": {
+        "since_date": { "template": "{{ config.since_date }}", "omit_when_absent": true },
+        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "name": "{{ coalesce record.payee_name record.memo }}",
+        "updated_at": "{{ coalesce record.date record.last_modified_on }}"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "categories",
+      "path": "/budgets/{{ config.budget_id }}/categories",
+      "records": { "path": "data.category_groups" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ record.name }}"
+      },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "payees",
+      "path": "/budgets/{{ config.budget_id }}/payees",
+      "records": { "path": "data.payees" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "updated_at": "{{ record.name }}"
+      },
+      "schema": "schemas/payees.json"
+    },
+    {
+      "name": "months",
+      "path": "/budgets/{{ config.budget_id }}/months",
+      "records": { "path": "data.months" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.month }}",
+        "updated_at": "{{ record.month }}"
+      },
+      "schema": "schemas/months.json"
+    },
+    {
+      "name": "scheduled_transactions",
+      "path": "/budgets/{{ config.budget_id }}/scheduled_transactions",
+      "records": { "path": "data.scheduled_transactions" },
+      "projection": "passthrough",
+      "computed_fields": {
+        "name": "{{ record.payee_name }}",
+        "updated_at": "{{ record.date_next }}"
+      },
+      "schema": "schemas/scheduled_transactions.json"
+    }
+  ]
+}

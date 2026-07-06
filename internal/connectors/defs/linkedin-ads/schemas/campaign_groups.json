@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_groups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "account": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "total_budget": { "type": ["object", "null"] },
+    "run_schedule": { "type": ["object", "null"] },
+    "created_at": { "type": ["integer", "null"], "description": "changeAuditStamps.created.time, epoch millis." },
+    "last_modified": { "type": ["integer", "null"], "description": "changeAuditStamps.lastModified.time, epoch millis." }
+  }
+}

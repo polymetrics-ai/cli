@@ -1,0 +1,7 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Owner" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/pms/owners/1"
+  }
+}

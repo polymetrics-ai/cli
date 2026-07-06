@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Team id"
+    },
+    "name": {
+      "type": "string",
+      "description": "Team name"
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Id of the picture"
+        },
+        "imageURL": {
+          "type": "string",
+          "description": "Url of the picture"
+        },
+        "originalUrl": {
+          "type": "string",
+          "description": "Original team picture url for icon generation"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the object returned."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "api": "Mixmax REST API (https://developer.mixmax.com/)",
+  "docs": "https://developer.mixmax.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (codesnippets, messages, rules, sequences, meetingtypes). Mixmax's write endpoints (message send, sequence enrollment) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/codesnippets",
+      "covered_by": {
+        "stream": "codesnippets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/rules",
+      "covered_by": {
+        "stream": "rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sequences",
+      "covered_by": {
+        "stream": "sequences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetingtypes",
+      "covered_by": {
+        "stream": "meetingtypes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/sequences/{id}/enrollments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Sequence enrollment not modeled by legacy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Message send not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/livefeed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Live feed events not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/user",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user profile introspection, not a syncable object stream"
+      }
+    }
+  ]
+}

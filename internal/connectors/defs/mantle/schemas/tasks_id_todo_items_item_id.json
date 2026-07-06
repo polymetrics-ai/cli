@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks_id_todo_items_item_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the todo item."
+    },
+    "content": {
+      "type": "string",
+      "description": "The content of the todo item."
+    },
+    "completed": {
+      "type": "boolean",
+      "description": "Whether the todo item is completed."
+    },
+    "completedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The timestamp when the todo item was completed.",
+      "format": "date-time"
+    },
+    "displayOrder": {
+      "type": "integer",
+      "description": "The display order of the todo item."
+    }
+  }
+}

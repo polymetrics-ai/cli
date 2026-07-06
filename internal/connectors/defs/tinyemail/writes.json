@@ -1,0 +1,42 @@
+{
+  "actions": [
+    {
+      "name": "create_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/segment/customer",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "segmentName": { "type": "string" },
+          "status": { "type": "string", "enum": ["Subscribed", "Unsubscribed"] },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "birthday": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "currency": { "type": "string" },
+          "country": { "type": "string" },
+          "province": { "type": "string" },
+          "city": { "type": "string" },
+          "address1": { "type": "string" },
+          "address2": { "type": "string" },
+          "phone": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "company": { "type": "string" },
+          "timezone": { "type": "string" },
+          "ordersCount": { "type": "integer" },
+          "totalSpent": { "type": "number" },
+          "lastOrderName": { "type": "string" },
+          "lastOrderDate": { "type": "string" },
+          "lastOrderPrice": { "type": "number" },
+          "source": { "type": "string" }
+        }
+      },
+      "risk": "creates or upserts a subscriber (customer) into the caller's tinyEmail account, optionally into a named audience segment; low-risk external mutation, no approval required"
+    }
+  ]
+}

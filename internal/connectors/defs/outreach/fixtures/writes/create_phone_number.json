@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "phonenumber",
+      "attributes": {
+        "name": "Fixture Create Phone Number"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/phoneNumbers",
+    "body": {
+      "data": {
+        "type": "phonenumber",
+        "attributes": {
+          "name": "Fixture Create Phone Number"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

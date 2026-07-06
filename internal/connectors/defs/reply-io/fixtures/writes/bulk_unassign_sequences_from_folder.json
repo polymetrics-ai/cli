@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "sequenceIds": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/sequence-folders/synthetic-conformance-value/sequence-links/bulk-delete",
+    "body": {
+      "sequenceIds": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

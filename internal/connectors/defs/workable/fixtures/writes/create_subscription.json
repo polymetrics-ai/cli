@@ -1,0 +1,24 @@
+{
+  "record": {
+    "target": "https://example.test/workable-subscription",
+    "event": "candidate_created",
+    "args": {
+      "account_id": "fixture-account",
+      "job_shortcode": "",
+      "stage_slug": ""
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions",
+    "body": {
+      "target": "https://example.test/workable-subscription",
+      "event": "candidate_created",
+      "args": {
+        "account_id": "fixture-account",
+        "job_shortcode": "",
+        "stage_slug": ""
+      }
+    }
+  }
+}

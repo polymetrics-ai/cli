@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/charts/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "chart_data",
+      "category": "revenue",
+      "display_type": "line",
+      "display_name": "Fixture Chart",
+      "description": "Fixture chart data",
+      "resolution": "day",
+      "values": [
+
+      ]
+    }
+  }
+}

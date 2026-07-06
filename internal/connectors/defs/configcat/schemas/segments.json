@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["segmentId"],
+  "required": ["segmentId"],
+  "properties": {
+    "segmentId": { "type": "string" },
+    "product": { "type": ["object", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "creatorEmail": { "type": ["string", "null"] },
+    "creatorFullName": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "lastUpdaterEmail": { "type": ["string", "null"] },
+    "lastUpdaterFullName": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] },
+    "usage": { "type": ["object", "null"] }
+  }
+}

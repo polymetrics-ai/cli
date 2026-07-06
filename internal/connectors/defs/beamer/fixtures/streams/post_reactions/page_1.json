@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/posts", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "post_fixture_1", "title": "Fixture Post 1" },
+      { "id": "post_fixture_2", "title": "Fixture Post 2" }
+    ]
+  }
+}

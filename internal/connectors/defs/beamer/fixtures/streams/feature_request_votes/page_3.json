@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/feature-requests/fr_fixture_2/votes", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

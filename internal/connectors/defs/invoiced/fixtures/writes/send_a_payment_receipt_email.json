@@ -1,0 +1,20 @@
+{
+  "record": {
+    "payment_id": 123,
+    "message": "Fixture message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payments/123/emails",
+    "body": {
+      "message": "Fixture message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

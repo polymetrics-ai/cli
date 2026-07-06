@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "out_of_office_today",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "policy_id": { "type": ["integer", "null"] },
+    "employee_id": { "type": ["integer", "null"] },
+    "details": { "type": ["string", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "end_date": { "type": ["string", "null"] },
+    "hours": { "type": ["number", "null"] }
+  }
+}

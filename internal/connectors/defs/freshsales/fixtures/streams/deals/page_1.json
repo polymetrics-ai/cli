@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/deals/view/synthetic-conformance-value", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "deals": [
+        {
+          "id": 20,
+          "name": "Fixture Deal 1",
+          "amount": 1000,
+          "currency_id": 1,
+          "deal_stage_id": 2,
+          "deal_pipeline_id": 1,
+          "sales_account_id": 10,
+          "owner_id": 1000,
+          "probability": 50,
+          "expected_close": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "total": 1, "total_pages": 1 }
+    }
+  }
+}

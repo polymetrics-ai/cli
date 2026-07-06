@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "FLIGHT", "page": "0", "size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

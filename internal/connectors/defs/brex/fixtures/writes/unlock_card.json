@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "card_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/cards/card_fixture_1/unlock"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

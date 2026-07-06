@@ -1,0 +1,8 @@
+{
+  "record": { "id": "metering_fixture_1", "custom_properties": { "invoice_ref": "fixture-invoice-1" } },
+  "expect": {
+    "method": "PATCH",
+    "path": "/metering/metering_fixture_1/",
+    "body": { "custom_properties": { "invoice_ref": "fixture-invoice-1" } }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_2/devices",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "serial": "Q2XX-FIX2-0002",
+        "name": "Fixture SW 1",
+        "model": "MS120",
+        "mac": "00:11:22:33:44:02",
+        "networkId": "N_fixture_2",
+        "productType": "switch",
+        "lat": 37.7749,
+        "lng": -122.4194,
+        "address": "Fixture Address 2",
+        "firmware": "switch-14-33",
+        "tags": []
+      }
+    ]
+  }
+}

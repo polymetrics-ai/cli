@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/configTemplates"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "tmpl_fixture_1",
+        "name": "Fixture Template 1",
+        "productTypes": ["appliance"],
+        "timeZone": "America/Los_Angeles"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/organizers/synthetic-conformance-value/events/", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "name": { "en": "Fixture Conference" },
+          "slug": "fixture-conf",
+          "live": true,
+          "testmode": false,
+          "currency": "EUR",
+          "date_from": "2026-03-01T00:00:00Z",
+          "date_to": null,
+          "is_public": true,
+          "has_subevents": false,
+          "timezone": "Europe/Berlin",
+          "public_url": "https://pretix.eu/fixture-events/fixture-conf/"
+        }
+      ]
+    }
+  }
+}

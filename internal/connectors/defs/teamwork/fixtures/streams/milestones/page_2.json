@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/1/milestones.json",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "milestones": [
+        { "id": "1", "title": "Fixture Milestone 1", "description": "Fixture milestone", "deadline": "20260601", "completed": false, "created-on": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

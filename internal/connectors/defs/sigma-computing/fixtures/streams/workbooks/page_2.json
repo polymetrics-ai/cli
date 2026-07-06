@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/workbooks", "query": { "page": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "id": "wb_fixture_3", "name": "Fixture workbook three", "updatedAt": "2026-01-03T00:00:00Z" }
+      ],
+      "nextPage": null
+    }
+  }
+}

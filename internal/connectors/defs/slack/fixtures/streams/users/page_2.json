@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users.list", "query": { "limit": "2", "cursor": "PAGE2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "members": [
+        { "id": "U3", "team_id": "T_FIXTURE", "name": "katherine", "real_name": "Katherine", "deleted": false, "is_admin": false, "is_bot": false, "tz": "America/New_York", "updated": 1700000200, "profile": { "email": "katherine@example.com", "display_name": "katherine" } }
+      ],
+      "response_metadata": { "next_cursor": "" }
+    }
+  }
+}

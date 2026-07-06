@@ -1,0 +1,4 @@
+{
+  "record": { "survey_id": 1, "label": "Fixture Variable", "name": "fixture_var", "type": "text" },
+  "expect": { "method": "POST", "path": "/variables" }
+}

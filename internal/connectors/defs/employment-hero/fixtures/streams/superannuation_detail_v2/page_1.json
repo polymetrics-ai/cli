@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/organisations/synthetic-conformance-value/employees/synthetic-conformance-value/superannuation_detail",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "employee_id": "synthetic-conformance-value",
+        "fund_name": "Fixture Super",
+        "member_number": "MEM-1"
+      }
+    }
+  }
+}

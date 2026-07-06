@@ -1,0 +1,5 @@
+{
+  "record": { "idpurchaseorder": 701 },
+  "expect": { "method": "POST", "path": "/purchaseorders/701/mark-as-purchased" },
+  "response": { "status": 200, "body": {} }
+}

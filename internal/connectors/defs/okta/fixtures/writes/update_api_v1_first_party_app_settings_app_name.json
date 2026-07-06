@@ -1,0 +1,19 @@
+{
+  "record": {
+    "app_name": "synthetic-conformance-value",
+    "sessionIdleTimeoutMinutes": 1,
+    "sessionMaxLifetimeMinutes": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/first-party-app-settings/synthetic-conformance-value",
+    "body": {
+      "sessionIdleTimeoutMinutes": 1,
+      "sessionMaxLifetimeMinutes": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

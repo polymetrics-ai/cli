@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "prospect",
+      "attributes": {
+        "name": "Fixture Update Prospect"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/prospects/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "prospect",
+        "attributes": {
+          "name": "Fixture Update Prospect"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

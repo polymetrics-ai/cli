@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "institutions",
+  "type": "object",
+  "x-primary-key": ["institution_id"],
+  "required": ["institution_id"],
+  "properties": {
+    "institution_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "country_codes": { "type": ["string", "null"] }
+  }
+}

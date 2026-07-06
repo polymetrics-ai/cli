@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "cat_fixture_1",
+    "parent": "master",
+    "labels": { "en_US": "Fixture Category" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/categories/cat_fixture_1",
+    "body": {
+      "parent": "master",
+      "labels": { "en_US": "Fixture Category" }
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

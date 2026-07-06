@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/settings/fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        { "id": "field_fixture_1", "api_name": "Deal_Name", "display_label": "Deal Name" },
+        { "id": "field_fixture_2", "api_name": "Amount", "display_label": "Amount" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "inspection_areas",
+  "type": "object",
+  "x-primary-key": ["inspectionAreaId"],
+  "required": ["inspectionAreaId"],
+  "properties": {
+    "inspectionAreaId": { "type": "string" },
+    "inspectionAreaName": { "type": ["string", "null"] },
+    "inspectionAreaType": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "endDate": { "type": ["string", "null"] },
+    "supersededBy": { "type": ["string", "null"] },
+    "orgInspectionAreaRetirementDate": { "type": ["string", "null"] },
+    "inspectionCategories": { "type": ["array", "null"] }
+  }
+}

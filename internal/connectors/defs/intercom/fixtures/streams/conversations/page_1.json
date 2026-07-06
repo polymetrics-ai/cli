@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations",
+    "query": { "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "list",
+      "data": [
+        {
+          "id": "conversation_fixture_1",
+          "type": "conversation",
+          "title": "Fixture conversation",
+          "state": "open",
+          "open": true,
+          "read": false,
+          "priority": "not_priority",
+          "created_at": 1767225601,
+          "updated_at": 1767225701,
+          "waiting_since": 1767225601,
+          "snoozed_until": null,
+          "admin_assignee_id": 900001
+        }
+      ],
+      "pages": { "type": "pages" },
+      "total_count": 1
+    }
+  }
+}

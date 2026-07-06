@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "object": "reservation", "action": "created", "endpointUrl": "https://example.com/fixture/webhook" },
+  "expect": { "method": "POST", "path": "/postWebhook" },
+  "response": { "status": 200, "body": { "success": true, "subscriptionID": "webhook_fixture_new" } }
+}

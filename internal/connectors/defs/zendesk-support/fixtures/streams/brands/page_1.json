@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/brands",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "brands": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "logo": "fixture_logo",
+          "brand_url": "fixture_brand_url",
+          "host_mapping": "fixture_host_mapping",
+          "subdomain": "fixture_subdomain",
+          "url": "fixture_url",
+          "ticket_form_ids": [
+
+          ],
+          "signature_template": "fixture_signature_template",
+          "has_help_center": true,
+          "help_center_state": "fixture_help_center_state",
+          "active": true,
+          "default": true,
+          "is_deleted": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

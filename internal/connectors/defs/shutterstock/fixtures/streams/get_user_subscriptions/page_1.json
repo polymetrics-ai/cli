@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/user/subscriptions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "get-user-subscriptions-fixture-1",
+          "name": "Fixture get user subscriptions",
+          "media_type": "get",
+          "updated_time": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

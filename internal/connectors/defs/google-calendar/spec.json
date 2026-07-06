@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Calendar Connection Specification",
+  "type": "object",
+  "required": [
+    "calendarid",
+    "client_id",
+    "client_refresh_token_2",
+    "client_secret"
+  ],
+  "properties": {
+    "calendarid": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true
+    },
+    "client_refresh_token_2": {
+      "type": "string",
+      "x-secret": true
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

@@ -1,0 +1,5200 @@
+{
+  "actions": [
+    {
+      "name": "create_user_notifications_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/user/notifications/token",
+      "risk": "POST /user/notifications/token (Create a JWT to access the in-app notifications service) executes a live GitBook API operation.",
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {}
+      }
+    },
+    {
+      "name": "update_user_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ record.user_id }}",
+      "risk": "PATCH /users/{userId} (Update a user by its ID) executes a live GitBook API operation.",
+      "path_fields": [
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "display_name": {},
+          "photo_url": {}
+        }
+      }
+    },
+    {
+      "name": "update_space_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.space_id }}",
+      "risk": "PATCH /spaces/{spaceId} (Update a space's title, icon, or settings) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "edit_mode": {},
+          "title": {},
+          "default_level": {},
+          "language": {},
+          "merge_rules": {},
+          "emoji": {},
+          "icon": {}
+        }
+      }
+    },
+    {
+      "name": "delete_space_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}",
+      "risk": "DELETE /spaces/{spaceId} (Delete a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "duplicate_space",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/duplicate",
+      "risk": "POST /spaces/{spaceId}/duplicate (Create a full copy of a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "restore_space",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/restore",
+      "risk": "POST /spaces/{spaceId}/restore (Restore a recently deleted space from the trash) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "move_space",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/move",
+      "risk": "POST /spaces/{spaceId}/move (Move a space to a different collection or position) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "parent": {},
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "import_git_repository",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/git/import",
+      "risk": "POST /spaces/{spaceId}/git/import (Pull content into a space from a connected Git repository) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "url",
+          "ref"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "url": {},
+          "ref": {},
+          "repo_cache_id": {},
+          "repo_tree_url": {},
+          "repo_commit_url": {},
+          "repo_project_directory": {},
+          "timestamp": {},
+          "force": {},
+          "standalone": {},
+          "git_info": {}
+        }
+      }
+    },
+    {
+      "name": "export_to_git_repository",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/git/export",
+      "risk": "POST /spaces/{spaceId}/git/export (Push space content to a connected Git repository) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "url",
+          "ref",
+          "commit_message"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "url": {},
+          "ref": {},
+          "commit_message": {},
+          "repo_cache_id": {},
+          "repo_tree_url": {},
+          "repo_commit_url": {},
+          "repo_project_directory": {},
+          "timestamp": {},
+          "force": {},
+          "git_info": {}
+        }
+      }
+    },
+    {
+      "name": "delete_legacy_git_installation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/git/legacy-installation",
+      "risk": "DELETE /spaces/{spaceId}/git/legacy-installation (Remove the legacy Git Sync installation from the space to be able to upgrade it to use the new Git integrations) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "invite_to_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/permissions",
+      "risk": "POST /spaces/{spaceId}/permissions (Invite a user or a team to a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "teams": {},
+          "users": {}
+        }
+      }
+    },
+    {
+      "name": "update_team_permission_in_space",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.space_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "PATCH /spaces/{spaceId}/permissions/teams/{teamId} (Update an org team's permission in a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "team_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_team_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "DELETE /spaces/{spaceId}/permissions/teams/{teamId} (Remove an org team from a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "team_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_user_permission_in_space",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.space_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "PATCH /spaces/{spaceId}/permissions/users/{userId} (Update space user permissions) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "user_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_user_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "DELETE /spaces/{spaceId}/permissions/users/{userId} (Remove a space user) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "user_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "apply_template_to_space",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/content/template",
+      "risk": "POST /spaces/{spaceId}/content/template (Apply a content template to populate a space with initial pages) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "id": {},
+          "params": {},
+          "change_request_id": {}
+        }
+      }
+    },
+    {
+      "name": "get_computed_document",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/content/computed/document",
+      "risk": "POST /spaces/{spaceId}/content/computed/document (Compute and render a document from a structured content source) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "source",
+          "seed"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "source": {},
+          "seed": {}
+        }
+      }
+    },
+    {
+      "name": "get_computed_revision",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/content/computed/revision",
+      "risk": "POST /spaces/{spaceId}/content/computed/revision (Compute and render a full revision from a structured content source) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "source",
+          "seed"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "source": {},
+          "seed": {}
+        }
+      }
+    },
+    {
+      "name": "create_change_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests",
+      "risk": "POST /spaces/{spaceId}/change-requests (Create a new change request in a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "subject": {},
+          "template": {}
+        }
+      }
+    },
+    {
+      "name": "update_change_request_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}",
+      "risk": "PATCH /spaces/{spaceId}/change-requests/{changeRequestId} (Update a change request's subject, description, or status) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "subject": {},
+          "description": {},
+          "links": {},
+          "status": {}
+        }
+      }
+    },
+    {
+      "name": "merge_change_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/merge",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/merge (Merge a change request into the space's live content) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_change_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/update",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/update (Sync a change request with the latest live space content) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "submit_change_request_review",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/reviews",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/reviews (Submit an approve or request-changes review for a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "status"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "status": {},
+          "comment": {}
+        }
+      }
+    },
+    {
+      "name": "request_reviewers_for_change_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/requested-reviewers",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers (Send review requests to users for a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "users"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "users": {},
+          "subject": {},
+          "description": {}
+        }
+      }
+    },
+    {
+      "name": "remove_requested_reviewer_from_change_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/requested-reviewers/{{ record.user_id }}",
+      "risk": "DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers/{userId} (Remove a reviewer from a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "user_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_change_request_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/conversations/{{ record.conversation_id }}",
+      "risk": "PATCH /spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId} (Update the title of an AI agent conversation on a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "conversation_id",
+          "title"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          },
+          "title": {}
+        }
+      }
+    },
+    {
+      "name": "delete_change_request_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/conversations/{{ record.conversation_id }}",
+      "risk": "DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId} (Delete an agent conversation) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "conversation_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "post_comment_in_change_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/comments (Post a new comment on a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "body"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "node": {},
+          "page": {},
+          "body": {},
+          "table_cell": {}
+        }
+      }
+    },
+    {
+      "name": "update_comment_in_change_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}",
+      "risk": "PUT /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId} (Update the content or status of a change request comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "resolved": {},
+          "body": {},
+          "added_reactions": {},
+          "removed_reactions": {}
+        }
+      }
+    },
+    {
+      "name": "delete_comment_in_change_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}",
+      "risk": "DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId} (Delete a change request comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "comment_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "post_comment_reply_in_change_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}/replies",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies (Post a reply to a change request comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "comment_id",
+          "body"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "body": {}
+        }
+      }
+    },
+    {
+      "name": "update_comment_reply_in_change_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}",
+      "risk": "PUT /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId} (Update the content of a change request comment reply) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "comment_id",
+        "comment_reply_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "comment_id",
+          "comment_reply_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "comment_reply_id": {
+            "type": "string"
+          },
+          "resolved": {},
+          "body": {},
+          "added_reactions": {},
+          "removed_reactions": {}
+        }
+      }
+    },
+    {
+      "name": "delete_comment_reply_in_change_request",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}",
+      "risk": "DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId} (Delete a change request comment reply) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id",
+        "comment_id",
+        "comment_reply_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "comment_id",
+          "comment_reply_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "comment_reply_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_change_request_content",
+      "kind": "update",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/content",
+      "risk": "POST /spaces/{spaceId}/change-requests/{changeRequestId}/content (Apply a batch of content changes to a change request) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "change_request_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "change_request_id",
+          "changes"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "change_request_id": {
+            "type": "string"
+          },
+          "changes": {}
+        }
+      }
+    },
+    {
+      "name": "post_comment_in_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/comments",
+      "risk": "POST /spaces/{spaceId}/comments (Post a new comment on a space or a specific page) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "body"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "node": {},
+          "page": {},
+          "body": {},
+          "table_cell": {}
+        }
+      }
+    },
+    {
+      "name": "update_comment_in_space",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spaces/{{ record.space_id }}/comments/{{ record.comment_id }}",
+      "risk": "PUT /spaces/{spaceId}/comments/{commentId} (Update the body or status of a space comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "comment_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "resolved": {},
+          "body": {},
+          "added_reactions": {},
+          "removed_reactions": {}
+        }
+      }
+    },
+    {
+      "name": "delete_comment_in_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/comments/{{ record.comment_id }}",
+      "risk": "DELETE /spaces/{spaceId}/comments/{commentId} (Delete a space comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "comment_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "post_comment_reply_in_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.space_id }}/comments/{{ record.comment_id }}/replies",
+      "risk": "POST /spaces/{spaceId}/comments/{commentId}/replies (Post a reply to an existing space comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "comment_id",
+          "body"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "body": {}
+        }
+      }
+    },
+    {
+      "name": "update_comment_reply_in_space",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spaces/{{ record.space_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}",
+      "risk": "PUT /spaces/{spaceId}/comments/{commentId}/replies/{commentReplyId} (Update the body of a reply to a space comment) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "comment_id",
+        "comment_reply_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "comment_id",
+          "comment_reply_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "comment_reply_id": {
+            "type": "string"
+          },
+          "body": {},
+          "added_reactions": {},
+          "removed_reactions": {}
+        }
+      }
+    },
+    {
+      "name": "delete_comment_reply_in_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.space_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}",
+      "risk": "DELETE /spaces/{spaceId}/comments/{commentId}/replies/{commentReplyId} (Delete a space comment reply) executes a live GitBook API operation.",
+      "path_fields": [
+        "space_id",
+        "comment_id",
+        "comment_reply_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "space_id",
+          "comment_id",
+          "comment_reply_id"
+        ],
+        "properties": {
+          "space_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "comment_reply_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_collection_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/collections/{{ record.collection_id }}",
+      "risk": "PATCH /collections/{collectionId} (Update a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "title": {},
+          "description": {},
+          "default_level": {}
+        }
+      }
+    },
+    {
+      "name": "delete_collection_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collections/{{ record.collection_id }}",
+      "risk": "DELETE /collections/{collectionId} (Delete a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "move_collection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/collections/{{ record.collection_id }}/move",
+      "risk": "POST /collections/{collectionId}/move (Move a collection to a new position.) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "parent": {},
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "transfer_collection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/collections/{{ record.collection_id }}/transfer",
+      "risk": "POST /collections/{collectionId}/transfer (Transfer a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id",
+          "organization"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "organization": {}
+        }
+      }
+    },
+    {
+      "name": "invite_to_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/collections/{{ record.collection_id }}/permissions",
+      "risk": "POST /collections/{collectionId}/permissions (Invite to a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "teams": {},
+          "users": {}
+        }
+      }
+    },
+    {
+      "name": "update_team_permission_in_collection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/collections/{{ record.collection_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "PATCH /collections/{collectionId}/permissions/teams/{teamId} (Update an org team's permission in a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id",
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id",
+          "team_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_team_from_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collections/{{ record.collection_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "DELETE /collections/{collectionId}/permissions/teams/{teamId} (Remove an org team from a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id",
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id",
+          "team_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_user_permission_in_collection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/collections/{{ record.collection_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "PATCH /collections/{collectionId}/permissions/users/{userId} (Update a collection user permission) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id",
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id",
+          "user_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_user_from_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/collections/{{ record.collection_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "DELETE /collections/{collectionId}/permissions/users/{userId} (Remove a user from a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "collection_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "collection_id",
+          "user_id"
+        ],
+        "properties": {
+          "collection_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "publish_integration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}",
+      "risk": "POST /integrations/{integrationName} (Publish an integration) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "organization",
+          "title",
+          "description",
+          "script",
+          "scopes"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "runtime": {},
+          "icon": {},
+          "title": {},
+          "description": {},
+          "summary": {},
+          "preview_images": {},
+          "visibility": {},
+          "target": {},
+          "scopes": {},
+          "categories": {},
+          "blocks": {},
+          "content_sources": {},
+          "external_links": {},
+          "configurations": {},
+          "script": {},
+          "organization": {},
+          "secrets": {},
+          "content_security_policy": {}
+        }
+      }
+    },
+    {
+      "name": "unpublish_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.integration_name }}",
+      "risk": "DELETE /integrations/{integrationName} (Unpublish an integration) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "install_integration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/installations",
+      "risk": "POST /integrations/{integrationName}/installations (Install an integration) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "organization"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "organization": {}
+        }
+      }
+    },
+    {
+      "name": "set_integration_development_mode",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/integrations/{{ record.integration_name }}/dev",
+      "risk": "PUT /integrations/{integrationName}/dev (Enable integration dev mode) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "tunnel_url"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "tunnel_url": {},
+          "all": {}
+        }
+      }
+    },
+    {
+      "name": "disable_integration_development_mode",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.integration_name }}/dev",
+      "risk": "DELETE /integrations/{integrationName}/dev (Disable integration dev mode) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "render_integration_ui_with_post",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/render",
+      "risk": "POST /integrations/{integrationName}/render (Render an integration UI with POST method) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "component_id",
+          "props",
+          "context"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "component_id": {},
+          "props": {},
+          "state": {},
+          "context": {},
+          "action": {}
+        }
+      }
+    },
+    {
+      "name": "queue_integration_task",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/tasks",
+      "risk": "POST /integrations/{integrationName}/tasks (Queue an integration task) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "task"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "task": {},
+          "schedule": {}
+        }
+      }
+    },
+    {
+      "name": "update_integration_installation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}",
+      "risk": "PATCH /integrations/{integrationName}/installations/{installationId} (Update an integration installation) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "external_ids": {},
+          "configuration": {},
+          "space_selection": {},
+          "site_selection": {}
+        }
+      }
+    },
+    {
+      "name": "uninstall_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}",
+      "risk": "DELETE /integrations/{integrationName}/installations/{installationId} (Uninstall an integration) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_integration_installation_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/tokens",
+      "risk": "POST /integrations/{integrationName}/installations/{installationId}/tokens (Create an integration installation API token) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "install_integration_on_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/spaces",
+      "risk": "POST /integrations/{integrationName}/installations/{installationId}/spaces (Install an integration on a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "space"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "space": {}
+        }
+      }
+    },
+    {
+      "name": "update_integration_space_installation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/spaces/{{ record.space_id }}",
+      "risk": "PATCH /integrations/{integrationName}/installations/{installationId}/spaces/{spaceId} (Update an integration space installation) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id",
+        "space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "space_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          },
+          "external_ids": {},
+          "configuration": {}
+        }
+      }
+    },
+    {
+      "name": "uninstall_integration_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/spaces/{{ record.space_id }}",
+      "risk": "DELETE /integrations/{integrationName}/installations/{installationId}/spaces/{spaceId} (Uninstall an integration from a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id",
+        "space_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "space_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "install_integration_on_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/sites",
+      "risk": "POST /integrations/{integrationName}/installations/{installationId}/sites (Install an integration on a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "site_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "site_id": {}
+        }
+      }
+    },
+    {
+      "name": "update_integration_site_installation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/sites/{{ record.site_id }}",
+      "risk": "PATCH /integrations/{integrationName}/installations/{installationId}/sites/{siteId} (Update an integration site installation) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "site_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "external_ids": {},
+          "configuration": {}
+        }
+      }
+    },
+    {
+      "name": "uninstall_integration_from_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/sites/{{ record.site_id }}",
+      "risk": "DELETE /integrations/{integrationName}/installations/{installationId}/sites/{siteId} (Uninstall an integration from a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "integration_name",
+        "installation_id",
+        "site_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_name",
+          "installation_id",
+          "site_id"
+        ],
+        "properties": {
+          "integration_name": {
+            "type": "string"
+          },
+          "installation_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_organization_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}",
+      "risk": "PATCH /orgs/{organizationId} (Update an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "title": {},
+          "email_domains": {},
+          "hostname": {},
+          "default_role": {},
+          "default_content": {},
+          "logo": {},
+          "sso": {},
+          "ai": {},
+          "invite_links": {},
+          "merge_rules": {}
+        }
+      }
+    },
+    {
+      "name": "update_member_in_organization_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/members/{{ record.user_id }}",
+      "risk": "PATCH /orgs/{organizationId}/members/{userId} (Update an organization member) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_member_from_organization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/members/{{ record.user_id }}",
+      "risk": "DELETE /orgs/{organizationId}/members/{userId} (Delete an organization member) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_organization_member_last_seen_at",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/ping",
+      "risk": "POST /orgs/{organizationId}/ping (Update an organization member last seen at) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "set_user_as_sso_member_for_organization",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/members/{{ record.user_id }}/sso",
+      "risk": "POST /orgs/{organizationId}/members/{userId}/sso (Set a user as an SSO member of an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_organization_team",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/teams",
+      "risk": "PUT /orgs/{organizationId}/teams (Create a team) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "title"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "title": {},
+          "members": {}
+        }
+      }
+    },
+    {
+      "name": "update_team_in_organization_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/teams/{{ record.team_id }}",
+      "risk": "PATCH /orgs/{organizationId}/teams/{teamId} (Update a team) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "team_id",
+          "title"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "title": {}
+        }
+      }
+    },
+    {
+      "name": "remove_team_from_organization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/teams/{{ record.team_id }}",
+      "risk": "DELETE /orgs/{organizationId}/teams/{teamId} (Delete a team) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "team_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_members_in_organization_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/teams/{{ record.team_id }}/members",
+      "risk": "PUT /orgs/{organizationId}/teams/{teamId}/members (Updates members of a team) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "team_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "add": {},
+          "memberships": {},
+          "remove": {}
+        }
+      }
+    },
+    {
+      "name": "add_member_to_organization_team_by_id",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/teams/{{ record.team_id }}/members/{{ record.user_id }}",
+      "risk": "PUT /orgs/{organizationId}/teams/{teamId}/members/{userId} (Add a team member) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "team_id",
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "team_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "delete_member_from_organization_team_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/teams/{{ record.team_id }}/members/{{ record.user_id }}",
+      "risk": "DELETE /orgs/{organizationId}/teams/{teamId}/members/{userId} (Delete a team member) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "team_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "team_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "invite_users_to_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/invites",
+      "risk": "POST /orgs/{organizationId}/invites (Invite users in an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "emails"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "emails": {},
+          "role": {},
+          "sso": {}
+        }
+      }
+    },
+    {
+      "name": "join_organization_with_invite",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/invites/{{ record.invite_id }}",
+      "risk": "POST /orgs/{organizationId}/invites/{inviteId} (Join an organization with an invite) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "invite_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "invite_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "invite_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_organization_invite",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/link-invites",
+      "risk": "POST /orgs/{organizationId}/link-invites (Create an organization invite) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "role": {},
+          "level": {},
+          "space": {},
+          "collection": {}
+        }
+      }
+    },
+    {
+      "name": "update_organization_invite_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/link-invites/{{ record.invite_id }}",
+      "risk": "PATCH /orgs/{organizationId}/link-invites/{inviteId} (Update an organization invite) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "invite_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "invite_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "invite_id": {
+            "type": "string"
+          },
+          "role": {},
+          "level": {}
+        }
+      }
+    },
+    {
+      "name": "delete_organization_invite_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/link-invites/{{ record.invite_id }}",
+      "risk": "DELETE /orgs/{organizationId}/link-invites/{inviteId} (Deletes an organization invite.) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "invite_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "invite_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "invite_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "join_organization",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/join",
+      "risk": "POST /orgs/{organizationId}/join (Join an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/spaces",
+      "risk": "POST /orgs/{organizationId}/spaces (Create a new documentation space in an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "title": {},
+          "emoji": {},
+          "parent": {},
+          "language": {},
+          "edit_mode": {},
+          "template": {},
+          "computed_source": {},
+          "empty": {}
+        }
+      }
+    },
+    {
+      "name": "create_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/collections",
+      "risk": "POST /orgs/{organizationId}/collections (Create a collection) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "title": {},
+          "parent": {}
+        }
+      }
+    },
+    {
+      "name": "create_organization_saml_provider",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/saml",
+      "risk": "POST /orgs/{organizationId}/saml (Create a new SAML provider) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "label"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "label": {},
+          "entity_id": {},
+          "certificate": {},
+          "sso_url": {},
+          "default_team": {},
+          "default_role": {}
+        }
+      }
+    },
+    {
+      "name": "update_organization_saml_provider",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/saml/{{ record.saml_provider_id }}",
+      "risk": "PATCH /orgs/{organizationId}/saml/{samlProviderId} (Update a SAML provider) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "saml_provider_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "saml_provider_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "saml_provider_id": {
+            "type": "string"
+          },
+          "label": {},
+          "entity_id": {},
+          "certificate": {},
+          "sso_url": {},
+          "default_team": {},
+          "default_role": {}
+        }
+      }
+    },
+    {
+      "name": "delete_organization_saml_provider",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/saml/{{ record.saml_provider_id }}",
+      "risk": "DELETE /orgs/{organizationId}/saml/{samlProviderId} (Delete a SAML provider) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "saml_provider_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "saml_provider_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "saml_provider_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "ask_in_organization",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/ask",
+      "risk": "POST /orgs/{organizationId}/ask (Ask a question in an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "query"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "query": {},
+          "previous_queries": {}
+        }
+      }
+    },
+    {
+      "name": "create_open_api_spec",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/openapi",
+      "risk": "POST /orgs/{organizationId}/openapi (Create an OpenAPI spec) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "source",
+          "slug"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "slug": {},
+          "source": {}
+        }
+      }
+    },
+    {
+      "name": "create_or_update_open_api_spec_by_slug",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}",
+      "risk": "PUT /orgs/{organizationId}/openapi/{specSlug} (Create or update an OpenAPI spec) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "spec_slug"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "spec_slug",
+          "source"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "spec_slug": {
+            "type": "string"
+          },
+          "source": {}
+        }
+      }
+    },
+    {
+      "name": "update_open_api_spec_by_slug",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}",
+      "risk": "PATCH /orgs/{organizationId}/openapi/{specSlug} (Update OpenAPI spec visibility) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "spec_slug"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "spec_slug",
+          "visibility"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "spec_slug": {
+            "type": "string"
+          },
+          "visibility": {}
+        }
+      }
+    },
+    {
+      "name": "delete_open_api_spec_by_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}",
+      "risk": "DELETE /orgs/{organizationId}/openapi/{specSlug} (Delete an OpenAPI spec) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "spec_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "spec_slug"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "spec_slug": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_organization_agent_instructions",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/agent-instructions",
+      "risk": "PUT /orgs/{organizationId}/agent-instructions (Update Docs agent instructions for an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "instructions"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "instructions": {}
+        }
+      }
+    },
+    {
+      "name": "create_translation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/translations",
+      "risk": "POST /orgs/{organizationId}/translations (Create a translation) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "language",
+          "source"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "source": {},
+          "language": {},
+          "instructions": {}
+        }
+      }
+    },
+    {
+      "name": "update_translation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/translations/{{ record.translation_id }}",
+      "risk": "PUT /orgs/{organizationId}/translations/{translationId} (Update a translation) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "translation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "translation_id",
+          "instructions"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "translation_id": {
+            "type": "string"
+          },
+          "instructions": {}
+        }
+      }
+    },
+    {
+      "name": "delete_translation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/translations/{{ record.translation_id }}",
+      "risk": "DELETE /orgs/{organizationId}/translations/{translationId} (Delete a translation) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "translation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "translation_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "translation_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "run_translation",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/translations/{{ record.translation_id }}/run",
+      "risk": "POST /orgs/{organizationId}/translations/{translationId}/run (Run a translation again) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "translation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "translation_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "translation_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_glossary_entries",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/translations-glossary",
+      "risk": "PUT /orgs/{organizationId}/translations-glossary (Update glossary entries) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "operations"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "operations": {}
+        }
+      }
+    },
+    {
+      "name": "generate_storage_upload_url",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/storage/upload",
+      "risk": "POST /orgs/{organizationId}/storage/upload (Create a signed URL to upload a file) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "file",
+          "kind"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "file": {},
+          "kind": {}
+        }
+      }
+    },
+    {
+      "name": "create_custom_font",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/fonts",
+      "risk": "PUT /orgs/{organizationId}/fonts (Create a custom font) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "font_family",
+          "font_faces"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "font_family": {},
+          "font_faces": {}
+        }
+      }
+    },
+    {
+      "name": "update_custom_font",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/fonts/{{ record.font_id }}",
+      "risk": "POST /orgs/{organizationId}/fonts/{fontId} (Update a custom font) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "font_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "font_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "font_id": {
+            "type": "string"
+          },
+          "font_family": {},
+          "font_faces": {}
+        }
+      }
+    },
+    {
+      "name": "delete_custom_font",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/fonts/{{ record.font_id }}",
+      "risk": "DELETE /orgs/{organizationId}/fonts/{fontId} (Delete a custom font) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "font_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "font_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "font_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "start_import_run",
+      "kind": "create",
+      "method": "POST",
+      "path": "/org/{{ record.organization_id }}/imports",
+      "risk": "POST /org/{organizationId}/imports (Import content into a space from a website) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "source",
+          "target"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "source": {},
+          "target": {},
+          "enhance": {}
+        }
+      }
+    },
+    {
+      "name": "cancel_import_run",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/org/{{ record.organization_id }}/imports/{{ record.import_run_id }}/cancel",
+      "risk": "POST /org/{organizationId}/imports/{importRunId}/cancel (Cancel an import run) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "import_run_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "import_run_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "import_run_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites",
+      "risk": "POST /orgs/{organizationId}/sites (Create a new documentation site in an organization) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "type": {},
+          "title": {},
+          "visibility": {},
+          "spaces": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId} (Update the properties of a documentation site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "title": {},
+          "visibility": {},
+          "basename": {},
+          "adaptive_content": {},
+          "permissions_model": {},
+          "default_level": {},
+          "default_site_space": {},
+          "default_site_section": {},
+          "proxy": {},
+          "styleguide": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId} (Delete a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_site_adaptive_schema",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/adaptive-schema",
+      "risk": "PUT /orgs/{organizationId}/sites/{siteId}/adaptive-schema (Update the visitor attributes JSON schema for an adaptive content site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "json_schema"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "json_schema": {}
+        }
+      }
+    },
+    {
+      "name": "publish_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/publish",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/publish (Publish a site to make it publicly accessible) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "unpublish_site",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/unpublish",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/unpublish (Take a site offline by unpublishing it) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_site_share_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/share-links",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/share-links (Create a private share link for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "name"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "name": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_share_link_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/share-links/{{ record.share_link_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/share-links/{shareLinkId} (Update a private share link for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "share_link_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "share_link_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "share_link_id": {
+            "type": "string"
+          },
+          "active": {},
+          "name": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_share_link_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/share-links/{{ record.share_link_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/share-links/{shareLinkId} (Deletes a share link) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "share_link_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "share_link_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "share_link_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "sort_site_structure",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/structure/sort",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/structure/sort (Move a site space, section, or section group to a new position) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "item",
+          "position"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "item": {},
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_publishing_auth_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/publishing/auth",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/publishing/auth (Update the published content authentication configuration for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "backend": {},
+          "fallback_url": {},
+          "logout_url": {}
+        }
+      }
+    },
+    {
+      "name": "regenerate_site_publishing_auth_by_id",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/publishing/auth/regenerate",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/publishing/auth/regenerate (Regenerate the private key for a site's published content authentication) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_site_customization_by_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/customization",
+      "risk": "PUT /orgs/{organizationId}/sites/{siteId}/customization (Update the branding and visual customization settings for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "styling",
+          "internationalization",
+          "favicon",
+          "header",
+          "footer",
+          "themes",
+          "feedback",
+          "ai",
+          "advanced_customization",
+          "trademark",
+          "external_links",
+          "pagination",
+          "page_actions",
+          "privacy_policy",
+          "social_preview",
+          "social_accounts",
+          "insights"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "title": {},
+          "localized_title": {},
+          "styling": {},
+          "internationalization": {},
+          "favicon": {},
+          "header": {},
+          "footer": {},
+          "announcement": {},
+          "themes": {},
+          "feedback": {},
+          "ai": {},
+          "advanced_customization": {},
+          "page_actions": {},
+          "external_links": {},
+          "pagination": {},
+          "trademark": {},
+          "privacy_policy": {},
+          "social_preview": {},
+          "social_accounts": {},
+          "insights": {}
+        }
+      }
+    },
+    {
+      "name": "add_space_to_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/site-spaces (Add a space to a site as a content source) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "space_id": {},
+          "section_id": {},
+          "draft": {}
+        }
+      }
+    },
+    {
+      "name": "add_section_group_to_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/section-groups (Add a section group to a site's navigation structure) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "title"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "title": {},
+          "icon": {},
+          "sections": {},
+          "parent": {},
+          "draft": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_section_group_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups/{{ record.site_section_group_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId} (Update a section group in a site's navigation structure) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_group_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_group_id": {
+            "type": "string"
+          },
+          "title": {},
+          "localized_title": {},
+          "icon": {},
+          "draft": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_section_group_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups/{{ record.site_section_group_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId} (Delete a site section group) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_group_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_group_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "add_section_to_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/sections (Add a new navigation section to a site backed by a space) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "space_id": {},
+          "title": {},
+          "icon": {},
+          "draft": {},
+          "site_section_group_id": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_section_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections/{{ record.site_section_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId} (Update a navigation section in a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_id": {
+            "type": "string"
+          },
+          "title": {},
+          "localized_title": {},
+          "path": {},
+          "default_site_space": {},
+          "condition": {},
+          "icon": {},
+          "draft": {},
+          "description": {},
+          "localized_description": {},
+          "site_section_group_id": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_section_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections/{{ record.site_section_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId} (Delete a site section) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "search_site_content",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/search",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/search (Full-text search across all content in a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "query"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "query": {},
+          "scope": {},
+          "mode": {},
+          "site_space_ids": {},
+          "site_space_id": {}
+        }
+      }
+    },
+    {
+      "name": "stream_ask_in_site",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ask",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/ask (Ask a question in a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "question",
+          "scope"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "question": {},
+          "context": {},
+          "scope": {},
+          "session": {}
+        }
+      }
+    },
+    {
+      "name": "create_site_scan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/scans",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/scans (Enqueue a new site scan) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "topic"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "topic": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_finding_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/findings/{{ record.site_finding_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId} (Update a site finding) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_finding_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_finding_id",
+          "status"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_finding_id": {
+            "type": "string"
+          },
+          "status": {}
+        }
+      }
+    },
+    {
+      "name": "trigger_change_requests_for_site_finding",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/findings/{{ record.site_finding_id }}/change-requests",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId}/change-requests (Process a site finding into change requests) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_finding_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_finding_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_finding_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_site_context_connection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/context-connections",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/context-connections (Create a context connection) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "connector": {},
+          "setup_settings": {},
+          "usage_settings": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_context_connection_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/context-connections/{{ record.site_context_connection_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId} (Update a context connection) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_context_connection_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_context_connection_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_context_connection_id": {
+            "type": "string"
+          },
+          "connector": {},
+          "setup_settings": {},
+          "usage_settings": {},
+          "label": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_context_connection_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/context-connections/{{ record.site_context_connection_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId} (Delete a context connection) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_context_connection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_context_connection_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_context_connection_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "sync_site_context_connection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/context-connections/{{ record.site_context_connection_id }}/sync",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}/sync (Trigger a sync for a context connection) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_context_connection_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_context_connection_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_context_connection_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_site_topic_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/topics/{{ record.site_topic_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId} (Update a topic) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_topic_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_topic_id",
+          "usage_settings"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_topic_id": {
+            "type": "string"
+          },
+          "usage_settings": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_topic_findings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/topics/{{ record.site_topic_id }}/findings",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId}/findings (Delete all findings for a topic) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_topic_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_topic_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_topic_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_site_space_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces/{{ record.site_space_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId} (Update a space linked to a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_space_id": {
+            "type": "string"
+          },
+          "path": {},
+          "condition": {},
+          "space_id": {},
+          "hidden": {},
+          "draft": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_space_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces/{{ record.site_space_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId} (Delete a site space) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_space_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "override_site_space_customization_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces/{{ record.site_space_id }}/customization",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/customization (Override branding and customization settings for a specific site space) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_space_id": {
+            "type": "string"
+          },
+          "title": {},
+          "localized_title": {},
+          "styling": {},
+          "internationalization": {},
+          "favicon": {},
+          "announcement": {},
+          "header": {},
+          "footer": {},
+          "themes": {},
+          "feedback": {},
+          "external_links": {},
+          "pagination": {},
+          "trademark": {},
+          "privacy_policy": {},
+          "social_preview": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_space_customization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces/{{ record.site_space_id }}/customization",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/customization (Delete a site space customization settings) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_space_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_space_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "move_site_section_group",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups/{{ record.site_section_group_id }}/move",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId}/move (Move a site section group to a new position. (Deprecated) use sortSiteStructure instead.) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_group_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_group_id": {
+            "type": "string"
+          },
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "move_site_section",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections/{{ record.site_section_id }}/move",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId}/move (Move a site section to a new position. (Deprecated) use sortSiteStructure instead.) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_section_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_section_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_section_id": {
+            "type": "string"
+          },
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "move_site_space",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces/{{ record.site_space_id }}/move",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/move (Move a site space to a new position. (Deprecated) use sortSiteStructure instead.) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_space_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_space_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_space_id": {
+            "type": "string"
+          },
+          "position": {}
+        }
+      }
+    },
+    {
+      "name": "invite_to_site",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/permissions",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/permissions (Invite a user or a team to a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "teams": {},
+          "users": {}
+        }
+      }
+    },
+    {
+      "name": "update_user_permission_in_site",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/permissions/users/{userId} (Update site user permissions) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_user_from_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/permissions/users/{{ record.user_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/permissions/users/{userId} (Remove a site user) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "user_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_team_permission_in_site",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/permissions/teams/{teamId} (Update an org team's permission in a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "team_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "remove_team_from_site",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/permissions/teams/{{ record.team_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/permissions/teams/{teamId} (Remove an org team from a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "team_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "stream_ai_response_in_site",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ai/response",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/ai/response (Generate an AI response in a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "input"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "previous_response_id": {},
+          "input": {},
+          "model": {},
+          "tools": {},
+          "tool_call": {},
+          "session": {},
+          "channel": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_agent_settings_by_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/agent-settings",
+      "risk": "PUT /orgs/{organizationId}/sites/{siteId}/agent-settings (Update the AI agent configuration for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "scans",
+          "findings",
+          "editing"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "scans": {},
+          "findings": {},
+          "editing": {}
+        }
+      }
+    },
+    {
+      "name": "create_site_styleguide_by_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/styleguide",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/styleguide (Create or retrieve the styleguide space for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "template": {}
+        }
+      }
+    },
+    {
+      "name": "track_events_in_site_by_id",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/insights/events",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/insights/events (Track site events) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "events"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "events": {}
+        }
+      }
+    },
+    {
+      "name": "aggregate_site_events",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/insights/events/aggregate",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/insights/events/aggregate (Query site events) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "range"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "select": {},
+          "where": {},
+          "group_by": {},
+          "order": {},
+          "range": {},
+          "limit": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_ads_by_id",
+      "kind": "update",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ads",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/ads (Update the advertising settings for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "status": {},
+          "topic": {}
+        }
+      }
+    },
+    {
+      "name": "create_site_redirect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/redirects (Create a URL redirect rule for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "source",
+          "destination"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "source": {},
+          "capture_wildcard": {},
+          "draft": {},
+          "destination": {}
+        }
+      }
+    },
+    {
+      "name": "bulk_upsert_site_redirects",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects",
+      "risk": "PUT /orgs/{organizationId}/sites/{siteId}/redirects (Create, update, delete, or publish site redirect rules in bulk) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "redirects"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "redirects": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_redirect_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects/{{ record.site_redirect_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/redirects/{siteRedirectId} (Update a URL redirect rule for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_redirect_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_redirect_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_redirect_id": {
+            "type": "string"
+          },
+          "source": {},
+          "capture_wildcard": {},
+          "draft": {},
+          "destination": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_redirect_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects/{{ record.site_redirect_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/redirects/{siteRedirectId} (Delete a site redirect) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_redirect_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_redirect_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_redirect_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_site_mcp_server",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/mcp-servers",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/mcp-servers (Add a new MCP server configuration to a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "name",
+          "url",
+          "headers"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "name": {},
+          "url": {},
+          "transport": {},
+          "headers": {},
+          "condition": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_mcp_server_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/mcp-servers/{{ record.site_mcp_server_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/mcp-servers/{siteMcpServerId} (Update an MCP server configuration for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_mcp_server_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_mcp_server_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_mcp_server_id": {
+            "type": "string"
+          },
+          "name": {},
+          "url": {},
+          "transport": {},
+          "headers": {},
+          "condition": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_mcp_server_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/mcp-servers/{{ record.site_mcp_server_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/mcp-servers/{siteMcpServerId} (Delete a site MCP server) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_mcp_server_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_mcp_server_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_mcp_server_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_site_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/channels",
+      "risk": "POST /orgs/{organizationId}/sites/{siteId}/channels (Create a new GitBook Agent channel for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "type": {},
+          "setup_settings": {},
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "update_site_channel_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/channels/{{ record.site_channel_id }}",
+      "risk": "PATCH /orgs/{organizationId}/sites/{siteId}/channels/{siteChannelId} (Update a GitBook Agent channel for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_channel_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_channel_id": {
+            "type": "string"
+          },
+          "type": {},
+          "setup_settings": {},
+          "role": {}
+        }
+      }
+    },
+    {
+      "name": "delete_site_channel_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/channels/{{ record.site_channel_id }}",
+      "risk": "DELETE /orgs/{organizationId}/sites/{siteId}/channels/{siteChannelId} (Delete a GitBook Agent channel from a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "organization_id",
+        "site_id",
+        "site_channel_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "site_id",
+          "site_channel_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "site_id": {
+            "type": "string"
+          },
+          "site_channel_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "dns_revalidate_custom_hostname",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom-hostnames/{{ record.hostname }}",
+      "risk": "PATCH /custom-hostnames/{hostname} (Revalidate a custom hostname DNS) executes a live GitBook API operation.",
+      "path_fields": [
+        "hostname"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "hostname"
+        ],
+        "properties": {
+          "hostname": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "remove_custom_hostname",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom-hostnames/{{ record.hostname }}",
+      "risk": "DELETE /custom-hostnames/{hostname} (Remove a custom hostname) executes a live GitBook API operation.",
+      "path_fields": [
+        "hostname"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "hostname"
+        ],
+        "properties": {
+          "hostname": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "ads_update_site",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ads/sites/{{ record.site_id }}",
+      "risk": "PATCH /ads/sites/{siteId} (Update the Ads configuration for a site) executes a live GitBook API operation.",
+      "path_fields": [
+        "site_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "site_id"
+        ],
+        "properties": {
+          "site_id": {
+            "type": "string"
+          },
+          "status": {},
+          "zone_id": {},
+          "reporting_id": {},
+          "reason": {}
+        }
+      }
+    },
+    {
+      "name": "resolve_published_content_by_url",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/urls/published",
+      "risk": "POST /urls/published (Resolve a URL of a published content.) executes a live GitBook API operation.",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {},
+          "redirect_on_error": {},
+          "visitor": {}
+        }
+      }
+    },
+    {
+      "name": "install_git_sync_provider_on_target",
+      "kind": "create",
+      "method": "POST",
+      "path": "/git/installations",
+      "risk": "POST /git/installations (Install a Git Sync provider on a target) executes a live GitBook API operation.",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "provider",
+          "target"
+        ],
+        "properties": {
+          "provider": {},
+          "target": {}
+        }
+      }
+    },
+    {
+      "name": "update_git_sync_installation_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/git/installations/{{ record.installation_id }}",
+      "risk": "PATCH /git/installations/{installationId} (Update a Git Sync installation configuration) executes a live GitBook API operation.",
+      "path_fields": [
+        "installation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "installation_id"
+        ],
+        "properties": {
+          "installation_id": {
+            "type": "string"
+          },
+          "project_directory": {},
+          "commit_message_template": {},
+          "preview_external_branches": {},
+          "priority": {},
+          "provider": {},
+          "provider_configuration": {}
+        }
+      }
+    },
+    {
+      "name": "uninstall_git_sync_installation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/git/installations/{{ record.installation_id }}",
+      "risk": "DELETE /git/installations/{installationId} (Uninstall a Git Sync installation) executes a live GitBook API operation.",
+      "path_fields": [
+        "installation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "installation_id"
+        ],
+        "properties": {
+          "installation_id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

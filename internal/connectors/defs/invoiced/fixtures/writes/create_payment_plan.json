@@ -1,0 +1,30 @@
+{
+  "record": {
+    "invoice_id": 123,
+    "installments": [
+      {
+        "date": 1767225600,
+        "amount": 100
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/123/payment_plan",
+    "body": {
+      "installments": [
+        {
+          "date": 1767225600,
+          "amount": 100
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

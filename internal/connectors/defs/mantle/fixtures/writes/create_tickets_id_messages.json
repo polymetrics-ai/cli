@@ -1,0 +1,67 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "actorType": "customer",
+    "content": "fixture",
+    "fullContent": "fixture",
+    "contentType": "markdown",
+    "isInternal": true,
+    "contactId": "contact_id_fixture",
+    "agentId": "agent_id_fixture",
+    "occurredAt": "2026-01-01T00:00:00Z",
+    "messageId": "message_id_fixture",
+    "inReplyToId": "in_reply_to_id_fixture",
+    "referencesIds": [
+      "references_id_fixture"
+    ],
+    "attachments": [
+      {
+        "url": "https://example.com/fixture",
+        "name": "fixture",
+        "contentType": "fixture",
+        "sizeBytes": 1
+      }
+    ],
+    "contact": {
+      "email": "fixture@example.com",
+      "name": "fixture"
+    },
+    "send": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tickets/id_fixture/messages",
+    "body": {
+      "actorType": "customer",
+      "content": "fixture",
+      "fullContent": "fixture",
+      "contentType": "markdown",
+      "isInternal": true,
+      "contactId": "contact_id_fixture",
+      "agentId": "agent_id_fixture",
+      "occurredAt": "2026-01-01T00:00:00Z",
+      "messageId": "message_id_fixture",
+      "inReplyToId": "in_reply_to_id_fixture",
+      "referencesIds": [
+        "references_id_fixture"
+      ],
+      "attachments": [
+        {
+          "url": "https://example.com/fixture",
+          "name": "fixture",
+          "contentType": "fixture",
+          "sizeBytes": 1
+        }
+      ],
+      "contact": {
+        "email": "fixture@example.com",
+        "name": "fixture"
+      },
+      "send": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

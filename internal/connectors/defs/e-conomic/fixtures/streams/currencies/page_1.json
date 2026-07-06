@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/currencies", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "code": "DKK", "name": "Danish Krone", "self": "https://restapi.e-conomic.com/currencies/DKK" },
+        { "code": "EUR", "name": "Euro", "self": "https://restapi.e-conomic.com/currencies/EUR" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

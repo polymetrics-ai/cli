@@ -1,0 +1,13 @@
+{
+  "record": {
+    "idp_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/idps/synthetic-conformance-value/lifecycle/deactivate"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

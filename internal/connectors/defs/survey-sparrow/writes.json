@@ -1,0 +1,624 @@
+{
+  "actions": [
+    {
+      "name": "create_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/surveys",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "survey_type"],
+        "properties": {
+          "name": { "type": "string" },
+          "survey_type": { "type": "string", "enum": ["ClassicForm", "NPS", "NPSChat", "Conversational", "CES", "CESChat", "CSAT", "CSATChat"] },
+          "survey_folder_id": { "type": "integer" },
+          "visibility": { "type": "string" },
+          "theme_id": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_survey",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/surveys/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "theme_id": { "type": "integer" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "full_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "mobile": { "type": "string" },
+          "job_title": { "type": "string" },
+          "contact_type": { "type": "string" },
+          "referenceId": { "type": "string" },
+          "unique_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "full_name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "mobile": { "type": "string" },
+          "job_title": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_question",
+      "kind": "create",
+      "method": "POST",
+      "path": "/questions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["survey_id", "text", "type"],
+        "properties": {
+          "survey_id": { "type": "integer" },
+          "section_id": { "type": "integer" },
+          "text": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string" },
+          "required": { "type": "boolean" },
+          "multiple_answers": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_question",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/questions/{{ record.question_id }}",
+      "path_fields": ["question_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["question_id", "survey_id"],
+        "properties": {
+          "question_id": { "type": "integer" },
+          "survey_id": { "type": "integer" },
+          "text": { "type": "string" },
+          "description": { "type": "string" },
+          "required": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_question",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/questions/{{ record.question_id }}",
+      "path_fields": ["question_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["question_id"],
+        "properties": { "question_id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_lists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_contact_list",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contact_lists/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_contact_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_lists/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_contact_property",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_properties",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type", "label"],
+        "properties": {
+          "type": { "type": "string" },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "contact_property_group_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_contact_property",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contact_properties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_contact_property",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_properties/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_survey_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/survey_folders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "visibility": { "type": "string" },
+          "parent_survey_folder_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_survey_folder",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/survey_folders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "visibility": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_survey_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/survey_folders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "enable_round_robin": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subject", "priority", "status"],
+        "properties": {
+          "subject": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "integer" },
+          "status": { "type": "integer" },
+          "requester_id": { "type": "integer" },
+          "email": { "type": "string" },
+          "assignee_id": { "type": "integer" },
+          "team_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "priority": { "type": "integer" },
+          "status": { "type": "integer" },
+          "assignee_id": { "type": "integer" },
+          "team_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "survey_id", "http_method"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "string" },
+          "survey_id": { "type": "integer" },
+          "http_method": { "type": "string" },
+          "event_type": { "type": "string" },
+          "object_type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "http_method": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "email", "role_id"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "role_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation creating a live user account with console access; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "role_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a user account; approval required"
+    },
+    {
+      "name": "create_reminder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reminders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["channel_id", "survey_id", "frequency", "type", "interval", "embed_first_question", "custom_footer"],
+        "properties": {
+          "channel_id": { "type": "integer" },
+          "survey_id": { "type": "integer" },
+          "body": { "type": "string" },
+          "subject": { "type": "string" },
+          "frequency": { "type": "string" },
+          "type": { "type": "string" },
+          "interval": { "type": "integer" },
+          "embed_first_question": { "type": "boolean" },
+          "custom_footer": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_reminder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reminders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_variable",
+      "kind": "create",
+      "method": "POST",
+      "path": "/variables",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["survey_id", "label", "name", "type"],
+        "properties": {
+          "survey_id": { "type": "integer" },
+          "label": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_variable",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/variables/{{ record.variable_id }}",
+      "path_fields": ["variable_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["variable_id"],
+        "properties": { "variable_id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    },
+    {
+      "name": "create_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string" },
+          "mode": { "type": "string" },
+          "email": { "type": "string" },
+          "mobile": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_channel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/channels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; approval required"
+    }
+  ]
+}

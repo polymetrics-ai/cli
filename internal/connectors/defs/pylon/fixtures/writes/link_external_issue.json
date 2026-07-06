@@ -1,0 +1,20 @@
+{
+  "record": {
+    "issue_id": "synthetic-conformance-value",
+    "source": "synthetic-conformance-value",
+    "external_issue_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issues/synthetic-conformance-value/external-issues",
+    "body": {
+      "source": "synthetic-conformance-value",
+      "external_issue_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

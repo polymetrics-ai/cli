@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

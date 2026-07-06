@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/clients", "query": { "per_page": "1", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": { "pagination": { "total": 0 } } }
+  }
+}

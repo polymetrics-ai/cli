@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "abc-def-ghi",
+    "title": "Fixture Dashboard Renamed",
+    "layout_type": "ordered",
+    "widgets": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/dashboard/abc-def-ghi"
+  }
+}

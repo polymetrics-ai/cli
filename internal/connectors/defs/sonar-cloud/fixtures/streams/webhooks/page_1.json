@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/webhooks/list",
+    "query": {
+      "organization": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "key": "webhook_fixture_1",
+          "name": "fixture webhook",
+          "url": "https://example.com/fixture-webhook",
+          "hasSecret": false
+        }
+      ]
+    }
+  }
+}

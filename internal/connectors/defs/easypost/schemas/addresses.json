@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "addresses",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "mode": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "name": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "street1": { "type": ["string", "null"] },
+    "street2": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "residential": { "type": ["boolean", "null"] }
+  }
+}

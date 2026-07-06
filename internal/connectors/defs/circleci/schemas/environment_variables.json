@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "environment_variables",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "value": { "type": ["string", "null"] },
+    "created-at": { "type": ["string", "null"] }
+  }
+}

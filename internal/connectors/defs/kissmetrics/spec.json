@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kissmetrics Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Kissmetrics API key/username, sent via HTTP Basic auth."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Kissmetrics API secret, sent via HTTP Basic auth. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://query.kissmetrics.io/v3",
+      "description": "Kissmetrics query API base URL override for tests or proxies."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Kissmetrics product (account) id. Required for the reports, events, and properties streams, which are scoped to a single product partition (products/{product_id}/<resource>)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-200)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

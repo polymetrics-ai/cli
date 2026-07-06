@@ -1,0 +1,15 @@
+{
+  "record": {
+    "name": "Fixture New Schedule",
+    "timeZone": "UTC",
+    "isDefault": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/schedules"
+  },
+  "response": {
+    "status": 201,
+    "body": { "status": "success", "data": { "id": 302, "name": "Fixture New Schedule", "timeZone": "UTC", "isDefault": false } }
+  }
+}

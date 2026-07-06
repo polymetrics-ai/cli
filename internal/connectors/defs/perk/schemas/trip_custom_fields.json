@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trip_custom_fields",
+  "type": "object",
+  "x-primary-key": ["trip_id"],
+  "required": ["trip_id"],
+  "properties": {
+    "trip_id": { "type": "string", "description": "Stamped by fan_out from the /trips list's own id field (a string); overwrites the raw response's own (numeric) trip_id after projection." },
+    "created_date": { "type": ["string", "null"] },
+    "custom_fields": { "type": ["array", "null"] }
+  }
+}

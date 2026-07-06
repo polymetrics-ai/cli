@@ -1,0 +1,21 @@
+{
+  "record": {
+    "billing_request_id": "billing_request_id_fixture",
+    "billing_requests": {
+      "description": "Synthetic collect_bank_account_details fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/billing_requests/billing_request_id_fixture/actions/collect_bank_account",
+    "body": {
+      "billing_requests": {
+        "description": "Synthetic collect_bank_account_details fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "creditnote_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/creditnotes/approve"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

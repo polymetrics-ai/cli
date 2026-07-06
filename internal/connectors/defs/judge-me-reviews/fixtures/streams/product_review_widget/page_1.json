@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/product_review"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "widget": "<div class=\"jdgm-widget\">Fixture product reviews</div>"
+    }
+  }
+}

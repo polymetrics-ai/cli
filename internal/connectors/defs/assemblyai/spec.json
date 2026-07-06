@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssemblyAI Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "AssemblyAI API key. Sent as the raw value of the Authorization header (no Bearer prefix); never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.assemblyai.com",
+      "description": "AssemblyAI API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-200)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "word_search_terms": {
+      "type": "string",
+      "default": "the",
+      "description": "Comma-or-space-separated keywords passed verbatim as the transcript_word_search_matches stream's required words query parameter (AssemblyAI's GET /v2/transcript/{id}/word-search has no server-side default; set this to the terms you want counted across every synced transcript). Only consumed by that one stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

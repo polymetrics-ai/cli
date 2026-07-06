@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_reports",
+  "type": "object",
+  "properties": {
+    "marketplaceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reportId": {
+      "type": "string"
+    },
+    "reportType": {
+      "type": "string"
+    },
+    "dataStartTime": {
+      "type": "string"
+    },
+    "dataEndTime": {
+      "type": "string"
+    },
+    "reportScheduleId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string"
+    },
+    "processingStatus": {
+      "type": "string"
+    },
+    "processingStartTime": {
+      "type": "string"
+    },
+    "processingEndTime": {
+      "type": "string"
+    },
+    "reportDocumentId": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "reportId"
+  ]
+}

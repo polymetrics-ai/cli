@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/app/dao/v6/opportunities",
+    "query": {
+      "a": "getAll",
+      "numRecords": "100",
+      "startIndex": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "opportunityId": "opp_fixture_101",
+          "opportunityName": "Fixture Deal 101",
+          "customerName": "Fixture Co",
+          "salesStageName": "Prospecting",
+          "opportunityAmount": "101000",
+          "currencyCode": "USD",
+          "closingDate": "2026-12-31",
+          "creationDate": "2026-01-01",
+          "lastUpdateDate": "2026-01-02"
+        }
+      ]
+    }
+  }
+}

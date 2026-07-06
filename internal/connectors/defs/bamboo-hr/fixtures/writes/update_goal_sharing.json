@@ -1,0 +1,22 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "goal_id": "fixture_id",
+    "sharedWithEmployeeIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/performance/employees/fixture_id/goals/fixture_id/sharedWith",
+    "body": {
+      "sharedWithEmployeeIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

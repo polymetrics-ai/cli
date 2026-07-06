@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "eod",
+  "type": "object",
+  "x-primary-key": ["symbol", "date"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "exchange": { "type": ["string", "null"] },
+    "open": { "type": ["number", "null"] },
+    "high": { "type": ["number", "null"] },
+    "low": { "type": ["number", "null"] },
+    "close": { "type": ["number", "null"] },
+    "volume": { "type": ["number", "null"] },
+    "adj_open": { "type": ["number", "null"] },
+    "adj_high": { "type": ["number", "null"] },
+    "adj_low": { "type": ["number", "null"] },
+    "adj_close": { "type": ["number", "null"] },
+    "adj_volume": { "type": ["number", "null"] },
+    "split_factor": { "type": ["number", "null"] },
+    "dividend": { "type": ["number", "null"] }
+  }
+}

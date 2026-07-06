@@ -1,0 +1,22 @@
+{
+  "record": {
+    "start": "2026-01-01T00:00:00.000Z",
+    "end": "2026-01-02T00:00:00.000Z",
+    "event": "Conversation-Resolved",
+    "format": "csv"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reports/raw",
+    "body": {
+      "event": "Conversation-Resolved",
+      "format": "csv"
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {
+      "id": "report_fixture_1"
+    }
+  }
+}

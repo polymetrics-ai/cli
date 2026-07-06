@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture schedule",
+    "prompt": "Run the fixture maintenance task",
+    "schedule_type": "one_time",
+    "scheduled_at": "2026-03-01T09:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/organizations/synthetic-conformance-value/schedules",
+    "body": {
+      "name": "Fixture schedule",
+      "prompt": "Run the fixture maintenance task"
+    }
+  }
+}

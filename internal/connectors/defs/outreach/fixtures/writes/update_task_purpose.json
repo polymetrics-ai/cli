@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "taskpurpose",
+      "attributes": {
+        "name": "Fixture Update Task Purpose"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/taskPurposes/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "taskpurpose",
+        "attributes": {
+          "name": "Fixture Update Task Purpose"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

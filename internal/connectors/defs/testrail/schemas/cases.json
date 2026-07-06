@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cases",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_on",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Stamped by the fan_out dialect from the enclosing project id discovered via the projects listing; always a string regardless of TestRail's own numeric project_id wire type."
+    },
+    "suite_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "section_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "priority_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "milestone_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "template_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_by": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updated_by": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updated_on": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "estimate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refs": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

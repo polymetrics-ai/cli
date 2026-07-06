@@ -1,0 +1,38 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "description": "description_fixture",
+    "model_name": "model_name_fixture",
+    "flavor_name": "flavor_name_fixture",
+    "gpu_type": "gpu-l40s-d",
+    "region": "eu-north1",
+    "gpu_count": 1,
+    "custom_weights_id": "custom_weights_id_fixture",
+    "scaling": {
+      "min_replicas": 1,
+      "max_replicas": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/dedicated_endpoints",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "model_name": "model_name_fixture",
+      "flavor_name": "flavor_name_fixture",
+      "gpu_type": "gpu-l40s-d",
+      "region": "eu-north1",
+      "gpu_count": 1,
+      "custom_weights_id": "custom_weights_id_fixture",
+      "scaling": {
+        "min_replicas": 1,
+        "max_replicas": 1
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

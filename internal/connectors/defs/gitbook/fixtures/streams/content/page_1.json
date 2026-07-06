@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/spaces/synthetic-conformance-value/content/pages", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pages": [
+        {
+          "id": "page_fixture_1",
+          "title": "Introduction",
+          "type": "document",
+          "kind": "document",
+          "slug": "introduction",
+          "path": "introduction"
+        },
+        {
+          "id": "page_fixture_2",
+          "title": "Getting Started",
+          "type": "group",
+          "kind": "group",
+          "slug": "getting-started",
+          "path": "getting-started"
+        }
+      ]
+    }
+  }
+}

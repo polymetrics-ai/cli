@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cryptocurrency_info",
+  "type": "object",
+  "x-primary-key": ["cmc_id"],
+  "properties": {
+    "cmc_id": { "type": ["string", "null"] },
+    "id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "subreddit": { "type": ["string", "null"] },
+    "notice": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "platform": { "type": ["object", "null"] },
+    "date_added": { "type": ["string", "null"] },
+    "date_launched": { "type": ["string", "null"] },
+    "urls": { "type": ["object", "null"] }
+  }
+}

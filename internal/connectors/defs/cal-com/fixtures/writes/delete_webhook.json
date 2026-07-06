@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 401
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/webhooks/401"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 401 } }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/signature_requests" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sr_fixture_1",
+          "name": "Fixture Contract One",
+          "status": "done",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "sr_fixture_2",
+          "name": "Fixture Contract Two",
+          "status": "pending",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

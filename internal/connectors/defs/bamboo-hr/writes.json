@@ -1,0 +1,4851 @@
+{
+  "actions": [
+    {
+      "name": "create_application_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/applicant_tracking/applications/{{ record.application_id }}/comments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "application_id",
+          "comment"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "comment": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Job Application Comment through the BambooHR API.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "update_applicant_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/applicant_tracking/applications/{{ record.application_id }}/status",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "application_id",
+          "status"
+        ],
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Applicant Status through the BambooHR API.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "add_new_company_benefit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/benefit/company_benefit",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Add a new company benefit through the BambooHR API."
+    },
+    {
+      "name": "delete_company_benefit",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/benefit/company_benefit/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete a company benefit.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_company_benefit",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/benefit/company_benefit/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "benefitType": {
+            "type": "string",
+            "enum": [
+              "health",
+              "dental",
+              "vision",
+              "retirement",
+              "hsa",
+              "flex",
+              "life",
+              "disability",
+              "reimbursement",
+              "supplemental",
+              "other"
+            ]
+          },
+          "benefitVendorId": {
+            "type": "string"
+          },
+          "companyBenefitName": {
+            "type": "string"
+          },
+          "deductionTypeId": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "meetAcaMin": {
+            "type": "boolean"
+          },
+          "minEssentialCoverage": {
+            "type": "boolean"
+          },
+          "planUrl": {
+            "type": "string"
+          },
+          "reimbursementAmount": {
+            "type": "number"
+          },
+          "reimbursementCurrencyCode": {
+            "type": "string"
+          },
+          "reimbursementFrequency": {
+            "type": "string",
+            "enum": [
+              "pay period",
+              "month",
+              "quarter",
+              "year",
+              "one time"
+            ]
+          },
+          "safeHarbor": {
+            "type": "boolean"
+          },
+          "ssoLoginUrl": {
+            "type": "string"
+          },
+          "ssoLoginUrlLinkText": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update a company benefit through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_employee_benefit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/benefit/employee_benefit",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "benefitPlanCoverageId": {
+            "type": "number"
+          },
+          "companyAmount": {
+            "type": "number"
+          },
+          "companyAmountType": {
+            "type": "string"
+          },
+          "companyAnnualMax": {
+            "type": "number"
+          },
+          "companyBenefitId": {
+            "type": "integer"
+          },
+          "companyBenefitName": {
+            "type": "string"
+          },
+          "companyCapAmount": {
+            "type": "number"
+          },
+          "companyCapAmountType": {
+            "type": "string"
+          },
+          "companyPercentBasedOn": {
+            "type": "string"
+          },
+          "coverageLevel": {
+            "type": "string"
+          },
+          "currencyCode": {
+            "type": "string"
+          },
+          "deductionEndDate": {
+            "type": "string"
+          },
+          "deductionStartDate": {
+            "type": "string"
+          },
+          "effectiveDate": {
+            "type": "string"
+          },
+          "employeeAmount": {
+            "type": "number"
+          },
+          "employeeAmountType": {
+            "type": "string"
+          },
+          "employeeAnnualMax": {
+            "type": "number"
+          },
+          "employeeCapAmount": {
+            "type": "number"
+          },
+          "employeeCapAmountType": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "integer"
+          },
+          "employeePercentBasedOn": {
+            "type": "string"
+          },
+          "enrollmentStatus": {
+            "type": "string",
+            "enum": [
+              "Eligible",
+              "Enrolled",
+              "Waived",
+              "Withdrawn",
+              "Terminated",
+              "Ineligible"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add an employee benefit through the BambooHR API."
+    },
+    {
+      "name": "add_benefit_group_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/benefitgroupemployees",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "benefitGroupId": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add a benefit group employee through the BambooHR API."
+    },
+    {
+      "name": "clear_employee_deposit",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/employee_direct_deposit_accounts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Clear an employee's direct deposit information.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_employee_deposit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employee_direct_deposit_accounts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add an employee's direct deposit information through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_employee_paystub",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employee_pay_stub",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "additionalFed": {
+            "type": "string"
+          },
+          "additionalLocal": {
+            "type": "string"
+          },
+          "additionalState": {
+            "type": "string"
+          },
+          "currencyCode": {
+            "type": "string"
+          },
+          "deductions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "deductionsAmount": {
+            "type": "string"
+          },
+          "dependentsAmount": {
+            "type": "string"
+          },
+          "deposits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "externalRecordId": {
+            "type": "string"
+          },
+          "fedWitholding": {
+            "type": "string"
+          },
+          "federalType": {
+            "type": "string",
+            "enum": [
+              "2020_w4",
+              "pre_2020_w4"
+            ]
+          },
+          "gross": {
+            "type": "string"
+          },
+          "localWithholding": {
+            "type": "string"
+          },
+          "net": {
+            "type": "string"
+          },
+          "otherIncome": {
+            "type": "string"
+          },
+          "payDate": {
+            "type": "string"
+          },
+          "payPeriodFrom": {
+            "type": "string"
+          },
+          "payPeriodTo": {
+            "type": "string"
+          },
+          "payeeName": {
+            "type": "string"
+          },
+          "payorAdd1": {
+            "type": "string"
+          },
+          "payorAdd2": {
+            "type": "string"
+          },
+          "payorCity": {
+            "type": "string"
+          },
+          "payorName": {
+            "type": "string"
+          },
+          "payorState": {
+            "type": "string"
+          },
+          "payorZip": {
+            "type": "string"
+          },
+          "stateWithholding": {
+            "type": "string"
+          },
+          "taxLocal": {
+            "type": "string"
+          },
+          "taxState": {
+            "type": "string"
+          },
+          "taxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "totalDeductions": {
+            "type": "string"
+          },
+          "totalTaxes": {
+            "type": "string"
+          },
+          "twoJobs": {
+            "type": "string"
+          },
+          "wages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "ytdDeductions": {
+            "type": "string"
+          },
+          "ytdGross": {
+            "type": "string"
+          },
+          "ytdNet": {
+            "type": "string"
+          },
+          "ytdTaxes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add an employee's paystub through the BambooHR API."
+    },
+    {
+      "name": "clear_employee_paystub",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/employee_pay_stub/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete an employee's paystub.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_employee_unpaid_paystubs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employee_unpaid_pay_stubs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "string"
+          },
+          "unpaidPeriods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add an employee's unpaid paystubs through the BambooHR API."
+    },
+    {
+      "name": "clear_employee_unpaid_paystubs",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/employee_unpaid_pay_stubs/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Clear an employee's unpaid paystubs.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "clear_employee_withholding",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/employee_withholding/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Clear an employee's default withholdings.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_employee_withholding",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employee_withholding/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "additionalFed": {
+            "type": "string"
+          },
+          "additionalLocal": {
+            "type": "string"
+          },
+          "additionalState": {
+            "type": "string"
+          },
+          "fedWithholding": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "localWithholding": {
+            "type": "string"
+          },
+          "stateWithholding": {
+            "type": "string"
+          },
+          "taxLocal": {
+            "type": "string"
+          },
+          "taxState": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Add an employee's default withholdings through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_employee_dependent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employeedependents",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employeeId"
+        ],
+        "properties": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "homePhone": {
+            "type": "string"
+          },
+          "isStudent": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "isUsCitizen": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "relationship": {
+            "type": "string"
+          },
+          "sin": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Employee Dependent through the BambooHR API."
+    },
+    {
+      "name": "update_employee_dependent",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/employeedependents/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "employeeId"
+        ],
+        "properties": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "homePhone": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "isStudent": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "isUsCitizen": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "relationship": {
+            "type": "string"
+          },
+          "sin": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Employee Dependent through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "adjust_time_off_balance",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/employees/{{ record.employee_id }}/time_off/balance_adjustment",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "amount",
+          "date",
+          "timeOffTypeId"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "timeOffTypeId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Adjust Time Off Balance through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_time_off_history",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/employees/{{ record.employee_id }}/time_off/history",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "date"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "eventType": {
+            "type": "string",
+            "enum": [
+              "used",
+              "override"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "timeOffRequestId": {
+            "type": "integer"
+          },
+          "timeOffTypeId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Off History Item through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "assign_time_off_policies",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/employees/{{ record.employee_id }}/time_off/policies",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Assign Time Off Policies through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_time_off_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/employees/{{ record.employee_id }}/time_off/request",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "status",
+          "start",
+          "end",
+          "timeOffTypeId"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "dates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number"
+                },
+                "ymd": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "end": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "enum": [
+                    "employee",
+                    "manager"
+                  ]
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "previousRequest": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "denied",
+              "declined",
+              "requested"
+            ]
+          },
+          "timeOffTypeId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Off Request through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_table_row",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/employees/{{ record.id }}/tables/{{ record.table }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "table"
+        ],
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "division": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "reportsTo": {
+            "type": "string"
+          },
+          "table": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Table Row through the BambooHR API.",
+      "path_fields": [
+        "id",
+        "table"
+      ]
+    },
+    {
+      "name": "delete_employee_table_row",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/employees/{{ record.id }}/tables/{{ record.table }}/{{ record.row_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "table",
+          "row_id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "row_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "table": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Employee Table Row.",
+      "path_fields": [
+        "id",
+        "table",
+        "row_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_table_row",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/employees/{{ record.id }}/tables/{{ record.table }}/{{ record.row_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "table",
+          "row_id"
+        ],
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "division": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "reportsTo": {
+            "type": "string"
+          },
+          "row_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "table": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Table Row through the BambooHR API.",
+      "path_fields": [
+        "id",
+        "table",
+        "row_id"
+      ]
+    },
+    {
+      "name": "update_list_field_values",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/meta/lists/{{ record.list_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "list_field_id"
+        ],
+        "properties": {
+          "list_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "adpCode": {
+                  "type": "string"
+                },
+                "archived": {
+                  "type": "string",
+                  "enum": [
+                    "yes",
+                    "no"
+                  ]
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update List Field Values through the BambooHR API.",
+      "path_fields": [
+        "list_field_id"
+      ]
+    },
+    {
+      "name": "create_goal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "title",
+          "dueDate",
+          "sharedWithEmployeeIds"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "alignsWithOptionId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "completionDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "percentComplete": {
+            "type": "integer"
+          },
+          "sharedWithEmployeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Goal through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "delete_goal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Goal.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_goal_v1",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "dueDate",
+          "sharedWithEmployeeIds",
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "alignsWithOptionId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "completionDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "percentComplete": {
+            "type": "integer"
+          },
+          "sharedWithEmployeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Goal (v1) through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "close_goal",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/close",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id"
+        ],
+        "properties": {
+          "comment": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Close Goal through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "create_goal_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "text"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Goal Comment through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "delete_goal_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "comment_id"
+        ],
+        "properties": {
+          "comment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Goal Comment.",
+      "path_fields": [
+        "employee_id",
+        "goal_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_goal_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "comment_id",
+          "text"
+        ],
+        "properties": {
+          "comment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Goal Comment through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id",
+        "comment_id"
+      ]
+    },
+    {
+      "name": "update_goal_milestone_progress",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/milestones/{{ record.milestone_id }}/progress",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "milestone_id",
+          "complete"
+        ],
+        "properties": {
+          "complete": {
+            "type": "boolean"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "milestone_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Milestone Progress through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id",
+        "milestone_id"
+      ]
+    },
+    {
+      "name": "update_goal_progress",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/progress",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "percentComplete"
+        ],
+        "properties": {
+          "completionDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "percentComplete": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Goal Progress through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "reopen_goal",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/reopen",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Reopen Goal through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "update_goal_sharing",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/sharedWith",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "sharedWithEmployeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Goal Sharing through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "create_scheduling_create_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/scheduling/schedules",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "locationId",
+          "startOfWeek"
+        ],
+        "properties": {
+          "earlyClockInThreshold": {
+            "type": "integer"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "locationId": {
+            "type": "integer"
+          },
+          "managerUserIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "startOfWeek": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Schedule through the BambooHR API."
+    },
+    {
+      "name": "delete_scheduling_delete_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/scheduling/schedules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Schedule.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_scheduling_update_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/scheduling/schedules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "earlyClockInThreshold": {
+            "type": "integer"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "locationId": {
+            "type": "integer"
+          },
+          "managerUserIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "startOfWeek": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Schedule through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_scheduling_create_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/scheduling/shifts",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "scheduleId",
+          "status",
+          "color",
+          "timezone",
+          "start",
+          "end"
+        ],
+        "properties": {
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "color": {
+            "type": "string"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "end": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceDtend": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceDtstart": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceRule": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceUntil": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "scheduleId": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "published"
+            ]
+          },
+          "timezone": {}
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Shift through the BambooHR API."
+    },
+    {
+      "name": "create_scheduling_publish_shifts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/scheduling/shifts/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "shiftIds"
+        ],
+        "properties": {
+          "shiftIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Publish Shifts through the BambooHR API."
+    },
+    {
+      "name": "delete_scheduling_delete_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/scheduling/shifts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Shift.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_scheduling_update_shift",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/scheduling/shifts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "capacity": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "color": {
+            "type": "string"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "end": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceDtend": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceDtstart": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceEditOption": {
+            "type": "string",
+            "enum": [
+              "instance",
+              "future",
+              "all"
+            ]
+          },
+          "recurrenceRule": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "recurrenceUntil": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "start": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "unpublishedChanges": {
+            "type": "null"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Shift through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_break_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/break-policies",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "breaks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "availabilityEndTime": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "availabilityMaxHoursWorked": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "availabilityMinHoursWorked": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "availabilityStartTime": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "availabilityType": {
+                  "enum": [
+                    "anytime",
+                    "hours_worked",
+                    "time_of_day"
+                  ]
+                },
+                "duration": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                },
+                "paid": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Break Policy through the BambooHR API."
+    },
+    {
+      "name": "delete_break_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Break Policy.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_break_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "assign_employees_to_break_policy",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/assign",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "employeeIds"
+        ],
+        "properties": {
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Assign Employees to Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "set_break_policy_employees",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/assign",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "employeeIds"
+        ],
+        "properties": {
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Set Employees for Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_break",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/breaks",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "availabilityEndTime": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "availabilityMaxHoursWorked": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "availabilityMinHoursWorked": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "availabilityStartTime": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "availabilityType": {
+            "enum": [
+              "anytime",
+              "hours_worked",
+              "time_of_day"
+            ]
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "paid": {
+            "type": "boolean"
+          },
+          "policyId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Break through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "replace_breaks_for_break_policy",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/breaks",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Replace Breaks for Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "sync_break_policy",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/sync",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "breaks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "availabilityEndTime": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "availabilityMaxHoursWorked": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "availabilityMinHoursWorked": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "availabilityStartTime": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "availabilityType": {
+                  "enum": [
+                    "anytime",
+                    "hours_worked",
+                    "time_of_day"
+                  ]
+                },
+                "duration": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                },
+                "paid": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Sync Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_unassign_employees_from_break_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/unassign",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "employeeIds"
+        ],
+        "properties": {
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Unassign Employees from Break Policy through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_break",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/breaks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Break.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_break",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/breaks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "availabilityEndTime": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "availabilityMaxHoursWorked": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "availabilityMinHoursWorked": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "availabilityStartTime": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "availabilityType": {
+            "enum": [
+              "anytime",
+              "hours_worked",
+              "time_of_day"
+            ]
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "paid": {
+            "type": "boolean"
+          },
+          "policyId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Break through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/projects",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "billable": {
+            "type": "boolean"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "includeInPayroll": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "billable": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Tracking Project through the BambooHR API."
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/projects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Time Tracking Project.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/projects/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "allEmployeesAssigned": {
+            "type": "boolean"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "billable": {
+            "type": "boolean"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "hasTasks": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "includeInPayroll": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Time Tracking Project through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_project_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/projects/{{ record.project_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "project_id",
+          "name"
+        ],
+        "properties": {
+          "billable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Tracking Project Task through the BambooHR API.",
+      "path_fields": [
+        "project_id"
+      ]
+    },
+    {
+      "name": "create_shift_differential",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time-tracking/shift-differentials",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "rate",
+          "rateType",
+          "times"
+        ],
+        "properties": {
+          "allowAllEmployees": {
+            "type": "boolean"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "string"
+          },
+          "rateType": {
+            "type": "string",
+            "enum": [
+              "AMOUNT",
+              "PERCENT"
+            ]
+          },
+          "times": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "startDay",
+                "endDay",
+                "start",
+                "end"
+              ],
+              "properties": {
+                "end": {
+                  "type": "string"
+                },
+                "endDay": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                },
+                "start": {
+                  "type": "string"
+                },
+                "startDay": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Tracking Shift Differential through the BambooHR API."
+    },
+    {
+      "name": "delete_shift_differential",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/shift-differentials/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Time Tracking Shift Differential.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_shift_differential",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/shift-differentials/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "allowAllEmployees": {
+            "type": "boolean"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "string"
+          },
+          "rateType": {
+            "type": "string",
+            "enum": [
+              "AMOUNT",
+              "PERCENT"
+            ]
+          },
+          "times": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "startDay",
+                "endDay",
+                "start",
+                "end"
+              ],
+              "properties": {
+                "end": {
+                  "type": "string"
+                },
+                "endDay": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                },
+                "start": {
+                  "type": "string"
+                },
+                "startDay": {
+                  "type": "string",
+                  "enum": [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Time Tracking Shift Differential through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/tasks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Time Tracking Task.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/tasks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "billable": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Time Tracking Task through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_time_off_request_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/time_off/requests/{{ record.request_id }}/status",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "denied",
+              "declined",
+              "canceled",
+              "cancelled"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Time Off Request Status through the BambooHR API.",
+      "path_fields": [
+        "request_id"
+      ]
+    },
+    {
+      "name": "delete_clock_entries",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/time_tracking/clock_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clockEntryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete clock entries.",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "store_clock_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "clockEntryId": {
+                  "type": "integer"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "employeeId": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "projectId": {
+                  "type": "integer"
+                },
+                "start": {
+                  "type": "string"
+                },
+                "taskId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Store clock entries through the BambooHR API."
+    },
+    {
+      "name": "delete_timesheet_clock_entries_via_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries/delete",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "clockEntryIds"
+        ],
+        "properties": {
+          "clockEntryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete Timesheet Clock Entries through the BambooHR API."
+    },
+    {
+      "name": "create_or_update_timesheet_clock_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries/store",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "entries"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "employeeId",
+                "date",
+                "start",
+                "end"
+              ],
+              "properties": {
+                "breakId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "date": {
+                  "type": "string"
+                },
+                "employeeId": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "projectId": {
+                  "type": "integer"
+                },
+                "start": {
+                  "type": "string"
+                },
+                "taskId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create or Update Timesheet Clock Entries through the BambooHR API."
+    },
+    {
+      "name": "clock_in",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_in/{{ record.employee_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "clockInLocation": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "type": "integer"
+              },
+              "address": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": true
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "start": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Clock in (employee id optional) through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "clock_out",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_out/{{ record.employee_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "clockOutLocation": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "type": "integer"
+              },
+              "address": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": true
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Clock out (employee id optional) through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "store_daily_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/daily_entries",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dailyEntryId": {
+                  "type": "integer"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "employeeId": {
+                  "type": "integer"
+                },
+                "hours": {
+                  "type": "number"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "projectId": {
+                  "type": "integer"
+                },
+                "taskId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Store daily entries through the BambooHR API."
+    },
+    {
+      "name": "clock_in_data",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employee/{{ record.employee_id }}/clock_in/data",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "clockInLocation": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "type": "integer"
+              },
+              "address": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": true
+          },
+          "clockOutLocation": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "type": "integer"
+              },
+              "address": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number"
+              },
+              "longitude": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": true
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "start": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Edit information on the currently clocked in entry through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "clock_out_employee_at_specific_time",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employee/{{ record.employee_id }}/clock_out/datetime",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "datetime": {
+            "type": "string"
+          },
+          "employeeId": {
+            "type": "integer"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Clock out an employee at a specific time through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_timesheet_clock_in_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employees/{{ record.employee_id }}/clock_in",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "breakId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "date": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "note": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "offline": {
+            "type": "boolean"
+          },
+          "projectId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "start": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "taskId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Timesheet Clock-In Entry through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_timesheet_clock_out_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employees/{{ record.employee_id }}/clock_out",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "end": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Timesheet Clock-Out Entry through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "delete_timesheet_hour_entries_via_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/hour_entries/delete",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "hourEntryIds"
+        ],
+        "properties": {
+          "hourEntryIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete Timesheet Hour Entries through the BambooHR API."
+    },
+    {
+      "name": "create_or_update_timesheet_hour_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/hour_entries/store",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "hours"
+        ],
+        "properties": {
+          "hours": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "employeeId": {
+                  "type": "integer"
+                },
+                "hours": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "projectId": {
+                  "type": "integer"
+                },
+                "taskId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create or Update Timesheet Hour Entries through the BambooHR API."
+    },
+    {
+      "name": "create_time_tracking_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/projects",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "allowAllEmployees": {
+            "type": "boolean"
+          },
+          "billable": {
+            "type": "boolean"
+          },
+          "employeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "hasTasks": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "billable": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Time Tracking Project through the BambooHR API."
+    },
+    {
+      "name": "approve_employee_timesheets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/timesheets/approve",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "lastChanged",
+          "timesheets"
+        ],
+        "properties": {
+          "lastChanged": {
+            "type": "integer"
+          },
+          "timesheets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "timesheetId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Approve employee timesheets through the BambooHR API."
+    },
+    {
+      "name": "clock_out_and_approve_employee_timesheets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/time_tracking/timesheets/clock_out_and_approve",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clockOuts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "date",
+                "end",
+                "timesheetId"
+              ],
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "end": {
+                  "type": "string"
+                },
+                "timesheetId": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Approve timesheets for employees that are currently clocked in through the BambooHR API."
+    },
+    {
+      "name": "create_time_tracking_hour_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/timetracking/add",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "dateHoursWorked",
+          "employeeId",
+          "hoursWorked",
+          "rateType",
+          "timeTrackingId"
+        ],
+        "properties": {
+          "dateHoursWorked": {
+            "type": "string"
+          },
+          "departmentId": {
+            "type": "integer"
+          },
+          "divisionId": {
+            "type": "integer"
+          },
+          "employeeId": {
+            "type": "integer"
+          },
+          "hoursWorked": {
+            "type": "number"
+          },
+          "jobCode": {
+            "type": "integer"
+          },
+          "jobData": {
+            "type": "string"
+          },
+          "jobTitleId": {
+            "type": "integer"
+          },
+          "payCode": {
+            "type": "string"
+          },
+          "payRate": {
+            "type": "number"
+          },
+          "rateType": {
+            "type": "string"
+          },
+          "timeTrackingId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Hour Record through the BambooHR API."
+    },
+    {
+      "name": "update_time_tracking_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/timetracking/adjust",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "timeTrackingId",
+          "hoursWorked"
+        ],
+        "properties": {
+          "holidayId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "hoursWorked": {
+            "type": "number"
+          },
+          "projectId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "shiftDifferentialId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "taskId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "timeTrackingId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Hour Record through the BambooHR API."
+    },
+    {
+      "name": "delete_time_tracking_hour_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/timetracking/delete/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Hour Record.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_or_update_time_tracking_hour_records",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/timetracking/record",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Create or Update Hour Records through the BambooHR API."
+    },
+    {
+      "name": "create_training_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/training/category",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Training Category through the BambooHR API."
+    },
+    {
+      "name": "delete_training_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/training/category/{{ record.training_category_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "training_category_id"
+        ],
+        "properties": {
+          "training_category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Training Category.",
+      "path_fields": [
+        "training_category_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_training_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/training/category/{{ record.training_category_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "training_category_id",
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "training_category_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Training Category through the BambooHR API.",
+      "path_fields": [
+        "training_category_id"
+      ]
+    },
+    {
+      "name": "create_employee_training_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/training/record/employee/{{ record.employee_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "completed",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "integer"
+          },
+          "completed": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "currency": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "credits": {
+            "type": "number"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "hours": {
+            "type": "number"
+          },
+          "instructor": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Employee Training Record through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "delete_employee_training_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/training/record/{{ record.employee_training_record_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_training_record_id"
+        ],
+        "properties": {
+          "employee_training_record_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Employee Training Record.",
+      "path_fields": [
+        "employee_training_record_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_employee_training_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/training/record/{{ record.employee_training_record_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_training_record_id",
+          "completed"
+        ],
+        "properties": {
+          "completed": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "currency": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "credits": {
+            "type": "number"
+          },
+          "employee_training_record_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "hours": {
+            "type": "number"
+          },
+          "instructor": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Employee Training Record through the BambooHR API.",
+      "path_fields": [
+        "employee_training_record_id"
+      ]
+    },
+    {
+      "name": "create_training_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/training/type",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "required": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "allowEmployeesToMarkComplete": {
+            "type": "boolean"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "dueFromHireDate": {
+            "type": "integer"
+          },
+          "frequency": {
+            "type": "integer"
+          },
+          "linkUrl": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "renewable": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Training Type through the BambooHR API."
+    },
+    {
+      "name": "delete_training_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/training/type/{{ record.training_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "training_type_id"
+        ],
+        "properties": {
+          "training_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Training Type.",
+      "path_fields": [
+        "training_type_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_training_type",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/training/type/{{ record.training_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "training_type_id"
+        ],
+        "properties": {
+          "required": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "allowEmployeesToMarkComplete": {
+            "type": "boolean"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "dueFromHireDate": {
+            "type": "integer"
+          },
+          "frequency": {
+            "type": "integer"
+          },
+          "linkUrl": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "renewable": {
+            "type": "boolean"
+          },
+          "training_type_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Training Type through the BambooHR API.",
+      "path_fields": [
+        "training_type_id"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/webhooks",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "url",
+          "format"
+        ],
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "employee_with_fields.updated",
+                "employee_with_fields.created",
+                "employee_with_fields.deleted",
+                "company-integrations.updated",
+                "employee.created",
+                "employee.updated",
+                "employee.deleted",
+                "company.updated",
+                "company.deleted"
+              ]
+            }
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "form-encoded"
+            ]
+          },
+          "includeCompanyDomain": {
+            "type": "boolean"
+          },
+          "monitorFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "postFields": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Webhook through the BambooHR API."
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/webhooks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Deletes BambooHR data: Delete Webhook.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/webhooks/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "url",
+          "format"
+        ],
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "employee_with_fields.updated",
+                "employee_with_fields.created",
+                "employee_with_fields.deleted",
+                "company-integrations.updated",
+                "employee.created",
+                "employee.updated",
+                "employee.deleted",
+                "company.updated",
+                "company.deleted"
+              ]
+            }
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "form-encoded"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "includeCompanyDomain": {
+            "type": "boolean"
+          },
+          "monitorFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "postFields": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Webhook through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "assign_time_off_policies_v1_1",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1_1/employees/{{ record.employee_id }}/time_off/policies",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Assign Time Off Policies v1.1 through the BambooHR API.",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_table_row_v1_1",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1_1/employees/{{ record.id }}/tables/{{ record.table }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "table"
+        ],
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "division": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "reportsTo": {
+            "type": "string"
+          },
+          "table": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Create Table Row v1.1 through the BambooHR API.",
+      "path_fields": [
+        "id",
+        "table"
+      ]
+    },
+    {
+      "name": "update_table_row_v1_1",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1_1/employees/{{ record.id }}/tables/{{ record.table }}/{{ record.row_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "table",
+          "row_id"
+        ],
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "division": {
+            "type": "string"
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "reportsTo": {
+            "type": "string"
+          },
+          "row_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "table": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "teams": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Table Row v1.1 through the BambooHR API.",
+      "path_fields": [
+        "id",
+        "table",
+        "row_id"
+      ]
+    },
+    {
+      "name": "update_goal_v1_1",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1_1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "employee_id",
+          "goal_id",
+          "title",
+          "dueDate",
+          "sharedWithEmployeeIds"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "alignsWithOptionId": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "completionDate": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "deletedMilestoneIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "goal_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "milestonesEnabled": {
+            "type": "boolean"
+          },
+          "percentComplete": {
+            "type": "integer"
+          },
+          "sharedWithEmployeeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update Goal (v1.1) through the BambooHR API.",
+      "path_fields": [
+        "employee_id",
+        "goal_id"
+      ]
+    },
+    {
+      "name": "update_company_benefit_properties",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v1_2/benefit/company_benefit/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "properties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": [
+                    "endYmd",
+                    "url",
+                    "ssoLoginPrompt",
+                    "ssoLoginUrl",
+                    "externalId"
+                  ]
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Update a company benefit through the BambooHR API.",
+      "path_fields": [
+        "id"
+      ]
+    }
+  ]
+}

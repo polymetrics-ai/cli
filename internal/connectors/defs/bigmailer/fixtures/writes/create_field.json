@@ -1,0 +1,15 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "name": "Fixture Field",
+    "type": "text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/fields",
+    "body": {
+      "name": "Fixture Field",
+      "type": "text"
+    }
+  }
+}

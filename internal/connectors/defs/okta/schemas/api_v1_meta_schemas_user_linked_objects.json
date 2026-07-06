@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "associated": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of the `primary` or the `associated` relationship"
+        },
+        "name": {
+          "type": "string",
+          "description": "API name of the `primary` or the `associated` link. The `name` parameter can't start with a number and can only contain the following characters: `a-z`, `A-Z`,` 0-9`, and `_`."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display name of the `primary` or the `associated` link"
+        },
+        "type": {
+          "type": "string",
+          "description": "The object type for this relationship",
+          "enum": [
+            "USER"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "primary": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Description of the `primary` or the `associated` relationship"
+        },
+        "name": {
+          "type": "string",
+          "description": "API name of the `primary` or the `associated` link. The `name` parameter can't start with a number and can only contain the following characters: `a-z`, `A-Z`,` 0-9`, and `_`."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display name of the `primary` or the `associated` link"
+        },
+        "type": {
+          "type": "string",
+          "description": "The object type for this relationship",
+          "enum": [
+            "USER"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,123 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "amount": 1.23,
+    "amountCurrencyCode": "fixture",
+    "acquisitionChannel": "fixture",
+    "acquisitionSource": "fixture",
+    "firstInteractionAt": "2026-01-01T00:00:00Z",
+    "closingAt": "2026-01-01T00:00:00Z",
+    "closedAt": "2026-01-01T00:00:00Z",
+    "dealFlowId": "deal_flow_id_fixture",
+    "dealStageId": "deal_stage_id_fixture",
+    "customerId": "customer_id_fixture",
+    "domain": "fixture",
+    "shopifyDomain": "fixture",
+    "companyId": "company_id_fixture",
+    "appId": "app_id_fixture",
+    "planId": "plan_id_fixture",
+    "ownerIds": [
+      "owner_id_fixture"
+    ],
+    "contactIds": [
+      "contact_id_fixture"
+    ],
+    "customer": {
+      "name": "fixture",
+      "email": "fixture@example.com",
+      "domain": "fixture",
+      "shopifyDomain": "fixture",
+      "shopifyShopId": "shopify_shop_id_fixture",
+      "tags": [
+        "fixture"
+      ],
+      "customFields": {
+        "id": "custom_fields_fixture_id"
+      },
+      "countryCode": "fixture",
+      "preferredCurrency": "fixture",
+      "description": "fixture"
+    },
+    "contacts": [
+      {
+        "email": "fixture@example.com",
+        "name": "fixture",
+        "phone": "fixture",
+        "jobTitle": "fixture",
+        "label": "fixture",
+        "notes": "fixture",
+        "tags": [
+          "fixture"
+        ]
+      }
+    ],
+    "notes": "fixture",
+    "affiliateId": "affiliate_id_fixture",
+    "partnershipId": "partnership_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/deals/id_fixture",
+    "body": {
+      "name": "fixture",
+      "amount": 1.23,
+      "amountCurrencyCode": "fixture",
+      "acquisitionChannel": "fixture",
+      "acquisitionSource": "fixture",
+      "firstInteractionAt": "2026-01-01T00:00:00Z",
+      "closingAt": "2026-01-01T00:00:00Z",
+      "closedAt": "2026-01-01T00:00:00Z",
+      "dealFlowId": "deal_flow_id_fixture",
+      "dealStageId": "deal_stage_id_fixture",
+      "customerId": "customer_id_fixture",
+      "domain": "fixture",
+      "shopifyDomain": "fixture",
+      "companyId": "company_id_fixture",
+      "appId": "app_id_fixture",
+      "planId": "plan_id_fixture",
+      "ownerIds": [
+        "owner_id_fixture"
+      ],
+      "contactIds": [
+        "contact_id_fixture"
+      ],
+      "customer": {
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "domain": "fixture",
+        "shopifyDomain": "fixture",
+        "shopifyShopId": "shopify_shop_id_fixture",
+        "tags": [
+          "fixture"
+        ],
+        "customFields": {
+          "id": "custom_fields_fixture_id"
+        },
+        "countryCode": "fixture",
+        "preferredCurrency": "fixture",
+        "description": "fixture"
+      },
+      "contacts": [
+        {
+          "email": "fixture@example.com",
+          "name": "fixture",
+          "phone": "fixture",
+          "jobTitle": "fixture",
+          "label": "fixture",
+          "notes": "fixture",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ],
+      "notes": "fixture",
+      "affiliateId": "affiliate_id_fixture",
+      "partnershipId": "partnership_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

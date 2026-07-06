@@ -1,0 +1,175 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "data.next"
+    },
+    "check": { "method": "GET", "path": "/products", "query": { "per": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "flexport api_key is missing or invalid; re-run pm credentials add flexport" },
+      { "status": 429, "class": "rate_limited", "hint": "flexport rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "booking_line_items",
+      "path": "/booking_line_items",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/booking_line_items.json"
+    },
+    {
+      "name": "bookings",
+      "path": "/bookings",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/bookings.json"
+    },
+    {
+      "name": "commercial_invoices",
+      "path": "/commercial_invoices",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/commercial_invoices.json"
+    },
+    {
+      "name": "customs_entries",
+      "path": "/customs_entries",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/customs_entries.json"
+    },
+    {
+      "name": "documents",
+      "path": "/documents",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/documents.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "company_entities",
+      "path": "/network/company_entities",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/company_entities.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/network/contacts",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "locations",
+      "path": "/locations",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "my_company",
+      "path": "/network/me/companies",
+      "records": { "path": "data", "single_object": true },
+      "pagination": { "type": "none" },
+      "projection": "passthrough",
+      "schema": "schemas/my_company.json"
+    },
+    {
+      "name": "container_legs",
+      "path": "/ocean/shipment_container_legs",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/container_legs.json"
+    },
+    {
+      "name": "containers",
+      "path": "/ocean/shipment_containers",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/containers.json"
+    },
+    {
+      "name": "ports",
+      "path": "/ports",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/ports.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "purchase_order_line_items",
+      "path": "/purchase_order_line_items",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/purchase_order_line_items.json"
+    },
+    {
+      "name": "purchase_orders",
+      "path": "/purchase_orders",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/purchase_orders.json"
+    },
+    {
+      "name": "shipment_legs",
+      "path": "/shipment_legs",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "projection": "passthrough",
+      "schema": "schemas/shipment_legs.json"
+    },
+    {
+      "name": "shipments",
+      "path": "/shipments",
+      "query": { "per": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "data.data" },
+      "schema": "schemas/shipments.json"
+    }
+  ]
+}

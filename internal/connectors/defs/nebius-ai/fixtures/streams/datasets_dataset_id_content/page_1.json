@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/datasets/synthetic-conformance-value/content",
+    "query": {
+      "limit": "20",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 20,
+      "offset": 0
+    }
+  }
+}

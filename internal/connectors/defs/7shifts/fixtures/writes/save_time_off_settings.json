@@ -1,0 +1,24 @@
+{
+  "record": {
+    "paid_time_off": true,
+    "sick_time_off": true,
+    "time_off_request_comment": true,
+    "time_off_request_notice": 12.34
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/time_off_settings/synthetic-conformance-value",
+    "body": {
+      "paid_time_off": true,
+      "sick_time_off": true,
+      "time_off_request_comment": true,
+      "time_off_request_notice": 12.34
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

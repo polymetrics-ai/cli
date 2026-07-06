@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/provident-fund-contracts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contracts": [
+        {
+          "idContrat": "provident_fund_contracts_1",
+          "name": "Fixture provident fund contracts"
+        }
+      ]
+    }
+  }
+}

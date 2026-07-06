@@ -1,0 +1,23 @@
+{
+  "record": {
+    "firstName": "firstName_fixture",
+    "lastName": "lastName_fixture",
+    "email": "fixture@example.invalid",
+    "password": "pw_sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "firstName": "firstName_fixture",
+      "lastName": "lastName_fixture",
+      "email": "fixture@example.invalid",
+      "password": "pw_sample"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sizes",
+  "type": "object",
+  "x-primary-key": ["dataset", "config", "split"],
+  "required": ["dataset", "config", "split"],
+  "properties": {
+    "dataset": { "type": "string" },
+    "config": { "type": "string" },
+    "split": { "type": "string" },
+    "num_rows": { "type": ["integer", "null"] },
+    "num_columns": { "type": ["integer", "null"] },
+    "num_bytes_parquet_files": { "type": ["integer", "null"] },
+    "num_bytes_memory": { "type": ["integer", "null"] }
+  }
+}

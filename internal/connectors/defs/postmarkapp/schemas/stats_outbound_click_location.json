@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stats_outbound_click_location",
+  "type": "object",
+  "additionalProperties": true
+}

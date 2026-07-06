@@ -1,0 +1,13 @@
+{
+  "record": {
+    "CampaignID": "camp_fixture_1",
+    "ConfirmationEmail": "confirm@example.com",
+    "SendDate": "Immediately"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/camp_fixture_1/send.json",
+    "body": { "ConfirmationEmail": "confirm@example.com", "SendDate": "Immediately" }
+  },
+  "response": { "status": 200, "body": {} }
+}

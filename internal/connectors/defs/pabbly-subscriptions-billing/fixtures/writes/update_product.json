@@ -1,0 +1,7 @@
+{
+  "record": { "id": "product_fixture_1", "product_name": "Updated Fixture Product" },
+  "expect": {
+    "method": "PUT",
+    "path": "/product/update/product_fixture_1"
+  }
+}

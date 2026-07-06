@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "order_fixture_1",
+          "name": "Fixture Order",
+          "email": "fixture1@example.com",
+          "status": "paid",
+          "starts_at": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "total": 4500
+        }
+      ]
+    }
+  }
+}

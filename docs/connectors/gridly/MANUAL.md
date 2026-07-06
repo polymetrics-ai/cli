@@ -10,22 +10,45 @@ SYNOPSIS
   pm credentials add <name> --connector gridly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Gridly views, records, and branches through the Gridly REST API.
+  Reads Gridly views, per-view records (with flattened column cells), and per-view branches through the Gridly REST API.
+
+ICON
+  asset: icons/gridly.svg
+  source: official
+  review_status: official_verified
+  review_url: https://www.gridly.com/docs/api/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  view_ids
+  api_key (secret)
+
+ETL STREAMS
+  views:
+    primary key: id
+    fields: id(), name()
+  records:
+    primary key: view_id, id
+    fields: cells(), id(), path(), view_id()
+  branches:
+    primary key: view_id, id
+    fields: id(), name(), view_id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Gridly API read of view/grid content
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

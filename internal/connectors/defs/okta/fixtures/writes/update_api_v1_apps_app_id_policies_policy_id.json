@@ -1,0 +1,14 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "policy_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/apps/synthetic-conformance-value/policies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

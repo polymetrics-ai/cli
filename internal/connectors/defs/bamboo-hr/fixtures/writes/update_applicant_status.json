@@ -1,0 +1,17 @@
+{
+  "record": {
+    "application_id": "fixture_id",
+    "status": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/applicant_tracking/applications/fixture_id/status",
+    "body": {
+      "status": 1001
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

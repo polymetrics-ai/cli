@@ -1,0 +1,12 @@
+{
+  "record": { "id": "availability_exception_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/availability_exceptions/delete",
+    "body": { "id": "availability_exception_fixture_1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "availability_exception_fixture_1", "type": "availabilityException" } }
+  }
+}

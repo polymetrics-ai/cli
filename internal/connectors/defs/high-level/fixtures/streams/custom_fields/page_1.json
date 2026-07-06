@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/upstream/customfields", "query": { "locationId": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "customFields": [
+        { "id": "cf_fixture_1", "name": "Favorite Color", "fieldKey": "contact.favorite_color", "dataType": "TEXT", "model": "contact", "position": 1 },
+        { "id": "cf_fixture_2", "name": "Company Size", "fieldKey": "contact.company_size", "dataType": "NUMERICAL", "model": "contact", "position": 2 }
+      ]
+    }
+  }
+}

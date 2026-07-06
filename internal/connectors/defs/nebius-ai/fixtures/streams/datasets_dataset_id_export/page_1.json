@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/datasets/synthetic-conformance-value/export",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "format": "jsonl"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

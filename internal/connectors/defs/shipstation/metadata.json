@@ -1,0 +1,22 @@
+{
+  "name": "shipstation",
+  "display_name": "ShipStation",
+  "description": "Reads ShipStation orders, shipments, products, and customers through the ShipStation REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.shipstation.com/docs/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ShipStation API read of order, shipment, product, and customer data"
+  }
+}

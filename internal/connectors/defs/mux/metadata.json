@@ -1,0 +1,23 @@
+{
+  "name": "mux",
+  "display_name": "Mux",
+  "description": "Reads Mux Video assets, live streams, direct uploads, and system signing keys through the Mux REST API using HTTP Basic authentication.",
+  "integration_type": "api",
+  "docs_url": "https://docs.mux.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Mux API read of video asset, live stream, upload, and signing key data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/telephony-providers",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "enabled": true,
+        "id": "id_fixture",
+        "isPrimaryProvider": true,
+        "providerCapability": "ALL",
+        "providerName": "TWILIO",
+        "providerSettings": {
+          "call": {
+            "twilioVerifySid": "twilio_verify_sid_fixture"
+          },
+          "sms": {
+            "twilioVerifySid": "twilio_verify_sid_fixture"
+          }
+        },
+        "providerSid": "provider_sid_fixture"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/accounts" },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": "acct_fixture_1",
+          "name": "Fixture Acme",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "acct_fixture_2",
+          "name": "Fixture Globex",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

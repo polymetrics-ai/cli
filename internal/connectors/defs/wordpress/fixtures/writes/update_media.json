@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "alt_text": "Fixture alt text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wp-json/wp/v2/media/1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "domain_keywords",
+  "type": "object",
+  "x-primary-key": ["keyword", "url"],
+  "required": ["keyword", "url"],
+  "properties": {
+    "keyword": { "type": "string" },
+    "position": { "type": ["integer", "null"] },
+    "url": { "type": "string" },
+    "updated_at": { "type": ["string", "null"], "description": "Legacy only ever populates this field in mode:fixture (a static fixtureUpdatedAt literal); Serpstat's real getKeywords response has no per-record timestamp field, matching legacy's live (non-fixture) read path emitting the raw JSON-RPC record verbatim with no updated_at key at all. Declared for catalog parity with legacy's published Fields (serpstat.go's streams()), not because the live API sends it." }
+  }
+}

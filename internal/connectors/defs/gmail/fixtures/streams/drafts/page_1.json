@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/users/me/drafts", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "drafts": [
+        { "id": "draft_fixture_1", "message": { "id": "msg_draft_1", "threadId": "thread_draft_1" } },
+        { "id": "draft_fixture_2", "message": { "id": "msg_draft_2", "threadId": "thread_draft_2" } }
+      ],
+      "nextPageToken": "page2token",
+      "resultSizeEstimate": 3
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "api": "Microsoft Graph API (https://learn.microsoft.com/en-us/graph/api/resources/list)",
+  "docs": "https://learn.microsoft.com/en-us/graph/api/resources/list",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 quarantine-repair migration: the 4 legacy-parity read streams only (lists, list_items, columns, content_types); the full Microsoft Graph SharePoint site surface (drives, pages, permissions, site-level activity, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/lists/{list_id}/items",
+      "covered_by": {
+        "stream": "list_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/lists/{list_id}/columns",
+      "covered_by": {
+        "stream": "columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/lists/{list_id}/contentTypes",
+      "covered_by": {
+        "stream": "content_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/drive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/pages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1.0/sites/{site_id}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "requires elevated administrative scope beyond this connector's current credential and sync surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1.0/sites/{site_id}/lists/{list_id}/items",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented in this bundle (legacy microsoft-lists connector is read-only; no write actions exist to port)"
+      }
+    }
+  ]
+}

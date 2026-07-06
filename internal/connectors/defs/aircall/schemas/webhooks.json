@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aircall Webhook",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "url": { "type": "string" },
+    "active": { "type": "boolean" },
+    "events": { "type": "array", "items": { "type": "string" } }
+  }
+}

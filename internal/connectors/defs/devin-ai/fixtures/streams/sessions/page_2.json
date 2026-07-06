@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/organizations/synthetic-conformance-value/sessions",
+    "query": {
+      "after": "fixture_cursor_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "session_id": "devin-session-fixture-3",
+          "url": "https://app.devin.ai/sessions/devin-session-fixture-3",
+          "title": "Fixture session 3",
+          "status": "suspended",
+          "status_detail": "user_request",
+          "category": "documentation_and_content",
+          "subcategory": "Other",
+          "origin": "api",
+          "org_id": "org-fixture",
+          "user_id": "user-fixture-1",
+          "service_user_id": "service-user-fixture-1",
+          "playbook_id": "playbook-fixture-1",
+          "tags": ["fixture", "archived"],
+          "pull_requests": [],
+          "acus_consumed": 0.75,
+          "is_archived": true,
+          "created_at": 1767398400,
+          "updated_at": 1767402000
+        }
+      ],
+      "has_next_page": false,
+      "end_cursor": null
+    }
+  }
+}

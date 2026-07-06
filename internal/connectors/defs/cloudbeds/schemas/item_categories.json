@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "item_categories",
+  "type": "object",
+  "x-primary-key": ["categoryID"],
+  "required": ["categoryID"],
+  "properties": {
+    "categoryID": { "type": "string" },
+    "categoryName": { "type": ["string", "null"] },
+    "categoryCode": { "type": ["string", "null"] },
+    "categoryColor": { "type": ["string", "null"] }
+  }
+}

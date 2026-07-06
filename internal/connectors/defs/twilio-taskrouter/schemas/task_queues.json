@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "task_queues",
+  "type": "object",
+  "x-primary-key": ["sid"],
+  "required": ["sid"],
+  "properties": {
+    "sid": { "type": "string" },
+    "friendly_name": { "type": ["string", "null"] }
+  }
+}

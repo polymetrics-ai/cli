@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers_id_timeline",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "type",
+    "source",
+    "occurredAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "description": "Event type (e.g., subscribed, upgraded, pageView, email)"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "appEvents",
+        "pageViews",
+        "emailEvents"
+      ]
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customerId": {
+      "type": "string"
+    },
+    "appInstallationId": {
+      "type": "string"
+    },
+    "subscription": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Current subscription details (for app events)",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "activatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trialExpiresAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "canceledAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "amount": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "currencyCode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "quantity": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "plan": {
+                "type": "object"
+              },
+              "appliedDiscount": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "previousSubscription": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Previous subscription details (for upgrade/downgrade events)"
+    },
+    "netChange": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Net revenue change for this event"
+    },
+    "planAmount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "planCurrencyCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "planInterval": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "planChanges": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Plan changes object, used only for Stripe subscription events and recurring usage changes"
+    },
+    "metadata": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Event-specific metadata"
+    },
+    "uninstallEvent": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Uninstall reason details (for uninstall app events)",
+      "properties": {
+        "reasonCode": {
+          "type": "string"
+        },
+        "reasonDetails": {
+          "type": "string"
+        }
+      }
+    },
+    "appCharge": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "App charge details (for one-time charge app events)",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "currencyCode": {
+          "type": "string"
+        }
+      }
+    },
+    "utm": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "UTM parameters (for page view events from Shopify App Store)",
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "medium": {
+          "type": "string"
+        },
+        "campaign": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        }
+      }
+    },
+    "affiliateAttribution": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Affiliate attribution details (for page view events from Shopify App Store)",
+      "properties": {
+        "affiliateId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affiliateName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "email": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Details about the email (for email events)",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "eventName": {
+          "type": "string"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

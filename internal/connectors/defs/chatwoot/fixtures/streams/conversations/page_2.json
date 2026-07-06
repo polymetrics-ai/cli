@@ -1,0 +1,215 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations",
+    "query": {
+      "status": "all",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "meta": {
+          "mine_count": 0,
+          "unassigned_count": 0,
+          "assigned_count": 3,
+          "all_count": 3
+        },
+        "payload": [
+          {
+            "id": 26,
+            "account_id": 1,
+            "uuid": "fixture-uuid-26",
+            "inbox_id": 1,
+            "status": "open",
+            "priority": null,
+            "additional_attributes": {},
+            "custom_attributes": {},
+            "labels": [
+              "billing"
+            ],
+            "muted": false,
+            "can_reply": true,
+            "unread_count": 0,
+            "agent_last_seen_at": 1767225626,
+            "assignee_last_seen_at": 1767225626,
+            "contact_last_seen_at": 1767225626,
+            "snoozed_until": null,
+            "waiting_since": null,
+            "first_reply_created_at": 1767225626,
+            "last_activity_at": 1767225626,
+            "sla_policy_id": null,
+            "created_at": 1767225626,
+            "updated_at": 1767225626,
+            "timestamp": 1767225626,
+            "meta": {
+              "sender": {
+                "additional_attributes": {},
+                "availability_status": "offline",
+                "email": "contact26@fixture.example",
+                "id": 26,
+                "name": "Fixture Contact 26",
+                "phone_number": null,
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1767225626,
+                "created_at": 1767225626
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 1,
+                "account_id": 1,
+                "available_name": "Fixture Agent",
+                "avatar_url": "",
+                "confirmed": true,
+                "display_name": null,
+                "message_signature": null,
+                "email": "agent1@fixture.example",
+                "hmac_identifier": "",
+                "inviter_id": null,
+                "name": "Fixture Agent",
+                "provider": "email",
+                "pubsub_token": "fixture-pubsub-token",
+                "role": "agent",
+                "ui_settings": {},
+                "uid": "fixture-uid",
+                "type": null
+              },
+              "hmac_verified": false
+            }
+          },
+          {
+            "id": 27,
+            "account_id": 1,
+            "uuid": "fixture-uuid-27",
+            "inbox_id": 1,
+            "status": "open",
+            "priority": null,
+            "additional_attributes": {},
+            "custom_attributes": {},
+            "labels": [],
+            "muted": false,
+            "can_reply": true,
+            "unread_count": 0,
+            "agent_last_seen_at": 1767225627,
+            "assignee_last_seen_at": 1767225627,
+            "contact_last_seen_at": 1767225627,
+            "snoozed_until": null,
+            "waiting_since": null,
+            "first_reply_created_at": 1767225627,
+            "last_activity_at": 1767225627,
+            "sla_policy_id": null,
+            "created_at": 1767225627,
+            "updated_at": 1767225627,
+            "timestamp": 1767225627,
+            "meta": {
+              "sender": {
+                "additional_attributes": {},
+                "availability_status": "offline",
+                "email": "contact27@fixture.example",
+                "id": 27,
+                "name": "Fixture Contact 27",
+                "phone_number": null,
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1767225627,
+                "created_at": 1767225627
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 1,
+                "account_id": 1,
+                "available_name": "Fixture Agent",
+                "avatar_url": "",
+                "confirmed": true,
+                "display_name": null,
+                "message_signature": null,
+                "email": "agent1@fixture.example",
+                "hmac_identifier": "",
+                "inviter_id": null,
+                "name": "Fixture Agent",
+                "provider": "email",
+                "pubsub_token": "fixture-pubsub-token",
+                "role": "agent",
+                "ui_settings": {},
+                "uid": "fixture-uid",
+                "type": null
+              },
+              "hmac_verified": false
+            }
+          },
+          {
+            "id": 28,
+            "account_id": 1,
+            "uuid": "fixture-uuid-28",
+            "inbox_id": 1,
+            "status": "open",
+            "priority": null,
+            "additional_attributes": {},
+            "custom_attributes": {},
+            "labels": [
+              "billing"
+            ],
+            "muted": false,
+            "can_reply": true,
+            "unread_count": 0,
+            "agent_last_seen_at": 1767225628,
+            "assignee_last_seen_at": 1767225628,
+            "contact_last_seen_at": 1767225628,
+            "snoozed_until": null,
+            "waiting_since": null,
+            "first_reply_created_at": 1767225628,
+            "last_activity_at": 1767225628,
+            "sla_policy_id": null,
+            "created_at": 1767225628,
+            "updated_at": 1767225628,
+            "timestamp": 1767225628,
+            "meta": {
+              "sender": {
+                "additional_attributes": {},
+                "availability_status": "offline",
+                "email": "contact28@fixture.example",
+                "id": 28,
+                "name": "Fixture Contact 28",
+                "phone_number": null,
+                "blocked": false,
+                "identifier": null,
+                "thumbnail": "",
+                "custom_attributes": {},
+                "last_activity_at": 1767225628,
+                "created_at": 1767225628
+              },
+              "channel": "Channel::Api",
+              "assignee": {
+                "id": 1,
+                "account_id": 1,
+                "available_name": "Fixture Agent",
+                "avatar_url": "",
+                "confirmed": true,
+                "display_name": null,
+                "message_signature": null,
+                "email": "agent1@fixture.example",
+                "hmac_identifier": "",
+                "inviter_id": null,
+                "name": "Fixture Agent",
+                "provider": "email",
+                "pubsub_token": "fixture-pubsub-token",
+                "role": "agent",
+                "ui_settings": {},
+                "uid": "fixture-uid",
+                "type": null
+              },
+              "hmac_verified": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

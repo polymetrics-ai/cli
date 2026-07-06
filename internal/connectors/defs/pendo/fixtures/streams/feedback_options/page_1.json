@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/feedback/options"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "labels": [
+        {
+          "id": "label_fixture",
+          "name": "Admin",
+          "category": "Role"
+        }
+      ],
+      "apps": [
+        {
+          "id": -323232,
+          "name": "Application"
+        }
+      ],
+      "importance": [
+        {
+          "value": 2,
+          "name": "Must Have"
+        }
+      ]
+    }
+  }
+}

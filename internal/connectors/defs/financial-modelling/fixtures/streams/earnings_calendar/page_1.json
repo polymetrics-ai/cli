@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/earning_calendar" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "FIX1",
+        "date": "2026-01-15",
+        "epsEstimated": 1.25,
+        "eps": 1.30,
+        "revenueEstimated": 5000000000,
+        "revenue": 5100000000,
+        "updatedFromDate": "2026-01-01",
+        "fiscalDateEnding": "2025-12-31",
+        "time": "amc"
+      }
+    ]
+  }
+}

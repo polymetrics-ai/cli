@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/appointment-types" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 42,
+        "name": "Intro Session",
+        "active": true,
+        "description": "Fixture appointment type",
+        "duration": 30,
+        "price": "0.00",
+        "category": "General",
+        "color": "#000000",
+        "private": false,
+        "type": "Intro Session"
+      }
+    ]
+  }
+}

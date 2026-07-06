@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Connection Specification",
+  "type": "object",
+  "required": ["base_url", "api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full Magento REST base URL including the API version prefix, e.g. https://magento.mystore.com/rest/V1. Legacy derives this from store_host + api_version at request time; this bundle requires the fully composed URL directly (see docs.md Known limits)."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Adobe Commerce (Magento) Integration Access Token. Sent as a Bearer token; never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only objects updated at or after this time are read (filtered on updated_at)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

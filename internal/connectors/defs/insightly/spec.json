@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Insightly Connection Specification",
+  "type": "object",
+  "required": ["token"],
+  "properties": {
+    "token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Insightly API token, sent as the HTTP Basic auth username with a blank password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.na1.insightly.com/v3.1",
+      "description": "Insightly API base URL, pod-specific (e.g. https://api.<pod>.insightly.com/v3.1). Defaults to the na1 pod, matching legacy's default; override with your account's actual pod URL."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

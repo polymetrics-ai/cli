@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/currencies",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "code": "FIX",
+          "name": "Fixture currencies 1",
+          "id": "currencies_fixture_1"
+        },
+        {
+          "code": "FIX",
+          "name": "Fixture currencies 2",
+          "id": "currencies_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/currencies",
+      "lastPage": "https://example.invalid/keka/currencies",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

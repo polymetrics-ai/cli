@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/auto"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "auto_fixture_1", "name": "Fixture Automated Template", "salesforceReady": false }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "fixture.example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/dnc_domains",
+    "body": {
+      "name": "fixture.example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "errors": null }
+  }
+}

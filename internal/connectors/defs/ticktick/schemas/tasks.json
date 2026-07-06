@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tasks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "projectId": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "isAllDay": { "type": ["string", "null"] },
+    "completedTime": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "desc": { "type": ["string", "null"] },
+    "dueDate": { "type": ["string", "null"] },
+    "priority": { "type": ["integer", "null"] },
+    "reminders": { "type": ["array", "null"], "items": { "type": "string" } },
+    "repeatFlag": { "type": ["string", "null"] },
+    "sortOrder": { "type": ["integer", "null"] },
+    "startDate": { "type": ["string", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "timeZone": { "type": ["string", "null"] },
+    "modifiedTime": { "type": ["string", "null"] }
+  }
+}

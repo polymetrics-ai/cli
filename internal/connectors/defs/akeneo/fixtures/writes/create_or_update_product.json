@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "prod_fixture_1",
+    "enabled": true,
+    "family": "shoes",
+    "categories": ["cat_1"],
+    "values": { "name": [{ "locale": null, "scope": null, "data": "Fixture Product" }] }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/products/prod_fixture_1",
+    "body": {
+      "enabled": true,
+      "family": "shoes",
+      "categories": ["cat_1"],
+      "values": { "name": [{ "locale": null, "scope": null, "data": "Fixture Product" }] }
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

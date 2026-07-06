@@ -1,0 +1,35 @@
+{
+  "record": {
+    "tags": [
+      "fixture_tags_1",
+      "fixture_tags_2"
+    ],
+    "comments": "fixture_comments_1",
+    "job_id": "fixture_job_id",
+    "candidate_id": "fixture_candidate_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hire/jobs/fixture_job_id/candidate/fixture_candidate_id/notes",
+    "body": {
+      "tags": [
+        "fixture_tags_1",
+        "fixture_tags_2"
+      ],
+      "comments": "fixture_comments_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "status": true,
+        "message": "fixture_add_candidate_notes_1"
+      },
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

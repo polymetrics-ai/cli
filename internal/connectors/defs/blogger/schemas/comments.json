@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "comments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": ["string", "null"] },
+    "post_id": { "type": ["string", "null"] },
+    "blog_id": { "type": ["string", "null"] },
+    "content": { "type": ["string", "null"] },
+    "published": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "author_id": { "type": ["string", "null"] },
+    "author_display_name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] }
+  }
+}

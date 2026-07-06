@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "card_number": "4012888888881881",
+    "month": "11",
+    "year": "2030",
+    "cvv": "423",
+    "mid": "method_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/paymentmethod/cus_fixture_1"
+  }
+}

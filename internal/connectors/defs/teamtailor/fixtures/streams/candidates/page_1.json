@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/candidates",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "candidate_fixture_1",
+          "type": "candidates",
+          "attributes": {
+            "first-name": "Fixture",
+            "last-name": "Candidate",
+            "email": "fixture-candidate@example.com",
+            "created-at": "2026-01-02T00:00:00Z"
+          }
+        }
+      ]
+    }
+  }
+}

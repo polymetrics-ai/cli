@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/synthetic-conformance-value/dsign"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

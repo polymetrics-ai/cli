@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "drug_event",
+  "type": "object",
+  "x-primary-key": ["safetyreportid"],
+  "required": ["safetyreportid"],
+  "properties": {
+    "safetyreportid": { "type": "string" },
+    "safetyreportversion": { "type": ["string", "null"] },
+    "receivedate": { "type": ["string", "null"] },
+    "receiptdate": { "type": ["string", "null"] },
+    "serious": { "type": ["string", "null"] },
+    "seriousnessdeath": { "type": ["string", "null"] },
+    "transmissiondate": { "type": ["string", "null"] },
+    "primarysourcecountry": { "type": ["string", "null"] },
+    "occurcountry": { "type": ["string", "null"] },
+    "fulfillexpeditecriteria": { "type": ["string", "null"] }
+  }
+}

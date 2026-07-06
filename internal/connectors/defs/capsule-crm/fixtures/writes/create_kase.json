@@ -1,0 +1,18 @@
+{
+  "record": {
+    "kase": {
+      "name": "Fixture Case",
+      "party": { "id": 1 }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/kases",
+    "body": {
+      "kase": {
+        "name": "Fixture Case",
+        "party": { "id": 1 }
+      }
+    }
+  }
+}

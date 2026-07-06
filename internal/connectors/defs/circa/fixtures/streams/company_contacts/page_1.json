@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "co_fixture_1", "name": "Fixture Co" }
+      ]
+    }
+  }
+}

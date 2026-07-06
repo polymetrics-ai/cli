@@ -1,0 +1,20 @@
+{
+  "record": {
+    "client_id": "fixture_client_1",
+    "description": "Updated by conformance fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/clients/fixture_client_1",
+    "body": {
+      "description": "Updated by conformance fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "client_id": "fixture_client_1",
+      "description": "Updated by conformance fixture"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "camp_fixture_1",
+          "type": "campaign",
+          "attributes": {
+            "name": "Fixture Campaign 1",
+            "status": "Sent",
+            "archived": false,
+            "channel": "email",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z",
+            "scheduled_at": "2026-01-01T09:00:00Z",
+            "send_time": "2026-01-01T09:00:00Z"
+          }
+        },
+        {
+          "id": "camp_fixture_2",
+          "type": "campaign",
+          "attributes": {
+            "name": "Fixture Campaign 2",
+            "status": "Draft",
+            "archived": false,
+            "channel": "sms",
+            "created_at": "2026-01-02T00:00:00Z",
+            "updated_at": "2026-01-02T00:00:00Z",
+            "scheduled_at": null,
+            "send_time": null
+          }
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

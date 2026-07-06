@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/content",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "content_fixture_101",
+          "title": "Fixture Content 101",
+          "type": "course",
+          "created_at": "2026-01-18T00:00:00Z",
+          "updated_at": "2026-01-18T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

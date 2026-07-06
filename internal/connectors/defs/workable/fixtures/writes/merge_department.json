@@ -1,0 +1,13 @@
+{
+  "record": {
+    "department_id": "department_fixture",
+    "target_department_id": "department_target_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/departments/department_fixture/merge",
+    "body": {
+      "target_department_id": "department_target_fixture"
+    }
+  }
+}

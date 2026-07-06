@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tags",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "userId": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

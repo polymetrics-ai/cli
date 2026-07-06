@@ -1,0 +1,20 @@
+{
+  "record": {
+    "enableAutoReply": true,
+    "responseSubject": "Fixture Out of Office",
+    "responseBodyPlainText": "Fixture: I am currently out of office."
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/settings/vacation",
+    "body": {
+      "enableAutoReply": true,
+      "responseSubject": "Fixture Out of Office",
+      "responseBodyPlainText": "Fixture: I am currently out of office."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "enableAutoReply": true, "responseSubject": "Fixture Out of Office" }
+  }
+}

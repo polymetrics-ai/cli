@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "fixture-room-1",
+    "description": "Fixture room for conformance",
+    "region": "us"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rooms",
+    "body": {
+      "name": "fixture-room-1",
+      "description": "Fixture room for conformance",
+      "region": "us"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "room_fixture_1", "name": "fixture-room-1", "enabled": true }
+  }
+}

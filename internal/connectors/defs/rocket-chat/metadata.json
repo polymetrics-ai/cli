@@ -1,0 +1,22 @@
+{
+  "name": "rocket-chat",
+  "display_name": "Rocket.Chat",
+  "description": "Reads Rocket.Chat users, public channels, private groups, direct messages, and rooms through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.rocket.chat/apidocs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Rocket.Chat API read of workspace users, rooms, and messages metadata"
+  }
+}

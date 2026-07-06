@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/transactions/synthetic-conformance-value/journals",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "entity_type": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "journal": {
+        "journal_id": "get_transaction_journal_view_fixture_1",
+        "location_name": "get_transaction_journal_view fixture 1",
+        "last_modified_time": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "get_transaction_journal_view_fixture_1",
+        "name": "get_transaction_journal_view fixture 1",
+        "updated_at": "2026-01-01T00:00:01Z"
+      }
+    }
+  }
+}

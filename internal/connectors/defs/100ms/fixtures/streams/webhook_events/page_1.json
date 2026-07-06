@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/analytics/webhooks", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "event_id": "event_fixture_1",
+          "event_name": "session.close.success",
+          "room_id": "room_fixture_1",
+          "event_timestamp": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

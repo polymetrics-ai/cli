@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pennylane Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pennylane API key. Used only for Bearer auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://app.pennylane.com/api/external/v2",
+      "description": "Pennylane API base URL override for tests or proxies."
+    },
+    "filter": {
+      "type": "string",
+      "description": "Optional Pennylane filter query expression, sent verbatim as the filter query param."
+    },
+    "sort": {
+      "type": "string",
+      "description": "Optional Pennylane sort expression, sent verbatim as the sort query param."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "Records per page (1-100)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "shipment": {
+      "to_address": { "id": "adr_fixture_to" },
+      "from_address": { "id": "adr_fixture_from" },
+      "parcel": { "id": "prcl_fixture_1" },
+      "ruleset_name": "ruleset_fixture",
+      "planned_ship_date": "2026-01-02",
+      "deliver_by_date": "2026-01-05"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/luma/promise",
+    "body": {
+      "shipment": {
+        "to_address": { "id": "adr_fixture_to" },
+        "from_address": { "id": "adr_fixture_from" },
+        "parcel": { "id": "prcl_fixture_1" },
+        "ruleset_name": "ruleset_fixture",
+        "planned_ship_date": "2026-01-02",
+        "deliver_by_date": "2026-01-05"
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "luma_info": { "ruleset_name": "ruleset_fixture" } } }
+}

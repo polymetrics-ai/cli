@@ -1,0 +1,24 @@
+{
+  "name": "zendesk-support",
+  "display_name": "Zendesk Support",
+  "description": "Reads and writes allow-listed Zendesk Support resources through the Zendesk Support REST API v2; Pass B expands top-level read streams from the public Airbyte/Zendesk surface.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zendesk Support API read across tickets, users, organizations, groups, satisfaction ratings, admin metadata, business rules, and Guide/community top-level resources",
+    "write": "allow-listed Zendesk Support mutations for tickets, users, organizations, groups, macros, triggers, automations, views, and ticket fields; destructive deletes require approval",
+    "approval": "writes require reverse-ETL approval; reads require normal connector access"
+  }
+}

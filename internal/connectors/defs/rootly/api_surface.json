@@ -1,0 +1,29 @@
+{
+  "api": "Rootly legacy connector hook surface",
+  "docs": "https://rootly.com/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy rootly connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/rootly, which delegates to internal/connectors/rootly until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/rootly incidents read path",
+      "covered_by": {
+        "stream": "incidents"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/rootly services read path",
+      "covered_by": {
+        "stream": "services"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/rootly users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
+  ]
+}

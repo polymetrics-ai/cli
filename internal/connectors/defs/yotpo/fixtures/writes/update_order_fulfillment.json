@@ -1,0 +1,21 @@
+{
+  "record": {
+    "order_yotpo_id": "300001",
+    "yotpo_id": "666666",
+    "fulfillment": {
+      "status": "success",
+      "shipment_info": { "shipment_status": "delivered", "tracking_company": "FixtureShip", "tracking_number": "F123" }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/core/v3/stores/synthetic-conformance-value/orders/300001/fulfillments/666666",
+    "body": {
+      "fulfillment": {
+        "status": "success",
+        "shipment_info": { "shipment_status": "delivered", "tracking_company": "FixtureShip", "tracking_number": "F123" }
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "fulfillment": { "yotpo_id": 666666 } } }
+}

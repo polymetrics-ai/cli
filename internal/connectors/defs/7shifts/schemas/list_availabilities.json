@@ -1,0 +1,565 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Availability ID"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "User ID"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "Company ID"
+    },
+    "week": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Week date of the availability"
+    },
+    "week_to": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Week to date of the availability"
+    },
+    "repeat": {
+      "type": "boolean",
+      "description": "If true, availability is repeating"
+    },
+    "status": {
+      "type": "integer",
+      "description": "Indicates the status of the availability"
+    },
+    "status_action_user_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "The user ID of the user that approved/declined the availability"
+    },
+    "status_action_message": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The message when the availability was approved/declined"
+    },
+    "mon": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "mon_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "mon_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "mon_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "mon_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "tue": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "tue_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "tue_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "tue_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "tue_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "wed": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "wed_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "wed_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "wed_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "wed_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "thu": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "thu_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "thu_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "thu_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "thu_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "fri": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "fri_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "fri_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "fri_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "fri_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "sat": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "sat_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "sat_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "sat_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "sat_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "sun": {
+      "type": "integer",
+      "description": "The availability status for the day"
+    },
+    "sun_from": {
+      "type": "string",
+      "description": "The start time of the availability for the day",
+      "format": "time"
+    },
+    "sun_to": {
+      "type": "string",
+      "description": "The end time of the availability for the day",
+      "format": "time"
+    },
+    "sun_comments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Comments included in the days availability"
+    },
+    "sun_reason": {
+      "type": "string",
+      "description": "The reason ID for the day"
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The created date of the shift in UTC"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The last modified date of the shift in UTC"
+    },
+    "old_approved_data": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Availability ID"
+        },
+        "user_id": {
+          "type": "integer",
+          "description": "User ID"
+        },
+        "company_id": {
+          "type": "integer",
+          "description": "Company ID"
+        },
+        "week": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Week date of the availability"
+        },
+        "week_to": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Week to date of the availability"
+        },
+        "repeat": {
+          "type": "boolean",
+          "description": "If true, availability is repeating"
+        },
+        "status": {
+          "type": "integer",
+          "description": "Indicates the status of the availability"
+        },
+        "mon": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "mon_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "mon_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "mon_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "mon_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "tue": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "tue_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "tue_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "tue_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "tue_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "wed": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "wed_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "wed_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "wed_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "wed_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "thu": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "thu_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "thu_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "thu_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "thu_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "fri": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "fri_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "fri_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "fri_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "fri_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "sat": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "sat_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "sat_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "sat_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "sat_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "sun": {
+          "type": "integer",
+          "description": "The availability status for the day"
+        },
+        "sun_from": {
+          "type": "string",
+          "description": "The start time of the availability for the day",
+          "format": "time"
+        },
+        "sun_to": {
+          "type": "string",
+          "description": "The end time of the availability for the day",
+          "format": "time"
+        },
+        "sun_comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Comments included in the days availability"
+        },
+        "sun_reason": {
+          "type": "string",
+          "description": "The reason ID for the day"
+        },
+        "created": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The created date of the shift in UTC",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "user_id",
+        "company_id",
+        "week",
+        "week_to",
+        "repeat",
+        "status",
+        "mon",
+        "mon_from",
+        "mon_to",
+        "mon_comments",
+        "mon_reason",
+        "tue",
+        "tue_from",
+        "tue_to",
+        "tue_comments",
+        "tue_reason",
+        "wed",
+        "wed_from",
+        "wed_to",
+        "wed_comments",
+        "wed_reason",
+        "thu",
+        "thu_from",
+        "thu_to",
+        "thu_comments",
+        "thu_reason",
+        "fri",
+        "fri_from",
+        "fri_to",
+        "fri_comments",
+        "fri_reason",
+        "sat",
+        "sat_from",
+        "sat_to",
+        "sat_comments",
+        "sat_reason",
+        "sun",
+        "sun_from",
+        "sun_to",
+        "sun_comments",
+        "sun_reason",
+        "created"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "user_id",
+    "company_id",
+    "week",
+    "week_to",
+    "repeat",
+    "status",
+    "status_action_user_id",
+    "status_action_message",
+    "mon",
+    "mon_from",
+    "mon_to",
+    "mon_comments",
+    "mon_reason",
+    "tue",
+    "tue_from",
+    "tue_to",
+    "tue_comments",
+    "tue_reason",
+    "wed",
+    "wed_from",
+    "wed_to",
+    "wed_comments",
+    "wed_reason",
+    "thu",
+    "thu_from",
+    "thu_to",
+    "thu_comments",
+    "thu_reason",
+    "fri",
+    "fri_from",
+    "fri_to",
+    "fri_comments",
+    "fri_reason",
+    "sat",
+    "sat_from",
+    "sat_to",
+    "sat_comments",
+    "sat_reason",
+    "sun",
+    "sun_from",
+    "sun_to",
+    "sun_comments",
+    "sun_reason",
+    "created",
+    "modified"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_availabilities",
+  "x-primary-key": [
+    "id"
+  ]
+}

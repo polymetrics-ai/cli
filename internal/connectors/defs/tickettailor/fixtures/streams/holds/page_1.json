@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/holds",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ho_fixture_1",
+          "event_id": "ev_fixture_1",
+          "note": "Fixture hold",
+          "total_on_hold": 5,
+          "created_at": 1767225600,
+          "updated_at": 1767225600
+        },
+        {
+          "id": "ho_fixture_2",
+          "event_id": "ev_fixture_1",
+          "note": "Fixture hold",
+          "total_on_hold": 5,
+          "created_at": 1767225600,
+          "updated_at": 1767225600
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/ev_fixture_2/contacts",
+    "query": { "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "econtact_fixture_2",
+          "first_name": "Colin",
+          "last_name": "Cartwright",
+          "email": "fixture2@example.com",
+          "contact_type": "Lead",
+          "company": null,
+          "title": null,
+          "owner": null,
+          "website": null,
+          "office_phone": null,
+          "mobile_phone": null,
+          "address": null,
+          "city": null,
+          "state": null,
+          "postal_index": null,
+          "country": null,
+          "twitter": null,
+          "linkedin": null,
+          "description": null,
+          "check_in_status": null,
+          "registration_status": "Registered",
+          "hot_lead": false,
+          "email_opt_in": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "created_by": null,
+          "created_method": "MANUAL",
+          "updated_at": "2026-01-01T00:02:00Z",
+          "updated_by": null,
+          "updated_method": "MANUAL"
+        }
+      ]
+    }
+  }
+}

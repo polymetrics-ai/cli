@@ -1,0 +1,26 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "file": {
+      "synthetic": true
+    },
+    "kind": "customization_font"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/storage/upload",
+    "body": {
+      "file": {
+        "synthetic": true
+      },
+      "kind": "customization_font"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "generate_storage_upload_url_fixture_1"
+    }
+  }
+}

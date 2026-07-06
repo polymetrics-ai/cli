@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/replenishmentOrders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "confirmedOn": "confirmedOn-fixture-1",
+      "createdAt": "createdAt-fixture-1",
+      "distributionIneligibleReasons": [],
+      "eligibleProducts": [],
+      "orderId": "orderId-fixture-1",
+      "status": "status-fixture-1",
+      "outboundShipments": [],
+      "products": [],
+      "shippedProducts": [],
+      "updatedAt": "updatedAt-fixture-1",
+      "order_id": "order_id-fixture-1"
+    }
+  }
+}

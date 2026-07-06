@@ -1,0 +1,12 @@
+{
+  "record": { "name": "fixture_snippet", "value": "Fixture snippet value" },
+  "expect": {
+    "method": "POST",
+    "path": "/snippets",
+    "body": {
+      "name": "fixture_snippet",
+      "value": "Fixture snippet value"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

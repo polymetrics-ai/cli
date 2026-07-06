@@ -1,0 +1,22 @@
+{
+  "record": {
+    "surveyId": "survey_fixture_1",
+    "mobile": "+15555550102",
+    "templateName": "feedback_request",
+    "templateLanguage": "en"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/send-wa-message",
+    "body": {
+      "surveyId": "survey_fixture_1",
+      "mobile": "+15555550102"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": "true"
+    }
+  }
+}

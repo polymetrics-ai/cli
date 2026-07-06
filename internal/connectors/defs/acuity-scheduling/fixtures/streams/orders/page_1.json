@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/orders", "query": { "max": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1234,
+        "total": "55",
+        "status": "paid",
+        "time": "2026-01-01 09:00",
+        "firstName": "Fixture",
+        "lastName": "Client",
+        "phone": "555-0100",
+        "email": "fixture@example.com",
+        "title": "Fixture Package",
+        "notes": "Fixture order note"
+      }
+    ]
+  }
+}

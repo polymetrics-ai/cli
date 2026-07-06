@@ -1,0 +1,24 @@
+{
+  "name": "ticktick",
+  "display_name": "TickTick",
+  "description": "Reads projects and project tasks, and writes task create/complete/delete actions, through the TickTick Open API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ticktick.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external TickTick API read of project and task data",
+    "write": "external TickTick API mutation: creates a task, marks a task complete, or permanently deletes a task",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

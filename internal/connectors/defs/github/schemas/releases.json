@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "releases",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "published_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "tag_name": {
+      "type": "string"
+    },
+    "target_commitish": {
+      "type": "string"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "draft": {
+      "type": "boolean"
+    },
+    "prerelease": {
+      "type": "boolean"
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "author_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assets_count": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

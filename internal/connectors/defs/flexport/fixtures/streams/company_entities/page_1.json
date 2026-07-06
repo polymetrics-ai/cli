@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/network/company_entities"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/network/company_entities",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/company_entity",
+            "id": 9281,
+            "name": "Fixture Trading LLC",
+            "ref": "fixture-entity",
+            "mailing_address": {
+              "_object": "/address",
+              "street_address": "1 Market St",
+              "city": "San Francisco",
+              "state": "CA",
+              "zip": "94105",
+              "country_code": "US"
+            },
+            "vat_numbers": []
+          }
+        ]
+      }
+    }
+  }
+}

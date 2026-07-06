@@ -1,0 +1,11 @@
+{
+  "record": {
+    "ids": 123,
+    "name": "Fixture delete_relationships",
+    "description": "Fixture delete_relationships record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/relationships"
+  }
+}

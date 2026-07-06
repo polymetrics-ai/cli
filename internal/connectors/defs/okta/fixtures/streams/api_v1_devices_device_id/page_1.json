@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/devices/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "providers": [
+        {
+          "payload": {
+            "clientVersion": "client_version_fixture"
+          },
+          "payloadVersion": "payload_version_fixture",
+          "provider": "provider_fixture"
+        }
+      ]
+    }
+  }
+}

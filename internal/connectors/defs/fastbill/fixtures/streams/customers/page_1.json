@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "customer_id": "fixture",
+      "customer_number": "fixture",
+      "customer_type": "fixture",
+      "organization": "fixture",
+      "first_name": "fixture",
+      "last_name": "fixture",
+      "email": "fixture",
+      "phone": "fixture",
+      "country_code": "fixture",
+      "currency_code": "fixture",
+      "created": "fixture"
+    }
+  ]
+}

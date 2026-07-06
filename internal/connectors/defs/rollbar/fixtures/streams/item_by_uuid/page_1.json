@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/item/",
+    "query": {
+      "uuid": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "id": 1,
+        "name": "Fixture item_by_uuid",
+        "title": "Fixture item_by_uuid",
+        "status": "active"
+      }
+    }
+  }
+}

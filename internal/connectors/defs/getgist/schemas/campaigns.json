@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaigns",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["integer", "null"] }
+  }
+}

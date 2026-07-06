@@ -1,0 +1,28 @@
+{
+  "record": {
+    "email": "fixture1@example.invalid",
+    "job_id": "fixture_job_id",
+    "candidate_id": "fixture_candidate_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/hire/jobs/fixture_job_id/candidate/fixture_candidate_id",
+    "body": {
+      "email": "fixture1@example.invalid"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "status": true,
+        "candidate": null,
+        "message": "fixture_update_candidate_1"
+      },
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

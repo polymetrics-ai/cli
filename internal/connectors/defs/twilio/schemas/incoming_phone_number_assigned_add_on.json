@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "incoming_phone_number_assigned_add_on",
+  "type": "object",
+  "x-primary-key": [
+    "sid"
+  ],
+  "properties": {
+    "sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "friendly_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "configuration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unique_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subresource_uris": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

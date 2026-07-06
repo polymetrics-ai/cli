@@ -1,0 +1,22 @@
+{
+  "record": {
+    "review_id": 123,
+    "send_private_email": false,
+    "private_reply": {
+      "email_subject": "Thanks",
+      "email_body": "Thanks for the review."
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/private_replies",
+    "body": {
+      "review_id": 123,
+      "send_private_email": false,
+      "private_reply": {
+        "email_subject": "Thanks",
+        "email_body": "Thanks for the review."
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+    "query": {
+      "accountId": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transferSchedules": [
+        {
+          "transferScheduleId": "transferScheduleId-fixture-1",
+          "transactionType": "transactionType-fixture-1",
+          "transactionSourceAccount": {},
+          "transactionDestinationAccount": {},
+          "transferScheduleStatus": "transferScheduleStatus-fixture-1",
+          "transferScheduleInformation": {},
+          "paymentPreference": {},
+          "transferScheduleFailures": []
+        }
+      ]
+    }
+  }
+}

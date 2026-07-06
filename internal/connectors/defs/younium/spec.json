@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Younium Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.younium.com",
+      "description": "Younium API root. Also usable as a base URL override for tests/proxies."
+    },
+    "username": {
+      "type": "string",
+      "description": "Younium API username, used with password for Basic auth."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Younium API password/account key, used with username for Basic auth. Never logged."
+    },
+    "legal_entity": {
+      "type": "string",
+      "description": "Optional legal entity code, sent as the X-Younium-Legal-Entity request header when set. Omitted entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

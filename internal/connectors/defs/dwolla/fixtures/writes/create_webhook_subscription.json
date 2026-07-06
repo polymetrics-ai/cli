@@ -1,0 +1,14 @@
+{
+  "record": {
+    "url": "https://example.com/hooks/dwolla",
+    "secret": "fixture-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhook-subscriptions",
+    "body": {
+      "url": "https://example.com/hooks/dwolla",
+      "secret": "fixture-1"
+    }
+  }
+}

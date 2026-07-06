@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/packages/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "object": "package",
+      "lookup_key": "monthly",
+      "display_name": "Monthly",
+      "position": 1,
+      "created_at": 1735689600000
+    }
+  }
+}

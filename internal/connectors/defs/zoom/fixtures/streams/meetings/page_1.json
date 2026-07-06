@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/meetings", "query": { "page_size": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meetings": [
+        { "id": "meeting_fixture_1", "uuid": "uuid_fixture_1", "topic": "Fixture Meeting One", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "meeting_fixture_2", "uuid": "uuid_fixture_2", "topic": "Fixture Meeting Two", "start_time": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page_token": ""
+    }
+  }
+}

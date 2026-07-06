@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Discord Connection Specification",
+  "type": "object",
+  "required": ["guild_id", "bot_token"],
+  "properties": {
+    "bot_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Discord bot token, sent as Authorization: Bot <bot_token>. Used only for the Authorization header; never logged."
+    },
+    "guild_id": {
+      "type": "string",
+      "description": "Discord guild (server) id; every stream is scoped to this guild."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://discord.com/api/v10",
+      "description": "Discord API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

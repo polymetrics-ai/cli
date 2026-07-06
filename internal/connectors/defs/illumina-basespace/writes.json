@@ -1,0 +1,481 @@
+{
+  "actions": [
+    {
+      "name": "update_applications_id_qcthresholds",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1pre3/applications/{{ record.application_id }}/qcthresholds",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: PUT /v1pre3/applications/{application_id}/qcthresholds.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "update_applications_id_workflowdependencies",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1pre3/applications/{{ record.application_id }}/workflowdependencies",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: PUT /v1pre3/applications/{application_id}/workflowdependencies.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "applications_id_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/applications/{{ record.application_id }}/workflows",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/applications/{application_id}/workflows.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "delete_appsessions_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1pre3/appsessions/{{ record.appsession_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appsession_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "appsession_id"
+        ]
+      },
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/appsessions/{appsession_id}.",
+      "path_fields": [
+        "appsession_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "appsessions_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{{ record.appsession_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appsession_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "appsession_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}.",
+      "path_fields": [
+        "appsession_id"
+      ]
+    },
+    {
+      "name": "appsessions_id_properties",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{{ record.appsession_id }}/properties",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appsession_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "appsession_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}/properties.",
+      "path_fields": [
+        "appsession_id"
+      ]
+    },
+    {
+      "name": "delete_appsessions_id_properties_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1pre3/appsessions/{{ record.appsession_id }}/properties/{{ record.name }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appsession_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "appsession_id",
+          "name"
+        ]
+      },
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/appsessions/{appsession_id}/properties/{name}.",
+      "path_fields": [
+        "appsession_id",
+        "name"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "appsessions_id_stop",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/appsessions/{{ record.appsession_id }}/stop",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appsession_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "appsession_id"
+        ]
+      },
+      "risk": "Destructive BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}/stop.",
+      "path_fields": [
+        "appsession_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "biosamples_bulkupdate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/biosamples/bulkupdate",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/biosamples/bulkupdate."
+    },
+    {
+      "name": "biosamples_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/biosamples/{{ record.biosample_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "biosample_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "biosample_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/biosamples/{biosample_id}.",
+      "path_fields": [
+        "biosample_id"
+      ]
+    },
+    {
+      "name": "datasets_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/datasets/{{ record.dataset_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "dataset_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "dataset_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/datasets/{dataset_id}.",
+      "path_fields": [
+        "dataset_id"
+      ]
+    },
+    {
+      "name": "update_laneqcthresholds",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1pre3/laneqcthresholds",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "BaseSpace mutation: PUT /v1pre3/laneqcthresholds."
+    },
+    {
+      "name": "lanes_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/lanes/{{ record.lane_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "lane_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "lane_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/lanes/{lane_id}.",
+      "path_fields": [
+        "lane_id"
+      ]
+    },
+    {
+      "name": "libraries_libraryid_labrequeues",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/libraries/{{ record.library_id }}/labrequeues",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "library_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "library_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/libraries/{library_id}/labrequeues.",
+      "path_fields": [
+        "library_id"
+      ]
+    },
+    {
+      "name": "librarypools_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/librarypools/{{ record.librarypool_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "librarypool_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "librarypool_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/librarypools/{librarypool_id}.",
+      "path_fields": [
+        "librarypool_id"
+      ]
+    },
+    {
+      "name": "librarypools_poolid_labrequeues",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/librarypools/{{ record.pool_id }}/labrequeues",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "pool_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "pool_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/librarypools/{pool_id}/labrequeues.",
+      "path_fields": [
+        "pool_id"
+      ]
+    },
+    {
+      "name": "preprequests_preprequestid_labrequeues",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/preprequests/{{ record.preprequest_id }}/labrequeues",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "preprequest_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "preprequest_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/preprequests/{preprequest_id}/labrequeues.",
+      "path_fields": [
+        "preprequest_id"
+      ]
+    },
+    {
+      "name": "delete_trash",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1pre3/trash",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/trash.",
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "trash_id_restorefromtrash",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/trash/{{ record.trash_id }}/restorefromtrash",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "trash_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "trash_id"
+        ]
+      },
+      "risk": "Destructive BaseSpace mutation: POST /v1pre3/trash/{trash_id}/restorefromtrash.",
+      "path_fields": [
+        "trash_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "users_id_settings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1pre3/users/{{ record.user_id }}/settings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "BaseSpace mutation: POST /v1pre3/users/{user_id}/settings.",
+      "path_fields": [
+        "user_id"
+      ]
+    }
+  ]
+}

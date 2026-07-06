@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/pipeline",
+    "query": { "page-token": "PIPE_PAGE2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "pipe_fixture_3", "number": 3, "project_slug": "gh/fixture-org/fixture-repo", "state": "created", "created_at": "2026-01-03T00:00:00Z", "updated_at": "2026-01-03T01:00:00Z" }
+      ],
+      "next_page_token": null
+    }
+  }
+}

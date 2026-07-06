@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "taxes_and_fees",
+  "type": "object",
+  "x-primary-key": ["type", "feeID", "taxID"],
+  "properties": {
+    "type": { "type": ["string", "null"] },
+    "feeID": { "type": ["string", "null"] },
+    "taxID": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "code": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "amountAdult": { "type": ["number", "null"] },
+    "amountChild": { "type": ["number", "null"] },
+    "amountRateBased": { "type": ["boolean", "null"] },
+    "amountType": { "type": ["string", "null"] },
+    "availableFor": { "type": ["array", "null"] },
+    "feesCharged": { "type": ["array", "null"] },
+    "taxesCharged": { "type": ["array", "null"] },
+    "inclusiveOrExclusive": { "type": ["string", "null"] },
+    "isDeleted": { "type": ["boolean", "null"] },
+    "childId": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "expiredAt": { "type": ["string", "null"] },
+    "roomTypes": { "type": ["array", "null"] },
+    "dateRanges": { "type": ["array", "null"] },
+    "lengthOfStaySettings": { "type": ["object", "null"] }
+  }
+}

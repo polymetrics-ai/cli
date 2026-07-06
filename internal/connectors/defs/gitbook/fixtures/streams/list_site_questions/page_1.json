@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/questions",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_questions_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_questions",
+          "name": "Fixture list_site_questions",
+          "status": "active",
+          "operation_id": "listSiteQuestions"
+        }
+      ]
+    }
+  }
+}

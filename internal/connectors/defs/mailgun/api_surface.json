@@ -1,0 +1,108 @@
+{
+  "api": "Mailgun API v3 (https://api.mailgun.net/v3, https://api.eu.mailgun.net/v3)",
+  "docs": "https://documentation.mailgun.com/en/latest/api_reference.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Mailgun surface (sending mail, suppressions, webhooks, templates, routes, IPs, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v3/domains",
+      "covered_by": {
+        "stream": "domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/lists/pages",
+      "covered_by": {
+        "stream": "mailing_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/{domain}/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/suppressions/bounces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/suppressions/complaints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/suppressions/unsubscribes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/lists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/routes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/ip_pools",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/{domain}/tags/{tag}/stats",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

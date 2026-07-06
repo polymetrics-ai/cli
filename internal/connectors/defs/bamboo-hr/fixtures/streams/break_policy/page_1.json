@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/break-policies/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "description": "fixture_value",
+      "allEmployeesAssigned": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "deletedAt": "2026-01-01T00:00:00Z",
+      "name": "Fixture Name",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

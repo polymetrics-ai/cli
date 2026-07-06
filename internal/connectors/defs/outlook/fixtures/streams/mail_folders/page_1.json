@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/me/mailFolders" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_folder_1", "displayName": "Inbox", "totalItemCount": 42, "unreadItemCount": 3 },
+        { "id": "fixture_folder_2", "displayName": "Sent Items", "totalItemCount": 17, "unreadItemCount": 0 }
+      ]
+    }
+  }
+}

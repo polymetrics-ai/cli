@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/mandates",
+    "query": {
+      "limit": "50",
+      "created_at[gt]": "2020-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "mandates": [
+        {
+          "id": "MD_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "reference": "REF-MD-1",
+          "status": "active",
+          "scheme": "bacs",
+          "next_possible_charge_date": "2026-01-10",
+          "payments_require_approval": false,
+          "links": {
+            "customer_bank_account": "BA_fixture_1",
+            "creditor": "CR_fixture_1"
+          }
+        }
+      ],
+      "meta": {
+        "cursors": {
+          "before": null,
+          "after": null
+        }
+      }
+    }
+  }
+}

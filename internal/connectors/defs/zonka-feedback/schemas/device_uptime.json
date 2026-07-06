@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "device_uptime",
+  "type": "object",
+  "x-primary-key": [
+    "deviceId"
+  ],
+  "required": [
+    "deviceId"
+  ],
+  "properties": {
+    "deviceId": {
+      "type": "string"
+    },
+    "totalUptime": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    }
+  }
+}

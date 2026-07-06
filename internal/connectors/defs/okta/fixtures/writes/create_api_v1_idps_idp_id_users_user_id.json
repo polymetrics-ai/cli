@@ -1,0 +1,18 @@
+{
+  "record": {
+    "idp_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value",
+    "externalId": "external_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/idps/synthetic-conformance-value/users/synthetic-conformance-value",
+    "body": {
+      "externalId": "external_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

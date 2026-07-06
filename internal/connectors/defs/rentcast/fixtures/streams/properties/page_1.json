@@ -1,0 +1,915 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/properties",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "property_fixture_1",
+        "formattedAddress": "1 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_2",
+        "formattedAddress": "2 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_3",
+        "formattedAddress": "3 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_4",
+        "formattedAddress": "4 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_5",
+        "formattedAddress": "5 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_6",
+        "formattedAddress": "6 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_7",
+        "formattedAddress": "7 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_8",
+        "formattedAddress": "8 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_9",
+        "formattedAddress": "9 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_10",
+        "formattedAddress": "10 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_11",
+        "formattedAddress": "11 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_12",
+        "formattedAddress": "12 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_13",
+        "formattedAddress": "13 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_14",
+        "formattedAddress": "14 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_15",
+        "formattedAddress": "15 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_16",
+        "formattedAddress": "16 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_17",
+        "formattedAddress": "17 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_18",
+        "formattedAddress": "18 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_19",
+        "formattedAddress": "19 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_20",
+        "formattedAddress": "20 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_21",
+        "formattedAddress": "21 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_22",
+        "formattedAddress": "22 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_23",
+        "formattedAddress": "23 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_24",
+        "formattedAddress": "24 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_25",
+        "formattedAddress": "25 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_26",
+        "formattedAddress": "26 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_27",
+        "formattedAddress": "27 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_28",
+        "formattedAddress": "28 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_29",
+        "formattedAddress": "29 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_30",
+        "formattedAddress": "30 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_31",
+        "formattedAddress": "31 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_32",
+        "formattedAddress": "32 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_33",
+        "formattedAddress": "33 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_34",
+        "formattedAddress": "34 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_35",
+        "formattedAddress": "35 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_36",
+        "formattedAddress": "36 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_37",
+        "formattedAddress": "37 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_38",
+        "formattedAddress": "38 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_39",
+        "formattedAddress": "39 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_40",
+        "formattedAddress": "40 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_41",
+        "formattedAddress": "41 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_42",
+        "formattedAddress": "42 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_43",
+        "formattedAddress": "43 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_44",
+        "formattedAddress": "44 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_45",
+        "formattedAddress": "45 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_46",
+        "formattedAddress": "46 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_47",
+        "formattedAddress": "47 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_48",
+        "formattedAddress": "48 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_49",
+        "formattedAddress": "49 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_50",
+        "formattedAddress": "50 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_51",
+        "formattedAddress": "51 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_52",
+        "formattedAddress": "52 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_53",
+        "formattedAddress": "53 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_54",
+        "formattedAddress": "54 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_55",
+        "formattedAddress": "55 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_56",
+        "formattedAddress": "56 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_57",
+        "formattedAddress": "57 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_58",
+        "formattedAddress": "58 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_59",
+        "formattedAddress": "59 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_60",
+        "formattedAddress": "60 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_61",
+        "formattedAddress": "61 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_62",
+        "formattedAddress": "62 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_63",
+        "formattedAddress": "63 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_64",
+        "formattedAddress": "64 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_65",
+        "formattedAddress": "65 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_66",
+        "formattedAddress": "66 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_67",
+        "formattedAddress": "67 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_68",
+        "formattedAddress": "68 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_69",
+        "formattedAddress": "69 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_70",
+        "formattedAddress": "70 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_71",
+        "formattedAddress": "71 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_72",
+        "formattedAddress": "72 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_73",
+        "formattedAddress": "73 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_74",
+        "formattedAddress": "74 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_75",
+        "formattedAddress": "75 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_76",
+        "formattedAddress": "76 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_77",
+        "formattedAddress": "77 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_78",
+        "formattedAddress": "78 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_79",
+        "formattedAddress": "79 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_80",
+        "formattedAddress": "80 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_81",
+        "formattedAddress": "81 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_82",
+        "formattedAddress": "82 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_83",
+        "formattedAddress": "83 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_84",
+        "formattedAddress": "84 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_85",
+        "formattedAddress": "85 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_86",
+        "formattedAddress": "86 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_87",
+        "formattedAddress": "87 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_88",
+        "formattedAddress": "88 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_89",
+        "formattedAddress": "89 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_90",
+        "formattedAddress": "90 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_91",
+        "formattedAddress": "91 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_92",
+        "formattedAddress": "92 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_93",
+        "formattedAddress": "93 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_94",
+        "formattedAddress": "94 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_95",
+        "formattedAddress": "95 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_96",
+        "formattedAddress": "96 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_97",
+        "formattedAddress": "97 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_98",
+        "formattedAddress": "98 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_99",
+        "formattedAddress": "99 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      },
+      {
+        "id": "property_fixture_100",
+        "formattedAddress": "100 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      }
+    ]
+  }
+}

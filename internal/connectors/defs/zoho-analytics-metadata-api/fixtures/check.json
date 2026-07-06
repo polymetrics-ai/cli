@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/workspaces" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "workspaceId": "ws_fixture_1", "workspaceName": "Finance", "createdTime": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

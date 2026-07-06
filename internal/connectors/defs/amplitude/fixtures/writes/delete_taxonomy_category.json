@@ -1,0 +1,11 @@
+{
+  "record": { "category_id": 7001 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/2/taxonomy/category/7001"
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

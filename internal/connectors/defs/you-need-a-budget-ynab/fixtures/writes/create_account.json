@@ -1,0 +1,21 @@
+{
+  "record": {
+    "account": {
+      "name": "Fixture New Account",
+      "type": "checking",
+      "balance": 0
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/synthetic-conformance-value/accounts",
+    "body": {
+      "account": {
+        "name": "Fixture New Account",
+        "type": "checking",
+        "balance": 0
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "account": { "id": "account_new_fixture" } } } }
+}

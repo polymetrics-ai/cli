@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lightspeed Retail Connection Specification",
+  "type": "object",
+  "required": ["subdomain", "api_key"],
+  "properties": {
+    "subdomain": {
+      "type": "string",
+      "description": "Your Lightspeed Retail (X-Series) account subdomain (the <subdomain> in https://<subdomain>.retail.lightspeed.app). Used to derive the API base URL."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Lightspeed Retail personal token / OAuth access token. Sent as Authorization: Bearer <api_key>; never logged."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

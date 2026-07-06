@@ -1,0 +1,479 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Authorization": "api-key {{ secrets.api_key }}"
+    },
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "api-key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/api/v3/companies/list",
+      "query": {
+        "limit": "1",
+        "page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "simfin api key is missing or invalid; re-run pm credentials add simfin"
+      },
+      {
+        "status": 403,
+        "hint": "simfin account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "simfin rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "companies",
+      "path": "/api/v3/companies/list",
+    "records": {
+      "path": "data"
+    },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "statements",
+      "path": "/api/v3/statements/list",
+    "records": {
+      "path": "data"
+    },
+    "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+    },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "schema": "schemas/statements.json"
+  },
+    {
+      "name": "markets",
+      "path": "/api/v3/markets/list",
+    "records": {
+      "path": "data"
+    },
+    "computed_fields": {
+      "id": "{{ coalesce record.id record.simId record.companyId }}",
+      "name": "{{ coalesce record.name record.companyName }}",
+      "updated_at": "{{ coalesce record.updated_at record.fiscalPeriod }}"
+    },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100
+      },
+      "schema": "schemas/markets.json"
+    },
+    {
+      "name": "company_general_compact",
+      "path": "/api/v3/companies/general/compact",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_general_compact.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "company_general_verbose",
+      "path": "/api/v3/companies/general/verbose",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_general_verbose.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "company_statements_compact",
+      "path": "/api/v3/companies/statements/compact",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_statements_compact.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "statements": {
+          "template": "{{ config.statements }}",
+          "default": "PL,BS,CF,DERIVED"
+        },
+        "period": {
+          "template": "{{ config.periods }}",
+          "omit_when_absent": true
+        },
+        "fyear": {
+          "template": "{{ config.fiscal_years }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        },
+        "ttm": {
+          "template": "{{ config.include_ttm }}",
+          "omit_when_absent": true
+        },
+        "asreported": {
+          "template": "{{ config.as_reported }}",
+          "omit_when_absent": true
+        },
+        "details": {
+          "template": "{{ config.include_details }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "company_statements_verbose",
+      "path": "/api/v3/companies/statements/verbose",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_statements_verbose.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "statements": {
+          "template": "{{ config.statements }}",
+          "default": "PL,BS,CF,DERIVED"
+        },
+        "period": {
+          "template": "{{ config.periods }}",
+          "omit_when_absent": true
+        },
+        "fyear": {
+          "template": "{{ config.fiscal_years }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        },
+        "ttm": {
+          "template": "{{ config.include_ttm }}",
+          "omit_when_absent": true
+        },
+        "asreported": {
+          "template": "{{ config.as_reported }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "company_prices_compact",
+      "path": "/api/v3/companies/prices/compact",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_prices_compact.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "ratios": {
+          "template": "{{ config.include_ratios }}",
+          "omit_when_absent": true
+        },
+        "asreported": {
+          "template": "{{ config.as_reported }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "company_prices_verbose",
+      "path": "/api/v3/companies/prices/verbose",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_prices_verbose.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "ratios": {
+          "template": "{{ config.include_ratios }}",
+          "omit_when_absent": true
+        },
+        "asreported": {
+          "template": "{{ config.as_reported }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "common_shares_outstanding",
+      "path": "/api/v3/companies/common-shares-outstanding",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/common_shares_outstanding.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "weighted_shares_outstanding",
+      "path": "/api/v3/companies/weighted-shares-outstanding",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/weighted_shares_outstanding.json",
+      "query": {
+        "id": {
+          "template": "{{ config.company_ids }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.tickers }}",
+          "omit_when_absent": true
+        },
+        "period": {
+          "template": "{{ config.periods }}",
+          "omit_when_absent": true
+        },
+        "fyear": {
+          "template": "{{ config.fiscal_years }}",
+          "omit_when_absent": true
+        },
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        },
+        "ttm": {
+          "template": "{{ config.include_ttm }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "filings_by_company",
+      "path": "/api/v3/filings/by-company",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/filings_by_company.json",
+      "query": {
+        "id": {
+          "template": "{{ config.filing_company_id }}",
+          "omit_when_absent": true
+        },
+        "ticker": {
+          "template": "{{ config.filing_company_ticker }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "filings",
+      "path": "/api/v3/filings/list",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per-page",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "query": {
+        "start-date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end-date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      },
+      "schema": "schemas/filings.json"
+    },
+    {
+      "name": "changed_companies",
+      "path": "/api/v3/companies/changed-companies",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/changed_companies.json",
+      "query": {
+        "start": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "data_change_log",
+      "path": "/api/v3/companies/data-change-log",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "pageNumber",
+        "size_param": "itemsPerPage",
+        "start_page": 0,
+        "page_size": 100
+      },
+      "projection": "passthrough",
+      "schema": "schemas/data_change_log.json"
+    }
+  ]
+}

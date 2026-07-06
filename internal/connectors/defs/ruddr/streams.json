@@ -1,0 +1,56 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/workspaces/{{ config.workspace_id }}/projects" },
+    "error_map": [
+      { "status": 401, "hint": "ruddr api_key is missing or invalid; re-run pm credentials add ruddr" },
+      { "status": 403, "hint": "ruddr account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "ruddr rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "clients",
+      "path": "/api/workspaces/{{ config.workspace_id }}/clients",
+      "query": { "page": "1", "page_size": "2" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "stream": "clients" },
+      "projection": "passthrough",
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "projects",
+      "path": "/api/workspaces/{{ config.workspace_id }}/projects",
+      "query": { "page": "1", "page_size": "2" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "stream": "projects" },
+      "projection": "passthrough",
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "time_entries",
+      "path": "/api/workspaces/{{ config.workspace_id }}/time_entries",
+      "query": { "page": "1", "page_size": "2" },
+      "records": { "path": "results" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next"
+      },
+      "computed_fields": { "stream": "time_entries" },
+      "projection": "passthrough",
+      "schema": "schemas/time_entries.json"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "id": 100010, "name": "Fixture Check Updated", "paused": true },
+  "expect": {
+    "method": "PUT",
+    "path": "/checks/100010",
+    "body": { "name": "Fixture Check Updated", "paused": true }
+  },
+  "response": { "status": 200, "body": { "message": "Modification of check was successful!" } }
+}

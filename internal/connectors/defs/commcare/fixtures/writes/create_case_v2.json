@@ -1,0 +1,22 @@
+{
+  "record": {
+    "case_type": "patient",
+    "case_name": "Fixture Patient",
+    "owner_id": "mobile_worker_fixture_1",
+    "external_id": "external_case_write_fixture_1",
+    "properties": { "dob": "2000-01-01" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/case/v2/",
+    "body": {
+      "case_type": "patient",
+      "case_name": "Fixture Patient",
+      "owner_id": "mobile_worker_fixture_1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "xform_id": "xform_fixture_1", "case": { "case_id": "case_write_fixture_1" } }
+  }
+}

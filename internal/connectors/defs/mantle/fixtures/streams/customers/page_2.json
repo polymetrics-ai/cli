@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers",
+    "query": {
+      "take": "500",
+      "cursor": "cust_fixture_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        {
+          "id": "cust_fixture_3",
+          "name": "Initech",
+          "email": "fixture3@example.com",
+          "domain": "initech.example.com",
+          "industry": "software",
+          "countryCode": "US",
+          "shopifyDomain": "initech.myshopify.com",
+          "shopifyShopId": "1000003",
+          "test": false,
+          "tags": [
+            "fixture"
+          ],
+          "last30Revenue": 50,
+          "lifetimeValue": 600,
+          "averageMonthlyRevenue": 45,
+          "firstInteractionAt": "2026-01-03T00:00:00+00:00",
+          "createdAt": "2026-01-03T00:00:00+00:00",
+          "updatedAt": "2026-01-03T00:00:00+00:00"
+        }
+      ],
+      "cursor": "cust_fixture_3",
+      "hasNextPage": false
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_report_schedules",
+  "type": "object",
+  "properties": {
+    "reportScheduleId": {
+      "type": "string"
+    },
+    "reportType": {
+      "type": "string"
+    },
+    "marketplaceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reportOptions": {
+      "type": "object"
+    },
+    "period": {
+      "type": "string"
+    },
+    "nextReportCreationTime": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "reportScheduleId"
+  ]
+}

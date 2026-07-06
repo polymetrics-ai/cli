@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/headless/courses"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "title": "Onboarding Basics",
+        "description": "Fixture description 1.",
+        "key": "course-1",
+        "image": "https://cdn.coassemble.example/img/course-1.png",
+        "active": true,
+        "private": false,
+        "paid": false,
+        "identified": false,
+        "is_sharable": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "record": {
+    "exitType": 1,
+    "exitReason": "fixture_exit_reason_1",
+    "resignationDate": "2026-01-01T00:00:00Z",
+    "lastWorkingDate": "2026-01-01T00:00:00Z",
+    "isOkToRehire": true,
+    "comments": "fixture_comments_1",
+    "employee_id": "fixture_employee_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hris/employees/fixture_employee_id/exitrequest",
+    "body": {
+      "exitType": 1,
+      "exitReason": "fixture_exit_reason_1",
+      "resignationDate": "2026-01-01T00:00:00Z",
+      "lastWorkingDate": "2026-01-01T00:00:00Z",
+      "isOkToRehire": true,
+      "comments": "fixture_comments_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "create_exit_request_fixture_1",
+        "name": "Fixture create exit request"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

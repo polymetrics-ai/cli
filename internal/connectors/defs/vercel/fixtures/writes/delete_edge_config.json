@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "ecfg_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/edge-config/ecfg_fixture_1"
+  }
+}

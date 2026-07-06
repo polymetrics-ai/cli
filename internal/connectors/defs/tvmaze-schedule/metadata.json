@@ -1,0 +1,23 @@
+{
+  "name": "tvmaze-schedule",
+  "display_name": "TVmaze Schedule",
+  "description": "Reads public TVmaze broadcast and web schedules without credentials.",
+  "integration_type": "api",
+  "docs_url": "https://www.tvmaze.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 0
+  },
+  "risk": {
+    "read": "external TVmaze public API read of broadcast/web schedule data",
+    "approval": "none; read-only public schedule API, no credentials"
+  }
+}

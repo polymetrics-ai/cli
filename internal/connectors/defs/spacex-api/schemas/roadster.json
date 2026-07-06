@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "roadster",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "launch_date_utc": { "type": ["string", "null"] },
+    "launch_mass_kg": { "type": ["number", "null"] },
+    "speed_kph": { "type": ["number", "null"] },
+    "earth_distance_km": { "type": ["number", "null"] },
+    "mars_distance_km": { "type": ["number", "null"] },
+    "wikipedia": { "type": ["string", "null"] }
+  }
+}

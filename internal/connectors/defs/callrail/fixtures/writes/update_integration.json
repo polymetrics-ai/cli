@@ -1,0 +1,9 @@
+{
+  "record": { "id": 1, "state": "disabled" },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/integrations/1.json",
+    "body": { "state": "disabled" }
+  },
+  "response": { "status": 200, "body": { "id": 1, "state": "disabled" } }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_logs",
+  "type": "object",
+  "properties": {
+    "logId": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "integer"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "integer"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "integer"
+    },
+    "task_name": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "billable": {
+      "type": "boolean"
+    },
+    "invoiced": {
+      "type": "boolean"
+    },
+    "rate": {
+      "type": "number"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "billable_amount": {
+      "type": "number"
+    },
+    "log_duration": {
+      "type": "number"
+    },
+    "labor_hours": {
+      "type": "number"
+    },
+    "billable_hours": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "logId"
+  ],
+  "x-cursor-field": "date"
+}

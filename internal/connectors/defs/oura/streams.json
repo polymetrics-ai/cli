@@ -1,0 +1,629 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/usercollection/personal_info"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "oura api_key is missing or invalid; re-run pm credentials add oura"
+      },
+      {
+        "status": 403,
+        "hint": "oura token lacks the required Oura scope or the user subscription does not allow the requested data"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "oura rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "personal_info",
+      "path": "/usercollection/personal_info",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/personal_info.json"
+    },
+    {
+      "name": "daily_sleep",
+      "path": "/usercollection/daily_sleep",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_sleep.json"
+    },
+    {
+      "name": "daily_activity",
+      "path": "/usercollection/daily_activity",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_activity.json"
+    },
+    {
+      "name": "daily_readiness",
+      "path": "/usercollection/daily_readiness",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_readiness.json"
+    },
+    {
+      "name": "daily_cardiovascular_age",
+      "path": "/usercollection/daily_cardiovascular_age",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_cardiovascular_age.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "daily_resilience",
+      "path": "/usercollection/daily_resilience",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_resilience.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "daily_spo2",
+      "path": "/usercollection/daily_spo2",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_spo2.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "daily_stress",
+      "path": "/usercollection/daily_stress",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/daily_stress.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "enhanced_tag",
+      "path": "/usercollection/enhanced_tag",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/enhanced_tag.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "rest_mode_period",
+      "path": "/usercollection/rest_mode_period",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/rest_mode_period.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "ring_configuration",
+      "path": "/usercollection/ring_configuration",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/ring_configuration.json"
+    },
+    {
+      "name": "session",
+      "path": "/usercollection/session",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/session.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "sleep",
+      "path": "/usercollection/sleep",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/sleep.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "sleep_time",
+      "path": "/usercollection/sleep_time",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/sleep_time.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "tag",
+      "path": "/usercollection/tag",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/tag.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "vo2_max",
+      "path": "/usercollection/vO2_max",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/vo2_max.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "workout",
+      "path": "/usercollection/workout",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/workout.json",
+      "query": {
+        "start_date": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "heartrate",
+      "path": "/usercollection/heartrate",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/heartrate.json",
+      "query": {
+        "start_datetime": {
+          "template": "{{ config.start_datetime }}",
+          "omit_when_absent": true
+        },
+        "end_datetime": {
+          "template": "{{ config.end_datetime }}",
+          "omit_when_absent": true
+        },
+        "latest": {
+          "template": "{{ config.latest }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "ring_battery_level",
+      "path": "/usercollection/ring_battery_level",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_token",
+        "token_path": "next_token"
+      },
+      "schema": "schemas/ring_battery_level.json",
+      "query": {
+        "start_datetime": {
+          "template": "{{ config.start_datetime }}",
+          "omit_when_absent": true
+        },
+        "end_datetime": {
+          "template": "{{ config.end_datetime }}",
+          "omit_when_absent": true
+        },
+        "latest": {
+          "template": "{{ config.latest }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "daily_sleep_detail",
+      "path": "/usercollection/daily_sleep/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_sleep_detail.json"
+    },
+    {
+      "name": "daily_activity_detail",
+      "path": "/usercollection/daily_activity/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_activity_detail.json"
+    },
+    {
+      "name": "daily_readiness_detail",
+      "path": "/usercollection/daily_readiness/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_readiness_detail.json"
+    },
+    {
+      "name": "daily_cardiovascular_age_detail",
+      "path": "/usercollection/daily_cardiovascular_age/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_cardiovascular_age.json"
+    },
+    {
+      "name": "daily_resilience_detail",
+      "path": "/usercollection/daily_resilience/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_resilience.json"
+    },
+    {
+      "name": "daily_spo2_detail",
+      "path": "/usercollection/daily_spo2/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_spo2.json"
+    },
+    {
+      "name": "daily_stress_detail",
+      "path": "/usercollection/daily_stress/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/daily_stress.json"
+    },
+    {
+      "name": "enhanced_tag_detail",
+      "path": "/usercollection/enhanced_tag/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/enhanced_tag.json"
+    },
+    {
+      "name": "rest_mode_period_detail",
+      "path": "/usercollection/rest_mode_period/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/rest_mode_period.json"
+    },
+    {
+      "name": "ring_configuration_detail",
+      "path": "/usercollection/ring_configuration/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/ring_configuration.json"
+    },
+    {
+      "name": "session_detail",
+      "path": "/usercollection/session/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/session.json"
+    },
+    {
+      "name": "sleep_detail",
+      "path": "/usercollection/sleep/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sleep.json"
+    },
+    {
+      "name": "sleep_time_detail",
+      "path": "/usercollection/sleep_time/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sleep_time.json"
+    },
+    {
+      "name": "tag_detail",
+      "path": "/usercollection/tag/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/tag.json"
+    },
+    {
+      "name": "vo2_max_detail",
+      "path": "/usercollection/vO2_max/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/vo2_max.json"
+    },
+    {
+      "name": "workout_detail",
+      "path": "/usercollection/workout/{{ config.document_id }}",
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/workout.json"
+    }
+  ]
+}

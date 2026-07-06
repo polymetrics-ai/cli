@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "product",
+      "attributes": {
+        "name": "Fixture Create Product"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products",
+    "body": {
+      "data": {
+        "type": "product",
+        "attributes": {
+          "name": "Fixture Create Product"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

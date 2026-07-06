@@ -1,0 +1,15 @@
+{
+  "name": "when-clause-equality-unknown-spec-key",
+  "display_name": "When Clause Equality Unknown Spec Key",
+  "description": "a deliberately invalid test connector: an auth spec's when clause uses the ==/in grammar but references an undeclared spec key",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "manufacturers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "support_url": { "type": ["string", "null"] },
+    "support_phone": { "type": ["string", "null"] },
+    "support_email": { "type": ["string", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "number_of_assets": { "type": ["integer", "null"] },
+    "number_of_accessories": { "type": ["integer", "null"] },
+    "number_of_components": { "type": ["integer", "null"] },
+    "number_of_consumables": { "type": ["integer", "null"] },
+    "number_of_licenses": { "type": ["integer", "null"] },
+    "number_of_products": { "type": ["integer", "null"] },
+    "assets": { "type": ["array", "null"] },
+    "accessories": { "type": ["array", "null"] },
+    "components": { "type": ["array", "null"] },
+    "consumables": { "type": ["array", "null"] },
+    "licenses": { "type": ["array", "null"] },
+    "products": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

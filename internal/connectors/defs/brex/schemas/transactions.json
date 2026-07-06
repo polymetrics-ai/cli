@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "posted_at_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "card_id": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "amount": { "type": ["object", "null"] },
+    "initiated_at_date": { "type": ["string", "null"] },
+    "posted_at_date": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] }
+  }
+}

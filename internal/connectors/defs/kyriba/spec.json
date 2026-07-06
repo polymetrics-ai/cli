@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kyriba Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.kyriba.com/api/v1",
+      "description": "Kyriba tenant REST API base URL override. Kyriba deployments vary by tenant; defaults to https://api.kyriba.com/api/v1."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.kyriba.com/oauth/token",
+      "description": "Kyriba OAuth2 client-credentials token endpoint override. Defaults to https://api.kyriba.com/oauth/token."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Kyriba OAuth2 client-credentials client id."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Kyriba OAuth2 client-credentials client secret. Never logged."
+    },
+    "scope": {
+      "type": "string",
+      "default": "",
+      "description": "Optional OAuth2 scope requested at token exchange. Left unset, no scope is sent (Kyriba tenant defaults apply)."
+    }
+  }
+}

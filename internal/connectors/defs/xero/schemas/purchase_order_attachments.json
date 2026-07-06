@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "purchase_order_attachments",
+  "type": "object",
+  "x-primary-key": [
+    "AttachmentID"
+  ],
+  "properties": {
+    "AttachmentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FileName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "MimeType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContentLength": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "IncludeOnline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "purchase_order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

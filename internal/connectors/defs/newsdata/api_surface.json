@@ -1,0 +1,37 @@
+{
+  "api": "NewsData.io API (https://newsdata.io/api/1)",
+  "docs": "https://newsdata.io/documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 3 legacy-parity read streams only",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/1/latest",
+      "covered_by": {
+        "stream": "latest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/crypto",
+      "covered_by": {
+        "stream": "crypto"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/sources",
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1/archive",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "(paid-tier historical archive search, not in legacy's first-cut scope)"
+      }
+    }
+  ]
+}

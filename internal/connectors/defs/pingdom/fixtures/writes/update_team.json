@@ -1,0 +1,9 @@
+{
+  "record": { "id": 800010, "name": "Fixture Team Updated", "member_ids": [700010] },
+  "expect": {
+    "method": "PUT",
+    "path": "/alerting/teams/800010",
+    "body": { "name": "Fixture Team Updated", "member_ids": [700010] }
+  },
+  "response": { "status": 200, "body": { "id": 800010 } }
+}

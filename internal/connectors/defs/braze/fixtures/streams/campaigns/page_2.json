@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns/list",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "campaigns": [
+        {
+          "id": "campaign_fixture_101",
+          "name": "Fixture Campaign 101",
+          "is_api_campaign": false,
+          "tags": [
+            "fixture"
+          ],
+          "last_edited": "2026-01-01T00:00:41Z"
+        }
+      ]
+    }
+  }
+}

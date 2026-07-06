@@ -1,0 +1,24 @@
+{
+  "name": "delighted",
+  "display_name": "Delighted",
+  "description": "Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API; can create/update and delete people.",
+  "integration_type": "api",
+  "docs_url": "https://delighted.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Delighted API read of survey responses, people, and aggregate NPS metrics",
+    "write": "creates/updates Delighted people and deletes existing people",
+    "approval": "reverse-ETL writes require plan preview and approval token"
+  }
+}

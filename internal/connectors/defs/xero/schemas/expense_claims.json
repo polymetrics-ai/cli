@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "expense_claims",
+  "type": "object",
+  "x-primary-key": [
+    "ExpenseClaimID"
+  ],
+  "properties": {
+    "ExpenseClaimID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Payments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "User": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Receipts": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Total": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "AmountDue": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "AmountPaid": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "PaymentDueDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReportingDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ReceiptID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

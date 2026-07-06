@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "msg_fixture_51",
+          "received": "2026-01-01T00:51:00Z",
+          "type": "Email",
+          "subject": "Fixture message 51",
+          "server": "srv_fixture_1",
+          "from": [
+            {
+              "email": "sender@example.com"
+            }
+          ],
+          "to": [
+            {
+              "email": "rcpt@example.com"
+            }
+          ],
+          "cc": [],
+          "bcc": []
+        }
+      ]
+    }
+  }
+}

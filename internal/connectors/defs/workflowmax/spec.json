@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkflowMax Connection Specification",
+  "type": "object",
+  "required": ["access_token", "account_id"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "WorkflowMax API v2 OAuth2 access token, sent as a Bearer token on every request. Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "WorkflowMax/Xero organisation identifier, sent as the required account-id header on every v2 request (api-docs.workflowmax.com Authentication)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.workflowmax2.com",
+      "description": "WorkflowMax API base URL. Defaults to the production v2 endpoint; override for test proxies."
+    },
+    "updated_since": {
+      "type": "string",
+      "description": "Optional YYYY-MM-DD lower bound for the jobs/clients updatedSince filter. When unset, every read is a full stream read (matching legacy's own always-full-read behavior)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "change_request_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/merge"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "merge_change_request_fixture_1"
+    }
+  }
+}

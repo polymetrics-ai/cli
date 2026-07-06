@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/users/me/history", "query": { "maxResults": "100", "pageToken": "page2token" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "history": [
+        {
+          "id": "2003",
+          "messagesDeleted": [
+            { "message": { "id": "msg_fixture_3", "threadId": "thread_fixture_3" } }
+          ]
+        }
+      ],
+      "historyId": "2003"
+    }
+  }
+}

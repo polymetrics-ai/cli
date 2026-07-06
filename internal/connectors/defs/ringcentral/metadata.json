@@ -1,0 +1,22 @@
+{
+  "name": "ringcentral",
+  "display_name": "RingCentral",
+  "description": "Reads RingCentral extensions, call logs, messages, contacts, and devices through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.ringcentral.com/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external RingCentral API read of account extension, call-log, message, contact, and device data"
+  }
+}

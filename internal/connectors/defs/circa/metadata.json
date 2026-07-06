@@ -1,0 +1,23 @@
+{
+  "name": "circa",
+  "display_name": "Circa",
+  "description": "Reads and writes Circa events, contacts, companies, teams, custom fields, and event/company sub-resources through the Circa REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.circa.co/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25
+  },
+  "risk": {
+    "read": "external Circa API read of event, contact, company, team, custom-field, and event/company sub-resource data",
+    "write": "external mutation of Circa contacts, events, companies, and event-contact registrations; create/update/delete affect live CRM/event data an operator relies on"
+  }
+}

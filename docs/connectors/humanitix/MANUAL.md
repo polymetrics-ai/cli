@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  event_id
+  page_size
+  since
+  api_key (secret)
+
+ETL STREAMS
+  events:
+    primary key: _id
+    cursor: updatedAt
+    fields: _id(), createdAt(), currency(), endDate(), location(), markedAsSoldOut(), name(), organiserId(), public(), published(), slug(), startDate(), updatedAt(), userId()
+  tags:
+    primary key: _id
+    cursor: updatedAt
+    fields: _id(), createdAt(), location(), name(), updatedAt(), userId()
+  orders:
+    primary key: _id
+    cursor: updatedAt
+    fields: _id(), completedAt(), createdAt(), currency(), email(), eventDateId(), eventId(), financialStatus(), firstName(), lastName(), manualOrder(), mobile(), orderName(), status(), total(), updatedAt()
+  tickets:
+    primary key: _id
+    cursor: updatedAt
+    fields: _id(), createdAt(), currency(), eventDateId(), eventId(), firstName(), isDonation(), lastName(), number(), orderId(), orderName(), price(), status(), ticketTypeId(), ticketTypeName(), total(), updatedAt()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Humanitix API read of event, order, ticket, and tag data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

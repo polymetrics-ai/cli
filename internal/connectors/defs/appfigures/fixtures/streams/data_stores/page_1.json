@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/data/stores" },
+  "response": {
+    "status": 200,
+    "body": {
+      "apple": {
+        "id": 1,
+        "code": "apple",
+        "name": "Apple App Store",
+        "short_name": "iOS",
+        "type": "mobile",
+        "supported_features": ["reviews", "ranks"],
+        "storefronts": [{ "id": 143441, "name": "United States", "short_name": "US", "type": "country" }],
+        "countries": [{ "iso": "US", "name": "United States", "apple_store_no": "143441" }]
+      },
+      "google_play": {
+        "id": 2,
+        "code": "google_play",
+        "name": "Google Play",
+        "short_name": "Android",
+        "type": "mobile",
+        "supported_features": ["reviews", "ranks"],
+        "storefronts": [],
+        "countries": []
+      }
+    }
+  }
+}

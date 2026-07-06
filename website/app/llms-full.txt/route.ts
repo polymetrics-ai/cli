@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { BLOG_POSTS } from '@/lib/blog';
 import { CONNECTOR_CATALOG } from '@/lib/connectors.catalog.generated';
 import { DOCS_PAGES } from '@/lib/docs.generated';
 
@@ -17,25 +16,15 @@ export async function GET() {
     }
   }
 
-  for (const post of BLOG_POSTS) {
-    const body = post.sections
-      .map((section) => {
-        const paragraphs = section.body.join('\n\n');
-        const points = section.points ? `\n\n${section.points.map((point) => `- ${point}`).join('\n')}` : '';
-        const code = section.code ? `\n\n\`\`\`bash\n${section.code}\n\`\`\`` : '';
-        return `## ${section.heading}\n\n${paragraphs}${points}${code}`;
-      })
-      .join('\n\n');
-
-    sections.push(`# ${post.title}\n\n${post.description}\n\n${body}`);
-  }
-
   // Compact connector index
   sections.push('# Connector catalog index\n');
-  const connectorLines = CONNECTOR_CATALOG.map(
-    (c) =>
-      `- **${c.name}** (\`${c.slug}\`) — ${c.category} ${c.type}, ${c.releaseStage}, status: ${c.status}`,
-  );
+  const connectorLines = CONNECTOR_CATALOG.map((c) => {
+    const capabilities = c.capabilityLabels.length > 0 ? c.capabilityLabels.join(', ') : 'metadata';
+    return (
+      `- **${c.name}** (\`${c.slug}\`) — ${c.categoryLabel}, ${c.releaseStage}; ` +
+      `capabilities: ${capabilities}; streams: ${c.streams.length}; write actions: ${c.writeActions.length}`
+    );
+  });
   sections.push(connectorLines.join('\n'));
 
   const text = sections.join('\n\n---\n\n');

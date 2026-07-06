@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HiBob Connection Specification",
+  "type": "object",
+  "required": ["username", "password", "base_url"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "HiBob service-user id, sent as the HTTP Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "HiBob service-user token, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "HiBob API base URL: https://api.hibob.com/v1 (production) or https://api.sandbox.hibob.com/v1 (sandbox). This bundle requires the full URL directly since the engine has no config-derivation mechanism for base URLs (see docs.md Known limits)."
+    }
+  }
+}

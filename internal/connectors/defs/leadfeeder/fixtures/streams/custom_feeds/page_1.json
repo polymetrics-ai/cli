@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/custom-feeds", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "feed_fixture_1", "type": "custom-feeds", "attributes": { "name": "Fixture Custom Feed 1" } }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

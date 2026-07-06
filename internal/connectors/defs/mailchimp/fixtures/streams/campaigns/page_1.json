@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "id": "campaign_fixture_1",
+          "web_id": 2001,
+          "type": "regular",
+          "status": "sent",
+          "create_time": "2026-01-01T00:00:00+00:00",
+          "send_time": "2026-01-02T00:00:00+00:00",
+          "emails_sent": 100,
+          "archive_url": "https://mailchimp.com/archive/fixture1"
+        }
+      ],
+      "total_items": 1
+    }
+  }
+}

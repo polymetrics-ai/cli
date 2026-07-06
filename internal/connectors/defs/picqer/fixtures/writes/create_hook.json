@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Hook", "event": "orders.status_changed", "address": "https://example.com/hooks/picqer" },
+  "expect": {
+    "method": "POST",
+    "path": "/hooks",
+    "body": { "name": "Fixture Hook", "event": "orders.status_changed", "address": "https://example.com/hooks/picqer" }
+  },
+  "response": { "status": 200, "body": { "idhook": 1801, "name": "Fixture Hook" } }
+}

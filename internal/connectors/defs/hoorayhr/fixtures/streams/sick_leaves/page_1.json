@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sick-leave"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "userId": 101,
+        "status": "active",
+        "percentage": 100,
+        "notes": "fixture note 1",
+        "actualStart": "2026-03-01",
+        "actualReturn": "2026-03-03",
+        "reportedStart": "2026-03-01",
+        "reportedReturn": "2026-03-03",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      },
+      {
+        "id": 2,
+        "userId": 102,
+        "status": "closed",
+        "percentage": 50,
+        "notes": "fixture note 2",
+        "actualStart": "2026-04-01",
+        "actualReturn": "2026-04-05",
+        "reportedStart": "2026-04-01",
+        "reportedReturn": "2026-04-05",
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/crypto", "query": { "size": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 1,
+      "results": [
+        {
+          "article_id": "crypto_fixture_1",
+          "title": "Fixture Crypto Article 1",
+          "link": "https://example.com/crypto/1",
+          "description": "Fixture crypto article description.",
+          "content": "Fixture crypto article content.",
+          "pubDate": "2026-01-01 00:00:00",
+          "image_url": "https://example.com/image.png",
+          "source_id": "fixture_source",
+          "source_name": "Fixture Source",
+          "source_url": "https://example.com",
+          "language": "english",
+          "creator": ["Fixture Author"],
+          "keywords": ["fixture", "crypto"],
+          "category": ["business"],
+          "country": ["united states of america"],
+          "duplicate": false
+        }
+      ],
+      "nextPage": null
+    }
+  }
+}

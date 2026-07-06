@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "VisitsSummary.get",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "nb_uniq_visitors": 1,
+      "nb_visits": 2,
+      "nb_users": 3,
+      "nb_actions": 4,
+      "max_actions": 5,
+      "bounce_rate": 6,
+      "nb_actions_per_visit": 7,
+      "avg_time_on_site": 8
+    }
+  }
+}

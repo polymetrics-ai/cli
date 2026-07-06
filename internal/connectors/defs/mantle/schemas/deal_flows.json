@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deal_flows",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the deal flow."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the deal flow."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the deal flow."
+    },
+    "displayOrder": {
+      "type": "integer",
+      "description": "The display order of the deal flow."
+    },
+    "defaultAcquisitionChannel": {
+      "type": "string",
+      "description": "The default acquisition channel for deals in this flow."
+    },
+    "defaultAcquisitionSource": {},
+    "defaultDealOwner": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "affiliate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "partnership": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      }
+    },
+    "acquirer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "dealStages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "displayOrder": {
+            "type": "integer"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "float"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the deal flow.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the deal flow.",
+      "format": "date-time"
+    },
+    "deletedAt": {
+      "type": "string",
+      "description": "The deletion timestamp of the deal flow.",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/webhooks", "query": { "offset": "0" } },
+  "response": { "status": 200, "body": [ { "id": 1201, "target": "https://example.invalid/hook", "event": "lead.creation", "active": true } ] }
+}

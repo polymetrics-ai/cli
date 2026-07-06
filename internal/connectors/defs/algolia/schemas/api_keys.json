@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "api_keys",
+  "type": "object",
+  "x-primary-key": ["value"],
+  "required": ["value"],
+  "properties": {
+    "value": { "type": "string" },
+    "created_at": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "acl": { "type": ["array", "null"] },
+    "indexes": { "type": ["array", "null"] },
+    "validity": { "type": ["integer", "null"] },
+    "max_hits_per_query": { "type": ["integer", "null"] },
+    "max_queries_per_ip_per_hour": { "type": ["integer", "null"] },
+    "referers": { "type": ["array", "null"] }
+  }
+}

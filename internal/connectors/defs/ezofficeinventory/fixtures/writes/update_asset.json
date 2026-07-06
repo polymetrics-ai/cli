@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1001,
+    "fixed_asset[name]": "Fixture Laptop Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/assets/1001.api"
+  }
+}

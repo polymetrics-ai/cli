@@ -1,0 +1,45 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "uiSchema": {
+      "buttonLabel": "button_label_fixture",
+      "elements": [
+        {
+          "label": "label_fixture",
+          "options": {
+            "format": "text"
+          },
+          "scope": "scope_fixture",
+          "type": "type_fixture"
+        }
+      ],
+      "label": "label_fixture",
+      "type": "type_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/meta/uischemas/synthetic-conformance-value",
+    "body": {
+      "uiSchema": {
+        "buttonLabel": "button_label_fixture",
+        "elements": [
+          {
+            "label": "label_fixture",
+            "options": {
+              "format": "text"
+            },
+            "scope": "scope_fixture",
+            "type": "type_fixture"
+          }
+        ],
+        "label": "label_fixture",
+        "type": "type_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

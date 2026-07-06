@@ -1,0 +1,70 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Simplesat-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "next_url", "next_url_path": "next" },
+    "check": { "method": "GET", "path": "/surveys" },
+    "error_map": [
+      { "status": 401, "hint": "simplesat api_key is missing or invalid" },
+      { "status": 429, "class": "rate_limited", "hint": "simplesat rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "answers",
+      "method": "POST",
+      "path": "/answers/search",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "answers" },
+      "schema": "schemas/answers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "surveys" },
+      "schema": "schemas/surveys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "questions",
+      "path": "/questions",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "questions" },
+      "schema": "schemas/questions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "100" },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true }
+      },
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "responses",
+      "method": "POST",
+      "path": "/responses/search",
+      "query": {
+        "page_size": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "responses" },
+      "schema": "schemas/responses.json",
+      "projection": "passthrough"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/comments",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "comment": {
+            "id": "comment_fixture_1",
+            "entity_type": "customer",
+            "entity_id": "cus_fixture_1",
+            "added_by": "fixture-user",
+            "notes": "Fixture comment",
+            "type": "user",
+            "created_at": 1767225600
+          }
+        }
+      ]
+    }
+  }
+}

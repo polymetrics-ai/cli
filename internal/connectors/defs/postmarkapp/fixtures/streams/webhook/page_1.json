@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ID": 20,
+      "Url": "https://example.com/webhook"
+    }
+  }
+}

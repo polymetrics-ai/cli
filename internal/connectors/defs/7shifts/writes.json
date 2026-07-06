@@ -1,0 +1,5304 @@
+{
+  "actions": [
+    {
+      "name": "approve_time_off",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/time_off/{{ record.time_off_id }}/approve",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status_action_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "time_off_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "risk": "Approve Time Off Request in the configured 7shifts account."
+    },
+    {
+      "name": "clear_task",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/clear",
+      "path_fields": [
+        "list_id",
+        "task_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "list_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "task_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "task_id",
+          "list_id",
+          "user_id"
+        ]
+      },
+      "risk": "Clear Task in the configured 7shifts account."
+    },
+    {
+      "name": "complete_task",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/complete",
+      "path_fields": [
+        "list_id",
+        "task_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "completion_value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "list_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "task_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "task_id",
+          "list_id",
+          "user_id"
+        ]
+      },
+      "risk": "Complete Task in the configured 7shifts account."
+    },
+    {
+      "name": "create_availability",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/availabilities",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "User ID"
+          },
+          "week": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Week date of the availability"
+          },
+          "week_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Week to date of the availability"
+          },
+          "repeat": {
+            "type": "boolean",
+            "description": "If true, availability is repeating"
+          },
+          "mon": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "mon_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "mon_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "mon_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "mon_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "tue": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "tue_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "tue_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "tue_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "tue_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "wed": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "wed_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "wed_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "wed_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "wed_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "thu": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "thu_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "thu_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "thu_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "thu_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "fri": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "fri_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "fri_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "fri_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "fri_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "sat": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "sat_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "sat_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "sat_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "sat_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "sun": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "sun_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "sun_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "sun_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "sun_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          }
+        },
+        "required": [
+          "user_id",
+          "repeat",
+          "mon",
+          "mon_from",
+          "mon_to",
+          "mon_comments",
+          "mon_reason",
+          "tue",
+          "tue_from",
+          "tue_to",
+          "tue_comments",
+          "tue_reason",
+          "wed",
+          "wed_from",
+          "wed_to",
+          "wed_comments",
+          "wed_reason",
+          "thu",
+          "thu_from",
+          "thu_to",
+          "thu_comments",
+          "thu_reason",
+          "fri",
+          "fri_from",
+          "fri_to",
+          "fri_comments",
+          "fri_reason",
+          "sat",
+          "sat_from",
+          "sat_to",
+          "sat_comments",
+          "sat_reason",
+          "sun",
+          "sun_from",
+          "sun_to",
+          "sun_comments",
+          "sun_reason"
+        ]
+      },
+      "risk": "Create Availability in the configured 7shifts account."
+    },
+    {
+      "name": "create_availability_reason",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/availability_reasons",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Availability reason"
+          },
+          "comments_required": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Comments required"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "risk": "Create Availability Reason in the configured 7shifts account."
+    },
+    {
+      "name": "create_bulk_forecast_overrides",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_overrides",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "department_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "Department ID. Optional"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "The date of the daily report data to override. Format YYYY-MM-DD",
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "value": {
+                  "type": "integer",
+                  "description": "Override value. Currency values in cents",
+                  "format": "int64"
+                },
+                "report_type": {
+                  "type": "string",
+                  "description": "Type of value to override. Default is sales",
+                  "enum": [
+                    "sales"
+                  ]
+                }
+              },
+              "required": [
+                "date",
+                "value",
+                "report_type"
+              ]
+            }
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "data"
+        ]
+      },
+      "risk": "Create Daily Projected Forecast Overrides in the configured 7shifts account."
+    },
+    {
+      "name": "create_complete_receipt",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/receipts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "The 7shifts location_id this receipt belongs to"
+          },
+          "receipt_date": {
+            "type": "string",
+            "description": "Receipt create date time. UTC date time in ISO8601 format",
+            "format": "date-time"
+          },
+          "net_total": {
+            "type": "integer",
+            "description": "The net total of the receipt pre tax, post-discounts, pre tips. In cents"
+          },
+          "gross_total": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The gross total of the receipt in cents"
+          },
+          "total_receipt_discounts": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The total discounts of the receipt in cents"
+          },
+          "tips": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Total tips in cents"
+          },
+          "external_user_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "External user ID of the sales receipt in your system (must be unique per 7shifts location)."
+          },
+          "revenue_center": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Label for the revenue centre for the receipt"
+          },
+          "receipt_lines": {
+            "type": "array",
+            "description": "Receipt line items",
+            "items": {
+              "type": "object",
+              "properties": {
+                "external_item_id": {
+                  "type": "string",
+                  "description": "The item ID available to the client"
+                },
+                "external_category_ids": {
+                  "type": "array",
+                  "description": "The list of category IDs available to the client",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "The quantity of this item"
+                },
+                "price": {
+                  "type": "integer",
+                  "description": "The item price in cents"
+                },
+                "gross_item_price": {
+                  "type": "integer",
+                  "description": "The item gross price in cents"
+                },
+                "net_item_price": {
+                  "type": "integer",
+                  "description": "The item net price pre tax, post-discounts, pre tips. In cents"
+                },
+                "item_discount": {
+                  "type": "integer",
+                  "description": "The item discount. In cents"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "The item status",
+                  "enum": [
+                    "open",
+                    "closed",
+                    "voided",
+                    "deleted"
+                  ]
+                },
+                "created": {
+                  "type": "string",
+                  "description": "Line item create date time. UTC date time in ISO8601 format",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "external_item_id",
+                "external_category_ids",
+                "quantity",
+                "price",
+                "gross_item_price",
+                "net_item_price",
+                "item_discount",
+                "status"
+              ]
+            }
+          },
+          "tip_details": {
+            "type": "array",
+            "description": "Tip line items",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Tip type",
+                  "enum": [
+                    "cc",
+                    "cash",
+                    "declared",
+                    "net",
+                    "total",
+                    "gratuity"
+                  ]
+                },
+                "value": {
+                  "type": "integer",
+                  "description": "Tip value. In cents"
+                }
+              },
+              "required": [
+                "type",
+                "value"
+              ]
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the receipt",
+            "enum": [
+              "open",
+              "closed",
+              "voided",
+              "deleted"
+            ]
+          },
+          "order_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Order type",
+            "enum": [
+              "dine_in",
+              "delivery",
+              "take_out"
+            ]
+          },
+          "dining_option": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Dining option"
+          }
+        },
+        "required": [
+          "location_id",
+          "receipt_date",
+          "receipt_lines",
+          "tip_details",
+          "net_total",
+          "status"
+        ]
+      },
+      "risk": "Create Receipt in the configured 7shifts account."
+    },
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/departments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "number",
+            "description": "Location ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Department name"
+          },
+          "default": {
+            "type": "boolean",
+            "description": "If true department is set as the default for the location"
+          }
+        },
+        "required": [
+          "location_id",
+          "name",
+          "default"
+        ]
+      },
+      "risk": "Create Department in the configured 7shifts account."
+    },
+    {
+      "name": "create_department_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/department_assignments",
+      "path_fields": [
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "integer",
+            "description": "Department ID for user assignment",
+            "format": "int64"
+          },
+          "appear_on_schedule": {
+            "type": "boolean",
+            "description": "Display the employee on the schedule for this department"
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "user_id",
+          "department_id"
+        ]
+      },
+      "risk": "Create Department Assignment in the configured 7shifts account."
+    },
+    {
+      "name": "create_employment_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/employment_records",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "The user_id"
+          },
+          "hire_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "employee hire date",
+            "format": "date"
+          },
+          "termination_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "employee termination date",
+            "format": "date"
+          },
+          "classification": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The classification"
+          },
+          "business_entity_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "business entity UUID"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Create Employment Record in the configured 7shifts account."
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/events",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_ids": {
+            "type": "array",
+            "description": "The list of locations where this event occurs",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Start date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "start_time": {
+            "type": "string",
+            "description": "Start time"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "End date for multi-day events",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_time": {
+            "type": "string",
+            "description": "End time"
+          },
+          "title": {
+            "type": "string",
+            "description": "The name of the event"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Description for event"
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A hex number representing the color",
+            "pattern": "(^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$|^$)"
+          },
+          "is_multi_day": {
+            "type": "boolean",
+            "description": "If true, the event is a multi-day event"
+          },
+          "recurrence": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Recurrence rules as defined by the RFC 5545 spec"
+          }
+        },
+        "required": [
+          "location_ids",
+          "start_date",
+          "start_time",
+          "end_time",
+          "end_date",
+          "title",
+          "is_multi_day"
+        ]
+      },
+      "risk": "Create Event in the configured 7shifts account."
+    },
+    {
+      "name": "create_external_user_mappings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "User ID in 7Shifts"
+          },
+          "external_user_id": {
+            "type": "string",
+            "description": "User ID in External System"
+          }
+        },
+        "required": [
+          "user_id",
+          "external_user_id"
+        ]
+      },
+      "risk": "Create External User Mapping in the configured 7shifts account."
+    },
+    {
+      "name": "create_forecast_override",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Department ID. Optional"
+          },
+          "date": {
+            "type": "string",
+            "description": "The date of the daily report data to override. Format YYYY-MM-DD",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Override value. Currency values in cents",
+            "format": "int64"
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Type of value to override. Default is sales",
+            "enum": [
+              "sales"
+            ]
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "date",
+          "value",
+          "report_type"
+        ]
+      },
+      "risk": "Create Daily Projected Forecast Override in the configured 7shifts account."
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/locations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Location name"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country two letter abbreviation"
+          },
+          "formatted_address": {
+            "type": "string",
+            "description": "Full address"
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "State or province"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "City"
+          },
+          "latitude": {
+            "type": "string",
+            "description": "locations latitude coordinates"
+          },
+          "longitude": {
+            "type": "string",
+            "description": "locations longitude coordinates"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Google Places location Id"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone. Valid zone info name"
+          },
+          "holiday_pay": {
+            "type": "boolean",
+            "description": "When true, holiday pay is enabled"
+          },
+          "sun_hours_close": {
+            "type": "string",
+            "description": "Sunday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "mon_hours_close": {
+            "type": "string",
+            "description": "Monday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "tue_hours_close": {
+            "type": "string",
+            "description": "Tuesday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "wed_hours_close": {
+            "type": "string",
+            "description": "Wednesday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "thu_hours_close": {
+            "type": "string",
+            "description": "Thursday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "fri_hours_close": {
+            "type": "string",
+            "description": "Friday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sat_hours_close": {
+            "type": "string",
+            "description": "Saturday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sun_hours_open": {
+            "type": "string",
+            "description": "Sunday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "mon_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Monday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "tue_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tuesday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "wed_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Wednesday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "thu_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thursday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "fri_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Friday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sat_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Saturday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sun_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Sunday"
+          },
+          "mon_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Monday"
+          },
+          "tue_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Tuesday"
+          },
+          "wed_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Wednesday"
+          },
+          "thu_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Thursday"
+          },
+          "fri_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Friday"
+          },
+          "sat_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Saturday"
+          },
+          "enable_shift_feedback": {
+            "type": "boolean",
+            "description": "If true end of shift feedback requests are enabled"
+          },
+          "shift_feedback": {
+            "type": "boolean",
+            "description": "If true end of shift feedback requests are enabled"
+          },
+          "coupon": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional coupon to apply to this location's billing"
+          },
+          "stripe_token_id": {
+            "type": "string",
+            "description": "Optional stripe payment token. If this is not provided, the account's default payment information will be used."
+          },
+          "copy_from_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Optional existing location id whose department and role structure the new location should copy"
+          }
+        },
+        "required": [
+          "name",
+          "country"
+        ]
+      },
+      "risk": "Create Location in the configured 7shifts account."
+    },
+    {
+      "name": "create_location_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/location_assignments",
+      "path_fields": [
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID for user assignment",
+            "format": "int64"
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "user_id",
+          "location_id"
+        ]
+      },
+      "risk": "Create Location Assignments in the configured 7shifts account."
+    },
+    {
+      "name": "create_log_book_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/log_book_categories",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "col": {
+            "type": "integer"
+          },
+          "sort": {
+            "type": "integer"
+          },
+          "field_type": {
+            "type": "string",
+            "enum": [
+              "dollar",
+              "number",
+              "percentage",
+              "textarea",
+              "engage_performance_logs",
+              "task_management_summary",
+              "weekly_overtime_risk"
+            ]
+          },
+          "notify": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "Create Log Book Category in the configured 7shifts account."
+    },
+    {
+      "name": "create_log_book_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/log_book_comments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "log_book_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "log_book_id",
+          "message"
+        ]
+      },
+      "risk": "Create Log Book Comment in the configured 7shifts account."
+    },
+    {
+      "name": "create_log_book_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/log_book_posts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "log_book_category_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date": {
+            "type": "string",
+            "description": "The posted date. Format YYYY-MM-DD",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "message": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "file_name": {
+                  "type": "string"
+                },
+                "file_content": {
+                  "type": "string",
+                  "description": "base 64 encoded file to be attached to post"
+                }
+              },
+              "required": [
+                "file_name",
+                "file_content"
+              ]
+            }
+          },
+          "attachment_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional UUID for attachment reference"
+          }
+        },
+        "required": [
+          "location_id",
+          "log_book_category_id",
+          "date",
+          "message"
+        ]
+      },
+      "risk": "Create Log Book Post in the configured 7shifts account."
+    },
+    {
+      "name": "create_projected_sales_interval_override",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Department ID"
+          },
+          "start": {
+            "type": "string",
+            "description": "Starting date/time (UTC) of the interval for which you wish to update the sales projection.",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "description": "Ending date/time (UTC) of the interval for which you wish to update the sales projection.",
+            "format": "date-time"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Override value. Currency value in cents. Only whole dollars are accepted.",
+            "format": "int64"
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Type of value to override. Default is sales",
+            "enum": [
+              "sales"
+            ]
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "start",
+          "end",
+          "value"
+        ]
+      },
+      "risk": "Create Sales Forecast Override Interval in the configured 7shifts account."
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/roles",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Role name"
+          },
+          "color": {
+            "type": "string",
+            "description": "A hex number representing the color"
+          },
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID"
+          },
+          "department_id": {
+            "type": "integer",
+            "description": "Department ID. If this role is not assigned to a department, this value will be zero"
+          },
+          "sort": {
+            "type": "integer",
+            "description": "The order in which the roles will be listed in the web app"
+          },
+          "job_code": {
+            "type": "string",
+            "description": "Job code"
+          },
+          "stations": {
+            "type": "array",
+            "description": "Stations this role contains",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of this station"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "is_tipped_role": {
+            "type": "boolean",
+            "description": "When true, role is tipped. Otherwise the role is non tipped"
+          }
+        },
+        "required": [
+          "name",
+          "color",
+          "location_id",
+          "department_id"
+        ]
+      },
+      "risk": "Create Role in the configured 7shifts account."
+    },
+    {
+      "name": "create_role_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments",
+      "path_fields": [
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "integer",
+            "description": "Role ID for user assignment"
+          },
+          "primary": {
+            "type": "boolean",
+            "description": "Sets the role as primary for this user.  Only one role per department can be primary."
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "user_id",
+          "role_id"
+        ]
+      },
+      "risk": "Create Role Assignment in the configured 7shifts account."
+    },
+    {
+      "name": "create_task_list_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/task_list_templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recurrence": {
+            "type": "string",
+            "description": "recurrence rules as defined by the RFC 5545 spec"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location_id": {
+                  "type": "integer"
+                },
+                "department_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "role_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "user_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "location_id"
+              ]
+            }
+          },
+          "due": {
+            "type": "string",
+            "description": "A date with YYYY-MM-DD format",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "time_frame": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The time when this task starts",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              },
+              "end": {
+                "type": "string",
+                "description": "The time when this task ends",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ]
+          },
+          "task_templates": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": "integer"
+                },
+                "created": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "task_completion": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "NUMBER",
+                        "TEMPERATURE",
+                        "PHOTO",
+                        "STRING",
+                        "WEIGHT",
+                        "CHECKMARK"
+                      ]
+                    },
+                    "primitive_type": {
+                      "type": "string",
+                      "enum": [
+                        "INTEGER",
+                        "DECIMAL",
+                        "FILE",
+                        "STRING",
+                        "BOOLEAN"
+                      ]
+                    },
+                    "unit": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "C",
+                        "F",
+                        "KG"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "primitive_type",
+                    "unit"
+                  ]
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "sort"
+              ]
+            }
+          },
+          "status": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "title",
+          "recurrence",
+          "assignments"
+        ]
+      },
+      "risk": "Create Task List Template in the configured 7shifts account."
+    },
+    {
+      "name": "create_task_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/task_tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "integer"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "task_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "user_id",
+                "task_id"
+              ]
+            }
+          }
+        },
+        "required": [
+          "company_id",
+          "tags"
+        ]
+      },
+      "risk": "Create Task Tags in the configured 7shifts account."
+    },
+    {
+      "name": "create_time_off",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/time_off",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "from_date": {
+            "type": "string"
+          },
+          "to_date": {
+            "type": "string"
+          },
+          "partial": {
+            "type": "boolean"
+          },
+          "partial_from": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "time"
+          },
+          "partial_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "time"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "string"
+          },
+          "hours": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "num_hours": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "date",
+                "num_hours"
+              ]
+            }
+          },
+          "status_action_user_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status_action_message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "company_id",
+          "from_date",
+          "to_date",
+          "partial",
+          "status",
+          "category"
+        ]
+      },
+      "risk": "Create Time Off in the configured 7shifts account."
+    },
+    {
+      "name": "create_user_mappings_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings_bulk",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "external_user_id": {
+                  "type": "string",
+                  "description": "External User ID"
+                },
+                "user_id": {
+                  "type": "integer",
+                  "description": "7shifts User ID"
+                },
+                "first_name": {
+                  "type": "string",
+                  "description": "The user's first name"
+                },
+                "last_name": {
+                  "type": "string",
+                  "description": "The user's last name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The user's email"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "description": "The user's mobile phone number. Format with no spaces and include area code."
+                }
+              },
+              "required": [
+                "external_user_id"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "Create User External Mappings in the configured 7shifts account."
+    },
+    {
+      "name": "create_user_wages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/wages",
+      "path_fields": [
+        "user_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "effective_date": {
+            "type": "string",
+            "description": "A date with YYYY-MM-DD format",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "role_id": {
+            "type": "integer",
+            "description": "Role ID"
+          },
+          "wage_type": {
+            "type": "string",
+            "description": "The wage type",
+            "enum": [
+              "hourly",
+              "weekly_salary",
+              "annual_salary"
+            ]
+          },
+          "wage_cents": {
+            "type": "integer",
+            "description": "The wage value. In cents"
+          },
+          "enabled_days": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Days of the week when the wage is applicable (optional, defaults to all days). Days keyed by full name (Sunday-Saturday)."
+          },
+          "allocations": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Salary allocation breakdown by location. Only applicable for salary wage types. All amount_tenths values must sum to 1000.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location_id": {
+                  "type": "integer",
+                  "description": "Location ID"
+                },
+                "amount_tenths": {
+                  "type": "integer",
+                  "description": "Allocation amount in tenths of a percent (1\u20131000). All entries must sum to 1000."
+                }
+              },
+              "required": [
+                "location_id",
+                "amount_tenths"
+              ]
+            }
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "user_id",
+          "effective_date",
+          "wage_type",
+          "wage_cents"
+        ]
+      },
+      "risk": "Create User Wage in the configured 7shifts account."
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/webhooks",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Webhook URL"
+          },
+          "method": {
+            "type": "string",
+            "description": "Webhook Method",
+            "enum": [
+              "post"
+            ]
+          },
+          "event": {
+            "type": "string",
+            "description": "Event",
+            "enum": [
+              "schedule.published",
+              "time_punch.created",
+              "time_punch.edited",
+              "time_punch.deleted",
+              "payroll_period.closed",
+              "user.created",
+              "user.modified",
+              "user.reactivated",
+              "user.deactivated",
+              "department.created",
+              "department.modified",
+              "department.deleted",
+              "location.created",
+              "location.modified",
+              "location.deleted",
+              "role.created",
+              "role.modified",
+              "role.deleted"
+            ]
+          }
+        },
+        "required": [
+          "url",
+          "method",
+          "event"
+        ]
+      },
+      "risk": "Create Webhook in the configured 7shifts account."
+    },
+    {
+      "name": "deactivate_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.identifier }}",
+      "path_fields": [
+        "identifier"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inactive_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Enum value. See inactive_reasons endpoint for list of values."
+          },
+          "inactive_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments related to this user deletion."
+          },
+          "would_rehire": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "identifier": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "identifier",
+          "inactive_reason"
+        ]
+      },
+      "risk": "Deactivate User in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "decline_time_off",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v2/time_off/{{ record.time_off_id }}/decline",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status_action_message": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "time_off_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "risk": "Decline Time Off Request in the configured 7shifts account."
+    },
+    {
+      "name": "delete_availability",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}",
+      "path_fields": [
+        "availability_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "availability_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "availability_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Availability in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_availability_reason",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/availability_reasons/{{ record.availability_reason_id }}",
+      "path_fields": [
+        "availability_reason_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "availability_reason_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "availability_reason_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Availability Reason in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_company_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Webhook in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_department",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/departments/{{ record.department_id }}",
+      "path_fields": [
+        "department_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "department_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Department in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_department_assignment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/department_assignments/{{ record.department_id }}",
+      "path_fields": [
+        "user_id",
+        "department_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "department_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "department_id",
+          "user_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Department Assignment in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_employment_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/employment_record/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Employment Record in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/events/{{ record.event_id }}",
+      "path_fields": [
+        "event_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "event_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Event in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_external_user_mappings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings/{{ record.identifier }}",
+      "path_fields": [
+        "identifier"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "identifier"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete External User Mapping in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_forecast_override",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "description": "The start date of the date range of override data to remove. Override data will be removed from only this date if no end date is provided. Format YYYY-MM-DD",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The ending date of a date range of override data to remove. Optional. Format YYYY-MM-DD",
+            "format": "date",
+            "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(3[01]|[12][0-9]|0[1-9])$"
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Type of override data to remove",
+            "enum": [
+              "sales"
+            ]
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "start_date",
+          "report_type"
+        ]
+      },
+      "risk": "Sync Daily Projected Forecast Override in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ record.location_id }}",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Location in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_location_assignment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/location_assignments/{{ record.location_id }}",
+      "path_fields": [
+        "user_id",
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "user_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Location Assignment in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_log_book_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/log_book_categories/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Log Book Category in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_log_book_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/log_book_comments/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Log Book Comment in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_log_book_post",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/log_book_posts/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Log Book Post in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/roles/{{ record.role_id }}",
+      "path_fields": [
+        "role_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "role_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Role in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_role_assignment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments/{{ record.role_id }}",
+      "path_fields": [
+        "user_id",
+        "role_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "role_id",
+          "user_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Role Assignment in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/shifts/{{ record.shift_id }}",
+      "path_fields": [
+        "shift_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shift_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "shift_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Shift in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_task_list_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/task_list_templates/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Task List Template in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_task_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/task_tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "integer"
+          },
+          "uuids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "company_id",
+          "uuids"
+        ]
+      },
+      "risk": "Delete Task Tags in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_time_off",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/time_off/{{ record.time_off_id }}",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "time_off_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Time Off in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_time_punch_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/time_punches/{{ record.time_punch_id }}",
+      "path_fields": [
+        "time_punch_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "time_punch_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_punch_id"
+        ]
+      },
+      "body_type": "none",
+      "risk": "Delete Time Punch in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "edit_availability",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}",
+      "path_fields": [
+        "availability_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Week date of the availability"
+          },
+          "week_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Week to date of the availability"
+          },
+          "repeat": {
+            "type": "boolean",
+            "description": "If true, availability is repeating"
+          },
+          "mon": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "mon_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "mon_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "mon_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "mon_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "tue": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "tue_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "tue_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "tue_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "tue_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "wed": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "wed_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "wed_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "wed_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "wed_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "thu": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "thu_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "thu_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "thu_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "thu_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "fri": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "fri_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "fri_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "fri_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "fri_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "sat": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "sat_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "sat_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "sat_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "sat_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "sun": {
+            "type": "integer",
+            "description": "The availability status for the day"
+          },
+          "sun_from": {
+            "type": "string",
+            "description": "The start time of the availability for the day",
+            "format": "time"
+          },
+          "sun_to": {
+            "type": "string",
+            "description": "The end time of the availability for the day",
+            "format": "time"
+          },
+          "sun_comments": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Comments included in the days availability"
+          },
+          "sun_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The reason ID for the day"
+          },
+          "availability_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "availability_id"
+        ]
+      },
+      "risk": "Update Availability in the configured 7shifts account."
+    },
+    {
+      "name": "edit_availability_reason",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/availability_reasons/{{ record.availability_reason_id }}",
+      "path_fields": [
+        "availability_reason_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Availability reason"
+          },
+          "comments_required": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Comments required"
+          },
+          "availability_reason_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "availability_reason_id",
+          "reason"
+        ]
+      },
+      "risk": "Update Availability Reason in the configured 7shifts account."
+    },
+    {
+      "name": "edit_company_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Webhook URL"
+          },
+          "webhook_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "webhook_id",
+          "url"
+        ]
+      },
+      "risk": "Update Webhook in the configured 7shifts account."
+    },
+    {
+      "name": "edit_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/company/{{ config.company_id }}/events/{{ record.event_id }}",
+      "path_fields": [
+        "event_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_ids": {
+            "type": "array",
+            "description": "The list of locations where this event occurs",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Start date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "start_time": {
+            "type": "string",
+            "description": "Start time"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "End date for multi-day events",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "end_time": {
+            "type": "string",
+            "description": "End time"
+          },
+          "title": {
+            "type": "string",
+            "description": "The name of the event"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Description for event"
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A hex number representing the color",
+            "pattern": "(^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$|^$)"
+          },
+          "is_multi_day": {
+            "type": "boolean",
+            "description": "If true, the event is a multi-day event"
+          },
+          "recurrence": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Recurrence rules as defined by the RFC 5545 spec"
+          },
+          "recurrence_target": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "describes which recurring events will be updated",
+            "enum": [
+              "THIS",
+              "THIS_AND_FUTURE"
+            ]
+          },
+          "event_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "event_id",
+          "location_ids",
+          "start_date",
+          "start_time",
+          "end_time",
+          "end_date",
+          "title",
+          "is_multi_day"
+        ]
+      },
+      "risk": "Update Event in the configured 7shifts account."
+    },
+    {
+      "name": "edit_task_list_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/task_list_templates/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "integer"
+          },
+          "task_templates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": "integer"
+                },
+                "task_completion": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "NUMBER",
+                        "TEMPERATURE",
+                        "PHOTO",
+                        "STRING",
+                        "WEIGHT",
+                        "CHECKMARK"
+                      ]
+                    },
+                    "unit": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "C",
+                        "F",
+                        "KG"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "title",
+                "description"
+              ]
+            }
+          },
+          "recurrence": {
+            "type": "string",
+            "description": "recurrence rules as defined by the RFC 5545 spec"
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location_id": {
+                  "type": "integer"
+                },
+                "department_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "role_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "user_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "location_id"
+              ]
+            }
+          },
+          "due": {
+            "type": "string",
+            "description": "A date with YYYY-MM-DD format",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "time_frame": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The time when this task starts",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              },
+              "end": {
+                "type": "string",
+                "description": "The time when this task ends",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ]
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ]
+      },
+      "risk": "Update Task List Template in the configured 7shifts account."
+    },
+    {
+      "name": "edit_time_off",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/time_off/{{ record.time_off_id }}",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "from_date": {
+            "type": "string"
+          },
+          "to_date": {
+            "type": "string"
+          },
+          "partial": {
+            "type": "boolean"
+          },
+          "partial_from": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "time"
+          },
+          "partial_to": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "time"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "status_action_message": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "hours": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "num_hours": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "date",
+                "num_hours"
+              ]
+            }
+          },
+          "time_off_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "risk": "Update Time Off in the configured 7shifts account."
+    },
+    {
+      "name": "post_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/shifts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "Shift ID"
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "User ID"
+          },
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Department ID. Required if the location uses departments."
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Role ID. Required if the location uses roles."
+          },
+          "station_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Station Number"
+          },
+          "start": {
+            "type": "string",
+            "description": "Start date time of the shift. UTC in ISO8601 format.",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "description": "End date time of the shift. UTC in ISO8601 format.",
+            "format": "date-time"
+          },
+          "close": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift ends at closing time. If set, end is not used."
+          },
+          "business_decline": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift ends at business decline."
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Notes displayed on a shift."
+          },
+          "draft": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true the shift is not published."
+          },
+          "notified": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true the user has been notified of the published shift."
+          },
+          "open": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift is not assigned to any user. Open shifts can be requested by users."
+          },
+          "open_offer_type": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Set when open is true. Set to 1 for everyone can request an open shift; set to 1 if only offered to specified role."
+          },
+          "list_in_job_network": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift should be made available to the 7shifts job network."
+          },
+          "job_network_wage": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The wage to offer the shift at in the 7shifts job network."
+          },
+          "unassigned": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Internal use only"
+          },
+          "unassigned_skill_level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The skill level required for this shift.",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "status": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Shift status type. 0 - none, 1 - sick, 2 - no show, 3 - late, 4 - call out, 5 - left late.",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "late_minutes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Number of minutes a user can clock in late after the shift starts."
+          },
+          "breaks": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Breaks to be created with the shift",
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "break_type_id": {
+                  "type": "integer",
+                  "description": "Break type ID"
+                },
+                "start": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Start date time of the break. UTC in ISO8601 format.",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "break_type_id"
+              ]
+            }
+          }
+        },
+        "required": [
+          "location_id",
+          "start",
+          "end"
+        ]
+      },
+      "risk": "Create Shift in the configured 7shifts account."
+    },
+    {
+      "name": "post_time_punch",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/time_punches",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID."
+          },
+          "department_id": {
+            "type": "integer",
+            "description": "Department ID. Defaults to 0 if not defined. Required if location has departments setup."
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "The 7shifts ID of the user who is clocking in."
+          },
+          "role_id": {
+            "type": "integer",
+            "description": "The ID of the role that the user is clocking in to work for. Defaults to 0 if not defined."
+          },
+          "clocked_in": {
+            "type": "string",
+            "description": "The start date and time when the user clocked in. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "clocked_out": {
+            "type": "string",
+            "description": "The start date and time when the user clocked out. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes for a shift."
+          },
+          "tips": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Tips declared for the shift in cents"
+          },
+          "breaks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "paid": {
+                  "type": "boolean",
+                  "description": "Specifies whether the break is paid or unpaid. Default true when no existing setting is found."
+                },
+                "in": {
+                  "type": "string",
+                  "description": "The start date and time of the break. Formatted as ISO8601 datetime in UTC timezone.",
+                  "format": "date-time"
+                },
+                "out": {
+                  "type": "string",
+                  "description": "The end date and time of the break. Formatted as ISO8601 datetime in UTC timezone.",
+                  "format": "date-time"
+                },
+                "custom_break_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "The custom break id belonging to the break if the break is a custom break."
+                }
+              },
+              "required": [
+                "paid",
+                "in"
+              ]
+            }
+          }
+        },
+        "required": [
+          "location_id",
+          "user_id",
+          "clocked_in"
+        ]
+      },
+      "risk": "Create Time Punch in the configured 7shifts account."
+    },
+    {
+      "name": "post_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/users",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name"
+          },
+          "preferred_first_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional alternate first name"
+          },
+          "preferred_last_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional alternate last name"
+          },
+          "location_ids": {
+            "type": "array",
+            "description": "An array of location IDs this user will be assigned to",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "department_ids": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "An array of department IDs this user will be assigned to. Department ID is required if this user's location has at least one department",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "role_ids": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "An array of role IDs this user will be assigned to.",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "email": {
+            "type": "string",
+            "description": "the user's email"
+          },
+          "mobile_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's mobile phone number. Format with no spaces and include area code"
+          },
+          "home_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's home phone number. Format with no spaces and include area code"
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's address"
+          },
+          "postal_zip": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's postal code or zip code"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's city"
+          },
+          "prov_state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's province or state"
+          },
+          "invite_user": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true Invite the user to 7shifts"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Notes associated with this user"
+          },
+          "hire_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The hire date of this user. Format YYYY-MM-DD",
+            "format": "date"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of this user",
+            "enum": [
+              "employee",
+              "asst_manager",
+              "manager",
+              "employer"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Either an employee ID or an ID assigned by your payroll provider that is used in your payroll export"
+          },
+          "punch_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The punch ID they punch in/out with. If no value is provided a new one will be created"
+          },
+          "birth_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's birthdate. Format YYYY-MM-DD",
+            "format": "date"
+          },
+          "language": {
+            "type": "string",
+            "description": "The user's preferred language. Default value is en",
+            "enum": [
+              "en",
+              "es",
+              "fr"
+            ]
+          },
+          "appear_as_employee": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "User should appear in the system as an employee. Applies to admin users only"
+          },
+          "subscribe_to_updates": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Subscribe this user to updates from 7shifts. This includes announcing new features for 7shifts"
+          },
+          "max_weekly_hours": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The maximum weekly hours this user is set to work"
+          },
+          "skill_level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "wage_cents": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "wage_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The wage type",
+            "enum": [
+              "hourly",
+              "weekly_salary"
+            ]
+          },
+          "wages": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "An array of Wages that will be set to the assigned User's roles",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role_id": {
+                  "type": "integer"
+                },
+                "wage_cents": {
+                  "type": "integer"
+                },
+                "effective_date": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date"
+                }
+              }
+            }
+          },
+          "permissions_template_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Id of a permissions template the user will be assigned to and granted permissions from."
+          }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "location_ids",
+          "department_ids",
+          "type"
+        ]
+      },
+      "risk": "Create User in the configured 7shifts account."
+    },
+    {
+      "name": "put_time_punch",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/time_punches/{{ record.time_punch_id }}",
+      "path_fields": [
+        "time_punch_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "integer",
+            "description": "Department ID"
+          },
+          "role_id": {
+            "type": "integer",
+            "description": "The ID of the role that the user is clocking in to work for."
+          },
+          "clocked_in": {
+            "type": "string",
+            "description": "The start date and time when the user clocked in. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "clocked_out": {
+            "type": "string",
+            "description": "The start date and time when the user clocked out. Formatted as ISO8601 datetime in UTC timezone.",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes for a shift."
+          },
+          "tips": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Tips declared for the shift in cents"
+          },
+          "breaks": {
+            "type": "array",
+            "description": "List of breaks during a shift. Breaks must always be included in a correct state in update requests. The absence of an existing break in the payload implies that it should be deleted.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The break id belonging to the break if it previously existed before the update."
+                },
+                "paid": {
+                  "type": "boolean",
+                  "description": "Specifies whether the break is paid or unpaid. Default true when no existing setting is found."
+                },
+                "in": {
+                  "type": "string",
+                  "description": "The start date and time of the break. Formatted as ISO8601 datetime in UTC timezone.",
+                  "format": "date-time"
+                },
+                "out": {
+                  "type": "string",
+                  "description": "The end date and time of the break. Formatted as ISO8601 datetime in UTC timezone.",
+                  "format": "date-time"
+                },
+                "custom_break_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "The custom break id belonging to the break if the break is a custom break."
+                }
+              },
+              "required": [
+                "paid",
+                "in"
+              ]
+            }
+          },
+          "time_punch_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "time_punch_id"
+        ]
+      },
+      "risk": "Update Time Punch in the configured 7shifts account."
+    },
+    {
+      "name": "put_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.identifier }}",
+      "path_fields": [
+        "identifier"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The user's first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The user's last name"
+          },
+          "preferred_first_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional alternate first name"
+          },
+          "preferred_last_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional alternate last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "the user's email"
+          },
+          "mobile_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's mobile phone number. Format with no spaces and include area code"
+          },
+          "home_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's home phone number. Format with no spaces and include area code"
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's address"
+          },
+          "postal_zip": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's postal code or zip code"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's city"
+          },
+          "prov_state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's province or state"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Notes associated with this user"
+          },
+          "hire_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The hire date of this user. Format YYYY-MM-DD",
+            "format": "date"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of this user",
+            "enum": [
+              "employee",
+              "asst_manager",
+              "manager"
+            ]
+          },
+          "employee_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Either an employee ID or an ID assigned by your payroll provider that is used in your payroll export"
+          },
+          "punch_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The punch ID they punch in/out with."
+          },
+          "birth_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's birthdate. Format YYYY-MM-DD",
+            "format": "date"
+          },
+          "language": {
+            "type": "string",
+            "description": "The user's preferred language. Default value is en",
+            "enum": [
+              "en",
+              "es",
+              "fr"
+            ]
+          },
+          "appear_as_employee": {
+            "type": "boolean",
+            "description": "User should appear in the system as an employee. Applies to admin users only"
+          },
+          "subscribe_to_updates": {
+            "type": "boolean",
+            "description": "Subscribe this user to updates from 7shifts. This includes announcing new features for 7shifts"
+          },
+          "max_weekly_hours": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The maximum weekly hours this user is set to work"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "User status. If false the user is unable to login"
+          },
+          "pronouns": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The user's pronouns"
+          },
+          "permissions_template_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Permission Template ID the user is assigned to"
+          },
+          "skill_level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "invite": {
+            "type": "boolean",
+            "description": "If true, an invite will be sent to the user"
+          },
+          "wage_type": {
+            "type": "string",
+            "description": "Whether the user is paid hourly or weekly",
+            "enum": [
+              "hourly",
+              "weekly_salary"
+            ]
+          },
+          "show_copy_previous_dialog": {
+            "type": "boolean",
+            "description": "This setting enables or disables the modal that appears when copying a schedule"
+          },
+          "push": {
+            "type": "boolean",
+            "description": "If the user should receive mobile push notifications. Must have the 7shifts mobile app installed and logged in."
+          },
+          "sms_notifications": {
+            "type": "boolean",
+            "description": "If the user should receive SMS notifications"
+          },
+          "identifier": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "identifier"
+        ]
+      },
+      "risk": "Update User in the configured 7shifts account."
+    },
+    {
+      "name": "save_time_off_settings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/time_off_settings/{{ config.company_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "paid_time_off": {
+            "type": "boolean"
+          },
+          "sick_time_off": {
+            "type": "boolean"
+          },
+          "time_off_request_comment": {
+            "type": "boolean"
+          },
+          "time_off_request_notice": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "Create Time Off Settings in the configured 7shifts account."
+    },
+    {
+      "name": "save_tip_pool_manual_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/tip_pool/{{ record.tip_pool_settings_uuid }}/manual_entry",
+      "path_fields": [
+        "tip_pool_settings_uuid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "manual_tip_pooling"
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Manual Entry UUID",
+                  "format": "uuid"
+                },
+                "tip_pool_settings_uuid": {
+                  "type": "string",
+                  "description": "UUID for the associated Tip Pool",
+                  "format": "uuid"
+                },
+                "day_part_uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "UUID for the associated Day Part (if any)",
+                  "format": "uuid"
+                },
+                "entry_date": {
+                  "type": "string",
+                  "description": "The date of the manually entered tips"
+                },
+                "tip_amount": {
+                  "type": "number",
+                  "description": "The tip amount for the given manual entry",
+                  "format": "float"
+                },
+                "created": {
+                  "type": "string",
+                  "description": "When this manual entry record was created"
+                },
+                "modified": {
+                  "type": "string",
+                  "description": "When this manual entry record was last modified"
+                }
+              },
+              "required": [
+                "tip_pool_settings_uuid",
+                "entry_date",
+                "tip_amount"
+              ]
+            }
+          },
+          "tip_pool_settings_uuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "tip_pool_settings_uuid",
+          "data"
+        ]
+      },
+      "risk": "Update Tip Pool Manual Entries in the configured 7shifts account."
+    },
+    {
+      "name": "sync_overridden_projected_sales_interval",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "description": "Starting date/time (UTC) of the interval for which you wish to update the sales projection.",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "description": "Ending date/time (UTC) of the interval for which you wish to update the sales projection.",
+            "format": "date-time"
+          },
+          "report_type": {
+            "type": "string",
+            "description": "Type of value to override. Default is sales",
+            "enum": [
+              "sales"
+            ]
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id",
+          "start",
+          "end"
+        ]
+      },
+      "risk": "Delete Sales Forecast Override Interval in the configured 7shifts account.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_availability_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}/status",
+      "path_fields": [
+        "availability_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "declined"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "availability_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "availability_id",
+          "status"
+        ]
+      },
+      "risk": "Update Availability Status in the configured 7shifts account."
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/companies/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "photo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pos": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Update Company in the configured 7shifts account."
+    },
+    {
+      "name": "update_complete_receipt",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/receipts/{{ record.receipt_id }}",
+      "path_fields": [
+        "receipt_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "receipt_date": {
+            "type": "string",
+            "description": "Receipt create date time. UTC date time in ISO8601 format",
+            "format": "date-time"
+          },
+          "net_total": {
+            "type": "integer",
+            "description": "The net total of the receipt pre tax, post-discounts, pre tips. In cents"
+          },
+          "gross_total": {
+            "type": "integer",
+            "description": "The gross total of the receipt in cents"
+          },
+          "total_receipt_discounts": {
+            "type": "integer",
+            "description": "The total discounts of the receipt in cents"
+          },
+          "tips": {
+            "type": "integer",
+            "description": "Total tips in cents"
+          },
+          "external_user_id": {
+            "type": "string",
+            "description": "External user ID of the sales receipt in your system (must be unique per 7shifts location)."
+          },
+          "revenue_center": {
+            "type": "string",
+            "description": "Label for the revenue center for the receipt"
+          },
+          "receipt_lines": {
+            "type": "array",
+            "description": "Receipt line items",
+            "items": {
+              "type": "object",
+              "properties": {
+                "external_item_id": {
+                  "type": "string",
+                  "description": "The item ID available to the client"
+                },
+                "external_category_ids": {
+                  "type": "array",
+                  "description": "The list of category IDs available to the client",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "The quantity of this item"
+                },
+                "price": {
+                  "type": "integer",
+                  "description": "The item price in cents"
+                },
+                "gross_item_price": {
+                  "type": "integer",
+                  "description": "The item gross price in cents"
+                },
+                "net_item_price": {
+                  "type": "integer",
+                  "description": "The item net price pre tax, post-discounts, pre tips. In cents"
+                },
+                "item_discount": {
+                  "type": "integer",
+                  "description": "The item discount. In cents"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "The item status",
+                  "enum": [
+                    "open",
+                    "closed",
+                    "voided",
+                    "deleted"
+                  ]
+                },
+                "created": {
+                  "type": "string",
+                  "description": "Line item create date time. UTC date time in ISO8601 format",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "external_item_id",
+                "external_category_ids",
+                "quantity",
+                "price",
+                "gross_item_price",
+                "net_item_price",
+                "item_discount",
+                "status"
+              ]
+            }
+          },
+          "tip_details": {
+            "type": "array",
+            "description": "Tip line items",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Tip type",
+                  "enum": [
+                    "cc",
+                    "cash",
+                    "declared",
+                    "net",
+                    "total",
+                    "gratuity"
+                  ]
+                },
+                "value": {
+                  "type": "integer",
+                  "description": "Tip value. In cents"
+                }
+              },
+              "required": [
+                "type",
+                "value"
+              ]
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the receipt",
+            "enum": [
+              "open",
+              "closed",
+              "voided",
+              "deleted"
+            ]
+          },
+          "order_type": {
+            "type": "string",
+            "description": "Order type",
+            "enum": [
+              "dine_in",
+              "delivery",
+              "take_out"
+            ]
+          },
+          "dining_option": {
+            "type": "string",
+            "description": "Dining option"
+          },
+          "receipt_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "receipt_id",
+          "net_total"
+        ]
+      },
+      "risk": "Update Receipt in the configured 7shifts account."
+    },
+    {
+      "name": "update_department",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/departments/{{ record.department_id }}",
+      "path_fields": [
+        "department_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Department name"
+          },
+          "default": {
+            "type": "boolean",
+            "description": "If true department is set as the default for the location"
+          },
+          "department_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "department_id",
+          "name",
+          "default"
+        ]
+      },
+      "risk": "Update Department in the configured 7shifts account."
+    },
+    {
+      "name": "update_employment_record",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/employment_record/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "hire_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The hire_date",
+            "format": "date"
+          },
+          "termination_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The termination_date",
+            "format": "date"
+          },
+          "classification": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The classification"
+          },
+          "business_entity_uuid": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "business entity UUID",
+            "format": "uuid"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ]
+      },
+      "risk": "Update Employment Record in the configured 7shifts account."
+    },
+    {
+      "name": "update_external_user_mappings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings/{{ record.identifier }}",
+      "path_fields": [
+        "identifier"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "User ID in 7Shifts"
+          },
+          "external_user_id": {
+            "type": "string",
+            "description": "User ID in External System"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "identifier"
+        ]
+      },
+      "risk": "Update External User Mappings in the configured 7shifts account."
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ record.location_id }}",
+      "path_fields": [
+        "location_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Location name"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "City"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country"
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "State or province"
+          },
+          "shift_feedback": {
+            "type": "boolean",
+            "description": "If true end of shift feedback requests are enabled"
+          },
+          "formatted_address": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "place_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone. Valid zone info name"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "department_based_budget": {
+            "type": "boolean"
+          },
+          "holiday_pay": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "When true, holiday pay is enabled"
+          },
+          "auto_send_log_book_time": {
+            "type": "string",
+            "description": "A timestamp with hh:mm:ss format",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sun_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Sunday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "mon_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Monday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "tue_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tuesday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "wed_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Wednesday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "thu_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thursday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "fri_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Friday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sat_hours_close": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Saturday closing time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sun_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Sunday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "mon_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Monday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "tue_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tuesday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "wed_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Wednesday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "thu_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thursday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "fri_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Friday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sat_hours_open": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Saturday opening time",
+            "pattern": "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$"
+          },
+          "sun_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Sunday"
+          },
+          "mon_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Monday"
+          },
+          "tue_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Tuesday"
+          },
+          "wed_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Wednesday"
+          },
+          "thu_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Thursday"
+          },
+          "fri_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Friday"
+          },
+          "sat_is_closed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true, location is closed on Saturday"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message visible to all employees"
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      },
+      "risk": "Update Location in the configured 7shifts account."
+    },
+    {
+      "name": "update_log_book_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/company/{{ config.company_id }}/log_book_categories/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "col": {
+            "type": "integer"
+          },
+          "sort": {
+            "type": "integer"
+          },
+          "field_type": {
+            "type": "string",
+            "description": "Categories cannot change type, documented here for legacy compatibility.",
+            "enum": [
+              "dollar",
+              "number",
+              "percentage",
+              "textarea",
+              "engage_performance_logs",
+              "task_management_summary",
+              "weekly_overtime_risk"
+            ]
+          },
+          "notify": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Update Log Book Category in the configured 7shifts account."
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/roles/{{ record.role_id }}",
+      "path_fields": [
+        "role_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "integer",
+            "description": "Department ID. If this role is not assigned to a department, this value will be zero"
+          },
+          "sort": {
+            "type": "integer",
+            "description": "The order in which the roles will be listed in the web app"
+          },
+          "color": {
+            "type": "string",
+            "description": "A hex number representing the color"
+          },
+          "name": {
+            "type": "string",
+            "description": "Role name"
+          },
+          "job_code": {
+            "type": "string",
+            "description": "Job code"
+          },
+          "stations": {
+            "type": "array",
+            "description": "Stations this role contains",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of this station"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "is_tipped_role": {
+            "type": "boolean",
+            "description": "When zero, role is a non tipped role, when one, role is tipped role"
+          },
+          "role_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "role_id"
+        ]
+      },
+      "risk": "Update Role in the configured 7shifts account."
+    },
+    {
+      "name": "update_role_assignment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments/{{ record.role_id }}",
+      "path_fields": [
+        "user_id",
+        "role_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "skill_level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "sort": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "primary": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "role_id",
+          "user_id"
+        ]
+      },
+      "risk": "Update Role Assignment in the configured 7shifts account."
+    },
+    {
+      "name": "update_shift",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/company/{{ config.company_id }}/shifts/{{ record.shift_id }}",
+      "path_fields": [
+        "shift_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Location ID"
+          },
+          "user_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "User ID"
+          },
+          "department_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Department ID. Required if the location uses departments"
+          },
+          "role_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Role ID. Required if the location uses roles"
+          },
+          "station_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The station assigned to the shift"
+          },
+          "start": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Start date time of the shift. UTC in ISO8601 format",
+            "format": "date-time"
+          },
+          "end": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "End date time of the shift. UTC in ISO8601 format",
+            "format": "date-time"
+          },
+          "close": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift ends at closing time. If set end is not used."
+          },
+          "business_decline": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift ends at business decline."
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Notes displayed on a shift"
+          },
+          "draft": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "If true the shift is not published."
+          },
+          "open": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Set to true if the shift is not assigned to any user. Open shifts can be requested by users."
+          },
+          "open_offer_type": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Set when open is true. Set to 0 when everyone at a location can request an open shift; set to 1 if only offered to specified role.",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "unassigned": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "When true the shift is unassigned. Internal use only."
+          },
+          "unassigned_skill_level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The skill level required for this shift.\n * 1: Beginner\n * 2: Intermediate\n * 3: Experienced\n",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "status": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Shift status type.\n * -1: Custom (requires custom_flag_id)\n * 0: None\n * 1: Sick\n * 2: No Show\n * 3: Late\n * 4: Call Out\n * 5: Left Late\n",
+            "enum": [
+              -1,
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "custom_flag_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Custom shift flag ID. Required when status is -1. Must match a company custom shift flag."
+          },
+          "late_minutes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Number of minutes a user can clock in late after the shift starts."
+          },
+          "breaks": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Breaks to be updated with the shift",
+            "items": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "break_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "Break ID"
+                },
+                "break_type_id": {
+                  "type": "integer",
+                  "description": "Break type ID"
+                },
+                "start": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Start date time of the break. UTC in ISO8601 format.",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "break_type_id"
+              ]
+            }
+          },
+          "shift_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "shift_id"
+        ]
+      },
+      "risk": "Update Shift in the configured 7shifts account."
+    },
+    {
+      "name": "upsert_bulk_employment_records",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/v2/company/{{ config.company_id }}/bulk_employment_records",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "records": {
+            "type": "array",
+            "description": "The records",
+            "items": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer",
+                  "description": "The user_id"
+                },
+                "classification": {
+                  "type": "string",
+                  "enum": [
+                    "employee",
+                    "contractor"
+                  ]
+                },
+                "hire_date": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The hire_date",
+                  "format": "date"
+                },
+                "business_entity_uuid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The business_entity_uuid",
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "user_id",
+                "classification"
+              ]
+            }
+          }
+        },
+        "required": [
+          "records"
+        ]
+      },
+      "risk": "Create Many Employment Records in the configured 7shifts account."
+    }
+  ]
+}

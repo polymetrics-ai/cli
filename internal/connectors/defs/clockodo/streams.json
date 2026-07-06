@@ -1,0 +1,149 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-ClockodoApiUser": "{{ config.email_address }}",
+      "X-ClockodoApiKey": "{{ secrets.api_key }}",
+      "X-Clockodo-External-Application": "{{ config.external_application }}",
+      "Accept-Language": "{{ config.language }}"
+    },
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v2/users" },
+    "error_map": [
+      { "status": 401, "hint": "clockodo credentials are missing or invalid; re-run pm credentials add clockodo" },
+      { "status": 403, "hint": "clockodo account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "clockodo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/v2/customers",
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "projects",
+      "path": "/v2/projects",
+      "records": { "path": "projects" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "services",
+      "path": "/v2/services",
+      "pagination": { "type": "none" },
+      "records": { "path": "services" },
+      "schema": "schemas/services.json"
+    },
+    {
+      "name": "users",
+      "path": "/v2/users",
+      "pagination": { "type": "none" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "current_user_settings",
+      "path": "/v2/aggregates/users/me",
+      "pagination": { "type": "none" },
+      "records": { "path": "." },
+      "schema": "schemas/current_user_settings.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v2/teams",
+      "pagination": { "type": "none" },
+      "records": { "path": "team" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "surcharges",
+      "path": "/v2/surcharges",
+      "pagination": { "type": "none" },
+      "records": { "path": "surcharges" },
+      "schema": "schemas/surcharges.json"
+    },
+    {
+      "name": "lumpsum_services",
+      "path": "/v2/lumpsumservices",
+      "pagination": { "type": "none" },
+      "records": { "path": "lumpSumServices" },
+      "schema": "schemas/lumpsum_services.json"
+    },
+    {
+      "name": "nonbusiness_groups",
+      "path": "/nonbusinessgroups",
+      "pagination": { "type": "none" },
+      "records": { "path": "nonbusinessgroups" },
+      "schema": "schemas/nonbusiness_groups.json"
+    },
+    {
+      "name": "nonbusiness_days",
+      "path": "/nonbusinessdays",
+      "pagination": { "type": "none" },
+      "query": {
+        "year": "{{ config.nonbusinessdays_year }}"
+      },
+      "records": { "path": "nonbusinessdays" },
+      "schema": "schemas/nonbusiness_days.json"
+    },
+    {
+      "name": "holidays_carry",
+      "path": "/holidayscarry",
+      "pagination": { "type": "none" },
+      "records": { "path": "holidayscarry" },
+      "schema": "schemas/holidays_carry.json"
+    },
+    {
+      "name": "holidays_quota",
+      "path": "/holidaysquota",
+      "pagination": { "type": "none" },
+      "records": { "path": "holidaysquota" },
+      "schema": "schemas/holidays_quota.json"
+    },
+    {
+      "name": "overtime_carry",
+      "path": "/overtimecarry",
+      "pagination": { "type": "none" },
+      "records": { "path": "overtimecarry" },
+      "schema": "schemas/overtime_carry.json"
+    },
+    {
+      "name": "target_hours",
+      "path": "/targethours",
+      "pagination": { "type": "none" },
+      "records": { "path": "targethours" },
+      "schema": "schemas/target_hours.json"
+    },
+    {
+      "name": "absences",
+      "path": "/absences",
+      "pagination": { "type": "none" },
+      "query": {
+        "year": "{{ config.absences_year }}"
+      },
+      "records": { "path": "absences" },
+      "schema": "schemas/absences.json"
+    },
+    {
+      "name": "entries",
+      "path": "/v2/entries",
+      "query": {
+        "time_since": "{{ config.entries_time_since }}",
+        "time_until": "{{ config.entries_time_until }}"
+      },
+      "records": { "path": "entries" },
+      "schema": "schemas/entries.json"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "expense_report_approval_history",
+  "type": "object",
+  "x-primary-key": [
+    "approval_id"
+  ],
+  "properties": {
+    "approval_id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

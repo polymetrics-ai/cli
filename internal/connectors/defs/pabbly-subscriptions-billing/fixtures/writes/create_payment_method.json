@@ -1,0 +1,17 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "gateway_type": "stripe",
+    "first_name": "Fixture",
+    "last_name": "Customer",
+    "email": "fixture1@example.com",
+    "card_number": "4111111111111111",
+    "month": "01",
+    "year": "2030",
+    "cvv": "123"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/paymentmethod/cus_fixture_1"
+  }
+}

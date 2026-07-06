@@ -1,0 +1,23 @@
+{
+  "record": {
+    "merge_into_account_id": "synthetic-conformance-value",
+    "merge_account_ids": [
+
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/merge",
+    "body": {
+      "merge_into_account_id": "synthetic-conformance-value",
+      "merge_account_ids": [
+
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

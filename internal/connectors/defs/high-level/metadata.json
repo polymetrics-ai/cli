@@ -1,0 +1,23 @@
+{
+  "name": "high-level",
+  "display_name": "High Level",
+  "description": "Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.",
+  "integration_type": "api",
+  "docs_url": "https://highlevel.stoplight.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external HighLevel (LeadConnector) API read of contact, opportunity, pipeline, custom field, and form submission data for a configured location",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

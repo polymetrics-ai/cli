@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "countries",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "CountryIso": { "type": ["string", "null"] },
+    "CountryName": { "type": ["string", "null"] },
+    "InternationalDialingInformation": { "type": ["object", "null"] },
+    "RegionCodes": { "type": ["array", "null"] }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "id": "acc_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/accounts/acc_fixture_1/disconnect"
+  },
+  "response": { "status": 200, "body": {} }
+}

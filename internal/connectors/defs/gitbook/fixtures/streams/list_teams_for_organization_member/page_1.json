@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/members/synthetic-conformance-value/teams",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_teams_for_organization_member_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_teams_for_organization_member",
+          "name": "Fixture list_teams_for_organization_member",
+          "status": "active",
+          "operation_id": "listTeamsForOrganizationMember"
+        }
+      ]
+    }
+  }
+}

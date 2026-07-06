@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "teams",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "avatar": { "type": ["string", "null"] },
+    "employee_ids": { "type": ["array", "null"] },
+    "lead_ids": { "type": ["array", "null"] }
+  }
+}

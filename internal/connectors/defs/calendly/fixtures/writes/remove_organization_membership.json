@@ -1,0 +1,13 @@
+{
+  "record": {
+    "uuid": "fixture_membership_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/organization_memberships/fixture_membership_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

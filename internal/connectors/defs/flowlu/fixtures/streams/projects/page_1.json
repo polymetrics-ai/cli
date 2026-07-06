@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/st/projects/list", "query": { "page": "1", "count": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "total_result": 1,
+        "page": 1,
+        "count": 100,
+        "items": [
+          {
+            "id": 1,
+            "name": "Fixture Project One",
+            "description": "conformance fixture project",
+            "stage_id": 1,
+            "manager_id": 4,
+            "owner_id": 10,
+            "active": 1,
+            "created_date": "2026-01-01 00:00:00",
+            "updated_date": "2026-01-01 00:00:00"
+          }
+        ]
+      }
+    }
+  }
+}

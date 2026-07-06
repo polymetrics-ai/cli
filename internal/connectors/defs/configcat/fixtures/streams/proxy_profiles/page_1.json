@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/v1/organizations/synthetic-conformance-value/proxy-profiles" },
+  "response": {
+    "status": 200,
+    "body": {
+      "profiles": [
+        {
+          "proxyProfileId": "proxy_fixture_1",
+          "name": "Fixture Proxy Profile",
+          "description": "fixture proxy profile",
+          "lastAccessedAt": "2026-01-01T00:00:00Z",
+          "connectionPreferences": {},
+          "sdkKeySelectionRules": []
+        }
+      ]
+    }
+  }
+}

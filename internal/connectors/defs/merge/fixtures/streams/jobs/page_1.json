@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/jobs", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": "job_fixture_1",
+          "remote_id": "remote_1",
+          "name": "Software Engineer",
+          "description": "Fixture job description",
+          "code": "ENG-1",
+          "status": "OPEN",
+          "type": "POSTING",
+          "confidential": false,
+          "remote_created_at": "2026-01-01T00:00:00Z",
+          "remote_updated_at": "2026-01-01T00:00:00Z",
+          "modified_at": "2026-01-01T00:00:00Z",
+          "remote_was_deleted": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/contacts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contact": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "email": "fixture@example.com",
+        "phone": "fixture",
+        "jobTitle": "fixture",
+        "label": "fixture",
+        "customers": [
+          {
+            "id": "id_fixture",
+            "label": "fixture"
+          }
+        ],
+        "notes": "fixture",
+        "socialProfiles": [
+          {
+            "key": "linkedin",
+            "value": "fixture"
+          }
+        ],
+        "secondaryEmails": [
+          "fixture@example.com"
+        ],
+        "tags": [
+          "fixture"
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

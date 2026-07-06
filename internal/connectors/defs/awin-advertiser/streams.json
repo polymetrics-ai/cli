@@ -1,0 +1,80 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/advertisers/{{ config.advertiserId }}/publishers/" },
+    "error_map": [
+      { "status": 401, "hint": "awin-advertiser api_key is missing or invalid; re-run pm credentials add awin-advertiser" },
+      { "status": 429, "class": "rate_limited", "hint": "awin-advertiser rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "transactions",
+      "path": "/advertisers/{{ config.advertiserId }}/transactions/",
+      "query": {
+        "startDate": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true },
+        "endDate": "2099-12-31T23:59:59",
+        "dateType": "transaction",
+        "timezone": "UTC",
+        "status": { "template": "{{ config.transaction_status }}", "omit_when_absent": true },
+        "publisherId": { "template": "{{ config.publisher_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "transactionDate",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "campaign_performance",
+      "path": "/advertisers/{{ config.advertiserId }}/reports/aggregated/publisher",
+      "records": { "path": "." },
+      "schema": "schemas/campaign_performance.json"
+    },
+    {
+      "name": "publishers",
+      "path": "/advertisers/{{ config.advertiserId }}/publishers/",
+      "records": { "path": "." },
+      "schema": "schemas/publishers.json"
+    },
+    {
+      "name": "publisher_performance",
+      "path": "/advertisers/{{ config.advertiserId }}/reports/publisher",
+      "pagination": { "type": "none" },
+      "query": {
+        "startDate": { "template": "{{ config.report_start_date }}", "omit_when_absent": true },
+        "endDate": "2099-12-31",
+        "timezone": "UTC",
+        "dateType": "transaction"
+      },
+      "records": { "path": "." },
+      "schema": "schemas/publisher_performance.json"
+    },
+    {
+      "name": "creative_performance",
+      "path": "/advertisers/{{ config.advertiserId }}/reports/creative",
+      "pagination": { "type": "none" },
+      "query": {
+        "startDate": { "template": "{{ config.report_start_date }}", "default": "2020-01-01" },
+        "endDate": "2099-12-31",
+        "region": { "template": "{{ config.report_region }}", "default": "GB" },
+        "timezone": "UTC",
+        "dateType": "transaction"
+      },
+      "records": { "path": "." },
+      "schema": "schemas/creative_performance.json"
+    }
+  ]
+}

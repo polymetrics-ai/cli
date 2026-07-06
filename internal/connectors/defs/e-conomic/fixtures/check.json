@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "skippages": "0", "pagesize": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "customerNumber": 1, "name": "Fixture Customer 1", "currency": "DKK", "email": "fixture1@example.com" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 1, "results": 1 }
+    }
+  }
+}

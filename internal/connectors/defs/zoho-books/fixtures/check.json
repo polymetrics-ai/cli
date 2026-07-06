@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "contacts": [
+        {
+          "contact_id": "contacts_fixture_1",
+          "contact_name": "contacts fixture 1",
+          "last_modified_time": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "contacts_fixture_1",
+          "name": "contacts fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z"
+        }
+      ]
+    }
+  }
+}

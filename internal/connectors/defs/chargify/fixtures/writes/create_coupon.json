@@ -1,0 +1,19 @@
+{
+  "record": {
+    "product_family_id": "1",
+    "coupon": {
+      "name": "Fixture Coupon",
+      "code": "FIXTURE10"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product_families/1/coupons.json",
+    "body": {
+      "coupon": {
+        "name": "Fixture Coupon",
+        "code": "FIXTURE10"
+      }
+    }
+  }
+}

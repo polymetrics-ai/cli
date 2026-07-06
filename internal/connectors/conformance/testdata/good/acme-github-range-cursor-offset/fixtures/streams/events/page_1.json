@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "evt_1", "updated_at": "2023-11-14T22:13:20+05:30" },
+        { "id": "evt_2", "updated_at": "2023-11-14T22:15:00+05:30" }
+      ]
+    }
+  }
+}

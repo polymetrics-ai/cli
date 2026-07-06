@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "jobs",
+  "type": "object",
+  "x-primary-key": ["jnid"],
+  "x-cursor-field": "date_updated",
+  "required": ["jnid"],
+  "properties": {
+    "jnid": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "number": { "type": ["string", "null"] },
+    "status_name": { "type": ["string", "null"] },
+    "record_type_name": { "type": ["string", "null"] },
+    "customer": { "type": ["string", "null"] },
+    "address_line1": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state_text": { "type": ["string", "null"] },
+    "zip": { "type": ["string", "null"] },
+    "sales_rep_name": { "type": ["string", "null"] },
+    "approved_estimate_total": { "type": ["number", "null"] },
+    "approved_invoice_total": { "type": ["number", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "is_archived": { "type": ["boolean", "null"] },
+    "date_created": { "type": ["integer", "null"] },
+    "date_updated": { "type": ["integer", "null"] },
+    "date_status_change": { "type": ["integer", "null"] }
+  }
+}

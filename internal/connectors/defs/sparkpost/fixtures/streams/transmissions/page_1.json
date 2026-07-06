@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/transmissions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "11750520427380741",
+          "state": "Success",
+          "campaign_id": "fixture_campaign",
+          "description": "conformance fixture transmission",
+          "num_generated": 10,
+          "num_rcpts": 10,
+          "num_failed_gen": 0,
+          "generation_start_time": "2026-01-01T00:00:00+00:00",
+          "generation_end_time": "2026-01-01T00:00:05+00:00"
+        }
+      ]
+    }
+  }
+}

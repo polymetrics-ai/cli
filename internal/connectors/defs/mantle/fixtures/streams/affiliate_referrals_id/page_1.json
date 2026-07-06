@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/affiliate_referrals/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "affiliateReferral": {
+        "id": "id_fixture",
+        "affiliateId": "affiliate_id_fixture",
+        "affiliateProgramId": "affiliate_program_id_fixture",
+        "appInstallationId": "app_installation_id_fixture",
+        "date": "2026-01-01T00:00:00Z",
+        "rules": {
+          "id": "rules_fixture_id"
+        },
+        "appListingPageViewId": "app_listing_page_view_id_fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "customerId": "customer_id_fixture",
+        "appId": "app_id_fixture"
+      }
+    }
+  }
+}

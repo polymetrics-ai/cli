@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/transaction", "query": { "limit": "2", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 3,
+      "limit": 2,
+      "offset": 0,
+      "transactions": [
+        { "transactionId": "transaction_fixture_1", "transactionType": "SALE", "transactionStatus": "FUNDS_AVAILABLE_FOR_PAYOUT", "transactionDate": "2026-01-01T00:00:00.000Z", "bookingEntry": "CREDIT", "orderId": "order_1", "amount": { "value": "10.00", "currency": "USD" } },
+        { "transactionId": "transaction_fixture_2", "transactionType": "REFUND", "transactionStatus": "FUNDS_AVAILABLE_FOR_PAYOUT", "transactionDate": "2026-01-02T00:00:00.000Z", "bookingEntry": "DEBIT", "orderId": "order_2", "amount": { "value": "5.00", "currency": "USD" } }
+      ]
+    }
+  }
+}

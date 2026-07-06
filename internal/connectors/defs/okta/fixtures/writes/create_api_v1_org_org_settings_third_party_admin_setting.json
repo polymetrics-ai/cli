@@ -1,0 +1,16 @@
+{
+  "record": {
+    "thirdPartyAdmin": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/org/orgSettings/thirdPartyAdminSetting",
+    "body": {
+      "thirdPartyAdmin": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

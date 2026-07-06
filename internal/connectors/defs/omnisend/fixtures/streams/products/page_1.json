@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        { "productID": "product_fixture_1", "title": "Fixture Product 1", "description": "Fixture description", "type": "physical", "status": "active", "currency": "USD", "vendor": "Fixture Vendor", "productUrl": "https://example.com/p/product_fixture_1", "categoryIDs": ["cat_1"], "variants": [], "images": [], "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": { "next": null }
+    }
+  }
+}

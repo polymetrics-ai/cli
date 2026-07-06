@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/api/2/events/list" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "value": "fixture_event_one",
+          "display": "Fixture Event One",
+          "totals": 100,
+          "non_active": false,
+          "deleted": false,
+          "hidden": false,
+          "flow_hidden": false
+        },
+        {
+          "value": "fixture_event_two",
+          "display": "Fixture Event Two",
+          "totals": 200,
+          "non_active": false,
+          "deleted": false,
+          "hidden": false,
+          "flow_hidden": false
+        }
+      ]
+    }
+  }
+}

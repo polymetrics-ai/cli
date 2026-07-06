@@ -1,0 +1,20 @@
+{
+  "name": "finnworlds",
+  "display_name": "Finnworlds",
+  "description": "Reads global financial data (dividends, stock splits, historical candlesticks, and commodity prices) from the Finnworlds REST API.",
+  "integration_type": "api",
+  "docs_url": "https://finnworlds.com/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Finnworlds API read of global financial/market data for the configured tickers/commodities",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

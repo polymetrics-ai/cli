@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/automations", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "automations": [
+        {
+          "id": "automation_fixture_1",
+          "create_time": "2026-01-01T00:00:00+00:00",
+          "start_time": "2026-01-01T00:00:00+00:00",
+          "status": "sending",
+          "emails_sent": 10
+        }
+      ],
+      "total_items": 1
+    }
+  }
+}

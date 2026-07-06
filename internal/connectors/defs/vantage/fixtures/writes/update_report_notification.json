@@ -1,0 +1,10 @@
+{
+  "record": {
+    "report_notification_token": "rptntf_fixture_1",
+    "title": "Updated Notification"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/report_notifications/rptntf_fixture_1"
+  }
+}

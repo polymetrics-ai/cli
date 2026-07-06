@@ -1,0 +1,24 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "task": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value/tasks",
+    "body": {
+      "task": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "queue_integration_task_fixture_1"
+    }
+  }
+}

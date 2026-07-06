@@ -1,0 +1,28 @@
+{
+  "record": {
+    "alias": "alias_fixture",
+    "authType": "BASIC_SMTP_AUTH",
+    "enabled": true,
+    "host": "host_fixture",
+    "id": "id_fixture",
+    "port": 1,
+    "username": "username_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/email-servers",
+    "body": {
+      "alias": "alias_fixture",
+      "authType": "BASIC_SMTP_AUTH",
+      "enabled": true,
+      "host": "host_fixture",
+      "id": "id_fixture",
+      "port": 1,
+      "username": "username_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

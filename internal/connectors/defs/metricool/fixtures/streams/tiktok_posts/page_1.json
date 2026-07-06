@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/analytics/posts/tiktok",
+    "query": {
+      "userId": "synthetic-conformance-value",
+      "blogId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "videoId": "video_1",
+          "publishDate": "2026-01-01T00:00:00",
+          "text": "Fixture TikTok post 1",
+          "views": 100,
+          "likes": 20,
+          "comments": 3,
+          "shares": 2,
+          "reach": 90,
+          "engagement": 25,
+          "url": "https://tiktok.com/fixture1"
+        },
+        {
+          "videoId": "video_2",
+          "publishDate": "2026-01-02T00:00:00",
+          "text": "Fixture TikTok post 2",
+          "views": 200,
+          "likes": 40,
+          "comments": 6,
+          "shares": 4,
+          "reach": 180,
+          "engagement": 50,
+          "url": "https://tiktok.com/fixture2"
+        }
+      ]
+    }
+  }
+}

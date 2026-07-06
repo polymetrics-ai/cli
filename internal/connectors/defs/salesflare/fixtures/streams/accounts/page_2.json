@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "page": "2", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 13,
+          "name": "Fixture Account 3",
+          "email": "fixture3@example.com",
+          "domain": "fixture3.example.com",
+          "phone_number": "+15550102",
+          "city": "Bruges",
+          "country": "BE",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination": { "next_page": null }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chift Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret", "account_id"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chift OAuth client ID; used to obtain a session access token via POST /token. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chift OAuth client secret; used to obtain a session access token via POST /token. Never logged."
+    },
+    "account_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chift account ID sent in the session-token exchange request body. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.chift.eu",
+      "description": "Chift API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-1000)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

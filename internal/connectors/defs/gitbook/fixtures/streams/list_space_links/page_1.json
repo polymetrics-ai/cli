@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/links",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_space_links_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_space_links",
+          "name": "Fixture list_space_links",
+          "status": "active",
+          "operation_id": "listSpaceLinks"
+        }
+      ]
+    }
+  }
+}

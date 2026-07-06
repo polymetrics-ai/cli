@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/entries", "query": { "limit": "1", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": { "count": 0, "entries": [] }
+  }
+}

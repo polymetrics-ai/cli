@@ -1,0 +1,45 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "sysparm_limit",
+      "offset_param": "sysparm_offset",
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/api/now/table/sys_user" },
+    "error_map": [
+      { "status": 401, "hint": "service-now username/password is missing or invalid; re-run pm credentials add service-now" },
+      { "status": 403, "hint": "service-now account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "service-now rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "incidents",
+      "path": "/api/now/table/incident",
+      "records": { "path": "result" },
+      "schema": "schemas/incidents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/api/now/table/sys_user",
+      "records": { "path": "result" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "groups",
+      "path": "/api/now/table/sys_user_group",
+      "records": { "path": "result" },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    }
+  ]
+}

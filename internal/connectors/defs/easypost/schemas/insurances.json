@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "insurances",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "mode": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "reference": { "type": ["string", "null"] },
+    "amount": { "type": ["string", "null"] },
+    "tracking_code": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "provider": { "type": ["string", "null"] },
+    "shipment_id": { "type": ["string", "null"] }
+  }
+}

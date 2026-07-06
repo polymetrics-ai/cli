@@ -1,0 +1,566 @@
+{
+  "actions": [
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/tags.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "company_id": { "type": "string" },
+          "color": { "type": "string" },
+          "tag_level": { "type": "string" }
+        }
+      },
+      "risk": "creates a new call/text tag definition visible account- or company-wide; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/tags/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": ["string", "integer"] },
+          "name": { "type": "string" },
+          "color": { "type": "string" },
+          "disabled": { "type": "string" }
+        }
+      },
+      "risk": "renames/recolors/disables a tag; renaming changes the tag everywhere it is currently assigned; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/tags/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": ["string", "integer"] }
+        }
+      },
+      "risk": "permanently removes a tag, including from every call/text interaction it has been applied to; irreversible, approval recommended"
+    },
+    {
+      "name": "create_company",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/companies.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "time_zone": { "type": "string" }
+        }
+      },
+      "risk": "creates a new company (a billable tracking entity) within the account; approval recommended"
+    },
+    {
+      "name": "update_company",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/companies/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "time_zone": { "type": "string" },
+          "callscore_enabled": { "type": "boolean" },
+          "callscribe_enabled": { "type": "boolean" },
+          "swap_ppc_override": { "type": "string" },
+          "swap_landing_override": { "type": "string" }
+        }
+      },
+      "risk": "updates company configuration; setting status to disabled deactivates all of the company's tracking numbers and its dynamic-number-insertion script — approval recommended for status changes"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/users.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name", "email", "role"],
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "role": { "type": "string" },
+          "companies": { "type": "array" }
+        }
+      },
+      "risk": "creates a new CallRail user and emails them a password-setup prompt; requires an administrator-scoped API key; approval recommended"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/users/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string" },
+          "role": { "type": "string" },
+          "companies": { "type": "array" }
+        }
+      },
+      "risk": "updates a user's profile/role/company access; name/email changes are restricted to the API key's own owning user by CallRail; approval recommended for role/company changes"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/users/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a user's access to the account; requires an administrator-scoped API key; irreversible, approval required"
+    },
+    {
+      "name": "update_call",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/calls/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "note": { "type": "string" },
+          "value": { "type": "string" },
+          "lead_status": { "type": "string" },
+          "append_tags": { "type": "boolean" },
+          "customer_name": { "type": "string" }
+        }
+      },
+      "risk": "applies tags/notes/lead-status/value/customer-name metadata to an existing call record; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_outbound_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/calls.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["caller_id", "business_phone_number", "customer_phone_number"],
+        "properties": {
+          "caller_id": { "type": "string" },
+          "business_phone_number": { "type": "string" },
+          "customer_phone_number": { "type": "string" },
+          "recording_enabled": { "type": "boolean" },
+          "outbound_greeting_recording_url": { "type": "string" },
+          "outbound_greeting_text": { "type": "string" }
+        }
+      },
+      "risk": "places a real outbound phone call connecting a business and a customer number (US/Canada only); a real-world side effect outside the CallRail account itself, approval required"
+    },
+    {
+      "name": "send_text_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/text-messages.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id", "customer_phone_number", "tracking_number", "content"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "customer_phone_number": { "type": "string" },
+          "tracking_number": { "type": "string" },
+          "content": { "type": "string" },
+          "media_url": { "type": "string" }
+        }
+      },
+      "risk": "sends a real SMS/MMS text message to a customer's phone (subject to 10DLC business-registration compliance rules); a real-world side effect outside the CallRail account itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope — see api_surface.json/docs.md; the media_url variant covers publicly-hosted-image MMS instead."
+    },
+    {
+      "name": "create_integration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/integrations.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type", "company_id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["Webhooks", "Custom"] },
+          "company_id": { "type": "string" },
+          "config": { "type": "object" }
+        }
+      },
+      "risk": "creates and activates a Webhooks or Custom-cookie-capture integration for a company (the only 2 integration types the API can create); approval recommended since Webhooks integrations push call data to an external URL"
+    },
+    {
+      "name": "update_integration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/integrations/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "state": { "type": "string", "enum": ["active", "disabled"] },
+          "config": { "type": "object" }
+        }
+      },
+      "risk": "updates an integration's active/disabled state or its webhook/cookie-capture configuration; approval recommended"
+    },
+    {
+      "name": "disable_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/integrations/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "disables (the docs' own term; not a hard delete) an integration; stops any external data flow it previously drove; approval recommended"
+    },
+    {
+      "name": "create_integration_filter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/integration_triggers.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id", "integration_id"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "integration_id": { "type": "integer" },
+          "tracker_ids": { "type": "array", "items": { "type": "string" } },
+          "call_type": { "type": ["string", "null"] },
+          "min_duration": { "type": "integer" },
+          "max_duration": { "type": "integer" },
+          "lead_status": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "adds a filter narrowing which calls trigger an existing integration; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_integration_filter",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/integration_triggers/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "tracker_ids": { "type": "array", "items": { "type": "string" } },
+          "call_type": { "type": ["string", "null"] },
+          "min_duration": { "type": "integer" },
+          "max_duration": { "type": "integer" },
+          "lead_status": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "updates an integration filter's trigger criteria; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_integration_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/integration_triggers/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "removes a filter; the parent integration keeps firing for every call, unfiltered, once this is removed; low-risk, no approval required"
+    },
+    {
+      "name": "create_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/notifications.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": { "type": "string" },
+          "email": { "type": "string" },
+          "company_id": { "type": "string" },
+          "tracker_id": { "type": "string" },
+          "send_email": { "type": "boolean" },
+          "send_push": { "type": "boolean" },
+          "send_desktop": { "type": "boolean" },
+          "alert_type": { "type": "string" },
+          "sms_enabled": { "type": "boolean" },
+          "call_enabled": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a call/text alert subscription for a user; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_notification",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/notifications/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "company_id": { "type": "string" },
+          "tracker_id": { "type": "string" },
+          "call_enabled": { "type": "boolean" },
+          "sms_enabled": { "type": "boolean" },
+          "alert_type": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing notification's scope/channel settings; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_notification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/notifications/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a notification subscription (restricted to notifications managed by the current user); irreversible, low-risk, no approval required"
+    },
+    {
+      "name": "create_caller_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/caller_ids.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id", "phone_number", "name"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "registers an outbound caller-id number and immediately triggers a real verification phone call to it; a real-world side effect, approval required"
+    },
+    {
+      "name": "delete_caller_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/caller_ids/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "removes an outbound caller id from the company; irreversible, low-risk, no approval required"
+    },
+    {
+      "name": "update_sms_thread",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/sms-threads/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "notes": { "type": "string" },
+          "value": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "append_tags": { "type": "boolean" },
+          "lead_qualification": { "type": "string" }
+        }
+      },
+      "risk": "applies notes/value/tags/lead-qualification metadata to an existing SMS thread; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tracker",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/trackers/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "whisper_message": { "type": "string" },
+          "sms_enabled": { "type": "boolean" },
+          "swap_targets": { "type": "array", "items": { "type": "string" } },
+          "call_flow": { "type": "object" },
+          "source": { "type": "object" },
+          "replace_tracking_number": { "type": "string" },
+          "campaign_name": { "type": "string" }
+        }
+      },
+      "risk": "reconfigures an existing (already-provisioned) session or source tracker's call flow, whisper message, SMS setting, or source rules; does not provision/deprovision a phone number itself, unlike create/disable; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_message_flow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.account_id }}/message-flows.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["company_id", "name", "initial_step_id", "steps"],
+        "properties": {
+          "company_id": { "type": "string" },
+          "name": { "type": "string" },
+          "initial_step_id": { "type": "string" },
+          "steps": { "type": "object" }
+        }
+      },
+      "risk": "creates a new automated SMS message flow (a step-graph of tag/response actions) for a company; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_message_flow",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.account_id }}/message-flows.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "initial_step_id", "steps"],
+        "properties": {
+          "id": { "type": "string" },
+          "initial_step_id": { "type": "string" },
+          "steps": { "type": "object" }
+        }
+      },
+      "risk": "replaces an existing message flow's step graph; the docs' own endpoint takes no {message_flow_id} path segment, identifying the flow purely via the body's id field; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "delete_message_flow",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.account_id }}/message-flows/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a message flow; any tracker still referencing it stops running the automated SMS steps; irreversible, approval recommended"
+    }
+  ]
+}

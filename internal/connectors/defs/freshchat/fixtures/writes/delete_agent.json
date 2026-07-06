@@ -1,0 +1,15 @@
+{
+  "record": {
+    "agent_id": "agent_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/agents/agent_fixture_1"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "AGENT_NOT_FOUND"
+    }
+  }
+}

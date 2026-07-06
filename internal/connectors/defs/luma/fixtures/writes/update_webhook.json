@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/webhooks/update",
+    "body": {
+      "id": "fixture_id"
+    }
+  }
+}

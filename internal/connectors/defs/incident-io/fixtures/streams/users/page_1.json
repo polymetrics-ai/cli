@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v2/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        { "id": "user_fixture_1", "name": "Fixture User One", "email": "fixture1@example.com", "slack_user_id": "U00001", "role": "viewer", "base_role": { "id": "brole_fixture_1", "name": "Owner" } },
+        { "id": "user_fixture_2", "name": "Fixture User Two", "email": "fixture2@example.com", "slack_user_id": "U00002", "role": "responder", "base_role": { "id": "brole_fixture_2", "name": "Responder" } }
+      ],
+      "pagination_meta": { "page_size": 2, "total_record_count": 2 }
+    }
+  }
+}

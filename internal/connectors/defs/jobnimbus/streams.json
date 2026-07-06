@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "offset_param": "from",
+      "limit_param": "size",
+      "page_size": 1000
+    },
+    "check": { "method": "GET", "path": "/contacts", "query": { "size": "1", "from": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "jobnimbus api_key is missing or invalid; re-run pm credentials add jobnimbus" },
+      { "status": 403, "hint": "jobnimbus account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "jobnimbus rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "results" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "records": { "path": "results" },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "results" },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities",
+      "records": { "path": "activity" },
+      "schema": "schemas/activities.json"
+    },
+    {
+      "name": "files",
+      "path": "/files",
+      "records": { "path": "files" },
+      "schema": "schemas/files.json"
+    }
+  ]
+}

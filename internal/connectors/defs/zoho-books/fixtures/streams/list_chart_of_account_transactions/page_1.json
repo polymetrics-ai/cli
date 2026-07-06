@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/chartofaccounts/accounttransactions",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "account_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "transactions": [
+        {
+          "categorized_transaction_id": "list_chart_of_account_transactions_fixture_1",
+          "offset_account_name": "list_chart_of_account_transactions fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "list_chart_of_account_transactions_fixture_1",
+          "name": "list_chart_of_account_transactions fixture 1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

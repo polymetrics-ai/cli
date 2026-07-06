@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v1/documents/id_fixture/draft"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_documents_id_draft_response",
+      "status": "ok"
+    }
+  }
+}

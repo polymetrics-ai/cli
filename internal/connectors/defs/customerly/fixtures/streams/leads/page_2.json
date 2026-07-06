@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads/list",
+    "query": {
+      "sort": "last_update",
+      "sort_direction": "desc",
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "leads": [
+          {
+            "crmhero_user_id": "lead_fixture_51",
+            "email": "lead51@example.com",
+            "name": "Fixture Lead 51",
+            "username": "fixture_lead_51",
+            "role": "lead",
+            "country": "US",
+            "city": "San Francisco",
+            "timezone": "America/Los_Angeles",
+            "sub_active": false,
+            "sub_status": "unsubscribed",
+            "create_date": "2026-01-01 00:00:00",
+            "last_update": "2026-01-01 00:01:00"
+          }
+        ]
+      }
+    }
+  }
+}

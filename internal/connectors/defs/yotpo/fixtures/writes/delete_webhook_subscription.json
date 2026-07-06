@@ -1,0 +1,8 @@
+{
+  "record": { "yotpo_id": "3245" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/core/v3/stores/synthetic-conformance-value/webhooks/subscriptions/3245"
+  },
+  "response": { "status": 200, "body": {} }
+}

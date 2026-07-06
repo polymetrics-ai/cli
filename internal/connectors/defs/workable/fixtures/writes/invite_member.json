@@ -1,0 +1,14 @@
+{
+  "record": {
+    "email": "invitee.fixture@example.test",
+    "name": "Fixture Invitee"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/members/invite",
+    "body": {
+      "email": "invitee.fixture@example.test",
+      "name": "Fixture Invitee"
+    }
+  }
+}

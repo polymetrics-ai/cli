@@ -1,0 +1,48 @@
+{
+  "record": {
+    "title": "Fixture Title",
+    "content": [
+      [
+        "Company",
+        "First name",
+        "Email"
+      ],
+      [
+        "Fixture Corp",
+        "Fixture",
+        "fixture@example.invalid"
+      ]
+    ],
+    "description": "Fixture description",
+    "tags": [
+      "fixture-tag"
+    ],
+    "user_id": "fixture-user@example.invalid",
+    "privacy": "off"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spreadsheets",
+    "body": {
+      "title": "Fixture Title",
+      "content": [
+        [
+          "Company",
+          "First name",
+          "Email"
+        ],
+        [
+          "Fixture Corp",
+          "Fixture",
+          "fixture@example.invalid"
+        ]
+      ],
+      "description": "Fixture description",
+      "tags": [
+        "fixture-tag"
+      ],
+      "user_id": "fixture-user@example.invalid",
+      "privacy": "off"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/projects/fixture_proj_1/sections" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_section_1", "name": "Fixture Section One", "resource_type": "section", "created_at": "2026-01-01T00:00:00Z" }
+      ],
+      "next_page": null
+    }
+  }
+}

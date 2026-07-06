@@ -1,0 +1,16 @@
+{
+  "record": {
+    "page_id": "page_id_fixture_1",
+    "subscriber_id": "subscriber_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/page_id_fixture_1/subscribers/subscriber_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_subscriber_fixture_response"
+    }
+  }
+}

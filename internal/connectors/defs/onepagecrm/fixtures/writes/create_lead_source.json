@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_value",
+    "text": "Fixture text",
+    "counts": "fixture_value",
+    "total_count": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lead_sources",
+    "body": {
+      "id": "fixture_value",
+      "text": "Fixture text",
+      "counts": "fixture_value",
+      "total_count": "fixture_value"
+    }
+  }
+}

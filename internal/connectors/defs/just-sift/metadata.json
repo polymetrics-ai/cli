@@ -1,0 +1,22 @@
+{
+  "name": "just-sift",
+  "display_name": "JustSift",
+  "description": "Reads JustSift people directory profiles and person field definitions through the Sift REST API.",
+  "integration_type": "api",
+  "docs_url": "https://sift.com/developers/docs/curl/apis-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external JustSift API read of people directory profiles and field definitions"
+  }
+}

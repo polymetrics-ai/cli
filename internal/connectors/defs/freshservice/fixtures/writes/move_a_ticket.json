@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture move_a_ticket",
+    "description": "Fixture move_a_ticket record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/move_workspace",
+    "body": {
+      "name": "Fixture move_a_ticket",
+      "description": "Fixture move_a_ticket record"
+    }
+  }
+}

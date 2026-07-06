@@ -1,0 +1,13 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PUT",
+    "path": "/v1pre3/laneqcthresholds"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

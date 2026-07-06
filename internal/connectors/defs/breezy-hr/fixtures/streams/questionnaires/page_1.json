@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/questionnaires" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "quest_fixture_1", "name": "Fixture Questionnaire" }
+    ]
+  }
+}

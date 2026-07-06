@@ -1,0 +1,24 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "employeeIds": [
+      1001
+    ],
+    "allEmployeesAssigned": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time-tracking/projects",
+    "body": {
+      "name": "Fixture Name",
+      "employeeIds": [
+        1001
+      ],
+      "allEmployeesAssigned": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

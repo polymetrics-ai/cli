@@ -1,0 +1,23 @@
+{
+  "name": "bugsnag",
+  "display_name": "Bugsnag",
+  "description": "Reads Bugsnag organizations, projects, collaborators, errors, events, and releases through the Bugsnag Data Access API.",
+  "integration_type": "api",
+  "docs_url": "https://bugsnagapiv2.docs.apiary.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Bugsnag API read of organization, project, collaborator, and error/event/release data",
+    "approval": "none; read-only"
+  }
+}

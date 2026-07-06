@@ -1,0 +1,23 @@
+{
+  "name": "deputy",
+  "display_name": "Deputy",
+  "description": "Reads Deputy locations, employees, departments, timesheets, tasks, leave, rosters, webhooks, and teams, and writes department/leave/roster/webhook/team mutations, through the Deputy REST API (full refresh).",
+  "integration_type": "api",
+  "docs_url": "https://developer.deputy.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Deputy API read of workforce scheduling, employee, timesheet, leave, and roster data",
+    "write": "external mutation of departments, leave requests (approval status), rosters/shifts (may notify employees), webhook subscriptions, and teams; approval required"
+  }
+}

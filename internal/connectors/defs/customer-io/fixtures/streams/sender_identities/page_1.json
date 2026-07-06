@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/sender_identities" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sender_identities": [
+        { "id": 1, "deduplicate_id": "1:1767225601", "name": "Fixture Sender One", "email": "sender1@example.com", "address": "123 Fixture St", "template_type": "email", "auto_generated": false },
+        { "id": 2, "deduplicate_id": "2:1767225602", "name": "Fixture Sender Two", "email": "sender2@example.com", "address": "456 Fixture Ave", "template_type": "email", "auto_generated": true }
+      ]
+    }
+  }
+}

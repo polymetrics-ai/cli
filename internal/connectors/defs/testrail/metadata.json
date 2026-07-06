@@ -1,0 +1,21 @@
+{
+  "name": "testrail",
+  "display_name": "TestRail",
+  "description": "Reads TestRail projects, suites, cases, milestones, plans, runs, users, and reference data (case types/fields, priorities, statuses, result fields, templates), and writes approved test-management mutations (projects, milestones, suites, cases, plans, runs, results) through the TestRail v2 API.",
+  "integration_type": "api",
+  "docs_url": "https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external TestRail API read of project, suite, case, milestone, plan, run, and reference data",
+    "write": "external TestRail API mutation (create/update projects, milestones, suites, cases, plans, runs; close/delete runs; add test results)",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

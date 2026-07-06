@@ -150,7 +150,9 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 	runCLIForReverseTest(t, []string{
 		"credentials", "add", "github-local",
 		"--connector", "github",
-		"--config", "repository=acme/widgets",
+		"--config", "owner=acme",
+		"--config", "repo=widgets",
+		"--config", "auth_type=token",
 		"--config", "base_url=" + server.URL,
 		"--from-env", "token=PM_GITHUB_TOKEN",
 		"--root", root,
@@ -160,7 +162,7 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
 		t.Fatalf("mkdir warehouse: %v", err)
 	}
-	row := `{"title":"Ship connector writes","body":"Created by approved reverse ETL","head":"feature/github-writes","base":"main","labels":"agentic,reverse-etl","reviewers":"ada,grace"}` + "\n"
+	row := `{"title":"Ship connector writes","body":"Created by approved reverse ETL","head":"feature/github-writes","base":"main","labels":["agentic","reverse-etl"],"reviewers":["ada","grace"]}` + "\n"
 	if err := os.WriteFile(filepath.Join(warehouseDir, "github_pr_candidates.jsonl"), []byte(row), 0o600); err != nil {
 		t.Fatalf("write warehouse row: %v", err)
 	}
@@ -224,7 +226,7 @@ func TestReverseETLRejectsPlannedCatalogDestination(t *testing.T) {
 	if code == 0 {
 		t.Fatalf("credentials add destination-postgres code = 0, want planned connector rejection; stdout=%s", stdout.String())
 	}
-	if !strings.Contains(stdout.String()+stderr.String(), `connector "destination-postgres" not found`) {
+	if !strings.Contains(stdout.String()+stderr.String(), `connector "destination-postgres" uses a legacy source-/destination- prefix; use bare connector name "postgres"`) {
 		t.Fatalf("planned destination rejection missing connector message: stdout=%s stderr=%s", stdout.String(), stderr.String())
 	}
 }

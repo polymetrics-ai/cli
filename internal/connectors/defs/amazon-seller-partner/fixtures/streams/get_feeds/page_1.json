@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/feeds/2021-06-30/feeds",
+    "query": {
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "feeds": [
+        {
+          "feedId": "feedId-fixture-1",
+          "feedType": "feedType-fixture-1",
+          "marketplaceIds": [],
+          "createdTime": "createdTime-fixture-1",
+          "processingStatus": "processingStatus-fixture-1",
+          "processingStartTime": "processingStartTime-fixture-1",
+          "processingEndTime": "processingEndTime-fixture-1",
+          "resultFeedDocumentId": "resultFeedDocumentId-fixture-1"
+        }
+      ]
+    }
+  }
+}

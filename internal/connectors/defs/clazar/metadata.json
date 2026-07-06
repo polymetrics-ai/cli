@@ -1,0 +1,28 @@
+{
+  "name": "clazar",
+  "display_name": "Clazar",
+  "description": "Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private offers, reseller offers, contacts, and metering records) and writes buyer/opportunity/contract/private-offer/contact/metering mutations, contract activation, and metering-record submission, through the Clazar REST API using OAuth2 client credentials.",
+  "integration_type": "api",
+  "docs_url": "https://developers.clazar.io/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Clazar API read of cloud marketplace GTM data",
+    "write": "external mutation of Clazar buyer/opportunity/contract/private-offer/contact/metering-record data; activate_contract irreversibly transitions a contract's state in the underlying cloud marketplace, and create_metering_records submits usage data that drives marketplace billing — every write ships with an explicit per-action risk string",
+    "approval": "required for activate_contract, delete_contact, and create_metering_records (financial/state-transition impact); custom_properties/external_object_associations updates and contact create/update are low-risk"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.base_url ({{ config.base_url }}/authenticate/); conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"base_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value/authenticate/\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/clazar package for this wave; the read/pagination/incremental/schema-projection shape is proven by structural review against legacy internal/connectors/clazar and, for Pass B's new streams/writes, against developers.clazar.io's published reference instead. Matches sendpulse's identical documented precedent."
+  }
+}

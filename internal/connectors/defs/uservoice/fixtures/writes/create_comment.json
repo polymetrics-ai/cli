@@ -1,0 +1,18 @@
+{
+  "record": {
+    "body": "Fixture comment body",
+    "links": { "suggestion": 101 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/admin/comments",
+    "body": {
+      "body": "Fixture comment body",
+      "links": { "suggestion": 101 }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "comments": [{ "id": 6002 }] }
+  }
+}

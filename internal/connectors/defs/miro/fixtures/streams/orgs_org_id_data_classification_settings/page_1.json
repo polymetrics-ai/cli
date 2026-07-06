@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/data-classification-settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "enabled": true,
+      "labels": [
+        {
+          "id": "id_fixture",
+          "color": "#ffffff",
+          "default": true,
+          "description": "description_fixture",
+          "name": "name_fixture",
+          "orderNumber": 1,
+          "sharingRecommendation": "sharing_recommendation_fixture",
+          "guidelineUrl": "https://example.invalid/fixture",
+          "type": "data-classification-label"
+        }
+      ],
+      "type": "data-classification-organization-settings"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/nudges/synthetic-conformance-value/responses.json",
+    "query": {
+      "limit": "500",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 32580126,
+        "time": "2026-01-10 06:29:50 -0700",
+        "token": "response-token-fixture-1",
+        "ip_address": "192.0.2.10",
+        "identity": "fixture1@example.com",
+        "page": "https://example.com/fixture-page",
+        "referrer": "https://example.com/referrer",
+        "user_agent": "Fixture Browser",
+        "answered_questions": {
+          "142776": {
+            "question_id": 142776,
+            "question_title": "How well do you understand the fixture question?",
+            "answer": "Fixture answer",
+            "selected_option_id": 391235,
+            "comment": "Fixture comment"
+          }
+        },
+        "properties": {
+          "plan": "Fixture",
+          "engagement_level": "High"
+        }
+      },
+      {
+        "id": 32580127,
+        "time": "2026-01-11 06:29:50 -0700",
+        "token": "response-token-fixture-2",
+        "ip_address": "192.0.2.11",
+        "identity": "fixture2@example.com",
+        "page": "https://example.com/fixture-page-2",
+        "referrer": null,
+        "user_agent": "Fixture Browser",
+        "answered_questions": {
+          "142777": {
+            "question_id": 142777,
+            "question_title": "How likely are you to recommend the fixture?",
+            "answer": "9",
+            "selected_option_id": 391236,
+            "comment": null
+          }
+        },
+        "properties": {
+          "plan": "Fixture"
+        }
+      }
+    ]
+  }
+}

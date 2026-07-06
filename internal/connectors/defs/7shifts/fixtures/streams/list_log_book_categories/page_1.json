@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/log_book_categories"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "company_id": 1001,
+          "name": "fixture name",
+          "col": 1001,
+          "sort": 1001,
+          "field_type": "fixture field type",
+          "notify": true,
+          "required": true,
+          "created": "2026-01-01T00:00:00Z",
+          "uuid": "00000000-0000-4000-8000-000000000001"
+        }
+      ]
+    }
+  }
+}

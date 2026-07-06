@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bank_accounts",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "bank_fixture_1",
+          "object": "bank_account",
+          "description": "Fixture bank_accounts 1",
+          "routing_number": "322271627",
+          "account_number": "123456789",
+          "account_type": "company",
+          "signatory": "John Doe",
+          "bank_name": "Example Bank",
+          "verified": true,
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-01T00:00:00Z",
+          "deleted": false
+        }
+      ],
+      "next_url": null,
+      "previous_url": null,
+      "count": 1
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "full_name": "Updated Fixture Contact" },
+  "expect": { "method": "PUT", "path": "/contacts/1" }
+}

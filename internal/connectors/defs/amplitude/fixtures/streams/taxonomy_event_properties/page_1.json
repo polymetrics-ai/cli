@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/api/2/taxonomy/event-property" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "event_property": "Fixture Property",
+          "event_type": "fixture_event_one",
+          "description": "fixture property description",
+          "type": "string",
+          "regex": null,
+          "enum_values": null,
+          "is_array_type": false,
+          "is_required": false,
+          "is_hidden": false,
+          "classifications": []
+        }
+      ]
+    }
+  }
+}

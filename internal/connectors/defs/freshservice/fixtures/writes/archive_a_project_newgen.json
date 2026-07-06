@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_id": 123,
+    "name": "Fixture archive_a_project_newgen",
+    "description": "Fixture archive_a_project_newgen record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pm/projects/123/archive",
+    "body": {
+      "name": "Fixture archive_a_project_newgen",
+      "description": "Fixture archive_a_project_newgen record"
+    }
+  }
+}

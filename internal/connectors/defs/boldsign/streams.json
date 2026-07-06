@@ -1,0 +1,130 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "Page",
+      "size_param": "PageSize",
+      "start_page": 1,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/v1/document/list", "query": { "Page": "1", "PageSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "boldsign api_key is missing or invalid; re-run pm credentials add boldsign" },
+      { "status": 429, "class": "rate_limited", "hint": "boldsign rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "documents",
+      "path": "/v1/document/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "document_id": "{{ coalesce record.documentId record.documentID }}",
+        "sender_email": "{{ record.senderEmail }}",
+        "message_title": "{{ record.messageTitle }}",
+        "created_date": "{{ record.createdDate }}",
+        "expiry_date": "{{ record.expiryDate }}",
+        "is_deleted": "{{ record.isDeleted }}",
+        "enable_signing_order": "{{ record.enableSigningOrder }}",
+        "sender_detail": "{{ record.senderDetail }}",
+        "signer_details": "{{ record.signerDetails }}"
+      },
+      "schema": "schemas/documents.json"
+    },
+    {
+      "name": "templates",
+      "path": "/v1/template/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "document_id": "{{ coalesce record.documentId record.documentID }}",
+        "template_name": "{{ record.templateName }}",
+        "template_description": "{{ record.templateDescription }}",
+        "created_date": "{{ record.createdDate }}",
+        "sender_email": "{{ record.senderEmail }}",
+        "is_shared_template": "{{ record.isSharedTemplate }}"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "teams",
+      "path": "/v1/teams/list",
+      "records": { "path": "results" },
+      "computed_fields": {
+        "team_id": "{{ coalesce record.teamId record.teamID }}",
+        "team_name": "{{ record.teamName }}",
+        "created_date": "{{ record.createdDate }}"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/v1/contacts/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.contactId }}",
+        "phone_number": "{{ record.phoneNumber }}",
+        "company_name": "{{ record.companyName }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "brands",
+      "path": "/v1/brand/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "brand_id": "{{ coalesce record.brandId record.brandID }}",
+        "brand_name": "{{ record.brandName }}",
+        "is_default": "{{ record.isDefault }}",
+        "background_color": "{{ record.backgroundColor }}",
+        "button_color": "{{ record.buttonColor }}"
+      },
+      "schema": "schemas/brands.json"
+    },
+    {
+      "name": "users",
+      "path": "/v1/users/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "user_id": "{{ record.userId }}",
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "team_id": "{{ record.teamId }}",
+        "team_name": "{{ record.teamName }}",
+        "user_status": "{{ record.userStatus }}",
+        "created_date": "{{ record.createdDate }}",
+        "modified_date": "{{ record.modifiedDate }}",
+        "meta_data": "{{ record.metaData }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "contact_groups",
+      "path": "/v1/contactGroups/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "group_id": "{{ record.groupId }}",
+        "group_name": "{{ record.groupName }}"
+      },
+      "schema": "schemas/contact_groups.json"
+    },
+    {
+      "name": "sender_identities",
+      "path": "/v1/senderIdentities/list",
+      "records": { "path": "result" },
+      "computed_fields": {
+        "created_by": "{{ record.createdBy }}",
+        "approved_date": "{{ record.approvedDate }}",
+        "brand_id": "{{ record.brandId }}",
+        "redirect_url": "{{ record.redirectUrl }}",
+        "notification_settings": "{{ record.notificationSettings }}",
+        "meta_data": "{{ record.metaData }}"
+      },
+      "schema": "schemas/sender_identities.json"
+    }
+  ]
+}

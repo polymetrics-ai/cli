@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organization_configuration_changes",
+  "type": "object",
+  "x-primary-key": ["organizationId", "ts", "label"],
+  "x-cursor-field": "ts",
+  "required": ["organizationId", "ts"],
+  "properties": {
+    "organizationId": { "type": "string" },
+    "ts": { "type": "string" },
+    "adminName": { "type": ["string", "null"] },
+    "adminEmail": { "type": ["string", "null"] },
+    "adminId": { "type": ["string", "null"] },
+    "networkName": { "type": ["string", "null"] },
+    "networkId": { "type": ["string", "null"] },
+    "networkUrl": { "type": ["string", "null"] },
+    "ssidName": { "type": ["string", "null"] },
+    "ssidNumber": { "type": ["integer", "null"] },
+    "page": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "oldValue": { "type": ["string", "null"] },
+    "newValue": { "type": ["string", "null"] },
+    "client": { "type": ["object", "null"] }
+  }
+}

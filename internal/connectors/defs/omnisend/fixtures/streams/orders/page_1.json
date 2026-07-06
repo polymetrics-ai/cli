@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/orders", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        { "orderID": "order_fixture_1", "orderNumber": 1001, "contactID": "contact_fixture_1", "cartID": "cart_fixture_1", "email": "fixture1@example.com", "currency": "USD", "orderSum": 100, "subTotalSum": 90, "taxSum": 10, "shippingSum": 5, "discountSum": 0, "paymentStatus": "paid", "fulfillmentStatus": "fulfilled", "products": [], "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_inbound",
+  "type": "object",
+  "properties": {
+    "createdAt": {
+      "type": "string"
+    },
+    "destinationDetails": {
+      "type": "object"
+    },
+    "externalReferenceId": {
+      "type": "string"
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "orderStatus": {
+      "type": "string"
+    },
+    "originAddress": {
+      "type": "object"
+    },
+    "packagesToInbound": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "preferences": {
+      "type": "object"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "orderId"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/fulfillmentOrders"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "fulfillmentOrders": [
+          {
+            "sellerFulfillmentOrderId": "sellerFulfillmentOrderId-fixture-1",
+            "marketplaceId": "marketplaceId-fixture-1",
+            "displayableOrderId": "displayableOrderId-fixture-1",
+            "displayableOrderDate": "displayableOrderDate-fixture-1",
+            "displayableOrderComment": "displayableOrderComment-fixture-1",
+            "shippingSpeedCategory": "shippingSpeedCategory-fixture-1",
+            "deliveryWindow": {},
+            "destinationAddress": {},
+            "fulfillmentAction": "fulfillmentAction-fixture-1",
+            "fulfillmentPolicy": "fulfillmentPolicy-fixture-1",
+            "codSettings": {},
+            "receivedDate": "receivedDate-fixture-1",
+            "fulfillmentOrderStatus": "fulfillmentOrderStatus-fixture-1",
+            "statusUpdatedDate": "statusUpdatedDate-fixture-1",
+            "notificationEmails": [],
+            "featureConstraints": []
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "10656107", "sellerName": "Fixture Seller One" },
+      { "id": "10656108", "sellerName": "Fixture Seller Two" }
+    ]
+  }
+}

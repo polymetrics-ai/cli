@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConvertKit Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "ConvertKit v3 API secret, sent as the api_secret query parameter on every request. Never logged."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Alternate secret name for the same api_secret credential (legacy fallback: api_key takes precedence when both are set)."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Alternate secret name for the same credential (legacy fallback, lowest precedence: api_key, then access_token, then api_secret)."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.convertkit.com/v3",
+      "description": "ConvertKit API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

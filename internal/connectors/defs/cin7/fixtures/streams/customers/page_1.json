@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/customer", "query": { "page": "1", "limit": "100", "IncludeDeprecated": "true" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "CustomerList": [
+        {
+          "ID": "cust_fixture_1",
+          "Name": "Fixture Customer One",
+          "Email": "fixture1@example.com",
+          "Phone": "555-0100",
+          "Status": "Active",
+          "Currency": "USD",
+          "PaymentTerm": "Net 30",
+          "TaxRule": "Tax Exempt",
+          "LastModifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "ID": "cust_fixture_2",
+          "Name": "Fixture Customer Two",
+          "Email": "fixture2@example.com",
+          "Phone": "555-0101",
+          "Status": "Active",
+          "Currency": "USD",
+          "PaymentTerm": "Net 30",
+          "TaxRule": "Tax Exempt",
+          "LastModifiedOn": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

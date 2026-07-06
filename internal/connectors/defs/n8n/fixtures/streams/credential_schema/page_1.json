@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/credentials/schema/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "httpBasicAuth",
+      "displayName": "HTTP Basic Auth",
+      "properties": []
+    }
+  }
+}

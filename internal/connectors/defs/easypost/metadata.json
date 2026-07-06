@@ -1,0 +1,25 @@
+{
+  "name": "easypost",
+  "display_name": "EasyPost",
+  "description": "Reads and writes EasyPost shipping resources including shipments, trackers, addresses, parcels, batches, events, claims, pickups, refunds, scan forms, end shippers, users, and webhooks through the EasyPost REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.easypost.com/docs/shipments",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external EasyPost API read of shipping, tracking, carrier metadata/account, event, claim, pickup, refund, scan-form, user, referral customer, and webhook data",
+    "write": "external EasyPost API mutation of live shipping objects, labels, pickups, insurance/refund workflows, reports, users, and webhooks; buy/refund/insurance/pickup/order/Luma actions may incur charges or alter operational shipping state",
+    "approval": "reverse ETL plan preview and approval required for every write action; charge-bearing/destructive actions are flagged in writes.json"
+  }
+}

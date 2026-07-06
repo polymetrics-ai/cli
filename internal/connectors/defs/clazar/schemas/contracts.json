@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contracts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "last_modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "cloud": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "buyer_id": { "type": ["string", "null"] },
+    "cloud_id": { "type": ["string", "null"] },
+    "listing_id": { "type": ["string", "null"] },
+    "offer_type": { "type": ["string", "null"] },
+    "duration": { "type": ["string", "null"] },
+    "start_at": { "type": ["string", "null"], "format": "date-time" },
+    "end_at": { "type": ["string", "null"], "format": "date-time" },
+    "accepted_at": { "type": ["string", "null"], "format": "date-time" },
+    "auto_renew": { "type": ["boolean", "null"] },
+    "latest_offer_id": { "type": ["string", "null"] },
+    "last_modified_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

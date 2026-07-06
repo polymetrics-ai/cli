@@ -1,0 +1,10 @@
+{
+  "record": {
+    "budget_alert_token": "bgtalrt_fixture_1",
+    "threshold": "500"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/budget_alerts/bgtalrt_fixture_1"
+  }
+}

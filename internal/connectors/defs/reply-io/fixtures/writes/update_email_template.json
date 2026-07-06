@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "name": "fixture_name",
+    "body": "fixture_body",
+    "subject": "fixture_subject",
+    "attachmentIds": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/email-templates/synthetic-conformance-value",
+    "body": {
+      "name": "fixture_name",
+      "body": "fixture_body",
+      "subject": "fixture_subject",
+      "attachmentIds": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

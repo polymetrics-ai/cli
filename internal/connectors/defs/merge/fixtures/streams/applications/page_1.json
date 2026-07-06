@@ -1,0 +1,40 @@
+{
+  "request": { "method": "GET", "path": "/applications", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": "application_fixture_1",
+          "remote_id": "remote_1",
+          "candidate": "candidate_fixture_1",
+          "job": "job_fixture_1",
+          "applied_at": "2026-01-01T00:00:00Z",
+          "rejected_at": null,
+          "source": "LinkedIn",
+          "credited_to": "user_fixture_1",
+          "current_stage": "Phone Screen",
+          "reject_reason": null,
+          "modified_at": "2026-01-01T00:00:00Z",
+          "remote_was_deleted": false
+        },
+        {
+          "id": "application_fixture_2",
+          "remote_id": "remote_2",
+          "candidate": "candidate_fixture_2",
+          "job": "job_fixture_1",
+          "applied_at": "2026-01-02T00:00:00Z",
+          "rejected_at": "2026-01-05T00:00:00Z",
+          "source": "Referral",
+          "credited_to": "user_fixture_1",
+          "current_stage": "Rejected",
+          "reject_reason": "Not a fit",
+          "modified_at": "2026-01-05T00:00:00Z",
+          "remote_was_deleted": false
+        }
+      ]
+    }
+  }
+}

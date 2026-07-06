@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "X" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/agents",
+      "query": { "per_page": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "freshdesk api_key is missing or invalid; re-run pm credentials add freshdesk" },
+      { "status": 403, "hint": "freshdesk account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "freshdesk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickets",
+      "path": "/tickets",
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "request_param": "updated_since",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "." },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "." },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "agents",
+      "path": "/agents",
+      "records": { "path": "." },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "records": { "path": "." },
+      "schema": "schemas/groups.json"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "topics",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "category": { "type": ["string", "null"] },
+    "subcategory": { "type": ["string", "null"] },
+    "labels": { "type": ["object", "null"] }
+  }
+}

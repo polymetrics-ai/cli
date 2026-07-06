@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calls",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "Subject": { "type": ["string", "null"] },
+    "Call_Type": { "type": ["string", "null"] },
+    "Call_Duration": { "type": ["string", "null"] },
+    "Call_Start_Time": { "type": ["string", "null"] },
+    "Who_Id": { "type": ["object", "null"] },
+    "Owner": { "type": ["object", "null"] },
+    "Created_Time": { "type": ["string", "null"] },
+    "Modified_Time": { "type": ["string", "null"] }
+  }
+}

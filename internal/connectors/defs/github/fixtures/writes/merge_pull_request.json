@@ -1,0 +1,13 @@
+{
+  "record": {
+    "pull_number": 301,
+    "merge_method": "squash"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/301/merge",
+    "body": {
+      "merge_method": "squash"
+    }
+  }
+}

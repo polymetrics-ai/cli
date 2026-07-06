@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fs_fixture_1",
+    "removed": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/funding-sources/fs_fixture_1",
+    "body": {
+      "removed": true
+    }
+  }
+}

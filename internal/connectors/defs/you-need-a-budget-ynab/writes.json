@@ -1,0 +1,278 @@
+{
+  "actions": [
+    {
+      "name": "create_transaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/{{ config.budget_id }}/transactions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["transaction"],
+        "properties": {
+          "transaction": {
+            "type": "object",
+            "required": ["account_id", "date", "amount"],
+            "properties": {
+              "account_id": { "type": "string" },
+              "date": { "type": "string" },
+              "amount": { "type": "integer" },
+              "payee_id": { "type": "string" },
+              "payee_name": { "type": "string" },
+              "category_id": { "type": "string" },
+              "memo": { "type": "string" },
+              "cleared": { "type": "string" },
+              "approved": { "type": "boolean" },
+              "flag_color": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new budget transaction; approval required. Body is wrapped under a top-level \"transaction\" key (YNAB's own POST /budgets/{budget_id}/transactions convention) — the record itself carries that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive (see teamwork/bitly precedent)."
+    },
+    {
+      "name": "update_transaction",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/budgets/{{ config.budget_id }}/transactions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "transaction"],
+        "properties": {
+          "id": { "type": "string" },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "account_id": { "type": "string" },
+              "date": { "type": "string" },
+              "amount": { "type": "integer" },
+              "payee_id": { "type": "string" },
+              "payee_name": { "type": "string" },
+              "category_id": { "type": "string" },
+              "memo": { "type": "string" },
+              "cleared": { "type": "string" },
+              "approved": { "type": "boolean" },
+              "flag_color": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; updates an existing budget transaction (amount, category, memo, cleared/approved status); approval required"
+    },
+    {
+      "name": "delete_transaction",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/budgets/{{ config.budget_id }}/transactions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; deletes a budget transaction (YNAB marks it deleted rather than purging, but it disappears from active budget totals); approval required"
+    },
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/{{ config.budget_id }}/accounts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["account"],
+        "properties": {
+          "account": {
+            "type": "object",
+            "required": ["name", "type", "balance"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "balance": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new budget account with an opening balance; approval required. This action cannot be undone via the API (YNAB has no delete-account endpoint)."
+    },
+    {
+      "name": "create_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/{{ config.budget_id }}/categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category"],
+        "properties": {
+          "category": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "note": { "type": "string" },
+              "category_group_id": { "type": "string" },
+              "goal_target": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new budget category within a category group; approval required"
+    },
+    {
+      "name": "update_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/budgets/{{ config.budget_id }}/categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "category"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "note": { "type": "string" },
+              "category_group_id": { "type": "string" },
+              "goal_target": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; renames/re-notes/re-goals an existing budget category; approval required"
+    },
+    {
+      "name": "update_month_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/budgets/{{ config.budget_id }}/months/{{ record.month }}/categories/{{ record.category_id }}",
+      "path_fields": ["month", "category_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["month", "category_id", "category"],
+        "properties": {
+          "month": { "type": "string" },
+          "category_id": { "type": "string" },
+          "category": {
+            "type": "object",
+            "required": ["budgeted"],
+            "properties": {
+              "budgeted": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; reassigns (budgets) an amount to a category for a specific month; approval required"
+    },
+    {
+      "name": "create_payee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/{{ config.budget_id }}/payees",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["payee"],
+        "properties": {
+          "payee": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new payee; approval required"
+    },
+    {
+      "name": "update_payee",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/budgets/{{ config.budget_id }}/payees/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "payee"],
+        "properties": {
+          "id": { "type": "string" },
+          "payee": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; renames an existing payee (also renames the corresponding transactions and shared payee history); approval required"
+    },
+    {
+      "name": "create_scheduled_transaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets/{{ config.budget_id }}/scheduled_transactions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["scheduled_transaction"],
+        "properties": {
+          "scheduled_transaction": {
+            "type": "object",
+            "required": ["account_id", "date"],
+            "properties": {
+              "account_id": { "type": "string" },
+              "date": { "type": "string" },
+              "amount": { "type": "integer" },
+              "payee_id": { "type": "string" },
+              "payee_name": { "type": "string" },
+              "category_id": { "type": "string" },
+              "memo": { "type": "string" },
+              "flag_color": { "type": "string" },
+              "frequency": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; creates a new recurring scheduled transaction that will auto-post future budget transactions; approval required"
+    },
+    {
+      "name": "delete_scheduled_transaction",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/budgets/{{ config.budget_id }}/scheduled_transactions/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion; removes a recurring scheduled transaction; approval required"
+    }
+  ]
+}

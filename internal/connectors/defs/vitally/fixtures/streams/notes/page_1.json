@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/notes",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "note_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "ext-note-1",
+          "accountId": "acct_fixture_1",
+          "organizationId": null,
+          "categoryId": "cat_fixture_1",
+          "authorId": "admin_fixture_1",
+          "subject": "Onboarding Kickoff",
+          "note": "<p>Notes for an onboarding kickoff call.</p>",
+          "noteDate": "2026-01-01T00:00:00Z",
+          "tags": [
+            "onboarding"
+          ],
+          "traits": {},
+          "source": null,
+          "archivedAt": null
+        },
+        {
+          "id": "note_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "ext-note-2",
+          "accountId": "acct_fixture_2",
+          "organizationId": null,
+          "categoryId": null,
+          "authorId": "admin_fixture_1",
+          "subject": "Check-in",
+          "note": "<p>Quarterly check-in notes.</p>",
+          "noteDate": "2026-01-02T00:00:00Z",
+          "tags": [],
+          "traits": {},
+          "source": "salesforce",
+          "archivedAt": null
+        }
+      ],
+      "next": "fixture_cursor_notes_1"
+    }
+  }
+}

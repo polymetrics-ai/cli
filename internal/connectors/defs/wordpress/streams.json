@@ -1,0 +1,131 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.password }}", "when": "{{ secrets.password }}" },
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/wp-json/wp/v2/posts", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "wordpress site requires authentication; configure username and password" },
+      { "status": 429, "class": "rate_limited", "hint": "wordpress rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "posts",
+      "path": "/wp-json/wp/v2/posts",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "schema": "schemas/posts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "pages",
+      "path": "/wp-json/wp/v2/pages",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "schema": "schemas/pages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "comments",
+      "path": "/wp-json/wp/v2/comments",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "schema": "schemas/comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "media",
+      "path": "/wp-json/wp/v2/media",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "incremental": {
+        "cursor_field": "date"
+      },
+      "schema": "schemas/media.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/wp-json/wp/v2/users",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "categories",
+      "path": "/wp-json/wp/v2/categories",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tags",
+      "path": "/wp-json/wp/v2/tags",
+      "query": {
+        "after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "taxonomies",
+      "path": "/wp-json/wp/v2/taxonomies",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/taxonomies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "types",
+      "path": "/wp-json/wp/v2/types",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "statuses",
+      "path": "/wp-json/wp/v2/statuses",
+      "records": { "path": ".", "keyed_object": true, "key_field": "slug" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/statuses.json",
+      "projection": "passthrough"
+    }
+  ]
+}

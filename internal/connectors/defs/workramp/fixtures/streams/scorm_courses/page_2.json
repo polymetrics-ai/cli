@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/scorms",
+    "query": {
+      "page": "2",
+      "per_page": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "per_page": 20,
+      "has_more": false,
+      "url": "/api/v1/scorms",
+      "data": {
+        "scorms": [
+          {
+            "id": "scorm-fixture-21",
+            "title": "Fixture SCORM 21",
+            "created_at": 1700000000021,
+            "time_estimate": 5
+          }
+        ]
+      }
+    }
+  }
+}

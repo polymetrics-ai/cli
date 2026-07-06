@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/email/bulk/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "bulk-fixture",
+      "Status": "Completed",
+      "TotalMessages": 1
+    }
+  }
+}

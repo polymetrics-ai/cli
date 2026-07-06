@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/inbound/v1/eligibility/itemPreview",
+    "query": {
+      "asin": "synthetic-conformance-value",
+      "program": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "ineligibilityReasonList": [
+          {
+            "id": "fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

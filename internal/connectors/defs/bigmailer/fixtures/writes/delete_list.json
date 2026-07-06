@@ -1,0 +1,10 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "list_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/brands/brand_fixture_1/lists/list_fixture_1"
+  }
+}

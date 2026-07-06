@@ -1,0 +1,16 @@
+{
+  "record": {
+    "first_name": "Fixture",
+    "last_name": "Person",
+    "billing_address": {
+      "address": "1 Fixture Street",
+      "postal_code": "75001",
+      "city": "Paris",
+      "country_alpha2": "FR"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/individual_customers"
+  }
+}

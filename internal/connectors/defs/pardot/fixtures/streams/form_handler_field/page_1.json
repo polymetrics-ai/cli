@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/form-handler-fields/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,formHandlerId,prospectApiFieldId,fieldLabel,dataFormat,isRequired,createdAt,updatedAt,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "formHandlerId": 1,
+      "prospectApiFieldId": 1,
+      "fieldLabel": "fieldLabel_fixture",
+      "dataFormat": "dataFormat_fixture",
+      "isRequired": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

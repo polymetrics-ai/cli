@@ -1,0 +1,18 @@
+{
+  "record": {
+    "custom_bitlink": "fixture.link/promo",
+    "bitlink_id": "bit.ly/fixture1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom_bitlinks",
+    "body": {
+      "custom_bitlink": "fixture.link/promo",
+      "bitlink_id": "bit.ly/fixture1"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "custom_bitlink": "fixture.link/promo" }
+  }
+}

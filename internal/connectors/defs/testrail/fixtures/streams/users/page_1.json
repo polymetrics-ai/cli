@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "/api/v2/get_users": "" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Fixture Admin", "email": "fixture-admin@example.com", "is_active": true, "role_id": 1, "role": "Administrator" },
+      { "id": 2, "name": "Fixture Tester", "email": "fixture-tester@example.com", "is_active": true, "role_id": 2, "role": "Tester" }
+    ]
+  }
+}

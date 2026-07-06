@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/collaborators/meal-vouchers",
+    "query": {
+      "maxResults": "50",
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "mealVouchers": [
+        {
+          "collaboratorId": "collaborator_meal_vouchers_1",
+          "name": "Fixture collaborator meal vouchers"
+        }
+      ],
+      "meta": {
+        "nextPageToken": "",
+        "count": 1
+      }
+    }
+  }
+}

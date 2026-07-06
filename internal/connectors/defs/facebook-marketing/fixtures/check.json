@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/me/adaccounts", "query": { "limit": "1", "fields": "id,account_id,name" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

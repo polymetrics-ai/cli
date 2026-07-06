@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stream/query",
+    "query": {
+      "distinct_ids": "[\"fixture-user-1\"]",
+      "from_date": "2026-01-01",
+      "to_date": "2026-01-02"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "results": {
+        "events": [
+          {
+            "event": "Viewed Page",
+            "properties": {
+              "time": 1767225600,
+              "distinct_id": "fixture-user-1",
+              "report_name": "funnels"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

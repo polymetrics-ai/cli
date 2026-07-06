@@ -1,0 +1,9 @@
+{
+  "record": {
+    "release_id": 701
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/releases/701"
+  }
+}

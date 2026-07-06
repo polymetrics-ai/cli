@@ -1,0 +1,17 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "team_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spaces/synthetic-conformance-value/permissions/teams/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_team_from_space_fixture_1"
+    }
+  }
+}

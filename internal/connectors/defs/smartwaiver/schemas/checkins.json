@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "checkins",
+  "type": "object",
+  "x-primary-key": ["checkinId"],
+  "required": ["checkinId"],
+  "properties": {
+    "checkinId": { "type": "string" },
+    "waiverId": { "type": ["string", "null"] },
+    "templateId": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "dateSigned": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] }
+  }
+}

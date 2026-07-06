@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NewsData.io Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "NewsData.io API key, sent as the 'apikey' query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://newsdata.io/api/1",
+      "description": "NewsData.io API base URL override for tests or proxies."
+    },
+    "search_query": {
+      "type": "string",
+      "description": "Optional search keywords, sent as the 'q' query parameter."
+    },
+    "categories": {
+      "type": "string",
+      "description": "Optional comma-separated category filter, sent as the 'category' query parameter."
+    },
+    "countries": {
+      "type": "string",
+      "description": "Optional comma-separated country filter, sent as the 'country' query parameter."
+    },
+    "languages": {
+      "type": "string",
+      "description": "Optional comma-separated language filter, sent as the 'language' query parameter."
+    },
+    "domains": {
+      "type": "string",
+      "description": "Optional comma-separated domain filter, sent as the 'domain' query parameter."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional lower-bound date (YYYY-MM-DD), sent as 'from_date'."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional upper-bound date (YYYY-MM-DD), sent as 'to_date'."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Records per page (1-50), sent as the 'size' query parameter on article streams."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -10,7 +10,12 @@ SYNOPSIS
   pm credentials add <name> --connector kyve [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads public KYVE pools, stakers, funders, and Cosmos validators through REST query endpoints.
+  Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYVE network's public REST query endpoints. Read-only; no credentials required.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -20,12 +25,31 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+
+ETL STREAMS
+  pools:
+    primary key: id
+    fields: id(), name(), runtime()
+  stakers:
+    primary key: address
+    fields: address(), amount()
+  funders:
+    primary key: address
+    fields: address(), amount()
+  validators:
+    primary key: operator_address
+    fields: moniker(), operator_address(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external read of public KYVE network pool/staker/funder/validator data
+  approval: none; read-only public Cosmos-style REST API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

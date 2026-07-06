@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/capsules" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "capsule_fixture_1", "serial": "C101", "type": "Dragon 1.0", "status": "retired", "reuse_count": 0, "water_landings": 1, "land_landings": 0, "last_update": null, "launches": ["launch_fixture_2"] }
+    ]
+  }
+}

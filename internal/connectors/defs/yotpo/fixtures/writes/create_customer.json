@@ -1,0 +1,23 @@
+{
+  "record": {
+    "customer": {
+      "external_id": "customer-fixture-new",
+      "email": "fixturenew@example.com",
+      "first_name": "Fixture",
+      "last_name": "New"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/customers",
+    "body": {
+      "customer": {
+        "external_id": "customer-fixture-new",
+        "email": "fixturenew@example.com",
+        "first_name": "Fixture",
+        "last_name": "New"
+      }
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

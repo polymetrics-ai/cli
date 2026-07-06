@@ -1,0 +1,970 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/users"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "onepagecrm username/password is missing or invalid; re-run pm credentials add onepagecrm"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "onepagecrm rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": {
+        "path": "data.contacts"
+      },
+      "computed_fields": {
+        "id": "{{ record.contact.id }}",
+        "first_name": "{{ record.contact.first_name }}",
+        "last_name": "{{ record.contact.last_name }}",
+        "company_name": "{{ record.contact.company_name }}",
+        "job_title": "{{ record.contact.job_title }}",
+        "status_id": "{{ record.contact.status_id }}",
+        "owner_id": "{{ record.contact.owner_id }}",
+        "starred": "{{ record.contact.starred }}",
+        "created_at": "{{ record.contact.created_at }}",
+        "updated_at": "{{ record.contact.updated_at }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "deals",
+      "path": "/deals",
+      "records": {
+        "path": "data.deals"
+      },
+      "computed_fields": {
+        "id": "{{ record.deal.id }}",
+        "name": "{{ record.deal.name }}",
+        "status": "{{ record.deal.status }}",
+        "stage": "{{ record.deal.stage }}",
+        "amount": "{{ record.deal.amount }}",
+        "currency": "{{ record.deal.currency }}",
+        "contact_id": "{{ record.deal.contact_id }}",
+        "owner_id": "{{ record.deal.owner_id }}",
+        "expected_close_date": "{{ record.deal.expected_close_date }}",
+        "created_at": "{{ record.deal.created_at }}",
+        "updated_at": "{{ record.deal.updated_at }}"
+      },
+      "schema": "schemas/deals.json"
+    },
+    {
+      "name": "actions",
+      "path": "/actions",
+      "records": {
+        "path": "data.actions"
+      },
+      "computed_fields": {
+        "id": "{{ record.action.id }}",
+        "contact_id": "{{ record.action.contact_id }}",
+        "text": "{{ record.action.text }}",
+        "status": "{{ record.action.status }}",
+        "date": "{{ record.action.date }}",
+        "done": "{{ record.action.done }}",
+        "assignee_id": "{{ record.action.assignee_id }}",
+        "created_at": "{{ record.action.created_at }}",
+        "updated_at": "{{ record.action.updated_at }}"
+      },
+      "schema": "schemas/actions.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": {
+        "path": "data.companies"
+      },
+      "computed_fields": {
+        "id": "{{ record.company.id }}",
+        "name": "{{ record.company.name }}",
+        "phone": "{{ record.company.phone }}",
+        "url": "{{ record.company.url }}",
+        "description": "{{ record.company.description }}",
+        "created_at": "{{ record.company.created_at }}",
+        "updated_at": "{{ record.company.updated_at }}"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.user.id }}",
+        "first_name": "{{ record.user.first_name }}",
+        "last_name": "{{ record.user.last_name }}",
+        "email": "{{ record.user.email }}",
+        "role": "{{ record.user.role }}",
+        "status": "{{ record.user.status }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "bootstrap",
+      "path": "/bootstrap",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "bootstrap"
+      },
+      "schema": "schemas/bootstrap.json"
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.user_id }}"
+      },
+      "schema": "schemas/user.json"
+    },
+    {
+      "name": "lead_sources",
+      "path": "/lead_sources",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/lead_sources.json"
+    },
+    {
+      "name": "lead_source",
+      "path": "/lead_sources/{{ config.lead_source_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.lead_source_id }}"
+      },
+      "schema": "schemas/lead_source.json"
+    },
+    {
+      "name": "statuses",
+      "path": "/statuses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.status.id }}"
+      },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "status",
+      "path": "/statuses/{{ config.status_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.status_id }}"
+      },
+      "schema": "schemas/status.json"
+    },
+    {
+      "name": "deal_fields",
+      "path": "/deal_fields",
+      "records": {
+        "path": "data.deal_fields"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.deal_field.id }}"
+      },
+      "schema": "schemas/deal_fields.json"
+    },
+    {
+      "name": "deal_field",
+      "path": "/deal_fields/{{ config.deal_field_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.deal_field_id }}"
+      },
+      "schema": "schemas/deal_field.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom_fields",
+      "records": {
+        "path": "data.custom_fields"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.custom_field.id }}"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "custom_field",
+      "path": "/custom_fields/{{ config.custom_field_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.custom_field_id }}"
+      },
+      "schema": "schemas/custom_field.json"
+    },
+    {
+      "name": "company_fields",
+      "path": "/company_fields",
+      "records": {
+        "path": "data.company_fields"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.company_field.id }}"
+      },
+      "schema": "schemas/company_fields.json"
+    },
+    {
+      "name": "company_field",
+      "path": "/company_fields/{{ config.company_field_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.company_field_id }}"
+      },
+      "schema": "schemas/company_field.json"
+    },
+    {
+      "name": "predefined_actions",
+      "path": "/predefined_actions",
+      "records": {
+        "path": "data.predefined_actions"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.predefined_action.id }}"
+      },
+      "schema": "schemas/predefined_actions.json"
+    },
+    {
+      "name": "predefined_action",
+      "path": "/predefined_actions/{{ config.predefined_action_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.predefined_action_id }}"
+      },
+      "schema": "schemas/predefined_action.json"
+    },
+    {
+      "name": "predefined_action_groups",
+      "path": "/predefined_action_groups",
+      "records": {
+        "path": "data.predefined_action_groups"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.predefined_action_group.id }}"
+      },
+      "schema": "schemas/predefined_action_groups.json"
+    },
+    {
+      "name": "predefined_action_group",
+      "path": "/predefined_action_groups/{{ config.predefined_action_group_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.predefined_action_group_id }}"
+      },
+      "schema": "schemas/predefined_action_group.json"
+    },
+    {
+      "name": "predefined_items",
+      "path": "/predefined_items",
+      "records": {
+        "path": "data.predefined_items"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.predefined_item.id }}"
+      },
+      "schema": "schemas/predefined_items.json"
+    },
+    {
+      "name": "predefined_item",
+      "path": "/predefined_items/{{ config.predefined_item_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.predefined_item_id }}"
+      },
+      "schema": "schemas/predefined_item.json"
+    },
+    {
+      "name": "predefined_item_groups",
+      "path": "/predefined_item_groups",
+      "records": {
+        "path": "data.predefined_item_groups"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.predefined_item_group.id }}"
+      },
+      "schema": "schemas/predefined_item_groups.json"
+    },
+    {
+      "name": "predefined_item_group",
+      "path": "/predefined_item_groups/{{ config.predefined_item_group_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.predefined_item_group_id }}"
+      },
+      "schema": "schemas/predefined_item_group.json"
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "records": {
+        "path": "data.notes"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.note.id }}"
+      },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "note",
+      "path": "/notes/{{ config.note_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.note_id }}"
+      },
+      "schema": "schemas/note.json"
+    },
+    {
+      "name": "calls",
+      "path": "/calls",
+      "records": {
+        "path": "data.calls"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.call.id }}"
+      },
+      "schema": "schemas/calls.json"
+    },
+    {
+      "name": "call",
+      "path": "/calls/{{ config.call_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.call_id }}"
+      },
+      "schema": "schemas/call.json"
+    },
+    {
+      "name": "call_results",
+      "path": "/call_results",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.call_result.result }}"
+      },
+      "schema": "schemas/call_results.json"
+    },
+    {
+      "name": "meetings",
+      "path": "/meetings",
+      "records": {
+        "path": "data.meetings"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.meeting.id }}"
+      },
+      "schema": "schemas/meetings.json"
+    },
+    {
+      "name": "meeting",
+      "path": "/meetings/{{ config.meeting_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.meeting_id }}"
+      },
+      "schema": "schemas/meeting.json"
+    },
+    {
+      "name": "deal",
+      "path": "/deals/{{ config.deal_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.deal_id }}"
+      },
+      "schema": "schemas/deal.json"
+    },
+    {
+      "name": "relationship_types",
+      "path": "/relationship_types",
+      "records": {
+        "path": "data.relationship_types"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.relationship_type.id }}"
+      },
+      "schema": "schemas/relationship_types.json"
+    },
+    {
+      "name": "relationship_type",
+      "path": "/relationship_types/{{ config.relationship_type_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.relationship_type_id }}"
+      },
+      "schema": "schemas/relationship_type.json"
+    },
+    {
+      "name": "countries",
+      "path": "/countries",
+      "records": {
+        "path": "data.countries"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.country.code }}"
+      },
+      "schema": "schemas/countries.json"
+    },
+    {
+      "name": "action",
+      "path": "/actions/{{ config.action_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.action_id }}"
+      },
+      "schema": "schemas/action.json"
+    },
+    {
+      "name": "filters",
+      "path": "/filters",
+      "records": {
+        "path": "data.filters"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.filter.id }}"
+      },
+      "schema": "schemas/filters.json"
+    },
+    {
+      "name": "filter",
+      "path": "/filters/{{ config.filter_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.filter_id }}"
+      },
+      "schema": "schemas/filter.json"
+    },
+    {
+      "name": "company",
+      "path": "/companies/{{ config.company_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.company_id }}"
+      },
+      "schema": "schemas/company.json"
+    },
+    {
+      "name": "company_actions",
+      "path": "/companies/{{ config.company_id }}/actions",
+      "records": {
+        "path": "data.actions"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.action.id }}"
+      },
+      "schema": "schemas/company_actions.json"
+    },
+    {
+      "name": "company_deals",
+      "path": "/companies/{{ config.company_id }}/deals",
+      "records": {
+        "path": "data.deals"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.deal.id }}"
+      },
+      "schema": "schemas/company_deals.json"
+    },
+    {
+      "name": "company_notes",
+      "path": "/companies/{{ config.company_id }}/notes",
+      "records": {
+        "path": "data.notes"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.note.id }}"
+      },
+      "schema": "schemas/company_notes.json"
+    },
+    {
+      "name": "company_calls",
+      "path": "/companies/{{ config.company_id }}/calls",
+      "records": {
+        "path": "data.calls"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.call.id }}"
+      },
+      "schema": "schemas/company_calls.json"
+    },
+    {
+      "name": "company_meetings",
+      "path": "/companies/{{ config.company_id }}/meetings",
+      "records": {
+        "path": "data.meetings"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.meeting.id }}"
+      },
+      "schema": "schemas/company_meetings.json"
+    },
+    {
+      "name": "company_linked_contacts",
+      "path": "/companies/{{ config.company_id }}/linked_contacts",
+      "records": {
+        "path": "data.linked_contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.linked_contact.id }}"
+      },
+      "schema": "schemas/company_linked_contacts.json"
+    },
+    {
+      "name": "company_pinned_attachments",
+      "path": "/companies/{{ config.company_id }}/pinned_attachments",
+      "records": {
+        "path": "data.pinned_attachments"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/company_pinned_attachments.json"
+    },
+    {
+      "name": "contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.contact_id }}"
+      },
+      "schema": "schemas/contact.json"
+    },
+    {
+      "name": "filtered_contacts",
+      "path": "/contacts/filters/{{ config.filter_id }}",
+      "records": {
+        "path": "data.contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.contact.id }}"
+      },
+      "schema": "schemas/filtered_contacts.json"
+    },
+    {
+      "name": "contact_actions",
+      "path": "/contacts/{{ config.contact_id }}/actions",
+      "records": {
+        "path": "data.actions"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.action.id }}"
+      },
+      "schema": "schemas/contact_actions.json"
+    },
+    {
+      "name": "contact_deals",
+      "path": "/contacts/{{ config.contact_id }}/deals",
+      "records": {
+        "path": "data.deals"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.deal.id }}"
+      },
+      "schema": "schemas/contact_deals.json"
+    },
+    {
+      "name": "contact_notes",
+      "path": "/contacts/{{ config.contact_id }}/notes",
+      "records": {
+        "path": "data.notes"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.note.id }}"
+      },
+      "schema": "schemas/contact_notes.json"
+    },
+    {
+      "name": "contact_calls",
+      "path": "/contacts/{{ config.contact_id }}/calls",
+      "records": {
+        "path": "data.calls"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.call.id }}"
+      },
+      "schema": "schemas/contact_calls.json"
+    },
+    {
+      "name": "contact_meetings",
+      "path": "/contacts/{{ config.contact_id }}/meetings",
+      "records": {
+        "path": "data.meetings"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.meeting.id }}"
+      },
+      "schema": "schemas/contact_meetings.json"
+    },
+    {
+      "name": "contact_relationships",
+      "path": "/contacts/{{ config.contact_id }}/relationships",
+      "records": {
+        "path": "data.relationships"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.relationship.id }}"
+      },
+      "schema": "schemas/contact_relationships.json"
+    },
+    {
+      "name": "contact_relationship",
+      "path": "/contacts/{{ config.contact_id }}/relationships/{{ config.relationship_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.relationship_id }}"
+      },
+      "schema": "schemas/contact_relationship.json"
+    },
+    {
+      "name": "contact_pinned_attachments",
+      "path": "/contacts/{{ config.contact_id }}/pinned_attachments",
+      "records": {
+        "path": "data.pinned_attachments"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/contact_pinned_attachments.json"
+    },
+    {
+      "name": "contacts_cascade",
+      "path": "/contacts/cascade",
+      "records": {
+        "path": "data.contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.contact.id }}"
+      },
+      "schema": "schemas/contacts_cascade.json"
+    },
+    {
+      "name": "contacts_cascade_after",
+      "path": "/contacts/cascade/{{ config.last_id }}",
+      "records": {
+        "path": "data.contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.contact.id }}"
+      },
+      "schema": "schemas/contacts_cascade_after.json"
+    },
+    {
+      "name": "action_stream",
+      "path": "/action_stream",
+      "records": {
+        "path": "data.contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.contact.id }}"
+      },
+      "schema": "schemas/action_stream.json"
+    },
+    {
+      "name": "team_stream",
+      "path": "/team_stream",
+      "records": {
+        "path": "data.contacts"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.contact.id }}"
+      },
+      "schema": "schemas/team_stream.json"
+    },
+    {
+      "name": "notifications",
+      "path": "/notifications",
+      "records": {
+        "path": "data.notifications"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.notification.id }}"
+      },
+      "schema": "schemas/notifications.json"
+    },
+    {
+      "name": "notification",
+      "path": "/notifications/{{ config.notification_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.notification_id }}"
+      },
+      "schema": "schemas/notification.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": {
+        "path": "data.webhooks"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "webhook",
+      "path": "/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.webhook_id }}"
+      },
+      "schema": "schemas/webhook.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "records": {
+        "path": "data.pipelines"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.pipeline.id }}"
+      },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "pipeline",
+      "path": "/pipelines/{{ config.pipeline_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.pipeline_id }}"
+      },
+      "schema": "schemas/pipeline.json"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/settlements/v1/payouts", "query": { "size": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "payouts": [
+        {
+          "payout_reference": "payout_fixture_1",
+          "currency_code": "EUR",
+          "payment_reference": "pmt_fixture_1",
+          "merchant_settlement_type": "Sale",
+          "totals": { "settlement_amount": 1000, "sale_amount": 1200, "return_amount": 0, "fee_amount": 200 }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "api": "Facebook Graph API v23.0 (https://graph.facebook.com/v23.0)",
+  "docs": "https://developers.facebook.com/docs/instagram-platform/changelog",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: 3 of legacy's 4 read streams (users, media, stories) at capability parity; user_insights is blocked (ENGINE_GAP — see docs.md's Known limits) and stays on the legacy implementation until a Tier-2 hook wave revisits it",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/{ig-user-id}",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ig-user-id}/media",
+      "covered_by": {
+        "stream": "media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ig-user-id}/stories",
+      "covered_by": {
+        "stream": "stories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{ig-user-id}/insights",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: legacy's user_insights mapper hoists the LAST element of the raw values[] array onto flat value/end_time fields and conditionally synthesizes a derived id (name+end_time) only when the raw record has no native id; the computed_fields dialect has no array-index/last-element accessor (dotted record paths only walk object-map keys) and no conditional fallback-if-absent expression, so this cannot be expressed in Tier 1, and Tier-2 hooks are out of scope for this wave per the wave2 fan-out hard rules. See docs.md."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{media-id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/{media-id}/comments is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{media-id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "destructive media deletion, not a syncable read"
+      }
+    }
+  ]
+}

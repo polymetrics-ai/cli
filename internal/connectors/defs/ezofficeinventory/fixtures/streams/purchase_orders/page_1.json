@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/purchase_orders.api",
+    "query": { "page": "1", "per_page": "25" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "purchase_orders": [
+        {
+          "id": 30,
+          "vendor_id": 20,
+          "company_id": 1,
+          "created_by_id": 1,
+          "requested_by_id": 1,
+          "approver_type": "admin",
+          "po_type": "standard",
+          "state": "confirmed",
+          "net_amount": "500.00",
+          "paid_amount": "0.00",
+          "payable_amount": "500.00",
+          "sequence_num": 1001,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "vendor_id": 21,
+          "company_id": 1,
+          "created_by_id": 1,
+          "requested_by_id": 1,
+          "approver_type": "admin",
+          "po_type": "standard",
+          "state": "draft",
+          "net_amount": "150.00",
+          "paid_amount": "0.00",
+          "payable_amount": "150.00",
+          "sequence_num": 1002,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "total_pages": 1,
+      "page": 1
+    }
+  }
+}

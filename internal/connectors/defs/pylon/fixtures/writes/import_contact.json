@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "email": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import/contacts",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "email": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

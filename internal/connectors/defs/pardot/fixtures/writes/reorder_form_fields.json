@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Fixture Pardot record",
+    "formFieldIds": [
+      1,
+      2
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/forms/101/do/reorderFormFields",
+    "body": {
+      "name": "Fixture Pardot record",
+      "formFieldIds": [
+        1,
+        2
+      ]
+    }
+  }
+}

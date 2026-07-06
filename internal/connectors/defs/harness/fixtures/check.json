@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/ng/api/organizations" },
+  "response": {
+    "status": 200,
+    "body": { "status": "SUCCESS", "data": { "totalPages": 1, "totalItems": 0, "pageItemCount": 0, "pageSize": 1, "pageIndex": 0, "empty": true, "content": [] } }
+  }
+}

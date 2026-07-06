@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": { "data": [ { "user": { "id": "user_fixture_1", "first_name": "Fixture", "last_name": "Admin", "email": "fixture1@example.com", "role": "admin", "status": "active" } } ] }
+  }
+}

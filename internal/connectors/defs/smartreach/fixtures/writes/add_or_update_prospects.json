@@ -1,0 +1,30 @@
+{
+  "record": {
+    "email": "fixture1@example.com",
+    "first_name": "Fixture",
+    "last_name": "One",
+    "company": "Fixture Co"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/prospects",
+    "body": {
+      "email": "fixture1@example.com",
+      "first_name": "Fixture",
+      "last_name": "One",
+      "company": "Fixture Co"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "object": "prospect",
+        "id": "prs_fixture_1",
+        "first_name": "Fixture",
+        "last_name": "One",
+        "company": "Fixture Co"
+      }
+    ]
+  }
+}

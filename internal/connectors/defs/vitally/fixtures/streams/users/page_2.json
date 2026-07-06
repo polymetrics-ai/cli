@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/users",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "from": "fixture_cursor_users_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "user_fixture_3",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "externalId": "ext-user-3",
+          "name": "Fixture User Three",
+          "email": "fixture3@example.com",
+          "avatar": null,
+          "traits": {},
+          "firstKnown": null,
+          "lastSeenTimestamp": null,
+          "lastInboundMessageTimestamp": null,
+          "lastOutboundMessageTimestamp": null,
+          "npsLastScore": null,
+          "npsLastFeedback": null,
+          "npsLastRespondedAt": null,
+          "unsubscribedFromConversations": false,
+          "unsubscribedFromConversationsAt": null,
+          "deactivatedAt": null,
+          "segments": [],
+          "accounts": [],
+          "organizations": []
+        }
+      ],
+      "next": null
+    }
+  }
+}

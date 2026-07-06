@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/supplier-groups", "query": { "skippages": "0", "pagesize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        { "supplierGroupNumber": 1, "name": "Fixture Supplier Group 1", "self": "https://restapi.e-conomic.com/supplier-groups/1" },
+        { "supplierGroupNumber": 2, "name": "Fixture Supplier Group 2", "self": "https://restapi.e-conomic.com/supplier-groups/2" }
+      ],
+      "pagination": { "skipPages": 0, "pageSize": 100, "results": 2 }
+    }
+  }
+}

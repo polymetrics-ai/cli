@@ -1,0 +1,222 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Outreach Connection Specification",
+  "type": "object",
+  "required": [
+    "access_token"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Outreach OAuth2 access token (resolved from legacy's refresh-token grant). Sent as a Bearer token; never logged. The client_id/client_secret/refresh_token exchange is performed outside this connector."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.outreach.io/api/v2",
+      "description": "Outreach API base URL override for tests or proxies. Defaults to https://api.outreach.io/api/v2."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound; only records updated at or after this time are read (sent as filter[updatedAt])."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "account_note_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the account_note detail stream."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the account detail stream."
+    },
+    "batch_item_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the batch_item detail stream."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the batch detail stream."
+    },
+    "call_disposition_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the call_disposition detail stream."
+    },
+    "call_purpose_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the call_purpose detail stream."
+    },
+    "call_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the call detail stream."
+    },
+    "compliance_request_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the compliance_request detail stream."
+    },
+    "content_category_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the content_category detail stream."
+    },
+    "content_category_membership_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the content_category_membership detail stream."
+    },
+    "email_address_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the email_address detail stream."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the event detail stream."
+    },
+    "favorite_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the favorite detail stream."
+    },
+    "import_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the import detail stream."
+    },
+    "kaia_recording_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the kaia_recording detail stream."
+    },
+    "mail_alias_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the mail_alias detail stream."
+    },
+    "mailbox_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the mailbox detail stream."
+    },
+    "mailing_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the mailing detail stream."
+    },
+    "opportunity_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the opportunity detail stream."
+    },
+    "opportunity_prospect_role_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the opportunity_prospect_role detail stream."
+    },
+    "opportunity_stage_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the opportunity_stage detail stream."
+    },
+    "org_setting_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the org_setting detail stream."
+    },
+    "persona_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the persona detail stream."
+    },
+    "phone_number_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the phone_number detail stream."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the product detail stream."
+    },
+    "profile_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the profile detail stream."
+    },
+    "prospect_note_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the prospect_note detail stream."
+    },
+    "prospect_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the prospect detail stream."
+    },
+    "purchase_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the purchase detail stream."
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the recipient detail stream."
+    },
+    "role_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the role detail stream."
+    },
+    "ruleset_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the ruleset detail stream."
+    },
+    "sequence_state_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the sequence_state detail stream."
+    },
+    "sequence_step_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the sequence_step detail stream."
+    },
+    "sequence_template_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the sequence_template detail stream."
+    },
+    "sequence_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the sequence detail stream."
+    },
+    "snippet_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the snippet detail stream."
+    },
+    "stage_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the stage detail stream."
+    },
+    "task_disposition_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the task_disposition detail stream."
+    },
+    "task_priority_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the task_priority detail stream."
+    },
+    "task_purpose_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the task_purpose detail stream."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the task detail stream."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the team detail stream."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the template detail stream."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the user detail stream."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the webhook detail stream."
+    },
+    "custom_object_name": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the custom_object_records detail stream."
+    },
+    "custom_object_record_id": {
+      "type": "string",
+      "description": "Optional Outreach identifier used by the custom_object_record detail stream."
+    }
+  }
+}

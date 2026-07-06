@@ -1,0 +1,342 @@
+{
+  "actions": [
+    {
+      "name": "create_company_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/company_customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "billing_address"],
+        "properties": {
+          "name": { "type": "string" },
+          "vat_number": { "type": "string" },
+          "reg_no": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "required": ["address", "postal_code", "city", "country_alpha2"],
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "delivery_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "payment_conditions": { "type": "string" },
+          "billing_iban": { "type": "string" },
+          "recipient": { "type": "string" },
+          "reference": { "type": "string" },
+          "notes": { "type": "string" },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a company customer record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "update_company_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/company_customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "vat_number": { "type": "string" },
+          "reg_no": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "delivery_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "payment_conditions": { "type": "string" },
+          "billing_iban": { "type": "string" },
+          "recipient": { "type": "string" },
+          "reference": { "type": "string" },
+          "notes": { "type": "string" },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a company customer record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "create_individual_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/individual_customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["first_name", "last_name", "billing_address"],
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "required": ["address", "postal_code", "city", "country_alpha2"],
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "delivery_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "payment_conditions": { "type": "string" },
+          "billing_iban": { "type": "string" },
+          "recipient": { "type": "string" },
+          "reference": { "type": "string" },
+          "notes": { "type": "string" },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates an individual customer record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "update_individual_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/individual_customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "billing_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "delivery_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "payment_conditions": { "type": "string" },
+          "billing_iban": { "type": "string" },
+          "recipient": { "type": "string" },
+          "reference": { "type": "string" },
+          "notes": { "type": "string" },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an individual customer record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/suppliers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "establishment_no": { "type": "string" },
+          "reg_no": { "type": "string" },
+          "vat_number": { "type": "string" },
+          "postal_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "iban": { "type": "string" },
+          "supplier_payment_method": { "type": "string" },
+          "supplier_due_date_delay": { "type": "integer" },
+          "supplier_due_date_rule": { "type": "string" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a supplier record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/suppliers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "establishment_no": { "type": "string" },
+          "reg_no": { "type": "string" },
+          "vat_number": { "type": "string" },
+          "postal_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "postal_code": { "type": "string" },
+              "city": { "type": "string" },
+              "country_alpha2": { "type": "string" }
+            }
+          },
+          "emails": { "type": "array", "items": { "type": "string" } },
+          "iban": { "type": "string" },
+          "supplier_payment_method": { "type": "string" },
+          "supplier_due_date_delay": { "type": "integer" },
+          "supplier_due_date_rule": { "type": "string" },
+          "external_reference": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates a supplier record in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "external_reference": { "type": "string" },
+          "price_before_tax": { "type": "string" },
+          "vat_rate": { "type": "string" },
+          "unit": { "type": "string" },
+          "currency": { "type": "string" },
+          "reference": { "type": "string" },
+          "ledger_account_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a sellable product in Pennylane's accounting ledger; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "external_reference": { "type": "string" },
+          "price_before_tax": { "type": "number" },
+          "vat_rate": { "type": "string" },
+          "unit": { "type": "string" },
+          "currency": { "type": "string" },
+          "reference": { "type": "string" },
+          "ledger_account_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; updates a product's pricing/VAT metadata in Pennylane; approval required"
+    },
+    {
+      "name": "create_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["label", "category_group_id"],
+        "properties": {
+          "label": { "type": "string" },
+          "direction": { "type": "string" },
+          "category_group_id": { "type": "integer" },
+          "analytical_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates an analytical category in Pennylane's chart of accounts; approval required"
+    },
+    {
+      "name": "update_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" },
+          "direction": { "type": "string" },
+          "analytical_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates an analytical category in Pennylane's chart of accounts; approval required"
+    }
+  ]
+}

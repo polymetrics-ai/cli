@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "https://{{ config.company }}.flowlu.com/api/v1/module",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "api_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "count",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "crm/account/list" },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "Flowlu API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "crm/account/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "leads",
+      "path": "crm/lead/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "tasks",
+      "path": "task/tasks/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "projects",
+      "path": "st/projects/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "invoices",
+      "path": "fin/invoice/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "agile_issues",
+      "path": "agile/issues/list",
+      "records": { "path": "response.items" },
+      "schema": "schemas/agile_issues.json"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/checks",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "chk_fixture_1",
+          "name": "SSL certificate check",
+          "status": "ok",
+          "message": null,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

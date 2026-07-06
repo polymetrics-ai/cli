@@ -1,0 +1,17 @@
+{
+  "record": {
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vouchers",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

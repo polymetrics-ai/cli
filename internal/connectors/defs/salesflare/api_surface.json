@@ -1,0 +1,101 @@
+{
+  "api": "Salesflare API 1.0.0 (https://api.salesflare.com/docs; live OpenAPI/Swagger 2.0 spec fetched from https://api.salesflare.com/openapi.json, 2026-07-03)",
+  "docs": "https://api.salesflare.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion against the complete documented Salesflare API v1.0.0 (47 paths, fetched live). 14 read streams: the 3 legacy-parity streams (accounts, contacts, opportunities) plus users, tags, tasks, workflows, groups, stages, pipelines, persons, currencies, custom_field_types, and email_data_sources. 22 write actions: full create/update/delete lifecycle for accounts, contacts, opportunities, tags, and tasks; create/update/delete for meetings; create for calls; create/update/delete for internal notes (messages). Excluded: account-scoped compound sub-resource mutations (contacts/users membership updates, feed, messages) whose real semantics are additive/positional list operations rather than a single-record create/update/delete this dialect can express faithfully; per-item-class custom-field CRUD (would require a config-supplied itemClass path segment per call, not a fixed resource); settings/configuration singletons (AI settings, filter fields); and detail-by-id GETs that duplicate an already-covered list stream's record shape.",
+  "endpoints": [
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "POST", "path": "/accounts", "covered_by": { "write": "create_account" } },
+    { "method": "GET", "path": "/accounts/{account_id}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/accounts/{account_id}", "covered_by": { "write": "update_account" } },
+    { "method": "DELETE", "path": "/accounts/{account_id}", "covered_by": { "write": "delete_account" } },
+    { "method": "POST", "path": "/accounts/{account_id}/contacts", "excluded": { "category": "out_of_scope", "reason": "account-to-contact membership add/link operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations" } },
+    { "method": "PUT", "path": "/accounts/{account_id}/contacts", "excluded": { "category": "out_of_scope", "reason": "account-to-contact membership replace operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations" } },
+    { "method": "GET", "path": "/accounts/{account_id}/feed", "excluded": { "category": "out_of_scope", "reason": "per-account activity feed/timeline sub-resource; a fan_out read over every account id is beyond this pass's breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/accounts/{account_id}/messages", "excluded": { "category": "out_of_scope", "reason": "per-account message/internal-note sub-resource; a fan_out read over every account id is beyond this pass's breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/accounts/{account_id}/users", "excluded": { "category": "out_of_scope", "reason": "account-to-user assignment add/link operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations" } },
+    { "method": "PUT", "path": "/accounts/{account_id}/users", "excluded": { "category": "out_of_scope", "reason": "account-to-user assignment replace operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations" } },
+
+    { "method": "POST", "path": "/calls", "covered_by": { "write": "create_call" } },
+    { "method": "PUT", "path": "/calls/{meeting_id}", "excluded": { "category": "duplicate_of", "reason": "call updates share the same meeting_id-keyed update shape as update_meeting; not modeled as a second write action for the same underlying record type" } },
+
+    { "method": "GET", "path": "/campaigns/mergefields", "excluded": { "category": "non_data_endpoint", "reason": "returns the set of template merge-field tokens available to workflow email campaigns, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/conferences/{conference_id}", "excluded": { "category": "requires_elevated_scope", "reason": "no list/discovery endpoint exists for conference ids independent of an already-known meeting; a lone detail-by-id GET with no enumeration path is not a syncable stream" } },
+
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "POST", "path": "/contacts", "covered_by": { "write": "create_contact" } },
+    { "method": "GET", "path": "/contacts/{contact_id}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/contacts/{contact_id}", "covered_by": { "write": "update_contact" } },
+    { "method": "DELETE", "path": "/contacts/{contact_id}", "covered_by": { "write": "delete_contact" } },
+
+    { "method": "GET", "path": "/currencies", "covered_by": { "stream": "currencies" } },
+
+    { "method": "GET", "path": "/customfields/types", "covered_by": { "stream": "custom_field_types" } },
+    { "method": "GET", "path": "/customfields/{itemClass}", "excluded": { "category": "out_of_scope", "reason": "per-item-class custom-field definition list; itemClass is a caller-supplied path segment (accounts/contacts/opportunities/etc.), not a fixed resource this dialect's static path templating models as one stream" } },
+    { "method": "POST", "path": "/customfields/{itemClass}", "excluded": { "category": "out_of_scope", "reason": "per-item-class custom-field creation; itemClass is a caller-supplied path segment, not a fixed resource" } },
+    { "method": "GET", "path": "/customfields/{itemClass}/{customFieldApiField}/options", "excluded": { "category": "out_of_scope", "reason": "per-custom-field dropdown option list requiring both itemClass and customFieldApiField path segments in hand; not a syncable top-level collection" } },
+    { "method": "GET", "path": "/customfields/{itemClass}/{id}", "excluded": { "category": "duplicate_of", "reason": "single-custom-field detail; would duplicate the excluded per-item-class list's record shape" } },
+    { "method": "PUT", "path": "/customfields/{itemClass}/{id}", "excluded": { "category": "out_of_scope", "reason": "per-item-class custom-field update; itemClass is a caller-supplied path segment, not a fixed resource" } },
+    { "method": "DELETE", "path": "/customfields/{itemClass}/{id}", "excluded": { "category": "destructive_admin", "reason": "deletes a custom-field DEFINITION (schema-level metadata affecting every record of that item class), not a data-record mutation; also requires a caller-supplied itemClass path segment" } },
+
+    { "method": "GET", "path": "/datasources/email", "covered_by": { "stream": "email_data_sources" } },
+    { "method": "PUT", "path": "/datasources/email/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "reconfigures a connected email account's sync settings; an account-security-adjacent mailbox-integration setting, not an ordinary CRM data record mutation" } },
+
+    { "method": "GET", "path": "/filterfields/{entity}", "excluded": { "category": "non_data_endpoint", "reason": "returns the set of fields available for building a saved filter on the given entity type, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/groups", "covered_by": { "stream": "groups" } },
+    { "method": "GET", "path": "/groups/{id}", "excluded": { "category": "duplicate_of", "reason": "single-group detail; identical record shape to the groups list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } },
+    { "method": "GET", "path": "/me/contacts", "excluded": { "category": "duplicate_of", "reason": "same contact records as the contacts list stream, filtered to the caller's own assigned contacts; not a distinct resource shape" } },
+
+    { "method": "POST", "path": "/meetings", "covered_by": { "write": "create_meeting" } },
+    { "method": "GET", "path": "/meetings/{meeting_id}", "excluded": { "category": "requires_elevated_scope", "reason": "no top-level list endpoint exists to enumerate meeting ids; a lone detail-by-id GET with no discovery path is not a syncable stream without an id already in hand from a write response" } },
+    { "method": "PUT", "path": "/meetings/{meeting_id}", "covered_by": { "write": "update_meeting" } },
+    { "method": "DELETE", "path": "/meetings/{meeting_id}", "covered_by": { "write": "delete_meeting" } },
+
+    { "method": "POST", "path": "/message/{message_id}/feedback", "excluded": { "category": "non_data_endpoint", "reason": "records AI-generated-message quality feedback (thumbs up/down style), not a CRM data-record mutation" } },
+    { "method": "POST", "path": "/messages", "covered_by": { "write": "create_internal_note" } },
+    { "method": "PUT", "path": "/messages/{message_id}", "covered_by": { "write": "update_internal_note" } },
+    { "method": "DELETE", "path": "/messages/{message_id}", "covered_by": { "write": "delete_internal_note" } },
+    { "method": "POST", "path": "/messages/{message_id}/feedback", "excluded": { "category": "duplicate_of", "reason": "identical AI-message-feedback endpoint to POST /message/{message_id}/feedback (singular vs. plural path prefix); not a CRM data-record mutation either way" } },
+
+    { "method": "GET", "path": "/opportunities", "covered_by": { "stream": "opportunities" } },
+    { "method": "POST", "path": "/opportunities", "covered_by": { "write": "create_opportunity" } },
+    { "method": "GET", "path": "/opportunities/{id}", "excluded": { "category": "duplicate_of", "reason": "single-opportunity detail; identical record shape to the opportunities list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/opportunities/{id}", "covered_by": { "write": "update_opportunity" } },
+    { "method": "DELETE", "path": "/opportunities/{id}", "covered_by": { "write": "delete_opportunity" } },
+
+    { "method": "GET", "path": "/persons", "covered_by": { "stream": "persons" } },
+
+    { "method": "GET", "path": "/pipelines", "covered_by": { "stream": "pipelines" } },
+
+    { "method": "GET", "path": "/settings/ai", "excluded": { "category": "non_data_endpoint", "reason": "account-wide AI-feature configuration singleton, not a syncable object stream" } },
+    { "method": "PUT", "path": "/settings/ai", "excluded": { "category": "requires_elevated_scope", "reason": "account-wide AI-feature configuration change, an admin/settings action rather than an ordinary CRM data-record mutation" } },
+
+    { "method": "GET", "path": "/stages", "covered_by": { "stream": "stages" } },
+    { "method": "GET", "path": "/stages/{stage_id}", "excluded": { "category": "duplicate_of", "reason": "single-stage detail; identical record shape to the stages list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/tags", "covered_by": { "stream": "tags" } },
+    { "method": "POST", "path": "/tags", "covered_by": { "write": "create_tag" } },
+    { "method": "GET", "path": "/tags/{tag_id}", "excluded": { "category": "duplicate_of", "reason": "single-tag detail; identical record shape to the tags list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/tags/{tag_id}", "covered_by": { "write": "update_tag" } },
+    { "method": "DELETE", "path": "/tags/{tag_id}", "covered_by": { "write": "delete_tag" } },
+    { "method": "GET", "path": "/tags/{tag_id}/usage", "excluded": { "category": "out_of_scope", "reason": "per-tag usage-count breakdown across workflows/filters/reports; a fan_out read over every tag id is beyond this pass's breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "POST", "path": "/tasks", "covered_by": { "write": "create_task" } },
+    { "method": "PUT", "path": "/tasks/{id}", "covered_by": { "write": "update_task" } },
+    { "method": "DELETE", "path": "/tasks/{id}", "covered_by": { "write": "delete_task" } },
+
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/users/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/workflows", "covered_by": { "stream": "workflows" } },
+    { "method": "POST", "path": "/workflows", "excluded": { "category": "requires_elevated_scope", "reason": "creates a full marketing-automation workflow definition (trigger + multi-step action graph); no documented flat request schema, and workflow authoring is a builder-tool operation rather than a plain CRM record create" } },
+    { "method": "GET", "path": "/workflows/{id}", "excluded": { "category": "duplicate_of", "reason": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/workflows/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "updates a full marketing-automation workflow's trigger/step graph; a builder-tool operation, not a plain CRM record update" } },
+    { "method": "PUT", "path": "/workflows/{id}/audience/{record_id}", "excluded": { "category": "out_of_scope", "reason": "re-enters or exits a single entity from a running workflow's audience; a workflow-runtime control action, not a CRM data-record mutation" } }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/projects/synthetic-conformance-value/events/",
+    "query": { "limit": "synthetic-conformance-value", "after": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "evt_fixture_1",
+          "event": "fixture_event",
+          "timestamp": "2026-01-01T00:00:00Z",
+          "distinct_id": "user_fixture_1",
+          "properties": { "source": "fixture" }
+        },
+        {
+          "id": "evt_fixture_2",
+          "event": "fixture_event",
+          "timestamp": "2026-01-02T00:00:00Z",
+          "distinct_id": "user_fixture_2",
+          "properties": { "source": "fixture" }
+        }
+      ],
+      "next": null
+    }
+  }
+}

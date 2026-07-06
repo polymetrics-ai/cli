@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "label_fixture_1",
+    "name": "Fixture Label Renamed",
+    "labelListVisibility": "labelShow",
+    "messageListVisibility": "show"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/labels/label_fixture_1",
+    "body": {
+      "name": "Fixture Label Renamed",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "label_fixture_1", "name": "Fixture Label Renamed", "type": "user" }
+  }
+}

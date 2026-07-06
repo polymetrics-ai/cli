@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/rest/api/3/search", "query": { "maxResults": "50", "startAt": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "startAt": 50,
+      "maxResults": 50,
+      "total": 51,
+      "issues": [
+        {
+          "id": "10051",
+          "key": "FIX-51",
+          "self": "https://fixture.atlassian.net/rest/api/3/issue/10051",
+          "fields": {
+            "summary": "Fixture issue 51",
+            "created": "2026-01-03T00:00:00.000+0000",
+            "updated": "2026-01-03T00:00:00.000+0000",
+            "status": { "name": "Done" },
+            "issuetype": { "name": "Task" },
+            "priority": { "name": "Low" },
+            "assignee": { "displayName": "Fixture User 2" },
+            "reporter": { "displayName": "Fixture Reporter" },
+            "project": { "key": "FIX" }
+          }
+        }
+      ]
+    }
+  }
+}

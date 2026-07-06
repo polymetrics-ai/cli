@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v1/configs/synthetic-conformance-value/settings" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "settingId": 1,
+        "key": "fixtureFlag",
+        "name": "Fixture Flag",
+        "hint": "a fixture flag",
+        "order": 0,
+        "settingType": "boolean",
+        "isJson": false,
+        "configId": "config_fixture_1",
+        "configName": "Fixture Config 1",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "tags": [],
+        "predefinedVariations": []
+      }
+    ]
+  }
+}

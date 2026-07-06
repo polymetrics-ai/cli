@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pms/units/types",
+    "query": {
+      "page": "2",
+      "size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "units": [
+          {
+            "id": 101,
+            "name": "Fixture Unit Type 101",
+            "shortName": "FUT101",
+            "typeCode": "DLX",
+            "isActive": false,
+            "maxOccupancy": 6,
+            "bedrooms": 3,
+            "nodeId": 11,
+            "lodgingTypeId": 2,
+            "isBookable": false,
+            "createdAt": "2026-01-02T00:00:00Z",
+            "updatedAt": "2026-01-02T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

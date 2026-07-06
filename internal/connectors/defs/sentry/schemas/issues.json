@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issues",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "lastSeen",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "shortId": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "culprit": { "type": ["string", "null"] },
+    "level": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "count": { "type": ["string", "null"], "description": "Sentry's real wire shape for this field is a numeric string, e.g. \"3\"." },
+    "userCount": { "type": ["integer", "null"] },
+    "firstSeen": { "type": ["string", "null"] },
+    "lastSeen": { "type": ["string", "null"] }
+  }
+}

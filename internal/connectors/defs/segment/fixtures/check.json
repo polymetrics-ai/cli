@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/workspaces" },
+  "response": {
+    "status": 200,
+    "body": { "workspaces": [] }
+  }
+}

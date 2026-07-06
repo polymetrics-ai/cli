@@ -1,0 +1,211 @@
+{
+  "actions": [
+    {
+      "name": "create_addressbook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/addressbooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["bookName"],
+        "properties": {
+          "bookName": { "type": "string" }
+        }
+      },
+      "risk": "creates a new address book (mailing list); external mutation, approval required"
+    },
+    {
+      "name": "update_addressbook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/addressbooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing address book"
+    },
+    {
+      "name": "delete_addressbook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/addressbooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "permanently removes an address book and all its subscriber associations; irreversible"
+    },
+    {
+      "name": "add_emails_to_book",
+      "kind": "update",
+      "method": "POST",
+      "path": "/addressbooks/{{ record.id }}/emails",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["emails"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "emails"],
+        "properties": {
+          "id": { "type": "string" },
+          "emails": { "type": "array" }
+        }
+      },
+      "risk": "subscribes new email addresses to an address book; each add may trigger a double opt-in confirmation email depending on account settings"
+    },
+    {
+      "name": "remove_emails_from_book",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/addressbooks/{{ record.id }}/emails",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["emails"],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "emails"],
+        "properties": {
+          "id": { "type": "string" },
+          "emails": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "unsubscribes the given email addresses from an address book; irreversible without re-adding them"
+    },
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/campaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sender_name", "sender_email", "subject", "body", "list_id"],
+        "properties": {
+          "sender_name": { "type": "string" },
+          "sender_email": { "type": "string" },
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "list_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new email campaign against a real address book; depending on account settings this may schedule actual sending to real subscribers, the highest-impact action in this bundle, approval required"
+    },
+    {
+      "name": "cancel_campaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/campaigns/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "cancels a scheduled/in-progress campaign; stops further sends but does not un-send already-delivered emails"
+    },
+    {
+      "name": "add_sender",
+      "kind": "create",
+      "method": "POST",
+      "path": "/senders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "name"],
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "registers a new sender email address, which SendPulse will send an activation email to; low-risk external mutation"
+    },
+    {
+      "name": "remove_sender",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/senders",
+      "body_type": "json",
+      "body_fields": ["email"],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": { "email": { "type": "string" } }
+      },
+      "risk": "removes a sender email address; any campaign still referencing it as its sender will fail to send"
+    },
+    {
+      "name": "add_to_blacklist",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blacklist",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["emails"],
+        "properties": {
+          "emails": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "permanently suppresses future sends to the given address(es) account-wide"
+    },
+    {
+      "name": "remove_from_blacklist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/blacklist",
+      "body_type": "json",
+      "body_fields": ["emails"],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["emails"],
+        "properties": { "emails": { "type": "string" } }
+      },
+      "risk": "removes an address from the account-wide suppression list; future campaigns can reach it again"
+    }
+  ]
+}

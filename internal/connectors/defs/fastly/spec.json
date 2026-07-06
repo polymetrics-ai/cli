@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Fastly Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Fastly API base URL override, e.g. for a test server. Defaults to https://api.fastly.com.",
+      "default": "https://api.fastly.com"
+    },
+    "fastly_api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Fastly API token, sent as the Fastly-Key request header on every call."
+    }
+  }
+}

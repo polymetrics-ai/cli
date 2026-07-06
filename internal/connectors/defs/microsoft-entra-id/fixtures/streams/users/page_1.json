@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_user_1", "displayName": "Fixture User 1", "userPrincipalName": "fixture1@example.com", "givenName": "Fixture", "surname": "User1", "mail": "fixture1@example.com", "jobTitle": "Engineer", "department": "Platform", "officeLocation": "Remote", "mobilePhone": "+15550100", "accountEnabled": true },
+        { "id": "fixture_user_2", "displayName": "Fixture User 2", "userPrincipalName": "fixture2@example.com", "givenName": "Fixture", "surname": "User2", "mail": "fixture2@example.com", "jobTitle": "Designer", "department": "Product", "officeLocation": "Remote", "mobilePhone": "+15550101", "accountEnabled": true }
+      ],
+      "@odata.nextLink": "https://graph.microsoft.com/v1.0/users?$skiptoken=fixture-skiptoken-1"
+    }
+  }
+}

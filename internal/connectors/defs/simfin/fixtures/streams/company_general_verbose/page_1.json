@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/general/verbose"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "name": "Fixture Corp",
+        "industry": "Software",
+        "employees": 1000
+      }
+    ]
+  }
+}

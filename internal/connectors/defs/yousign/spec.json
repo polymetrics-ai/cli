@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Yousign Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.yousign.app/v3",
+      "description": "Yousign API root. Also usable as a base URL override for tests/proxies."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Yousign API key. Used only for Bearer auth (Authorization: Bearer <api_key>); never logged."
+    },
+    "limit": {
+      "type": "string",
+      "description": "Optional per-request record limit, sent as the 'limit' query parameter when set. Omitted entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

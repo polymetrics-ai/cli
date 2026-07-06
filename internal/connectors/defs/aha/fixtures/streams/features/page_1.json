@@ -1,0 +1,441 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/features",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "features": [
+        {
+          "id": "feature_fixture_1",
+          "reference_num": "FIX-1",
+          "name": "Fixture feature 1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/1"
+        },
+        {
+          "id": "feature_fixture_2",
+          "reference_num": "FIX-2",
+          "name": "Fixture feature 2",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/2"
+        },
+        {
+          "id": "feature_fixture_3",
+          "reference_num": "FIX-3",
+          "name": "Fixture feature 3",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/3"
+        },
+        {
+          "id": "feature_fixture_4",
+          "reference_num": "FIX-4",
+          "name": "Fixture feature 4",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/4"
+        },
+        {
+          "id": "feature_fixture_5",
+          "reference_num": "FIX-5",
+          "name": "Fixture feature 5",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/5"
+        },
+        {
+          "id": "feature_fixture_6",
+          "reference_num": "FIX-6",
+          "name": "Fixture feature 6",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/6"
+        },
+        {
+          "id": "feature_fixture_7",
+          "reference_num": "FIX-7",
+          "name": "Fixture feature 7",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/7"
+        },
+        {
+          "id": "feature_fixture_8",
+          "reference_num": "FIX-8",
+          "name": "Fixture feature 8",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/8"
+        },
+        {
+          "id": "feature_fixture_9",
+          "reference_num": "FIX-9",
+          "name": "Fixture feature 9",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/9"
+        },
+        {
+          "id": "feature_fixture_10",
+          "reference_num": "FIX-10",
+          "name": "Fixture feature 10",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/10"
+        },
+        {
+          "id": "feature_fixture_11",
+          "reference_num": "FIX-11",
+          "name": "Fixture feature 11",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/11"
+        },
+        {
+          "id": "feature_fixture_12",
+          "reference_num": "FIX-12",
+          "name": "Fixture feature 12",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/12"
+        },
+        {
+          "id": "feature_fixture_13",
+          "reference_num": "FIX-13",
+          "name": "Fixture feature 13",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/13"
+        },
+        {
+          "id": "feature_fixture_14",
+          "reference_num": "FIX-14",
+          "name": "Fixture feature 14",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/14"
+        },
+        {
+          "id": "feature_fixture_15",
+          "reference_num": "FIX-15",
+          "name": "Fixture feature 15",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/15"
+        },
+        {
+          "id": "feature_fixture_16",
+          "reference_num": "FIX-16",
+          "name": "Fixture feature 16",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/16"
+        },
+        {
+          "id": "feature_fixture_17",
+          "reference_num": "FIX-17",
+          "name": "Fixture feature 17",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/17"
+        },
+        {
+          "id": "feature_fixture_18",
+          "reference_num": "FIX-18",
+          "name": "Fixture feature 18",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/18"
+        },
+        {
+          "id": "feature_fixture_19",
+          "reference_num": "FIX-19",
+          "name": "Fixture feature 19",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/19"
+        },
+        {
+          "id": "feature_fixture_20",
+          "reference_num": "FIX-20",
+          "name": "Fixture feature 20",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/20"
+        },
+        {
+          "id": "feature_fixture_21",
+          "reference_num": "FIX-21",
+          "name": "Fixture feature 21",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/21"
+        },
+        {
+          "id": "feature_fixture_22",
+          "reference_num": "FIX-22",
+          "name": "Fixture feature 22",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/22"
+        },
+        {
+          "id": "feature_fixture_23",
+          "reference_num": "FIX-23",
+          "name": "Fixture feature 23",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/23"
+        },
+        {
+          "id": "feature_fixture_24",
+          "reference_num": "FIX-24",
+          "name": "Fixture feature 24",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/24"
+        },
+        {
+          "id": "feature_fixture_25",
+          "reference_num": "FIX-25",
+          "name": "Fixture feature 25",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/25"
+        },
+        {
+          "id": "feature_fixture_26",
+          "reference_num": "FIX-26",
+          "name": "Fixture feature 26",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/26"
+        },
+        {
+          "id": "feature_fixture_27",
+          "reference_num": "FIX-27",
+          "name": "Fixture feature 27",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/27"
+        },
+        {
+          "id": "feature_fixture_28",
+          "reference_num": "FIX-28",
+          "name": "Fixture feature 28",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/28"
+        },
+        {
+          "id": "feature_fixture_29",
+          "reference_num": "FIX-29",
+          "name": "Fixture feature 29",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/29"
+        },
+        {
+          "id": "feature_fixture_30",
+          "reference_num": "FIX-30",
+          "name": "Fixture feature 30",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z",
+          "start_date": "2026-01-01",
+          "due_date": "2026-02-01",
+          "workflow_status": {
+            "id": "1",
+            "name": "In progress"
+          },
+          "url": "https://secure.aha.io/features/30"
+        }
+      ],
+      "pagination": {
+        "total_records": 31,
+        "total_pages": 2,
+        "current_page": 1
+      }
+    }
+  }
+}

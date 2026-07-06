@@ -1,0 +1,23 @@
+{
+  "name": "acuity-scheduling",
+  "display_name": "Acuity Scheduling",
+  "description": "Reads Acuity Scheduling appointments, clients, appointment types, calendars, forms, products, orders, and labels, and writes appointment/block/certificate mutations, through the Acuity REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.acuityscheduling.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Acuity Scheduling API read of appointments, clients, appointment types, calendars, forms, products, orders, and labels",
+    "write": "external Acuity Scheduling mutation: creates/updates/cancels live appointments, blocks off calendar time, and issues package/coupon certificates; approval required"
+  }
+}

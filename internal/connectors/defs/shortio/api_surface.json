@@ -1,0 +1,46 @@
+{
+  "api": "Short.io REST API (https://developers.short.io/)",
+  "docs": "https://developers.short.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (links, domains). Short.io's write endpoints (link create/update/delete) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/links",
+      "covered_by": {
+        "stream": "links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/domains",
+      "covered_by": {
+        "stream": "domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/links",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented link creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/links/expand",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/statistics/link/{link_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Click analytics not modeled by legacy"
+      }
+    }
+  ]
+}

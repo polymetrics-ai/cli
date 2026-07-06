@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "name": "Fixture Housekeeper" },
+  "expect": { "method": "POST", "path": "/postHousekeeper" },
+  "response": { "status": 200, "body": { "success": true, "housekeeperID": "hk_fixture_new" } }
+}

@@ -1,0 +1,197 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "count",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/products/mine" },
+    "error_map": [
+      { "status": 401, "hint": "appfigures api_key is missing or invalid; re-run pm credentials add appfigures" },
+      { "status": 403, "hint": "appfigures api_key lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "appfigures rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "reviews",
+      "path": "/reviews",
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "reviews" },
+      "schema": "schemas/reviews.json"
+    },
+    {
+      "name": "products",
+      "path": "/products/mine",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "sales",
+      "path": "/reports/sales",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/sales.json"
+    },
+    {
+      "name": "ratings",
+      "path": "/reports/ratings",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "group_by": { "template": "{{ config.group_by }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/ratings.json"
+    },
+    {
+      "name": "categories",
+      "path": "/data/categories",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "revenue",
+      "path": "/reports/revenue",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": { "report": "revenue" },
+      "schema": "schemas/revenue.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/reports/subscriptions",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": { "report": "subscriptions" },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "ads",
+      "path": "/reports/ads",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": { "report": "ads" },
+      "schema": "schemas/ads.json"
+    },
+    {
+      "name": "estimates",
+      "path": "/reports/estimates",
+      "pagination": { "type": "none" },
+      "query": {
+        "store": { "template": "{{ config.search_store }}", "omit_when_absent": true },
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": { "report": "estimates" },
+      "schema": "schemas/estimates.json"
+    },
+    {
+      "name": "events",
+      "path": "/events/",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "external_accounts",
+      "path": "/external_accounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/external_accounts.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "results" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "account_info",
+      "path": "/",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "user_id": "{{ record.user.id }}",
+        "user_name": "{{ record.user.name }}",
+        "user_email": "{{ record.user.email }}",
+        "daily_used": "{{ record.usage.daily_used }}",
+        "daily_limit": "{{ record.usage.daily_limit }}"
+      },
+      "schema": "schemas/account_info.json"
+    },
+    {
+      "name": "data_countries",
+      "path": "/data/countries",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true, "key_field": "iso" },
+      "schema": "schemas/data_countries.json"
+    },
+    {
+      "name": "data_languages",
+      "path": "/data/languages",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true },
+      "schema": "schemas/data_languages.json"
+    },
+    {
+      "name": "data_stores",
+      "path": "/data/stores",
+      "pagination": { "type": "none" },
+      "records": { "path": "", "keyed_object": true, "key_field": "store_key" },
+      "schema": "schemas/data_stores.json"
+    },
+    {
+      "name": "data_currencies",
+      "path": "/data/currencies",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/data_currencies.json"
+    },
+    {
+      "name": "data_sdks",
+      "path": "/data/sdks",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "schema": "schemas/data_sdks.json"
+    }
+  ]
+}

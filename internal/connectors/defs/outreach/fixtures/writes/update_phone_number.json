@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "phonenumber",
+      "attributes": {
+        "name": "Fixture Update Phone Number"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/phoneNumbers/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "phonenumber",
+        "attributes": {
+          "name": "Fixture Update Phone Number"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "session_attachments",
+  "type": "object",
+  "x-primary-key": ["attachment_id"],
+  "required": ["attachment_id"],
+  "properties": {
+    "attachment_id": { "type": "string" },
+    "session_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "content_type": { "type": ["string", "null"] }
+  }
+}

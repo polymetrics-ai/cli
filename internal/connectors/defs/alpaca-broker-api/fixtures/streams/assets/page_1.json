@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/assets", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "asset_fixture_1",
+        "class": "us_equity",
+        "exchange": "NASDAQ",
+        "symbol": "FIX1",
+        "name": "Fixture Asset 1",
+        "status": "active",
+        "tradable": true,
+        "marginable": true,
+        "shortable": false,
+        "easy_to_borrow": false,
+        "fractionable": true
+      },
+      {
+        "id": "asset_fixture_2",
+        "class": "us_equity",
+        "exchange": "NASDAQ",
+        "symbol": "FIX2",
+        "name": "Fixture Asset 2",
+        "status": "active",
+        "tradable": true,
+        "marginable": true,
+        "shortable": false,
+        "easy_to_borrow": false,
+        "fractionable": true
+      }
+    ]
+  }
+}

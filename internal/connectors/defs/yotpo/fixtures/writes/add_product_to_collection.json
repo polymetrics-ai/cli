@@ -1,0 +1,14 @@
+{
+  "record": {
+    "collection_yotpo_id": "1",
+    "product_id": "100001"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/core/v3/stores/synthetic-conformance-value/collections/1/products",
+    "body": {
+      "product_id": "100001"
+    }
+  },
+  "response": { "status": 200, "body": {} }
+}

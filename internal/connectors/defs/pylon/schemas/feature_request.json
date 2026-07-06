@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "feature_request",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "custom_fields": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "evidence_count": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "portal_visible_to_account_ids": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "request_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

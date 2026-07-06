@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Imagga Connection Specification",
+  "type": "object",
+  "required": ["api_key", "api_secret"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Imagga API key, sent as the HTTP Basic auth username. Never logged."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Imagga API secret, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.imagga.com/v2",
+      "description": "Imagga API base URL override for tests or proxies."
+    },
+    "image_urls": {
+      "type": "string",
+      "default": "https://imagga.com/static/images/categorization/child-476506_640.jpg",
+      "description": "Comma-separated image URLs to analyze via the tags/categories/colors/faces_detections streams. Defaults to Imagga's own sample image, matching legacy's no-config fallback."
+    }
+  }
+}

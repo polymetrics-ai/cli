@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_webhooks",
+  "type": "object",
+  "x-primary-key": ["WebhookID"],
+  "required": ["WebhookID"],
+  "properties": {
+    "WebhookID": { "type": "string" },
+    "ListID": { "type": ["string", "null"] },
+    "Events": { "type": ["array", "null"] },
+    "Url": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "PayloadFormat": { "type": ["string", "null"] }
+  }
+}

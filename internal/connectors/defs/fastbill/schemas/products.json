@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "properties": {
+    "article_number": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "unit_price": {
+      "type": "string"
+    },
+    "currency_code": {
+      "type": "string"
+    },
+    "vat_percent": {
+      "type": "string"
+    },
+    "is_greedy": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "article_number"
+  ]
+}

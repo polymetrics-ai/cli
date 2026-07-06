@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/collections",
+    "query": {
+      "repositoryId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collections": {
+        "id": "id_fixture",
+        "handles": [
+          "fixture"
+        ],
+        "title": "fixture",
+        "description": "fixture",
+        "displayOrder": 1,
+        "status": "draft",
+        "groups": [
+          {
+            "id": "id_fixture",
+            "handle": "fixture",
+            "title": "fixture",
+            "displayOrder": 1,
+            "status": "draft",
+            "pages": [
+              {
+                "id": "page_fixture_id"
+              }
+            ],
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

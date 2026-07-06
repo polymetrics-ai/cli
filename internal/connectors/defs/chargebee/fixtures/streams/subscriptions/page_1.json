@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/subscriptions", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "subscription": {
+            "id": "sub_fixture_1",
+            "customer_id": "cus_fixture_1",
+            "plan_id": "plan_fixture_1",
+            "status": "active",
+            "currency_code": "USD",
+            "plan_quantity": 1,
+            "plan_amount": 1000,
+            "current_term_start": 1767225600,
+            "current_term_end": 1769817600,
+            "created_at": 1767225600,
+            "started_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

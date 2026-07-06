@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/externalFulfillment/2024-09-11/shipments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id-fixture-1",
+      "locationId": "locationId-fixture-1",
+      "marketplaceAttributes": {},
+      "shipmentInfo": {},
+      "invoiceInfo": {},
+      "partyInfoList": [],
+      "shipmentRequirements": {},
+      "charges": [],
+      "status": "status-fixture-1",
+      "subStatus": "subStatus-fixture-1",
+      "reason": "reason-fixture-1",
+      "lineItems": [],
+      "shippingInfo": {},
+      "packages": [],
+      "creationDateTime": "creationDateTime-fixture-1",
+      "lastUpdatedDateTime": "lastUpdatedDateTime-fixture-1",
+      "earliestPackDateTime": "earliestPackDateTime-fixture-1",
+      "shipment_id": "shipment_id-fixture-1"
+    }
+  }
+}

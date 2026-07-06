@@ -1,0 +1,91 @@
+{
+  "api": "Zendesk Chat API v2 (https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/)",
+  "docs": "https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (agents, chats, departments, shortcuts, triggers); the full Zendesk Chat surface (bans, visitors, chat search, account settings, roles, goals) is out of scope until Pass B. zendesk-chat has no allow-listed write actions in legacy (read-only connector).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chats",
+      "covered_by": {
+        "stream": "chats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shortcuts",
+      "covered_by": {
+        "stream": "shortcuts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/triggers",
+      "covered_by": {
+        "stream": "triggers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/bans is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitors",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/visitors is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/chats/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/chats/search is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account settings snapshot, not a syncable object stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/roles is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/goals",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/goals is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

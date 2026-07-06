@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/oauth2/v1/clients/synthetic-conformance-value/roles/synthetic-conformance-value/targets/catalog/apps",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "category": "category_fixture",
+        "description": "description_fixture",
+        "displayName": "display_name_fixture",
+        "features": [
+          "feature_fixture"
+        ],
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "name": "name_fixture",
+        "signOnModes": [
+          "sign_on_mode_fixture"
+        ],
+        "status": "ACTIVE",
+        "verificationStatus": "verification_status_fixture",
+        "website": "website_fixture",
+        "_links": {
+          "logo": [
+            {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          ],
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

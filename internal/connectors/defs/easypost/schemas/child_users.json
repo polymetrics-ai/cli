@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "child_users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "parent_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "phone_number": { "type": ["string", "null"] },
+    "verified": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "default_carbon_offset": { "type": ["boolean", "null"] },
+    "children": { "type": ["array", "null"] }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/posts", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "post_fixture_1",
+        "date": "2026-01-01T00:00:00Z",
+        "category": "new",
+        "title": "Fixture Post 1",
+        "content": "Fixture content 1",
+        "url": "https://app.example.com/posts/1",
+        "feedbackEnabled": true,
+        "reactionsEnabled": true,
+        "published": true,
+        "clicks": 10,
+        "views": 100
+      },
+      {
+        "id": "post_fixture_2",
+        "date": "2026-01-02T00:00:00Z",
+        "category": "improved",
+        "title": "Fixture Post 2",
+        "content": "Fixture content 2",
+        "url": "https://app.example.com/posts/2",
+        "feedbackEnabled": true,
+        "reactionsEnabled": false,
+        "published": true,
+        "clicks": 20,
+        "views": 200
+      }
+    ]
+  }
+}

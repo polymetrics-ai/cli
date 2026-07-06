@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/v1/contactGroups/list", "query": { "Page": "1", "PageSize": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        {
+          "groupId": "group_fixture_1",
+          "groupName": "Fixture Group 1",
+          "contacts": [
+            { "name": "Fixture Contact 1", "email": "contact1@example.com" }
+          ],
+          "directories": []
+        },
+        {
+          "groupId": "group_fixture_2",
+          "groupName": "Fixture Group 2",
+          "contacts": [],
+          "directories": ["Active Directory"]
+        }
+      ],
+      "pageDetails": { "page": 1, "totalPages": 1 }
+    }
+  }
+}

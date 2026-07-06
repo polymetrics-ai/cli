@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/categories"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        { "id": 5, "name": "Fixture Category 1", "color": "#0000FF" }
+      ]
+    }
+  }
+}

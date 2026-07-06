@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/products.json", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "product": {
+          "id": 1,
+          "name": "Pro Plan",
+          "handle": "pro-plan",
+          "description": "The pro tier plan",
+          "price_in_cents": 2000,
+          "interval": 1,
+          "interval_unit": "month",
+          "product_family_id": 1,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      }
+    ]
+  }
+}

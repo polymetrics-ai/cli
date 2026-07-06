@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Lump Sum Service" },
+  "expect": { "method": "PUT", "path": "/v2/lumpsumservices/1" }
+}

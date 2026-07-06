@@ -1,0 +1,50 @@
+{
+  "request": { "method": "GET", "path": "/v1/bookings", "query": { "bookingType": "FLIGHT", "page": "0", "size": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "bk_fixture_1",
+          "bookingId": "BK-0001",
+          "bookingType": "FLIGHT",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONF0001",
+          "currency": "USD",
+          "grandTotal": 100,
+          "basePrice": 90,
+          "bookingFee": 10,
+          "destination": "SFO",
+          "startDate": "2026-01-01T00:00:00.000Z",
+          "endDate": "2026-01-01T00:00:00.000Z",
+          "created": "2026-01-01T00:00:00.000Z",
+          "lastModified": "2026-01-01T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        },
+        {
+          "uuid": "bk_fixture_2",
+          "bookingId": "BK-0002",
+          "bookingType": "FLIGHT",
+          "bookingStatus": "CONFIRMED",
+          "bookingMethod": "ONLINE",
+          "approvalStatus": "APPROVED",
+          "confirmationNumber": "CONF0002",
+          "currency": "USD",
+          "grandTotal": 200,
+          "basePrice": 180,
+          "bookingFee": 10,
+          "destination": "SFO",
+          "startDate": "2026-01-01T00:00:00.000Z",
+          "endDate": "2026-01-01T00:00:00.000Z",
+          "created": "2026-01-01T00:00:00.000Z",
+          "lastModified": "2026-01-02T00:00:00.000Z",
+          "domestic": true,
+          "expensed": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/products" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Package",
+        "description": "Fixture product description",
+        "price": "100.00",
+        "type": "appointments",
+        "hidden": false,
+        "expires": 180,
+        "minutes": null
+      }
+    ]
+  }
+}

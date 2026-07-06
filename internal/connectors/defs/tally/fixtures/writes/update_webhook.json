@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "webhook_fixture_1",
+    "formId": "form_fixture_1",
+    "url": "https://example.com/webhooks/tally-updated",
+    "eventTypes": ["FORM_RESPONSE"],
+    "isEnabled": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/webhooks/webhook_fixture_1",
+    "body": {
+      "formId": "form_fixture_1",
+      "url": "https://example.com/webhooks/tally-updated",
+      "eventTypes": ["FORM_RESPONSE"],
+      "isEnabled": false
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

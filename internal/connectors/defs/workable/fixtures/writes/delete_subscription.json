@@ -1,0 +1,9 @@
+{
+  "record": {
+    "subscription_id": "subscription_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/subscriptions/subscription_fixture"
+  }
+}

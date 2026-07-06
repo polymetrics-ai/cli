@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/performance/employees/synthetic-conformance-value/goals"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "goals": [
+        {
+          "id": "fixture_id",
+          "title": "Fixture Name",
+          "description": "fixture_value",
+          "actions": {},
+          "alignsWithOptionId": "fixture_id",
+          "completionDate": "2026-01-01T00:00:00Z",
+          "dueDate": "2026-01-01T00:00:00Z",
+          "lastChangedDateTime": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

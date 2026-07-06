@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "traits": { "type": ["object", "null"], "description": "Arbitrary Vitally account trait bag, passed through unchanged (legacy maps traits verbatim, no per-field projection)." }
+  }
+}

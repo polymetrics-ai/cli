@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v2/product-catalog/items/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "product_catalog_items_item_uuid_fixture_1",
+      "name": "Fixture product_catalog_items_item_uuid",
+      "status": "fixture",
+      "date_created": "2026-01-01T00:00:00Z"
+    }
+  }
+}

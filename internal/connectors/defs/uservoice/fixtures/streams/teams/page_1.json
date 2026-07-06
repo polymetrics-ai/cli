@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/admin/teams", "query": { "page": "1", "per_page": "30" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "teams": [
+        { "id": 8001, "name": "Fixture Team", "members_count": 3 }
+      ],
+      "pagination": { "page": 1, "per_page": 30, "total_pages": 1, "total_records": 1 }
+    }
+  }
+}

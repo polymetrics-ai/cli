@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "guests",
+  "type": "object",
+  "x-primary-key": ["guestID"],
+  "required": ["guestID"],
+  "properties": {
+    "guestID": { "type": "string" },
+    "guestName": { "type": ["string", "null"] },
+    "guestEmail": { "type": ["string", "null"] },
+    "propertyID": { "type": ["string", "null"] },
+    "reservationID": { "type": ["string", "null"] },
+    "isMainGuest": { "type": ["boolean", "null"] },
+    "isAnonymized": { "type": ["boolean", "null"] },
+    "dateCreated": { "type": ["string", "null"] },
+    "dateModified": { "type": ["string", "null"] }
+  }
+}

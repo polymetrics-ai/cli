@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "org_id": { "type": "string" },
+    "urn": { "type": ["string", "null"] },
+    "vanity_name": { "type": ["string", "null"] },
+    "localized_name": { "type": ["string", "null"] },
+    "localized_website": { "type": ["string", "null"] },
+    "primary_organization_type": { "type": ["string", "null"] },
+    "organization_type": { "type": ["string", "null"] },
+    "version_tag": { "type": ["string", "null"] },
+    "staff_count_range": { "type": ["string", "null"] },
+    "name": { "type": ["object", "null"] },
+    "locations": { "type": ["array", "null"] },
+    "industries": { "type": ["array", "null"] }
+  }
+}

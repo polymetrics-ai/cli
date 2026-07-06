@@ -1,0 +1,43 @@
+{
+  "api": "Google Analytics 4 (GA4) legacy connector hook surface",
+  "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy google-analytics-data-api connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-analytics-data-api, which delegates to internal/connectors/google-analytics-data-api until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+      "covered_by": {
+        "stream": "daily_active_users"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api website_overview read path",
+      "covered_by": {
+        "stream": "website_overview"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+      "covered_by": {
+        "stream": "traffic_sources"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api devices read path",
+      "covered_by": {
+        "stream": "devices"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api pages read path",
+      "covered_by": {
+        "stream": "pages"
+      }
+    }
+  ]
+}

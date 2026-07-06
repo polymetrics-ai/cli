@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leave",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "employee": { "type": ["integer", "null"] },
+    "leave_rule": { "type": ["integer", "null"] },
+    "date_start": { "type": ["string", "null"] },
+    "date_end": { "type": ["string", "null"] },
+    "days": { "type": ["number", "null"] },
+    "status": { "type": ["integer", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "all_day": { "type": ["boolean", "null"] },
+    "creator": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

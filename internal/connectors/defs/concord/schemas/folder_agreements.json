@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "folder_agreements",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "folderId": { "type": ["integer", "null"] },
+    "organizationId": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "modifiedAt": { "type": ["integer", "null"] }
+  }
+}

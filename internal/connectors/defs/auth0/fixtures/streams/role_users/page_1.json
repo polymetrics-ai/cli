@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/roles", "query": { "page": "0", "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "start": 0,
+      "limit": 50,
+      "length": 1,
+      "total": 1,
+      "roles": [
+        {
+          "id": "rol_fixture_1",
+          "name": "Fixture Admin",
+          "description": "conformance fixture role"
+        }
+      ]
+    }
+  }
+}

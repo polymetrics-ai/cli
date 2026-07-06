@@ -12,20 +12,40 @@ SYNOPSIS
 DESCRIPTION
   Reads Short.io links and domains through the Short.io REST API.
 
+ICON
+  asset: icons/shortio.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.short.io/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  links:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), path(), title(), updated_at()
+  domains:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), path(), title(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Short.io API read of link and domain data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

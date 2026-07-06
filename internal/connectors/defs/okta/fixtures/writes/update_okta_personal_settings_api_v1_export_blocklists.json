@@ -1,0 +1,20 @@
+{
+  "record": {
+    "domains": [
+      "domain_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/okta-personal-settings/api/v1/export-blocklists",
+    "body": {
+      "domains": [
+        "domain_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

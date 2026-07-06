@@ -1,0 +1,25 @@
+{
+  "name": "zoho-expense",
+  "display_name": "Zoho Expense",
+  "description": "Reads and writes Zoho Expense API v1 resources through the declarative connector engine.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/expense/api/v1/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Zoho Expense API read of expense, report, organization, user, project, tax, currency, customer, trip, advance, and reporting tag data",
+    "write": "creates, updates, submits, approves, reimburses, archives, deletes, and otherwise mutates Zoho Expense resources; requires explicit approval",
+    "approval": "writes require explicit operator approval through the reverse ETL approval flow"
+  }
+}

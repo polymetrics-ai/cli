@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Container" },
+  "expect": {
+    "method": "POST",
+    "path": "/picking-containers",
+    "body": { "name": "Fixture Container" }
+  },
+  "response": { "status": 200, "body": { "idpicking_container": 1401, "name": "Fixture Container" } }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign Custom Field",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "udate",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "descript": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "isrequired": { "type": ["string", "null"] },
+    "perstag": { "type": ["string", "null"] },
+    "visible": { "type": ["string", "null"] },
+    "cdate": { "type": ["string", "null"] },
+    "udate": { "type": ["string", "null"] }
+  }
+}

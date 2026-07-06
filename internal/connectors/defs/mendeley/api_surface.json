@@ -1,0 +1,36 @@
+{
+  "api": "Mendeley legacy connector hook surface",
+  "docs": "https://dev.mendeley.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy mendeley connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/mendeley, which delegates to internal/connectors/mendeley until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mendeley documents read path",
+      "covered_by": {
+        "stream": "documents"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mendeley folders read path",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mendeley groups read path",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/mendeley annotations read path",
+      "covered_by": {
+        "stream": "annotations"
+      }
+    }
+  ]
+}

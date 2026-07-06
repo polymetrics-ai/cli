@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/departments",
+    "query": { "page": "0", "page-size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalCount": 1,
+      "results": [
+        { "id": "1", "name": "Fixture Department 1" }
+      ]
+    }
+  }
+}

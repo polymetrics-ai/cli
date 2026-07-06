@@ -1,0 +1,21 @@
+{
+  "name": "when-i-work",
+  "display_name": "When I Work",
+  "description": "Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.wheniwork.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external When I Work API read of the caller's own workforce-scheduling data",
+    "write": "external mutation of workforce-scheduling records (users, locations, positions, sites, shift templates, annotations, availability events, time entries feeding payroll, and shifts); create/update/delete all require approval, deletes are irreversible",
+    "approval": "read: none; write: required for every create/update/delete action"
+  }
+}

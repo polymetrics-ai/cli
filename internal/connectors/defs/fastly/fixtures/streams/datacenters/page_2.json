@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/datacenters", "query": { "page": "2", "per_page": "2" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "code": "NRT",
+        "name": "Tokyo",
+        "group": "APAC",
+        "shield": "nrt-jp",
+        "coordinates": { "x": 139, "y": 35 }
+      }
+    ]
+  }
+}

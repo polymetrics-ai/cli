@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ad_groups",
+  "type": "object",
+  "x-primary-key": ["Id"],
+  "required": ["Id"],
+  "properties": {
+    "Id": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "AdRotation": { "type": ["string", "null"] },
+    "Network": { "type": ["string", "null"] },
+    "StartDate": { "type": ["string", "null"] },
+    "EndDate": { "type": ["string", "null"] }
+  }
+}

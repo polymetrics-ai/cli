@@ -1,0 +1,67 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/forms", "query": { "page_size": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "typeform access token is missing or invalid; re-run pm credentials add typeform" },
+      { "status": 403, "hint": "typeform account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "typeform rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "forms",
+      "path": "/forms",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "is_public": "{{ record.settings.is_public }}",
+        "theme_href": "{{ record.theme.href }}",
+        "self_href": "{{ record._links.display }}"
+      },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "responses",
+      "path": "/forms/{{ fanout.id }}/responses",
+      "records": { "path": "items" },
+      "fan_out": {
+        "ids_from": { "config_key": "form_ids" },
+        "into": { "path_var": "form_id" },
+        "stamp_field": "form_id"
+      },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "records": { "path": "items" },
+      "computed_fields": {
+        "self_href": "{{ record.self.href }}"
+      },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "themes",
+      "path": "/themes",
+      "records": { "path": "items" },
+      "schema": "schemas/themes.json"
+    },
+    {
+      "name": "images",
+      "path": "/images",
+      "records": { "path": "" },
+      "schema": "schemas/images.json"
+    }
+  ]
+}

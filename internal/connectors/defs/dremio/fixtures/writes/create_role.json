@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "fixture-analysts",
+    "description": "Fixture analysts role"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/role",
+    "body": {
+      "name": "fixture-analysts",
+      "description": "Fixture analysts role"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "role_fixture_new", "name": "fixture-analysts" }
+  }
+}

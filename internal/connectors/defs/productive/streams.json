@@ -1,0 +1,87 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Auth-Token", "value": "{{ secrets.api_key }}" }
+    ],
+    "headers": {
+      "X-Organization-Id": "{{ config.organization_id }}"
+    },
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/projects", "query": { "page": "1", "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "productive api_key is missing or invalid; re-run pm credentials add productive" },
+      { "status": 403, "hint": "productive account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "productive rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "type": "{{ record.type }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "people",
+      "path": "/people",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "type": "{{ record.type }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/people.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "type": "{{ record.type }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "type": "{{ record.type }}",
+        "name": "{{ record.attributes.name }}",
+        "created_at": "{{ record.attributes.created_at }}",
+        "updated_at": "{{ record.attributes.updated_at }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/tasks.json"
+    }
+  ]
+}

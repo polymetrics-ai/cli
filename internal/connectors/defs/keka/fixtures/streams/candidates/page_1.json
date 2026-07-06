@@ -1,0 +1,64 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hire/jobs/{{ config.job_id }}/candidates",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "candidates_fixture_1",
+          "firstName": "Fixture candidates 1",
+          "lastName": "Fixture candidates 1",
+          "middleName": null,
+          "gender": 1,
+          "email": "fixture1@example.invalid",
+          "mobilePhone": {
+            "countryCode": "FIX",
+            "number": "FIX-1"
+          },
+          "educationDetails": [],
+          "experienceDetails": [],
+          "skills": [],
+          "additionalCandidateDetails": {
+            "date of Birth": "2026-01-01T00:00:00Z",
+            "experience (in years)": "fixture_candidates_1",
+            "current Salary": "fixture_candidates_1",
+            "expected Salary": "fixture_candidates_1",
+            "available To Join (in days)": "fixture_candidates_1",
+            "location Preference": "fixture_candidates_1",
+            "current Location": "fixture_candidates_1"
+          },
+          "jobApplicationDetails": {
+            "jobHiringStageId": "candidates_fixture_1",
+            "movedtoStageOn": "fixture_candidates_1",
+            "screeningQuestionsResponse": {},
+            "appliedOn": "fixture_candidates_1",
+            "status": 1,
+            "sourcedBy": "fixture_candidates_1",
+            "sourceTitle": "Fixture candidates 1",
+            "assignedTo": "fixture_candidates_1",
+            "assignedOn": "fixture_candidates_1"
+          }
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/candidates",
+      "lastPage": "https://example.invalid/keka/candidates",
+      "nextPage": null,
+      "previousPage": null,
+      "totalRecords": 1,
+      "totalPages": 1,
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

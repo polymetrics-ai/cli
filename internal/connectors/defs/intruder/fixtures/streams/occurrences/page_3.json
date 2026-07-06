@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues/2/occurrences",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": 201,
+          "target": "host-2.example.com",
+          "port": 22,
+          "age": "5 days",
+          "extra_info": { "service": "ssh" },
+          "snoozed": true,
+          "snooze_reason": "accepted risk",
+          "snooze_until": "2026-08-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/notes/not_fixture_1",
+    "query": { "include": "transcript" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "not_fixture_1",
+      "title": "Fixture meeting 1",
+      "object": "note",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T01:00:00Z",
+      "owner": { "name": "Fixture Owner 1", "email": "owner1@example.com" },
+      "summary": "Fixture summary 1",
+      "transcript": [ { "speaker": "A", "text": "hello" } ],
+      "attendees": [ { "name": "Attendee One", "email": "att1@example.com" } ],
+      "calendar_event": { "id": "cal_1", "title": "Calendar event 1" },
+      "folders": []
+    }
+  }
+}

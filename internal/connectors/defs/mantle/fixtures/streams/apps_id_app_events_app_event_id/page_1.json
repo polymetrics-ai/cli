@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/app_events/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "appEvent": {
+        "id": "id_fixture",
+        "type": "fixture",
+        "appId": "app_id_fixture",
+        "customerId": "customer_id_fixture",
+        "appInstallationId": "app_installation_id_fixture",
+        "transactionId": "transaction_id_fixture",
+        "previousSubscriptionId": "previous_subscription_id_fixture",
+        "subscriptionId": "subscription_id_fixture",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

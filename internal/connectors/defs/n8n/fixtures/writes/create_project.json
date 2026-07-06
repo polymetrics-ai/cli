@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Project"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": {
+      "name": "Fixture Project"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

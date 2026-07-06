@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "card_fixture_1",
+    "spend_controls": {
+      "limit_amount": 100000
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/cards/card_fixture_1",
+    "body": {
+      "spend_controls": {
+        "limit_amount": 100000
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

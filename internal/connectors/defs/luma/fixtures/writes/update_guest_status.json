@@ -1,0 +1,16 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "guest_id": "fixture_guest_id",
+    "status": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/guests/update-status",
+    "body": {
+      "event_id": "fixture_event_id",
+      "guest_id": "fixture_guest_id",
+      "status": "2026-01-01T00:00:00Z"
+    }
+  }
+}

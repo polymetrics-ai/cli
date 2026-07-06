@@ -1,0 +1,59 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "created": "2026-01-01T00:00:00Z",
+    "factorType": "call",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "profile": {},
+    "provider": "provider_fixture",
+    "status": "ACTIVE",
+    "vendorName": "vendor_name_fixture",
+    "_embedded": {},
+    "_links": {
+      "verify": {
+        "hints": {
+          "allow": [
+            "DELETE"
+          ]
+        },
+        "href": "https://example.invalid/fixture",
+        "name": "name_fixture",
+        "templated": true,
+        "type": "type_fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/users/synthetic-conformance-value/factors",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "factorType": "call",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "profile": {},
+      "provider": "provider_fixture",
+      "status": "ACTIVE",
+      "vendorName": "vendor_name_fixture",
+      "_embedded": {},
+      "_links": {
+        "verify": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

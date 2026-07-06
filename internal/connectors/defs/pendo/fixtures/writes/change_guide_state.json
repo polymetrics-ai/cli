@@ -1,0 +1,13 @@
+{
+  "record": {
+    "guideId": "guideId_fixture",
+    "state": "staged"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/guide/guideId_fixture/state",
+    "body": {
+      "state": "staged"
+    }
+  }
+}

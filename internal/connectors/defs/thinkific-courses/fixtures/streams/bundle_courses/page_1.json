@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bundles/synthetic-conformance-value/courses",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 123,
+          "name": "Fixture bundle_courses",
+          "slug": "fixture-bundle_courses",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "current_page": 1,
+          "next_page": null
+        }
+      }
+    }
+  }
+}

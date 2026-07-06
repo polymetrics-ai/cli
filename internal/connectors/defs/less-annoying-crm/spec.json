@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Less Annoying CRM Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key",
+    "start_date"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "API key to use. Manage and create your API keys on the Programmer API settings page at https://account.lessannoyingcrm.com/app/Settings/Api."
+    },
+    "start_date": {
+      "type": "string"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://example.invalid",
+      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Set to fixture for credential-free legacy fixture tests."
+    }
+  }
+}

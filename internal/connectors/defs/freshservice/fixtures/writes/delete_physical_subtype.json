@@ -1,0 +1,11 @@
+{
+  "record": {
+    "physical_subtype_id": 123,
+    "name": "Fixture delete_physical_subtype",
+    "description": "Fixture delete_physical_subtype record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/itam/physical-subtypes/123"
+  }
+}

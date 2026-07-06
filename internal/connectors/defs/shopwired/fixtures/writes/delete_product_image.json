@@ -1,0 +1,15 @@
+{
+  "record": {
+    "product_id": 1,
+    "id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/products/1/images/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

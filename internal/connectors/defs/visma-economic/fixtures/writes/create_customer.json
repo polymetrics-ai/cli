@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Customer ApS",
+    "currency": "DKK",
+    "email": "fixture@example.com",
+    "paymentTerms": {
+      "paymentTermsNumber": 1
+    },
+    "customerGroup": {
+      "customerGroupNumber": 1
+    },
+    "vatZone": {
+      "vatZoneNumber": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers"
+  }
+}

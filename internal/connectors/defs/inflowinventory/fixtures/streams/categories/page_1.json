@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/categories"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "categoryId": "cat_fixture_1",
+        "name": "Fixture Category 1",
+        "parentCategoryId": null,
+        "isDefault": true,
+        "timestamp": "AAAAAAAAE1k="
+      },
+      {
+        "categoryId": "cat_fixture_2",
+        "name": "Fixture Category 2",
+        "parentCategoryId": "cat_fixture_1",
+        "isDefault": false,
+        "timestamp": "AAAAAAAAE2k="
+      }
+    ]
+  }
+}

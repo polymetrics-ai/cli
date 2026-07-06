@@ -1,0 +1,12 @@
+{
+  "record": {
+    "user[email]": "fixture-new@example.com",
+    "user[first_name]": "Fixture",
+    "user[last_name]": "New",
+    "user[role_id]": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/members.api"
+  }
+}

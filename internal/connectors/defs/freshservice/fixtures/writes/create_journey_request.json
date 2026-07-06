@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_journey_request",
+    "description": "Fixture create_journey_request record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journeys/requests",
+    "body": {
+      "name": "Fixture create_journey_request",
+      "description": "Fixture create_journey_request record"
+    }
+  }
+}

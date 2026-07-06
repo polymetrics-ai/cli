@@ -1,0 +1,12 @@
+{
+  "record": {
+    "propertyID": "prop_fixture_1",
+    "startDate": "2026-02-01",
+    "endDate": "2026-02-03",
+    "guestFirstName": "Fixture",
+    "guestLastName": "Guest",
+    "rooms": [{ "roomTypeID": "roomtype_fixture_1", "quantity": 1 }]
+  },
+  "expect": { "method": "POST", "path": "/postReservation" },
+  "response": { "status": 200, "body": { "success": true, "reservationID": "res_fixture_new" } }
+}

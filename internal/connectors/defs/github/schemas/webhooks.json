@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "repository": { "type": "string" },
+    "id": { "type": "integer" },
+    "type": { "type": "string" },
+    "name": { "type": "string" },
+    "active": { "type": "boolean" },
+    "events": { "type": "array", "items": { "type": "string" } },
+    "config_url": {
+      "type": ["string", "null"],
+      "description": "Flattened from record.config.url (webhook target URL); the config object also carries content_type/secret/insecure_ssl, not projected here since secret is write-only on GitHub's side."
+    },
+    "url": { "type": "string" },
+    "test_url": { "type": "string" },
+    "ping_url": { "type": "string" },
+    "deliveries_url": { "type": ["string", "null"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

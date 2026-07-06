@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/payroll/paygrades",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pay_grades_fixture_1",
+          "name": "Fixture pay grades 1"
+        },
+        {
+          "id": "pay_grades_fixture_2",
+          "name": "Fixture pay grades 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/pay_grades",
+      "lastPage": "https://example.invalid/keka/pay_grades",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/errors",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "err_fixture_1",
+        "project_id": "synthetic-conformance-value",
+        "error_class": "RuntimeError",
+        "message": "fixture error",
+        "context": "GET /fixture",
+        "severity": "error",
+        "original_severity": "error",
+        "status": "open",
+        "first_seen": "2026-01-01T00:00:00.000Z",
+        "last_seen": "2026-01-02T00:00:00.000Z",
+        "events": 5,
+        "comment_count": 0,
+        "url": "https://app.bugsnag.com/fixture-org-1/fixture-project-1/errors/err_fixture_1"
+      }
+    ]
+  }
+}

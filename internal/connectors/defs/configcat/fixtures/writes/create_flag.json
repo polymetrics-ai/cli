@@ -1,0 +1,7 @@
+{
+  "record": { "key": "fixtureFlag", "name": "Fixture Flag", "settingType": "boolean" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/configs/synthetic-conformance-value/settings"
+  }
+}

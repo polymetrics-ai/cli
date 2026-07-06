@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Contains information about a single AI interaction log entry.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the AI interaction log entry."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Date and time when the AI interaction occurred.<br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).\n",
+      "format": "date-time"
+    },
+    "storedAt": {
+      "type": "string",
+      "description": "Date and time when the AI interaction log was stored.<br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).\n",
+      "format": "date-time"
+    },
+    "sessionId": {
+      "type": "string",
+      "description": "Unique identifier of the session during which the AI interaction occurred."
+    },
+    "messageId": {
+      "type": "string",
+      "description": "Unique identifier of the message associated with the AI interaction."
+    },
+    "object": {
+      "type": "object",
+      "description": "Contains information about the Miro object involved in the AI interaction.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the Miro object involved in the AI interaction, e.g., Board ID or Organization ID.\n"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the Miro object involved in the AI interaction, e.g., \"board, \"organization\"."
+        }
+      },
+      "additionalProperties": true
+    },
+    "aiFeatureName": {
+      "type": "string",
+      "description": "Name of the AI feature that was used during the interaction."
+    },
+    "actor": {
+      "type": "object",
+      "description": "Contains information about the user who performed the AI interaction.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user who performed the AI interaction."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the user who performed the AI interaction."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user who performed the AI interaction."
+        }
+      },
+      "additionalProperties": true
+    },
+    "logType": {
+      "type": "string",
+      "description": "Type of the AI interaction log entry."
+    },
+    "details": {
+      "type": "object",
+      "description": "Additional details about the AI interaction. The structure of this object varies depending on the AI feature used. The text may contain unstructured data that could reveal information used in interactions with the LLM.",
+      "properties": {},
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

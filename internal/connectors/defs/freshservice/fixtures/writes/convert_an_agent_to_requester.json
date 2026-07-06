@@ -1,0 +1,15 @@
+{
+  "record": {
+    "agent_id": 123,
+    "name": "Fixture convert_an_agent_to_requester",
+    "description": "Fixture convert_an_agent_to_requester record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/agents/123/convert_to_requester",
+    "body": {
+      "name": "Fixture convert_an_agent_to_requester",
+      "description": "Fixture convert_an_agent_to_requester record"
+    }
+  }
+}

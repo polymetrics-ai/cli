@@ -1,0 +1,20 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "tunnel_url": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/integrations/synthetic-conformance-value/dev",
+    "body": {
+      "tunnel_url": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "set_integration_development_mode_fixture_1"
+    }
+  }
+}

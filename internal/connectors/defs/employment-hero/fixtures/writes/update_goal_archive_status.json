@@ -1,0 +1,19 @@
+{
+  "record": {
+    "goal_id": "goal_fixture_1",
+    "status": "archived"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/goals/goal_fixture_1/archive_status",
+    "body": {
+      "status": "archived"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_goal_archive_status_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept-Encoding": "deflate, gzip"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "X-CMC_PRO_API_KEY", "value": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/fiat/map", "query": { "start": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "coinmarketcap api_key is missing or invalid; re-run pm credentials add coinmarketcap" },
+      { "status": 403, "hint": "coinmarketcap plan lacks access for this endpoint" },
+      { "status": 429, "class": "rate_limited", "hint": "coinmarketcap rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "global_metrics",
+      "path": "/v1/global-metrics/quotes/latest",
+      "query": {
+        "convert": { "template": "{{ config.convert }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/global_metrics.json"
+    },
+    {
+      "name": "global_metrics_quotes_historical",
+      "path": "/v1/global-metrics/quotes/historical",
+      "query": {
+        "convert": { "template": "{{ config.convert }}", "omit_when_absent": true },
+        "time_start": { "template": "{{ config.historical_time_start }}", "omit_when_absent": true },
+        "time_end": { "template": "{{ config.historical_time_end }}", "omit_when_absent": true },
+        "count": { "template": "{{ config.historical_count }}", "omit_when_absent": true },
+        "interval": { "template": "{{ config.historical_interval }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.quotes" },
+      "schema": "schemas/global_metrics_quotes_historical.json"
+    },
+    {
+      "name": "cryptocurrency_info",
+      "path": "/v2/cryptocurrency/info",
+      "query": {
+        "id": "{{ config.cryptocurrency_ids }}"
+      },
+      "records": { "path": "data", "keyed_object": true, "key_field": "cmc_id" },
+      "schema": "schemas/cryptocurrency_info.json"
+    },
+    {
+      "name": "cryptocurrency_quotes_latest",
+      "path": "/v3/cryptocurrency/quotes/latest",
+      "query": {
+        "id": "{{ config.cryptocurrency_ids }}",
+        "convert": { "template": "{{ config.convert }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data", "keyed_object": true, "key_field": "cmc_id" },
+      "schema": "schemas/cryptocurrency_quotes_latest.json"
+    },
+    {
+      "name": "price_conversion",
+      "path": "/v2/tools/price-conversion",
+      "query": {
+        "amount": "{{ config.price_conversion_amount }}",
+        "id": { "template": "{{ config.price_conversion_id }}", "omit_when_absent": true },
+        "symbol": { "template": "{{ config.price_conversion_symbol }}", "omit_when_absent": true },
+        "convert": { "template": "{{ config.convert }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/price_conversion.json"
+    },
+    {
+      "name": "fear_and_greed_latest",
+      "path": "/v3/fear-and-greed/latest",
+      "records": { "path": "data" },
+      "schema": "schemas/fear_and_greed_latest.json"
+    },
+    {
+      "name": "altcoin_season_index_latest",
+      "path": "/v1/altcoin-season-index/latest",
+      "records": { "path": "data" },
+      "schema": "schemas/altcoin_season_index_latest.json"
+    },
+    {
+      "name": "altcoin_season_index_historical",
+      "path": "/v1/altcoin-season-index/historical",
+      "query": {
+        "timeframe": { "template": "{{ config.altcoin_season_timeframe }}", "default": "7d" }
+      },
+      "records": { "path": "data.points" },
+      "schema": "schemas/altcoin_season_index_historical.json"
+    },
+    {
+      "name": "key_info",
+      "path": "/v1/key/info",
+      "records": { "path": "data" },
+      "schema": "schemas/key_info.json"
+    }
+  ]
+}

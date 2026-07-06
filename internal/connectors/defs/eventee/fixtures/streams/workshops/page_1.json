@@ -1,0 +1,36 @@
+{
+  "request": { "method": "GET", "path": "/content" },
+  "response": {
+    "status": 200,
+    "body": {
+      "lectures": [],
+      "speakers": [],
+      "days": [],
+      "halls": [],
+      "tracks": [],
+      "workshops": [
+        {
+          "id": 421,
+          "name": "Fixture Workshop",
+          "description": "Sanitized fixture workshop.",
+          "start": "2026-06-01 11:00:00",
+          "end": "2026-06-01 12:30:00",
+          "hall_id": 42,
+          "speakers": [],
+          "discussion": true,
+          "moderating": false,
+          "polling": true,
+          "capacity": 30,
+          "type": 1,
+          "stream": { "url": "https://example.com/workshop-live", "type": "youtube" },
+          "virtual_meeting": { "url": "https://example.com/workshop-meeting", "service": "Fixture Meet" },
+          "tracks": [],
+          "booking_info": [{ "available": 18, "capacity": 30 }],
+          "created_at": "2026-05-01 00:00:00",
+          "updated_at": "2026-05-02 00:00:00"
+        }
+      ],
+      "pauses": []
+    }
+  }
+}

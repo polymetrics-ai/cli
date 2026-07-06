@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/projects/prj_fixture_2/collaborators" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "collab_fixture_2",
+        "name": "Fixture Collaborator Two",
+        "email": "collaborator2@example.com"
+      }
+    ]
+  }
+}

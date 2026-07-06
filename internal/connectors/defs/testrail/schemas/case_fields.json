@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "case_fields",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "type_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "system_name": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] }
+  }
+}

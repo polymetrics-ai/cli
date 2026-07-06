@@ -1,0 +1,76 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/bgv/{{ config.bgv_id }}/requests",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "bgv_requests_fixture_1",
+          "candidateId": "2026-01-01T00:00:00Z",
+          "firstName": "Fixture bgv requests 1",
+          "middleName": null,
+          "lastName": "Fixture bgv requests 1",
+          "status": 1,
+          "bgvDecision": 1,
+          "email": "fixture1@example.invalid",
+          "mobileNumber": null,
+          "gender": 1,
+          "checks": [
+            {
+              "id": "bgv_requests_fixture_1",
+              "name": "Fixture bgv requests 1",
+              "count": 1
+            },
+            {
+              "id": "bgv_requests_fixture_2",
+              "name": "Fixture bgv requests 2",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "bgv_requests_fixture_2",
+          "candidateId": "2026-01-01T00:00:00Z",
+          "firstName": "Fixture bgv requests 2",
+          "middleName": null,
+          "lastName": "Fixture bgv requests 2",
+          "status": 1,
+          "bgvDecision": 1,
+          "email": "fixture2@example.invalid",
+          "mobileNumber": null,
+          "gender": 1,
+          "checks": [
+            {
+              "id": "bgv_requests_fixture_1",
+              "name": "Fixture bgv requests 1",
+              "count": 1
+            },
+            {
+              "id": "bgv_requests_fixture_2",
+              "name": "Fixture bgv requests 2",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/bgv_requests",
+      "lastPage": "https://example.invalid/keka/bgv_requests",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

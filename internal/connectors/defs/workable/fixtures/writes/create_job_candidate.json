@@ -1,0 +1,15 @@
+{
+  "record": {
+    "job_shortcode": "JOB1",
+    "name": "Fixture Candidate",
+    "email": "candidate.fixture@example.test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/jobs/JOB1/candidates",
+    "body": {
+      "name": "Fixture Candidate",
+      "email": "candidate.fixture@example.test"
+    }
+  }
+}

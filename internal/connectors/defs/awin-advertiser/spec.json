@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Awin Advertiser Connection Specification",
+  "type": "object",
+  "required": ["api_key", "advertiserId"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Awin API OAuth2 bearer token. Used only for Bearer auth; never logged."
+    },
+    "advertiserId": {
+      "type": "string",
+      "description": "Numeric Awin advertiser account ID; substituted into every stream's path."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.awin.com",
+      "description": "Awin API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Lower bound for the transactions stream's date window, in Awin's exact 'YYYY-MM-DDTHH:MM:SS' wire format (no timezone suffix). Unlike legacy, this bundle does not normalize an RFC3339 or YYYY-MM-DD value for you — see docs.md's Known limits."
+    },
+    "report_start_date": {
+      "type": "string",
+      "description": "Lower bound for the publisher_performance report's date window, in Awin's 'YYYY-MM-DD' (date-only) wire format for this endpoint specifically — a different format than start_date's timestamp shape, since Awin's /reports/publisher endpoint documents date-only startDate/endDate values. Optional for publisher_performance (omitted entirely when unset, matching that endpoint's own optional startDate). For creative_performance, Awin documents startDate as REQUIRED; when unset here, this bundle sends a fixed fallback literal ('2020-01-01', see docs.md's Known limits) rather than omitting it, since that endpoint has no documented tolerance for an absent startDate."
+    },
+    "report_region": {
+      "type": "string",
+      "description": "Awin region code (e.g. GB, US, DE) required by the creative_performance report. Awin documents no all-regions option for this endpoint; when unset, this bundle sends a fixed fallback literal ('GB', see docs.md's Known limits) rather than omitting it."
+    },
+    "transaction_status": {
+      "type": "string",
+      "description": "Optional transactions stream filter: one of Awin's documented status values (pending, approved, declined, deleted), sent verbatim as the status query parameter. Unset by default (no filter, matching legacy)."
+    },
+    "publisher_id": {
+      "type": "string",
+      "description": "Optional transactions stream filter: a single publisher ID or Awin's documented comma-separated list of publisher IDs, sent verbatim as the publisherId query parameter. Unset by default (no filter, matching legacy)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

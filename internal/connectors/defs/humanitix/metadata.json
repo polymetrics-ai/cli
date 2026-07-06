@@ -1,0 +1,23 @@
+{
+  "name": "humanitix",
+  "display_name": "Humanitix",
+  "description": "Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.humanitix.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Humanitix API read of event, order, ticket, and tag data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

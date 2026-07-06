@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.
 
+ICON
+  asset: icons/launchdarkly.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://apidocs.launchdarkly.com/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  project_key
+  access_token (secret)
+
+ETL STREAMS
+  projects:
+    primary key: _id
+    fields: _id(), key(), name(), tags()
+  members:
+    primary key: _id
+    fields: _id(), _pendingInvite(), email(), firstName(), lastName(), role()
+  auditlog:
+    primary key: _id
+    cursor: date
+    fields: _id(), date(), description(), kind(), name(), shortDescription()
+  flags:
+    primary key: key
+    fields: creationDate(), description(), key(), kind(), name(), tags(), temporary()
+  environments:
+    primary key: _id
+    fields: _id(), color(), defaultTtl(), key(), name(), tags()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external LaunchDarkly API read of project, membership, audit, and feature-flag configuration data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

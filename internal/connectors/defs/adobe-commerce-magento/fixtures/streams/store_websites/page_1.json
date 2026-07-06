@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/store/websites" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "code": "base",
+        "name": "Main Website",
+        "default_group_id": 1,
+        "is_default": true
+      },
+      {
+        "id": 0,
+        "code": "admin",
+        "name": "Admin",
+        "default_group_id": 0,
+        "is_default": false
+      }
+    ]
+  }
+}

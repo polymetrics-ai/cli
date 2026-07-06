@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/payments", "query": { "page": "1", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "pmt_fixture_1", "amount": 150, "currency": "USD", "status": "settled" },
+        { "id": "pmt_fixture_2", "amount": 250, "currency": "EUR", "status": "settled" }
+      ]
+    }
+  }
+}

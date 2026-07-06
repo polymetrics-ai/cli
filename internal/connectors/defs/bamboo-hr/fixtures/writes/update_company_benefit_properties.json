@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "properties": [
+      {
+        "name": "endYmd",
+        "value": "fixture_value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1_2/benefit/company_benefit/fixture_id",
+    "body": {
+      "properties": [
+        {
+          "name": "endYmd",
+          "value": "fixture_value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

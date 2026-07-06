@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "FIXTURE_VAR",
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/envvar"
+  }
+}

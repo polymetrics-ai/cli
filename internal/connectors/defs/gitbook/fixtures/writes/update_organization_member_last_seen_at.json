@@ -1,0 +1,16 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/ping"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "update_organization_member_last_seen_at_fixture_1"
+    }
+  }
+}

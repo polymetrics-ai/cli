@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/trips" },
+  "response": {
+    "status": 200,
+    "body": { "trips": [], "limit": 1, "offset": 0, "total": 0 }
+  }
+}

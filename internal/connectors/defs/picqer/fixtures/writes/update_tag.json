@@ -1,0 +1,9 @@
+{
+  "record": { "idtag": 601, "title": "Fixture Tag Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/tags/601",
+    "body": { "title": "Fixture Tag Updated" }
+  },
+  "response": { "status": 200, "body": { "idtag": 601, "title": "Fixture Tag Updated" } }
+}

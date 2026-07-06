@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/workflows", "query": { "cursor": "fixture_campaign_cursor" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 503,
+        "name": "Fixture Campaign Three",
+        "created_time": 1767225603,
+        "updated_time": 0,
+        "rules": "{}",
+        "domainUserId": 900001,
+        "creatorName": "fixture-user"
+      }
+    ]
+  }
+}

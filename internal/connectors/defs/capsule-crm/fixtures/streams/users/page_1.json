@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "page": "1",
+      "perPage": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": 40,
+          "username": "fixture1",
+          "name": "Fixture User 1",
+          "email": "fixture1@example.com",
+          "status": "ACTIVE",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

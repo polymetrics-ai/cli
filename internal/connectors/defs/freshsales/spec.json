@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Freshsales Connection Specification",
+  "type": "object",
+  "required": ["api_key", "domain_name"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Freshsales API key, sent as 'Authorization: Token token=<api_key>'. Never logged."
+    },
+    "domain_name": {
+      "type": "string",
+      "description": "Freshsales account domain (e.g. mydomain.myfreshworks.com); combined with the fixed /crm/sales/api path to form the base URL."
+    },
+    "view_id": {
+      "type": "string",
+      "default": "0",
+      "description": "Freshsales view id every stream's list endpoint is scoped to (<resource>/view/<view_id>). Defaults to '0', the default/all view alias."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

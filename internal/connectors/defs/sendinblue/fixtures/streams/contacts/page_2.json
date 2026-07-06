@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "100", "offset": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        { "id": 3, "email": "fixture3@example.com", "modifiedAt": "2026-01-03T00:00:00.000Z" }
+      ],
+      "count": 3
+    }
+  }
+}

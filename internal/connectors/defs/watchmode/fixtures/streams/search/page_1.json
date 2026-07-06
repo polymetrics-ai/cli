@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/search/",
+    "query": {
+      "search_value": "synthetic-conformance-value",
+      "search_field": "name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "title_results": [
+        { "id": 3173903, "name": "Fixture Title One", "type": "movie", "year": 1984 },
+        { "id": 3173904, "name": "Fixture Title Two", "type": "tv_series", "year": 2019 }
+      ]
+    }
+  }
+}

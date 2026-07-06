@@ -1,0 +1,344 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "address1": {
+      "type": "string",
+      "description": "Primary address of the organization associated with the org"
+    },
+    "address2": {
+      "type": "string",
+      "description": "Secondary address of the organization associated with the org"
+    },
+    "city": {
+      "type": "string",
+      "description": "City of the organization associated with the org"
+    },
+    "companyName": {
+      "type": "string",
+      "description": "Name of org"
+    },
+    "country": {
+      "type": "string",
+      "description": "County of the organization associated with the org"
+    },
+    "created": {
+      "type": "string",
+      "description": "When org was created",
+      "format": "date-time"
+    },
+    "endUserSupportHelpURL": {
+      "type": "string",
+      "description": "Support link of org"
+    },
+    "expiresAt": {
+      "type": "string",
+      "description": "Expiration of org",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Org ID"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "When org was last updated",
+      "format": "date-time"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "description": "Phone number of the organization associated with the org"
+    },
+    "postalCode": {
+      "type": "string",
+      "description": "Postal code of the organization associated with the org"
+    },
+    "state": {
+      "type": "string",
+      "description": "State of the organization associated with the org"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of org",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Subdomain of org"
+    },
+    "supportPhoneNumber": {
+      "type": "string",
+      "description": "Support help phone of the organization associated with the org"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website of the organization associated with the org"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the org using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification",
+      "properties": {
+        "contacts": {
+          "type": "object",
+          "description": "Link to the [Org Contacts](/openapi/okta-management/management/orgsettingcontact/) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "logo": {
+          "type": "object",
+          "description": "Link to the org logo",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "oktaCommunication": {
+          "type": "object",
+          "description": "Link to the [Org Communication Settings](/openapi/okta-management/management/orgsettingcommunication/) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "oktaSupport": {
+          "type": "object",
+          "description": "Link to the [Org Support Settings](/openapi/okta-management/management/orgsettingsupport/) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "preferences": {
+          "type": "object",
+          "description": "Link to the [Org Preferences](/openapi/okta-management/management/orgsettingcustomization/getorgpreferences) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        },
+        "uploadLogo": {
+          "type": "object",
+          "description": "Link to the [Upload Org Logo](/openapi/okta-management/management/orgsettingcustomization) resource",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

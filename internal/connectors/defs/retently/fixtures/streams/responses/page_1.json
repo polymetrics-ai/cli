@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/responses",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "resp_fixture_1",
+          "customer_id": "cust_fixture_1",
+          "score": 9,
+          "comment": "Great product",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "resp_fixture_2",
+          "customer_id": "cust_fixture_2",
+          "score": 7,
+          "comment": "Pretty good",
+          "created_at": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

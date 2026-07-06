@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/internal/api/v2/users", "query": { "after": "fixture-users-cursor-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "user_fixture_2", "name": "Fixture User Two", "email": "fixture2@example.com", "status": "DEACTIVATED", "groups": null }
+      ],
+      "nextMarker": null,
+      "previousMarker": "fixture-users-cursor-1",
+      "limit": 20,
+      "count": 1
+    }
+  }
+}

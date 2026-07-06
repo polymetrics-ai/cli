@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/commenters",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_commenters_in_space_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_commenters_in_space",
+          "name": "Fixture list_commenters_in_space",
+          "status": "active",
+          "operation_id": "listCommentersInSpace"
+        }
+      ]
+    }
+  }
+}

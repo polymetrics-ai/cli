@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metrics/customer-count",
+    "query": { "interval": "month", "end-date": "2099-12-31" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "date": "2026-01-01", "customers": 11, "percentage-change": 0.0 },
+        { "date": "2026-02-01", "customers": 12, "percentage-change": 9.1 }
+      ]
+    }
+  }
+}

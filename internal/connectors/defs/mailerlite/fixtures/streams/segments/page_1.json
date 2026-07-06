@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/segments", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "segment_fixture_1",
+          "name": "Fixture Segment One",
+          "total": 25,
+          "open_rate": { "float": 0.4, "string": "40%" },
+          "click_rate": { "float": 0.1, "string": "10%" },
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

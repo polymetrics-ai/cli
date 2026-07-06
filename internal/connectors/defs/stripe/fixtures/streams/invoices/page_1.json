@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/invoices", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "in_fixture_1",
+          "object": "invoice",
+          "created": 1767225601,
+          "customer": "cus_fixture_1",
+          "subscription": "sub_fixture_1",
+          "status": "paid",
+          "currency": "usd",
+          "amount_due": 2000,
+          "amount_paid": 2000,
+          "amount_remaining": 0,
+          "total": 2000,
+          "paid": true,
+          "livemode": false
+        }
+      ]
+    }
+  }
+}

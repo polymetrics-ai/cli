@@ -1,0 +1,19 @@
+{
+  "record": {
+    "object_type": "synthetic-conformance-value",
+    "value": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": {
+      "object_type": "synthetic-conformance-value",
+      "value": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

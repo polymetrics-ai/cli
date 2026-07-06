@@ -1,0 +1,10 @@
+{
+  "record": {
+    "business_metric_token": "bm_fixture_1",
+    "title": "Updated Metric"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/business_metrics/bm_fixture_1"
+  }
+}

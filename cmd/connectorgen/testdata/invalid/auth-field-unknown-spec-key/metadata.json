@@ -1,0 +1,15 @@
+{
+  "name": "auth-field-unknown-spec-key",
+  "display_name": "Auth Field Unknown Spec Key",
+  "description": "a deliberately invalid test connector: an auth spec's username field templates an undeclared spec key",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "hash": "webhook_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/forms/synthetic-conformance-value/webhooks/webhook_fixture_1.json"
+  },
+  "response": { "status": 200, "body": { "Success": 1 } }
+}

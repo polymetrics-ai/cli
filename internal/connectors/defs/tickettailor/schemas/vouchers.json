@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vouchers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "value": { "type": ["integer", "null"] },
+    "total_codes": { "type": ["integer", "null"] },
+    "available_codes": { "type": ["integer", "null"] },
+    "expiry": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "type": "object",
+  "properties": {
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Location ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Location name"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
+    "departments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Department ID"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "Company ID"
+          },
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Department name"
+          },
+          "appear_on_schedule": {
+            "type": "boolean",
+            "description": "If the Department should appear on schedules"
+          }
+        },
+        "required": [
+          "id",
+          "company_id",
+          "location_id",
+          "name"
+        ]
+      }
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "location_id": {
+            "type": "integer"
+          },
+          "department_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "is_primary": {
+            "type": "boolean"
+          },
+          "skill_level": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "sort": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "company_id",
+          "location_id",
+          "department_id",
+          "name"
+        ]
+      }
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "stream_key",
+    "locations",
+    "departments",
+    "roles"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_assignments",
+  "x-primary-key": [
+    "stream_key"
+  ]
+}

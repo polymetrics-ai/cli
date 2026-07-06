@@ -1,0 +1,9 @@
+{
+  "record": { "pull_number": 1, "expected_head_sha": "6dcb09b5b57875f334f61aebed695e2e4193db5" },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/pulls/1/update-branch",
+    "body": { "expected_head_sha": "6dcb09b5b57875f334f61aebed695e2e4193db5" }
+  },
+  "response": { "status": 202, "body": { "message": "Updating pull request branch." } }
+}

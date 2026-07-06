@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders",
+  "type": "object",
+  "x-primary-key": ["orderId"],
+  "required": ["orderId"],
+  "properties": {
+    "orderId": { "type": "string" },
+    "status": { "type": ["string", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "orderComment": { "type": ["string", "null"] },
+    "acceptedOn": { "type": ["string", "null"], "format": "date-time" },
+    "fulfilledOn": { "type": ["string", "null"], "format": "date-time" },
+    "refundedOn": { "type": ["string", "null"], "format": "date-time" },
+    "customerInfo": { "type": ["object", "null"] },
+    "customerPaymentDetails": { "type": ["object", "null"] },
+    "shippingAddress": { "type": ["object", "null"] },
+    "purchasedItems": { "type": ["array", "null"] }
+  }
+}

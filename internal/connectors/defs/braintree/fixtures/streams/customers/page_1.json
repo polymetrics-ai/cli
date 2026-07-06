@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/customers",
+    "query": { "page_size": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        { "id": "cus_fixture_1", "status": "active" },
+        { "id": "cus_fixture_2", "status": "active" }
+      ],
+      "pagination": { "next_page": "2" }
+    }
+  }
+}

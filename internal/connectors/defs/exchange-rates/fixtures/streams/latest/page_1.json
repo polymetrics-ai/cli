@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/latest" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "date": "2026-01-02",
+      "timestamp": 1767312000,
+      "base": "EUR",
+      "rates": { "USD": 1.05, "GBP": 0.85, "JPY": 160.0 }
+    }
+  }
+}

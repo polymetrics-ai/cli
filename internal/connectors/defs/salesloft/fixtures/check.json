@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "per_page": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "metadata": { "paging": { "per_page": 1, "current_page": 1, "next_page": null, "total_pages": 0 } } }
+  }
+}

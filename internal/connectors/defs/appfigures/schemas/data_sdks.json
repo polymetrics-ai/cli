@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "data_sdks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "code": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "active": { "type": ["boolean", "null"] },
+    "release_date": { "type": ["string", "null"] },
+    "started_tracking": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "tracked_platforms": { "type": ["array", "null"] },
+    "external_links": { "type": ["array", "null"] },
+    "developer": { "type": ["object", "null"] }
+  }
+}

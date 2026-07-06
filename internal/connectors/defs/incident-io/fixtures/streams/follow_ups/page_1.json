@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v2/follow_ups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "follow_ups": [
+        { "id": "fu_fixture_1", "incident_id": "01ABC_fixture_1", "title": "Fixture follow-up 1", "description": "deterministic fixture record", "status": "outstanding", "assignee": { "id": "user_fixture_1", "name": "Fixture User One" }, "completed_at": null, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "fu_fixture_2", "incident_id": "01ABD_fixture_2", "title": "Fixture follow-up 2", "description": "deterministic fixture record", "status": "completed", "assignee": { "id": "user_fixture_2", "name": "Fixture User Two" }, "completed_at": "2026-01-03T00:00:00Z", "created_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-03T00:00:00Z" }
+      ],
+      "pagination_meta": { "page_size": 2, "total_record_count": 2 }
+    }
+  }
+}

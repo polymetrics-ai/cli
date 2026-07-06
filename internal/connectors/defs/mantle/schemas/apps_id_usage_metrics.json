@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apps_id_usage_metrics",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the usage metric."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the usage metric."
+    },
+    "eventName": {
+      "type": "string",
+      "description": "The event name associated with the usage metric."
+    },
+    "calculation": {
+      "type": "string",
+      "description": "The calculation method for the usage metric.",
+      "enum": [
+        "count",
+        "sum"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "description": "Additional parameters for the usage metric."
+    }
+  }
+}

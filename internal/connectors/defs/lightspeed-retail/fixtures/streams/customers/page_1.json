@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/customers", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "customer_fixture_1",
+          "version": 2000,
+          "customer_code": "C-1",
+          "customer_group_id": "group_fixture_1",
+          "balance": 0,
+          "loyalty_balance": 0,
+          "year_to_date": 100,
+          "do_not_email": false,
+          "enable_loyalty": true,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "version": { "min": 2000, "max": null }
+    }
+  }
+}

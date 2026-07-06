@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "123",
+    "title": "Fixture Title",
+    "description": "Fixture description"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/leads/123",
+    "body": {
+      "title": "Fixture Title",
+      "description": "Fixture description"
+    }
+  }
+}

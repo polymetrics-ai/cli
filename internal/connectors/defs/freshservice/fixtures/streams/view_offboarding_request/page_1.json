@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/offboarding_requests/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "offboarding_request": {
+        "id": "view_offboarding_request",
+        "name": "Fixture view_offboarding_request",
+        "subject": "Fixture view_offboarding_request",
+        "description": "Fixture view_offboarding_request record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

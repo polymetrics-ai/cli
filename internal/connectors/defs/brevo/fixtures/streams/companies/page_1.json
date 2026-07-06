@@ -1,0 +1,1317 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "cmp_fixture_1",
+          "attributes": {
+            "name": "Fixture Company 1",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            1
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_2",
+          "attributes": {
+            "name": "Fixture Company 2",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            2
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_3",
+          "attributes": {
+            "name": "Fixture Company 3",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            3
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_4",
+          "attributes": {
+            "name": "Fixture Company 4",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            4
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_5",
+          "attributes": {
+            "name": "Fixture Company 5",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            5
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_6",
+          "attributes": {
+            "name": "Fixture Company 6",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            6
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_7",
+          "attributes": {
+            "name": "Fixture Company 7",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            7
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_8",
+          "attributes": {
+            "name": "Fixture Company 8",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            8
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_9",
+          "attributes": {
+            "name": "Fixture Company 9",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            9
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_10",
+          "attributes": {
+            "name": "Fixture Company 10",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            10
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_11",
+          "attributes": {
+            "name": "Fixture Company 11",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            11
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_12",
+          "attributes": {
+            "name": "Fixture Company 12",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            12
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_13",
+          "attributes": {
+            "name": "Fixture Company 13",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            13
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_14",
+          "attributes": {
+            "name": "Fixture Company 14",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            14
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_15",
+          "attributes": {
+            "name": "Fixture Company 15",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            15
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_16",
+          "attributes": {
+            "name": "Fixture Company 16",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            16
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_17",
+          "attributes": {
+            "name": "Fixture Company 17",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            17
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_18",
+          "attributes": {
+            "name": "Fixture Company 18",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            18
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_19",
+          "attributes": {
+            "name": "Fixture Company 19",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            19
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_20",
+          "attributes": {
+            "name": "Fixture Company 20",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            20
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_21",
+          "attributes": {
+            "name": "Fixture Company 21",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            21
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_22",
+          "attributes": {
+            "name": "Fixture Company 22",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            22
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_23",
+          "attributes": {
+            "name": "Fixture Company 23",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            23
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_24",
+          "attributes": {
+            "name": "Fixture Company 24",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            24
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_25",
+          "attributes": {
+            "name": "Fixture Company 25",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            25
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_26",
+          "attributes": {
+            "name": "Fixture Company 26",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            26
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_27",
+          "attributes": {
+            "name": "Fixture Company 27",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            27
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_28",
+          "attributes": {
+            "name": "Fixture Company 28",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            28
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_29",
+          "attributes": {
+            "name": "Fixture Company 29",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            29
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_30",
+          "attributes": {
+            "name": "Fixture Company 30",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            30
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_31",
+          "attributes": {
+            "name": "Fixture Company 31",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            31
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_32",
+          "attributes": {
+            "name": "Fixture Company 32",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            32
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_33",
+          "attributes": {
+            "name": "Fixture Company 33",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            33
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_34",
+          "attributes": {
+            "name": "Fixture Company 34",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            34
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_35",
+          "attributes": {
+            "name": "Fixture Company 35",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            35
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_36",
+          "attributes": {
+            "name": "Fixture Company 36",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            36
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_37",
+          "attributes": {
+            "name": "Fixture Company 37",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            37
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_38",
+          "attributes": {
+            "name": "Fixture Company 38",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            38
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_39",
+          "attributes": {
+            "name": "Fixture Company 39",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            39
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_40",
+          "attributes": {
+            "name": "Fixture Company 40",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            40
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_41",
+          "attributes": {
+            "name": "Fixture Company 41",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            41
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_42",
+          "attributes": {
+            "name": "Fixture Company 42",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            42
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_43",
+          "attributes": {
+            "name": "Fixture Company 43",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            43
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_44",
+          "attributes": {
+            "name": "Fixture Company 44",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            44
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_45",
+          "attributes": {
+            "name": "Fixture Company 45",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            45
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_46",
+          "attributes": {
+            "name": "Fixture Company 46",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            46
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_47",
+          "attributes": {
+            "name": "Fixture Company 47",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            47
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_48",
+          "attributes": {
+            "name": "Fixture Company 48",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            48
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_49",
+          "attributes": {
+            "name": "Fixture Company 49",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            49
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_50",
+          "attributes": {
+            "name": "Fixture Company 50",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            50
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_51",
+          "attributes": {
+            "name": "Fixture Company 51",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            51
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_52",
+          "attributes": {
+            "name": "Fixture Company 52",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            52
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_53",
+          "attributes": {
+            "name": "Fixture Company 53",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            53
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_54",
+          "attributes": {
+            "name": "Fixture Company 54",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            54
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_55",
+          "attributes": {
+            "name": "Fixture Company 55",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            55
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_56",
+          "attributes": {
+            "name": "Fixture Company 56",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            56
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_57",
+          "attributes": {
+            "name": "Fixture Company 57",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            57
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_58",
+          "attributes": {
+            "name": "Fixture Company 58",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            58
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_59",
+          "attributes": {
+            "name": "Fixture Company 59",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            59
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_60",
+          "attributes": {
+            "name": "Fixture Company 60",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            60
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_61",
+          "attributes": {
+            "name": "Fixture Company 61",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            61
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_62",
+          "attributes": {
+            "name": "Fixture Company 62",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            62
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_63",
+          "attributes": {
+            "name": "Fixture Company 63",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            63
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_64",
+          "attributes": {
+            "name": "Fixture Company 64",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            64
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_65",
+          "attributes": {
+            "name": "Fixture Company 65",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            65
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_66",
+          "attributes": {
+            "name": "Fixture Company 66",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            66
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_67",
+          "attributes": {
+            "name": "Fixture Company 67",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            67
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_68",
+          "attributes": {
+            "name": "Fixture Company 68",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            68
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_69",
+          "attributes": {
+            "name": "Fixture Company 69",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            69
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_70",
+          "attributes": {
+            "name": "Fixture Company 70",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            70
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_71",
+          "attributes": {
+            "name": "Fixture Company 71",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            71
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_72",
+          "attributes": {
+            "name": "Fixture Company 72",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            72
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_73",
+          "attributes": {
+            "name": "Fixture Company 73",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-18T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            73
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_74",
+          "attributes": {
+            "name": "Fixture Company 74",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-19T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            74
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_75",
+          "attributes": {
+            "name": "Fixture Company 75",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-20T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            75
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_76",
+          "attributes": {
+            "name": "Fixture Company 76",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-21T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            76
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_77",
+          "attributes": {
+            "name": "Fixture Company 77",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-22T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            77
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_78",
+          "attributes": {
+            "name": "Fixture Company 78",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-23T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            78
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_79",
+          "attributes": {
+            "name": "Fixture Company 79",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-24T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            79
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_80",
+          "attributes": {
+            "name": "Fixture Company 80",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-25T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            80
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_81",
+          "attributes": {
+            "name": "Fixture Company 81",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-26T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            81
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_82",
+          "attributes": {
+            "name": "Fixture Company 82",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-27T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            82
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_83",
+          "attributes": {
+            "name": "Fixture Company 83",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-28T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            83
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_84",
+          "attributes": {
+            "name": "Fixture Company 84",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-01T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            84
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_85",
+          "attributes": {
+            "name": "Fixture Company 85",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-02T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            85
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_86",
+          "attributes": {
+            "name": "Fixture Company 86",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-03T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            86
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_87",
+          "attributes": {
+            "name": "Fixture Company 87",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-04T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            87
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_88",
+          "attributes": {
+            "name": "Fixture Company 88",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-05T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            88
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_89",
+          "attributes": {
+            "name": "Fixture Company 89",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-06T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            89
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_90",
+          "attributes": {
+            "name": "Fixture Company 90",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-07T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            90
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_91",
+          "attributes": {
+            "name": "Fixture Company 91",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-08T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            91
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_92",
+          "attributes": {
+            "name": "Fixture Company 92",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-09T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            92
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_93",
+          "attributes": {
+            "name": "Fixture Company 93",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-10T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            93
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_94",
+          "attributes": {
+            "name": "Fixture Company 94",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-11T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            94
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_95",
+          "attributes": {
+            "name": "Fixture Company 95",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-12T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            95
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_96",
+          "attributes": {
+            "name": "Fixture Company 96",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-13T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            96
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_97",
+          "attributes": {
+            "name": "Fixture Company 97",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-14T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            97
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_98",
+          "attributes": {
+            "name": "Fixture Company 98",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-15T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            98
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_99",
+          "attributes": {
+            "name": "Fixture Company 99",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-16T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            99
+          ],
+          "linkedDealsIds": []
+        },
+        {
+          "id": "cmp_fixture_100",
+          "attributes": {
+            "name": "Fixture Company 100",
+            "domain": "example.com",
+            "created_at": "2026-01-01T00:00:00.000+00:00",
+            "last_updated_at": "2026-01-17T00:00:00.000+00:00"
+          },
+          "linkedContactsIds": [
+            100
+          ],
+          "linkedDealsIds": []
+        }
+      ]
+    }
+  }
+}

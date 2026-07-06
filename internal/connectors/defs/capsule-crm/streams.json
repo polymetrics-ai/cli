@@ -1,0 +1,178 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.bearer_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "perPage",
+      "start_page": 1,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/parties", "query": { "page": "1", "perPage": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "capsule-crm bearer token is missing or invalid; re-run pm credentials add capsule-crm" },
+      { "status": 403, "hint": "capsule-crm account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "capsule-crm rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "parties",
+      "path": "/parties",
+      "records": { "path": "parties" },
+      "computed_fields": {
+        "first_name": "{{ record.firstName }}",
+        "last_name": "{{ record.lastName }}",
+        "organisation_name": "{{ record.organisationName }}",
+        "job_title": "{{ record.jobTitle }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "last_contacted_at": "{{ record.lastContactedAt }}"
+      },
+      "schema": "schemas/parties.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/opportunities",
+      "records": { "path": "opportunities" },
+      "computed_fields": {
+        "party_id": "{{ record.party.id }}",
+        "milestone_id": "{{ record.milestone.id }}",
+        "milestone_name": "{{ record.milestone.name }}",
+        "value_amount": "{{ record.value.amount }}",
+        "value_currency": "{{ record.value.currency }}",
+        "expected_close_on": "{{ record.expectedCloseOn }}",
+        "closed_on": "{{ record.closedOn }}",
+        "lost_reason": "{{ record.lostReason }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/opportunities.json"
+    },
+    {
+      "name": "kases",
+      "path": "/kases",
+      "records": { "path": "kases" },
+      "computed_fields": {
+        "party_id": "{{ record.party.id }}",
+        "closed_on": "{{ record.closedOn }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/kases.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "records": { "path": "tasks" },
+      "computed_fields": {
+        "due_on": "{{ record.dueOn }}",
+        "category_id": "{{ record.category.id }}",
+        "party_id": "{{ record.party.id }}",
+        "opportunity_id": "{{ record.opportunity.id }}",
+        "kase_id": "{{ record.kase.id }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "users" },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "tags" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/customfields",
+      "records": { "path": "definitions" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "entity_type": "{{ record.entityType }}",
+        "restricted_to_type": "{{ record.restrictedToType }}"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "teams" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "pipelines",
+      "path": "/pipelines",
+      "records": { "path": "pipelines" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "display_order": "{{ record.displayOrder }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/pipelines.json"
+    },
+    {
+      "name": "milestones",
+      "path": "/milestones",
+      "records": { "path": "milestones" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "pipeline_id": "{{ record.pipeline.id }}"
+      },
+      "schema": "schemas/milestones.json"
+    },
+    {
+      "name": "lost_reasons",
+      "path": "/lostreasons",
+      "records": { "path": "lostReasons" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/lost_reasons.json"
+    },
+    {
+      "name": "categories",
+      "path": "/categories",
+      "records": { "path": "categories" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "boards",
+      "path": "/boards",
+      "records": { "path": "boards" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "entity_type": "{{ record.entityType }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/boards.json"
+    },
+    {
+      "name": "stages",
+      "path": "/stages",
+      "records": { "path": "stages" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "display_order": "{{ record.displayOrder }}",
+        "board_id": "{{ record.board.id }}"
+      },
+      "schema": "schemas/stages.json"
+    }
+  ]
+}

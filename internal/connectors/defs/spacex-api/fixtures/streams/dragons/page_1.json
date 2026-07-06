@@ -1,0 +1,28 @@
+{
+  "request": { "method": "GET", "path": "/dragons" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "dragon_fixture_1",
+        "name": "Dragon 1",
+        "type": "capsule",
+        "active": true,
+        "crew_capacity": 0,
+        "first_flight": "2010-12-08",
+        "dry_mass_kg": 4200,
+        "description": "Fixture cargo Dragon record for conformance testing."
+      },
+      {
+        "id": "dragon_fixture_2",
+        "name": "Dragon 2",
+        "type": "capsule",
+        "active": true,
+        "crew_capacity": 4,
+        "first_flight": "2019-03-02",
+        "dry_mass_kg": 6350,
+        "description": "Fixture crew Dragon record for conformance testing."
+      }
+    ]
+  }
+}

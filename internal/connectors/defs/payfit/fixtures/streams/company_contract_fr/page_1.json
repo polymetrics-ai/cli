@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/contracts-fr/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contractId": "company_contract_fr_1",
+      "name": "Fixture company contract fr"
+    }
+  }
+}

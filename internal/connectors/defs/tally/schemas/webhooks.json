@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "formId": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "signingSecret": { "type": ["string", "null"] },
+    "httpHeaders": { "type": ["array", "null"] },
+    "eventTypes": { "type": ["array", "null"] },
+    "externalSubscriber": { "type": ["string", "null"] },
+    "isEnabled": { "type": ["boolean", "null"] },
+    "lastSyncedAt": { "type": ["string", "null"], "format": "date-time" },
+    "createdAt": { "type": ["string", "null"], "format": "date-time" },
+    "updatedAt": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

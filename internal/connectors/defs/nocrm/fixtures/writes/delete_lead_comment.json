@@ -1,0 +1,10 @@
+{
+  "record": {
+    "lead_id": "456",
+    "id": "123"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/leads/456/comments/123"
+  }
+}

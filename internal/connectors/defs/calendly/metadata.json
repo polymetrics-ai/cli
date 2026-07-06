@@ -1,0 +1,24 @@
+{
+  "name": "calendly",
+  "display_name": "Calendly",
+  "description": "Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups, routing forms and submissions, webhook subscriptions, availability schedules, activity log entries, and the current user, and manages bookings/webhooks/memberships/invitations/event types through the Calendly v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.calendly.com/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Calendly API read of scheduling, organization, routing-form, webhook, and activity-log data",
+    "write": "external mutation of live scheduling data: cancels real scheduled events and books new ones (notifying invitees), creates/deletes webhook subscriptions, removes organization memberships, sends organization invitation emails, and creates one-off event types/shareable booking links",
+    "approval": "required for every write action"
+  }
+}

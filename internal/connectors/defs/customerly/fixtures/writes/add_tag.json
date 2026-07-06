@@ -1,0 +1,17 @@
+{
+  "record": {
+    "tag": "fixture-tag",
+    "untag": false,
+    "users": [{ "user_id": 1001 }],
+    "leads": [{ "email": "lead-fixture@example.com" }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags",
+    "body": {
+      "tag": "fixture-tag",
+      "untag": false
+    }
+  },
+  "response": { "status": 200, "body": { "data": [] } }
+}

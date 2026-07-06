@@ -1,0 +1,21 @@
+{
+  "record": {
+    "first_name": "Grace",
+    "last_name": "Hopper",
+    "email": "grace@example.com",
+    "trading_name": "Grace Consulting"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/quick_add_contractor",
+    "body": {
+      "trading_name": "Grace Consulting"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "quick_add_contractor_fixture_response"
+    }
+  }
+}

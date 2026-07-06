@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/macros",
+    "query": {
+      "page[size]": "100",
+      "sort_by": "created_at",
+      "sort_order": "asc"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "macros": [
+        {
+          "id": 1,
+          "position": 7,
+          "restriction": {
+          },
+          "title": "fixture_title",
+          "created_at": "2026-01-01T00:00:00Z",
+          "url": "fixture_url",
+          "description": "fixture_description",
+          "default": true,
+          "updated_at": "2026-01-01T00:00:00Z",
+          "active": true,
+          "raw_title": "fixture_raw_title",
+          "actions": [
+
+          ]
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

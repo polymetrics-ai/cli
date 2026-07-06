@@ -1,0 +1,128 @@
+{
+  "actions": [
+    {
+      "name": "kill_feature_flag_in_environment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/splits/ws/{{ record.workspace_id }}/{{ record.feature_flag_name }}/environments/{{ record.environment_id }}/kill",
+      "path_fields": ["workspace_id", "feature_flag_name", "environment_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "feature_flag_name", "environment_id"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "feature_flag_name": { "type": "string" },
+          "environment_id": { "type": "string" }
+        }
+      },
+      "risk": "immediately forces every SDK evaluating this feature flag in the given environment onto its off/default treatment; high-impact production traffic-shaping mutation, approval required"
+    },
+    {
+      "name": "restore_feature_flag_in_environment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/splits/ws/{{ record.workspace_id }}/{{ record.feature_flag_name }}/environments/{{ record.environment_id }}/restore",
+      "path_fields": ["workspace_id", "feature_flag_name", "environment_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "feature_flag_name", "environment_id"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "feature_flag_name": { "type": "string" },
+          "environment_id": { "type": "string" }
+        }
+      },
+      "risk": "reverts a previously-killed feature flag in the given environment back to its configured targeting rules; production traffic-shaping mutation, approval required"
+    },
+    {
+      "name": "archive_feature_flag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/splits/ws/{{ record.workspace_id }}/{{ record.feature_flag_name }}/archive",
+      "path_fields": ["workspace_id", "feature_flag_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "feature_flag_name"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "feature_flag_name": { "type": "string" },
+          "title": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "archives a feature flag account-wide (all SDKs calling it return control); approval required"
+    },
+    {
+      "name": "unarchive_feature_flag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/splits/ws/{{ record.workspace_id }}/{{ record.feature_flag_name }}/unarchive",
+      "path_fields": ["workspace_id", "feature_flag_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["workspace_id", "feature_flag_name"],
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "feature_flag_name": { "type": "string" },
+          "title": { "type": "string" },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "restores an archived feature flag to active use account-wide; approval required"
+    },
+    {
+      "name": "add_segment_keys_in_environment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/uploadKeys",
+      "path_fields": ["environment_id", "segment_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environment_id", "segment_name", "keys"],
+        "properties": {
+          "environment_id": { "type": "string" },
+          "segment_name": { "type": "string" },
+          "keys": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "adds member keys to a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required"
+    },
+    {
+      "name": "remove_segment_keys_from_environment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/removeKeys",
+      "path_fields": ["environment_id", "segment_name"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["environment_id", "segment_name", "keys"],
+        "properties": {
+          "environment_id": { "type": "string" },
+          "segment_name": { "type": "string" },
+          "keys": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "comment": { "type": "string" }
+        }
+      },
+      "risk": "removes member keys from a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required"
+    }
+  ]
+}

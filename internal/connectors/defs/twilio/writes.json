@@ -1,0 +1,7726 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio account resources in the connected account; approval required"
+    },
+    {
+      "name": "create_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "CustomerName",
+          "Street",
+          "City",
+          "Region",
+          "PostalCode",
+          "IsoCountry"
+        ],
+        "properties": {
+          "CustomerName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Street": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "City": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PostalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IsoCountry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "AutoCorrectAddress": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "StreetSecondary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio address resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio address resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_address",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CustomerName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Street": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "City": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PostalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "AutoCorrectAddress": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "StreetSecondary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio address resources in the connected account; approval required"
+    },
+    {
+      "name": "create_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Applications.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MessageStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PublicApplicationConnectEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio application resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_application",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Applications/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio application resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_application",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Applications/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MessageStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PublicApplicationConnectEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio application resources in the connected account; approval required"
+    },
+    {
+      "name": "create_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "To",
+          "From"
+        ],
+        "properties": {
+          "To": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "From": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SendDigits": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Timeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "Record": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "RecordingChannels": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingConfigurationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipAuthUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipAuthPassword": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MachineDetection": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MachineDetectionTimeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "RecordingStatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "Trim": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MachineDetectionSpeechThreshold": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetectionSpeechEndThreshold": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetectionSilenceTimeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "AsyncAmd": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AsyncAmdStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AsyncAmdStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Byoc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallToken": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingTrack": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TimeLimit": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ClientNotificationUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Twiml": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio call resources in the connected account; approval required"
+    },
+    {
+      "name": "create_payments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "IdempotencyKey",
+          "StatusCallback"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "IdempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BankAccountType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ChargeAmount": {
+            "type": [
+              "number",
+              "integer",
+              "null"
+            ]
+          },
+          "Currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Input": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MinPostalCodeLength": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "Parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PaymentConnector": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PaymentMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PostalCode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "SecurityCode": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Timeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "TokenType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ValidCardTypes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RequireMatchingInputs": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Confirmation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio payments resources in the connected account; approval required"
+    },
+    {
+      "name": "update_payments",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid",
+          "IdempotencyKey",
+          "StatusCallback"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "IdempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Capture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio payments resources in the connected account; approval required"
+    },
+    {
+      "name": "create_call_recording",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "RecordingStatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "RecordingStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Trim": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingChannels": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingTrack": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingConfigurationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio call recording resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_call_recording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio call recording resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_call_recording",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid",
+          "Status"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PauseBehavior": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio call recording resources in the connected account; approval required"
+    },
+    {
+      "name": "create_siprec",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConnectorName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Track": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter1.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter1.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter2.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter2.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter3.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter3.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter4.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter4.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter5.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter5.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter6.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter6.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter7.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter7.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter8.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter8.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter9.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter9.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter10.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter10.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter11.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter11.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter12.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter12.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter13.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter13.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter14.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter14.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter15.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter15.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter16.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter16.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter17.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter17.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter18.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter18.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter19.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter19.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter20.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter20.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter21.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter21.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter22.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter22.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter23.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter23.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter24.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter24.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter25.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter25.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter26.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter26.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter27.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter27.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter28.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter28.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter29.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter29.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter30.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter30.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter31.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter31.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter32.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter32.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter33.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter33.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter34.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter34.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter35.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter35.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter36.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter36.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter37.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter37.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter38.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter38.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter39.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter39.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter40.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter40.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter41.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter41.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter42.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter42.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter43.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter43.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter44.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter44.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter45.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter45.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter46.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter46.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter47.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter47.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter48.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter48.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter49.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter49.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter50.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter50.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter51.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter51.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter52.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter52.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter53.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter53.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter54.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter54.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter55.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter55.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter56.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter56.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter57.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter57.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter58.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter58.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter59.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter59.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter60.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter60.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter61.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter61.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter62.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter62.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter63.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter63.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter64.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter64.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter65.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter65.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter66.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter66.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter67.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter67.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter68.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter68.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter69.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter69.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter70.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter70.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter71.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter71.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter72.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter72.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter73.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter73.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter74.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter74.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter75.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter75.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter76.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter76.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter77.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter77.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter78.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter78.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter79.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter79.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter80.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter80.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter81.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter81.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter82.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter82.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter83.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter83.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter84.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter84.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter85.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter85.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter86.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter86.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter87.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter87.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter88.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter88.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter89.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter89.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter90.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter90.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter91.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter91.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter92.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter92.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter93.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter93.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter94.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter94.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter95.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter95.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter96.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter96.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter97.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter97.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter98.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter98.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter99.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter99.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio siprec resources in the connected account; approval required"
+    },
+    {
+      "name": "update_siprec",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid",
+          "Status"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio siprec resources in the connected account; approval required"
+    },
+    {
+      "name": "create_stream",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "Url"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "Url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Track": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter1.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter1.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter2.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter2.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter3.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter3.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter4.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter4.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter5.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter5.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter6.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter6.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter7.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter7.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter8.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter8.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter9.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter9.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter10.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter10.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter11.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter11.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter12.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter12.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter13.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter13.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter14.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter14.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter15.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter15.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter16.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter16.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter17.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter17.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter18.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter18.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter19.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter19.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter20.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter20.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter21.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter21.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter22.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter22.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter23.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter23.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter24.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter24.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter25.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter25.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter26.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter26.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter27.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter27.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter28.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter28.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter29.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter29.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter30.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter30.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter31.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter31.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter32.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter32.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter33.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter33.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter34.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter34.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter35.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter35.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter36.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter36.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter37.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter37.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter38.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter38.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter39.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter39.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter40.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter40.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter41.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter41.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter42.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter42.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter43.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter43.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter44.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter44.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter45.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter45.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter46.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter46.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter47.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter47.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter48.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter48.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter49.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter49.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter50.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter50.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter51.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter51.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter52.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter52.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter53.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter53.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter54.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter54.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter55.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter55.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter56.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter56.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter57.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter57.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter58.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter58.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter59.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter59.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter60.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter60.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter61.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter61.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter62.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter62.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter63.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter63.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter64.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter64.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter65.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter65.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter66.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter66.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter67.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter67.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter68.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter68.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter69.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter69.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter70.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter70.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter71.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter71.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter72.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter72.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter73.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter73.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter74.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter74.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter75.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter75.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter76.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter76.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter77.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter77.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter78.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter78.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter79.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter79.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter80.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter80.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter81.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter81.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter82.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter82.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter83.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter83.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter84.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter84.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter85.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter85.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter86.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter86.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter87.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter87.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter88.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter88.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter89.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter89.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter90.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter90.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter91.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter91.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter92.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter92.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter93.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter93.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter94.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter94.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter95.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter95.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter96.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter96.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter97.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter97.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter98.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter98.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter99.Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Parameter99.Value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio stream resources in the connected account; approval required"
+    },
+    {
+      "name": "update_stream",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid",
+          "Status"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio stream resources in the connected account; approval required"
+    },
+    {
+      "name": "create_realtime_transcription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "Name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Track": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "InboundTrackLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "OutboundTrackLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PartialResults": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "LanguageCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TranscriptionEngine": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ProfanityFilter": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "SpeechModel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Hints": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EnableAutomaticPunctuation": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "IntelligenceService": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConversationConfiguration": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConversationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TranscriptionConfigurationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EnableProviderData": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio realtime transcription resources in the connected account; approval required"
+    },
+    {
+      "name": "update_realtime_transcription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid",
+          "Status"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio realtime transcription resources in the connected account; approval required"
+    },
+    {
+      "name": "create_user_defined_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessages.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "Content"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "Content": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio user defined message resources in the connected account; approval required"
+    },
+    {
+      "name": "create_user_defined_message_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions.json",
+      "path_fields": [
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "Callback"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "Callback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio user defined message subscription resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_user_defined_message_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions/{{ record.sid }}.json",
+      "path_fields": [
+        "call_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "call_sid",
+          "sid"
+        ],
+        "properties": {
+          "call_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio user defined message subscription resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_call",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio call resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_call",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "Url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Twiml": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TimeLimit": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio call resources in the connected account; approval required"
+    },
+    {
+      "name": "create_participant",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants.json",
+      "path_fields": [
+        "conference_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conference_sid",
+          "From",
+          "To"
+        ],
+        "properties": {
+          "conference_sid": {
+            "type": "string"
+          },
+          "From": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "To": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "Label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Timeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "Record": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Muted": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Beep": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StartConferenceOnEnter": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "EndConferenceOnExit": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "WaitUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "WaitMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EarlyMedia": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "MaxParticipants": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ConferenceRecord": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceTrim": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceStatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "RecordingChannels": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipAuthUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipAuthPassword": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceRecordingStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ConferenceRecordingStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingStatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "ConferenceRecordingStatusCallbackEvent": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "Coaching": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "CallSidToCoach": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "JitterBufferSize": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Byoc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingTrack": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RecordingConfigurationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TimeLimit": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetection": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MachineDetectionTimeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetectionSpeechThreshold": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetectionSpeechEndThreshold": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "MachineDetectionSilenceTimeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "AmdStatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AmdStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Trim": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallToken": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ClientNotificationUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallerDisplayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio participant resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_participant",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json",
+      "path_fields": [
+        "conference_sid",
+        "call_sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conference_sid",
+          "call_sid"
+        ],
+        "properties": {
+          "conference_sid": {
+            "type": "string"
+          },
+          "call_sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio participant resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_participant",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json",
+      "path_fields": [
+        "conference_sid",
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conference_sid",
+          "call_sid"
+        ],
+        "properties": {
+          "conference_sid": {
+            "type": "string"
+          },
+          "call_sid": {
+            "type": "string"
+          },
+          "Muted": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Hold": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "HoldUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "HoldMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AnnounceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AnnounceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "WaitUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "WaitMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BeepOnExit": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "EndConferenceOnExit": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Coaching": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "CallSidToCoach": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio participant resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_conference_recording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json",
+      "path_fields": [
+        "conference_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conference_sid",
+          "sid"
+        ],
+        "properties": {
+          "conference_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio conference recording resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conference_recording",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json",
+      "path_fields": [
+        "conference_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "conference_sid",
+          "sid",
+          "Status"
+        ],
+        "properties": {
+          "conference_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PauseBehavior": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio conference recording resources in the connected account; approval required"
+    },
+    {
+      "name": "update_conference",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AnnounceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AnnounceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio conference resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_connect_app",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/ConnectApps/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio connect app resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_connect_app",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/ConnectApps/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "AuthorizeRedirectUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CompanyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "DeauthorizeCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "DeauthorizeCallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "HomepageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Permissions": {
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio connect app resources in the connected account; approval required"
+    },
+    {
+      "name": "create_incoming_phone_number",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyAddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdentitySid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceReceiveMode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BundleSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "PhoneNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AreaCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio incoming phone number resources in the connected account; approval required"
+    },
+    {
+      "name": "create_incoming_phone_number_assigned_add_on",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns.json",
+      "path_fields": [
+        "resource_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "resource_sid",
+          "InstalledAddOnSid"
+        ],
+        "properties": {
+          "resource_sid": {
+            "type": "string"
+          },
+          "InstalledAddOnSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio incoming phone number assigned add on resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_incoming_phone_number_assigned_add_on",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns/{{ record.sid }}.json",
+      "path_fields": [
+        "resource_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "resource_sid",
+          "sid"
+        ],
+        "properties": {
+          "resource_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio incoming phone number assigned add on resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incoming_phone_number",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio incoming phone number resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_incoming_phone_number",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "AccountSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyAddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceReceiveMode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdentitySid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BundleSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio incoming phone number resources in the connected account; approval required"
+    },
+    {
+      "name": "create_incoming_phone_number_local",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Local.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "PhoneNumber"
+        ],
+        "properties": {
+          "PhoneNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdentitySid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyAddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceReceiveMode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BundleSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio incoming phone number local resources in the connected account; approval required"
+    },
+    {
+      "name": "create_incoming_phone_number_mobile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Mobile.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "PhoneNumber"
+        ],
+        "properties": {
+          "PhoneNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdentitySid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyAddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceReceiveMode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BundleSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio incoming phone number mobile resources in the connected account; approval required"
+    },
+    {
+      "name": "create_incoming_phone_number_toll_free",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/TollFree.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "PhoneNumber"
+        ],
+        "properties": {
+          "PhoneNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceCallerIdLookup": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IdentitySid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyAddressSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceReceiveMode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "BundleSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio incoming phone number toll free resources in the connected account; approval required"
+    },
+    {
+      "name": "create_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Keys.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio key resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Keys/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio key resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_key",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Keys/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio key resources in the connected account; approval required"
+    },
+    {
+      "name": "create_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "To"
+        ],
+        "properties": {
+          "To": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApplicationSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MaxPrice": {
+            "type": [
+              "number",
+              "integer",
+              "null"
+            ]
+          },
+          "ProvideFeedback": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Attempt": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ValidityPeriod": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "ForceDelivery": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "ContentRetention": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "AddressRetention": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmartEncoded": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "PersistentAction": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "TrafficType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ShortenUrls": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "ScheduleType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SendAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SendAsMms": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "ContentVariables": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "RiskCheck": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "From": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FallbackFrom": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MessagingServiceSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Body": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MediaUrl": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "ContentSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio message resources in the connected account; approval required"
+    },
+    {
+      "name": "create_message_feedback",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Feedback.json",
+      "path_fields": [
+        "message_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "message_sid"
+        ],
+        "properties": {
+          "message_sid": {
+            "type": "string"
+          },
+          "Outcome": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio message feedback resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_media",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Media/{{ record.sid }}.json",
+      "path_fields": [
+        "message_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "message_sid",
+          "sid"
+        ],
+        "properties": {
+          "message_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio media resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio message resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_message",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "Body": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio message resources in the connected account; approval required"
+    },
+    {
+      "name": "create_outgoing_caller_id_validation_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/OutgoingCallerIds.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "PhoneNumber"
+        ],
+        "properties": {
+          "PhoneNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallDelay": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "Extension": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "StatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio validation request resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_outgoing_caller_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio outgoing caller id resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_outgoing_caller_id",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio outgoing caller id resources in the connected account; approval required"
+    },
+    {
+      "name": "create_queue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "FriendlyName"
+        ],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MaxSize": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio queue resources in the connected account; approval required"
+    },
+    {
+      "name": "update_member",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ record.queue_sid }}/Members/{{ record.call_sid }}.json",
+      "path_fields": [
+        "queue_sid",
+        "call_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "queue_sid",
+          "call_sid",
+          "Url"
+        ],
+        "properties": {
+          "queue_sid": {
+            "type": "string"
+          },
+          "call_sid": {
+            "type": "string"
+          },
+          "Url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Method": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio member resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_queue",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio queue resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_queue",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "MaxSize": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio queue resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_recording_transcription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ record.recording_sid }}/Transcriptions/{{ record.sid }}.json",
+      "path_fields": [
+        "recording_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "recording_sid",
+          "sid"
+        ],
+        "properties": {
+          "recording_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio recording transcription resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_recording_add_on_result_payload",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ record.reference_sid }}/AddOnResults/{{ record.add_on_result_sid }}/Payloads/{{ record.sid }}.json",
+      "path_fields": [
+        "reference_sid",
+        "add_on_result_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "reference_sid",
+          "add_on_result_sid",
+          "sid"
+        ],
+        "properties": {
+          "reference_sid": {
+            "type": "string"
+          },
+          "add_on_result_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio recording add on result payload resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_recording_add_on_result",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ record.reference_sid }}/AddOnResults/{{ record.sid }}.json",
+      "path_fields": [
+        "reference_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "reference_sid",
+          "sid"
+        ],
+        "properties": {
+          "reference_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio recording add on result resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_recording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio recording resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_signing_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SigningKeys.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio signing key resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_signing_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SigningKeys/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio signing key resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_signing_key",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SigningKeys/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio signing key resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_credential_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "FriendlyName"
+        ],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip credential list resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_credential",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials.json",
+      "path_fields": [
+        "credential_list_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "credential_list_sid",
+          "Username",
+          "Password"
+        ],
+        "properties": {
+          "credential_list_sid": {
+            "type": "string"
+          },
+          "Username": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Password": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip credential resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_credential",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json",
+      "path_fields": [
+        "credential_list_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "credential_list_sid",
+          "sid"
+        ],
+        "properties": {
+          "credential_list_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip credential resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_sip_credential",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json",
+      "path_fields": [
+        "credential_list_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "credential_list_sid",
+          "sid"
+        ],
+        "properties": {
+          "credential_list_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "Password": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio sip credential resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_credential_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip credential list resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_sip_credential_list",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid",
+          "FriendlyName"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio sip credential list resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "DomainName"
+        ],
+        "properties": {
+          "DomainName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceStatusCallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipRegistration": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "EmergencyCallingEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Secure": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "ByocTrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyCallerSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip domain resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_auth_calls_credential_list_mapping",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings.json",
+      "path_fields": [
+        "domain_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "CredentialListSid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "CredentialListSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip auth calls credential list mapping resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_auth_calls_credential_list_mapping",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings/{{ record.sid }}.json",
+      "path_fields": [
+        "domain_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "sid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip auth calls credential list mapping resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sip_auth_calls_ip_access_control_list_mapping",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings.json",
+      "path_fields": [
+        "domain_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "IpAccessControlListSid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "IpAccessControlListSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip auth calls ip access control list mapping resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_auth_calls_ip_access_control_list_mapping",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings/{{ record.sid }}.json",
+      "path_fields": [
+        "domain_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "sid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip auth calls ip access control list mapping resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sip_auth_registrations_credential_list_mapping",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings.json",
+      "path_fields": [
+        "domain_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "CredentialListSid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "CredentialListSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip auth registrations credential list mapping resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_auth_registrations_credential_list_mapping",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings/{{ record.sid }}.json",
+      "path_fields": [
+        "domain_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "sid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip auth registrations credential list mapping resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sip_credential_list_mapping",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings.json",
+      "path_fields": [
+        "domain_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "CredentialListSid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "CredentialListSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip credential list mapping resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_credential_list_mapping",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings/{{ record.sid }}.json",
+      "path_fields": [
+        "domain_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "sid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip credential list mapping resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_sip_ip_access_control_list_mapping",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings.json",
+      "path_fields": [
+        "domain_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "IpAccessControlListSid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "IpAccessControlListSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip ip access control list mapping resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_ip_access_control_list_mapping",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings/{{ record.sid }}.json",
+      "path_fields": [
+        "domain_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "domain_sid",
+          "sid"
+        ],
+        "properties": {
+          "domain_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip ip access control list mapping resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_sip_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip domain resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_sip_domain",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceStatusCallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceStatusCallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "VoiceUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SipRegistration": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "DomainName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyCallingEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "Secure": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "ByocTrunkSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "EmergencyCallerSid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio sip domain resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_ip_access_control_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "FriendlyName"
+        ],
+        "properties": {
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip ip access control list resources in the connected account; approval required"
+    },
+    {
+      "name": "create_sip_ip_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses.json",
+      "path_fields": [
+        "ip_access_control_list_sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ip_access_control_list_sid",
+          "FriendlyName",
+          "IpAddress"
+        ],
+        "properties": {
+          "ip_access_control_list_sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "IpAddress": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CidrPrefixLength": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio sip ip address resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_ip_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json",
+      "path_fields": [
+        "ip_access_control_list_sid",
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ip_access_control_list_sid",
+          "sid"
+        ],
+        "properties": {
+          "ip_access_control_list_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip ip address resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_sip_ip_address",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json",
+      "path_fields": [
+        "ip_access_control_list_sid",
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ip_access_control_list_sid",
+          "sid"
+        ],
+        "properties": {
+          "ip_access_control_list_sid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "IpAddress": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CidrPrefixLength": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio sip ip address resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_sip_ip_access_control_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio sip ip access control list resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_sip_ip_access_control_list",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid",
+          "FriendlyName"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio sip ip access control list resources in the connected account; approval required"
+    },
+    {
+      "name": "update_short_code",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/SMS/ShortCodes/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ApiVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "SmsFallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio short code resources in the connected account; approval required"
+    },
+    {
+      "name": "create_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Tokens.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "Ttl": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio token resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_transcription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Transcriptions/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio transcription resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_usage_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Triggers.json",
+      "path_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "CallbackUrl",
+          "TriggerValue",
+          "UsageCategory"
+        ],
+        "properties": {
+          "CallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TriggerValue": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "UsageCategory": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Recurring": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "TriggerBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates Twilio usage trigger resources in the connected account; approval required"
+    },
+    {
+      "name": "delete_usage_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes Twilio usage trigger resources in the connected account; approval required",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_usage_trigger",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "CallbackMethod": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "CallbackUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio usage trigger resources in the connected account; approval required"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "POST",
+      "path": "/Accounts/{{ record.sid }}.json",
+      "path_fields": [
+        "sid"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sid"
+        ],
+        "properties": {
+          "sid": {
+            "type": "string"
+          },
+          "FriendlyName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "mutates Twilio account resources in the connected account; approval required"
+    }
+  ]
+}

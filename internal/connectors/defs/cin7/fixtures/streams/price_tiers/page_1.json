@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ref/priceTier", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "PriceTiers": [
+        { "Code": 1, "Name": "Tier 1" },
+        { "Code": 2, "Name": "Tier 2" }
+      ]
+    }
+  }
+}

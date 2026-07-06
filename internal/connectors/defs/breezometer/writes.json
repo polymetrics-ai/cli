@@ -1,0 +1,34 @@
+{
+  "actions": [
+    {
+      "name": "score_cleanest_route",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/insights/v1/cleanest-route",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["routes"],
+        "properties": {
+          "routes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "polyline"],
+              "properties": {
+                "id": { "type": "string" },
+                "polyline": { "type": "array" },
+                "routeDuration": { "type": "integer" },
+                "durationUnits": { "type": "string" },
+                "lengthUnits": { "type": "string" },
+                "routesSort": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "stateless environmental-cleanliness scoring computation over caller-supplied route geometries; creates or mutates no persistent BreezoMeter object and has no side effects beyond the API call itself, low-risk"
+    }
+  ]
+}

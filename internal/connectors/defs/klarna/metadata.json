@@ -1,0 +1,23 @@
+{
+  "name": "klarna",
+  "display_name": "Klarna",
+  "description": "Reads Klarna settlement payouts and transactions through the Klarna Settlements API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.klarna.com/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Klarna Settlements API read of payout and transaction data",
+    "approval": "none; read-only source"
+  }
+}

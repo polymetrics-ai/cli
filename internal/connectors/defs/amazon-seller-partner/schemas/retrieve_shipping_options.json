@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_shipping_options",
+  "type": "object",
+  "properties": {
+    "shippingOptionId": {
+      "type": "string"
+    },
+    "shipBy": {
+      "type": "string"
+    },
+    "carrierName": {
+      "type": "string"
+    },
+    "pickupWindow": {
+      "type": "object"
+    },
+    "timeSlot": {
+      "type": "object"
+    },
+    "handoverLocation": {
+      "type": "object"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

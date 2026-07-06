@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/prod_fixture_1/webhooks" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "webhookId": 1,
+        "url": "https://example.com/webhook",
+        "httpMethod": "POST",
+        "content": "{}",
+        "webHookHeaders": [],
+        "config": { "configId": "config_fixture_1" },
+        "environment": { "environmentId": "env_fixture_1" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "site_section_id": "synthetic-conformance-value",
+    "position": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/sections/synthetic-conformance-value/move",
+    "body": {
+      "position": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "move_site_section_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "resource_set_id_or_label": "synthetic-conformance-value",
+    "resource_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value/resources/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cpd_requirements",
+  "type": "object",
+  "x-primary-key": ["audienceRequirementId"],
+  "required": ["audienceRequirementId", "audienceId", "requiredMinutes", "createdAt"],
+  "properties": {
+    "audienceRequirementId": { "type": "string" },
+    "audienceId": { "type": ["string", "null"] },
+    "requiredMinutes": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

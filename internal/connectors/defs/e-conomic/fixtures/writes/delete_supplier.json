@@ -1,0 +1,11 @@
+{
+  "record": { "supplierNumber": 201 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/suppliers/201"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "name": "Fixture One-off Event",
+    "host": "https://api.calendly.com/users/fixture_user_1",
+    "duration": 30,
+    "date_setting": {
+      "type": "date_range",
+      "start_date": "2026-02-01",
+      "end_date": "2026-02-28"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/one_off_event_types"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/event_types/fixture_oneoff_1",
+        "name": "Fixture One-off Event"
+      }
+    }
+  }
+}

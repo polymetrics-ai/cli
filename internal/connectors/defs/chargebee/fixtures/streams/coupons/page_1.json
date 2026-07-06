@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coupons",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "coupon": {
+            "id": "coupon_fixture_1",
+            "name": "Fixture Coupon",
+            "discount_type": "percentage",
+            "discount_percentage": 10,
+            "duration_type": "forever",
+            "status": "active",
+            "apply_on": "invoice_amount",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "redemptions": 0,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "ListName": "Fixture List"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/Fixture List"
+  }
+}

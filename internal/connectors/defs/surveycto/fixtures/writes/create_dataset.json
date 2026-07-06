@@ -1,0 +1,7 @@
+{
+  "record": { "id": "fixture_dataset", "title": "Fixture Dataset", "discriminator": "DATA" },
+  "expect": {
+    "method": "POST",
+    "path": "/datasets"
+  }
+}

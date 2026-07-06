@@ -1,0 +1,20 @@
+{
+  "record": {
+    "uuid": "contact_fixture_1",
+    "email": "fixture-contact-updated@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/clients/contacts/contact_fixture_1",
+    "body": {
+      "email": "fixture-contact-updated@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "contact_fixture_1",
+      "email": "fixture-contact-updated@example.com"
+    }
+  }
+}

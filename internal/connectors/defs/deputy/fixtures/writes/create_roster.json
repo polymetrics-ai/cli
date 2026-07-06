@@ -1,0 +1,22 @@
+{
+  "record": { "OperationalUnit": 1, "StartTime": 1769904000, "EndTime": 1769932800 },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Roster",
+    "body": { "OperationalUnit": 1, "StartTime": 1769904000, "EndTime": 1769932800 }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "OperationalUnit": 1,
+      "StartTime": 1769904000,
+      "EndTime": 1769932800,
+      "Published": false,
+      "Open": true,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:00:00"
+    }
+  }
+}

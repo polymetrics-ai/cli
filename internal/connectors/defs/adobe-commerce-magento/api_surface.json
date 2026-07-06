@@ -1,0 +1,98 @@
+{
+  "api": "Adobe Commerce (Magento) REST API V1 (https://developer.adobe.com/commerce/webapi/rest/)",
+  "docs": "https://developer.adobe.com/commerce/webapi/rest/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: 10 read streams (products, orders, customers, categories, invoices, shipments, creditmemos, customer_groups, store_websites, store_views) and 4 write actions (update_product, create_category, update_category, cancel_order) covering the practically syncable/mutable catalog+sales+store-config surface reachable through the generic `searchCriteria` list convention and simple id-scoped mutations this dialect can express. Excluded: quote/cart checkout-flow endpoints (carts, cart items, shipping estimation, coupon-on-cart) which model an in-progress, session-scoped shopping cart rather than a syncable catalog/sales object and whose write shapes are transactional multi-step checkout sequences, not single-record mutations; Multi-Source Inventory (inventory sources/stocks/source-items), an Adobe Commerce-edition-only module not present on every Magento Open Source install this connector targets; CMS pages/blocks, a content-authoring surface distinct from the catalog/sales domain this connector otherwise covers; binary/multipart product-media-gallery image upload; compound order/invoice/shipment/credit-memo creation endpoints whose real payload is a per-line-item quantity/amount breakdown this dialect's flat single-record body construction cannot safely express; and destructive-admin/elevated-scope endpoints (product/category/customer delete, tax/sales-rule configuration) this connector deliberately does not allow-list as reverse-ETL writes. Paths below are relative to `/rest/<store_code>` (this bundle's `base_url` already includes the `/rest/V1` version prefix; `streams.json`'s stream paths therefore start at the resource segment).",
+  "endpoints": [
+    { "method": "GET", "path": "/rest/V1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/rest/V1/products/{sku}", "excluded": { "category": "duplicate_of", "reason": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/products", "excluded": { "category": "out_of_scope", "reason": "product creation requires a full attribute-set-aware payload (custom attributes, type-specific extension attributes) this dialect's flat body construction cannot safely express without risking a malformed catalog entity; update_product covers the practical mutation case" } },
+    { "method": "PUT", "path": "/rest/V1/products/{sku}", "covered_by": { "write": "update_product" } },
+    { "method": "DELETE", "path": "/rest/V1/products/{sku}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; product deletion is irreversible and out of scope" } },
+    { "method": "GET", "path": "/rest/V1/products/{sku}/media", "excluded": { "category": "out_of_scope", "reason": "product media-gallery sub-resource; a nested list keyed off an already-covered product, not modeled as its own top-level stream" } },
+    { "method": "POST", "path": "/rest/V1/products/{sku}/media", "excluded": { "category": "binary_payload", "reason": "product image upload requires a base64-encoded binary media payload; this dialect's write actions send structured JSON/form bodies, not binary asset uploads" } },
+    { "method": "GET", "path": "/rest/V1/products/{sku}/stockItems/{itemId}", "excluded": { "category": "out_of_scope", "reason": "single stock-item lookup keyed off a product+item id pair with no list endpoint to enumerate from; not a syncable stream" } },
+    { "method": "PUT", "path": "/rest/V1/products/{sku}/stockItems/{itemId}", "excluded": { "category": "out_of_scope", "reason": "legacy (pre-MSI) single-source stock-quantity mutation; superseded by the MSI source-items surface, itself excluded this pass as a Commerce-edition-only module" } },
+
+    { "method": "GET", "path": "/rest/V1/categories/list", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/rest/V1/categories/{categoryId}", "excluded": { "category": "duplicate_of", "reason": "single-category detail; identical record shape to the categories list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/categories", "covered_by": { "write": "create_category" } },
+    { "method": "PUT", "path": "/rest/V1/categories/{id}", "covered_by": { "write": "update_category" } },
+    { "method": "DELETE", "path": "/rest/V1/categories/{categoryId}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; category deletion is irreversible and out of scope" } },
+    { "method": "GET", "path": "/rest/V1/categories/{categoryId}/products", "excluded": { "category": "out_of_scope", "reason": "category-to-product assignment sub-list; a nested join-table read, not a top-level syncable stream" } },
+    { "method": "POST", "path": "/rest/V1/categories/{categoryId}/products", "excluded": { "category": "out_of_scope", "reason": "category-to-product assignment mutation; a join-table write rather than a mutation of the category or product record itself" } },
+
+    { "method": "GET", "path": "/rest/V1/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/rest/V1/orders/{id}", "excluded": { "category": "duplicate_of", "reason": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/orders/{id}/cancel", "covered_by": { "write": "cancel_order" } },
+    { "method": "POST", "path": "/rest/V1/orders/{id}/hold", "excluded": { "category": "out_of_scope", "reason": "order lifecycle state-transition action beyond the single cancel mutation modeled this pass; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/rest/V1/orders/{id}/unhold", "excluded": { "category": "out_of_scope", "reason": "order lifecycle state-transition action beyond the single cancel mutation modeled this pass; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/rest/V1/orders", "excluded": { "category": "out_of_scope", "reason": "raw full-order-object creation bypasses the checkout/cart pipeline Magento itself expects orders to be created through; not a safe reverse-ETL write" } },
+    { "method": "PUT", "path": "/rest/V1/orders/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "order status-history comment append; a narrow annotation write, not a full-record mutation, deferred this pass" } },
+    { "method": "GET", "path": "/rest/V1/orders/{id}/comments", "excluded": { "category": "duplicate_of", "reason": "order status-history sub-resource nested under an already-covered order; not modeled as its own stream" } },
+
+    { "method": "GET", "path": "/rest/V1/customers/search", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/rest/V1/customers/{customerId}", "excluded": { "category": "duplicate_of", "reason": "single-customer detail; identical record shape to the customers list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/customers", "excluded": { "category": "out_of_scope", "reason": "customer creation touches account-credential/password-reset flows this connector does not model as a safe reverse-ETL write" } },
+    { "method": "PUT", "path": "/rest/V1/customers/{customerId}", "excluded": { "category": "requires_elevated_scope", "reason": "customer profile mutation can alter login credentials and group/tax assignment; treated as elevated-scope admin action, not an allow-listed write" } },
+    { "method": "DELETE", "path": "/rest/V1/customers/{customerId}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; customer deletion is irreversible and out of scope" } },
+    { "method": "GET", "path": "/rest/V1/customers/{customerId}/addresses", "excluded": { "category": "out_of_scope", "reason": "customer address-book sub-resource nested under an already-covered customer; not modeled as its own top-level stream" } },
+
+    { "method": "GET", "path": "/rest/V1/customerGroups/search", "covered_by": { "stream": "customer_groups" } },
+    { "method": "GET", "path": "/rest/V1/customerGroups/{id}", "excluded": { "category": "duplicate_of", "reason": "single-customer-group detail; identical record shape to the customer_groups list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/customerGroups", "excluded": { "category": "requires_elevated_scope", "reason": "customer group creation controls tax-class and permission assignment account-wide; treated as elevated-scope admin configuration, not an allow-listed write" } },
+
+    { "method": "GET", "path": "/rest/V1/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/rest/V1/invoices/{id}", "excluded": { "category": "duplicate_of", "reason": "single-invoice detail; identical record shape to the invoices list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/invoice", "excluded": { "category": "out_of_scope", "reason": "invoice creation is a multi-step order-billing action (partial qty selection, capture-vs-offline) not expressible as this dialect's flat single-record write; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/rest/V1/invoices/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "invoice comment-append annotation write; narrow scope deferred this pass" } },
+    { "method": "POST", "path": "/rest/V1/invoices/{id}/emails", "excluded": { "category": "non_data_endpoint", "reason": "triggers an outbound customer-facing invoice email; a notification side-effect, not a data mutation" } },
+    { "method": "POST", "path": "/rest/V1/invoices/{id}/void", "excluded": { "category": "out_of_scope", "reason": "invoice void lifecycle action beyond the mutations modeled this pass; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/rest/V1/shipments", "covered_by": { "stream": "shipments" } },
+    { "method": "GET", "path": "/rest/V1/shipments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-shipment detail; identical record shape to the shipments list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/shipment", "excluded": { "category": "out_of_scope", "reason": "shipment creation requires per-order-item quantity selection plus carrier/tracking-number sub-objects, a compound multi-part payload this dialect's flat body construction cannot safely express" } },
+    { "method": "POST", "path": "/rest/V1/shipment/track", "excluded": { "category": "out_of_scope", "reason": "adds a tracking-number sub-object to an existing shipment; a nested-object append write, not a full-record mutation" } },
+    { "method": "POST", "path": "/rest/V1/shipments/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "shipment comment-append annotation write; narrow scope deferred this pass" } },
+    { "method": "POST", "path": "/rest/V1/shipment/{id}/emails", "excluded": { "category": "non_data_endpoint", "reason": "triggers an outbound customer-facing shipment email; a notification side-effect, not a data mutation" } },
+
+    { "method": "GET", "path": "/rest/V1/creditmemos", "covered_by": { "stream": "creditmemos" } },
+    { "method": "GET", "path": "/rest/V1/creditmemos/{id}", "excluded": { "category": "duplicate_of", "reason": "single-credit-memo detail; identical record shape to the creditmemos list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/rest/V1/creditmemo", "excluded": { "category": "out_of_scope", "reason": "credit memo creation requires a per-order-item refund-quantity/amount breakdown, a compound payload this dialect's flat body construction cannot safely express" } },
+    { "method": "POST", "path": "/rest/V1/creditmemos/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "credit memo comment-append annotation write; narrow scope deferred this pass" } },
+    { "method": "POST", "path": "/rest/V1/creditmemo/{id}/emails", "excluded": { "category": "non_data_endpoint", "reason": "triggers an outbound customer-facing credit-memo email; a notification side-effect, not a data mutation" } },
+
+    { "method": "GET", "path": "/rest/V1/store/websites", "covered_by": { "stream": "store_websites" } },
+    { "method": "GET", "path": "/rest/V1/store/storeViews", "covered_by": { "stream": "store_views" } },
+    { "method": "GET", "path": "/rest/V1/store/storeConfigs", "excluded": { "category": "non_data_endpoint", "reason": "per-store runtime configuration snapshot (locale, currency, base URLs), not a syncable business-object stream" } },
+    { "method": "GET", "path": "/rest/V1/store/storeGroups", "excluded": { "category": "duplicate_of", "reason": "the intermediate website-to-store-view grouping layer; both covered endpoints (store_websites/store_views) already surface the same hierarchy without this connecting layer" } },
+
+    { "method": "GET", "path": "/rest/V1/carts/{cartId}", "excluded": { "category": "out_of_scope", "reason": "an active shopping-cart/quote is a session-scoped, in-progress checkout object, not a settled syncable catalog/sales record; the whole quote/cart resource group is out of scope" } },
+    { "method": "POST", "path": "/rest/V1/carts", "excluded": { "category": "out_of_scope", "reason": "cart creation is the first step of a multi-request checkout sequence (create cart -> add items -> set addresses -> place order), not a standalone single-record write this dialect models" } },
+    { "method": "GET", "path": "/rest/V1/carts/{cartId}/items", "excluded": { "category": "out_of_scope", "reason": "cart line-item sub-list of an out-of-scope session-scoped cart resource" } },
+    { "method": "POST", "path": "/rest/V1/carts/{cartId}/items", "excluded": { "category": "out_of_scope", "reason": "cart line-item mutation of an out-of-scope session-scoped cart resource" } },
+    { "method": "PUT", "path": "/rest/V1/carts/{cartId}/coupons/{couponCode}", "excluded": { "category": "out_of_scope", "reason": "coupon-to-cart application on an out-of-scope session-scoped cart resource" } },
+    { "method": "GET", "path": "/rest/V1/carts/{cartId}/totals", "excluded": { "category": "out_of_scope", "reason": "computed cart-total snapshot of an out-of-scope session-scoped cart resource, not a persisted record" } },
+    { "method": "POST", "path": "/rest/V1/carts/{cartId}/order", "excluded": { "category": "out_of_scope", "reason": "the terminal place-order step of the multi-request checkout sequence; the resulting order is already covered by the orders stream once settled" } },
+
+    { "method": "GET", "path": "/rest/V1/inventory/sources", "excluded": { "category": "out_of_scope", "reason": "Multi-Source Inventory (MSI) is an Adobe Commerce-edition-only module not present on every Magento Open Source install this connector targets; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/rest/V1/inventory/stocks", "excluded": { "category": "out_of_scope", "reason": "MSI stocks surface; same edition-availability caveat as inventory/sources" } },
+    { "method": "GET", "path": "/rest/V1/inventory/source-items", "excluded": { "category": "out_of_scope", "reason": "MSI source-items surface; same edition-availability caveat as inventory/sources" } },
+
+    { "method": "GET", "path": "/rest/V1/cmsPage/search", "excluded": { "category": "out_of_scope", "reason": "CMS page content authoring is a distinct content-management domain from the catalog/sales/store-config surface this connector covers; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/rest/V1/cmsBlock/search", "excluded": { "category": "out_of_scope", "reason": "CMS block content authoring; same content-management-domain exclusion as cmsPage" } },
+
+    { "method": "GET", "path": "/rest/V1/salesRules/search", "excluded": { "category": "out_of_scope", "reason": "cart price rules (promotions) are merchandising configuration, not a transactional catalog/sales record; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/rest/V1/coupons", "excluded": { "category": "out_of_scope", "reason": "coupon codes are sub-objects of the out-of-scope sales-rule/promotion configuration surface" } },
+    { "method": "POST", "path": "/rest/V1/coupons/generate", "excluded": { "category": "out_of_scope", "reason": "bulk coupon-code generation returns an async-style batch result, not a single synchronous record; part of the excluded promotions surface" } },
+
+    { "method": "POST", "path": "/rest/V1/taxRates", "excluded": { "category": "requires_elevated_scope", "reason": "tax-rate configuration affects storefront pricing/compliance account-wide; treated as elevated-scope admin configuration, not an allow-listed reverse-ETL write" } },
+    { "method": "GET", "path": "/rest/V1/taxRates/{rateId}", "excluded": { "category": "out_of_scope", "reason": "single-tax-rate lookup with no list-all endpoint to enumerate from without a search-criteria filter target; narrow admin-configuration read, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/rest/V1/taxRules", "excluded": { "category": "requires_elevated_scope", "reason": "tax-rule configuration affects storefront pricing/compliance account-wide; treated as elevated-scope admin configuration, not an allow-listed reverse-ETL write" } },
+    { "method": "GET", "path": "/rest/V1/taxClasses/search", "excluded": { "category": "out_of_scope", "reason": "tax-class configuration lookup; narrow admin-configuration read, Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/rest/V1/products/{sku}/links/{type}", "excluded": { "category": "out_of_scope", "reason": "related/up-sell/cross-sell product-link sub-resource nested under an already-covered product; not modeled as its own top-level stream" } },
+    { "method": "GET", "path": "/rest/V1/bulk/{bulkUuid}/detailed-status", "excluded": { "category": "non_data_endpoint", "reason": "async bulk-operation job-status polling handle, not a syncable business-object stream" } },
+    { "method": "POST", "path": "/rest/V1/integration/admin/token", "excluded": { "category": "non_data_endpoint", "reason": "admin credential token-issuance endpoint; this connector authenticates with a pre-provisioned long-lived Integration Access Token instead, never performing its own login flow" } }
+  ]
+}

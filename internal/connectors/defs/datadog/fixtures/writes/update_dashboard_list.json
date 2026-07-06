@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Dashboard List Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/dashboard/lists/manual/1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/kyve/query/v1beta1/pools", "query": { "pagination.limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pools": [
+        { "id": "1", "name": "Fixture Pool One", "runtime": "@kyve/fixture" },
+        { "id": "2", "name": "Fixture Pool Two", "runtime": "@kyve/fixture" }
+      ],
+      "pagination": { "next_key": "fixture-next-key-1", "total": "3" }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "kyve",
+  "display_name": "KYVE",
+  "description": "Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYVE network's public REST query endpoints. Read-only; no credentials required.",
+  "integration_type": "api",
+  "docs_url": "https://docs.kyve.network/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external read of public KYVE network pool/staker/funder/validator data",
+    "approval": "none; read-only public Cosmos-style REST API"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads/synthetic-conformance-value/customfields"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "1",
+        "name": "Fixture lead_custom_fields",
+        "href": "https://app.nutshell.com/rest/lead_custom_fields/1",
+        "htmlUrl": "https://app.nutshell.com/lead_custom_fields/1",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      },
+      {
+        "id": "2",
+        "name": "Fixture lead_custom_fields",
+        "href": "https://app.nutshell.com/rest/lead_custom_fields/2",
+        "htmlUrl": "https://app.nutshell.com/lead_custom_fields/2",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      }
+    ]
+  }
+}

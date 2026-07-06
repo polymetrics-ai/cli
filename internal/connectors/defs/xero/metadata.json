@@ -1,0 +1,25 @@
+{
+  "name": "xero",
+  "display_name": "Xero",
+  "description": "Reads and writes Xero Accounting API resources through declarative JSON bundle streams and typed write actions.",
+  "integration_type": "api",
+  "docs_url": "https://developer.xero.com/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Xero Accounting API read of financial, contact, report, attachment-metadata, history, and organisation data",
+    "write": "creates, updates, emails, sets up, and deletes Xero Accounting API resources in the connected tenant",
+    "approval": "reverse ETL writes require plan preview and approval token; delete actions are marked destructive"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/internal/api/v2/segments/ws/synthetic-conformance-value",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": "segment_fixture_1",
+          "name": "beta-users",
+          "status": "ACTIVE",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "totalCount": 1
+    }
+  }
+}

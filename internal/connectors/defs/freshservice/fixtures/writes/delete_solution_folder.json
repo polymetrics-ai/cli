@@ -1,0 +1,11 @@
+{
+  "record": {
+    "folder_id": 123,
+    "name": "Fixture delete_solution_folder",
+    "description": "Fixture delete_solution_folder record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/solutions/folders/123"
+  }
+}

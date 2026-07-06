@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Qualaroo Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Qualaroo API key. Legacy nudge endpoints send it as Authorization: Token token=\"<api_key>\"; the Reporting API uses it as the HTTP Basic username. Never logged."
+    },
+    "api_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional Qualaroo Reporting API secret. When provided, the bundle uses HTTP Basic auth for reporting response reads."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.qualaroo.com/api/v1",
+      "description": "Qualaroo API base URL override for tests or proxies."
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "Qualaroo survey/nudge id used by the documented Reporting API response endpoint."
+    }
+  }
+}

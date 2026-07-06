@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/team" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "team_fixture_1", "name": "Engineering", "description": "fixture record", "default": false, "employees": ["emp_fixture_1"], "projects": ["project_fixture_1"], "modelName": "Team" },
+      { "id": "team_fixture_2", "name": "Design", "description": "fixture record", "default": false, "employees": ["emp_fixture_2"], "projects": ["project_fixture_1"], "modelName": "Team" }
+    ]
+  }
+}

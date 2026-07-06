@@ -1,0 +1,26 @@
+{
+  "record": {
+    "defaultMode": "DISABLE",
+    "useCaseModeOverrides": {
+      "LOGIN_PAGE": "DISABLE",
+      "OAUTH2_AUTHORIZE": "DISABLE",
+      "OIE_APP_INTENT": "DISABLE"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/rate-limit-settings/per-client",
+    "body": {
+      "defaultMode": "DISABLE",
+      "useCaseModeOverrides": {
+        "LOGIN_PAGE": "DISABLE",
+        "OAUTH2_AUTHORIZE": "DISABLE",
+        "OIE_APP_INTENT": "DISABLE"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

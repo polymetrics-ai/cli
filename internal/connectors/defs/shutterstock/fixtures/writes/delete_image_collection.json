@@ -1,0 +1,13 @@
+{
+  "record": {
+    "image_collection_id": "image-collection-id-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/images/collections/image-collection-id-fixture-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

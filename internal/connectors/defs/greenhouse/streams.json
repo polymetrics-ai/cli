@@ -1,0 +1,999 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "On-Behalf-Of": "{{ config.on_behalf_of_user_id }}"
+    },
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": ""
+      }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/jobs",
+      "query": {
+        "per_page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "greenhouse api_key is missing or invalid; re-run pm credentials add greenhouse"
+      },
+      {
+        "status": 403,
+        "hint": "greenhouse account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "greenhouse rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "candidates",
+      "path": "/candidates",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "applications",
+      "path": "/applications",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "offers",
+      "path": "/offers",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/offers.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "activity_feed",
+      "path": "/candidates/{{ config.candidate_id }}/activity_feed",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/activity_feed.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "application",
+      "path": "/applications/{{ config.application_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/application.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "approvals_for_job",
+      "path": "/jobs/{{ config.job_id }}/approval_flows",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/approvals_for_job.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "approval_flow",
+      "path": "/approval_flows/{{ config.approval_flow_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/approval_flow.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "pending_approvals_for_user",
+      "path": "/users/{{ config.user_id }}/pending_approvals",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/pending_approvals_for_user.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "candidate",
+      "path": "/candidates/{{ config.candidate_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/candidate.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "close_reasons",
+      "path": "/close_reasons",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/close_reasons.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom_fields/{{ config.field_type }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_fields.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "custom_field",
+      "path": "/custom_field/{{ config.custom_field_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_field.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_field_options",
+      "path": "/custom_field/{{ config.custom_field_id }}/custom_field_options",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_field_options.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_question_sets",
+      "path": "/demographics/question_sets",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_question_sets.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_question_set",
+      "path": "/demographics/question_sets/{{ config.demographic_question_set_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_question_set.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "demographic_questions",
+      "path": "/demographics/questions",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_questions.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_questions_for_demographic_question_set",
+      "path": "/demographics/question_sets/{{ config.demographic_question_set_id }}/questions",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_questions_for_demographic_question_set.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_question",
+      "path": "/demographics/questions/{{ config.demographic_question_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_question.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "demographic_answer_options",
+      "path": "/demographics/answer_options",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answer_options.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_answer_options_for_demographic_question",
+      "path": "/demographics/questions/{{ config.demographic_question_id }}/answer_options",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answer_options_for_demographic_question.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_answer_option",
+      "path": "/demographics/answer_options/{{ config.demographic_answer_option_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answer_option.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "demographic_answers",
+      "path": "/demographics/answers",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answers.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_answers_for_application",
+      "path": "/applications/{{ config.application_id }}/demographics/answers",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answers_for_application.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "demographic_answer",
+      "path": "/demographics/answers/{{ config.demographic_answer_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/demographic_answer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/departments.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "department",
+      "path": "/departments/{{ config.department_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/department.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "degrees",
+      "path": "/degrees",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/degrees.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "disciplines",
+      "path": "/disciplines",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/disciplines.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "schools",
+      "path": "/schools",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/schools.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "eeoc",
+      "path": "/eeoc",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/eeoc.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "eeoc_data_for_application",
+      "path": "/applications/{{ config.application_id }}/eeoc",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/eeoc_data_for_application.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "email_templates",
+      "path": "/email_templates",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_templates.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "email_template",
+      "path": "/email_templates/{{ config.email_template_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/email_template.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "job_openings",
+      "path": "/jobs/{{ config.job_id }}/openings",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_openings.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "opening_for_job",
+      "path": "/jobs/{{ config.job_id }}/openings/{{ config.opening_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/opening_for_job.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "job_posts",
+      "path": "/job_posts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_posts.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job_post",
+      "path": "/job_posts/{{ config.job_post_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_post.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "job_posts_for_job",
+      "path": "/jobs/{{ config.job_id }}/job_posts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_posts_for_job.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job_post_for_job",
+      "path": "/jobs/{{ config.job_id }}/job_post",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_post_for_job.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_locations_for_job_post",
+      "path": "/job_posts/{{ config.job_post_id }}/custom_locations",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_locations_for_job_post.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job_stages",
+      "path": "/job_stages",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_stages.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job_stages_for_job",
+      "path": "/jobs/{{ config.job_id }}/stages",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_stages_for_job.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job_stage",
+      "path": "/job_stages/{{ config.job_stage_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_stage.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "job",
+      "path": "/jobs/{{ config.job_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "hiring_team",
+      "path": "/jobs/{{ config.job_id }}/hiring_team",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/hiring_team.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "offers_for_application",
+      "path": "/applications/{{ config.application_id }}/offers",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offers_for_application.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "current_offer_for_application",
+      "path": "/applications/{{ config.application_id }}/offers/current_offer",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/current_offer_for_application.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "offer",
+      "path": "/offers/{{ config.offer_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "offices",
+      "path": "/offices",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/offices.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "office",
+      "path": "/offices/{{ config.office_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/office.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prospect_pools",
+      "path": "/prospect_pools",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/prospect_pools.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "prospect_pool",
+      "path": "/prospect_pools/{{ config.prospect_pool_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/prospect_pool.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "rejection_reasons",
+      "path": "/rejection_reasons",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/rejection_reasons.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "scheduled_interviews",
+      "path": "/scheduled_interviews",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scheduled_interviews.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "scheduled_interviews_for_application",
+      "path": "/applications/{{ config.application_id }}/scheduled_interviews",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scheduled_interviews_for_application.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "scheduled_interview",
+      "path": "/scheduled_interviews/{{ config.scheduled_interview_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scheduled_interview.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "scorecards",
+      "path": "/scorecards",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scorecards.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "scorecards_for_application",
+      "path": "/applications/{{ config.application_id }}/scorecards",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scorecards_for_application.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "scorecard",
+      "path": "/scorecards/{{ config.scorecard_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/scorecard.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "candidate_tags",
+      "path": "/tags/candidate",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/candidate_tags.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "tags_applied_to_candidate",
+      "path": "/candidates/{{ config.candidate_id }}/tags",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tags_applied_to_candidate.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "tracking_link_data_for_token",
+      "path": "/tracking_links/{{ config.token }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tracking_link_data_for_token.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "job_permissions",
+      "path": "/users/{{ config.user_id }}/permissions/jobs",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/job_permissions.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "future_job_permissions",
+      "path": "/users/{{ config.user_id }}/permissions/future_jobs",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/future_job_permissions.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "user_roles",
+      "path": "/user_roles",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/user_roles.json",
+      "query": {
+        "per_page": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    }
+  ]
+}

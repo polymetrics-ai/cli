@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "role",
+      "attributes": {
+        "name": "Fixture Update Role"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/roles/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "role",
+        "attributes": {
+          "name": "Fixture Update Role"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

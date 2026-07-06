@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/notifications/webhook/rules",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": [
+        {
+          "id": 1,
+          "name": "Fixture webhook_notification_rules",
+          "title": "Fixture webhook_notification_rules",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

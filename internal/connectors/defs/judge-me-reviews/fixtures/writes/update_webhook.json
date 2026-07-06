@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 1,
+    "webhook": {
+      "key": "review/updated",
+      "url": "https://example.com/webhooks/review-updated"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhooks/1",
+    "body": {
+      "webhook": {
+        "key": "review/updated",
+        "url": "https://example.com/webhooks/review-updated"
+      }
+    }
+  }
+}

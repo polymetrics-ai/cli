@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/departments" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "_id": "dept_fixture_1", "name": "Engineering" },
+      { "_id": "dept_fixture_2", "name": "Sales" }
+    ]
+  }
+}

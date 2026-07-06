@@ -1,0 +1,22 @@
+{
+  "record": {
+    "externalId": "ext-acct-fixture-1",
+    "name": "Fixture Account",
+    "organizationId": "org_fixture_1",
+    "traits": { "plan": "pro" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resources/accounts",
+    "body": {
+      "externalId": "ext-acct-fixture-1",
+      "name": "Fixture Account",
+      "organizationId": "org_fixture_1",
+      "traits": { "plan": "pro" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "acct_fixture_1", "externalId": "ext-acct-fixture-1", "name": "Fixture Account" }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "id": 1,
+          "title": "Fixture Launch",
+          "status": "live",
+          "url": "https://events.example/events/1",
+          "venue": "Fixture Hall",
+          "currency": "USD",
+          "start_date": "2026-01-01",
+          "start_time": "09:00",
+          "end_date": "2026-01-01",
+          "end_time": "17:00",
+          "time_zone": "UTC",
+          "categories": "Conference",
+          "tickets_sold": 10,
+          "tickets_total": 100
+        },
+        {
+          "id": 2,
+          "title": "Fixture Expo",
+          "status": "live",
+          "url": "https://events.example/events/2",
+          "venue": "Fixture Hall",
+          "currency": "USD",
+          "start_date": "2026-02-01",
+          "start_time": "09:00",
+          "end_date": "2026-02-01",
+          "end_time": "17:00",
+          "time_zone": "UTC",
+          "categories": "Expo",
+          "tickets_sold": 20,
+          "tickets_total": 200
+        },
+        {
+          "id": 3,
+          "title": "Fixture Closing",
+          "status": "draft",
+          "url": "https://events.example/events/3",
+          "venue": "Fixture Hall",
+          "currency": "USD",
+          "start_date": "2026-03-01",
+          "start_time": "09:00",
+          "end_date": "2026-03-01",
+          "end_time": "17:00",
+          "time_zone": "UTC",
+          "categories": "Conference",
+          "tickets_sold": 5,
+          "tickets_total": 50
+        }
+      ]
+    }
+  }
+}

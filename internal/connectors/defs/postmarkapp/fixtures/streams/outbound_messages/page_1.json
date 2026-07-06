@@ -1,0 +1,1418 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages/outbound",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 101,
+      "Messages": [
+        {
+          "MessageID": "msg-fixture-1",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture1@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 1",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-2",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture2@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 2",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-3",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture3@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 3",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-4",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture4@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 4",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-5",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture5@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 5",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-6",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture6@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 6",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-7",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture7@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 7",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-8",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture8@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 8",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-9",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture9@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 9",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-10",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture10@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 10",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-11",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture11@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 11",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-12",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture12@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 12",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-13",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture13@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 13",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-14",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture14@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 14",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-15",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture15@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 15",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-16",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture16@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 16",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-17",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture17@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 17",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-18",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture18@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 18",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-19",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture19@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 19",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-20",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture20@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 20",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-21",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture21@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 21",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-22",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture22@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 22",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-23",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture23@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 23",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-24",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture24@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 24",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-25",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture25@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 25",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-26",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture26@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 26",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-27",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture27@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 27",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-28",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture28@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 28",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-29",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture29@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 29",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-30",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture30@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 30",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-31",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture31@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 31",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-32",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture32@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 32",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-33",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture33@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 33",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-34",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture34@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 34",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-35",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture35@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 35",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-36",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture36@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 36",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-37",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture37@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 37",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-38",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture38@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 38",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-39",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture39@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 39",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-40",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture40@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 40",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-41",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture41@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 41",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-42",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture42@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 42",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-43",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture43@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 43",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-44",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture44@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 44",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-45",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture45@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 45",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-46",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture46@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 46",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-47",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture47@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 47",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-48",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture48@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 48",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-49",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture49@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 49",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-50",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture50@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 50",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-51",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture51@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 51",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-52",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture52@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 52",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-53",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture53@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 53",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-54",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture54@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 54",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-55",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture55@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 55",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-56",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture56@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 56",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-57",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture57@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 57",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-58",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture58@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 58",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-59",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture59@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 59",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-60",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture60@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 60",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-61",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture61@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 61",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-62",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture62@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 62",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-63",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture63@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 63",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-64",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture64@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 64",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-65",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture65@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 65",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-66",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture66@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 66",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-67",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture67@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 67",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-68",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture68@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 68",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-69",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture69@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 69",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-70",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture70@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 70",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-71",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture71@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 71",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-72",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture72@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 72",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-73",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture73@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 73",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-74",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture74@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 74",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-75",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture75@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 75",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-76",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture76@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 76",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-77",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture77@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 77",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-78",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture78@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 78",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-79",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture79@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 79",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-80",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture80@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 80",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-81",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture81@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 81",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-82",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture82@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 82",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-83",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture83@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 83",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-84",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture84@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 84",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-85",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture85@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 85",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-86",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture86@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 86",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-87",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture87@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 87",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-88",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture88@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 88",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-89",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture89@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 89",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-90",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture90@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 90",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-91",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture91@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 91",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-92",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture92@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 92",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-93",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture93@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 93",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-94",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture94@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 94",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-95",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture95@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 95",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-96",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture96@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 96",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-97",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture97@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 97",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-98",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture98@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 98",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-99",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture99@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 99",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        },
+        {
+          "MessageID": "msg-fixture-100",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture100@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 100",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        }
+      ]
+    }
+  }
+}

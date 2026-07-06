@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "draft_fixture_1",
+    "message": { "raw": "Zml4dHVyZS11cGRhdGVkLWRyYWZ0" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/drafts/draft_fixture_1",
+    "body": {
+      "message": { "raw": "Zml4dHVyZS11cGRhdGVkLWRyYWZ0" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "draft_fixture_1", "message": { "id": "msg_fixture_draft_1" } }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "article_id": "article_id_fixture_1",
+    "name": "Fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/articles/article_id_fixture_1",
+    "body": {
+      "name": "Fixture"
+    }
+  }
+}

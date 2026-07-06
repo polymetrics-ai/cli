@@ -1,0 +1,33 @@
+{
+  "api": "Harvest API v2 (https://api.harvestapp.com/v2)",
+  "docs": "https://help.getharvest.com/api-v2/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B read expansion for Harvest API v2 list/singleton endpoints that are expressible as bounded declarative streams. Legacy remains read-only; documented mutation endpoints are excluded with concrete permission/risk categories rather than exposed as broad reverse-ETL actions.",
+  "endpoints": [
+    { "method": "GET", "path": "/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/company", "covered_by": { "stream": "company" } },
+    { "method": "GET", "path": "/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/time_entries", "covered_by": { "stream": "time_entries" } },
+    { "method": "GET", "path": "/task_assignments", "covered_by": { "stream": "task_assignments" } },
+    { "method": "GET", "path": "/invoices", "covered_by": { "stream": "invoices" } },
+    { "method": "GET", "path": "/estimates", "covered_by": { "stream": "estimates" } },
+    { "method": "GET", "path": "/expenses", "covered_by": { "stream": "expenses" } },
+    { "method": "GET", "path": "/invoice_item_categories", "covered_by": { "stream": "invoice_item_categories" } },
+    { "method": "GET", "path": "/estimate_item_categories", "covered_by": { "stream": "estimate_item_categories" } },
+    { "method": "GET", "path": "/expense_categories", "covered_by": { "stream": "expense_categories" } },
+    { "method": "GET", "path": "/roles", "covered_by": { "stream": "roles" } },
+    { "method": "GET", "path": "/clients/{CLIENT_ID}, /contacts/{CONTACT_ID}, /projects/{PROJECT_ID}, /tasks/{TASK_ID}, /users/{USER_ID}, /time_entries/{TIME_ENTRY_ID}, /invoices/{INVOICE_ID}, /estimates/{ESTIMATE_ID}, /expenses/{EXPENSE_ID}, /invoice_item_categories/{ID}, /estimate_item_categories/{ID}, /expense_categories/{ID}, /roles/{ROLE_ID}", "excluded": { "category": "duplicate_of", "reason": "Detail endpoints return the same object shape as the corresponding list streams; adding ID-parameter streams would require user-supplied IDs and would duplicate rows already available from the list endpoints." } },
+    { "method": "GET", "path": "/projects/{PROJECT_ID}/task_assignments", "excluded": { "category": "duplicate_of", "reason": "Project-scoped task assignments are a filtered view of the covered /task_assignments stream." } },
+    { "method": "GET", "path": "/projects/{PROJECT_ID}/user_assignments and /users/{USER_ID}/project_assignments", "excluded": { "category": "out_of_scope", "reason": "These parameterized assignment endpoints require caller-supplied project/user IDs or fan-out from other streams, which is not expressible in the current declarative stream dialect without a StreamHook." } },
+    { "method": "GET", "path": "/users/{USER_ID}/billable_rates, /users/{USER_ID}/cost_rates, /users/{USER_ID}/teammates", "excluded": { "category": "requires_elevated_scope", "reason": "User rate/team endpoints expose compensation or manager relationship data and require administrator/manager permissions; they are intentionally outside the default read surface." } },
+    { "method": "GET", "path": "/invoices/{INVOICE_ID}/messages, /invoices/{INVOICE_ID}/payments, /estimates/{ESTIMATE_ID}/messages", "excluded": { "category": "out_of_scope", "reason": "These nested endpoints require an invoice/estimate ID fan-out and are not expressible as standalone declarative list streams without a StreamHook." } },
+    { "method": "GET", "path": "/reports/time/clients, /reports/time/projects, /reports/time/tasks, /reports/time/team", "excluded": { "category": "out_of_scope", "reason": "Time reports require explicit from/to date windows and emit aggregate metric rows rather than source objects; adding them needs a separate report-parameter design, not a silent default range." } },
+    { "method": "GET", "path": "/reports/expenses/*, /reports/uninvoiced, /reports/project_budget", "excluded": { "category": "out_of_scope", "reason": "Report endpoints emit aggregate metric rows with report-specific required filters or permission-sensitive amounts; they are excluded pending a dedicated report-stream contract." } },
+    { "method": "POST", "path": "/clients, /contacts, /projects, /tasks, /users, /time_entries, /invoices, /estimates, /expenses, /invoice_item_categories, /estimate_item_categories, /expense_categories, /roles and nested assignment/rate/message/payment actions", "excluded": { "category": "requires_elevated_scope", "reason": "Harvest write endpoints create live business records and commonly require administrator or manager permissions; legacy Write is unsupported, so this read connector does not expose reverse-ETL mutations." } },
+    { "method": "PATCH", "path": "/company and mutable Harvest resources", "excluded": { "category": "requires_elevated_scope", "reason": "Patch endpoints mutate account settings or business records and require a dedicated reverse-ETL risk/approval design not present in the legacy connector." } },
+    { "method": "DELETE", "path": "/clients, /contacts, /projects, /tasks, /users, /time_entries, /invoices, /estimates, /expenses, /categories, /roles and assignments", "excluded": { "category": "destructive_admin", "reason": "Delete endpoints remove or archive live Harvest business data and are intentionally not exposed by this read-only connector." } }
+  ]
+}

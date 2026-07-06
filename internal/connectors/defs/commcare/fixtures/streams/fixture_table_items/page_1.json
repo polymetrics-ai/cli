@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/fixture/v1/",
+    "query": { "fixture_type": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "fields": { "name": "Fixture item", "state": "Fixture State" },
+        "fixture_type": "synthetic-conformance-value",
+        "resource_uri": "",
+        "id": "fixture_table_item_1"
+      }
+    ]
+  }
+}

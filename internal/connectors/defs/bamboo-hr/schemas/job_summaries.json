@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "job_summaries",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "title": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "activeApplicantsCount": {
+      "type": "integer"
+    },
+    "department": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "hiringLead": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "location": {
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "newApplicantsCount": {
+      "type": "integer"
+    },
+    "postedDate": {
+      "type": "string"
+    },
+    "postingUrl": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "totalApplicantsCount": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/applications",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 201,
+        "candidate_id": 1,
+        "status": "active",
+        "applied_at": "2026-01-01T00:00:00Z",
+        "rejected_at": null,
+        "last_activity_at": "2026-01-02T00:00:00Z",
+        "source_id": 7
+      },
+      {
+        "id": 202,
+        "candidate_id": 2,
+        "status": "rejected",
+        "applied_at": "2026-01-01T00:00:01Z",
+        "rejected_at": "2026-01-03T00:00:00Z",
+        "last_activity_at": "2026-01-03T00:00:00Z",
+        "source_id": 7
+      }
+    ]
+  }
+}

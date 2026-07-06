@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collaborators",
+  "type": "object",
+  "x-primary-key": ["id", "project_id"],
+  "required": ["id", "project_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "project_id": { "type": "string" }
+  }
+}

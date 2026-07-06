@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON schema version identifier"
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "A collection of error messages for individual properties in the schema. Okta implements a subset of [ajv-errors](https://github.com/ajv-validator/ajv-errors).",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "id": {
+      "type": "string",
+      "description": "URI of log stream schema"
+    },
+    "oneOf": {
+      "type": "array",
+      "description": "Non-empty array of valid JSON schemas.\n\nOkta only supports `oneOf` for specifying display names for an `enum`. Each schema has the following format:\n\n```\n{\n  \"const\": \"enumValue\",\n  \"title\": \"display name\"\n}\n```",
+      "items": {
+        "type": "object",
+        "properties": {
+          "const": {
+            "type": "string",
+            "description": "The enumerated value"
+          },
+          "title": {
+            "type": "string",
+            "description": "The display label for the enumerated value"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "pattern": {
+      "type": "string",
+      "description": "For `string` log stream schema property type, specifies the regular expression used to validate the property"
+    },
+    "properties": {
+      "type": "object",
+      "description": "log stream schema properties object",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "required": {
+      "type": "array",
+      "description": "Required properties for this log stream schema object",
+      "items": {
+        "type": "string"
+      }
+    },
+    "title": {
+      "type": "string",
+      "description": "Name of the log streaming integration"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of log stream schema property"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

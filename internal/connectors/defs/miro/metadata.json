@@ -1,0 +1,25 @@
+{
+  "name": "miro",
+  "display_name": "Miro",
+  "description": "Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental REST API resources through the Miro Developer Platform API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.miro.com/reference/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Miro API reads across board, enterprise, SCIM, user-group, project, and experimental resources",
+    "write": "external Miro API mutations including board sharing, item changes, enterprise administration, SCIM provisioning, groups, projects, and deletes",
+    "approval": "required for every write action; destructive deletes require destructive confirmation"
+  }
+}

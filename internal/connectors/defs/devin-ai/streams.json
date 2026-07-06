@@ -1,0 +1,349 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "end_cursor",
+      "stop_path": "has_next_page"
+    },
+    "check": { "method": "GET", "path": "/v3/organizations/{{ config.org_id }}/sessions" },
+    "error_map": [
+      { "status": 401, "hint": "devin-ai api_token is missing or invalid; re-run pm credentials add devin-ai" },
+      { "status": 403, "hint": "devin-ai organization lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "devin-ai rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sessions",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/sessions.json"
+    },
+    {
+      "name": "sessions_insights",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/insights",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/sessions_insights.json"
+    },
+    {
+      "name": "session_details",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ fanout.id }}",
+      "records": { "path": ".", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
+        "into": { "path_var": "devin_id" }
+      },
+      "schema": "schemas/sessions.json"
+    },
+    {
+      "name": "session_messages",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ fanout.id }}/messages",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "created_after",
+        "param_format": "unix_seconds",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "message_id": "{{ coalesce record.message_id record.event_id }}",
+        "role": "{{ coalesce record.role record.source }}",
+        "content": "{{ coalesce record.content record.message }}"
+      },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
+        "into": { "path_var": "devin_id" },
+        "stamp_field": "session_id"
+      },
+      "schema": "schemas/session_messages.json"
+    },
+    {
+      "name": "session_attachments",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ fanout.id }}/attachments",
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
+        "into": { "path_var": "devin_id" },
+        "stamp_field": "session_id"
+      },
+      "schema": "schemas/session_attachments.json"
+    },
+    {
+      "name": "session_tags",
+      "path": "/v3/organizations/{{ config.org_id }}/sessions/{{ fanout.id }}/tags",
+      "records": { "path": ".", "single_object": true },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
+        "into": { "path_var": "devin_id" },
+        "stamp_field": "session_id"
+      },
+      "schema": "schemas/session_tags.json"
+    },
+    {
+      "name": "playbooks",
+      "path": "/v3/organizations/{{ config.org_id }}/playbooks",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.title }}",
+        "description": "{{ coalesce record.description record.body }}"
+      },
+      "schema": "schemas/playbooks.json"
+    },
+    {
+      "name": "secrets",
+      "path": "/v3/organizations/{{ config.org_id }}/secrets",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "name": "{{ coalesce record.name record.key }}",
+        "type": "{{ coalesce record.type record.secret_type }}"
+      },
+      "schema": "schemas/secrets.json"
+    },
+    {
+      "name": "knowledge_notes",
+      "path": "/v3/organizations/{{ config.org_id }}/knowledge/notes",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "schema": "schemas/knowledge_notes.json"
+    },
+    {
+      "name": "knowledge_folders",
+      "path": "/v3/organizations/{{ config.org_id }}/knowledge/folders",
+      "records": { "path": "folders" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/knowledge_folders.json"
+    },
+    {
+      "name": "repositories",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories",
+      "query": {
+        "first": { "template": "{{ config.page_size }}", "default": "100" },
+        "filter_name": { "template": "{{ config.repository_filter_name }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/repositories.json"
+    },
+    {
+      "name": "indexed_repositories",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/repositories/indexing",
+      "query": { "first": { "template": "{{ config.page_size }}", "default": "100" } },
+      "records": { "path": "items" },
+      "schema": "schemas/indexed_repositories.json"
+    },
+    {
+      "name": "schedules",
+      "path": "/v3/organizations/{{ config.org_id }}/schedules",
+      "records": { "path": "items" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 100
+      },
+      "schema": "schemas/schedules.json"
+    },
+    {
+      "name": "organization_users",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/members/users",
+      "query": {
+        "first": { "template": "{{ config.page_size }}", "default": "100" },
+        "email": { "template": "{{ config.user_email }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/organization_users.json"
+    },
+    {
+      "name": "organization_idp_group_users",
+      "path": "/v3beta1/organizations/{{ config.org_id }}/members/idp-users",
+      "query": {
+        "first": { "template": "{{ config.page_size }}", "default": "100" },
+        "email": { "template": "{{ config.user_email }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "schema": "schemas/organization_idp_group_users.json"
+    },
+    {
+      "name": "self",
+      "path": "/v3/self",
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "schema": "schemas/self.json"
+    },
+    {
+      "name": "org_daily_consumption",
+      "path": "/v3/organizations/{{ config.org_id }}/consumption/daily",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_daily_consumption" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "session_daily_consumption",
+      "path": "/v3/organizations/{{ config.org_id }}/consumption/daily/sessions/{{ fanout.id }}",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "session_daily_consumption" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3/organizations/{{ config.org_id }}/sessions", "records_path": "items", "id_field": "session_id" } },
+        "into": { "path_var": "session_id" },
+        "stamp_field": "session_id"
+      },
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "user_daily_consumption",
+      "path": "/v3/organizations/{{ config.org_id }}/consumption/daily/users/{{ fanout.id }}",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "user_daily_consumption" },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": { "request": { "path": "/v3beta1/organizations/{{ config.org_id }}/members/users", "records_path": "items", "id_field": "user_id" } },
+        "into": { "path_var": "user_id" },
+        "stamp_field": "user_id"
+      },
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_usage_metrics",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/usage",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_usage_metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_session_metrics",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/sessions",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_session_metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_active_users_metrics",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/active-users",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_active_users_metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_daily_active_users",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/dau",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_daily_active_users" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_monthly_active_users",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/mau",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_monthly_active_users" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_pr_metrics",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/prs",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_pr_metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_search_metrics",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/searches",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_search_metrics" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    },
+    {
+      "name": "org_weekly_active_users",
+      "path": "/v3/organizations/{{ config.org_id }}/metrics/wau",
+      "query": {
+        "time_after": { "template": "{{ config.metrics_time_after }}", "omit_when_absent": true },
+        "time_before": { "template": "{{ config.metrics_time_before }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "pagination": { "type": "none" },
+      "computed_fields": { "metric": "org_weekly_active_users" },
+      "projection": "passthrough",
+      "schema": "schemas/metric_result.json"
+    }
+  ]
+}

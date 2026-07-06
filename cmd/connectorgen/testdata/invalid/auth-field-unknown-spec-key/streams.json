@@ -1,0 +1,20 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "authfield/1.0",
+    "headers": {},
+    "auth": [ { "mode": "basic", "username": "{{ config.nope_username }}", "password": "{{ secrets.token }}" } ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ping" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

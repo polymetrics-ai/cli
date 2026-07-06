@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "columns": { "type": ["array", "null"] },
+    "filters": { "type": ["array", "null"] },
+    "resource_uri": { "type": ["string", "null"] }
+  }
+}

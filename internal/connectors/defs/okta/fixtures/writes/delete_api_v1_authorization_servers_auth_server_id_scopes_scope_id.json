@@ -1,0 +1,14 @@
+{
+  "record": {
+    "auth_server_id": "synthetic-conformance-value",
+    "scope_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/scopes/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

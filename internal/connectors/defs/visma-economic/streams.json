@@ -1,0 +1,208 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-AppSecretToken": "{{ secrets.app_secret_token }}",
+      "X-AgreementGrantToken": "{{ secrets.agreement_grant_token }}"
+    },
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/customers" },
+    "pagination": { "type": "page_number", "page_param": "skippages", "size_param": "pagesize", "start_page": 0, "page_size": 100 },
+    "error_map": [
+      { "status": 401, "class": "auth_failed", "hint": "invalid app_secret_token or agreement_grant_token" },
+      { "status": 422, "class": "invalid_request", "hint": "e-conomic rejected the request body; check required fields" },
+      { "status": 429, "class": "rate_limited", "hint": "e-conomic API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "collection" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "id": "{{ record.customerNumber | last_path_segment }}"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "suppliers",
+      "path": "/suppliers",
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "computed_fields": {
+        "id": "{{ record.supplierNumber }}"
+      },
+      "schema": "schemas/suppliers.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.productNumber }}"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "invoices_booked",
+      "path": "/invoices/booked",
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "computed_fields": {
+        "id": "{{ record.bookedInvoiceNumber }}"
+      },
+      "schema": "schemas/invoices_booked.json"
+    },
+    {
+      "name": "invoices_drafts",
+      "path": "/invoices/drafts",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.draftInvoiceNumber }}"
+      },
+      "schema": "schemas/invoices_drafts.json"
+    },
+    {
+      "name": "orders_drafts",
+      "path": "/orders/drafts",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.orderNumber }}"
+      },
+      "schema": "schemas/orders_drafts.json"
+    },
+    {
+      "name": "orders_sent",
+      "path": "/orders/sent",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.orderNumber }}"
+      },
+      "schema": "schemas/orders_sent.json"
+    },
+    {
+      "name": "quotes_drafts",
+      "path": "/quotes/drafts",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.quoteNumber }}"
+      },
+      "schema": "schemas/quotes_drafts.json"
+    },
+    {
+      "name": "quotes_sent",
+      "path": "/quotes/sent",
+      "records": { "path": "collection" },
+      "incremental": { "cursor_field": "lastUpdated", "request_param": "filter", "start_config_key": "start_date" },
+      "query": {
+        "filter": { "template": "lastUpdated$gte:{{ incremental.lower_bound }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "id": "{{ record.quoteNumber }}"
+      },
+      "schema": "schemas/quotes_sent.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.departmentNumber }}"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "payment_terms",
+      "path": "/payment-terms",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.paymentTermsNumber }}"
+      },
+      "schema": "schemas/payment_terms.json"
+    },
+    {
+      "name": "units",
+      "path": "/units",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.unitNumber }}"
+      },
+      "schema": "schemas/units.json"
+    },
+    {
+      "name": "vat_types",
+      "path": "/vat-types",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.vatTypeNumber }}"
+      },
+      "schema": "schemas/vat_types.json"
+    },
+    {
+      "name": "vat_zones",
+      "path": "/vat-zones",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.vatZoneNumber }}"
+      },
+      "schema": "schemas/vat_zones.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.accountNumber }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "customer_groups",
+      "path": "/customer-groups",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.customerGroupNumber }}"
+      },
+      "schema": "schemas/customer_groups.json"
+    },
+    {
+      "name": "product_groups",
+      "path": "/product-groups",
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.productGroupNumber }}"
+      },
+      "schema": "schemas/product_groups.json"
+    }
+  ]
+}

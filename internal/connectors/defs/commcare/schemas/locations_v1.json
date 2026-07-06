@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations_v1",
+  "type": "object",
+  "x-primary-key": ["location_id"],
+  "x-cursor-field": "last_modified",
+  "required": ["location_id"],
+  "properties": {
+    "created_at": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "id": { "type": ["integer", "string", "null"] },
+    "last_modified": { "type": ["string", "null"] },
+    "latitude": { "type": ["string", "number", "null"] },
+    "location_data": { "type": ["object", "null"] },
+    "location_id": { "type": "string" },
+    "location_type": { "type": ["string", "null"] },
+    "longitude": { "type": ["string", "number", "null"] },
+    "name": { "type": ["string", "null"] },
+    "parent": { "type": ["string", "null"] },
+    "resource_uri": { "type": ["string", "null"] },
+    "site_code": { "type": ["string", "null"] }
+  }
+}

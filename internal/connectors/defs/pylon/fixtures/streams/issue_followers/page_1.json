@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/issues/synthetic-conformance-value/followers"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "synthetic-conformance-value"
+        }
+      ],
+      "request_id": "req_fixture"
+    }
+  }
+}

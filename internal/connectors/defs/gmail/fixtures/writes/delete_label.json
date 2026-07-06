@@ -1,0 +1,7 @@
+{
+  "record": { "id": "label_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/labels/label_fixture_1"
+  }
+}

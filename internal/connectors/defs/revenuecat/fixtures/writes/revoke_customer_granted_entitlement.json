@@ -1,0 +1,15 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "entitlement_id": "ent_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/actions/revoke_granted_entitlement"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

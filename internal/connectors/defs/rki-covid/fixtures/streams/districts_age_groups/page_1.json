@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/districts/age-groups",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "02000": {
+          "A00-A04": {
+            "casesMale": 10,
+            "casesFemale": 11,
+            "deathsMale": 0,
+            "deathsFemale": 0
+          }
+        }
+      }
+    }
+  }
+}

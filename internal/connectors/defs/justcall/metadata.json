@@ -1,0 +1,22 @@
+{
+  "name": "justcall",
+  "display_name": "JustCall",
+  "description": "Reads JustCall users, call logs, SMS, contacts, and phone numbers through the JustCall REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.justcall.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external JustCall API read of users, call logs, SMS, contacts, and phone numbers"
+  }
+}

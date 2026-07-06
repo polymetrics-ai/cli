@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/contact-account-lists/synthetic-conformance-value",
+    "body": {
+      "name": "fixture_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

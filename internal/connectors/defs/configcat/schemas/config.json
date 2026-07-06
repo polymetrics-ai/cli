@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "config",
+  "type": "object",
+  "x-primary-key": ["configId"],
+  "required": ["configId"],
+  "properties": {
+    "configId": { "type": "string" },
+    "product": { "type": ["object", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "migratedConfigId": { "type": ["string", "null"] },
+    "evaluationVersion": { "type": ["string", "null"] }
+  }
+}

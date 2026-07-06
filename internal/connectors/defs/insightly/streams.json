@@ -1,0 +1,165 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.token }}", "password": "" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "top",
+      "offset_param": "skip"
+    },
+    "check": { "method": "GET", "path": "/Contacts", "query": { "top": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "insightly credentials are missing or invalid; re-run pm credentials add insightly" },
+      { "status": 403, "hint": "insightly account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "insightly rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/Contacts",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.CONTACT_ID }}",
+        "contact_id": "{{ record.CONTACT_ID }}",
+        "first_name": "{{ record.FIRST_NAME }}",
+        "last_name": "{{ record.LAST_NAME }}",
+        "email_address": "{{ record.EMAIL_ADDRESS }}",
+        "phone": "{{ record.PHONE }}",
+        "organisation_id": "{{ record.ORGANISATION_ID }}",
+        "title": "{{ record.TITLE }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "organisations",
+      "path": "/Organisations",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.ORGANISATION_ID }}",
+        "organisation_id": "{{ record.ORGANISATION_ID }}",
+        "organisation_name": "{{ record.ORGANISATION_NAME }}",
+        "phone": "{{ record.PHONE }}",
+        "website": "{{ record.WEBSITE }}",
+        "owner_user_id": "{{ record.OWNER_USER_ID }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/organisations.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/Opportunities",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.OPPORTUNITY_ID }}",
+        "opportunity_id": "{{ record.OPPORTUNITY_ID }}",
+        "opportunity_name": "{{ record.OPPORTUNITY_NAME }}",
+        "opportunity_state": "{{ record.OPPORTUNITY_STATE }}",
+        "opportunity_value": "{{ record.OPPORTUNITY_VALUE }}",
+        "probability": "{{ record.PROBABILITY }}",
+        "bid_currency": "{{ record.BID_CURRENCY }}",
+        "pipeline_id": "{{ record.PIPELINE_ID }}",
+        "stage_id": "{{ record.STAGE_ID }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/opportunities.json"
+    },
+    {
+      "name": "leads",
+      "path": "/Leads",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.LEAD_ID }}",
+        "lead_id": "{{ record.LEAD_ID }}",
+        "first_name": "{{ record.FIRST_NAME }}",
+        "last_name": "{{ record.LAST_NAME }}",
+        "email": "{{ record.EMAIL }}",
+        "organisation_name": "{{ record.ORGANISATION_NAME }}",
+        "lead_status_id": "{{ record.LEAD_STATUS_ID }}",
+        "lead_source_id": "{{ record.LEAD_SOURCE_ID }}",
+        "converted": "{{ record.CONVERTED }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "projects",
+      "path": "/Projects",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.PROJECT_ID }}",
+        "project_id": "{{ record.PROJECT_ID }}",
+        "project_name": "{{ record.PROJECT_NAME }}",
+        "status": "{{ record.STATUS }}",
+        "pipeline_id": "{{ record.PIPELINE_ID }}",
+        "stage_id": "{{ record.STAGE_ID }}",
+        "owner_user_id": "{{ record.OWNER_USER_ID }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/Tasks",
+      "records": { "path": "" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "id": "{{ record.TASK_ID }}",
+        "task_id": "{{ record.TASK_ID }}",
+        "title": "{{ record.TITLE }}",
+        "status": "{{ record.STATUS }}",
+        "priority": "{{ record.PRIORITY }}",
+        "completed": "{{ record.COMPLETED }}",
+        "due_date": "{{ record.DUE_DATE }}",
+        "owner_user_id": "{{ record.OWNER_USER_ID }}",
+        "date_created_utc": "{{ record.DATE_CREATED_UTC }}",
+        "date_updated_utc": "{{ record.DATE_UPDATED_UTC }}"
+      },
+      "schema": "schemas/tasks.json"
+    }
+  ]
+}

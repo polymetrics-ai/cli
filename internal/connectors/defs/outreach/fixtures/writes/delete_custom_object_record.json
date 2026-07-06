@@ -1,0 +1,15 @@
+{
+  "record": {
+    "objectName": "synthetic-conformance-value",
+    "id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customObjects/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

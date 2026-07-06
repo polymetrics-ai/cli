@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_order_vendor_direct_fulfillment_orders_v1_purchase_orders_purchase_order_number",
+  "type": "object",
+  "properties": {
+    "purchaseOrderNumber": {
+      "type": "string"
+    },
+    "orderDetails": {
+      "type": "object"
+    },
+    "purchase_order_number": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "purchaseOrderNumber"
+  ]
+}

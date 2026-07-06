@@ -1,0 +1,7 @@
+{
+  "record": { "title": "Fixture Clause", "content": "Fixture clause content." },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/synthetic-conformance-value/clauses"
+  }
+}

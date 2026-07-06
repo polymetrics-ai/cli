@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "voices",
+  "type": "object",
+  "x-primary-key": ["voice_name", "face_id"],
+  "required": ["voice_name"],
+  "properties": {
+    "voice_name": { "type": "string" },
+    "face_id": { "type": ["string", "null"] },
+    "audio_url": { "type": ["string", "null"] }
+  }
+}

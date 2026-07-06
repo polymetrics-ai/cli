@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Space" },
+  "expect": {
+    "method": "POST",
+    "path": "/team/synthetic-conformance-value/space",
+    "body": { "name": "Fixture Space" }
+  },
+  "response": { "status": 200, "body": { "id": "space_fixture_new", "name": "Fixture Space" } }
+}

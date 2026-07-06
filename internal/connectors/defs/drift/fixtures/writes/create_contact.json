@@ -1,0 +1,22 @@
+{
+  "record": {
+    "attributes": {
+      "email": "fixture.new@example.com",
+      "externalId": "fixture-external-1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts",
+    "body": {
+      "attributes": {
+        "email": "fixture.new@example.com",
+        "externalId": "fixture-external-1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": 999, "attributes": { "email": "fixture.new@example.com" } } }
+  }
+}

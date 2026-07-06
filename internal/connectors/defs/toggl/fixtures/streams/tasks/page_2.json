@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces/synthetic-conformance-value/tasks",
+    "query": {
+      "per_page": "100",
+      "page": "2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 200,
+          "workspace_id": 9,
+          "project_id": 100,
+          "name": "Fixture Task 200",
+          "active": false,
+          "at": "2026-01-02T00:00:00Z",
+          "estimated_seconds": 7200,
+          "tracked_seconds": 7200,
+          "user_id": 2,
+          "user_name": "Fixture User Two",
+          "client_id": 200,
+          "client_name": "Fixture Client One",
+          "project_name": "Fixture Project One",
+          "project_color": "#06a893",
+          "project_billable": true,
+          "project_is_private": true,
+          "rate": null,
+          "rate_last_updated": null,
+          "recurring": false,
+          "external_reference": null
+        }
+      ],
+      "page": 2,
+      "per_page": 100,
+      "sort_field": "name",
+      "sort_order": "ASC",
+      "total_count": 101
+    }
+  }
+}

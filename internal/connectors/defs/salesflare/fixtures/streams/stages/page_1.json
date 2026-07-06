@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/stages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "name": "Fixture Qualifying", "pipeline_id": 1 },
+        { "id": 2, "name": "Fixture Negotiation", "pipeline_id": 1 }
+      ]
+    }
+  }
+}

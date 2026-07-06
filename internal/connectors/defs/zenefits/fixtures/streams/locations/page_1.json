@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/core/locations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "location_fixture_1",
+            "name": "Fixture HQ",
+            "street1": "1 Fixture St.",
+            "street2": null,
+            "city": "Fixture City",
+            "state": "CA",
+            "zip": "94100",
+            "country": "US",
+            "phone": "+15550100",
+            "company": { "object": "/meta/ref/detail", "ref_object": "/core/companies", "url": "https://api.zenefits.com/core/companies/1" },
+            "people": { "object": "/meta/ref/list", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/locations/location_fixture_1/people" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/locations"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

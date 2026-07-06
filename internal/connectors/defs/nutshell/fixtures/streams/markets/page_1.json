@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/markets"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "1",
+        "name": "Fixture markets",
+        "href": "https://app.nutshell.com/rest/markets/1",
+        "htmlUrl": "https://app.nutshell.com/markets/1",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      },
+      {
+        "id": "2",
+        "name": "Fixture markets",
+        "href": "https://app.nutshell.com/rest/markets/2",
+        "htmlUrl": "https://app.nutshell.com/markets/2",
+        "createdTime": "2026-01-01T00:00:00+0000",
+        "modifiedTime": "2026-01-01T00:00:01+0000"
+      }
+    ]
+  }
+}

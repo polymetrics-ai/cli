@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SolarWinds Service Desk Connection Specification",
+  "type": "object",
+  "properties": {
+    "api_key_2": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SolarWinds Service Desk API key, sent as a Bearer token. Takes priority over api_key when both are configured (matching legacy's firstSecret(\"api_key_2\", \"api_key\") precedence). Never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "SolarWinds Service Desk API key (fallback name), sent as a Bearer token when api_key_2 is not configured. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.samanage.com",
+      "description": "SolarWinds Service Desk (Samanage) API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound forwarded verbatim as the updated_after query param; only sent when set (matches legacy's pass-through, no local validation)."
+    },
+    "page": {
+      "type": "string",
+      "description": "Page number forwarded verbatim as the page query param; only sent when set (legacy is single-request/non-paginating and merely passes this through, no local validation)."
+    },
+    "per_page": {
+      "type": "string",
+      "description": "Page size forwarded verbatim as the per_page query param; only sent when set (legacy is single-request/non-paginating and merely passes this through, no local validation)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

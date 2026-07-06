@@ -1,0 +1,12 @@
+{
+  "record": { "name": "Fixture Project", "color": "blue", "is_favorite": true },
+  "expect": {
+    "method": "POST",
+    "path": "/projects",
+    "body": { "name": "Fixture Project", "color": "blue", "is_favorite": true }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "prj_fixture_created", "name": "Fixture Project", "color": "blue", "is_favorite": true }
+  }
+}

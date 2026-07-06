@@ -1,0 +1,187 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/surveys", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "survey-sparrow access_token is missing or invalid; re-run pm credentials add survey-sparrow" },
+      { "status": 429, "class": "rate_limited", "hint": "survey-sparrow rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "records": { "path": "data" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "responses",
+      "path": "/responses",
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "completed_time"
+      },
+      "schema": "schemas/responses.json"
+    },
+    {
+      "name": "questions",
+      "path": "/questions",
+      "query": { "survey_id": "{{ config.survey_id }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/questions.json"
+    },
+    {
+      "name": "channels",
+      "path": "/channels",
+      "records": { "path": "data" },
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "contact_lists",
+      "path": "/contact_lists",
+      "records": { "path": "data" },
+      "schema": "schemas/contact_lists.json"
+    },
+    {
+      "name": "contact_properties",
+      "path": "/contact_properties",
+      "records": { "path": "data" },
+      "schema": "schemas/contact_properties.json"
+    },
+    {
+      "name": "reminders",
+      "path": "/reminders",
+      "records": { "path": "data" },
+      "schema": "schemas/reminders.json"
+    },
+    {
+      "name": "reputation_platforms",
+      "path": "/reputation/platforms",
+      "records": { "path": "data" },
+      "schema": "schemas/reputation_platforms.json"
+    },
+    {
+      "name": "reputation_app_platforms",
+      "path": "/reputation/app_platforms",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/reputation_app_platforms.json"
+    },
+    {
+      "name": "reputation_reviews",
+      "path": "/reputation/reviews",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/reputation_reviews.json"
+    },
+    {
+      "name": "survey_folders",
+      "path": "/survey_folders",
+      "records": { "path": "data" },
+      "schema": "schemas/survey_folders.json"
+    },
+    {
+      "name": "ticket_fields",
+      "path": "/ticket_fields",
+      "records": { "path": "data" },
+      "schema": "schemas/ticket_fields.json"
+    },
+    {
+      "name": "tickets",
+      "path": "/tickets",
+      "records": { "path": "data" },
+      "schema": "schemas/tickets.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "data" },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "records": { "path": "data" },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "variables",
+      "path": "/variables",
+      "records": { "path": "data" },
+      "schema": "schemas/variables.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "records": { "path": "data" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 50
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": { "path": "data" },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "email_themes",
+      "path": "/email_themes",
+      "records": { "path": "data" },
+      "schema": "schemas/email_themes.json"
+    },
+    {
+      "name": "expressions",
+      "path": "/expressions",
+      "records": { "path": "data" },
+      "schema": "schemas/expressions.json"
+    }
+  ]
+}

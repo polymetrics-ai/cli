@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "batch_payments",
+  "type": "object",
+  "x-primary-key": [
+    "BatchPaymentID"
+  ],
+  "properties": {
+    "Account": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "Reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Particulars": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Details": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Narrative": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "BatchPaymentID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DateString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Amount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "Payments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TotalAmount": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IsReconciled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "workflow_id": "wf_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workflows/wf_fixture_1/unarchive"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

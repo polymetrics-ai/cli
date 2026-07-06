@@ -1,0 +1,24 @@
+{
+  "name": "smartsheets",
+  "display_name": "Smartsheets",
+  "description": "Reads and writes Smartsheet sheets, rows, folders, reports, dashboards, users, webhooks, attachments, discussions, proofs, update requests, and workspace metadata.",
+  "integration_type": "api",
+  "docs_url": "https://developers.smartsheet.com/api/smartsheet/openapi/home",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Smartsheet API read of sheets, rows, folders, reports, dashboards, users, shares, webhooks, attachments, discussions, proofs, update requests, workspaces, and event metadata",
+    "write": "creates, updates, copies, moves, publishes, shares, and deletes Smartsheet business objects including rows, sheets, reports, folders, comments, attachments, proofs, update requests, webhooks, and workspaces; destructive deletes require approval",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

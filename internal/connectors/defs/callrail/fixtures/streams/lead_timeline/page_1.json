@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/leads.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "leads": [
+        {
+          "id": "PER_fixture_1",
+          "name": "Fixture Lead"
+        }
+      ]
+    }
+  }
+}

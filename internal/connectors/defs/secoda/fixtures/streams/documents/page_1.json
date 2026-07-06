@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/documents", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "doc_fixture_1", "name": "Fixture Runbook", "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

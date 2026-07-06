@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/messaging-event/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "objects": [
+        {
+          "id": 10215869,
+          "content_type": "email",
+          "date": "2026-07-01T04:11:27.482899",
+          "date_last_activity": "2026-07-01T04:11:27.482899",
+          "case_id": "case_v2_fixture_1",
+          "domain": "synthetic-conformance-value",
+          "error": null,
+          "form": null,
+          "messages": [
+            {
+              "message_id": 153444,
+              "date": "2026-07-01T04:12:00.000",
+              "date_modified": null,
+              "type": "sms",
+              "direction": "outgoing",
+              "content": "Fixture message",
+              "status": "sent",
+              "backend": "FIXTURE_BACKEND",
+              "phone_number": "+15550102"
+            }
+          ],
+          "recipient": { "recipient_id": "case_v2_fixture_1", "type": "case", "name": "Fixture Recipient" },
+          "source": { "source_id": "source_fixture_1", "type": "conditional-alert", "name": "Fixture Alert" },
+          "status": "completed"
+        }
+      ],
+      "meta": { "limit": 20, "next": null }
+    }
+  }
+}

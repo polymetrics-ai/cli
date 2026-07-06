@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sharetribe Connection Specification",
+  "type": "object",
+  "required": ["oauth_access_token"],
+  "properties": {
+    "oauth_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Sharetribe Integration API OAuth2 access token, sent as a Bearer token. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://flex-api.sharetribe.com/v1",
+      "description": "Sharetribe Integration API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

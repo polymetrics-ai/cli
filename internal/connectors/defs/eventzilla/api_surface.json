@@ -1,0 +1,27 @@
+{
+  "api": "Eventzilla v2 REST API (https://developer.eventzilla.net/docs/)",
+  "docs": "https://developer.eventzilla.net/docs/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion against the real Eventzilla v2 developer docs (https://developer.eventzilla.net/docs/, https://www.eventzilla.net/api/). 6 read streams (events, categories, users, attendees, tickets, transactions -- the latter a per-event fan_out like attendees/tickets) and 2 write actions (checkin_attendee, toggle_event_sales) are covered. Excluded: single-resource detail GETs that duplicate an already-covered list stream's record shape (events/{id}, attendees/{attendeeid}, users/{userid}, transactions/{checkout_id or refno}); the multi-step registration/checkout flow (prepare, create, fillorder, confirm) and order confirm/cancel, which are compound, payment-carrying, multi-request workflows this dialect's single-request write shape cannot safely express and which mutate real customer orders/charges.",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } },
+    { "method": "GET", "path": "/events/{eventid}", "excluded": { "category": "duplicate_of", "reason": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/events/togglesales", "covered_by": { "write": "toggle_event_sales" } },
+    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/users/{userid}", "excluded": { "category": "duplicate_of", "reason": "single-organizer detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/events/{event_id}/attendees", "covered_by": { "stream": "attendees" } },
+    { "method": "GET", "path": "/attendees/{attendeeid}", "excluded": { "category": "duplicate_of", "reason": "single-attendee detail; identical record shape to the attendees list stream's per-item object (per-event fan_out), already covered by that stream" } },
+    { "method": "POST", "path": "/attendees/checkin", "covered_by": { "write": "checkin_attendee" } },
+    { "method": "GET", "path": "/events/{event_id}/tickets", "covered_by": { "stream": "tickets" } },
+    { "method": "GET", "path": "/events/{event_id}/transactions", "covered_by": { "stream": "transactions" } },
+    { "method": "GET", "path": "/transactions/{checkout_id}", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail keyed by checkout_id; identical record shape to the transactions stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/transactions/{refno}", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail keyed by order reference number instead of checkout_id; identical record shape to the transactions stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/checkout/prepare/{eventid}/{dateid}", "excluded": { "category": "out_of_scope", "reason": "returns live payment-option/ticket-category/question/discount/tax configuration for an in-progress registration session; a preparatory read for the checkout flow below, not an independently syncable data stream" } },
+    { "method": "POST", "path": "/checkout/create", "excluded": { "category": "out_of_scope", "reason": "step 1 of the multi-step registration/checkout workflow (create -> fillorder -> confirm); a real customer-facing purchase-session creation that charges no money yet but reserves inventory, compound and stateful across 3 sequential requests this dialect's single-request write action cannot express" } },
+    { "method": "POST", "path": "/checkout/fillorder", "excluded": { "category": "out_of_scope", "reason": "step 2 of the multi-step registration/checkout workflow; depends on the checkout_id returned by checkout/create, compound multi-request workflow out of scope for a single declarative write action" } },
+    { "method": "POST", "path": "/checkout/confirm", "excluded": { "category": "out_of_scope", "reason": "step 3 of the multi-step registration/checkout workflow; finalizes payment and books a real paid registration, compound multi-request workflow and a genuine financial transaction out of scope for this pass" } },
+    { "method": "POST", "path": "/events/order/confirm", "excluded": { "category": "destructive_admin", "reason": "confirms a pending order against a real payment/registration record on behalf of the buyer; a financially consequential state transition on someone else's order, not a plain data-object mutation" } },
+    { "method": "POST", "path": "/events/order/cancel", "excluded": { "category": "destructive_admin", "reason": "cancels an existing paid order/registration, an irreversible financial action affecting a real attendee's registration and refund eligibility" } }
+  ]
+}

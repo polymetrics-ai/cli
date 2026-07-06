@@ -1,0 +1,10 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "tag": "FirstName"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/list_fixture_1/fields/FirstName"
+  }
+}

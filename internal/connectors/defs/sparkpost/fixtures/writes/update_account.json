@@ -1,0 +1,7 @@
+{
+  "record": { "company_name": "Updated Fixture Inc" },
+  "expect": {
+    "method": "PUT",
+    "path": "/account"
+  }
+}

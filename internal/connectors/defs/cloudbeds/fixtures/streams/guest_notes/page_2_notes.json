@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/getGuestNotes", "query": { "guestID": "guest_fixture_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "guestNoteID": "note_fixture_1",
+          "userName": "Fixture User",
+          "dateCreated": "2026-01-01 12:00:00",
+          "dateModified": "2026-01-01 12:00:00",
+          "guestNote": "Fixture guest note."
+        }
+      ],
+      "count": 1
+    }
+  }
+}

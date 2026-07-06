@@ -1,0 +1,54 @@
+{
+  "record": {
+    "created": "2026-01-01T00:00:00Z",
+    "id": "id_fixture",
+    "lastUpdated": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "status": "ACTIVE",
+    "type": "aws_eventbridge",
+    "_links": {
+      "activate": {
+        "href": "https://example.invalid/fixture",
+        "method": "GET"
+      },
+      "deactivate": {
+        "href": "https://example.invalid/fixture",
+        "method": "GET"
+      },
+      "self": {
+        "href": "https://example.invalid/fixture",
+        "method": "GET"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/logStreams",
+    "body": {
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "status": "ACTIVE",
+      "type": "aws_eventbridge",
+      "_links": {
+        "activate": {
+          "href": "https://example.invalid/fixture",
+          "method": "GET"
+        },
+        "deactivate": {
+          "href": "https://example.invalid/fixture",
+          "method": "GET"
+        },
+        "self": {
+          "href": "https://example.invalid/fixture",
+          "method": "GET"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

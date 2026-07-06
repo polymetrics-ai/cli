@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  kind
+  api_key (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    fields: first_name(), id(), last_name(), modified_at()
+  contact_groups:
+    primary key: id
+    fields: id(), kind(), name()
+  users:
+    primary key: id
+    fields: email(), id(), name()
+  teams:
+    primary key: id
+    fields: id(), name(), organization()
+  shared_labels:
+    primary key: id
+    fields: color(), id(), name(), name_with_parent_names()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Missive API read of contact, user, team, and label data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

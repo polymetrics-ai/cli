@@ -1,0 +1,22 @@
+{
+  "record": {
+    "listingId": "listing_fixture_1",
+    "seats": 1,
+    "start": "2026-01-01T00:00:00.000Z",
+    "end": "2026-01-02T00:00:00.000Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/availability_exceptions/create",
+    "body": {
+      "listingId": "listing_fixture_1",
+      "seats": 1,
+      "start": "2026-01-01T00:00:00.000Z",
+      "end": "2026-01-02T00:00:00.000Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "availability_exception_fixture_1", "type": "availabilityException" } }
+  }
+}

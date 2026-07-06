@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "enrollments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "user_id": { "type": ["integer", "null"] },
+    "user_name": { "type": ["string", "null"] },
+    "user_email": { "type": ["string", "null"] },
+    "course_id": { "type": ["integer", "null"] },
+    "course_name": { "type": ["string", "null"] },
+    "percentage_completed": { "type": ["number", "null"] },
+    "expired": { "type": ["boolean", "null"] },
+    "is_free_trial": { "type": ["boolean", "null"] },
+    "completed": { "type": ["boolean", "null"] },
+    "started_at": { "type": ["string", "null"] },
+    "activated_at": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "expiry_date": { "type": ["string", "null"] }
+  }
+}

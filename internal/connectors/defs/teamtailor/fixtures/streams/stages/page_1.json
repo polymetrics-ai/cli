@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stages",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "stage_fixture_1", "type": "stages", "attributes": { "name": "Fixture Applied" } }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "mandate_id": "mandate_id_fixture",
+    "mandates": {
+      "description": "Synthetic update_a_mandate fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/mandates/mandate_id_fixture",
+    "body": {
+      "mandates": {
+        "description": "Synthetic update_a_mandate fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

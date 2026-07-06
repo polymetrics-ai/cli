@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/images/create-upload-url",
+    "body": {
+      "name": "Fixture record"
+    }
+  }
+}

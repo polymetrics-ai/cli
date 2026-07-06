@@ -1,0 +1,1591 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.account_sid }}",
+        "password": "{{ secrets.auth_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages.json"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "twilio account_sid/auth_token is missing or invalid; re-run pm credentials add twilio"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "twilio rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages.json",
+      "records": {
+        "path": "messages"
+      },
+      "schema": "schemas/messages.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (legacy's next_page_uri body-cursor pagination is a HOST-RELATIVE URL -- e.g. '/2010-04-01/Accounts/AC.../Messages.json?Page=1' -- which the engine's declarative next_url pagination type cannot express: engine/paginate.go's checkOrigin fail-closed SSRF guard hard-rejects any next-page URL with an empty Host, same ENGINE_GAP as docs/migration/quarantine.json's rootly/safetyculture entries; see docs.md's Streams notes). hook-covered, proven live by archived parity evidence for twilio (TestParityTwilio_MessagesTwoPagePagination) and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "calls",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls.json",
+      "records": {
+        "path": "calls"
+      },
+      "schema": "schemas/calls.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by archived parity evidence for twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "recordings",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings.json",
+      "records": {
+        "path": "recordings"
+      },
+      "schema": "schemas/recordings.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by archived parity evidence for twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "conferences",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences.json",
+      "records": {
+        "path": "conferences"
+      },
+      "schema": "schemas/conferences.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by archived parity evidence for twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "usage_records",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "schema": "schemas/usage_records.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (same host-relative next_page_uri ENGINE_GAP as messages; see docs.md's Streams notes). hook-covered, proven live by archived parity evidence for twilio and internal/connectors/hooks/twilio/hooks_test.go"
+      }
+    },
+    {
+      "name": "account",
+      "path": "/Accounts/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/account.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "accounts",
+      "path": "/Accounts.json",
+      "records": {
+        "path": "accounts"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "address",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses.json",
+      "records": {
+        "path": "addresses"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/address.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "address_2",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/address_2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "application",
+      "path": "/Accounts/{{ secrets.account_sid }}/Applications/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/application.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "applications",
+      "path": "/Accounts/{{ secrets.account_sid }}/Applications.json",
+      "records": {
+        "path": "applications"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/applications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "authorized_connect_app",
+      "path": "/Accounts/{{ secrets.account_sid }}/AuthorizedConnectApps/{{ config.connect_app_sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/authorized_connect_app.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "authorized_connect_apps",
+      "path": "/Accounts/{{ secrets.account_sid }}/AuthorizedConnectApps.json",
+      "records": {
+        "path": "authorized_connect_apps"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/authorized_connect_apps.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_countries",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers.json",
+      "records": {
+        "path": "countries"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_countries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_country",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/available_phone_number_country.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_locals",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/Local.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_locals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_machine_to_machines",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/MachineToMachine.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_machine_to_machines.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_mobiles",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/Mobile.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_mobiles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_nationals",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/National.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_nationals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_shared_costs",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/SharedCost.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_shared_costs.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_toll_frees",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/TollFree.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_toll_frees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "available_phone_number_voips",
+      "path": "/Accounts/{{ secrets.account_sid }}/AvailablePhoneNumbers/{{ config.country_code }}/Voip.json",
+      "records": {
+        "path": "available_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/available_phone_number_voips.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "balance",
+      "path": "/Accounts/{{ secrets.account_sid }}/Balance.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/balance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/call.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call_events",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.call_sid }}/Events.json",
+      "records": {
+        "path": "events"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/call_events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call_notification",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.call_sid }}/Notifications/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/call_notification.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call_notifications",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.call_sid }}/Notifications.json",
+      "records": {
+        "path": "notifications"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/call_notifications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call_recording",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.call_sid }}/Recordings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/call_recording.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "call_recordings",
+      "path": "/Accounts/{{ secrets.account_sid }}/Calls/{{ config.call_sid }}/Recordings.json",
+      "records": {
+        "path": "recordings"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/call_recordings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "conference",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/conference.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "conference_recording",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ config.conference_sid }}/Recordings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/conference_recording.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "conference_recordings",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ config.conference_sid }}/Recordings.json",
+      "records": {
+        "path": "recordings"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/conference_recordings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "connect_app",
+      "path": "/Accounts/{{ secrets.account_sid }}/ConnectApps/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/connect_app.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "connect_apps",
+      "path": "/Accounts/{{ secrets.account_sid }}/ConnectApps.json",
+      "records": {
+        "path": "connect_apps"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/connect_apps.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dependent_phone_numbers",
+      "path": "/Accounts/{{ secrets.account_sid }}/Addresses/{{ config.address_sid }}/DependentPhoneNumbers.json",
+      "records": {
+        "path": "dependent_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/dependent_phone_numbers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/incoming_phone_number.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_assigned_add_on",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ config.resource_sid }}/AssignedAddOns/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/incoming_phone_number_assigned_add_on.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_assigned_add_on_extension",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ config.resource_sid }}/AssignedAddOns/{{ config.assigned_add_on_sid }}/Extensions/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/incoming_phone_number_assigned_add_on_extension.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_assigned_add_on_extensions",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ config.resource_sid }}/AssignedAddOns/{{ config.assigned_add_on_sid }}/Extensions.json",
+      "records": {
+        "path": "extensions"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_number_assigned_add_on_extensions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_assigned_add_ons",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ config.resource_sid }}/AssignedAddOns.json",
+      "records": {
+        "path": "assigned_add_ons"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_number_assigned_add_ons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_locals",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Local.json",
+      "records": {
+        "path": "incoming_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_number_locals.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_mobiles",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Mobile.json",
+      "records": {
+        "path": "incoming_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_number_mobiles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_number_toll_frees",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/TollFree.json",
+      "records": {
+        "path": "incoming_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_number_toll_frees.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "incoming_phone_numbers",
+      "path": "/Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers.json",
+      "records": {
+        "path": "incoming_phone_numbers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/incoming_phone_numbers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "key",
+      "path": "/Accounts/{{ secrets.account_sid }}/Keys/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/key.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "keys",
+      "path": "/Accounts/{{ secrets.account_sid }}/Keys.json",
+      "records": {
+        "path": "keys"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/keys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "media",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ config.message_sid }}/Media/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/media.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "medias",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ config.message_sid }}/Media.json",
+      "records": {
+        "path": "media_list"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/medias.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "member",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ config.queue_sid }}/Members/{{ config.call_sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/member.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "members",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ config.queue_sid }}/Members.json",
+      "records": {
+        "path": "queue_members"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/members.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "message",
+      "path": "/Accounts/{{ secrets.account_sid }}/Messages/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/message.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notification",
+      "path": "/Accounts/{{ secrets.account_sid }}/Notifications/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/notification.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notifications",
+      "path": "/Accounts/{{ secrets.account_sid }}/Notifications.json",
+      "records": {
+        "path": "notifications"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/notifications.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "outgoing_caller_id",
+      "path": "/Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/outgoing_caller_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "outgoing_caller_ids",
+      "path": "/Accounts/{{ secrets.account_sid }}/OutgoingCallerIds.json",
+      "records": {
+        "path": "outgoing_caller_ids"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/outgoing_caller_ids.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "participant",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ config.conference_sid }}/Participants/{{ config.call_sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/participant.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "participants",
+      "path": "/Accounts/{{ secrets.account_sid }}/Conferences/{{ config.conference_sid }}/Participants.json",
+      "records": {
+        "path": "participants"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/participants.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "queue",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/queue.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "queues",
+      "path": "/Accounts/{{ secrets.account_sid }}/Queues.json",
+      "records": {
+        "path": "queues"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/queues.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/recording.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_add_on_result",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.reference_sid }}/AddOnResults/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/recording_add_on_result.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_add_on_result_payload",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.reference_sid }}/AddOnResults/{{ config.add_on_result_sid }}/Payloads/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/recording_add_on_result_payload.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_add_on_result_payload_data",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.reference_sid }}/AddOnResults/{{ config.add_on_result_sid }}/Payloads/{{ config.payload_sid }}/Data.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/recording_add_on_result_payload_data.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_add_on_result_payloads",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.reference_sid }}/AddOnResults/{{ config.add_on_result_sid }}/Payloads.json",
+      "records": {
+        "path": "payloads"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/recording_add_on_result_payloads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_add_on_results",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.reference_sid }}/AddOnResults.json",
+      "records": {
+        "path": "add_on_results"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/recording_add_on_results.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_transcription",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.recording_sid }}/Transcriptions/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/recording_transcription.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "recording_transcriptions",
+      "path": "/Accounts/{{ secrets.account_sid }}/Recordings/{{ config.recording_sid }}/Transcriptions.json",
+      "records": {
+        "path": "transcriptions"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/recording_transcriptions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "short_code",
+      "path": "/Accounts/{{ secrets.account_sid }}/SMS/ShortCodes/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/short_code.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "short_codes",
+      "path": "/Accounts/{{ secrets.account_sid }}/SMS/ShortCodes.json",
+      "records": {
+        "path": "short_codes"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/short_codes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "signing_key",
+      "path": "/Accounts/{{ secrets.account_sid }}/SigningKeys/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/signing_key.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "signing_keys",
+      "path": "/Accounts/{{ secrets.account_sid }}/SigningKeys.json",
+      "records": {
+        "path": "signing_keys"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/signing_keys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_calls_credential_list_mapping",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Calls/CredentialListMappings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_auth_calls_credential_list_mapping.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_calls_credential_list_mappings",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Calls/CredentialListMappings.json",
+      "records": {
+        "path": "contents"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_auth_calls_credential_list_mappings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_calls_ip_access_control_list_mapping",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Calls/IpAccessControlListMappings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_auth_calls_ip_access_control_list_mapping.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_calls_ip_access_control_list_mappings",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Calls/IpAccessControlListMappings.json",
+      "records": {
+        "path": "contents"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_auth_calls_ip_access_control_list_mappings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_registrations_credential_list_mapping",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Registrations/CredentialListMappings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_auth_registrations_credential_list_mapping.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_auth_registrations_credential_list_mappings",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/Auth/Registrations/CredentialListMappings.json",
+      "records": {
+        "path": "contents"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_auth_registrations_credential_list_mappings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credential",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ config.credential_list_sid }}/Credentials/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_credential.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credential_list",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_credential_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credential_list_mapping",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/CredentialListMappings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_credential_list_mapping.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credential_list_mappings",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/CredentialListMappings.json",
+      "records": {
+        "path": "credential_list_mappings"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_credential_list_mappings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credential_lists",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists.json",
+      "records": {
+        "path": "credential_lists"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_credential_lists.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_credentials",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ config.credential_list_sid }}/Credentials.json",
+      "records": {
+        "path": "credentials"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_credentials.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_domain",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_domain.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_domains",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains.json",
+      "records": {
+        "path": "domains"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_domains.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_access_control_list",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_ip_access_control_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_access_control_list_mapping",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/IpAccessControlListMappings/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_ip_access_control_list_mapping.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_access_control_list_mappings",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ config.domain_sid }}/IpAccessControlListMappings.json",
+      "records": {
+        "path": "ip_access_control_list_mappings"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_ip_access_control_list_mappings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_access_control_lists",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists.json",
+      "records": {
+        "path": "ip_access_control_lists"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_ip_access_control_lists.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_address",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ config.ip_access_control_list_sid }}/IpAddresses.json",
+      "records": {
+        "path": "ip_addresses"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/sip_ip_address.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "sip_ip_address_2",
+      "path": "/Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ config.ip_access_control_list_sid }}/IpAddresses/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/sip_ip_address_2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transcription",
+      "path": "/Accounts/{{ secrets.account_sid }}/Transcriptions/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/transcription.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transcriptions",
+      "path": "/Accounts/{{ secrets.account_sid }}/Transcriptions.json",
+      "records": {
+        "path": "transcriptions"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/transcriptions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_all_times",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/AllTime.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_all_times.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_dailies",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/Daily.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_dailies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_last_months",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/LastMonth.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_last_months.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_monthlies",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/Monthly.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_monthlies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_this_months",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/ThisMonth.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_this_months.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_todays",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/Today.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_todays.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_yearlies",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/Yearly.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_yearlies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_record_yesterdays",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Records/Yesterday.json",
+      "records": {
+        "path": "usage_records"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_record_yesterdays.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_trigger",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ config.sid }}.json",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/usage_trigger.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "usage_triggers",
+      "path": "/Accounts/{{ secrets.account_sid }}/Usage/Triggers.json",
+      "records": {
+        "path": "usage_triggers"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "Page",
+        "size_param": "PageSize",
+        "start_page": 0,
+        "page_size": 50,
+        "max_pages": 25
+      },
+      "schema": "schemas/usage_triggers.json",
+      "projection": "passthrough"
+    }
+  ]
+}

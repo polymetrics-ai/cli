@@ -1,0 +1,266 @@
+{
+  "actions": [
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "locale": { "type": "string" },
+          "fields": { "type": "array" }
+        }
+      },
+      "risk": "creates a new contact; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "locale": { "type": "string" },
+          "fields": { "type": "array" }
+        }
+      },
+      "risk": "updates an existing contact's email/locale/custom-field values; external mutation, no approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a contact; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new tag; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing tag; external mutation, no approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a tag, removing it from every contact it is assigned to; approval required"
+    },
+    {
+      "name": "add_contact_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/tags",
+      "path_fields": ["contact_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["contact_id", "tag_id"],
+        "properties": {
+          "contact_id": { "type": "string" },
+          "tag_id": { "type": "string" }
+        }
+      },
+      "risk": "assigns a tag to a contact; assigning certain tags can trigger Systeme.io automations (enrollment in a course/campaign); external mutation, no approval required"
+    },
+    {
+      "name": "remove_contact_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}",
+      "path_fields": ["contact_id", "tag_id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["contact_id", "tag_id"],
+        "properties": {
+          "contact_id": { "type": "string" },
+          "tag_id": { "type": "string" }
+        }
+      },
+      "risk": "removes a tag from a contact; removing certain tags can trigger Systeme.io automations; external mutation, no approval required"
+    },
+    {
+      "name": "create_contact_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_fields",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug", "type"],
+        "properties": {
+          "slug": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "creates a new custom contact field definition; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_contact_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contact_fields/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "slug": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing custom contact field definition; external mutation, no approval required"
+    },
+    {
+      "name": "delete_contact_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_fields/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly deletes a custom contact field definition and its stored values on every contact; approval required"
+    },
+    {
+      "name": "create_funnel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/funnels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new sales funnel; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_funnel_step",
+      "kind": "create",
+      "method": "POST",
+      "path": "/funnels/{{ record.funnel_id }}/steps",
+      "path_fields": ["funnel_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["funnel_id", "name"],
+        "properties": {
+          "funnel_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new step within an existing funnel; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "event"],
+        "properties": {
+          "url": { "type": "string" },
+          "event": { "type": "string" }
+        }
+      },
+      "risk": "creates a new outgoing webhook subscription; low-risk external mutation, no approval required"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/1/security/sources" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "source": "10.0.0.1/32", "description": "Fixture server subnet" }
+    ]
+  }
+}

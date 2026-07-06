@@ -1,0 +1,4 @@
+{
+  "record": { "id": "oppo_fixture_1" },
+  "expect": { "method": "DELETE", "path": "/opportunity/oppo_fixture_1" }
+}

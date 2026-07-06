@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/webshoporders", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idcompany_webshop_order": 1,
+        "idcompany_webshop": 1,
+        "idorder": 301,
+        "foreign_id": "WEB0001",
+        "foreign_number": "ORDER-2026-0001",
+        "foreign_status": "completed",
+        "status": "imported",
+        "reason": null,
+        "ordered": "2026-01-01T00:00:00Z",
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

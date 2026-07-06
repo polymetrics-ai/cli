@@ -1,0 +1,22 @@
+{
+  "record": {
+    "status": [
+      "running"
+    ],
+    "workflowId": "wf_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/executions/stop",
+    "body": {
+      "status": [
+        "running"
+      ],
+      "workflowId": "wf_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

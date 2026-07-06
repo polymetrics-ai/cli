@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/user/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "type": "user",
+          "id": "mobile_worker_fixture_1",
+          "username": "worker1@example.test",
+          "first_name": "Worker",
+          "last_name": "One",
+          "default_phone_number": "+15550100",
+          "email": "worker1@example.test",
+          "phone_numbers": ["+15550100"],
+          "groups": ["group_fixture_1"],
+          "locations": ["location_fixture_1"],
+          "primary_location": "location_fixture_1",
+          "user_data": { "chw_id": "fixture_chw_1" }
+        }
+      ]
+    }
+  }
+}

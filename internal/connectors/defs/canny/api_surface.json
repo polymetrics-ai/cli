@@ -1,0 +1,43 @@
+{
+  "api": "Canny legacy connector hook surface",
+  "docs": "https://developers.canny.io/api-reference",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy canny connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/canny, which delegates to internal/connectors/canny until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/canny boards read path",
+      "covered_by": {
+        "stream": "boards"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/canny posts read path",
+      "covered_by": {
+        "stream": "posts"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/canny comments read path",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/canny categories read path",
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/canny companies read path",
+      "covered_by": {
+        "stream": "companies"
+      }
+    }
+  ]
+}

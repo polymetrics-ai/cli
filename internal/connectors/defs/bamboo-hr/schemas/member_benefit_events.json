@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "member_benefit_events",
+  "type": "object",
+  "x-primary-key": [
+    "memberId"
+  ],
+  "properties": {
+    "coverages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "eligibility",
+                    "enrollment",
+                    "loss"
+                  ]
+                },
+                "effectiveDate": {
+                  "type": "string"
+                },
+                "monthlyPremiumInCents": {
+                  "type": [
+                    "null",
+                    "number"
+                  ]
+                },
+                "premiumTierId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "planId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "memberId": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/integrations.json",
+    "query": {
+      "page": "1",
+      "per_page": "100",
+      "company_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "integrations": [
+        {
+          "id": 1,
+          "config": { "pre_call_webhook": ["https://example.com/webhook"] },
+          "state": "active",
+          "type": "Webhooks"
+        }
+      ]
+    }
+  }
+}

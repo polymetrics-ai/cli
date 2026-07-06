@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/management/attribute-classes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "atc_fixture_1",
+          "name": "Fixture Attribute One",
+          "description": "conformance fixture attribute class",
+          "type": "code",
+          "environmentId": "env_fixture_1",
+          "archived": false,
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces",
+    "query": {
+      "limit": "100",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "workspace_fixture_1",
+          "name": "Fixture Workspace",
+          "index": 0,
+          "members": [
+            {
+              "id": "user_fixture_1",
+              "email": "fixture1@example.com",
+              "name": "Fixture User 1"
+            }
+          ],
+          "invites": [],
+          "folders": [],
+          "createdByUserId": "user_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "page": 1,
+      "limit": 100,
+      "total": 1,
+      "hasMore": false
+    }
+  }
+}

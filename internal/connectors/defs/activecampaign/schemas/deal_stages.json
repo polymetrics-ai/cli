@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign Deal Stage",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "udate",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "group": { "type": ["string", "null"] },
+    "order": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "cdate": { "type": ["string", "null"] },
+    "udate": { "type": ["string", "null"] }
+  }
+}

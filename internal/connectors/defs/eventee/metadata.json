@@ -1,0 +1,25 @@
+{
+  "name": "eventee",
+  "display_name": "Eventee",
+  "description": "Reads Eventee event agenda, attendee, registration, group, review, and partner data; writes documented Eventee agenda, attendee, registration, partner, speaker, and track mutations through the public REST API.",
+  "integration_type": "api",
+  "docs_url": "https://publiceventeeapi.docs.apiary.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Eventee API reads of event agenda, attendee, registration, group, review, and partner data",
+    "write": "creates, updates, invites, checks in, removes, or deletes Eventee event content and attendees/registrants; destructive deletes require approval",
+    "approval": "reverse ETL writes require plan preview and approval token; delete actions are marked destructive"
+  }
+}

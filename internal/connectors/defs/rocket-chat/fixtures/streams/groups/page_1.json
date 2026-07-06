@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/groups.list", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        { "_id": "group_fixture_1", "name": "private-team", "fname": "private-team", "msgs": 7, "usersCount": 3, "_updatedAt": "2026-01-01T00:00:00.000Z" }
+      ],
+      "count": 1,
+      "offset": 0,
+      "total": 1,
+      "success": true
+    }
+  }
+}

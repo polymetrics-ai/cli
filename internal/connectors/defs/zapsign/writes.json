@@ -1,0 +1,176 @@
+{
+  "actions": [
+    {
+      "name": "create_document_from_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/models/create-doc/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id", "signers"],
+        "properties": {
+          "template_id": { "type": "string" },
+          "signers": { "type": "array", "items": { "type": "object" } },
+          "folder_path": { "type": "string" },
+          "creator_email": { "type": "string" },
+          "send_automatic_email": { "type": "boolean" },
+          "send_automatic_whatsapp": { "type": "boolean" },
+          "signature_order_active": { "type": "boolean" },
+          "allow_refusal": { "type": "boolean" },
+          "custom_metadata": { "type": "object" }
+        }
+      },
+      "risk": "creates a new signable document from an existing template and notifies signers by email/WhatsApp if send_automatic_email/send_automatic_whatsapp is set; external mutation, approval required"
+    },
+    {
+      "name": "cancel_document",
+      "kind": "update",
+      "method": "POST",
+      "path": "/docs/{{ record.token }}/cancel/",
+      "path_fields": ["token"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" }
+        }
+      },
+      "risk": "irreversibly interrupts an in-progress signature flow for a document; any signer who has not yet signed can no longer complete it"
+    },
+    {
+      "name": "delete_document",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/docs/{{ record.token }}/delete/",
+      "path_fields": ["token"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" }
+        }
+      },
+      "risk": "soft-deletes a document, hiding it from the ZapSign web interface for end users while it remains readable via the API"
+    },
+    {
+      "name": "add_signer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/docs/{{ record.doc_token }}/add-signer/",
+      "path_fields": ["doc_token"],
+      "body_type": "json",
+      "body_fields": ["name", "email", "phone_country", "phone_number", "auth_mode", "send_automatic_email", "send_automatic_whatsapp"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["doc_token", "name"],
+        "properties": {
+          "doc_token": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_country": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "auth_mode": { "type": "string" },
+          "send_automatic_email": { "type": "boolean" },
+          "send_automatic_whatsapp": { "type": "boolean" }
+        }
+      },
+      "risk": "adds a new signer to an existing document and, if send_automatic_email/send_automatic_whatsapp is set, immediately notifies them with a signing link"
+    },
+    {
+      "name": "update_signer",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signers/{{ record.token }}/",
+      "path_fields": ["token"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phone_country": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "auth_mode": { "type": "string" },
+          "lock_name": { "type": "boolean" },
+          "lock_email": { "type": "boolean" },
+          "lock_phone": { "type": "boolean" }
+        }
+      },
+      "risk": "mutates an existing signer's contact details or authentication mode; only succeeds if the signer has not yet signed the document (ZapSign rejects the request once the signer has already signed, surfaced as an ordinary per-record write failure)"
+    },
+    {
+      "name": "remove_signer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signer/{{ record.token }}/remove/",
+      "path_fields": ["token"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a signer from a document; this is irreversible, and re-adding the same person issues a brand new signing token/link"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "type"],
+        "properties": {
+          "url": { "type": "string" },
+          "type": { "type": "string" },
+          "enabled": { "type": "boolean" }
+        }
+      },
+      "risk": "registers a new outbound webhook that will POST live document-event data to an external URL of the caller's choosing; verify the target endpoint before enabling"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.id }}/",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+    }
+  ]
+}

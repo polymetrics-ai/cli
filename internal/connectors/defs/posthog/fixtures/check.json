@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/projects/{{ config.project_id }}/events/", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "next": null }
+  }
+}

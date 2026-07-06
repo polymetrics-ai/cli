@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/operations/synthetic-conformance-value/errors"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "data": [
+        "operation_error_fixture"
+      ]
+    }
+  }
+}

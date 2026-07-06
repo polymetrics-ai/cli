@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/commerce/transactions" },
+  "response": {
+    "status": 200,
+    "body": {
+      "documents": [
+        {
+          "id": "txn_fixture_1",
+          "salesOrderId": "order_fixture_1",
+          "customerEmail": "fixture1@example.com",
+          "createdOn": "2026-01-01T00:00:00Z",
+          "modifiedOn": "2026-01-01T00:00:00Z",
+          "voided": false
+        }
+      ],
+      "pagination": { "nextPageCursor": "fixture-txn-cursor-2", "hasNextPage": true }
+    }
+  }
+}

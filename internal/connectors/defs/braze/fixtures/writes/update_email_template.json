@@ -1,0 +1,15 @@
+{
+  "record": {
+    "email_template_id": "tpl_fixture_1",
+    "subject": "Fixture Subject Updated"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates/email/update",
+    "body": {
+      "email_template_id": "tpl_fixture_1",
+      "subject": "Fixture Subject Updated"
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

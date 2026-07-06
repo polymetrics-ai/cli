@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/flags/synthetic-conformance-value", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "key": "fixture-flag-1", "name": "Fixture Flag 1", "description": "fixture flag", "kind": "boolean", "creationDate": 1767225601000, "temporary": false, "tags": ["fixture"] }
+      ],
+      "totalCount": 1
+    }
+  }
+}

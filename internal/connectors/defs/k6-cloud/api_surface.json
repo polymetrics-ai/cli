@@ -1,0 +1,11 @@
+{
+  "api": "k6 Cloud REST API v3 (https://api.k6.io)",
+  "docs": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration, completed: all 3 of legacy's read streams (organizations, k6-tests, projects) are ported at Tier 1. projects is a sub-resource fan-out (read once per organization id) now expressed declaratively via the engine's stream.fan_out dialect (ids_from.request against /v3/organizations, into.path_var) — the same pattern as cisco-meraki/breezy-hr — closing the prior Tier-2 StreamHook gap. Any other k6 Cloud surface is out of scope until Pass B.",
+  "endpoints": [
+    { "method": "GET", "path": "/v3/organizations", "covered_by": { "stream": "organizations" } },
+    { "method": "GET", "path": "/v3/organizations/{id}/projects", "covered_by": { "stream": "projects" } },
+    { "method": "GET", "path": "loadtests/v2/tests", "covered_by": { "stream": "k6_tests" } }
+  ]
+}

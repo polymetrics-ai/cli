@@ -1,0 +1,20 @@
+{
+  "record": {
+    "authenticatorEnrollmentId": "authenticator_enrollment_id_fixture",
+    "fulfillmentProvider": "yubico",
+    "userId": "user_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webauthn-registration/api/v1/send-pin",
+    "body": {
+      "authenticatorEnrollmentId": "authenticator_enrollment_id_fixture",
+      "fulfillmentProvider": "yubico",
+      "userId": "user_id_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

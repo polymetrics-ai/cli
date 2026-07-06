@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "routing_key": {
+      "type": "string"
+    },
+    "model_name": {
+      "type": "string"
+    },
+    "flavor_name": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "gpu_type": {
+      "type": "string",
+      "enum": [
+        "gpu-l40s-d",
+        "gpu-l40s-a",
+        "gpu-h100-sxm",
+        "gpu-h200-sxm",
+        "gpu-b200-sxm",
+        "gpu-b200-sxm-a",
+        "gpu-b300-sxm"
+      ]
+    },
+    "gpu_count": {
+      "type": "integer"
+    },
+    "custom_weights_id": {
+      "type": "string"
+    },
+    "scaling": {
+      "type": "object",
+      "properties": {
+        "min_replicas": {
+          "type": "integer"
+        },
+        "max_replicas": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    },
+    "deployment": {
+      "type": "object",
+      "properties": {
+        "ready_replicas": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "starting",
+            "running",
+            "updating",
+            "stopping",
+            "stopped",
+            "error"
+          ]
+        },
+        "readiness": {
+          "type": "string",
+          "enum": [
+            "ready",
+            "partially_ready",
+            "not_ready"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

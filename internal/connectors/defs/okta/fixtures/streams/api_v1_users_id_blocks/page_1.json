@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/blocks",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "appliesTo": "ANY_DEVICES",
+        "type": "DEVICE_BASED"
+      }
+    ]
+  }
+}

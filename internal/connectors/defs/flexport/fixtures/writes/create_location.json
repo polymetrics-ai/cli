@@ -1,0 +1,48 @@
+{
+  "record": {
+    "name": "Fixture Warehouse",
+    "company_id": "company_fixture_1",
+    "address": {
+      "street_address": "1 Market St",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94105",
+      "country_code": "US"
+    },
+    "contact_ids": ["contact_fixture_1"],
+    "ref": "fixture-warehouse",
+    "metadata": {
+      "temperature": ["ambient"]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/network/locations",
+    "body": {
+      "name": "Fixture Warehouse",
+      "company_id": "company_fixture_1",
+      "address": {
+        "street_address": "1 Market St",
+        "city": "San Francisco",
+        "state": "CA",
+        "zip": "94105",
+        "country_code": "US"
+      },
+      "contact_ids": ["contact_fixture_1"],
+      "ref": "fixture-warehouse",
+      "metadata": {
+        "temperature": ["ambient"]
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/network/location",
+        "id": "location_fixture_1"
+      }
+    }
+  }
+}

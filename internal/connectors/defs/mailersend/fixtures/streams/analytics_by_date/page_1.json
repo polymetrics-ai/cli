@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/analytics/date", "query": { "date_from": "synthetic-conformance-value", "date_to": "synthetic-conformance-value", "domain_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "date_from": "1767225600",
+        "date_to": "1767311999",
+        "group_by": "days",
+        "stats": [
+          {
+            "date": "1767225600",
+            "queued": 0,
+            "sent": 1,
+            "delivered": 1,
+            "opened": 1,
+            "clicked": 0,
+            "soft_bounced": 0,
+            "hard_bounced": 0,
+            "unsubscribed": 0,
+            "spam_complaints": 0,
+            "opened_unique": 1,
+            "clicked_unique": 0,
+            "survey_opened": 0,
+            "survey_submitted": 0
+          }
+        ]
+      }
+    }
+  }
+}

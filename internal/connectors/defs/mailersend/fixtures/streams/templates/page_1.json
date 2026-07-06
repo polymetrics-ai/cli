@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/templates", "query": { "page": "1", "limit": "25", "domain_id": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "template_fixture_1",
+          "name": "Fixture Template",
+          "description": null,
+          "type": "html",
+          "image_path": "https://example.com/template.png",
+          "tags": ["transactional"],
+          "variables": { "name": "" },
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}

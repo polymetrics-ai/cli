@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sites",
+  "type": "object",
+  "x-primary-key": ["site_url"],
+  "required": ["site_url"],
+  "properties": {
+    "site_url": { "type": "string" },
+    "permission_level": { "type": ["string", "null"] }
+  }
+}

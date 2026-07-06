@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/search",
+    "query": {
+      "page": "2",
+      "page-size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "results": [
+          {
+            "id": "world/fixture-51",
+            "type": "article",
+            "webTitle": "Fixture Article 51",
+            "webPublicationDate": "2026-01-24T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

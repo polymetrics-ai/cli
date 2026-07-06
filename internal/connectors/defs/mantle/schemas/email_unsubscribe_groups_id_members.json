@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "email_unsubscribe_groups_id_members",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the email unsubscribe group member."
+    },
+    "email": {
+      "type": "string",
+      "description": "The email address of the email unsubscribe group member."
+    },
+    "dateAdded": {
+      "type": "string",
+      "description": "The date and time the email unsubscribe group member was added to the group.",
+      "format": "date-time"
+    }
+  }
+}

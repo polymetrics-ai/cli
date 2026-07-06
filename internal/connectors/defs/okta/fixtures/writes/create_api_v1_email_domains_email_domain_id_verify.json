@@ -1,0 +1,13 @@
+{
+  "record": {
+    "email_domain_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/email-domains/synthetic-conformance-value/verify"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

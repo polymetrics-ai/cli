@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/auditLogs",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "audit_logs_fixture_1",
+          "type": "auditLog",
+          "attributes": {
+            "name": "Fixture Audit Logs",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/auditLogs"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

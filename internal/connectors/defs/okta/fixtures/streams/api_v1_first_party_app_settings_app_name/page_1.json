@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/first-party-app-settings/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sessionIdleTimeoutMinutes": 1,
+      "sessionMaxLifetimeMinutes": 1
+    }
+  }
+}

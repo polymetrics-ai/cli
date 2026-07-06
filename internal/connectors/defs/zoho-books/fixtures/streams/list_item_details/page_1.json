@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/itemdetails",
+    "query": {
+      "page": "1",
+      "per_page": "200",
+      "item_ids": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "items": [
+        {
+          "item_id": "list_item_details_fixture_1",
+          "name": "list_item_details fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "list_item_details_fixture_1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

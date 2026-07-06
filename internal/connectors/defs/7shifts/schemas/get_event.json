@@ -1,0 +1,133 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "general",
+        "birthday",
+        "work_anniversary"
+      ]
+    },
+    "location_ids": {
+      "type": "array",
+      "description": "The list of locations where this event occurs",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "start": {
+      "type": "array",
+      "description": "The events start date-time for each locations timezone",
+      "items": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID"
+          },
+          "date_time": {
+            "type": "string",
+            "description": "The events start date-time for the locations timezone"
+          }
+        },
+        "required": [
+          "location_id",
+          "date_time"
+        ]
+      }
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Start date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Start time"
+    },
+    "end": {
+      "type": "array",
+      "description": "The events end date-time for each locations timezone",
+      "items": {
+        "type": "object",
+        "properties": {
+          "location_id": {
+            "type": "integer",
+            "description": "Location ID"
+          },
+          "date_time": {
+            "type": "string",
+            "description": "The events end date-time for the locations timezone"
+          }
+        },
+        "required": [
+          "location_id",
+          "date_time"
+        ]
+      }
+    },
+    "end_date": {
+      "type": "string",
+      "description": "End date for multi-day events",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "End time"
+    },
+    "title": {
+      "type": "string",
+      "description": "The name of the event"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Description for event"
+    },
+    "color": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A hex number representing the color"
+    },
+    "is_multi_day": {
+      "type": "boolean",
+      "description": "If true, the event is a multi-day event"
+    },
+    "recurrence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Recurrence rules as defined by the RFC 5545 spec"
+    },
+    "all_day": {
+      "type": "boolean",
+      "description": "If true, the event is an all day event"
+    }
+  },
+  "required": [
+    "id",
+    "event_type",
+    "location_ids",
+    "start_date",
+    "start_time",
+    "end_time",
+    "end_date",
+    "title",
+    "is_multi_day",
+    "all_day"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_event",
+  "x-primary-key": [
+    "id"
+  ]
+}

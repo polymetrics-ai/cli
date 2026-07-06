@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/subscriptions",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "sub_fixture_1",
+          "object": "subscription",
+          "customer_id": "cust_fixture_1",
+          "product_id": "prod_fixture_1",
+          "starts_at": 1735689600000,
+          "status": "active",
+          "store_subscription_identifier": "synthetic-conformance-value"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/subscriptions"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employee_id": "emp_fixture_1",
+    "id": "leave_balance_fixture_1",
+    "accrued_amount": 22.5
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/emp_fixture_1/leave_balances/leave_balance_fixture_1",
+    "body": {
+      "accrued_amount": 22.5
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_leave_balance_fixture_response"
+    }
+  }
+}

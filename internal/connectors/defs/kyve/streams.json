@@ -1,0 +1,66 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pagination.key",
+      "token_path": "pagination.next_key"
+    },
+    "check": { "method": "GET", "path": "/kyve/query/v1beta1/pools", "query": { "pagination.limit": "1" } },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "kyve public API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "pools",
+      "path": "/kyve/query/v1beta1/pools",
+      "query": { "pagination.limit": "{{ config.page_size }}" },
+      "records": { "path": "pools" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "runtime": "{{ record.runtime }}"
+      },
+      "schema": "schemas/pools.json"
+    },
+    {
+      "name": "stakers",
+      "path": "/kyve/query/v1beta1/stakers",
+      "query": { "pagination.limit": "{{ config.page_size }}" },
+      "records": { "path": "stakers" },
+      "computed_fields": {
+        "address": "{{ coalesce record.address record.account }}",
+        "amount": "{{ coalesce record.amount record.balance }}"
+      },
+      "schema": "schemas/stakers.json"
+    },
+    {
+      "name": "funders",
+      "path": "/kyve/query/v1beta1/funders",
+      "query": { "pagination.limit": "{{ config.page_size }}" },
+      "records": { "path": "funders" },
+      "computed_fields": {
+        "address": "{{ coalesce record.address record.account }}",
+        "amount": "{{ coalesce record.amount record.balance }}"
+      },
+      "schema": "schemas/funders.json"
+    },
+    {
+      "name": "validators",
+      "path": "/cosmos/staking/v1beta1/validators",
+      "query": { "pagination.limit": "{{ config.page_size }}" },
+      "records": { "path": "validators" },
+      "computed_fields": {
+        "operator_address": "{{ record.operator_address }}",
+        "moniker": "{{ record.description.moniker }}",
+        "status": "{{ record.status }}"
+      },
+      "schema": "schemas/validators.json"
+    }
+  ]
+}

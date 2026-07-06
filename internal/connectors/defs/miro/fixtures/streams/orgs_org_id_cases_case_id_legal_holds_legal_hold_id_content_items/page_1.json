@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/cases/synthetic-conformance-value/legal-holds/synthetic-conformance-value/content-items"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "size": 1,
+      "total": 1,
+      "cursor": "cursor_fixture",
+      "limit": 100,
+      "type": "cursor-list",
+      "data": [
+        {
+          "contentId": "content_id_fixture",
+          "type": "type_fixture"
+        }
+      ]
+    }
+  }
+}

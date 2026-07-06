@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 1,
+    "action": "action_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wishlists/1/modify",
+    "body": {
+      "action": "action_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

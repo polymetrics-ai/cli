@@ -1,0 +1,12 @@
+{
+  "record": { "content": "Buy milk", "project_id": "prj_fixture_1", "priority": 4 },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks",
+    "body": { "content": "Buy milk", "project_id": "prj_fixture_1", "priority": 4 }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "task_fixture_created", "content": "Buy milk", "project_id": "prj_fixture_1", "priority": 4, "is_completed": false }
+  }
+}

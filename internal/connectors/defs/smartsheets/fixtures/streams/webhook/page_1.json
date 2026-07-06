@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 12345,
+      "name": "Fixture webhook",
+      "type": "webhook",
+      "modifiedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

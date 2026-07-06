@@ -1,0 +1,15 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "custom_attribute_id": "custom_attribute_fixture",
+    "value": "Fixture value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/candidates/candidate_fixture/update_custom_attribute_value",
+    "body": {
+      "custom_attribute_id": "custom_attribute_fixture",
+      "value": "Fixture value"
+    }
+  }
+}

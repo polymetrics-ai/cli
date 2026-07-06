@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/reporting/transactions",
+    "query": {
+      "start_date": "synthetic-conformance-value",
+      "end_date": "synthetic-conformance-value",
+      "fields": "all",
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transaction_details": [
+        {
+          "transaction_info": {
+            "transaction_id": "T-fixture-101",
+            "transaction_status": "S",
+            "transaction_event_code": "T0006",
+            "transaction_initiation_date": "2026-01-01T00:00:00Z",
+            "transaction_updated_date": "2026-01-01T00:05:00Z",
+            "transaction_amount": {
+              "currency_code": "USD",
+              "value": "10.101"
+            },
+            "fee_amount": {
+              "currency_code": "USD",
+              "value": "-0.51"
+            },
+            "paypal_account_id": "ACC-fixture"
+          }
+        }
+      ],
+      "account_number": "fixture-account",
+      "start_date": "2026-01-01T00:00:00Z",
+      "end_date": "2026-01-02T00:00:00Z",
+      "last_refreshed_datetime": "2026-01-02T00:00:00Z",
+      "page": 2,
+      "total_items": 101,
+      "total_pages": 2
+    }
+  }
+}

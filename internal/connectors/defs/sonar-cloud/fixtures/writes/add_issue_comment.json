@@ -1,0 +1,7 @@
+{
+  "record": { "issue": "AZfixture000000000000001", "text": "Fixture comment for conformance testing." },
+  "expect": {
+    "method": "POST",
+    "path": "/api/issues/add_comment"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/cpdEntries",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "totalResults": 1001,
+        "totalPages": 2,
+        "page": 2,
+        "perPage": 1000
+      },
+      "results": [
+        {
+          "logEntryId": "646767c6b808667ea07d1001",
+          "userId": "646767d825352012231001",
+          "activity": "Fixture Reading",
+          "category": "Personal Reading",
+          "entryDate": "2026-01-02",
+          "durationMinutes": 30,
+          "description": "Fixture entry",
+          "isVerified": false
+        }
+      ]
+    }
+  }
+}

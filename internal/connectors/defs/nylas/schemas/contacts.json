@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "grant_id": { "type": ["string", "null"] },
+    "object": { "type": ["string", "null"] },
+    "given_name": { "type": ["string", "null"] },
+    "surname": { "type": ["string", "null"] },
+    "company_name": { "type": ["string", "null"] },
+    "job_title": { "type": ["string", "null"] },
+    "emails": { "type": ["array", "null"] },
+    "phone_numbers": { "type": ["array", "null"] },
+    "source": { "type": ["string", "null"] }
+  }
+}

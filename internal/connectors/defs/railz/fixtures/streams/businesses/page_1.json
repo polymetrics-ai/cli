@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/businesses",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "businessUuid": "biz_fixture_1",
+          "businessName": "Fixture Business 1",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_2",
+          "businessName": "Fixture Business 2",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_3",
+          "businessName": "Fixture Business 3",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_4",
+          "businessName": "Fixture Business 4",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_5",
+          "businessName": "Fixture Business 5",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_6",
+          "businessName": "Fixture Business 6",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_7",
+          "businessName": "Fixture Business 7",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_8",
+          "businessName": "Fixture Business 8",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_9",
+          "businessName": "Fixture Business 9",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_10",
+          "businessName": "Fixture Business 10",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_11",
+          "businessName": "Fixture Business 11",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_12",
+          "businessName": "Fixture Business 12",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_13",
+          "businessName": "Fixture Business 13",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_14",
+          "businessName": "Fixture Business 14",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_15",
+          "businessName": "Fixture Business 15",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_16",
+          "businessName": "Fixture Business 16",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_17",
+          "businessName": "Fixture Business 17",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_18",
+          "businessName": "Fixture Business 18",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_19",
+          "businessName": "Fixture Business 19",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_20",
+          "businessName": "Fixture Business 20",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_21",
+          "businessName": "Fixture Business 21",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_22",
+          "businessName": "Fixture Business 22",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_23",
+          "businessName": "Fixture Business 23",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_24",
+          "businessName": "Fixture Business 24",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_25",
+          "businessName": "Fixture Business 25",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_26",
+          "businessName": "Fixture Business 26",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_27",
+          "businessName": "Fixture Business 27",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_28",
+          "businessName": "Fixture Business 28",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_29",
+          "businessName": "Fixture Business 29",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_30",
+          "businessName": "Fixture Business 30",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_31",
+          "businessName": "Fixture Business 31",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_32",
+          "businessName": "Fixture Business 32",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_33",
+          "businessName": "Fixture Business 33",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_34",
+          "businessName": "Fixture Business 34",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_35",
+          "businessName": "Fixture Business 35",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_36",
+          "businessName": "Fixture Business 36",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_37",
+          "businessName": "Fixture Business 37",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_38",
+          "businessName": "Fixture Business 38",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_39",
+          "businessName": "Fixture Business 39",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_40",
+          "businessName": "Fixture Business 40",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_41",
+          "businessName": "Fixture Business 41",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_42",
+          "businessName": "Fixture Business 42",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_43",
+          "businessName": "Fixture Business 43",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_44",
+          "businessName": "Fixture Business 44",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_45",
+          "businessName": "Fixture Business 45",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_46",
+          "businessName": "Fixture Business 46",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_47",
+          "businessName": "Fixture Business 47",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_48",
+          "businessName": "Fixture Business 48",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_49",
+          "businessName": "Fixture Business 49",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_50",
+          "businessName": "Fixture Business 50",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_51",
+          "businessName": "Fixture Business 51",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_52",
+          "businessName": "Fixture Business 52",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_53",
+          "businessName": "Fixture Business 53",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_54",
+          "businessName": "Fixture Business 54",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_55",
+          "businessName": "Fixture Business 55",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_56",
+          "businessName": "Fixture Business 56",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_57",
+          "businessName": "Fixture Business 57",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_58",
+          "businessName": "Fixture Business 58",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_59",
+          "businessName": "Fixture Business 59",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_60",
+          "businessName": "Fixture Business 60",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_61",
+          "businessName": "Fixture Business 61",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_62",
+          "businessName": "Fixture Business 62",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_63",
+          "businessName": "Fixture Business 63",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_64",
+          "businessName": "Fixture Business 64",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_65",
+          "businessName": "Fixture Business 65",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_66",
+          "businessName": "Fixture Business 66",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_67",
+          "businessName": "Fixture Business 67",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_68",
+          "businessName": "Fixture Business 68",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_69",
+          "businessName": "Fixture Business 69",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_70",
+          "businessName": "Fixture Business 70",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_71",
+          "businessName": "Fixture Business 71",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_72",
+          "businessName": "Fixture Business 72",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_73",
+          "businessName": "Fixture Business 73",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_74",
+          "businessName": "Fixture Business 74",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_75",
+          "businessName": "Fixture Business 75",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_76",
+          "businessName": "Fixture Business 76",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_77",
+          "businessName": "Fixture Business 77",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_78",
+          "businessName": "Fixture Business 78",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_79",
+          "businessName": "Fixture Business 79",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_80",
+          "businessName": "Fixture Business 80",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_81",
+          "businessName": "Fixture Business 81",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_82",
+          "businessName": "Fixture Business 82",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_83",
+          "businessName": "Fixture Business 83",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_84",
+          "businessName": "Fixture Business 84",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_85",
+          "businessName": "Fixture Business 85",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_86",
+          "businessName": "Fixture Business 86",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_87",
+          "businessName": "Fixture Business 87",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_88",
+          "businessName": "Fixture Business 88",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_89",
+          "businessName": "Fixture Business 89",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_90",
+          "businessName": "Fixture Business 90",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_91",
+          "businessName": "Fixture Business 91",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_92",
+          "businessName": "Fixture Business 92",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_93",
+          "businessName": "Fixture Business 93",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_94",
+          "businessName": "Fixture Business 94",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_95",
+          "businessName": "Fixture Business 95",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_96",
+          "businessName": "Fixture Business 96",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_97",
+          "businessName": "Fixture Business 97",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_98",
+          "businessName": "Fixture Business 98",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_99",
+          "businessName": "Fixture Business 99",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "businessUuid": "biz_fixture_100",
+          "businessName": "Fixture Business 100",
+          "status": "active",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

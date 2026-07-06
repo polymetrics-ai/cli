@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "company": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "level": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pluginCampaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "addressOne": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "addressTwo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "zip": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "territory": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fax": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "adminId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "maximumDailyApiCalls": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "apiCallsUsed": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedById": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

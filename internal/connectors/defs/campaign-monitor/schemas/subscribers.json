@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscribers",
+  "type": "object",
+  "x-primary-key": ["ListID", "EmailAddress"],
+  "required": ["ListID", "EmailAddress"],
+  "properties": {
+    "ListID": { "type": "string" },
+    "EmailAddress": { "type": "string" },
+    "Name": { "type": ["string", "null"] },
+    "ListJoinedDate": { "type": ["string", "null"] },
+    "Date": { "type": ["string", "null"] },
+    "State": { "type": ["string", "null"] },
+    "CustomFields": { "type": ["array", "null"] },
+    "ReadsEmailWith": { "type": ["string", "null"] },
+    "ConsentToTrack": { "type": ["string", "null"] }
+  }
+}

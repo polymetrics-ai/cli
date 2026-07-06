@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "plans",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "data_source_uuid": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "interval_count": { "type": ["integer", "null"] },
+    "interval_unit": { "type": ["string", "null"] },
+    "external_id": { "type": ["string", "null"] }
+  }
+}

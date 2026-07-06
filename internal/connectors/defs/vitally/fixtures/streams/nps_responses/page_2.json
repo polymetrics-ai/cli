@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/npsResponses",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "from": "fixture_cursor_nps_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "nps_fixture_3",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "updatedAt": "2026-01-03T00:00:00Z",
+          "externalId": null,
+          "userId": "user_fixture_3",
+          "score": 10,
+          "feedback": null,
+          "respondedAt": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

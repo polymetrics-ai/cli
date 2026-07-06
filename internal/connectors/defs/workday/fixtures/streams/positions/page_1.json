@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ccx/api/v1/synthetic-conformance-value/positions", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "position-1", "title": "Fixture Engineer", "worker_id": "worker-1", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "position-2", "title": "Fixture Manager", "worker_id": "worker-2", "updated_at": "2026-01-01T00:01:00Z" }
+      ]
+    }
+  }
+}

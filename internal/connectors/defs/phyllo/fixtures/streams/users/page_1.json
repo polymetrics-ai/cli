@@ -1,0 +1,367 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/users",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "user_fixture_1",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:01:00Z",
+          "updated_at": "2026-01-01T00:01:00Z"
+        },
+        {
+          "id": "user_fixture_2",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:02:00Z",
+          "updated_at": "2026-01-01T00:02:00Z"
+        },
+        {
+          "id": "user_fixture_3",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:03:00Z",
+          "updated_at": "2026-01-01T00:03:00Z"
+        },
+        {
+          "id": "user_fixture_4",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:04:00Z",
+          "updated_at": "2026-01-01T00:04:00Z"
+        },
+        {
+          "id": "user_fixture_5",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:05:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": "user_fixture_6",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:06:00Z",
+          "updated_at": "2026-01-01T00:06:00Z"
+        },
+        {
+          "id": "user_fixture_7",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:07:00Z",
+          "updated_at": "2026-01-01T00:07:00Z"
+        },
+        {
+          "id": "user_fixture_8",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:08:00Z",
+          "updated_at": "2026-01-01T00:08:00Z"
+        },
+        {
+          "id": "user_fixture_9",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:09:00Z",
+          "updated_at": "2026-01-01T00:09:00Z"
+        },
+        {
+          "id": "user_fixture_10",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:10:00Z",
+          "updated_at": "2026-01-01T00:10:00Z"
+        },
+        {
+          "id": "user_fixture_11",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:11:00Z",
+          "updated_at": "2026-01-01T00:11:00Z"
+        },
+        {
+          "id": "user_fixture_12",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:12:00Z",
+          "updated_at": "2026-01-01T00:12:00Z"
+        },
+        {
+          "id": "user_fixture_13",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:13:00Z",
+          "updated_at": "2026-01-01T00:13:00Z"
+        },
+        {
+          "id": "user_fixture_14",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:14:00Z",
+          "updated_at": "2026-01-01T00:14:00Z"
+        },
+        {
+          "id": "user_fixture_15",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:15:00Z",
+          "updated_at": "2026-01-01T00:15:00Z"
+        },
+        {
+          "id": "user_fixture_16",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:16:00Z",
+          "updated_at": "2026-01-01T00:16:00Z"
+        },
+        {
+          "id": "user_fixture_17",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:17:00Z",
+          "updated_at": "2026-01-01T00:17:00Z"
+        },
+        {
+          "id": "user_fixture_18",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:18:00Z",
+          "updated_at": "2026-01-01T00:18:00Z"
+        },
+        {
+          "id": "user_fixture_19",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:19:00Z",
+          "updated_at": "2026-01-01T00:19:00Z"
+        },
+        {
+          "id": "user_fixture_20",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:20:00Z",
+          "updated_at": "2026-01-01T00:20:00Z"
+        },
+        {
+          "id": "user_fixture_21",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:21:00Z",
+          "updated_at": "2026-01-01T00:21:00Z"
+        },
+        {
+          "id": "user_fixture_22",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:22:00Z",
+          "updated_at": "2026-01-01T00:22:00Z"
+        },
+        {
+          "id": "user_fixture_23",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:23:00Z",
+          "updated_at": "2026-01-01T00:23:00Z"
+        },
+        {
+          "id": "user_fixture_24",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:24:00Z",
+          "updated_at": "2026-01-01T00:24:00Z"
+        },
+        {
+          "id": "user_fixture_25",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:25:00Z",
+          "updated_at": "2026-01-01T00:25:00Z"
+        },
+        {
+          "id": "user_fixture_26",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:26:00Z",
+          "updated_at": "2026-01-01T00:26:00Z"
+        },
+        {
+          "id": "user_fixture_27",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:27:00Z",
+          "updated_at": "2026-01-01T00:27:00Z"
+        },
+        {
+          "id": "user_fixture_28",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:28:00Z",
+          "updated_at": "2026-01-01T00:28:00Z"
+        },
+        {
+          "id": "user_fixture_29",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:29:00Z",
+          "updated_at": "2026-01-01T00:29:00Z"
+        },
+        {
+          "id": "user_fixture_30",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:30:00Z",
+          "updated_at": "2026-01-01T00:30:00Z"
+        },
+        {
+          "id": "user_fixture_31",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:31:00Z",
+          "updated_at": "2026-01-01T00:31:00Z"
+        },
+        {
+          "id": "user_fixture_32",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:32:00Z",
+          "updated_at": "2026-01-01T00:32:00Z"
+        },
+        {
+          "id": "user_fixture_33",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:33:00Z",
+          "updated_at": "2026-01-01T00:33:00Z"
+        },
+        {
+          "id": "user_fixture_34",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:34:00Z",
+          "updated_at": "2026-01-01T00:34:00Z"
+        },
+        {
+          "id": "user_fixture_35",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:35:00Z",
+          "updated_at": "2026-01-01T00:35:00Z"
+        },
+        {
+          "id": "user_fixture_36",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:36:00Z",
+          "updated_at": "2026-01-01T00:36:00Z"
+        },
+        {
+          "id": "user_fixture_37",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:37:00Z",
+          "updated_at": "2026-01-01T00:37:00Z"
+        },
+        {
+          "id": "user_fixture_38",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:38:00Z",
+          "updated_at": "2026-01-01T00:38:00Z"
+        },
+        {
+          "id": "user_fixture_39",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:39:00Z",
+          "updated_at": "2026-01-01T00:39:00Z"
+        },
+        {
+          "id": "user_fixture_40",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:40:00Z",
+          "updated_at": "2026-01-01T00:40:00Z"
+        },
+        {
+          "id": "user_fixture_41",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:41:00Z",
+          "updated_at": "2026-01-01T00:41:00Z"
+        },
+        {
+          "id": "user_fixture_42",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:42:00Z",
+          "updated_at": "2026-01-01T00:42:00Z"
+        },
+        {
+          "id": "user_fixture_43",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:43:00Z",
+          "updated_at": "2026-01-01T00:43:00Z"
+        },
+        {
+          "id": "user_fixture_44",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:44:00Z",
+          "updated_at": "2026-01-01T00:44:00Z"
+        },
+        {
+          "id": "user_fixture_45",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:45:00Z",
+          "updated_at": "2026-01-01T00:45:00Z"
+        },
+        {
+          "id": "user_fixture_46",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:46:00Z",
+          "updated_at": "2026-01-01T00:46:00Z"
+        },
+        {
+          "id": "user_fixture_47",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:47:00Z",
+          "updated_at": "2026-01-01T00:47:00Z"
+        },
+        {
+          "id": "user_fixture_48",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:48:00Z",
+          "updated_at": "2026-01-01T00:48:00Z"
+        },
+        {
+          "id": "user_fixture_49",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:49:00Z",
+          "updated_at": "2026-01-01T00:49:00Z"
+        },
+        {
+          "id": "user_fixture_50",
+          "platform": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:50:00Z",
+          "updated_at": "2026-01-01T00:50:00Z"
+        }
+      ]
+    }
+  }
+}

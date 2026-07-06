@@ -1,0 +1,23 @@
+{
+  "name": "onesignal",
+  "display_name": "OneSignal",
+  "description": "Reads OneSignal account-level applications through the OneSignal REST API. Device/notification/outcome streams remain quarantined (ENGINE_GAP: no per-stream auth override).",
+  "integration_type": "api",
+  "docs_url": "https://documentation.onesignal.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1
+  },
+  "risk": {
+    "read": "external OneSignal API read of account-level application metadata",
+    "approval": "none; read-only"
+  }
+}

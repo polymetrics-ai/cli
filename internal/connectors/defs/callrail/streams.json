@@ -1,0 +1,206 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "\"{{ secrets.api_key }}\"", "prefix": "Token token=" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/a/{{ config.account_id }}/companies.json", "query": { "per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "callrail api_key is missing or invalid; re-run pm credentials add callrail" },
+      { "status": 403, "hint": "callrail account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "callrail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "calls",
+      "path": "/a/{{ config.account_id }}/calls.json",
+      "records": { "path": "calls" },
+      "incremental": {
+        "cursor_field": "start_time",
+        "request_param": "start_date",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/calls.json"
+    },
+    {
+      "name": "companies",
+      "path": "/a/{{ config.account_id }}/companies.json",
+      "records": { "path": "companies" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_date",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "users",
+      "path": "/a/{{ config.account_id }}/users.json",
+      "records": { "path": "users" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "request_param": "start_date",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "text_messages",
+      "path": "/a/{{ config.account_id }}/text-messages.json",
+      "records": { "path": "text_messages" },
+      "incremental": {
+        "cursor_field": "last_message_at",
+        "request_param": "start_date",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/text_messages.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/a.json",
+      "records": { "path": "accounts" },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "tags",
+      "path": "/a/{{ config.account_id }}/tags.json",
+      "records": { "path": "tags" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "trackers",
+      "path": "/a/{{ config.account_id }}/trackers.json",
+      "records": { "path": "trackers" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "company_id": "{{ record.company.id }}",
+        "company_name": "{{ record.company.name }}"
+      },
+      "schema": "schemas/trackers.json"
+    },
+    {
+      "name": "form_submissions",
+      "path": "/a/{{ config.account_id }}/form_submissions.json",
+      "records": { "path": "form_submissions" },
+      "incremental": {
+        "cursor_field": "submitted_at",
+        "request_param": "start_date",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/form_submissions.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/a/{{ config.account_id }}/integrations.json",
+      "records": { "path": "integrations" },
+      "query": {
+        "company_id": { "template": "{{ config.company_id }}", "omit_when_absent": true }
+      },
+      "schema": "schemas/integrations.json"
+    },
+    {
+      "name": "integration_filters",
+      "path": "/a/{{ config.account_id }}/integration_triggers.json",
+      "records": { "path": "integration_criteria" },
+      "query": {
+        "company_id": { "template": "{{ config.company_id }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "integration_type": "{{ record.integration.type }}"
+      },
+      "schema": "schemas/integration_filters.json"
+    },
+    {
+      "name": "notifications",
+      "path": "/a/{{ config.account_id }}/notifications.json",
+      "records": { "path": "notifications" },
+      "schema": "schemas/notifications.json"
+    },
+    {
+      "name": "caller_ids",
+      "path": "/a/{{ config.account_id }}/caller_ids.json",
+      "records": { "path": "caller_ids" },
+      "query": {
+        "company_id": { "template": "{{ config.company_id }}", "omit_when_absent": true }
+      },
+      "schema": "schemas/caller_ids.json"
+    },
+    {
+      "name": "sms_threads",
+      "path": "/a/{{ config.account_id }}/sms-threads.json",
+      "records": { "path": "sms_threads" },
+      "schema": "schemas/sms_threads.json"
+    },
+    {
+      "name": "message_flows",
+      "path": "/a/{{ config.account_id }}/message-flows.json",
+      "records": { "path": "message-flows" },
+      "query": {
+        "company_id": { "template": "{{ config.company_id }}", "omit_when_absent": true }
+      },
+      "schema": "schemas/message_flows.json"
+    },
+    {
+      "name": "leads",
+      "path": "/a/{{ config.account_id }}/leads.json",
+      "records": { "path": "leads" },
+      "incremental": {
+        "cursor_field": "created_at",
+        "start_config_key": "start_date"
+      },
+      "query": {
+        "company_id": { "template": "{{ config.company_id }}", "omit_when_absent": true }
+      },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "page_views",
+      "path": "/a/{{ config.account_id }}/calls/{{ fanout.id }}/page_views.json",
+      "records": { "path": "page_views" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/a/{{ config.account_id }}/calls.json", "records_path": "calls", "id_field": "id" }
+        },
+        "into": { "path_var": "call_id" },
+        "stamp_field": "call_id"
+      },
+      "schema": "schemas/page_views.json"
+    },
+    {
+      "name": "lead_timeline",
+      "path": "/a/{{ config.account_id }}/leads/{{ fanout.id }}/timeline.json",
+      "records": { "path": "lead" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/a/{{ config.account_id }}/leads.json", "records_path": "leads", "id_field": "id" }
+        },
+        "into": { "path_var": "lead_id" },
+        "stamp_field": "lead_id"
+      },
+      "schema": "schemas/lead_timeline.json"
+    }
+  ]
+}

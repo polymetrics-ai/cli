@@ -1,0 +1,15 @@
+{
+  "record": {
+    "change_id": 123,
+    "name": "Fixture update_approval_chain_rule_change",
+    "description": "Fixture update_approval_chain_rule_change record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/approval-chain-rule",
+    "body": {
+      "name": "Fixture update_approval_chain_rule_change",
+      "description": "Fixture update_approval_chain_rule_change record"
+    }
+  }
+}

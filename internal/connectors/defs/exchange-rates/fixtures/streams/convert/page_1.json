@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/convert",
+    "query": {
+      "from": "synthetic-conformance-value",
+      "to": "synthetic-conformance-value",
+      "amount": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "query": { "from": "GBP", "to": "JPY", "amount": 25 },
+      "info": { "timestamp": 1767225600, "rate": 148.972231 },
+      "historical": "",
+      "date": "2026-01-01",
+      "result": 3724.305775
+    }
+  }
+}

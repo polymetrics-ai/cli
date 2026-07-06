@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company_general_compact",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "simId": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "companyId": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "ticker": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "companyName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fiscalYear": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "fiscalPeriod": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filingType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filingIdentifier": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "columns": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "data": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "statements": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "prices": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "shares": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "changes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/knowledge-bases/synthetic-conformance-value/collections",
+    "body": {
+      "title": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

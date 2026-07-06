@@ -1,0 +1,22 @@
+{
+  "record": {
+    "SKU": "SKU-FIXTURE-1",
+    "Name": "Fixture Product",
+    "Category": "Fixtures",
+    "CostingMethod": "FIFO",
+    "UOM": "ea",
+    "Status": "Active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product",
+    "body": {
+      "SKU": "SKU-FIXTURE-1",
+      "Name": "Fixture Product",
+      "Category": "Fixtures",
+      "CostingMethod": "FIFO",
+      "UOM": "ea",
+      "Status": "Active"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "123"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/123/duplicate_lead"
+  }
+}

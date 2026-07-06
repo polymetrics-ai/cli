@@ -1,0 +1,30 @@
+{
+  "record": {
+    "vendor_credit_id": "synthetic-conformance-value",
+    "payload": {
+      "fixture": true
+    },
+    "data": {
+      "fixture": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/vendorcredits/synthetic-conformance-value/refunds",
+    "body": {
+      "payload": {
+        "fixture": true
+      },
+      "data": {
+        "fixture": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

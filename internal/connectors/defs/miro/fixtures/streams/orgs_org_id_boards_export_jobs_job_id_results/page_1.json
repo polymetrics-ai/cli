@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs/synthetic-conformance-value/results"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobId": "job_id_fixture",
+      "results": [
+        {
+          "boardId": "board_id_fixture",
+          "errorMessage": "error_message_fixture",
+          "exportLink": "https://example.invalid/fixture",
+          "status": "status_fixture",
+          "errorType": "error_type_fixture"
+        }
+      ]
+    }
+  }
+}

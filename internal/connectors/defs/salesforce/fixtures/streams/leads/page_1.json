@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/services/data/synthetic-conformance-value/query",
+    "query": { "q": "SELECT Id, Name, Email, LastModifiedDate FROM Lead ORDER BY LastModifiedDate ASC" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalSize": 2,
+      "done": true,
+      "records": [
+        { "attributes": { "type": "Lead" }, "Id": "00Qfixture1", "Name": "Fixture Lead One", "Email": "fixture1@example.com", "LastModifiedDate": "2026-01-01T00:00:00Z" },
+        { "attributes": { "type": "Lead" }, "Id": "00Qfixture2", "Name": "Fixture Lead Two", "Email": "fixture2@example.com", "LastModifiedDate": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

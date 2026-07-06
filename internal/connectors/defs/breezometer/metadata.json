@@ -1,0 +1,21 @@
+{
+  "name": "breezometer",
+  "display_name": "Breezometer",
+  "description": "Reads BreezoMeter (Google Environment) air quality, pollen, weather, and wildfire-tracking conditions/forecasts for a configured location via the BreezoMeter REST API; writes a stateless cleanest-route environmental-cleanliness scoring computation.",
+  "integration_type": "api",
+  "docs_url": "https://docs.breezometer.com/api-documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external BreezoMeter API read of point-in-time environmental, weather, and wildfire-tracking data for the configured location",
+    "write": "stateless environmental-cleanliness scoring computation over caller-supplied route geometries; no persistent BreezoMeter object is created or mutated",
+    "approval": "none; the sole write action is a stateless computation with no side effects on BreezoMeter's own data"
+  }
+}

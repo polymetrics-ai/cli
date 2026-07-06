@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "products": [
+        {
+          "id": "1",
+          "name": "Fixture products",
+          "href": "https://app.nutshell.com/rest/products/1",
+          "htmlUrl": "https://app.nutshell.com/products/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture products",
+          "href": "https://app.nutshell.com/rest/products/2",
+          "htmlUrl": "https://app.nutshell.com/products/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

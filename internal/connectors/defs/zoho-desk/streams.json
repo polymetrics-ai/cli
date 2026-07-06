@@ -1,0 +1,62 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "orgId": "{{ config.org_id }}"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Zoho-oauthtoken ", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "from",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/tickets" },
+    "error_map": [
+      { "status": 401, "hint": "zoho-desk access_token is missing, expired, or invalid; re-run pm credentials add zoho-desk" },
+      { "status": 403, "hint": "zoho-desk account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "zoho-desk rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "tickets",
+      "path": "/tickets",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.subject }}",
+        "updated_at": "{{ record.modifiedTime }}"
+      },
+      "schema": "schemas/tickets.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.lastName }}",
+        "updated_at": "{{ record.modifiedTime }}"
+      },
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.accountName }}",
+        "updated_at": "{{ record.modifiedTime }}"
+      },
+      "schema": "schemas/accounts.json",
+      "projection": "passthrough"
+    }
+  ]
+}

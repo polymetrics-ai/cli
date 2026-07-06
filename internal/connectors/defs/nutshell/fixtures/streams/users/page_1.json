@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": 1,
+          "entityType": "User",
+          "name": "Fixture User 1",
+          "emails": "fixture1@example.com",
+          "isEnabled": true,
+          "isAdministrator": false,
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": 2,
+          "entityType": "User",
+          "name": "Fixture User 2",
+          "emails": "fixture2@example.com",
+          "isEnabled": true,
+          "isAdministrator": false,
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:02+0000"
+        }
+      ]
+    }
+  }
+}

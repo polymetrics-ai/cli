@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/conversations.history", "query": { "limit": "2", "channel": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "messages": [
+        { "ts": "1700000000.000100", "type": "message", "user": "U1", "text": "Fixture message 1", "team": "T_FIXTURE" },
+        { "ts": "1700000100.000100", "type": "message", "user": "U2", "text": "Fixture message 2", "thread_ts": "1700000100.000100", "reply_count": 2, "team": "T_FIXTURE" }
+      ],
+      "response_metadata": { "next_cursor": "PAGE2" }
+    }
+  }
+}

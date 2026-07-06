@@ -1,0 +1,37 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "recipient_id": "recipient_id_fixture",
+    "name": "Fixture patch_documents_id_recipients_recipient_recipient_id",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v1/documents/id_fixture/recipients/recipient/recipient_id_fixture",
+    "body": {
+      "name": "Fixture patch_documents_id_recipients_recipient_recipient_id",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_documents_id_recipients_recipient_recipient_id_response",
+      "status": "ok"
+    }
+  }
+}

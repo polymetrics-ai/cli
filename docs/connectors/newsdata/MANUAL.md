@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads latest news, cryptocurrency news, and news sources from the NewsData.io REST API.
 
+ICON
+  asset: icons/source-newsdata.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://newsdata.io/documentation
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  category
+  country
+  domain
+  language
+  query
+  query_in_title
+  size
+  api_key (secret)
+
+ETL STREAMS
+  latest:
+    primary key: article_id
+    cursor: pubDate
+    fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+  crypto:
+    primary key: article_id
+    cursor: pubDate
+    fields: article_id(), category(), content(), country(), creator(), description(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_priority(), title()
+  sources:
+    primary key: id
+    fields: category(), country(), description(), icon(), id(), language(), name(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external NewsData.io API read of article and source metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

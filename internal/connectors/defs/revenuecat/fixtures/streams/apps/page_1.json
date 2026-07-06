@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/apps",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "app_fixture_1",
+          "object": "app",
+          "name": "Fixture App 1",
+          "project_id": "synthetic-conformance-value",
+          "created_at": 1735689600000,
+          "type": "ios"
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/apps"
+    }
+  }
+}

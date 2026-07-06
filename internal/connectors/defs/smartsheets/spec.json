@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Smartsheets Connection Specification",
+  "type": "object",
+  "required": [
+    "access_token"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Smartsheet API access token, used as the Bearer credential. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.smartsheet.com/2.0",
+      "description": "Smartsheet API base URL override for tests or proxies."
+    },
+    "spreadsheet_id": {
+      "type": "string",
+      "description": "Smartsheet sheet or report ID to read rows from; required for the hook-backed sheet_rows stream."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for the hook-backed sheet_rows stream. Declarative page-number streams use the bundle pageSize of 100."
+    },
+    "asset_type": {
+      "type": "string",
+      "default": "sheet",
+      "description": "Smartsheet asset type used by share read streams."
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "Smartsheet asset ID used by share read streams."
+    },
+    "alternate_email_id": {
+      "type": "string",
+      "description": "Alternate email ID for alternate email streams and writes."
+    },
+    "attachment_id": {
+      "type": "string",
+      "description": "Attachment ID for attachment streams and delete/version actions."
+    },
+    "automation_rule_id": {
+      "type": "string",
+      "description": "Automation rule ID for automation rule streams and writes."
+    },
+    "column_id": {
+      "type": "string",
+      "description": "Column ID for column and cell-history streams."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Comment ID for comment streams and comment writes."
+    },
+    "config_spreadsheet_id": {
+      "type": "string",
+      "description": "Smartsheet config spreadsheet id value used by templated streams or writes."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Contact ID for contact detail streams."
+    },
+    "cross_sheet_reference_id": {
+      "type": "string",
+      "description": "Cross-sheet reference ID for cross-sheet reference detail streams."
+    },
+    "discussion_id": {
+      "type": "string",
+      "description": "Discussion ID for discussion streams and comment writes."
+    },
+    "favorite_id": {
+      "type": "string",
+      "description": "Favorite object ID for favorite detail streams."
+    },
+    "favorite_type": {
+      "type": "string",
+      "description": "Favorite type for favorite detail streams."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "Folder ID for folder streams and folder-scoped writes."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Group ID for group streams and member writes."
+    },
+    "proof_id": {
+      "type": "string",
+      "description": "Proof ID for proof streams and proof-scoped writes."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Report ID for report streams and report-scoped writes."
+    },
+    "row_id": {
+      "type": "string",
+      "description": "Row ID for row streams and row-scoped writes."
+    },
+    "sent_update_request_id": {
+      "type": "string",
+      "description": "Sent update request ID for sent update request streams and deletes."
+    },
+    "share_id": {
+      "type": "string",
+      "description": "Share ID for share detail/update/delete actions."
+    },
+    "sheet_id": {
+      "type": "string",
+      "description": "Sheet ID for sheet streams and sheet-scoped writes."
+    },
+    "sight_id": {
+      "type": "string",
+      "description": "Dashboard (sight) ID for dashboard streams and writes."
+    },
+    "update_request_id": {
+      "type": "string",
+      "description": "Update request ID for update request streams and writes."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID for user and alternate email streams and writes."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Webhook ID for webhook streams and writes."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Workspace ID for workspace streams and workspace-scoped writes."
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Plan ID for user plan membership actions."
+    },
+    "field_id": {
+      "type": "string",
+      "description": "Summary field ID for summary-field image writes."
+    }
+  }
+}

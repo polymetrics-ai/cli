@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/v1/workspaces/synthetic-conformance-value/users", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "user_fixture_1", "name": "Fixture User One" }
+    ]
+  }
+}

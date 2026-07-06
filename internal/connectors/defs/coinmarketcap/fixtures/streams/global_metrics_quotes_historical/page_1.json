@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v1/global-metrics/quotes/historical" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": {
+        "quotes": [
+          {
+            "timestamp": "2026-01-01T00:00:00.000Z",
+            "btc_dominance": 48.5,
+            "eth_dominance": 18.2,
+            "active_cryptocurrencies": 9421,
+            "active_exchanges": 517,
+            "active_market_pairs": 84210,
+            "quote": { "USD": { "total_market_cap": 1750000000000.0, "total_volume_24h": 82000000000.0 } }
+          }
+        ]
+      }
+    }
+  }
+}

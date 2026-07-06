@@ -1,0 +1,25 @@
+{
+  "record": {
+    "app_id": "synthetic-conformance-value",
+    "baseUrl": "https://example.invalid/fixture",
+    "profile": {
+      "authScheme": "TOKEN",
+      "token": "fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/apps/synthetic-conformance-value/connections/default",
+    "body": {
+      "baseUrl": "https://example.invalid/fixture",
+      "profile": {
+        "authScheme": "TOKEN",
+        "token": "fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

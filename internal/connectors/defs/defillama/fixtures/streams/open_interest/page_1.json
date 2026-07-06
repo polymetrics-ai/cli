@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/overview/open-interest",
+    "query": { "excludeTotalDataChart": "true", "excludeTotalDataChartBreakdown": "true" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "protocols": [
+        {
+          "defillamaId": "1",
+          "name": "Fixture Perps",
+          "displayName": "Fixture Perps",
+          "category": "Derivatives",
+          "chains": ["Optimism"],
+          "total24h": 200000.0,
+          "total7d": 1400000.0,
+          "total30d": 6000000.0,
+          "totalAllTime": 199999999.0,
+          "change_1d": 0.5
+        },
+        {
+          "defillamaId": "2",
+          "name": "Fixture Perps Two",
+          "displayName": "Fixture Perps Two",
+          "category": "Derivatives",
+          "chains": ["Base"],
+          "total24h": 90000.0,
+          "total7d": 630000.0,
+          "total30d": 2700000.0,
+          "totalAllTime": 89999999.0,
+          "change_1d": -1.1
+        }
+      ]
+    }
+  }
+}

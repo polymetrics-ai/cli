@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/notifications.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 1,
+      "notifications": [
+        {
+          "id": 1,
+          "user_id": "USR_fixture_1",
+          "alert_type": "all",
+          "call_enabled": true,
+          "company_id": "CMP_fixture_1",
+          "company_name": "Fixture Company",
+          "name": "Fixture Notification",
+          "send_desktop": false,
+          "send_email": true,
+          "send_push": false,
+          "sms_enabled": true,
+          "tracker_id": "TRK_fixture_1",
+          "tracker_name": "Fixture Tracker"
+        }
+      ]
+    }
+  }
+}

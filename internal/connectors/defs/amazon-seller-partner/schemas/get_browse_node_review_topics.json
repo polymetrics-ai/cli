@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_browse_node_review_topics",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string"
+    },
+    "browseNodeMetrics": {
+      "type": "object"
+    },
+    "reviewSnippets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "subtopics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "browse_node_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "browse_node_id"
+  ]
+}

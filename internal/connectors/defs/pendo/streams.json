@@ -1,0 +1,488 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "x-pendo-integration-key",
+        "value": "{{ secrets.integration_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/visitor",
+      "query": {
+        "limit": "1",
+        "page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "pendo integration_key is missing or invalid; re-run pm credentials add pendo"
+      },
+      {
+        "status": 403,
+        "hint": "pendo account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "pendo rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "visitors",
+      "path": "/visitor",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "page": "1"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/visitors.json"
+    },
+    {
+      "name": "accounts",
+      "path": "/account",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "page": "1"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "pages",
+      "path": "/page",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "page": "1"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pages.json"
+    },
+    {
+      "name": "features",
+      "path": "/feature",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "page": "1"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/features.json"
+    },
+    {
+      "name": "page_by_id",
+      "path": "/page",
+      "query": {
+        "id": "{{ config.page_id }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/page_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "pages_by_ids",
+      "path": "/page",
+      "query": {
+        "id": "{{ config.page_ids }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/pages_by_ids.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "feature_by_id",
+      "path": "/feature",
+      "query": {
+        "id": "{{ config.feature_id }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/feature_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "features_by_ids",
+      "path": "/feature",
+      "query": {
+        "id": "{{ config.feature_ids }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/features_by_ids.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tracktypes",
+      "path": "/tracktype",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/tracktypes.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "tracktype_by_id",
+      "path": "/tracktype",
+      "query": {
+        "id": "{{ config.tracktype_id }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/tracktype_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "visitor_by_id",
+      "path": "/visitor/{{ config.visitor_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/visitor_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "visitor_history",
+      "path": "/visitor/{{ config.visitor_id }}/history",
+      "query": {
+        "starttime": "{{ config.visitor_history_starttime }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/visitor_history.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "account_by_id",
+      "path": "/account/{{ config.account_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/account_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bulkdelete_requests",
+      "path": "/bulkdelete",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/bulkdelete_requests.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bulkdelete_request",
+      "path": "/bulkdelete/{{ config.bulkdelete_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/bulkdelete_request.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "segments",
+      "path": "/segment",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/segments.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "segment_by_id",
+      "path": "/segment/{{ config.segment_id }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/segment_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "segment_status",
+      "path": "/segment/{{ config.segment_id }}/status",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/segment_status.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "reports",
+      "path": "/report",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/reports.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "report_results_json",
+      "path": "/report/{{ config.report_id }}/results.json",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/report_results_json.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "guides",
+      "path": "/guide",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/guides.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "guide_by_id",
+      "path": "/guide",
+      "query": {
+        "id": "{{ config.guide_id }}"
+      },
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/guide_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "guide_history",
+      "path": "/guide/{{ config.guide_id }}/history",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/guide_history.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "guide_order",
+      "path": "/guide/order",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/guide_order.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "metadata_schema",
+      "path": "/metadata/schema/{{ config.metadata_kind }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/metadata_schema.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "metadata_dependencies",
+      "path": "/metadata/dependencies",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/metadata_dependencies.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "metadata_field_dependencies",
+      "path": "/metadata/dependencies/{{ config.metadata_kind }}/{{ config.metadata_group }}/{{ config.metadata_field_name }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/metadata_field_dependencies.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blacklist",
+      "path": "/blacklist",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/blacklist.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "blacklist_by_type",
+      "path": "/blacklist/type/{{ config.blacklist_type }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/blacklist_by_type.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "servers",
+      "path": "/servername",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/servers.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "server_by_name",
+      "path": "/servername/{{ config.server_name }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/server_by_name.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "servers_by_flag",
+      "path": "/servername/flag/{{ config.flag_name }}",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/servers_by_flag.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "feedback_options",
+      "path": "/feedback/options",
+      "records": {
+        "path": "",
+        "single_object": true
+      },
+      "schema": "schemas/feedback_options.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/groups"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 100,
+      "size": 100,
+      "data": [
+        {
+          "id": "id_fixture",
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "type": "user-group"
+        }
+      ],
+      "cursor": "cursor_fixture",
+      "type": "cursor-list"
+    }
+  }
+}

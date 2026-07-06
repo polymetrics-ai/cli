@@ -1,0 +1,178 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/top-headlines",
+    "query": {
+      "page": "1",
+      "max": "10"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalArticles": 11,
+      "articles": [
+        {
+          "id": "hl_fixture_1",
+          "title": "Fixture headline 1",
+          "description": "Fixture headline description 1",
+          "content": "Fixture headline content 1",
+          "url": "https://example.com/top-headlines/1",
+          "image": "https://example.com/top-headlines/1.jpg",
+          "publishedAt": "2026-01-02T00:01:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_2",
+          "title": "Fixture headline 2",
+          "description": "Fixture headline description 2",
+          "content": "Fixture headline content 2",
+          "url": "https://example.com/top-headlines/2",
+          "image": "https://example.com/top-headlines/2.jpg",
+          "publishedAt": "2026-01-02T00:02:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_3",
+          "title": "Fixture headline 3",
+          "description": "Fixture headline description 3",
+          "content": "Fixture headline content 3",
+          "url": "https://example.com/top-headlines/3",
+          "image": "https://example.com/top-headlines/3.jpg",
+          "publishedAt": "2026-01-02T00:03:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_4",
+          "title": "Fixture headline 4",
+          "description": "Fixture headline description 4",
+          "content": "Fixture headline content 4",
+          "url": "https://example.com/top-headlines/4",
+          "image": "https://example.com/top-headlines/4.jpg",
+          "publishedAt": "2026-01-02T00:04:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_5",
+          "title": "Fixture headline 5",
+          "description": "Fixture headline description 5",
+          "content": "Fixture headline content 5",
+          "url": "https://example.com/top-headlines/5",
+          "image": "https://example.com/top-headlines/5.jpg",
+          "publishedAt": "2026-01-02T00:05:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_6",
+          "title": "Fixture headline 6",
+          "description": "Fixture headline description 6",
+          "content": "Fixture headline content 6",
+          "url": "https://example.com/top-headlines/6",
+          "image": "https://example.com/top-headlines/6.jpg",
+          "publishedAt": "2026-01-02T00:06:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_7",
+          "title": "Fixture headline 7",
+          "description": "Fixture headline description 7",
+          "content": "Fixture headline content 7",
+          "url": "https://example.com/top-headlines/7",
+          "image": "https://example.com/top-headlines/7.jpg",
+          "publishedAt": "2026-01-02T00:07:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_8",
+          "title": "Fixture headline 8",
+          "description": "Fixture headline description 8",
+          "content": "Fixture headline content 8",
+          "url": "https://example.com/top-headlines/8",
+          "image": "https://example.com/top-headlines/8.jpg",
+          "publishedAt": "2026-01-02T00:08:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_9",
+          "title": "Fixture headline 9",
+          "description": "Fixture headline description 9",
+          "content": "Fixture headline content 9",
+          "url": "https://example.com/top-headlines/9",
+          "image": "https://example.com/top-headlines/9.jpg",
+          "publishedAt": "2026-01-02T00:09:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        },
+        {
+          "id": "hl_fixture_10",
+          "title": "Fixture headline 10",
+          "description": "Fixture headline description 10",
+          "content": "Fixture headline content 10",
+          "url": "https://example.com/top-headlines/10",
+          "image": "https://example.com/top-headlines/10.jpg",
+          "publishedAt": "2026-01-02T00:10:00Z",
+          "lang": "en",
+          "source": {
+            "id": "fixture-source",
+            "name": "Fixture News",
+            "url": "https://example.com",
+            "country": "us"
+          }
+        }
+      ]
+    }
+  }
+}

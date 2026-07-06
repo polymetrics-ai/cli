@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "page": "1", "per_page": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "id": 30,
+          "type": "campaign",
+          "name": "Welcome Series",
+          "subject": "Welcome to Gist",
+          "status": "active",
+          "created_at": 1767225601,
+          "updated_at": 1767225601
+        }
+      ],
+      "pages": { "next": null }
+    }
+  }
+}

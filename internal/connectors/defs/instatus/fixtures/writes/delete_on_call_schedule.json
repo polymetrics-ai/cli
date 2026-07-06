@@ -1,0 +1,15 @@
+{
+  "record": {
+    "on_call_schedule_id": "on_call_schedule_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/on-call-schedules/on_call_schedule_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_on_call_schedule_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,1823 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/exchanges",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "count": 100,
+        "total": 101
+      },
+      "data": [
+        {
+          "mic": "XFX1",
+          "name": "Fixture Exchange 1",
+          "acronym": "FX1",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX2",
+          "name": "Fixture Exchange 2",
+          "acronym": "FX2",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX3",
+          "name": "Fixture Exchange 3",
+          "acronym": "FX3",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX4",
+          "name": "Fixture Exchange 4",
+          "acronym": "FX4",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX5",
+          "name": "Fixture Exchange 5",
+          "acronym": "FX5",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX6",
+          "name": "Fixture Exchange 6",
+          "acronym": "FX6",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX7",
+          "name": "Fixture Exchange 7",
+          "acronym": "FX7",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX8",
+          "name": "Fixture Exchange 8",
+          "acronym": "FX8",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX9",
+          "name": "Fixture Exchange 9",
+          "acronym": "FX9",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX10",
+          "name": "Fixture Exchange 10",
+          "acronym": "FX10",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX11",
+          "name": "Fixture Exchange 11",
+          "acronym": "FX11",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX12",
+          "name": "Fixture Exchange 12",
+          "acronym": "FX12",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX13",
+          "name": "Fixture Exchange 13",
+          "acronym": "FX13",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX14",
+          "name": "Fixture Exchange 14",
+          "acronym": "FX14",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX15",
+          "name": "Fixture Exchange 15",
+          "acronym": "FX15",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX16",
+          "name": "Fixture Exchange 16",
+          "acronym": "FX16",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX17",
+          "name": "Fixture Exchange 17",
+          "acronym": "FX17",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX18",
+          "name": "Fixture Exchange 18",
+          "acronym": "FX18",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX19",
+          "name": "Fixture Exchange 19",
+          "acronym": "FX19",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX20",
+          "name": "Fixture Exchange 20",
+          "acronym": "FX20",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX21",
+          "name": "Fixture Exchange 21",
+          "acronym": "FX21",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX22",
+          "name": "Fixture Exchange 22",
+          "acronym": "FX22",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX23",
+          "name": "Fixture Exchange 23",
+          "acronym": "FX23",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX24",
+          "name": "Fixture Exchange 24",
+          "acronym": "FX24",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX25",
+          "name": "Fixture Exchange 25",
+          "acronym": "FX25",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX26",
+          "name": "Fixture Exchange 26",
+          "acronym": "FX26",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX27",
+          "name": "Fixture Exchange 27",
+          "acronym": "FX27",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX28",
+          "name": "Fixture Exchange 28",
+          "acronym": "FX28",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX29",
+          "name": "Fixture Exchange 29",
+          "acronym": "FX29",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX30",
+          "name": "Fixture Exchange 30",
+          "acronym": "FX30",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX31",
+          "name": "Fixture Exchange 31",
+          "acronym": "FX31",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX32",
+          "name": "Fixture Exchange 32",
+          "acronym": "FX32",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX33",
+          "name": "Fixture Exchange 33",
+          "acronym": "FX33",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX34",
+          "name": "Fixture Exchange 34",
+          "acronym": "FX34",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX35",
+          "name": "Fixture Exchange 35",
+          "acronym": "FX35",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX36",
+          "name": "Fixture Exchange 36",
+          "acronym": "FX36",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX37",
+          "name": "Fixture Exchange 37",
+          "acronym": "FX37",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX38",
+          "name": "Fixture Exchange 38",
+          "acronym": "FX38",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX39",
+          "name": "Fixture Exchange 39",
+          "acronym": "FX39",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX40",
+          "name": "Fixture Exchange 40",
+          "acronym": "FX40",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX41",
+          "name": "Fixture Exchange 41",
+          "acronym": "FX41",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX42",
+          "name": "Fixture Exchange 42",
+          "acronym": "FX42",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX43",
+          "name": "Fixture Exchange 43",
+          "acronym": "FX43",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX44",
+          "name": "Fixture Exchange 44",
+          "acronym": "FX44",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX45",
+          "name": "Fixture Exchange 45",
+          "acronym": "FX45",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX46",
+          "name": "Fixture Exchange 46",
+          "acronym": "FX46",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX47",
+          "name": "Fixture Exchange 47",
+          "acronym": "FX47",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX48",
+          "name": "Fixture Exchange 48",
+          "acronym": "FX48",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX49",
+          "name": "Fixture Exchange 49",
+          "acronym": "FX49",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX50",
+          "name": "Fixture Exchange 50",
+          "acronym": "FX50",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX51",
+          "name": "Fixture Exchange 51",
+          "acronym": "FX51",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX52",
+          "name": "Fixture Exchange 52",
+          "acronym": "FX52",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX53",
+          "name": "Fixture Exchange 53",
+          "acronym": "FX53",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX54",
+          "name": "Fixture Exchange 54",
+          "acronym": "FX54",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX55",
+          "name": "Fixture Exchange 55",
+          "acronym": "FX55",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX56",
+          "name": "Fixture Exchange 56",
+          "acronym": "FX56",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX57",
+          "name": "Fixture Exchange 57",
+          "acronym": "FX57",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX58",
+          "name": "Fixture Exchange 58",
+          "acronym": "FX58",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX59",
+          "name": "Fixture Exchange 59",
+          "acronym": "FX59",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX60",
+          "name": "Fixture Exchange 60",
+          "acronym": "FX60",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX61",
+          "name": "Fixture Exchange 61",
+          "acronym": "FX61",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX62",
+          "name": "Fixture Exchange 62",
+          "acronym": "FX62",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX63",
+          "name": "Fixture Exchange 63",
+          "acronym": "FX63",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX64",
+          "name": "Fixture Exchange 64",
+          "acronym": "FX64",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX65",
+          "name": "Fixture Exchange 65",
+          "acronym": "FX65",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX66",
+          "name": "Fixture Exchange 66",
+          "acronym": "FX66",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX67",
+          "name": "Fixture Exchange 67",
+          "acronym": "FX67",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX68",
+          "name": "Fixture Exchange 68",
+          "acronym": "FX68",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX69",
+          "name": "Fixture Exchange 69",
+          "acronym": "FX69",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX70",
+          "name": "Fixture Exchange 70",
+          "acronym": "FX70",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX71",
+          "name": "Fixture Exchange 71",
+          "acronym": "FX71",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX72",
+          "name": "Fixture Exchange 72",
+          "acronym": "FX72",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX73",
+          "name": "Fixture Exchange 73",
+          "acronym": "FX73",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX74",
+          "name": "Fixture Exchange 74",
+          "acronym": "FX74",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX75",
+          "name": "Fixture Exchange 75",
+          "acronym": "FX75",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX76",
+          "name": "Fixture Exchange 76",
+          "acronym": "FX76",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX77",
+          "name": "Fixture Exchange 77",
+          "acronym": "FX77",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX78",
+          "name": "Fixture Exchange 78",
+          "acronym": "FX78",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX79",
+          "name": "Fixture Exchange 79",
+          "acronym": "FX79",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX80",
+          "name": "Fixture Exchange 80",
+          "acronym": "FX80",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX81",
+          "name": "Fixture Exchange 81",
+          "acronym": "FX81",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX82",
+          "name": "Fixture Exchange 82",
+          "acronym": "FX82",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX83",
+          "name": "Fixture Exchange 83",
+          "acronym": "FX83",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX84",
+          "name": "Fixture Exchange 84",
+          "acronym": "FX84",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX85",
+          "name": "Fixture Exchange 85",
+          "acronym": "FX85",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX86",
+          "name": "Fixture Exchange 86",
+          "acronym": "FX86",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX87",
+          "name": "Fixture Exchange 87",
+          "acronym": "FX87",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX88",
+          "name": "Fixture Exchange 88",
+          "acronym": "FX88",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX89",
+          "name": "Fixture Exchange 89",
+          "acronym": "FX89",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX90",
+          "name": "Fixture Exchange 90",
+          "acronym": "FX90",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX91",
+          "name": "Fixture Exchange 91",
+          "acronym": "FX91",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX92",
+          "name": "Fixture Exchange 92",
+          "acronym": "FX92",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX93",
+          "name": "Fixture Exchange 93",
+          "acronym": "FX93",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX94",
+          "name": "Fixture Exchange 94",
+          "acronym": "FX94",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX95",
+          "name": "Fixture Exchange 95",
+          "acronym": "FX95",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX96",
+          "name": "Fixture Exchange 96",
+          "acronym": "FX96",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX97",
+          "name": "Fixture Exchange 97",
+          "acronym": "FX97",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "GBP",
+            "symbol": "\u00a3",
+            "name": "British Pound"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX98",
+          "name": "Fixture Exchange 98",
+          "acronym": "FX98",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "JPY",
+            "symbol": "\u00a5",
+            "name": "Japanese Yen"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX99",
+          "name": "Fixture Exchange 99",
+          "acronym": "FX99",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "EUR",
+            "symbol": "\u20ac",
+            "name": "Euro"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        },
+        {
+          "mic": "XFX100",
+          "name": "Fixture Exchange 100",
+          "acronym": "FX100",
+          "country": "Fixtureland",
+          "country_code": "FX",
+          "city": "Fixture City",
+          "website": "https://example.com",
+          "currency": {
+            "code": "USD",
+            "symbol": "$",
+            "name": "US Dollar"
+          },
+          "timezone": {
+            "timezone": "UTC",
+            "abbr": "UTC"
+          }
+        }
+      ]
+    }
+  }
+}

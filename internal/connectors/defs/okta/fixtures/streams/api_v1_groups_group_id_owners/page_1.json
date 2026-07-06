@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/groups/synthetic-conformance-value/owners",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "displayName": "display_name_fixture",
+        "id": "id_fixture",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "originId": "origin_id_fixture",
+        "originType": "APPLICATION",
+        "resolved": true,
+        "type": "GROUP"
+      }
+    ]
+  }
+}

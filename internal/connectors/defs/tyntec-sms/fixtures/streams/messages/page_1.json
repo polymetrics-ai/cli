@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/sms/v1/messages", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        {
+          "id": "msg_fixture_1",
+          "from": "15550100001",
+          "to": "15550100002",
+          "status": "DELIVERED",
+          "createdAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "msg_fixture_2",
+          "from": "15550100001",
+          "to": "15550100003",
+          "status": "DELIVERED",
+          "createdAt": "2026-01-01T00:05:00Z"
+        }
+      ]
+    }
+  }
+}

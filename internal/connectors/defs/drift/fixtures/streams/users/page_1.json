@@ -1,0 +1,44 @@
+{
+  "request": { "method": "GET", "path": "/users/list" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "orgId": 42,
+          "name": "Fixture One",
+          "alias": "fix1",
+          "email": "fixture1@example.com",
+          "phone": "+15550100",
+          "locale": "en-US",
+          "availability": "AVAILABLE",
+          "role": "admin",
+          "timeZone": "Etc/UTC",
+          "avatarUrl": "https://example.com/avatar1.png",
+          "verified": true,
+          "bot": false,
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601
+        },
+        {
+          "id": 2,
+          "orgId": 42,
+          "name": "Fixture Two",
+          "alias": "fix2",
+          "email": "fixture2@example.com",
+          "phone": "+15550101",
+          "locale": "en-US",
+          "availability": "AWAY",
+          "role": "member",
+          "timeZone": "Etc/UTC",
+          "avatarUrl": "https://example.com/avatar2.png",
+          "verified": true,
+          "bot": false,
+          "createdAt": 1767225602,
+          "updatedAt": 1767225602
+        }
+      ]
+    }
+  }
+}

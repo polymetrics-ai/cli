@@ -1,0 +1,13 @@
+{
+  "record": {
+    "user_id": "user_fixture_1",
+    "first_name": "Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/user_fixture_1",
+    "body": {
+      "first_name": "Updated"
+    }
+  }
+}

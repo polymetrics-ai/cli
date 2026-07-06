@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_submissions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "formId": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "siteId": { "type": ["string", "null"] },
+    "workspaceId": { "type": ["string", "null"] },
+    "formResponse": { "type": ["object", "null"] },
+    "dateSubmitted": { "type": ["string", "null"], "format": "date-time" },
+    "localeId": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/activities"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "activities": [
+        {
+          "id": "job_activity_fixture_1",
+          "action": "job_updated",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

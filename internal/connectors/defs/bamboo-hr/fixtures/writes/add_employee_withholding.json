@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "additionalFed": "fixture_value",
+    "additionalLocal": "fixture_value",
+    "additionalState": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employee_withholding/fixture_id",
+    "body": {
+      "additionalFed": "fixture_value",
+      "additionalLocal": "fixture_value",
+      "additionalState": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

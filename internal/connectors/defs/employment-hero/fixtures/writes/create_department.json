@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Engineering Department"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/departments",
+    "body": {
+      "name": "Engineering Department"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_department_fixture_response"
+    }
+  }
+}

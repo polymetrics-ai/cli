@@ -1,0 +1,10 @@
+{
+  "record": {
+    "catalog_feed_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/catalog_feeds/1"
+  },
+  "response": { "status": 200, "body": {} }
+}

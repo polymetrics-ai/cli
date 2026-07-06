@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "builds",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "graphql_id": { "type": ["string", "null"] },
+    "number": { "type": ["integer", "null"] },
+    "state": { "type": ["string", "null"] },
+    "blocked": { "type": ["boolean", "null"] },
+    "message": { "type": ["string", "null"] },
+    "commit": { "type": ["string", "null"] },
+    "branch": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "web_url": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "scheduled_at": { "type": ["string", "null"] },
+    "started_at": { "type": ["string", "null"] },
+    "finished_at": { "type": ["string", "null"] }
+  }
+}

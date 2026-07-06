@@ -1,0 +1,9 @@
+{
+  "record": {
+    "signature_request_id": "sigreq_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_request/release_hold/sigreq_fixture_1"
+  }
+}

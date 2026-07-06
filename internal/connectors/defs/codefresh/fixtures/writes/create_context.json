@@ -1,0 +1,23 @@
+{
+  "record": {
+    "metadata": {
+      "name": "fixture-context"
+    },
+    "type": "secret",
+    "spec": {
+      "data": { "FIXTURE_VAR": "fixture-value" }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contexts",
+    "body": {
+      "metadata": { "name": "fixture-context" },
+      "type": "secret"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "metadata": { "name": "fixture-context" } }
+  }
+}

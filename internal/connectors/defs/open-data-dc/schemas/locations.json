@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["MarId"],
+  "required": ["MarId"],
+  "properties": {
+    "MarId": { "type": "string" },
+    "FullAddress": { "type": ["string", "null"] },
+    "SSL": { "type": ["string", "null"] },
+    "StName": { "type": ["string", "null"] },
+    "AddrNum": { "type": ["string", "null"] },
+    "Quadrant": { "type": ["string", "null"] },
+    "Ward": { "type": ["string", "null"] },
+    "Anc": { "type": ["string", "null"] },
+    "Zipcode": { "type": ["string", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "ResidenceType": { "type": ["string", "null"] },
+    "CensusTract": { "type": ["string", "null"] },
+    "Latitude": { "type": ["number", "null"] },
+    "Longitude": { "type": ["number", "null"] },
+    "Xcoord": { "type": ["number", "null"] },
+    "Ycoord": { "type": ["number", "null"] },
+    "distance": { "type": ["number", "null"], "description": "Search ranking distance score, present only when the underlying search returns one." }
+  }
+}

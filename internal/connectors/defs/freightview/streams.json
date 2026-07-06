@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "shipments",
+      "method": "GET",
+      "path": "/__legacy_hook/shipments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/shipments.json"
+    },
+    {
+      "name": "quotes",
+      "method": "GET",
+      "path": "/__legacy_hook/quotes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/quotes.json"
+    },
+    {
+      "name": "tracking",
+      "method": "GET",
+      "path": "/__legacy_hook/tracking",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tracking.json"
+    }
+  ]
+}

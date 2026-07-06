@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "sortOrder": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/order-statuses",
+    "body": {
+      "name": "name_fixture",
+      "sortOrder": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

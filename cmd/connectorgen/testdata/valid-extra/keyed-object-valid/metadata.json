@@ -1,0 +1,15 @@
+{
+  "name": "keyed-object-valid",
+  "display_name": "Keyed Object Valid",
+  "description": "a control connector proving a well-formed records.keyed_object block passes connectorgen validate cleanly (S4 engine mini-wave item 3)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

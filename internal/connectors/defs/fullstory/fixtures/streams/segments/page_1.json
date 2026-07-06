@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/segments/v2", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "seg_fixture_1",
+          "name": "All Sessions",
+          "description": "conformance fixture segment",
+          "creator": "fixture@example.com",
+          "created": "2026-01-01T00:00:00Z",
+          "is_public": true,
+          "type": "system"
+        },
+        {
+          "id": "seg_fixture_2",
+          "name": "Mobile Sessions",
+          "description": "conformance fixture segment",
+          "creator": "fixture@example.com",
+          "created": "2026-01-01T00:00:00Z",
+          "is_public": false,
+          "type": "custom"
+        }
+      ],
+      "next_page_token": "PAGE2"
+    }
+  }
+}

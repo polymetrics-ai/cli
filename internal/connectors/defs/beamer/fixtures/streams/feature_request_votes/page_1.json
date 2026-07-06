@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/feature-requests", "query": { "page": "0", "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "fr_fixture_1", "title": "Fixture Feature Request 1" },
+      { "id": "fr_fixture_2", "title": "Fixture Feature Request 2" }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_ads",
+  "type": "object",
+  "x-primary-key": ["ad_id"],
+  "required": ["ad_id"],
+  "properties": {
+    "ad_id": { "type": "integer" },
+    "campaign_id": { "type": ["integer", "null"] },
+    "ad_group_id": { "type": ["integer", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "asin": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "serving_status": { "type": ["string", "null"] }
+  }
+}

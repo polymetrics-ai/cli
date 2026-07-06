@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/contacts/lists", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        { "id": 20, "name": "Fixture Newsletter" }
+      ],
+      "count": 1
+    }
+  }
+}

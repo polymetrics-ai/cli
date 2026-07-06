@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        { "contactID": "contact_fixture_1", "email": "fixture1@example.com", "firstName": "Fixture1", "lastName": "Example", "status": "active", "country": "United States", "countryCode": "US", "city": "Springfield", "state": "IL", "createdAt": "2026-01-01T00:00:00Z", "segments": ["vip"], "tags": ["fixture"] },
+        { "contactID": "contact_fixture_2", "email": "fixture2@example.com", "firstName": "Fixture2", "lastName": "Example", "status": "active", "country": "United States", "countryCode": "US", "city": "Springfield", "state": "IL", "createdAt": "2026-01-02T00:00:00Z", "segments": [], "tags": [] }
+      ],
+      "paging": { "next": null }
+    }
+  }
+}

@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Nylas calendars, contacts, messages, and events for a connected grant through the Nylas v3 REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  calendar_id
+  grant_id
+  max_pages
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  calendars:
+    primary key: id
+    fields: description(), grant_id(), hex_color(), id(), is_primary(), name(), object(), read_only(), timezone()
+  contacts:
+    primary key: id
+    fields: company_name(), emails(), given_name(), grant_id(), id(), job_title(), object(), phone_numbers(), source(), surname()
+  messages:
+    primary key: id
+    cursor: date
+    fields: date(), folders(), from(), grant_id(), id(), object(), snippet(), starred(), subject(), thread_id(), to(), unread()
+  events:
+    primary key: id
+    cursor: updated_at
+    fields: busy(), calendar_id(), description(), grant_id(), id(), location(), object(), read_only(), status(), title(), updated_at(), when()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Nylas API read of a connected grant's calendar, contact, and message data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

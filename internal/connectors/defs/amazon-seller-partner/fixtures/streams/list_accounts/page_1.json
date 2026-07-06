@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/accounts",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "accountId": "accountId-fixture-1",
+          "accountHolderName": "accountHolderName-fixture-1",
+          "bankAccountNumberFormat": "bankAccountNumberFormat-fixture-1",
+          "bankName": "bankName-fixture-1",
+          "bankAccountOwnershipType": "bankAccountOwnershipType-fixture-1",
+          "routingNumber": "routingNumber-fixture-1",
+          "bankNumberFormat": "bankNumberFormat-fixture-1",
+          "accountCountryCode": "accountCountryCode-fixture-1",
+          "accountCurrency": "accountCurrency-fixture-1",
+          "bankAccountNumberTail": "bankAccountNumberTail-fixture-1",
+          "bankAccountHolderStatus": "bankAccountHolderStatus-fixture-1"
+        }
+      ]
+    }
+  }
+}

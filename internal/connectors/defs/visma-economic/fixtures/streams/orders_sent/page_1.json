@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders/sent",
+    "query": {
+      "skippages": "0",
+      "pagesize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collection": [
+        {
+          "orderNumber": 7002,
+          "date": "2026-01-08",
+          "currency": "DKK",
+          "netAmount": 400.0,
+          "grossAmount": 500.0,
+          "vatAmount": 100.0,
+          "lastUpdated": "2026-01-08T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

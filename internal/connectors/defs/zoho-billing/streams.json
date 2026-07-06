@@ -1,0 +1,65 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Zoho-oauthtoken ", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/customers" },
+    "error_map": [
+      { "status": 401, "hint": "zoho-billing access_token is missing or invalid; re-run pm credentials add zoho-billing" },
+      { "status": 429, "class": "rate_limited", "hint": "zoho-billing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "customers",
+      "path": "/customers",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "customers" },
+      "computed_fields": {
+        "id": "{{ record.customer_id }}",
+        "name": "{{ record.display_name }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/customers.json"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/subscriptions",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "subscriptions" },
+      "computed_fields": {
+        "id": "{{ record.subscription_id }}",
+        "name": "{{ record.name }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/subscriptions.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "query": {
+        "organization_id": { "template": "{{ config.organization_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "invoices" },
+      "computed_fields": {
+        "id": "{{ record.invoice_id }}",
+        "name": "{{ record.invoice_number }}",
+        "updated_at": "{{ record.updated_time }}"
+      },
+      "schema": "schemas/invoices.json"
+    }
+  ]
+}

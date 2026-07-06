@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pricebooks",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "pricebooks": [
+        {
+          "currency_id": "list_pricebooks_fixture_1",
+          "name": "list_pricebooks fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "list_pricebooks_fixture_1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

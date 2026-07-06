@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lead_sources",
+  "description": "Pipedrive's lead sources have no numeric or UUID identifier; the source name itself is the only stable per-record key Pipedrive documents for this resource.",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" }
+  }
+}

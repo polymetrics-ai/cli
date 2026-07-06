@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Chat Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Zendesk Chat account root, e.g. https://acme.zendesk.com/api/v2/chat for subdomain 'acme'. Also usable as a base URL override for tests/proxies."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk Chat OAuth access token. Sent as Authorization: Bearer <access_token>; never logged."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the chats incremental-export stream; converted to a Unix-seconds start_time query value."
+    }
+  }
+}

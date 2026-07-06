@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "post": {
+        "name": "Posts",
+        "slug": "post",
+        "description": "",
+        "hierarchical": false,
+        "has_archive": false,
+        "taxonomies": ["category", "post_tag"],
+        "rest_base": "posts"
+      },
+      "page": {
+        "name": "Pages",
+        "slug": "page",
+        "description": "",
+        "hierarchical": true,
+        "has_archive": false,
+        "taxonomies": [],
+        "rest_base": "pages"
+      }
+    }
+  }
+}

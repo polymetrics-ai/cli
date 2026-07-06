@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Location Type", "color": "#00ff00" },
+  "expect": {
+    "method": "POST",
+    "path": "/location_types",
+    "body": { "name": "Fixture Location Type", "color": "#00ff00" }
+  },
+  "response": { "status": 200, "body": { "id": 1301, "name": "Fixture Location Type" } }
+}

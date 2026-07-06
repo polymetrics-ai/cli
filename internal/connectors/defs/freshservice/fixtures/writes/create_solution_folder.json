@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_solution_folder",
+    "description": "Fixture create_solution_folder record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/solutions/folders",
+    "body": {
+      "name": "Fixture create_solution_folder",
+      "description": "Fixture create_solution_folder record"
+    }
+  }
+}

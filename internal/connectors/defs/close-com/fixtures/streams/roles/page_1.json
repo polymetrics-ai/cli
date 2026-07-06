@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/role/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "role_1", "name": "Fixture Role", "organization_id": "orga_fixture" }
+      ]
+    }
+  }
+}

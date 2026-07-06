@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/folder-contents/synthetic-conformance-value",
+    "query": {
+      "fields": "id,folderId,folderRef,objectType,objectId,objectName,objectRef,createdAt,updatedAt,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "folderId": 1,
+      "folderRef": "folderRef_fixture",
+      "objectType": "objectType_fixture",
+      "objectId": 1,
+      "objectName": "objectName_fixture",
+      "objectRef": "objectRef_fixture",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

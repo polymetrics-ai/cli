@@ -1,0 +1,7 @@
+{
+  "record": { "projectId": "proj_fixture_1", "id": "task_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/workspaces/synthetic-conformance-value/projects/proj_fixture_1/tasks/task_fixture_1"
+  }
+}

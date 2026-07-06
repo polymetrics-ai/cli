@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/segments" },
+  "response": {
+    "status": 200,
+    "body": {
+      "segments": [
+        { "id": "s_fixture_1", "name": "VIPs", "type": "people", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" },
+        { "id": "s_fixture_2", "name": "Trials", "type": "people", "createdAt": "2026-01-01T00:00:00Z", "updatedAt": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "countercyclical",
+  "display_name": "Countercyclical",
+  "description": "Reads Countercyclical investments, valuations, research memos, teams, assumptions, and pipelines, and creates investments, through the Countercyclical REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.countercyclical.io/developers/endpoints",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Countercyclical API read of investment and valuation data",
+    "write": "external mutation: creates a new Investment record in the caller's workspace; no update/delete actions are exposed",
+    "approval": "required for the create_investment write action; read-only otherwise"
+  }
+}

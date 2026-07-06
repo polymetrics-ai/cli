@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search_catalog_items_catalog_2022_04_01_items",
+  "type": "object",
+  "properties": {
+    "asin": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object"
+    },
+    "classifications": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "productTypes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "salesRanks": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "summaries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "vendorDetails": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "asin"
+  ]
+}

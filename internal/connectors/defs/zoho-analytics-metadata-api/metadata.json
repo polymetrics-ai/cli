@@ -1,0 +1,28 @@
+{
+  "name": "zoho-analytics-metadata-api",
+  "display_name": "Zoho Analytics Metadata API",
+  "description": "Reads Zoho Analytics workspace/view/table/organization/folder/query-table/datasource metadata and triggers datasource/view data syncs, via the Zoho OAuth 2.0 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://www.zoho.com/analytics/api/v2/metadata-api.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zoho Analytics API read of workspace/view/table metadata plus organizations, recently-accessed views, shared workspaces/dashboards, folders, query tables, and datasources",
+    "write": "triggers an asynchronous datasource or view data sync/refetch in Zoho Analytics; does not create, modify, or delete any Zoho Analytics workspace/view/table/data record itself -- only re-pulls from an already-configured external datasource",
+    "approval": "required for write actions (sync_datasource/refetch_view_data); read access uses the same OAuth refresh-token grant with no separate approval"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven by internal/connectors/hooks/zoho-analytics-metadata-api's hooks_test.go (the AuthHook's real OAuth2 refresh-grant path, gmail precedent) -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

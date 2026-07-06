@@ -1,0 +1,7 @@
+{
+  "record": { "label": "Fixture Product", "price_before_tax": "42.50", "vat_rate": "FR_200" },
+  "expect": {
+    "method": "POST",
+    "path": "/products"
+  }
+}

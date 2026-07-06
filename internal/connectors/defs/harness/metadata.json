@@ -1,0 +1,23 @@
+{
+  "name": "harness",
+  "display_name": "Harness",
+  "description": "Reads Harness NextGen organizations, projects, services, connectors, and pipelines through the Harness platform REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.harness.io/docs/platform/automation/api/api-quickstart/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Harness NextGen platform API read of organization/project/service/connector/pipeline metadata",
+    "approval": "none; read-only source connector"
+  }
+}

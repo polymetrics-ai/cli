@@ -1,0 +1,16 @@
+{
+  "record": {
+    "task_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/synthetic-conformance-value/markasopen"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

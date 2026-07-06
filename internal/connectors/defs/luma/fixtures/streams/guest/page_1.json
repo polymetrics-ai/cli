@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/events/guests/get",
+    "query": {
+      "event_id": "synthetic-conformance-value",
+      "id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "user_id": "fixture_user_id",
+      "user_email": "fixture@example.invalid",
+      "user_name": "Fixture Name",
+      "user_first_name": "Fixture Name",
+      "user_last_name": "Fixture Name",
+      "approval_status": "2026-01-01T00:00:00Z",
+      "check_in_qr_code": "fixture",
+      "eth_address": "fixture",
+      "invited_at": "2026-01-01T00:00:00Z",
+      "joined_at": "2026-01-01T00:00:00Z",
+      "phone_number": "fixture",
+      "registered_at": "2026-01-01T00:00:00Z",
+      "registration_answers": [],
+      "solana_address": "fixture",
+      "utm_source": "fixture",
+      "event_tickets": [],
+      "event_ticket_orders": []
+    }
+  }
+}

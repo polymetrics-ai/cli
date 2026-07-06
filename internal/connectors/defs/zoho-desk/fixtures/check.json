@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/tickets", "query": { "from": "0", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

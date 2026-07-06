@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture update_cloud_infrastructure",
+    "description": "Fixture update_cloud_infrastructure record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/itam/cloud_infrastructures",
+    "body": {
+      "name": "Fixture update_cloud_infrastructure",
+      "description": "Fixture update_cloud_infrastructure record"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "navan",
+  "display_name": "Navan",
+  "description": "Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST API using OAuth2 client-credentials authentication.",
+  "integration_type": "api",
+  "docs_url": "https://navan.com/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Navan API read of travel booking data (flight, hotel, car, rail)"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.base_url ({{ config.base_url }}/ta-auth/oauth/token, matching legacy's navanTokenPath derivation); conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"base_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value/ta-auth/oauth/token\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/navan package for this wave; the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/navan instead. Matches dwolla's, clazar's, and sendpulse's identical documented precedent."
+  }
+}

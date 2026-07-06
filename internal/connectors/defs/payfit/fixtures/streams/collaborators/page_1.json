@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/collaborators",
+    "query": {
+      "maxResults": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "collaborators": [
+        {
+          "id": "collaborators_1",
+          "name": "Fixture collaborators"
+        }
+      ],
+      "meta": {
+        "nextPageToken": "",
+        "count": 1
+      }
+    }
+  }
+}

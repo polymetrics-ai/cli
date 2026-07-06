@@ -1,0 +1,18 @@
+{
+  "record": {
+    "user_id": "user_fixture_1",
+    "name": "fixture_event",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "attributes": { "source": "conformance" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/users/user_fixture_1/events",
+    "body": {
+      "name": "fixture_event",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "attributes": { "source": "conformance" }
+    }
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

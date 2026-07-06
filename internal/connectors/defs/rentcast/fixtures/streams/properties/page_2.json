@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/properties",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "property_fixture_101",
+        "formattedAddress": "101 Fixture St, Fixture City, CA 90000",
+        "propertyType": "Single Family",
+        "city": "Fixture City",
+        "state": "CA",
+        "zipCode": "90000",
+        "lastSeenDate": "2026-01-01"
+      }
+    ]
+  }
+}

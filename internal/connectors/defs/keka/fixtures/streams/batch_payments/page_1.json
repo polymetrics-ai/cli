@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles/{{ config.pay_cycle_id }}/paybatches/{{ config.pay_batch_id }}/payments",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "batch_payments_fixture_1",
+          "name": "Fixture batch payments"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

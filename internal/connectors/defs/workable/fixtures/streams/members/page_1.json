@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/members"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "members": [
+        {
+          "id": "member_fixture_1",
+          "name": "Fixture Member",
+          "email": "member.fixture@example.test"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

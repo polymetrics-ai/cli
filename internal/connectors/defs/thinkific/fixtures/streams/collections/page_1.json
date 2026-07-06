@@ -1,0 +1,1117 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/collections",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Fixture Collection 1",
+          "description": "A fixture category",
+          "slug": "fixture-collection-1",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            1
+          ],
+          "default": false
+        },
+        {
+          "id": 2,
+          "name": "Fixture Collection 2",
+          "description": "A fixture category",
+          "slug": "fixture-collection-2",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            2
+          ],
+          "default": false
+        },
+        {
+          "id": 3,
+          "name": "Fixture Collection 3",
+          "description": "A fixture category",
+          "slug": "fixture-collection-3",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            3
+          ],
+          "default": false
+        },
+        {
+          "id": 4,
+          "name": "Fixture Collection 4",
+          "description": "A fixture category",
+          "slug": "fixture-collection-4",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            4
+          ],
+          "default": false
+        },
+        {
+          "id": 5,
+          "name": "Fixture Collection 5",
+          "description": "A fixture category",
+          "slug": "fixture-collection-5",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            5
+          ],
+          "default": false
+        },
+        {
+          "id": 6,
+          "name": "Fixture Collection 6",
+          "description": "A fixture category",
+          "slug": "fixture-collection-6",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            6
+          ],
+          "default": false
+        },
+        {
+          "id": 7,
+          "name": "Fixture Collection 7",
+          "description": "A fixture category",
+          "slug": "fixture-collection-7",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            7
+          ],
+          "default": false
+        },
+        {
+          "id": 8,
+          "name": "Fixture Collection 8",
+          "description": "A fixture category",
+          "slug": "fixture-collection-8",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            8
+          ],
+          "default": false
+        },
+        {
+          "id": 9,
+          "name": "Fixture Collection 9",
+          "description": "A fixture category",
+          "slug": "fixture-collection-9",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            9
+          ],
+          "default": false
+        },
+        {
+          "id": 10,
+          "name": "Fixture Collection 10",
+          "description": "A fixture category",
+          "slug": "fixture-collection-10",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            10
+          ],
+          "default": false
+        },
+        {
+          "id": 11,
+          "name": "Fixture Collection 11",
+          "description": "A fixture category",
+          "slug": "fixture-collection-11",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            11
+          ],
+          "default": false
+        },
+        {
+          "id": 12,
+          "name": "Fixture Collection 12",
+          "description": "A fixture category",
+          "slug": "fixture-collection-12",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            12
+          ],
+          "default": false
+        },
+        {
+          "id": 13,
+          "name": "Fixture Collection 13",
+          "description": "A fixture category",
+          "slug": "fixture-collection-13",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            13
+          ],
+          "default": false
+        },
+        {
+          "id": 14,
+          "name": "Fixture Collection 14",
+          "description": "A fixture category",
+          "slug": "fixture-collection-14",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            14
+          ],
+          "default": false
+        },
+        {
+          "id": 15,
+          "name": "Fixture Collection 15",
+          "description": "A fixture category",
+          "slug": "fixture-collection-15",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            15
+          ],
+          "default": false
+        },
+        {
+          "id": 16,
+          "name": "Fixture Collection 16",
+          "description": "A fixture category",
+          "slug": "fixture-collection-16",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            16
+          ],
+          "default": false
+        },
+        {
+          "id": 17,
+          "name": "Fixture Collection 17",
+          "description": "A fixture category",
+          "slug": "fixture-collection-17",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            17
+          ],
+          "default": false
+        },
+        {
+          "id": 18,
+          "name": "Fixture Collection 18",
+          "description": "A fixture category",
+          "slug": "fixture-collection-18",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            18
+          ],
+          "default": false
+        },
+        {
+          "id": 19,
+          "name": "Fixture Collection 19",
+          "description": "A fixture category",
+          "slug": "fixture-collection-19",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            19
+          ],
+          "default": false
+        },
+        {
+          "id": 20,
+          "name": "Fixture Collection 20",
+          "description": "A fixture category",
+          "slug": "fixture-collection-20",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            20
+          ],
+          "default": false
+        },
+        {
+          "id": 21,
+          "name": "Fixture Collection 21",
+          "description": "A fixture category",
+          "slug": "fixture-collection-21",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            21
+          ],
+          "default": false
+        },
+        {
+          "id": 22,
+          "name": "Fixture Collection 22",
+          "description": "A fixture category",
+          "slug": "fixture-collection-22",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            22
+          ],
+          "default": false
+        },
+        {
+          "id": 23,
+          "name": "Fixture Collection 23",
+          "description": "A fixture category",
+          "slug": "fixture-collection-23",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            23
+          ],
+          "default": false
+        },
+        {
+          "id": 24,
+          "name": "Fixture Collection 24",
+          "description": "A fixture category",
+          "slug": "fixture-collection-24",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            24
+          ],
+          "default": false
+        },
+        {
+          "id": 25,
+          "name": "Fixture Collection 25",
+          "description": "A fixture category",
+          "slug": "fixture-collection-25",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            25
+          ],
+          "default": false
+        },
+        {
+          "id": 26,
+          "name": "Fixture Collection 26",
+          "description": "A fixture category",
+          "slug": "fixture-collection-26",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            26
+          ],
+          "default": false
+        },
+        {
+          "id": 27,
+          "name": "Fixture Collection 27",
+          "description": "A fixture category",
+          "slug": "fixture-collection-27",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            27
+          ],
+          "default": false
+        },
+        {
+          "id": 28,
+          "name": "Fixture Collection 28",
+          "description": "A fixture category",
+          "slug": "fixture-collection-28",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            28
+          ],
+          "default": false
+        },
+        {
+          "id": 29,
+          "name": "Fixture Collection 29",
+          "description": "A fixture category",
+          "slug": "fixture-collection-29",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            29
+          ],
+          "default": false
+        },
+        {
+          "id": 30,
+          "name": "Fixture Collection 30",
+          "description": "A fixture category",
+          "slug": "fixture-collection-30",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            30
+          ],
+          "default": false
+        },
+        {
+          "id": 31,
+          "name": "Fixture Collection 31",
+          "description": "A fixture category",
+          "slug": "fixture-collection-31",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            31
+          ],
+          "default": false
+        },
+        {
+          "id": 32,
+          "name": "Fixture Collection 32",
+          "description": "A fixture category",
+          "slug": "fixture-collection-32",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            32
+          ],
+          "default": false
+        },
+        {
+          "id": 33,
+          "name": "Fixture Collection 33",
+          "description": "A fixture category",
+          "slug": "fixture-collection-33",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            33
+          ],
+          "default": false
+        },
+        {
+          "id": 34,
+          "name": "Fixture Collection 34",
+          "description": "A fixture category",
+          "slug": "fixture-collection-34",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            34
+          ],
+          "default": false
+        },
+        {
+          "id": 35,
+          "name": "Fixture Collection 35",
+          "description": "A fixture category",
+          "slug": "fixture-collection-35",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            35
+          ],
+          "default": false
+        },
+        {
+          "id": 36,
+          "name": "Fixture Collection 36",
+          "description": "A fixture category",
+          "slug": "fixture-collection-36",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            36
+          ],
+          "default": false
+        },
+        {
+          "id": 37,
+          "name": "Fixture Collection 37",
+          "description": "A fixture category",
+          "slug": "fixture-collection-37",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            37
+          ],
+          "default": false
+        },
+        {
+          "id": 38,
+          "name": "Fixture Collection 38",
+          "description": "A fixture category",
+          "slug": "fixture-collection-38",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            38
+          ],
+          "default": false
+        },
+        {
+          "id": 39,
+          "name": "Fixture Collection 39",
+          "description": "A fixture category",
+          "slug": "fixture-collection-39",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            39
+          ],
+          "default": false
+        },
+        {
+          "id": 40,
+          "name": "Fixture Collection 40",
+          "description": "A fixture category",
+          "slug": "fixture-collection-40",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            40
+          ],
+          "default": false
+        },
+        {
+          "id": 41,
+          "name": "Fixture Collection 41",
+          "description": "A fixture category",
+          "slug": "fixture-collection-41",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            41
+          ],
+          "default": false
+        },
+        {
+          "id": 42,
+          "name": "Fixture Collection 42",
+          "description": "A fixture category",
+          "slug": "fixture-collection-42",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            42
+          ],
+          "default": false
+        },
+        {
+          "id": 43,
+          "name": "Fixture Collection 43",
+          "description": "A fixture category",
+          "slug": "fixture-collection-43",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            43
+          ],
+          "default": false
+        },
+        {
+          "id": 44,
+          "name": "Fixture Collection 44",
+          "description": "A fixture category",
+          "slug": "fixture-collection-44",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            44
+          ],
+          "default": false
+        },
+        {
+          "id": 45,
+          "name": "Fixture Collection 45",
+          "description": "A fixture category",
+          "slug": "fixture-collection-45",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            45
+          ],
+          "default": false
+        },
+        {
+          "id": 46,
+          "name": "Fixture Collection 46",
+          "description": "A fixture category",
+          "slug": "fixture-collection-46",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            46
+          ],
+          "default": false
+        },
+        {
+          "id": 47,
+          "name": "Fixture Collection 47",
+          "description": "A fixture category",
+          "slug": "fixture-collection-47",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            47
+          ],
+          "default": false
+        },
+        {
+          "id": 48,
+          "name": "Fixture Collection 48",
+          "description": "A fixture category",
+          "slug": "fixture-collection-48",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            48
+          ],
+          "default": false
+        },
+        {
+          "id": 49,
+          "name": "Fixture Collection 49",
+          "description": "A fixture category",
+          "slug": "fixture-collection-49",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            49
+          ],
+          "default": false
+        },
+        {
+          "id": 50,
+          "name": "Fixture Collection 50",
+          "description": "A fixture category",
+          "slug": "fixture-collection-50",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            50
+          ],
+          "default": false
+        },
+        {
+          "id": 51,
+          "name": "Fixture Collection 51",
+          "description": "A fixture category",
+          "slug": "fixture-collection-51",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            51
+          ],
+          "default": false
+        },
+        {
+          "id": 52,
+          "name": "Fixture Collection 52",
+          "description": "A fixture category",
+          "slug": "fixture-collection-52",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            52
+          ],
+          "default": false
+        },
+        {
+          "id": 53,
+          "name": "Fixture Collection 53",
+          "description": "A fixture category",
+          "slug": "fixture-collection-53",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            53
+          ],
+          "default": false
+        },
+        {
+          "id": 54,
+          "name": "Fixture Collection 54",
+          "description": "A fixture category",
+          "slug": "fixture-collection-54",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            54
+          ],
+          "default": false
+        },
+        {
+          "id": 55,
+          "name": "Fixture Collection 55",
+          "description": "A fixture category",
+          "slug": "fixture-collection-55",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            55
+          ],
+          "default": false
+        },
+        {
+          "id": 56,
+          "name": "Fixture Collection 56",
+          "description": "A fixture category",
+          "slug": "fixture-collection-56",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            56
+          ],
+          "default": false
+        },
+        {
+          "id": 57,
+          "name": "Fixture Collection 57",
+          "description": "A fixture category",
+          "slug": "fixture-collection-57",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            57
+          ],
+          "default": false
+        },
+        {
+          "id": 58,
+          "name": "Fixture Collection 58",
+          "description": "A fixture category",
+          "slug": "fixture-collection-58",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            58
+          ],
+          "default": false
+        },
+        {
+          "id": 59,
+          "name": "Fixture Collection 59",
+          "description": "A fixture category",
+          "slug": "fixture-collection-59",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            59
+          ],
+          "default": false
+        },
+        {
+          "id": 60,
+          "name": "Fixture Collection 60",
+          "description": "A fixture category",
+          "slug": "fixture-collection-60",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            60
+          ],
+          "default": false
+        },
+        {
+          "id": 61,
+          "name": "Fixture Collection 61",
+          "description": "A fixture category",
+          "slug": "fixture-collection-61",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            61
+          ],
+          "default": false
+        },
+        {
+          "id": 62,
+          "name": "Fixture Collection 62",
+          "description": "A fixture category",
+          "slug": "fixture-collection-62",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            62
+          ],
+          "default": false
+        },
+        {
+          "id": 63,
+          "name": "Fixture Collection 63",
+          "description": "A fixture category",
+          "slug": "fixture-collection-63",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            63
+          ],
+          "default": false
+        },
+        {
+          "id": 64,
+          "name": "Fixture Collection 64",
+          "description": "A fixture category",
+          "slug": "fixture-collection-64",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            64
+          ],
+          "default": false
+        },
+        {
+          "id": 65,
+          "name": "Fixture Collection 65",
+          "description": "A fixture category",
+          "slug": "fixture-collection-65",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            65
+          ],
+          "default": false
+        },
+        {
+          "id": 66,
+          "name": "Fixture Collection 66",
+          "description": "A fixture category",
+          "slug": "fixture-collection-66",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            66
+          ],
+          "default": false
+        },
+        {
+          "id": 67,
+          "name": "Fixture Collection 67",
+          "description": "A fixture category",
+          "slug": "fixture-collection-67",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            67
+          ],
+          "default": false
+        },
+        {
+          "id": 68,
+          "name": "Fixture Collection 68",
+          "description": "A fixture category",
+          "slug": "fixture-collection-68",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            68
+          ],
+          "default": false
+        },
+        {
+          "id": 69,
+          "name": "Fixture Collection 69",
+          "description": "A fixture category",
+          "slug": "fixture-collection-69",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            69
+          ],
+          "default": false
+        },
+        {
+          "id": 70,
+          "name": "Fixture Collection 70",
+          "description": "A fixture category",
+          "slug": "fixture-collection-70",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            70
+          ],
+          "default": false
+        },
+        {
+          "id": 71,
+          "name": "Fixture Collection 71",
+          "description": "A fixture category",
+          "slug": "fixture-collection-71",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            71
+          ],
+          "default": false
+        },
+        {
+          "id": 72,
+          "name": "Fixture Collection 72",
+          "description": "A fixture category",
+          "slug": "fixture-collection-72",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            72
+          ],
+          "default": false
+        },
+        {
+          "id": 73,
+          "name": "Fixture Collection 73",
+          "description": "A fixture category",
+          "slug": "fixture-collection-73",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            73
+          ],
+          "default": false
+        },
+        {
+          "id": 74,
+          "name": "Fixture Collection 74",
+          "description": "A fixture category",
+          "slug": "fixture-collection-74",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            74
+          ],
+          "default": false
+        },
+        {
+          "id": 75,
+          "name": "Fixture Collection 75",
+          "description": "A fixture category",
+          "slug": "fixture-collection-75",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            75
+          ],
+          "default": false
+        },
+        {
+          "id": 76,
+          "name": "Fixture Collection 76",
+          "description": "A fixture category",
+          "slug": "fixture-collection-76",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            76
+          ],
+          "default": false
+        },
+        {
+          "id": 77,
+          "name": "Fixture Collection 77",
+          "description": "A fixture category",
+          "slug": "fixture-collection-77",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            77
+          ],
+          "default": false
+        },
+        {
+          "id": 78,
+          "name": "Fixture Collection 78",
+          "description": "A fixture category",
+          "slug": "fixture-collection-78",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            78
+          ],
+          "default": false
+        },
+        {
+          "id": 79,
+          "name": "Fixture Collection 79",
+          "description": "A fixture category",
+          "slug": "fixture-collection-79",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            79
+          ],
+          "default": false
+        },
+        {
+          "id": 80,
+          "name": "Fixture Collection 80",
+          "description": "A fixture category",
+          "slug": "fixture-collection-80",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            80
+          ],
+          "default": false
+        },
+        {
+          "id": 81,
+          "name": "Fixture Collection 81",
+          "description": "A fixture category",
+          "slug": "fixture-collection-81",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            81
+          ],
+          "default": false
+        },
+        {
+          "id": 82,
+          "name": "Fixture Collection 82",
+          "description": "A fixture category",
+          "slug": "fixture-collection-82",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            82
+          ],
+          "default": false
+        },
+        {
+          "id": 83,
+          "name": "Fixture Collection 83",
+          "description": "A fixture category",
+          "slug": "fixture-collection-83",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            83
+          ],
+          "default": false
+        },
+        {
+          "id": 84,
+          "name": "Fixture Collection 84",
+          "description": "A fixture category",
+          "slug": "fixture-collection-84",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            84
+          ],
+          "default": false
+        },
+        {
+          "id": 85,
+          "name": "Fixture Collection 85",
+          "description": "A fixture category",
+          "slug": "fixture-collection-85",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            85
+          ],
+          "default": false
+        },
+        {
+          "id": 86,
+          "name": "Fixture Collection 86",
+          "description": "A fixture category",
+          "slug": "fixture-collection-86",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            86
+          ],
+          "default": false
+        },
+        {
+          "id": 87,
+          "name": "Fixture Collection 87",
+          "description": "A fixture category",
+          "slug": "fixture-collection-87",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            87
+          ],
+          "default": false
+        },
+        {
+          "id": 88,
+          "name": "Fixture Collection 88",
+          "description": "A fixture category",
+          "slug": "fixture-collection-88",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            88
+          ],
+          "default": false
+        },
+        {
+          "id": 89,
+          "name": "Fixture Collection 89",
+          "description": "A fixture category",
+          "slug": "fixture-collection-89",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            89
+          ],
+          "default": false
+        },
+        {
+          "id": 90,
+          "name": "Fixture Collection 90",
+          "description": "A fixture category",
+          "slug": "fixture-collection-90",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            90
+          ],
+          "default": false
+        },
+        {
+          "id": 91,
+          "name": "Fixture Collection 91",
+          "description": "A fixture category",
+          "slug": "fixture-collection-91",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            91
+          ],
+          "default": false
+        },
+        {
+          "id": 92,
+          "name": "Fixture Collection 92",
+          "description": "A fixture category",
+          "slug": "fixture-collection-92",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            92
+          ],
+          "default": false
+        },
+        {
+          "id": 93,
+          "name": "Fixture Collection 93",
+          "description": "A fixture category",
+          "slug": "fixture-collection-93",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            93
+          ],
+          "default": false
+        },
+        {
+          "id": 94,
+          "name": "Fixture Collection 94",
+          "description": "A fixture category",
+          "slug": "fixture-collection-94",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            94
+          ],
+          "default": false
+        },
+        {
+          "id": 95,
+          "name": "Fixture Collection 95",
+          "description": "A fixture category",
+          "slug": "fixture-collection-95",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            95
+          ],
+          "default": false
+        },
+        {
+          "id": 96,
+          "name": "Fixture Collection 96",
+          "description": "A fixture category",
+          "slug": "fixture-collection-96",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            96
+          ],
+          "default": false
+        },
+        {
+          "id": 97,
+          "name": "Fixture Collection 97",
+          "description": "A fixture category",
+          "slug": "fixture-collection-97",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            97
+          ],
+          "default": false
+        },
+        {
+          "id": 98,
+          "name": "Fixture Collection 98",
+          "description": "A fixture category",
+          "slug": "fixture-collection-98",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            98
+          ],
+          "default": false
+        },
+        {
+          "id": 99,
+          "name": "Fixture Collection 99",
+          "description": "A fixture category",
+          "slug": "fixture-collection-99",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            99
+          ],
+          "default": false
+        },
+        {
+          "id": 100,
+          "name": "Fixture Collection 100",
+          "description": "A fixture category",
+          "slug": "fixture-collection-100",
+          "created_at": "2026-01-02T00:00:00Z",
+          "product_ids": [
+            100
+          ],
+          "default": false
+        }
+      ]
+    }
+  }
+}

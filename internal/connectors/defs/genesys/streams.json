@@ -1,0 +1,55 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "pageNumber",
+      "size_param": "pageSize",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "users", "query": { "pageSize": "1", "pageNumber": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "genesys client_id/client_secret is missing or invalid; re-run pm credentials add genesys" },
+      { "status": 403, "hint": "genesys OAuth client lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "genesys rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "users",
+      "records": { "path": "entities" },
+      "computed_fields": { "display_name": "{{ record.name }}" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "queues",
+      "path": "routing/queues",
+      "records": { "path": "entities" },
+      "schema": "schemas/queues.json"
+    },
+    {
+      "name": "groups",
+      "path": "groups",
+      "records": { "path": "entities" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "divisions",
+      "path": "authorization/divisions",
+      "records": { "path": "entities" },
+      "schema": "schemas/divisions.json"
+    }
+  ]
+}

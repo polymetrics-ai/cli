@@ -1,0 +1,19 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "name": "Fixture Checking",
+    "routingNumber": "222222226",
+    "accountNumber": "123456789",
+    "bankAccountType": "checking"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1/funding-sources",
+    "body": {
+      "name": "Fixture Checking",
+      "routingNumber": "222222226",
+      "accountNumber": "123456789",
+      "bankAccountType": "checking"
+    }
+  }
+}

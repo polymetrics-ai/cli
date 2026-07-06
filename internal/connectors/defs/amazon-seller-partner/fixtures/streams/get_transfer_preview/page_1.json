@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/finances/transfers/wallet/2024-03-01/transferPreview",
+    "query": {
+      "sourceCountryCode": "synthetic-conformance-value",
+      "sourceCurrencyCode": "synthetic-conformance-value",
+      "destinationCountryCode": "synthetic-conformance-value",
+      "destinationCurrencyCode": "synthetic-conformance-value",
+      "baseAmount": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fees": [
+        {
+          "feeId": "feeId-fixture-1",
+          "feeType": "feeType-fixture-1",
+          "feeRateValue": "feeRateValue-fixture-1",
+          "feeAmount": {}
+        }
+      ]
+    }
+  }
+}

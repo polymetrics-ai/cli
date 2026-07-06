@@ -1,0 +1,26 @@
+{
+  "record": {
+    "email": "fixture1@example.com",
+    "firstName": "Fixture",
+    "lastName": "Subscriber",
+    "status": "Subscribed",
+    "segmentName": "fixture-segment",
+    "tags": ["fixture"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/segment/customer",
+    "body": {
+      "email": "fixture1@example.com",
+      "firstName": "Fixture",
+      "lastName": "Subscriber",
+      "status": "Subscribed",
+      "segmentName": "fixture-segment",
+      "tags": ["fixture"]
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value/bindings",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "roles": [
+        {
+          "id": "id_fixture",
+          "_links": {
+            "members": {
+              "hints": {
+                "allow": [
+                  "DELETE"
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ],
+      "_links": {
+        "next": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "resource-set": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

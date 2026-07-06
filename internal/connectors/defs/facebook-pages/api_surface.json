@@ -1,0 +1,46 @@
+{
+  "api": "Facebook Graph API v19.0 (https://developers.facebook.com/docs/graph-api/)",
+  "docs": "https://developers.facebook.com/docs/pages/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave4 migration: the 2 legacy-parity read streams only (page, posts). Post insight/metric endpoints, comments, and page management writes are out of scope (legacy itself implements neither).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/{page-id}",
+      "covered_by": {
+        "stream": "page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{page-id}/posts",
+      "covered_by": {
+        "stream": "posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{post-id}/insights",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented post insight/metric fan-out; requires per-post metric selection and elevated permissions (see package doc comment)"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{post-id}/comments",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented comment reads; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{page-id}/feed",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector is read-only; no post-creation write was ever implemented"
+      }
+    }
+  ]
+}

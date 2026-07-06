@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/2021-06-30/reports/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "marketplaceIds": [],
+      "reportId": "reportId-fixture-1",
+      "reportType": "reportType-fixture-1",
+      "dataStartTime": "dataStartTime-fixture-1",
+      "dataEndTime": "dataEndTime-fixture-1",
+      "reportScheduleId": "reportScheduleId-fixture-1",
+      "createdTime": "createdTime-fixture-1",
+      "processingStatus": "processingStatus-fixture-1",
+      "processingStartTime": "processingStartTime-fixture-1",
+      "processingEndTime": "processingEndTime-fixture-1",
+      "reportDocumentId": "reportDocumentId-fixture-1",
+      "report_id": "report_id-fixture-1"
+    }
+  }
+}

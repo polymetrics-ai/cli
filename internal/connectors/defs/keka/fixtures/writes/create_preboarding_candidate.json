@@ -1,0 +1,47 @@
+{
+  "record": {
+    "firstName": "Fixture firstName",
+    "middleName": "Fixture middleName",
+    "lastName": "Fixture lastName",
+    "email": "fixture1@example.invalid",
+    "countryCode": "fixture_country_code_1",
+    "mobileNumber": "+15550100",
+    "gender": 1,
+    "stage": 0,
+    "status": 2,
+    "jobTitle": "Fixture jobTitle",
+    "department": "fixture_department_1",
+    "workLocation": "fixture_work_location_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hire/preboarding/candidates",
+    "body": {
+      "firstName": "Fixture firstName",
+      "middleName": "Fixture middleName",
+      "lastName": "Fixture lastName",
+      "email": "fixture1@example.invalid",
+      "countryCode": "fixture_country_code_1",
+      "mobileNumber": "+15550100",
+      "gender": 1,
+      "stage": 0,
+      "status": 2,
+      "jobTitle": "Fixture jobTitle",
+      "department": "fixture_department_1",
+      "workLocation": "fixture_work_location_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "create_preboarding_candidate_fixture_1",
+        "name": "Fixture create preboarding candidate"
+      },
+      "status": "success",
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

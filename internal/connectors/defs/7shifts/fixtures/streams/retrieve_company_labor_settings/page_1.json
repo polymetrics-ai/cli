@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/labor_settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "company_id": 1001,
+        "consecutive_days_threshold": 1001,
+        "consecutive_days_multiplier": 12.34,
+        "regular_rate_of_pay_enabled": true,
+        "exception_cost_enabled": true,
+        "overtime_by_location_enabled": true,
+        "auto_break_enabled": true,
+        "auto_break_hours": 12.34,
+        "auto_break_minutes": 1001,
+        "auto_break_hours_2": 12.34,
+        "auto_break_minutes_2": 1001,
+        "overtime_enabled": true,
+        "daily_overtime_threshold": 1001,
+        "daily_overtime_multiplier": 12.34,
+        "premium_overtime_threshold": 1001,
+        "premium_overtime_multiplier": 12.34,
+        "weekly_overtime_threshold": 1001,
+        "weekly_overtime_multiplier": 12.34,
+        "ot_alerts_enabled": true,
+        "ot_alerts_buffer_minutes": 1001,
+        "split_hours_on_holidays": true,
+        "wage_based_roles_enabled": true,
+        "tipped_minimum_wage_enabled": true,
+        "jurisdiction": "fixture jurisdiction",
+        "is_custom": true,
+        "use_jurisdiction_minimum_wage_for_ot": true,
+        "is_custom_min_wage": true,
+        "custom_min_wages": [
+          {
+            "company_id": 1001,
+            "wage_cents": 1001,
+            "effective_date": "2026-01-01",
+            "id": 1001,
+            "location_id": 1001,
+            "is_deleted": true
+          }
+        ]
+      }
+    }
+  }
+}

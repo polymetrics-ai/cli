@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture create routing rule"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/routing-rules",
+    "body": {
+      "name": "Fixture create routing rule"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_routing_rule_fixture_response"
+    }
+  }
+}

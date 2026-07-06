@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "agreement_versions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "date": { "type": ["integer", "null"] },
+    "version": { "type": ["integer", "null"] },
+    "displayVersion": { "type": ["number", "null"] },
+    "comment": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "organization": { "type": ["object", "null"] },
+    "user": { "type": ["object", "null"] },
+    "agreement_id": { "type": ["string", "null"] }
+  }
+}

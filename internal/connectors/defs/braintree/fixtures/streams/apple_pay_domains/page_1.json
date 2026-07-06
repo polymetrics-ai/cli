@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/apple_pay/registered_domains"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        { "domain": "payments.example.invalid", "status": "registered" }
+      ]
+    }
+  }
+}

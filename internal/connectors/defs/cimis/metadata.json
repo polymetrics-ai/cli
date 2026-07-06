@@ -1,0 +1,19 @@
+{
+  "name": "cimis",
+  "display_name": "CIMIS",
+  "description": "Reads California Irrigation Management Information System (CIMIS) weather station metadata and station/spatial zip-code reference lists through the CIMIS Web API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://cimis.water.ca.gov/WSNReportCriteria.aspx",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external CIMIS API read of public weather station metadata"
+  }
+}

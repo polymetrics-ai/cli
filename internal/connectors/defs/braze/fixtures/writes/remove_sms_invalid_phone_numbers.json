@@ -1,0 +1,13 @@
+{
+  "record": {
+    "phone_numbers": ["+15550100"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sms/invalid_phone_numbers/remove",
+    "body": {
+      "phone_numbers": ["+15550100"]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

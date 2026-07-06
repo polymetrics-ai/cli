@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/v2/tools/price-conversion" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": {
+        "id": 1,
+        "symbol": "FIX1",
+        "name": "Fixture Coin One",
+        "amount": 100,
+        "last_updated": "2026-01-01T00:00:00.000Z",
+        "quote": { "USD": { "price": 6500050.0, "last_updated": "2026-01-01T00:00:00.000Z" } }
+      }
+    }
+  }
+}

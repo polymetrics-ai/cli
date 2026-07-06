@@ -1,0 +1,21 @@
+{
+  "record": {
+    "surveyId": "survey_fixture_1",
+    "mobile": "+15555550101",
+    "message": "Please share feedback"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/send2waysms",
+    "body": {
+      "surveyId": "survey_fixture_1",
+      "mobile": "+15555550101"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": "true"
+    }
+  }
+}

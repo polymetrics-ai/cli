@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "1",
+    "subscription": {
+      "coupon_code": "SAVE10"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscriptions/1.json",
+    "body": {
+      "subscription": {
+        "coupon_code": "SAVE10"
+      }
+    }
+  }
+}

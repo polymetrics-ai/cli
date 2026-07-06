@@ -1,0 +1,12 @@
+{
+  "record": {
+    "target": "https://example.com/fixture-replies",
+    "match": {
+      "domain": "fixture.example.com"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/relay-webhooks"
+  }
+}

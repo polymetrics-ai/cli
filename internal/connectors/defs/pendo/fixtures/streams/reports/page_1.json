@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/report"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "report_fixture",
+        "name": "Fixture",
+        "lastUpdatedAt": 1760000000000,
+        "kind": "Report"
+      }
+    ]
+  }
+}

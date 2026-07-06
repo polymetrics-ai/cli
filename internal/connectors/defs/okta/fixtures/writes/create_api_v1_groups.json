@@ -1,0 +1,22 @@
+{
+  "record": {
+    "profile": {
+      "description": "description_fixture",
+      "name": "name_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/groups",
+    "body": {
+      "profile": {
+        "description": "description_fixture",
+        "name": "name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

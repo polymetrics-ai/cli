@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "current_user_settings",
+  "type": "object",
+  "properties": {
+    "user": { "type": ["object", "null"] },
+    "company": { "type": ["object", "null"] },
+    "workTimeRegulation": { "type": ["object", "null"] }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "event_type": "https://api.calendly.com/event_types/fixture_type_1",
+    "max_spots": 5
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shares"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/shares/fixture_share_1",
+        "event_type": "https://api.calendly.com/event_types/fixture_type_1",
+        "max_spots": 5
+      }
+    }
+  }
+}

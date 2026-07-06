@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": 1,
+    "order": {
+      "number": "fixture-order-1-updated"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orders/1"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "templates",
+  "type": "object",
+  "x-primary-key": ["templateId"],
+  "required": ["templateId"],
+  "properties": {
+    "templateId": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "publishedVersion": { "type": ["integer", "null"] },
+    "publishedOn": { "type": ["string", "null"] },
+    "webUrl": { "type": ["string", "null"] },
+    "kioskUrl": { "type": ["string", "null"] }
+  }
+}

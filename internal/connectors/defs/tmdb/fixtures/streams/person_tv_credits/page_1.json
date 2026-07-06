@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/123/tv_credits"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture person_tv_credits",
+      "name": "Fixture person_tv_credits",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

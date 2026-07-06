@@ -1,0 +1,25 @@
+{
+  "name": "mailjet-sms",
+  "display_name": "Mailjet SMS",
+  "description": "Reads Mailjet SMS messages, message counts, and export job status; writes SMS send and export-request actions.",
+  "integration_type": "api",
+  "docs_url": "https://dev.mailjet.com/sms/reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 100
+  },
+  "risk": {
+    "read": "external Mailjet SMS API read of outbound SMS message data",
+    "write": "external Mailjet SMS API mutation; may send SMS messages or request asynchronous SMS exports",
+    "approval": "required for all write actions"
+  }
+}

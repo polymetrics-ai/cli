@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/location/v2/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "domain": "synthetic-conformance-value",
+          "last_modified": "2026-06-03T00:00:00.000000",
+          "latitude": "31.4100000000",
+          "location_data": { "pop": "1001" },
+          "location_id": "location_v2_fixture_1",
+          "location_type_code": "county",
+          "location_type_name": "County",
+          "longitude": null,
+          "name": "Fixture County",
+          "parent_location_id": "location_v2_parent_fixture_1",
+          "site_code": "fixture_county"
+        }
+      ]
+    }
+  }
+}

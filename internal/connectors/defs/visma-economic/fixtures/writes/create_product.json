@@ -1,0 +1,14 @@
+{
+  "record": {
+    "productNumber": "P-2001",
+    "name": "Fixture New Product",
+    "salesPrice": 29.99,
+    "productGroup": {
+      "productGroupNumber": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products"
+  }
+}

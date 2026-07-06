@@ -1,0 +1,26 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "source": {
+      "synthetic": true
+    },
+    "seed": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/spaces/synthetic-conformance-value/content/computed/revision",
+    "body": {
+      "source": {
+        "synthetic": true
+      },
+      "seed": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "get_computed_revision_fixture_1"
+    }
+  }
+}

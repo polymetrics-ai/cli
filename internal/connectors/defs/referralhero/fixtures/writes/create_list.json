@@ -1,0 +1,27 @@
+{
+  "record": {
+    "website": "https://example.com/refer",
+    "name": "Fixture Campaign"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists",
+    "body": {
+      "website": "https://example.com/refer",
+      "name": "Fixture Campaign"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "uuid": "MFfixture001",
+        "name": "Fixture Campaign",
+        "created_at": 1487659010
+      },
+      "calls_left": 1000,
+      "timestamp": 1487659010
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "actions": [
+    {
+      "name": "add_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_project",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "announcement": { "type": "string" },
+          "show_announcement": { "type": "boolean" },
+          "suite_mode": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new top-level TestRail project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "add_milestone",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_milestone/{{ record.project_id }}",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "due_on": { "type": "integer" },
+          "start_on": { "type": "integer" },
+          "parent_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new milestone under the target project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "add_suite",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_suite/{{ record.project_id }}",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "risk": "creates a new test suite under the target project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "add_case",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_case/{{ record.section_id }}",
+      "path_fields": ["section_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["section_id", "title"],
+        "properties": {
+          "section_id": { "type": "integer" },
+          "title": { "type": "string" },
+          "type_id": { "type": "integer" },
+          "priority_id": { "type": "integer" },
+          "template_id": { "type": "integer" },
+          "milestone_id": { "type": "integer" },
+          "estimate": { "type": "string" },
+          "refs": { "type": "string" }
+        }
+      },
+      "risk": "creates a new test case in the target section; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "update_case",
+      "kind": "update",
+      "method": "POST",
+      "path": "index.php?/api/v2/update_case/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "type_id": { "type": "integer" },
+          "priority_id": { "type": "integer" },
+          "milestone_id": { "type": "integer" },
+          "estimate": { "type": "string" },
+          "refs": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing test case's title, type, priority, milestone, estimate, or references"
+    },
+    {
+      "name": "add_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_plan/{{ record.project_id }}",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "milestone_id": { "type": "integer" }
+        }
+      },
+      "risk": "creates a new test plan under the target project; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "add_run",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_run/{{ record.project_id }}",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "integer" },
+          "suite_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "milestone_id": { "type": "integer" },
+          "assignedto_id": { "type": "integer" },
+          "include_all": { "type": "boolean" },
+          "case_ids": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "creates a new test run under the target project, selecting test cases into it for execution; low-risk external mutation, no approval required"
+    },
+    {
+      "name": "close_run",
+      "kind": "update",
+      "method": "POST",
+      "path": "index.php?/api/v2/close_run/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "closes and archives an existing test run; no further results can be added to it after closing"
+    },
+    {
+      "name": "delete_run",
+      "kind": "delete",
+      "method": "POST",
+      "path": "index.php?/api/v2/delete_run/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [400]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently deletes a test run and all of its tests and results; irreversible"
+    },
+    {
+      "name": "add_result_for_case",
+      "kind": "create",
+      "method": "POST",
+      "path": "index.php?/api/v2/add_result_for_case/{{ record.run_id }}/{{ record.case_id }}",
+      "path_fields": ["run_id", "case_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["run_id", "case_id"],
+        "properties": {
+          "run_id": { "type": "integer" },
+          "case_id": { "type": "integer" },
+          "status_id": { "type": "integer" },
+          "comment": { "type": "string" },
+          "elapsed": { "type": "string" },
+          "defects": { "type": "string" },
+          "version": { "type": "string" }
+        }
+      },
+      "risk": "records a new test result (pass/fail/etc.) against a case within a run; appends to result history, does not overwrite prior results"
+    }
+  ]
+}

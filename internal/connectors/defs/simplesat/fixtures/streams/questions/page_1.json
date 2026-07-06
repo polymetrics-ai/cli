@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/questions",
+    "query": {
+      "page_size": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "count": 2,
+      "questions": [
+        {
+          "id": 301,
+          "survey": { "id": 201 },
+          "order": 1,
+          "metric": "csat",
+          "text": "How satisfied were you?",
+          "rating_scale": true,
+          "required": true
+        },
+        {
+          "id": 302,
+          "survey": { "id": 201 },
+          "order": 2,
+          "metric": "nps",
+          "text": "How likely are you to recommend us?",
+          "rating_scale": true,
+          "required": false
+        }
+      ]
+    }
+  }
+}

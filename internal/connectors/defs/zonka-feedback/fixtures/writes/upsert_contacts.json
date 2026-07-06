@@ -1,0 +1,25 @@
+{
+  "record": {
+    "email": "fixture@example.com",
+    "name": "Fixture Contact",
+    "uniqueId": "contact_fixture_1",
+    "attributes": {
+      "plan": "enterprise"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/upsert",
+    "body": {
+      "email": "fixture@example.com",
+      "uniqueId": "contact_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "success": true
+    }
+  }
+}

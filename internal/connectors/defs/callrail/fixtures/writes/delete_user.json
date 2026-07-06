@@ -1,0 +1,8 @@
+{
+  "record": { "id": "USR_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/users/USR_fixture_1.json"
+  },
+  "response": { "status": 204, "body": {} }
+}

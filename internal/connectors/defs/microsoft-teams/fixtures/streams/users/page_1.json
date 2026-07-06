@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/users" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_user_1", "displayName": "Fixture Users 1", "userPrincipalName": "fixture+1@example.com", "mail": "fixture+1@example.com", "jobTitle": "Engineer", "officeLocation": "Remote", "mobilePhone": "", "accountEnabled": true },
+        { "id": "fixture_user_2", "displayName": "Fixture Users 2", "userPrincipalName": "fixture+2@example.com", "mail": "fixture+2@example.com", "jobTitle": "Engineer", "officeLocation": "Remote", "mobilePhone": "", "accountEnabled": true }
+      ]
+    }
+  }
+}

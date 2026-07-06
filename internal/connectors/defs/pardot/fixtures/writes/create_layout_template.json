@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture layout_template",
+    "campaignId": 1,
+    "folderId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v5/objects/layout-templates",
+    "body": {
+      "name": "Fixture layout_template",
+      "campaignId": 1,
+      "folderId": 1
+    }
+  }
+}

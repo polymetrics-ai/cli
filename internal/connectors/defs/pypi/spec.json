@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PyPI Connection Specification",
+  "type": "object",
+  "required": ["project_name"],
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "description": "PyPI project (package) name to read metadata for, e.g. 'requests'. Must not contain '/', '?', '#', or '..'."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://pypi.org",
+      "description": "PyPI base URL. Defaults to https://pypi.org."
+    }
+  }
+}

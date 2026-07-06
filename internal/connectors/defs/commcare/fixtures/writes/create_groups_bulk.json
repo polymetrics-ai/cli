@@ -1,0 +1,18 @@
+{
+  "record": {
+    "objects": [
+      { "name": "Fixture group one", "case_sharing": false, "reporting": true },
+      { "name": "Fixture group two", "case_sharing": true, "reporting": true }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/a/synthetic-conformance-value/api/group/v1/",
+    "body": {
+      "objects": [
+        { "name": "Fixture group one", "case_sharing": false, "reporting": true },
+        { "name": "Fixture group two", "case_sharing": true, "reporting": true }
+      ]
+    }
+  }
+}

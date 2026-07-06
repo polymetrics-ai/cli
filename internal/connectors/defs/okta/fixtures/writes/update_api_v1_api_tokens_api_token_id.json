@@ -1,0 +1,41 @@
+{
+  "record": {
+    "api_token_id": "synthetic-conformance-value",
+    "clientName": "client_name_fixture",
+    "created": "2026-01-01T00:00:00Z",
+    "name": "name_fixture",
+    "network": {
+      "connection": "connection_fixture",
+      "include": [
+        "include_fixture"
+      ],
+      "exclude": [
+        "exclude_fixture"
+      ]
+    },
+    "userId": "user_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/api-tokens/synthetic-conformance-value",
+    "body": {
+      "clientName": "client_name_fixture",
+      "created": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "network": {
+        "connection": "connection_fixture",
+        "include": [
+          "include_fixture"
+        ],
+        "exclude": [
+          "exclude_fixture"
+        ]
+      },
+      "userId": "user_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

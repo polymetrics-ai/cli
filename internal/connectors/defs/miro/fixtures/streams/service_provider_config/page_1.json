@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ServiceProviderConfig"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "schema_fixture"
+      ],
+      "documentationUri": "https://example.invalid/fixture",
+      "patch": {
+        "supported": true
+      },
+      "bulk": {
+        "supported": true,
+        "maxOperations": 1.25,
+        "maxPayloadSize": 1.25
+      },
+      "filter": {
+        "supported": true,
+        "maxResults": 1.25
+      },
+      "changePassword": {
+        "supported": true
+      },
+      "sort": {
+        "supported": true
+      },
+      "etag": {
+        "supported": true
+      },
+      "authenticationSchemes": [
+        {
+          "name": "name_fixture",
+          "description": "description_fixture",
+          "specUri": "https://example.invalid/fixture",
+          "type": "type_fixture",
+          "primary": true
+        }
+      ]
+    }
+  }
+}

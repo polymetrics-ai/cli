@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/r/synthetic-conformance-value/comments", "query": { "limit": "100", "raw_json": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "kind": "t1",
+            "data": {
+              "id": "cfixture_1",
+              "name": "t1_cfixture_1",
+              "body": "Fixture comment 1",
+              "subreddit": "fixture",
+              "author": "fixture_user",
+              "created_utc": 1767225701,
+              "permalink": "/r/fixture/comments/fixture_1/_/cfixture_1/"
+            }
+          },
+          {
+            "kind": "t1",
+            "data": {
+              "id": "cfixture_2",
+              "name": "t1_cfixture_2",
+              "body": "Fixture comment 2",
+              "subreddit": "fixture",
+              "author": "fixture_user",
+              "created_utc": 1767225702,
+              "permalink": "/r/fixture/comments/fixture_2/_/cfixture_2/"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

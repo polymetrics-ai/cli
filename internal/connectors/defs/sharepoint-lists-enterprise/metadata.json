@@ -1,0 +1,28 @@
+{
+  "name": "sharepoint-lists-enterprise",
+  "display_name": "SharePoint Lists Enterprise",
+  "description": "Reads and writes SharePoint lists and list items through Microsoft Graph.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/graph/api/resources/list?view=graph-rest-1.0",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Graph API read of SharePoint list and list-item data",
+    "write": "creates/updates SharePoint lists and list items (rows and their column values) on the configured site via Microsoft Graph",
+    "approval": "none for list/list-item create-update (low-risk CRM/CMS-style data, no destructive deletes implemented)"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.login_base_url + config.tenant_id (Azure AD's per-tenant OAuth2 endpoint), not from base_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") for both is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/sharepoint-lists-enterprise (this bundle has no Tier-2 hook, so there is no paritytest package for this wave). See sendpulse's identical oauth2_client_credentials skip_dynamic precedent."
+  }
+}

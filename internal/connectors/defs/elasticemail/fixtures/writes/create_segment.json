@@ -1,0 +1,18 @@
+{
+  "record": {
+    "Name": "Fixture Segment",
+    "Rule": "Status = Active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/segments",
+    "body": {
+      "Name": "Fixture Segment",
+      "Rule": "Status = Active"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

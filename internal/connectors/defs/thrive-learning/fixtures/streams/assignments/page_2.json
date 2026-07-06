@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/assignments",
+    "query": {
+      "page": "2",
+      "perPage": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "63f57d805d8ecbf46f51001",
+        "audienceId": "5f9d88d6e1b2a34c56d1001",
+        "primaryContentId": "5c8936159ec2d00010c1001",
+        "alternativeContentIds": [],
+        "hideAlternativeContent": false,
+        "isActive": true,
+        "isDeleted": false,
+        "createdAt": "2026-01-02T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

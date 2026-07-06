@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/summary/transfer"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "IsoCurrency": "USD",
+        "PaymentsAmount": 482.58,
+        "SumCommissionAgent": 77.51,
+        "SumCommissionUserTaxes": 0.07,
+        "SumItems": 243777.62,
+        "SumNominalSum": 493.09,
+        "SumOutProject": 241787.62,
+        "SumPayoutSum": 462.62,
+        "TaxesOfPayments": 0.14,
+        "DirectTaxesOfPayments": 0.14
+      }
+    ]
+  }
+}

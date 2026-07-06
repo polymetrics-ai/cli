@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/raw-data/export/app/synthetic-conformance-value/in_app_events_report/v5" },
+  "response": {
+    "status": 200,
+    "body": "AppsFlyer ID,Event Time,Media Source,Campaign\naf_fixture_1,2026-01-01 00:00:00,fixture_network,fixture_campaign\n"
+  }
+}

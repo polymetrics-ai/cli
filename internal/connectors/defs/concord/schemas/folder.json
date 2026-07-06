@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "folder",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "parentId": { "type": ["integer", "null"] },
+    "createdBy": { "type": ["object", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "modifiedAt": { "type": ["integer", "null"] },
+    "access": { "type": ["object", "null"] },
+    "isBookmarked": { "type": ["boolean", "null"] }
+  }
+}

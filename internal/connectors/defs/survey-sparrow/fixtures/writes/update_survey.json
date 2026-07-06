@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "name": "Updated Fixture Survey" },
+  "expect": { "method": "PATCH", "path": "/surveys/1" }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/differential_prices",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "differential_price": {
+            "id": "dp_fixture_1",
+            "item_price_id": "ip_fixture_1",
+            "parent_item_id": "item_fixture_1",
+            "price": 1900,
+            "currency_code": "USD",
+            "status": "active",
+            "created_at": 1767225600,
+            "updated_at": 1767225601,
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

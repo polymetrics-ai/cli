@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/subscriptions", "query": { "limit": "250" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscriptions": [
+        {
+          "id": 2001,
+          "status": "active",
+          "customer_id": 1001,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2002,
+          "status": "active",
+          "customer_id": 1002,
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next_cursor": ""
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "api": "Aviationstack API v1 (https://api.aviationstack.com/v1)",
+  "docs": "https://aviationstack.com/documentation",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, verified against the live aviationstack/APILayer documentation (aviationstack.com/documentation, docs.apilayer.com/aviationstack, aviationstack.com/pricing). The full v1 surface is 9 GET list endpoints; the 5 legacy-parity streams (flights/airlines/airports/airplanes/countries) remain the entire free-plan-reachable surface implemented as streams. Every remaining endpoint is now enumerated with a real, specific reason: aviationstack's own pricing page confirms only real-time flights ships on the Free plan — historical flights, future flight schedules, and airline routes are explicitly paid-tier-only (Basic $49.99/mo+); cities/taxes/aircraft_types are additional reference-data resources this migration did not have paid-tier access to verify against a live account, so they are triaged out-of-scope rather than assumed-covered. aviationstack is a read-only API with no documented mutation endpoint of any kind (no POST/PATCH/DELETE anywhere in its surface) — capabilities.write stays false; this is the full extent of the real surface, not a scoping choice.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/flights", "covered_by": { "stream": "flights" } },
+    { "method": "GET", "path": "/v1/airlines", "covered_by": { "stream": "airlines" } },
+    { "method": "GET", "path": "/v1/airports", "covered_by": { "stream": "airports" } },
+    { "method": "GET", "path": "/v1/airplanes", "covered_by": { "stream": "airplanes" } },
+    { "method": "GET", "path": "/v1/countries", "covered_by": { "stream": "countries" } },
+    { "method": "GET", "path": "/v1/routes", "excluded": { "category": "requires_elevated_scope", "reason": "airline route data is explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes" } },
+    { "method": "GET", "path": "/v1/flightsFuture", "excluded": { "category": "requires_elevated_scope", "reason": "future flight schedules are explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes" } },
+    { "method": "GET", "path": "/v1/timetable", "excluded": { "category": "requires_elevated_scope", "reason": "requires a premium aviationstack plan not assumed available for this migration" } },
+    { "method": "GET", "path": "/v1/historical", "excluded": { "category": "requires_elevated_scope", "reason": "historical flight status is explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes" } },
+    { "method": "GET", "path": "/v1/cities", "excluded": { "category": "out_of_scope", "reason": "additional geographic reference-data resource (city name/IATA/geoname_id/lat-long/timezone); this migration had no paid-tier account to confirm live field shapes against, and it is not part of legacy's own covered surface — Pass B breadth-vs-cost triage, not assumed free-tier-reachable" } },
+    { "method": "GET", "path": "/v1/taxes", "excluded": { "category": "out_of_scope", "reason": "aviation-tax reference-data resource (tax name + IATA code); same reasoning as cities — not part of legacy's covered surface, Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/v1/aircraft_types", "excluded": { "category": "out_of_scope", "reason": "aircraft-type reference-data resource (IATA code + aircraft name), distinct from the already-covered airplanes (individual tail-numbered aircraft) stream; not part of legacy's covered surface, Pass B breadth-vs-cost triage" } }
+  ]
+}

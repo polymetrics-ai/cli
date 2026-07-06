@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 700010,
+    "name": "Fixture Contact Updated",
+    "paused": false,
+    "notification_targets": { "email": [{ "severity": "HIGH", "address": "fixture1@example.com" }] }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/alerting/contacts/700010",
+    "body": {
+      "name": "Fixture Contact Updated",
+      "paused": false,
+      "notification_targets": { "email": [{ "severity": "HIGH", "address": "fixture1@example.com" }] }
+    }
+  },
+  "response": { "status": 200, "body": { "contact": { "id": 700010, "name": "Fixture Contact Updated", "paused": false } } }
+}

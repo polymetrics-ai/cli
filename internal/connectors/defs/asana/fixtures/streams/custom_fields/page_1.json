@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/custom_fields" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_cf_1", "name": "Fixture Priority", "resource_type": "custom_field", "type": "enum", "enabled": true, "description": "Fixture custom field" },
+        { "gid": "fixture_cf_2", "name": "Fixture Points", "resource_type": "custom_field", "type": "number", "enabled": true, "description": null }
+      ],
+      "next_page": null
+    }
+  }
+}

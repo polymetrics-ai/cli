@@ -1,0 +1,41 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "id": "acc_fixture_1",
+          "name": "Acme Fixture",
+          "trackedSubscriptionId": "sub_fixture_1",
+          "sfdcId": "sfdc_fixture_1",
+          "industry": "Software",
+          "numberOfEmployees": "50",
+          "numberOfUsers": "20",
+          "plan": "enterprise",
+          "location": "Remote",
+          "website": "https://acme.example.com",
+          "createDate": "1767225601",
+          "lastModifiedDate": "1767225601",
+          "lastSeenDate": "1767225601"
+        },
+        {
+          "id": "acc_fixture_2",
+          "name": "Globex Fixture",
+          "trackedSubscriptionId": "sub_fixture_2",
+          "sfdcId": "sfdc_fixture_2",
+          "industry": "Manufacturing",
+          "numberOfEmployees": "200",
+          "numberOfUsers": "80",
+          "plan": "growth",
+          "location": "Remote",
+          "website": "https://globex.example.com",
+          "createDate": "1767225602",
+          "lastModifiedDate": "1767225602",
+          "lastSeenDate": "1767225602"
+        }
+      ],
+      "scrollId": "scroll_fixture_page2"
+    }
+  }
+}

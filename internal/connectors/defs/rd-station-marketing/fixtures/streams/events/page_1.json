@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "page": "1", "page_size": "125" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        { "uuid": "event_fixture_1", "event_type": "CONVERSION", "email": "fixture1@example.com", "created_at": "2026-01-01T00:00:00Z" },
+        { "uuid": "event_fixture_2", "event_type": "EMAIL_OPEN", "email": "fixture2@example.com", "created_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

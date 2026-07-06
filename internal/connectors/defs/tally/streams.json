@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/forms", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "tally api_key is missing or invalid; re-run pm credentials add tally" },
+      { "status": 403, "hint": "tally account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "tally rate limit exceeded (100 requests/minute); the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "forms",
+      "path": "/forms",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "schema": "schemas/forms.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "items" },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "webhooks" },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "submissions",
+      "path": "/forms/{{ fanout.id }}/submissions",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": { "path": "submissions" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/forms", "records_path": "items", "id_field": "id" }
+        },
+        "into": { "path_var": "form_id" },
+        "stamp_field": "form_id"
+      },
+      "incremental": {
+        "cursor_field": "submitted_at",
+        "request_param": "startDate",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "submitted_at": "{{ record.submittedAt }}"
+      },
+      "schema": "schemas/submissions.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "cursor_advances' generic re-read harness is not fan_out-aware: it seeds a capture server that always answers 200 with an empty body, but this stream's fan_out.ids_from.request issues its own preliminary GET /forms id-listing request FIRST — against that same always-empty capture server, so zero form ids ever resolve and the per-form submissions sub-sequence (the request that would actually carry startDate) is never issued at all; the harness's single captured-value slot would in any case only ever record whichever request shape hit it last. This is a harness limitation (checkCursorAdvances has no fan_out-aware two-phase variant), not a bundle defect; hook-covered-style proof is not applicable (no hook here) but the identical marker mechanism applies to any dynamic check a generic harness genuinely cannot reach. Proven live by archived parity evidence for tally's TestParityTally_SubmissionsFanOutSendsStartDateOnResumedSync (asserts the real two-phase read sends startDate=<seeded cursor> on the per-form sub-sequence) and TestParityTally_SubmissionsFreshSyncOmitsStartDate (asserts a fresh sync omits the param entirely)."
+      }
+    }
+  ]
+}

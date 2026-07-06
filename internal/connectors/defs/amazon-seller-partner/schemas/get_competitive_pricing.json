@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_competitive_pricing",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "SellerSKU": {
+      "type": "string"
+    },
+    "ASIN": {
+      "type": "string"
+    },
+    "Product": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "ASIN"
+  ]
+}

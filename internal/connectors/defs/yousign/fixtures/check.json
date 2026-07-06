@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/signature_requests" },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

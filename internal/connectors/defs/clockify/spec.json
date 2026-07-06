@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clockify Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Clockify API key, sent as the X-Api-Key header. Used only for auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.clockify.me/api",
+      "description": "Clockify API base URL override for tests or proxies."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Clockify workspace id; required for the clients/projects/tags/users streams, which are scoped under /v1/workspaces/{workspace_id}/..."
+    }
+  }
+}

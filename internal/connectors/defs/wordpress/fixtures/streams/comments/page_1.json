@@ -1,0 +1,46 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/comments", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "post": 1,
+        "parent": 0,
+        "author": 0,
+        "author_name": "Fixture Commenter One",
+        "author_url": "",
+        "date": "2026-01-01T00:00:00",
+        "date_gmt": "2026-01-01T00:00:00",
+        "content": { "rendered": "<p>Fixture comment one.</p>" },
+        "link": "https://example.com/fixture-post-1/#comment-1",
+        "status": "approved",
+        "type": "comment",
+        "author_avatar_urls": { "24": "https://example.com/avatar/1?s=24" },
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/comments/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/comments" }]
+        }
+      },
+      {
+        "id": 2,
+        "post": 1,
+        "parent": 1,
+        "author": 0,
+        "author_name": "Fixture Commenter Two",
+        "author_url": "",
+        "date": "2026-01-01T00:01:00",
+        "date_gmt": "2026-01-01T00:01:00",
+        "content": { "rendered": "<p>Fixture comment two.</p>" },
+        "link": "https://example.com/fixture-post-1/#comment-2",
+        "status": "approved",
+        "type": "comment",
+        "author_avatar_urls": { "24": "https://example.com/avatar/2?s=24" },
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/comments/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/comments" }]
+        }
+      }
+    ]
+  }
+}

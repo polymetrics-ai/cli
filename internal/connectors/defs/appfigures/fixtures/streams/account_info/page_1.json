@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "200",
+      "message": "OK",
+      "see": "http://docs.appfigures.com/api",
+      "version": "2.0",
+      "user": {
+        "id": 7001,
+        "name": "Fixture User",
+        "email": "fixture1@example.com"
+      },
+      "usage": {
+        "daily_used": 125,
+        "daily_limit": 1000
+      },
+      "sequence": 28,
+      "source": "100"
+    }
+  }
+}

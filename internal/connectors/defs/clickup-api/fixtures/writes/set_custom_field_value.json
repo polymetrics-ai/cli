@@ -1,0 +1,8 @@
+{
+  "record": { "task_id": "task_fixture_1", "field_id": "field_fixture_1", "value": "fixture value" },
+  "expect": {
+    "method": "POST",
+    "path": "/task/task_fixture_1/field/field_fixture_1",
+    "body": { "value": "fixture value" }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "record": { "id": 11, "name": "Fixture Account Updated" },
+  "expect": { "method": "PUT", "path": "/accounts/11" },
+  "response": { "status": 200, "body": { "id": 11 } }
+}

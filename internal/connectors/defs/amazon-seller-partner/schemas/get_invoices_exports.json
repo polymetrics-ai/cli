@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_invoices_exports",
+  "type": "object",
+  "properties": {
+    "errorMessage": {
+      "type": "string"
+    },
+    "exportId": {
+      "type": "string"
+    },
+    "generateExportFinishedAt": {
+      "type": "string"
+    },
+    "generateExportStartedAt": {
+      "type": "string"
+    },
+    "invoicesDocumentIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "exportId"
+  ]
+}

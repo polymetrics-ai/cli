@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/health-insurance-contracts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contracts": [
+        {
+          "idContrat": "health_insurance_contracts_1",
+          "name": "Fixture health insurance contracts"
+        }
+      ]
+    }
+  }
+}

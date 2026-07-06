@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "monday.com user",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "is_admin": { "type": ["boolean", "null"] },
+    "is_guest": { "type": ["boolean", "null"] },
+    "is_pending": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

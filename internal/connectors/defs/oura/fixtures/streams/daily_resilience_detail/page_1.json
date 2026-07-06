@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_resilience/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_resilience_detail_fixture_1",
+      "day": "2026-01-01",
+      "contributors": {},
+      "level": "normal"
+    }
+  }
+}

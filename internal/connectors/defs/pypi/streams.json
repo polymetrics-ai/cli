@@ -1,0 +1,23 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/pypi/{{ config.project_name }}/json" },
+    "error_map": [
+      { "status": 404, "hint": "pypi project not found; check config.project_name" },
+      { "status": 429, "class": "rate_limited", "hint": "pypi rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "project",
+      "path": "/pypi/{{ config.project_name }}/json",
+      "records": { "path": "info" },
+      "projection": "passthrough",
+      "schema": "schemas/project.json"
+    }
+  ]
+}

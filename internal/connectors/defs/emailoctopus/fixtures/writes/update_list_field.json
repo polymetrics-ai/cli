@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "list_fixture_1",
+    "tag": "FirstName",
+    "label": "Given name",
+    "new_tag": "FirstName"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/lists/list_fixture_1/fields/FirstName",
+    "body": {
+      "label": "Given name",
+      "new_tag": "FirstName"
+    }
+  }
+}

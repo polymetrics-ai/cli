@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/members" },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "id": "member_fixture_1", "name": "Fixture Member", "email": "fixture1@example.com", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPage": null
+    }
+  }
+}

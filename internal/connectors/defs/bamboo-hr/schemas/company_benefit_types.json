@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company_benefit_types",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "canBeAcaPlan": {
+      "type": "boolean"
+    },
+    "canCoExistEnrollment": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "isReimbursementPlan": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "lastUpdated": {
+      "type": "string",
+      "description": "The timestamp when the user classification was last updated",
+      "format": "date-time"
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of user classification",
+      "enum": [
+        "LITE",
+        "STANDARD"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

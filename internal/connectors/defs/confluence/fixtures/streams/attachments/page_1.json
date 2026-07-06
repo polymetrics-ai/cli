@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/attachments",
+    "query": {
+      "limit": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "attachments_fixture_1",
+          "status": "current",
+          "title": "fixture-file-1.png",
+          "pageId": "pages_fixture_1",
+          "mediaType": "image/png",
+          "fileSize": 1024,
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "attachments_fixture_2",
+          "status": "current",
+          "title": "fixture-file-2.png",
+          "pageId": "pages_fixture_1",
+          "mediaType": "image/png",
+          "fileSize": 2048,
+          "createdAt": "2026-01-01T00:00:00.000Z"
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "site_id": "synthetic-conformance-value",
+    "redirects": []
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/redirects",
+    "body": {
+      "redirects": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "bulk_upsert_site_redirects_fixture_1"
+    }
+  }
+}

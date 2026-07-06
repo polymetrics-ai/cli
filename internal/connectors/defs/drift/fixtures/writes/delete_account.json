@@ -1,0 +1,9 @@
+{
+  "record": {
+    "account_id": "acct_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/acct_fixture_1"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "routes": [
+      { "id": "route_fixture_1", "polyline": [[-118.10494, 33.92513], [-118.10471, 33.92384]], "routeDuration": 600 }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/insights/v1/cleanest-route",
+    "body": {
+      "routes": [
+        { "id": "route_fixture_1", "polyline": [[-118.10494, 33.92513], [-118.10471, 33.92384]], "routeDuration": 600 }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "responseId": "resp_fixture_1",
+      "time": "2026-01-01T00:00:00Z",
+      "racss": [{ "RACSid": "racs_fixture_1", "routeId": "route_fixture_1", "RACS": 82, "error": 0 }],
+      "completionStatus": "Completed"
+    }
+  }
+}

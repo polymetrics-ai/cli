@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "Fixture group",
+    "case_sharing": false,
+    "reporting": true,
+    "users": ["mobile_worker_fixture_1"],
+    "metadata": { "localization": "Fixture" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/group/v1/",
+    "body": {
+      "name": "Fixture group",
+      "case_sharing": false
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "group_created_fixture_1" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ccx/api/hcm/v1/synthetic-conformance-value/workers", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "worker-1", "descriptor": "Fixture Worker 1", "updated": "2026-01-01T00:00:00Z" },
+        { "id": "worker-2", "descriptor": "Fixture Worker 2", "updated": "2026-01-01T00:01:00Z" }
+      ]
+    }
+  }
+}

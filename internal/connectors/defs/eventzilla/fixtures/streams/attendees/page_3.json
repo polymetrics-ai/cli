@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/events/2/attendees", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "attendees": [
+        {
+          "id": 102,
+          "event_id": 2,
+          "first_name": "Fixture",
+          "last_name": "Attendee2",
+          "email": "attendee2@example.com",
+          "ticket_type": "vip",
+          "refno": "REF-102",
+          "transaction_amount": 50.0,
+          "transaction_status": "complete",
+          "transaction_date": "2026-02-01",
+          "is_attended": "true"
+        }
+      ]
+    }
+  }
+}

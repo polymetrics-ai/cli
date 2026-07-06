@@ -1,0 +1,52 @@
+{
+  "api": "Kissmetrics query API v3",
+  "docs": "https://support.kissmetrics.io/reference",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out: the 4 legacy-parity read streams only (products, reports, events, properties); Kissmetrics exposes a read-only query API, no writes implemented",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/reports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/properties",
+      "covered_by": {
+        "stream": "properties"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}/reports/{report_id}/data",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Report result data, not implemented by legacy internal/connectors/kissmetrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Ad-hoc query endpoint, not implemented by legacy internal/connectors/kissmetrics"
+      }
+    }
+  ]
+}

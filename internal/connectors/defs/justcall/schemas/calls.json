@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calls",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "call_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "call_date": { "type": ["string", "null"] },
+    "call_time": { "type": ["string", "null"] },
+    "call_sid": { "type": ["string", "null"] },
+    "agent_id": { "type": ["string", "null"] },
+    "agent_name": { "type": ["string", "null"] },
+    "agent_email": { "type": ["string", "null"] },
+    "contact_name": { "type": ["string", "null"] },
+    "contact_number": { "type": ["string", "null"] },
+    "call_duration": { "type": ["string", "null"] },
+    "cost_incurred": { "type": ["string", "null"] },
+    "justcall_number": { "type": ["string", "null"] },
+    "justcall_line_name": { "type": ["string", "null"] }
+  }
+}

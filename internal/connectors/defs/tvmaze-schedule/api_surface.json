@@ -1,0 +1,46 @@
+{
+  "api": "TVmaze API (https://api.tvmaze.com)",
+  "docs": "https://www.tvmaze.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read-only streams (schedule, web_schedule) only, matching internal/connectors/tvmaze-schedule's exact endpoint set; the full TVmaze surface (shows, people, search, episode/season lookups) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/schedule",
+      "covered_by": {
+        "stream": "schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/web/schedule",
+      "covered_by": {
+        "stream": "web_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/shows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shows/{id}/episodes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    }
+  ]
+}

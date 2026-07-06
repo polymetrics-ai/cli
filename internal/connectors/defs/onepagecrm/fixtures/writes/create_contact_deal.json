@@ -1,0 +1,19 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "owner_id": "fixture_value",
+    "name": "Fixture Name",
+    "text": "Fixture text",
+    "stage": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_id/deals",
+    "body": {
+      "owner_id": "fixture_value",
+      "name": "Fixture Name",
+      "text": "Fixture text",
+      "stage": "fixture_value"
+    }
+  }
+}

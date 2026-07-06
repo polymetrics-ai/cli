@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sp/keywords",
+    "query": {
+      "count": "100",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "keywordId": 223344001,
+        "campaignId": 445566001,
+        "adGroupId": 990011001,
+        "keywordText": "fixture keyword one",
+        "matchType": "exact",
+        "state": "enabled",
+        "bid": 0.75
+      },
+      {
+        "keywordId": 223344002,
+        "campaignId": 445566002,
+        "adGroupId": 990011002,
+        "keywordText": "fixture keyword two",
+        "matchType": "phrase",
+        "state": "enabled",
+        "bid": 1.25
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts",
+    "query": {
+      "limit": "20",
+      "offset": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contacts": [
+        {
+          "id": "21",
+          "email": "fixture21@example.com",
+          "firstName": "Fixture21",
+          "lastName": "Example",
+          "phone": "",
+          "cdate": "2026-01-02T00:00:00-05:00",
+          "udate": "2026-01-02T00:00:00-05:00",
+          "orgid": "",
+          "deleted": "0"
+        }
+      ],
+      "meta": {
+        "total": "21"
+      }
+    }
+  }
+}

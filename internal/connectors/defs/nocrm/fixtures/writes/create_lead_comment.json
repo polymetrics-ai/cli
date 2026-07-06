@@ -1,0 +1,17 @@
+{
+  "record": {
+    "lead_id": "456",
+    "content": "Fixture content",
+    "activity_id": "42",
+    "is_pinned": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/leads/456/comments",
+    "body": {
+      "content": "Fixture content",
+      "activity_id": "42",
+      "is_pinned": true
+    }
+  }
+}

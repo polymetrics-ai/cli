@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "es_fixture_1",
+    "name": "Renamed Series"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/event_series/es_fixture_1"
+  }
+}

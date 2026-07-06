@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "transaction_fixture_1",
+    "metadata": { "extId": "fixture-ext-1" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/transactions/update_metadata",
+    "body": {
+      "id": "transaction_fixture_1",
+      "metadata": { "extId": "fixture-ext-1" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "transaction_fixture_1", "type": "transaction" } }
+  }
+}

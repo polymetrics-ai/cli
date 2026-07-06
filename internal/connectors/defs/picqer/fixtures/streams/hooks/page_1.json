@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/hooks", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idhook": 1, "name": "Stock is changed", "event": "products.free_stock_changed", "address": "https://example.com/picqer-webhook", "active": true, "secret": true }
+    ]
+  }
+}

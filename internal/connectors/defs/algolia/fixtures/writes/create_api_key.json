@@ -1,0 +1,7 @@
+{
+  "record": { "acl": ["search"], "description": "fixture key" },
+  "expect": {
+    "method": "POST",
+    "path": "/1/keys"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v2/booking-pages", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "page_fixture_1", "object": "booking_page", "name": "Fixture Booking Page", "label": "fixture-page", "url": "https://oncehub.example/fixture-page", "timezone": "UTC", "active": true }
+      ]
+    }
+  }
+}

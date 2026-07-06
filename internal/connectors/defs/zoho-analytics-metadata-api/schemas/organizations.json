@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations",
+  "type": "object",
+  "x-primary-key": ["orgId"],
+  "required": ["orgId"],
+  "properties": {
+    "orgId": { "type": "string" },
+    "orgName": { "type": ["string", "null"] },
+    "orgDesc": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "createdByZuId": { "type": ["string", "null"] },
+    "planName": { "type": ["string", "null"] },
+    "isDefault": { "type": ["boolean", "null"] },
+    "numberOfworkspaces": { "type": ["integer", "null"] },
+    "role": { "type": ["string", "null"] }
+  }
+}

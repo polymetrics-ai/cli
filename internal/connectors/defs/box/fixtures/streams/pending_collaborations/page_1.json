@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/collaborations",
+    "query": { "status": "pending", "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "collaboration_fixture_1",
+          "type": "collaboration",
+          "item": { "id": "folder_fixture_1", "type": "folder" },
+          "accessible_by": { "id": "users_fixture_2", "type": "user" },
+          "invite_email": null,
+          "role": "editor",
+          "status": "pending",
+          "expires_at": null,
+          "is_access_only": false,
+          "acknowledged_at": null,
+          "created_by": { "id": "users_fixture_1", "type": "user" },
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-01T00:00:00-08:00"
+        }
+      ],
+      "total_count": 1,
+      "limit": 100,
+      "offset": 0
+    }
+  }
+}

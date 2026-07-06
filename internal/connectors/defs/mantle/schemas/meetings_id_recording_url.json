@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "meetings_id_recording_url",
+  "type": "object",
+  "properties": {
+    "recordingUrl": {
+      "type": "string",
+      "description": "Temporary signed URL for the recording"
+    },
+    "expiresIn": {
+      "type": "integer",
+      "description": "Time in seconds until the URL expires"
+    }
+  }
+}

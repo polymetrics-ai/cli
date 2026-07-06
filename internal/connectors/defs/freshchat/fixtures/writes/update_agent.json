@@ -1,0 +1,13 @@
+{
+  "record": {
+    "agent_id": "agent_fixture_1",
+    "first_name": "Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/agents/agent_fixture_1",
+    "body": {
+      "first_name": "Renamed"
+    }
+  }
+}

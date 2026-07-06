@@ -1,0 +1,8 @@
+{
+  "record": { "id": "task_fixture_1", "status": "in progress" },
+  "expect": {
+    "method": "PUT",
+    "path": "/task/task_fixture_1",
+    "body": { "status": "in progress" }
+  }
+}

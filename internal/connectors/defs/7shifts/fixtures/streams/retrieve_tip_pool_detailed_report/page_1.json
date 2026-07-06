@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/locations/synthetic-conformance-value/tip_pool_detailed_report",
+    "query": {
+      "start_date": "2020-01-01T00:00:00Z",
+      "end_date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "location_id": 1001,
+        "location_name": "fixture location name",
+        "report_rows": [
+          {
+            "date": "2026-01-01",
+            "tip_pools": [
+              {
+                "tip_pool_uuid": "00000000-0000-4000-8000-000000000001",
+                "tip_pool_name": "fixture tip pool name",
+                "unassigned_tips": [
+                  {
+                    "net_sales": 1001,
+                    "cc_tips": 1001,
+                    "cc_tips_withheld": 1001,
+                    "auto_grat_tips": 1001,
+                    "cash_tips": 1001,
+                    "declared_tips": 1001
+                  }
+                ],
+                "assigned_tips": [
+                  {
+                    "net_sales": 1001,
+                    "cc_tips": 1001,
+                    "cc_tips_withheld": 1001,
+                    "auto_grat_tips": 1001,
+                    "cash_tips": 1001,
+                    "declared_tips": 1001
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

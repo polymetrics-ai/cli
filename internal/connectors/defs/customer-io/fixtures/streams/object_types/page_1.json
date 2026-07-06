@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/object_types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "types": [
+        { "id": "1", "name": "Companies", "singular_name": "Company", "slug": "companies", "singular_slug": "company", "enabled": true, "icon": "briefcase" },
+        { "id": "2", "name": "Accounts", "singular_name": "Account", "slug": "accounts", "singular_slug": "account", "enabled": true, "icon": "building" }
+      ]
+    }
+  }
+}

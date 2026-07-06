@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/people/delete_jobs/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "id": 1,
+        "name": "Fixture person_deletion_job",
+        "title": "Fixture person_deletion_job",
+        "status": "active"
+      }
+    }
+  }
+}

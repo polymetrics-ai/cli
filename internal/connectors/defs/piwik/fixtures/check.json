@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/index.php", "query": { "module": "API", "format": "JSON", "method": "SitesManager.getAllSites" } },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

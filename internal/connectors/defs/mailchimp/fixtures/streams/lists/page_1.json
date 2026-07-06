@@ -1,0 +1,1018 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists",
+    "query": {
+      "count": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        {
+          "id": "list_fixture_1",
+          "web_id": 1001,
+          "name": "Fixture List 1",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture1"
+        },
+        {
+          "id": "list_fixture_2",
+          "web_id": 1002,
+          "name": "Fixture List 2",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture2"
+        },
+        {
+          "id": "list_fixture_3",
+          "web_id": 1003,
+          "name": "Fixture List 3",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture3"
+        },
+        {
+          "id": "list_fixture_4",
+          "web_id": 1004,
+          "name": "Fixture List 4",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture4"
+        },
+        {
+          "id": "list_fixture_5",
+          "web_id": 1005,
+          "name": "Fixture List 5",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture5"
+        },
+        {
+          "id": "list_fixture_6",
+          "web_id": 1006,
+          "name": "Fixture List 6",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture6"
+        },
+        {
+          "id": "list_fixture_7",
+          "web_id": 1007,
+          "name": "Fixture List 7",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture7"
+        },
+        {
+          "id": "list_fixture_8",
+          "web_id": 1008,
+          "name": "Fixture List 8",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture8"
+        },
+        {
+          "id": "list_fixture_9",
+          "web_id": 1009,
+          "name": "Fixture List 9",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture9"
+        },
+        {
+          "id": "list_fixture_10",
+          "web_id": 1010,
+          "name": "Fixture List 10",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture10"
+        },
+        {
+          "id": "list_fixture_11",
+          "web_id": 1011,
+          "name": "Fixture List 11",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture11"
+        },
+        {
+          "id": "list_fixture_12",
+          "web_id": 1012,
+          "name": "Fixture List 12",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture12"
+        },
+        {
+          "id": "list_fixture_13",
+          "web_id": 1013,
+          "name": "Fixture List 13",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture13"
+        },
+        {
+          "id": "list_fixture_14",
+          "web_id": 1014,
+          "name": "Fixture List 14",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture14"
+        },
+        {
+          "id": "list_fixture_15",
+          "web_id": 1015,
+          "name": "Fixture List 15",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture15"
+        },
+        {
+          "id": "list_fixture_16",
+          "web_id": 1016,
+          "name": "Fixture List 16",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture16"
+        },
+        {
+          "id": "list_fixture_17",
+          "web_id": 1017,
+          "name": "Fixture List 17",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture17"
+        },
+        {
+          "id": "list_fixture_18",
+          "web_id": 1018,
+          "name": "Fixture List 18",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture18"
+        },
+        {
+          "id": "list_fixture_19",
+          "web_id": 1019,
+          "name": "Fixture List 19",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture19"
+        },
+        {
+          "id": "list_fixture_20",
+          "web_id": 1020,
+          "name": "Fixture List 20",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture20"
+        },
+        {
+          "id": "list_fixture_21",
+          "web_id": 1021,
+          "name": "Fixture List 21",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture21"
+        },
+        {
+          "id": "list_fixture_22",
+          "web_id": 1022,
+          "name": "Fixture List 22",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture22"
+        },
+        {
+          "id": "list_fixture_23",
+          "web_id": 1023,
+          "name": "Fixture List 23",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture23"
+        },
+        {
+          "id": "list_fixture_24",
+          "web_id": 1024,
+          "name": "Fixture List 24",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture24"
+        },
+        {
+          "id": "list_fixture_25",
+          "web_id": 1025,
+          "name": "Fixture List 25",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture25"
+        },
+        {
+          "id": "list_fixture_26",
+          "web_id": 1026,
+          "name": "Fixture List 26",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture26"
+        },
+        {
+          "id": "list_fixture_27",
+          "web_id": 1027,
+          "name": "Fixture List 27",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture27"
+        },
+        {
+          "id": "list_fixture_28",
+          "web_id": 1028,
+          "name": "Fixture List 28",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture28"
+        },
+        {
+          "id": "list_fixture_29",
+          "web_id": 1029,
+          "name": "Fixture List 29",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture29"
+        },
+        {
+          "id": "list_fixture_30",
+          "web_id": 1030,
+          "name": "Fixture List 30",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture30"
+        },
+        {
+          "id": "list_fixture_31",
+          "web_id": 1031,
+          "name": "Fixture List 31",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture31"
+        },
+        {
+          "id": "list_fixture_32",
+          "web_id": 1032,
+          "name": "Fixture List 32",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture32"
+        },
+        {
+          "id": "list_fixture_33",
+          "web_id": 1033,
+          "name": "Fixture List 33",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture33"
+        },
+        {
+          "id": "list_fixture_34",
+          "web_id": 1034,
+          "name": "Fixture List 34",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture34"
+        },
+        {
+          "id": "list_fixture_35",
+          "web_id": 1035,
+          "name": "Fixture List 35",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture35"
+        },
+        {
+          "id": "list_fixture_36",
+          "web_id": 1036,
+          "name": "Fixture List 36",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture36"
+        },
+        {
+          "id": "list_fixture_37",
+          "web_id": 1037,
+          "name": "Fixture List 37",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture37"
+        },
+        {
+          "id": "list_fixture_38",
+          "web_id": 1038,
+          "name": "Fixture List 38",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture38"
+        },
+        {
+          "id": "list_fixture_39",
+          "web_id": 1039,
+          "name": "Fixture List 39",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture39"
+        },
+        {
+          "id": "list_fixture_40",
+          "web_id": 1040,
+          "name": "Fixture List 40",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture40"
+        },
+        {
+          "id": "list_fixture_41",
+          "web_id": 1041,
+          "name": "Fixture List 41",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture41"
+        },
+        {
+          "id": "list_fixture_42",
+          "web_id": 1042,
+          "name": "Fixture List 42",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture42"
+        },
+        {
+          "id": "list_fixture_43",
+          "web_id": 1043,
+          "name": "Fixture List 43",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture43"
+        },
+        {
+          "id": "list_fixture_44",
+          "web_id": 1044,
+          "name": "Fixture List 44",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture44"
+        },
+        {
+          "id": "list_fixture_45",
+          "web_id": 1045,
+          "name": "Fixture List 45",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture45"
+        },
+        {
+          "id": "list_fixture_46",
+          "web_id": 1046,
+          "name": "Fixture List 46",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture46"
+        },
+        {
+          "id": "list_fixture_47",
+          "web_id": 1047,
+          "name": "Fixture List 47",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture47"
+        },
+        {
+          "id": "list_fixture_48",
+          "web_id": 1048,
+          "name": "Fixture List 48",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture48"
+        },
+        {
+          "id": "list_fixture_49",
+          "web_id": 1049,
+          "name": "Fixture List 49",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture49"
+        },
+        {
+          "id": "list_fixture_50",
+          "web_id": 1050,
+          "name": "Fixture List 50",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture50"
+        },
+        {
+          "id": "list_fixture_51",
+          "web_id": 1051,
+          "name": "Fixture List 51",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture51"
+        },
+        {
+          "id": "list_fixture_52",
+          "web_id": 1052,
+          "name": "Fixture List 52",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture52"
+        },
+        {
+          "id": "list_fixture_53",
+          "web_id": 1053,
+          "name": "Fixture List 53",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture53"
+        },
+        {
+          "id": "list_fixture_54",
+          "web_id": 1054,
+          "name": "Fixture List 54",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture54"
+        },
+        {
+          "id": "list_fixture_55",
+          "web_id": 1055,
+          "name": "Fixture List 55",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture55"
+        },
+        {
+          "id": "list_fixture_56",
+          "web_id": 1056,
+          "name": "Fixture List 56",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture56"
+        },
+        {
+          "id": "list_fixture_57",
+          "web_id": 1057,
+          "name": "Fixture List 57",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture57"
+        },
+        {
+          "id": "list_fixture_58",
+          "web_id": 1058,
+          "name": "Fixture List 58",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture58"
+        },
+        {
+          "id": "list_fixture_59",
+          "web_id": 1059,
+          "name": "Fixture List 59",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture59"
+        },
+        {
+          "id": "list_fixture_60",
+          "web_id": 1060,
+          "name": "Fixture List 60",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture60"
+        },
+        {
+          "id": "list_fixture_61",
+          "web_id": 1061,
+          "name": "Fixture List 61",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture61"
+        },
+        {
+          "id": "list_fixture_62",
+          "web_id": 1062,
+          "name": "Fixture List 62",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture62"
+        },
+        {
+          "id": "list_fixture_63",
+          "web_id": 1063,
+          "name": "Fixture List 63",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture63"
+        },
+        {
+          "id": "list_fixture_64",
+          "web_id": 1064,
+          "name": "Fixture List 64",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture64"
+        },
+        {
+          "id": "list_fixture_65",
+          "web_id": 1065,
+          "name": "Fixture List 65",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture65"
+        },
+        {
+          "id": "list_fixture_66",
+          "web_id": 1066,
+          "name": "Fixture List 66",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture66"
+        },
+        {
+          "id": "list_fixture_67",
+          "web_id": 1067,
+          "name": "Fixture List 67",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture67"
+        },
+        {
+          "id": "list_fixture_68",
+          "web_id": 1068,
+          "name": "Fixture List 68",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture68"
+        },
+        {
+          "id": "list_fixture_69",
+          "web_id": 1069,
+          "name": "Fixture List 69",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture69"
+        },
+        {
+          "id": "list_fixture_70",
+          "web_id": 1070,
+          "name": "Fixture List 70",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture70"
+        },
+        {
+          "id": "list_fixture_71",
+          "web_id": 1071,
+          "name": "Fixture List 71",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture71"
+        },
+        {
+          "id": "list_fixture_72",
+          "web_id": 1072,
+          "name": "Fixture List 72",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture72"
+        },
+        {
+          "id": "list_fixture_73",
+          "web_id": 1073,
+          "name": "Fixture List 73",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture73"
+        },
+        {
+          "id": "list_fixture_74",
+          "web_id": 1074,
+          "name": "Fixture List 74",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture74"
+        },
+        {
+          "id": "list_fixture_75",
+          "web_id": 1075,
+          "name": "Fixture List 75",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture75"
+        },
+        {
+          "id": "list_fixture_76",
+          "web_id": 1076,
+          "name": "Fixture List 76",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture76"
+        },
+        {
+          "id": "list_fixture_77",
+          "web_id": 1077,
+          "name": "Fixture List 77",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture77"
+        },
+        {
+          "id": "list_fixture_78",
+          "web_id": 1078,
+          "name": "Fixture List 78",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture78"
+        },
+        {
+          "id": "list_fixture_79",
+          "web_id": 1079,
+          "name": "Fixture List 79",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture79"
+        },
+        {
+          "id": "list_fixture_80",
+          "web_id": 1080,
+          "name": "Fixture List 80",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture80"
+        },
+        {
+          "id": "list_fixture_81",
+          "web_id": 1081,
+          "name": "Fixture List 81",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture81"
+        },
+        {
+          "id": "list_fixture_82",
+          "web_id": 1082,
+          "name": "Fixture List 82",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture82"
+        },
+        {
+          "id": "list_fixture_83",
+          "web_id": 1083,
+          "name": "Fixture List 83",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture83"
+        },
+        {
+          "id": "list_fixture_84",
+          "web_id": 1084,
+          "name": "Fixture List 84",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture84"
+        },
+        {
+          "id": "list_fixture_85",
+          "web_id": 1085,
+          "name": "Fixture List 85",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture85"
+        },
+        {
+          "id": "list_fixture_86",
+          "web_id": 1086,
+          "name": "Fixture List 86",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture86"
+        },
+        {
+          "id": "list_fixture_87",
+          "web_id": 1087,
+          "name": "Fixture List 87",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture87"
+        },
+        {
+          "id": "list_fixture_88",
+          "web_id": 1088,
+          "name": "Fixture List 88",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture88"
+        },
+        {
+          "id": "list_fixture_89",
+          "web_id": 1089,
+          "name": "Fixture List 89",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture89"
+        },
+        {
+          "id": "list_fixture_90",
+          "web_id": 1090,
+          "name": "Fixture List 90",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture90"
+        },
+        {
+          "id": "list_fixture_91",
+          "web_id": 1091,
+          "name": "Fixture List 91",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture91"
+        },
+        {
+          "id": "list_fixture_92",
+          "web_id": 1092,
+          "name": "Fixture List 92",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture92"
+        },
+        {
+          "id": "list_fixture_93",
+          "web_id": 1093,
+          "name": "Fixture List 93",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture93"
+        },
+        {
+          "id": "list_fixture_94",
+          "web_id": 1094,
+          "name": "Fixture List 94",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture94"
+        },
+        {
+          "id": "list_fixture_95",
+          "web_id": 1095,
+          "name": "Fixture List 95",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture95"
+        },
+        {
+          "id": "list_fixture_96",
+          "web_id": 1096,
+          "name": "Fixture List 96",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture96"
+        },
+        {
+          "id": "list_fixture_97",
+          "web_id": 1097,
+          "name": "Fixture List 97",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture97"
+        },
+        {
+          "id": "list_fixture_98",
+          "web_id": 1098,
+          "name": "Fixture List 98",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture98"
+        },
+        {
+          "id": "list_fixture_99",
+          "web_id": 1099,
+          "name": "Fixture List 99",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture99"
+        },
+        {
+          "id": "list_fixture_100",
+          "web_id": 1100,
+          "name": "Fixture List 100",
+          "date_created": "2026-01-01T00:00:00+00:00",
+          "list_rating": 3,
+          "email_type_option": true,
+          "visibility": "pub",
+          "subscribe_url_short": "http://eepurl.com/fixture100"
+        }
+      ],
+      "total_items": 101
+    }
+  }
+}

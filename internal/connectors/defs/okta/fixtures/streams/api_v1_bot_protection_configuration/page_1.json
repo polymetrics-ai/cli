@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/bot-protection/configuration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "enforcementType": "OKTA_CHALLENGE",
+      "level": "ANY",
+      "mode": "DISABLED",
+      "supportedFlows": [
+        "SIGN_IN"
+      ],
+      "_links": {
+        "self": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

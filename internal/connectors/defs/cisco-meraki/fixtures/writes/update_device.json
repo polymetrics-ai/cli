@@ -1,0 +1,10 @@
+{
+  "record": {
+    "serial": "Q2XX-FIXTURE-0001",
+    "name": "Fixture Device Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/devices/Q2XX-FIXTURE-0001"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "caller_id": "+15555550100",
+    "business_phone_number": "+15555550200",
+    "customer_phone_number": "+15555550300"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/calls.json",
+    "body": {
+      "caller_id": "+15555550100",
+      "business_phone_number": "+15555550200",
+      "customer_phone_number": "+15555550300"
+    }
+  },
+  "response": { "status": 201, "body": { "id": "CAL_fixture_2", "direction": "outbound" } }
+}

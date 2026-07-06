@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mailboxes/synthetic-conformance-value/actions/linkEwsMasterAccount"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

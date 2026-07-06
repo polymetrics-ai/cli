@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ad_account_id": "adaccount_fixture_1",
+    "id": "camp_fixture_1",
+    "status": "PAUSED"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ad_accounts/adaccount_fixture_1/campaigns/camp_fixture_1",
+    "body": { "status": "PAUSED" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "camp_fixture_1", "status": "PAUSED" }
+  }
+}

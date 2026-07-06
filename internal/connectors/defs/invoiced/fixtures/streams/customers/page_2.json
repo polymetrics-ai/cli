@@ -1,0 +1,43 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page": "2",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1101,
+        "object": "customer",
+        "name": "Fixture Customer 101",
+        "number": "CUS-0101",
+        "email": "fixture101@example.com",
+        "type": "person",
+        "currency": "usd",
+        "balance": 10100,
+        "phone": "555-0100",
+        "country": "US",
+        "created_at": 1767225600,
+        "updated_at": 1767225701
+      },
+      {
+        "id": 1102,
+        "object": "customer",
+        "name": "Fixture Customer 102",
+        "number": "CUS-0102",
+        "email": "fixture102@example.com",
+        "type": "company",
+        "currency": "usd",
+        "balance": 10200,
+        "phone": "555-0100",
+        "country": "US",
+        "created_at": 1767225600,
+        "updated_at": 1767225702
+      }
+    ]
+  }
+}

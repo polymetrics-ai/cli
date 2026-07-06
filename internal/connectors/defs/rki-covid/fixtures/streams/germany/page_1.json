@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/germany",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "cases": 100,
+      "deaths": 1,
+      "recovered": 90,
+      "weekIncidence": 12.3,
+      "casesPer100k": 45.6,
+      "casesPerWeek": 10
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "installation_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value/installations/synthetic-conformance-value/tokens"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "create_integration_installation_token_fixture_1"
+    }
+  }
+}

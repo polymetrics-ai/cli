@@ -1,0 +1,5151 @@
+{
+  "api": "Okta Admin Management API 2026.06.3",
+  "docs": "https://github.com/okta/okta-management-openapi-spec/tree/master/dist/current",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from Okta's current management-minimal OpenAPI: 284 streams, 429 write actions, and 19 documented exclusions.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logs",
+      "covered_by": {
+        "stream": "system_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/app-authenticator-configuration",
+      "covered_by": {
+        "stream": "well_known_app_authenticator_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/apple-app-site-association",
+      "covered_by": {
+        "stream": "well_known_apple_app_site_association"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/assetlinks.json",
+      "covered_by": {
+        "stream": "well_known_assetlinks_json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/okta-organization",
+      "covered_by": {
+        "stream": "well_known_okta_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/ssf-configuration",
+      "covered_by": {
+        "stream": "well_known_ssf_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/.well-known/webauthn",
+      "covered_by": {
+        "stream": "well_known_webauthn"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agentPools",
+      "covered_by": {
+        "stream": "api_v1_agent_pools"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agentPools/{poolId}/updates",
+      "covered_by": {
+        "stream": "api_v1_agent_pools_pool_id_updates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates",
+      "covered_by": {
+        "write": "create_api_v1_agent_pools_pool_id_updates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agentPools/{poolId}/updates/settings",
+      "covered_by": {
+        "stream": "api_v1_agent_pools_pool_id_updates_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/settings",
+      "covered_by": {
+        "write": "create_api_v1_agent_pools_pool_id_updates_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+      "covered_by": {
+        "stream": "api_v1_agent_pools_pool_id_updates_update_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+      "covered_by": {
+        "write": "create_api_v1_agent_pools_pool_id_updates_update_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}",
+      "covered_by": {
+        "write": "delete_api_v1_agent_pools_pool_id_updates_update_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/activate",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/pause",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_pause"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/resume",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_resume"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/retry",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_retry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/agentPools/{poolId}/updates/{updateId}/stop",
+      "covered_by": {
+        "write": "execute_api_v1_agent_pools_pool_id_updates_update_id_stop"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/api-tokens",
+      "covered_by": {
+        "stream": "api_v1_api_tokens"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/api-tokens/current",
+      "covered_by": {
+        "write": "delete_api_v1_api_tokens_current"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/api-tokens/{apiTokenId}",
+      "covered_by": {
+        "stream": "api_v1_api_tokens_api_token_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/api-tokens/{apiTokenId}",
+      "covered_by": {
+        "write": "update_api_v1_api_tokens_api_token_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/api-tokens/{apiTokenId}",
+      "covered_by": {
+        "write": "delete_api_v1_api_tokens_api_token_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps",
+      "covered_by": {
+        "stream": "api_v1_apps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps",
+      "covered_by": {
+        "write": "create_api_v1_apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/apps/{appId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/connections/default",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_connections_default"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/connections/default",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_connections_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/connections/default/jwks",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_connections_default_jwks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/connections/default/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_connections_default_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/connections/default/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_connections_default_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/csrs",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_csrs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/csrs",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_credentials_csrs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/csrs/{csrId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_csrs_csr_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/credentials/csrs/{csrId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_credentials_csrs_csr_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/csrs/{csrId}/lifecycle/publish",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type application/x-x509-ca-cert, application/pkix-cert, application/x-pem-file is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/jwks",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_jwks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/jwks",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_credentials_jwks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/jwks/{keyId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_jwks_key_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/credentials/jwks/{keyId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_credentials_jwks_key_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/jwks/{keyId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_credentials_jwks_key_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/jwks/{keyId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_credentials_jwks_key_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/keys",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/keys/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) validityYears, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/keys/{keyId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_keys_key_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/keys/{keyId}/clone",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) targetAid, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/secrets",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_secrets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/secrets",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_credentials_secrets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/credentials/secrets/{secretId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_credentials_secrets_secret_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/credentials/secrets/{secretId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_credentials_secrets_secret_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/secrets/{secretId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_credentials_secrets_secret_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/credentials/secrets/{secretId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_credentials_secrets_secret_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/cwo/connections",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_cwo_connections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/cwo/connections",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_cwo_connections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_cwo_connections_connection_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_cwo_connections_connection_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/cwo/connections/{connectionId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_cwo_connections_connection_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/features",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/features/{featureName}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_features_feature_name"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/apps/{appId}/features/{featureName}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_features_feature_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/federated-claims",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_federated_claims"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/federated-claims",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_federated_claims"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_federated_claims_claim_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_federated_claims_claim_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/federated-claims/{claimId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_federated_claims_claim_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/grants",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_grants"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/grants",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_grants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/grants/{grantId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_grants_grant_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/grants/{grantId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_grants_grant_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/group-push/mappings",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_group_push_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/group-push/mappings",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_group_push_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_group_push_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_group_push_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) deleteTargetGroup, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/groups",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/groups/{groupId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_groups_group_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/apps/{appId}/groups/{groupId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_groups_group_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/apps/{appId}/groups/{groupId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/groups/{groupId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_groups_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/interclient-allowed-apps",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GET response is a top-level array of scalar values; the declarative extractor emits object records only."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/interclient-allowed-apps",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_interclient_allowed_apps"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/interclient-allowed-apps/{allowedAppId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_interclient_allowed_apps_allowed_app_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/interclient-target-apps",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GET response is a top-level array of scalar values; the declarative extractor emits object records only."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_apps_app_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/apps/{appId}/policies/{policyId}",
+      "covered_by": {
+        "write": "update_api_v1_apps_app_id_policies_policy_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/sso/saml/metadata",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GET response content type text/xml is not JSON and cannot be decoded by the declarative record extractor."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/tokens",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_tokens"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/tokens",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/tokens/{tokenId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/tokens/{tokenId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/users",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/users",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/apps/{appId}/users/{userId}",
+      "covered_by": {
+        "stream": "api_v1_apps_app_id_users_user_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appId}/users/{userId}",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_id_users_user_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/apps/{appId}/users/{userId}",
+      "covered_by": {
+        "write": "delete_api_v1_apps_app_id_users_user_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/apps/{appName}/{appId}/oauth2/callback",
+      "covered_by": {
+        "write": "create_api_v1_apps_app_name_app_id_oauth2_callback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators",
+      "covered_by": {
+        "stream": "api_v1_authenticators"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators",
+      "covered_by": {
+        "write": "create_api_v1_authenticators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators/{authenticatorId}",
+      "covered_by": {
+        "stream": "api_v1_authenticators_authenticator_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authenticators/{authenticatorId}",
+      "covered_by": {
+        "write": "update_api_v1_authenticators_authenticator_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids",
+      "covered_by": {
+        "stream": "api_v1_authenticators_authenticator_id_aaguids"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids",
+      "covered_by": {
+        "write": "create_api_v1_authenticators_authenticator_id_aaguids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+      "covered_by": {
+        "stream": "api_v1_authenticators_authenticator_id_aaguids_aaguid"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+      "covered_by": {
+        "write": "update_api_v1_authenticators_authenticator_id_aaguids_aaguid"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+      "covered_by": {
+        "write": "update_api_v1_authenticators_authenticator_id_aaguids_aaguid_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authenticators/{authenticatorId}/aaguids/{aaguid}",
+      "covered_by": {
+        "write": "delete_api_v1_authenticators_authenticator_id_aaguids_aaguid"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authenticators_authenticator_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authenticators_authenticator_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods",
+      "covered_by": {
+        "stream": "api_v1_authenticators_authenticator_id_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}",
+      "covered_by": {
+        "stream": "api_v1_authenticators_authenticator_id_methods_method_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}",
+      "covered_by": {
+        "write": "update_api_v1_authenticators_authenticator_id_methods_method_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authenticators_authenticator_id_methods_method_type_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods/{methodType}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authenticators_authenticator_id_methods_method_type_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authenticators/{authenticatorId}/methods/{webAuthnMethodType}/verify-rp-id-domain",
+      "covered_by": {
+        "write": "create_api_v1_authenticators_authenticator_id_methods_web_authn_method_type_verify_rp_id_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authorizationServers/{authServerId}",
+      "covered_by": {
+        "write": "update_api_v1_authorization_servers_auth_server_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/associatedServers",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_associated_servers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/associatedServers",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_associated_servers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/associatedServers/{associatedServerId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_associated_servers_associated_server_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/claims",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_claims"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/claims",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_claims"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/claims/{claimId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_claims_claim_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authorizationServers/{authServerId}/claims/{claimId}",
+      "covered_by": {
+        "write": "update_api_v1_authorization_servers_auth_server_id_claims_claim_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/claims/{claimId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_claims_claim_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/clients",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/clients/{clientId}/tokens",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/clients/{clientId}/tokens",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_clients_client_id_tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/clients/{clientId}/tokens/{tokenId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/clients/{clientId}/tokens/{tokenId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/credentials/keys",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_credentials_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/credentials/keys/{keyId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_credentials_keys_key_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/credentials/lifecycle/keyRotate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_credentials_lifecycle_key_rotate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_policies_policy_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}",
+      "covered_by": {
+        "write": "update_api_v1_authorization_servers_auth_server_id_policies_policy_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_policies_policy_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "write": "update_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules/{ruleId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys/{keyId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys/{keyId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys/{keyId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/resourceservercredentials/keys/{keyId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/scopes",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_scopes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/authorizationServers/{authServerId}/scopes",
+      "covered_by": {
+        "write": "create_api_v1_authorization_servers_auth_server_id_scopes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/authorizationServers/{authServerId}/scopes/{scopeId}",
+      "covered_by": {
+        "stream": "api_v1_authorization_servers_auth_server_id_scopes_scope_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/authorizationServers/{authServerId}/scopes/{scopeId}",
+      "covered_by": {
+        "write": "update_api_v1_authorization_servers_auth_server_id_scopes_scope_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/authorizationServers/{authServerId}/scopes/{scopeId}",
+      "covered_by": {
+        "write": "delete_api_v1_authorization_servers_auth_server_id_scopes_scope_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/behaviors",
+      "covered_by": {
+        "stream": "api_v1_behaviors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/behaviors",
+      "covered_by": {
+        "write": "create_api_v1_behaviors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/behaviors/{behaviorId}",
+      "covered_by": {
+        "stream": "api_v1_behaviors_behavior_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/behaviors/{behaviorId}",
+      "covered_by": {
+        "write": "update_api_v1_behaviors_behavior_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/behaviors/{behaviorId}",
+      "covered_by": {
+        "write": "delete_api_v1_behaviors_behavior_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/behaviors/{behaviorId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_behaviors_behavior_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/behaviors/{behaviorId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_behaviors_behavior_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/bot-protection/configuration",
+      "covered_by": {
+        "stream": "api_v1_bot_protection_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/bot-protection/configuration",
+      "covered_by": {
+        "write": "create_api_v1_bot_protection_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands",
+      "covered_by": {
+        "stream": "api_v1_brands"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands",
+      "covered_by": {
+        "write": "create_api_v1_brands"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/domains",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/error",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_error"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/error/customized",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_error_customized"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/pages/error/customized",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_pages_error_customized"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/pages/error/customized",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_pages_error_customized"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/error/default",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_error_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/error/preview",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_error_preview"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/pages/error/preview",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_pages_error_preview"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/pages/error/preview",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_pages_error_preview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_sign_in"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/customized",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_sign_in_customized"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/customized",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_pages_sign_in_customized"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/customized",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_pages_sign_in_customized"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/default",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_sign_in_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/preview",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_sign_in_preview"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/preview",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_pages_sign_in_preview"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/preview",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_pages_sign_in_preview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-in/widget-versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "GET response is a top-level array of scalar values; the declarative extractor emits object records only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/pages/sign-out/customized",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_pages_sign_out_customized"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/pages/sign-out/customized",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_pages_sign_out_customized"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_customizations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations",
+      "covered_by": {
+        "write": "create_api_v1_brands_brand_id_templates_email_template_name_customizations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_templates_email_template_name_customizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations/{customizationId}",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations/{customizationId}",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations/{customizationId}",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/customizations/{customizationId}/preview",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id_preview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/default-content",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_default_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/default-content/preview",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_default_content_preview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/settings",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_templates_email_template_name_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/settings",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_templates_email_template_name_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands/{brandId}/templates/email/{templateName}/test",
+      "covered_by": {
+        "write": "create_api_v1_brands_brand_id_templates_email_template_name_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/themes",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_themes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_themes_theme_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_themes_theme_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/background-image",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/background-image",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_themes_theme_id_background_image"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/favicon",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/favicon",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_themes_theme_id_favicon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/logo",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/brands/{brandId}/themes/{themeId}/logo",
+      "covered_by": {
+        "write": "delete_api_v1_brands_brand_id_themes_theme_id_logo"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/well-known-uris",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_well_known_uris"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/well-known-uris/{path}",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_well_known_uris_path"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/brands/{brandId}/well-known-uris/{path}/customized",
+      "covered_by": {
+        "stream": "api_v1_brands_brand_id_well_known_uris_path_customized"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/brands/{brandId}/well-known-uris/{path}/customized",
+      "covered_by": {
+        "write": "update_api_v1_brands_brand_id_well_known_uris_path_customized"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/captchas",
+      "covered_by": {
+        "stream": "api_v1_captchas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/captchas",
+      "covered_by": {
+        "write": "create_api_v1_captchas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/captchas/{captchaId}",
+      "covered_by": {
+        "stream": "api_v1_captchas_captcha_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/captchas/{captchaId}",
+      "covered_by": {
+        "write": "create_api_v1_captchas_captcha_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/captchas/{captchaId}",
+      "covered_by": {
+        "write": "update_api_v1_captchas_captcha_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/captchas/{captchaId}",
+      "covered_by": {
+        "write": "delete_api_v1_captchas_captcha_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-assurances",
+      "covered_by": {
+        "stream": "api_v1_device_assurances"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-assurances",
+      "covered_by": {
+        "write": "create_api_v1_device_assurances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-assurances/{deviceAssuranceId}",
+      "covered_by": {
+        "stream": "api_v1_device_assurances_device_assurance_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/device-assurances/{deviceAssuranceId}",
+      "covered_by": {
+        "write": "update_api_v1_device_assurances_device_assurance_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/device-assurances/{deviceAssuranceId}",
+      "covered_by": {
+        "write": "delete_api_v1_device_assurances_device_assurance_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-integrations",
+      "covered_by": {
+        "stream": "api_v1_device_integrations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-integrations/{deviceIntegrationId}",
+      "covered_by": {
+        "stream": "api_v1_device_integrations_device_integration_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-integrations/{deviceIntegrationId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_device_integrations_device_integration_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-integrations/{deviceIntegrationId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_device_integrations_device_integration_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-posture-checks",
+      "covered_by": {
+        "stream": "api_v1_device_posture_checks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/device-posture-checks",
+      "covered_by": {
+        "write": "create_api_v1_device_posture_checks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-posture-checks/default",
+      "covered_by": {
+        "stream": "api_v1_device_posture_checks_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/device-posture-checks/{postureCheckId}",
+      "covered_by": {
+        "stream": "api_v1_device_posture_checks_posture_check_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/device-posture-checks/{postureCheckId}",
+      "covered_by": {
+        "write": "update_api_v1_device_posture_checks_posture_check_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/device-posture-checks/{postureCheckId}",
+      "covered_by": {
+        "write": "delete_api_v1_device_posture_checks_posture_check_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices",
+      "covered_by": {
+        "stream": "api_v1_devices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices/{deviceId}",
+      "covered_by": {
+        "stream": "api_v1_devices_device_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/devices/{deviceId}",
+      "covered_by": {
+        "write": "delete_api_v1_devices_device_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/devices/{deviceId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_devices_device_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/devices/{deviceId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_devices_device_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/devices/{deviceId}/lifecycle/suspend",
+      "covered_by": {
+        "write": "execute_api_v1_devices_device_id_lifecycle_suspend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/devices/{deviceId}/lifecycle/unsuspend",
+      "covered_by": {
+        "write": "execute_api_v1_devices_device_id_lifecycle_unsuspend"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/devices/{deviceId}/users",
+      "covered_by": {
+        "stream": "api_v1_devices_device_id_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/directories/{appInstanceId}/groups/modify",
+      "covered_by": {
+        "write": "create_api_v1_directories_app_instance_id_groups_modify"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/directories/{appInstanceId}/groups/{groupId}/query",
+      "covered_by": {
+        "write": "create_api_v1_directories_app_instance_id_groups_group_id_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/directories/{appInstanceId}/groups/{groupId}/query/{resultId}",
+      "covered_by": {
+        "stream": "api_v1_directories_app_instance_id_groups_group_id_query_result_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/domains",
+      "covered_by": {
+        "stream": "api_v1_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/domains",
+      "covered_by": {
+        "write": "create_api_v1_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/domains/{domainId}",
+      "covered_by": {
+        "stream": "api_v1_domains_domain_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/domains/{domainId}",
+      "covered_by": {
+        "write": "update_api_v1_domains_domain_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/domains/{domainId}",
+      "covered_by": {
+        "write": "delete_api_v1_domains_domain_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/domains/{domainId}/certificate",
+      "covered_by": {
+        "write": "update_api_v1_domains_domain_id_certificate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/domains/{domainId}/verify",
+      "covered_by": {
+        "write": "create_api_v1_domains_domain_id_verify"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dr/failback",
+      "covered_by": {
+        "write": "create_api_v1_dr_failback"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dr/failover",
+      "covered_by": {
+        "write": "create_api_v1_dr_failover"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dr/status",
+      "covered_by": {
+        "stream": "api_v1_dr_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dr/status/{domain}",
+      "covered_by": {
+        "stream": "api_v1_dr_status_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/email-domains",
+      "covered_by": {
+        "stream": "api_v1_email_domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/email-domains",
+      "covered_by": {
+        "write": "create_api_v1_email_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/email-domains/{emailDomainId}",
+      "covered_by": {
+        "stream": "api_v1_email_domains_email_domain_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/email-domains/{emailDomainId}",
+      "covered_by": {
+        "write": "update_api_v1_email_domains_email_domain_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/email-domains/{emailDomainId}",
+      "covered_by": {
+        "write": "delete_api_v1_email_domains_email_domain_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/email-domains/{emailDomainId}/verify",
+      "covered_by": {
+        "write": "create_api_v1_email_domains_email_domain_id_verify"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/email-servers",
+      "covered_by": {
+        "stream": "api_v1_email_servers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/email-servers",
+      "covered_by": {
+        "write": "create_api_v1_email_servers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/email-servers/{emailServerId}",
+      "covered_by": {
+        "stream": "api_v1_email_servers_email_server_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/email-servers/{emailServerId}",
+      "covered_by": {
+        "write": "update_api_v1_email_servers_email_server_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/email-servers/{emailServerId}",
+      "covered_by": {
+        "write": "delete_api_v1_email_servers_email_server_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/email-servers/{emailServerId}/test",
+      "covered_by": {
+        "write": "create_api_v1_email_servers_email_server_id_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/eventHooks",
+      "covered_by": {
+        "stream": "api_v1_event_hooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/eventHooks",
+      "covered_by": {
+        "write": "create_api_v1_event_hooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/eventHooks/{eventHookId}",
+      "covered_by": {
+        "stream": "api_v1_event_hooks_event_hook_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/eventHooks/{eventHookId}",
+      "covered_by": {
+        "write": "update_api_v1_event_hooks_event_hook_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/eventHooks/{eventHookId}",
+      "covered_by": {
+        "write": "delete_api_v1_event_hooks_event_hook_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/eventHooks/{eventHookId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_event_hooks_event_hook_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/eventHooks/{eventHookId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_event_hooks_event_hook_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/eventHooks/{eventHookId}/lifecycle/verify",
+      "covered_by": {
+        "write": "execute_api_v1_event_hooks_event_hook_id_lifecycle_verify"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/features",
+      "covered_by": {
+        "stream": "api_v1_features"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/features/{featureId}",
+      "covered_by": {
+        "stream": "api_v1_features_feature_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/features/{featureId}/dependencies",
+      "covered_by": {
+        "stream": "api_v1_features_feature_id_dependencies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/features/{featureId}/dependents",
+      "covered_by": {
+        "stream": "api_v1_features_feature_id_dependents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/features/{featureId}/{lifecycle}",
+      "covered_by": {
+        "write": "create_api_v1_features_feature_id_lifecycle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/first-party-app-settings/{appName}",
+      "covered_by": {
+        "stream": "api_v1_first_party_app_settings_app_name"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/first-party-app-settings/{appName}",
+      "covered_by": {
+        "write": "update_api_v1_first_party_app_settings_app_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups",
+      "covered_by": {
+        "write": "create_api_v1_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/rules",
+      "covered_by": {
+        "stream": "api_v1_groups_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups/rules",
+      "covered_by": {
+        "write": "create_api_v1_groups_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/rules/{groupRuleId}",
+      "covered_by": {
+        "stream": "api_v1_groups_rules_group_rule_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/rules/{groupRuleId}",
+      "covered_by": {
+        "write": "update_api_v1_groups_rules_group_rule_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/rules/{groupRuleId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_rules_group_rule_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups/rules/{groupRuleId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_groups_rules_group_rule_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups/rules/{groupRuleId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_groups_rules_group_rule_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}",
+      "covered_by": {
+        "write": "update_api_v1_groups_group_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/apps",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/owners",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_owners"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/owners",
+      "covered_by": {
+        "write": "create_api_v1_groups_group_id_owners"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/owners/{ownerId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_owners_owner_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/roles",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/groups/{groupId}/roles",
+      "covered_by": {
+        "write": "create_api_v1_groups_group_id_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_roles_role_assignment_id_targets_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups/{targetGroupId}",
+      "covered_by": {
+        "write": "update_api_v1_groups_group_id_roles_role_assignment_id_targets_groups_target_group_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/roles/{roleAssignmentId}/targets/groups/{targetGroupId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_roles_role_assignment_id_targets_groups_target_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/groups/{groupId}/users",
+      "covered_by": {
+        "stream": "api_v1_groups_group_id_users"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/groups/{groupId}/users/{userId}",
+      "covered_by": {
+        "write": "update_api_v1_groups_group_id_users_user_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/groups/{groupId}/users/{userId}",
+      "covered_by": {
+        "write": "delete_api_v1_groups_group_id_users_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/hook-keys",
+      "covered_by": {
+        "stream": "api_v1_hook_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/hook-keys",
+      "covered_by": {
+        "write": "create_api_v1_hook_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/hook-keys/public/{keyId}",
+      "covered_by": {
+        "stream": "api_v1_hook_keys_public_key_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/hook-keys/{id}",
+      "covered_by": {
+        "stream": "api_v1_hook_keys_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/hook-keys/{id}",
+      "covered_by": {
+        "write": "update_api_v1_hook_keys_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/hook-keys/{id}",
+      "covered_by": {
+        "write": "delete_api_v1_hook_keys_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/assignees/users",
+      "covered_by": {
+        "stream": "api_v1_iam_assignees_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/governance/bundles",
+      "covered_by": {
+        "stream": "api_v1_iam_governance_bundles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/governance/bundles",
+      "covered_by": {
+        "write": "create_api_v1_iam_governance_bundles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/governance/bundles/{bundleId}",
+      "covered_by": {
+        "stream": "api_v1_iam_governance_bundles_bundle_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/iam/governance/bundles/{bundleId}",
+      "covered_by": {
+        "write": "update_api_v1_iam_governance_bundles_bundle_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/governance/bundles/{bundleId}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_governance_bundles_bundle_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/governance/bundles/{bundleId}/entitlements",
+      "covered_by": {
+        "stream": "api_v1_iam_governance_bundles_bundle_id_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/governance/bundles/{bundleId}/entitlements/{entitlementId}/values",
+      "covered_by": {
+        "stream": "api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/governance/optIn",
+      "covered_by": {
+        "stream": "api_v1_iam_governance_opt_in"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/governance/optIn",
+      "covered_by": {
+        "write": "create_api_v1_iam_governance_opt_in"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/governance/optOut",
+      "covered_by": {
+        "write": "create_api_v1_iam_governance_opt_out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/resource-sets",
+      "covered_by": {
+        "write": "create_api_v1_iam_resource_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+      "covered_by": {
+        "write": "update_api_v1_iam_resource_sets_resource_set_id_or_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_resource_sets_resource_set_id_or_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings",
+      "covered_by": {
+        "write": "create_api_v1_iam_resource_sets_resource_set_id_or_label_bindings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members",
+      "covered_by": {
+        "write": "update_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members/{memberId}",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/bindings/{roleIdOrLabel}/members/{memberId}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_resources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+      "covered_by": {
+        "write": "create_api_v1_iam_resource_sets_resource_set_id_or_label_resources"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources",
+      "covered_by": {
+        "write": "update_api_v1_iam_resource_sets_resource_set_id_or_label_resources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+      "covered_by": {
+        "stream": "api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+      "covered_by": {
+        "write": "update_api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/resource-sets/{resourceSetIdOrLabel}/resources/{resourceId}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/roles",
+      "covered_by": {
+        "stream": "api_v1_iam_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/roles",
+      "covered_by": {
+        "write": "create_api_v1_iam_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}",
+      "covered_by": {
+        "stream": "api_v1_iam_roles_role_id_or_label"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}",
+      "covered_by": {
+        "write": "update_api_v1_iam_roles_role_id_or_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_roles_role_id_or_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}/permissions",
+      "covered_by": {
+        "stream": "api_v1_iam_roles_role_id_or_label_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+      "covered_by": {
+        "stream": "api_v1_iam_roles_role_id_or_label_permissions_permission_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+      "covered_by": {
+        "write": "create_api_v1_iam_roles_role_id_or_label_permissions_permission_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+      "covered_by": {
+        "write": "update_api_v1_iam_roles_role_id_or_label_permissions_permission_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/iam/roles/{roleIdOrLabel}/permissions/{permissionType}",
+      "covered_by": {
+        "write": "delete_api_v1_iam_roles_role_id_or_label_permissions_permission_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}",
+      "covered_by": {
+        "stream": "api_v1_identity_sources_identity_source_id_groups_group_or_external_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_groups_group_or_external_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}",
+      "covered_by": {
+        "write": "delete_api_v1_identity_sources_identity_source_id_groups_group_or_external_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}/membership",
+      "covered_by": {
+        "stream": "api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}/membership",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/identity-sources/{identitySourceId}/groups/{groupOrExternalId}/membership/{memberExternalId}",
+      "covered_by": {
+        "write": "delete_api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership_member_external_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions",
+      "covered_by": {
+        "stream": "api_v1_identity_sources_identity_source_id_sessions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}",
+      "covered_by": {
+        "stream": "api_v1_identity_sources_identity_source_id_sessions_session_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}",
+      "covered_by": {
+        "write": "delete_api_v1_identity_sources_identity_source_id_sessions_session_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-delete",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-group-memberships-delete",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_group_memberships_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-group-memberships-upsert",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_group_memberships_upsert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-groups-delete",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_groups_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-groups-upsert",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_groups_upsert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/bulk-upsert",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_bulk_upsert"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/sessions/{sessionId}/start-import",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_sessions_session_id_start_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/identity-sources/{identitySourceId}/users",
+      "covered_by": {
+        "write": "create_api_v1_identity_sources_identity_source_id_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/identity-sources/{identitySourceId}/users/{externalId}",
+      "covered_by": {
+        "stream": "api_v1_identity_sources_identity_source_id_users_external_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/identity-sources/{identitySourceId}/users/{externalId}",
+      "covered_by": {
+        "write": "update_api_v1_identity_sources_identity_source_id_users_external_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/identity-sources/{identitySourceId}/users/{externalId}",
+      "covered_by": {
+        "write": "update_api_v1_identity_sources_identity_source_id_users_external_id_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/identity-sources/{identitySourceId}/users/{externalId}",
+      "covered_by": {
+        "write": "delete_api_v1_identity_sources_identity_source_id_users_external_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps",
+      "covered_by": {
+        "stream": "api_v1_idps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps",
+      "covered_by": {
+        "write": "create_api_v1_idps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/credentials/keys",
+      "covered_by": {
+        "stream": "api_v1_idps_credentials_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/credentials/keys",
+      "covered_by": {
+        "write": "create_api_v1_idps_credentials_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/credentials/keys/{kid}",
+      "covered_by": {
+        "stream": "api_v1_idps_credentials_keys_kid"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/idps/credentials/keys/{kid}",
+      "covered_by": {
+        "write": "update_api_v1_idps_credentials_keys_kid"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/idps/credentials/keys/{kid}",
+      "covered_by": {
+        "write": "delete_api_v1_idps_credentials_keys_kid"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/idps/{idpId}",
+      "covered_by": {
+        "write": "update_api_v1_idps_idp_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/idps/{idpId}",
+      "covered_by": {
+        "write": "delete_api_v1_idps_idp_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/credentials/csrs",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_credentials_csrs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/credentials/csrs",
+      "covered_by": {
+        "write": "create_api_v1_idps_idp_id_credentials_csrs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/credentials/csrs/{idpCsrId}",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_credentials_csrs_idp_csr_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/idps/{idpId}/credentials/csrs/{idpCsrId}",
+      "covered_by": {
+        "write": "delete_api_v1_idps_idp_id_credentials_csrs_idp_csr_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/credentials/csrs/{idpCsrId}/lifecycle/publish",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type application/pkix-cert, application/x-x509-ca-cert, application/x-pem-file is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/credentials/keys",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_credentials_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/credentials/keys/active",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_credentials_keys_active"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/credentials/keys/generate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) validityYears, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/credentials/keys/{kid}",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_credentials_keys_kid"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/credentials/keys/{kid}/clone",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) targetIdpId, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_idps_idp_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_idps_idp_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/users",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/users/{userId}",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_users_user_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/idps/{idpId}/users/{userId}",
+      "covered_by": {
+        "write": "create_api_v1_idps_idp_id_users_user_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/idps/{idpId}/users/{userId}",
+      "covered_by": {
+        "write": "delete_api_v1_idps_idp_id_users_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/idps/{idpId}/users/{userId}/credentials/tokens",
+      "covered_by": {
+        "stream": "api_v1_idps_idp_id_users_user_id_credentials_tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/inlineHooks",
+      "covered_by": {
+        "stream": "api_v1_inline_hooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inlineHooks",
+      "covered_by": {
+        "write": "create_api_v1_inline_hooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/inlineHooks/{inlineHookId}",
+      "covered_by": {
+        "stream": "api_v1_inline_hooks_inline_hook_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inlineHooks/{inlineHookId}",
+      "covered_by": {
+        "write": "create_api_v1_inline_hooks_inline_hook_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/inlineHooks/{inlineHookId}",
+      "covered_by": {
+        "write": "update_api_v1_inline_hooks_inline_hook_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/inlineHooks/{inlineHookId}",
+      "covered_by": {
+        "write": "delete_api_v1_inline_hooks_inline_hook_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inlineHooks/{inlineHookId}/execute",
+      "covered_by": {
+        "write": "create_api_v1_inline_hooks_inline_hook_id_execute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inlineHooks/{inlineHookId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_inline_hooks_inline_hook_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/inlineHooks/{inlineHookId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_inline_hooks_inline_hook_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logStreams",
+      "covered_by": {
+        "stream": "api_v1_log_streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logStreams",
+      "covered_by": {
+        "write": "create_api_v1_log_streams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/logStreams/{logStreamId}",
+      "covered_by": {
+        "stream": "api_v1_log_streams_log_stream_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/logStreams/{logStreamId}",
+      "covered_by": {
+        "write": "update_api_v1_log_streams_log_stream_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/logStreams/{logStreamId}",
+      "covered_by": {
+        "write": "delete_api_v1_log_streams_log_stream_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logStreams/{logStreamId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_log_streams_log_stream_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/logStreams/{logStreamId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_log_streams_log_stream_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mappings",
+      "covered_by": {
+        "stream": "api_v1_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mappings/{mappingId}",
+      "covered_by": {
+        "stream": "api_v1_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mappings/{mappingId}",
+      "covered_by": {
+        "write": "create_api_v1_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/apps/{appId}/default",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_apps_app_id_default"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/schemas/apps/{appId}/default",
+      "covered_by": {
+        "write": "create_api_v1_meta_schemas_apps_app_id_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/group/default",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_group_default"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/schemas/group/default",
+      "covered_by": {
+        "write": "create_api_v1_meta_schemas_group_default"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/logStream",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_log_stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/logStream/{logStreamType}",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_log_stream_log_stream_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/user/linkedObjects",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_user_linked_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/schemas/user/linkedObjects",
+      "covered_by": {
+        "write": "create_api_v1_meta_schemas_user_linked_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/user/linkedObjects/{linkedObjectName}",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_user_linked_objects_linked_object_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/meta/schemas/user/linkedObjects/{linkedObjectName}",
+      "covered_by": {
+        "write": "delete_api_v1_meta_schemas_user_linked_objects_linked_object_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/schemas/user/{schemaId}",
+      "covered_by": {
+        "stream": "api_v1_meta_schemas_user_schema_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/schemas/user/{schemaId}",
+      "covered_by": {
+        "write": "create_api_v1_meta_schemas_user_schema_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/types/user",
+      "covered_by": {
+        "stream": "api_v1_meta_types_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/types/user",
+      "covered_by": {
+        "write": "create_api_v1_meta_types_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/types/user/{typeId}",
+      "covered_by": {
+        "stream": "api_v1_meta_types_user_type_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/types/user/{typeId}",
+      "covered_by": {
+        "write": "create_api_v1_meta_types_user_type_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/meta/types/user/{typeId}",
+      "covered_by": {
+        "write": "update_api_v1_meta_types_user_type_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/meta/types/user/{typeId}",
+      "covered_by": {
+        "write": "delete_api_v1_meta_types_user_type_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/uischemas",
+      "covered_by": {
+        "stream": "api_v1_meta_uischemas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/meta/uischemas",
+      "covered_by": {
+        "write": "create_api_v1_meta_uischemas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/uischemas/{id}",
+      "covered_by": {
+        "stream": "api_v1_meta_uischemas_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/meta/uischemas/{id}",
+      "covered_by": {
+        "write": "update_api_v1_meta_uischemas_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/meta/uischemas/{id}",
+      "covered_by": {
+        "write": "delete_api_v1_meta_uischemas_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org",
+      "covered_by": {
+        "stream": "api_v1_org"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org",
+      "covered_by": {
+        "write": "create_api_v1_org"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/org",
+      "covered_by": {
+        "write": "update_api_v1_org"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/captcha",
+      "covered_by": {
+        "stream": "api_v1_org_captcha"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/org/captcha",
+      "covered_by": {
+        "write": "update_api_v1_org_captcha"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/org/captcha",
+      "covered_by": {
+        "write": "delete_api_v1_org_captcha"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/contacts",
+      "covered_by": {
+        "stream": "api_v1_org_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/contacts/{contactType}",
+      "covered_by": {
+        "stream": "api_v1_org_contacts_contact_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/org/contacts/{contactType}",
+      "covered_by": {
+        "write": "update_api_v1_org_contacts_contact_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/email/bounces/remove-list",
+      "covered_by": {
+        "write": "create_api_v1_org_email_bounces_remove_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/factors/yubikey_token/tokens",
+      "covered_by": {
+        "stream": "api_v1_org_factors_yubikey_token_tokens"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/factors/yubikey_token/tokens",
+      "covered_by": {
+        "write": "create_api_v1_org_factors_yubikey_token_tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/factors/yubikey_token/tokens/{tokenId}",
+      "covered_by": {
+        "stream": "api_v1_org_factors_yubikey_token_tokens_token_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/orgSettings/thirdPartyAdminSetting",
+      "covered_by": {
+        "stream": "api_v1_org_org_settings_third_party_admin_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/orgSettings/thirdPartyAdminSetting",
+      "covered_by": {
+        "write": "create_api_v1_org_org_settings_third_party_admin_setting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/preferences",
+      "covered_by": {
+        "stream": "api_v1_org_preferences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/preferences/hideEndUserFooter",
+      "covered_by": {
+        "write": "create_api_v1_org_preferences_hide_end_user_footer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/preferences/showEndUserFooter",
+      "covered_by": {
+        "write": "create_api_v1_org_preferences_show_end_user_footer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/privacy/aerial",
+      "covered_by": {
+        "stream": "api_v1_org_privacy_aerial"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/aerial/grant",
+      "covered_by": {
+        "write": "create_api_v1_org_privacy_aerial_grant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/aerial/revoke",
+      "covered_by": {
+        "write": "execute_api_v1_org_privacy_aerial_revoke"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/privacy/oktaCommunication",
+      "covered_by": {
+        "stream": "api_v1_org_privacy_okta_communication"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/oktaCommunication/optIn",
+      "covered_by": {
+        "write": "create_api_v1_org_privacy_okta_communication_opt_in"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/oktaCommunication/optOut",
+      "covered_by": {
+        "write": "create_api_v1_org_privacy_okta_communication_opt_out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/privacy/oktaSupport",
+      "covered_by": {
+        "stream": "api_v1_org_privacy_okta_support"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/privacy/oktaSupport/cases",
+      "covered_by": {
+        "stream": "api_v1_org_privacy_okta_support_cases"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/org/privacy/oktaSupport/cases/{caseNumber}",
+      "covered_by": {
+        "write": "update_api_v1_org_privacy_okta_support_cases_case_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/oktaSupport/extend",
+      "covered_by": {
+        "write": "create_api_v1_org_privacy_okta_support_extend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/oktaSupport/grant",
+      "covered_by": {
+        "write": "create_api_v1_org_privacy_okta_support_grant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/privacy/oktaSupport/revoke",
+      "covered_by": {
+        "write": "execute_api_v1_org_privacy_okta_support_revoke"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/settings/autoAssignAdminAppSetting",
+      "covered_by": {
+        "stream": "api_v1_org_settings_auto_assign_admin_app_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/org/settings/autoAssignAdminAppSetting",
+      "covered_by": {
+        "write": "create_api_v1_org_settings_auto_assign_admin_app_setting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/org/settings/clientPrivilegesSetting",
+      "covered_by": {
+        "stream": "api_v1_org_settings_client_privileges_setting"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/org/settings/clientPrivilegesSetting",
+      "covered_by": {
+        "write": "update_api_v1_org_settings_client_privileges_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orgs",
+      "covered_by": {
+        "write": "create_api_v1_orgs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies",
+      "covered_by": {
+        "stream": "api_v1_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies",
+      "covered_by": {
+        "write": "create_api_v1_policies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/simulate",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/policies/{policyId}",
+      "covered_by": {
+        "write": "update_api_v1_policies_policy_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/policies/{policyId}",
+      "covered_by": {
+        "write": "delete_api_v1_policies_policy_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}/app",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id_app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/clone",
+      "covered_by": {
+        "write": "create_api_v1_policies_policy_id_clone"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_policies_policy_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_policies_policy_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}/mappings",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/mappings",
+      "covered_by": {
+        "write": "create_api_v1_policies_policy_id_mappings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}/mappings/{mappingId}",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/policies/{policyId}/mappings/{mappingId}",
+      "covered_by": {
+        "write": "delete_api_v1_policies_policy_id_mappings_mapping_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}/rules",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/rules",
+      "covered_by": {
+        "write": "create_api_v1_policies_policy_id_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "stream": "api_v1_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "write": "update_api_v1_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/policies/{policyId}/rules/{ruleId}",
+      "covered_by": {
+        "write": "delete_api_v1_policies_policy_id_rules_rule_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_policies_policy_id_rules_rule_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/policies/{policyId}/rules/{ruleId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_policies_policy_id_rules_rule_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/principal-rate-limits",
+      "covered_by": {
+        "stream": "api_v1_principal_rate_limits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/principal-rate-limits",
+      "covered_by": {
+        "write": "create_api_v1_principal_rate_limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/principal-rate-limits/{principalRateLimitId}",
+      "covered_by": {
+        "stream": "api_v1_principal_rate_limits_principal_rate_limit_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/principal-rate-limits/{principalRateLimitId}",
+      "covered_by": {
+        "write": "update_api_v1_principal_rate_limits_principal_rate_limit_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/push-providers",
+      "covered_by": {
+        "stream": "api_v1_push_providers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/push-providers",
+      "covered_by": {
+        "write": "create_api_v1_push_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/push-providers/{pushProviderId}",
+      "covered_by": {
+        "stream": "api_v1_push_providers_push_provider_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/push-providers/{pushProviderId}",
+      "covered_by": {
+        "write": "update_api_v1_push_providers_push_provider_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/push-providers/{pushProviderId}",
+      "covered_by": {
+        "write": "delete_api_v1_push_providers_push_provider_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rate-limit-settings/admin-notifications",
+      "covered_by": {
+        "stream": "api_v1_rate_limit_settings_admin_notifications"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/rate-limit-settings/admin-notifications",
+      "covered_by": {
+        "write": "update_api_v1_rate_limit_settings_admin_notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rate-limit-settings/per-client",
+      "covered_by": {
+        "stream": "api_v1_rate_limit_settings_per_client"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/rate-limit-settings/per-client",
+      "covered_by": {
+        "write": "update_api_v1_rate_limit_settings_per_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/rate-limit-settings/warning-threshold",
+      "covered_by": {
+        "stream": "api_v1_rate_limit_settings_warning_threshold"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/rate-limit-settings/warning-threshold",
+      "covered_by": {
+        "write": "update_api_v1_rate_limit_settings_warning_threshold"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/realm-assignments",
+      "covered_by": {
+        "stream": "api_v1_realm_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/realm-assignments",
+      "covered_by": {
+        "write": "create_api_v1_realm_assignments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/realm-assignments/operations",
+      "covered_by": {
+        "stream": "api_v1_realm_assignments_operations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/realm-assignments/operations",
+      "covered_by": {
+        "write": "create_api_v1_realm_assignments_operations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/realm-assignments/{assignmentId}",
+      "covered_by": {
+        "stream": "api_v1_realm_assignments_assignment_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/realm-assignments/{assignmentId}",
+      "covered_by": {
+        "write": "update_api_v1_realm_assignments_assignment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/realm-assignments/{assignmentId}",
+      "covered_by": {
+        "write": "delete_api_v1_realm_assignments_assignment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/realm-assignments/{assignmentId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_realm_assignments_assignment_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/realm-assignments/{assignmentId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_realm_assignments_assignment_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/realms",
+      "covered_by": {
+        "stream": "api_v1_realms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/realms",
+      "covered_by": {
+        "write": "create_api_v1_realms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/realms/{realmId}",
+      "covered_by": {
+        "stream": "api_v1_realms_realm_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/realms/{realmId}",
+      "covered_by": {
+        "write": "update_api_v1_realms_realm_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/realms/{realmId}",
+      "covered_by": {
+        "write": "delete_api_v1_realms_realm_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/roles/{roleRef}/subscriptions",
+      "covered_by": {
+        "stream": "api_v1_roles_role_ref_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}",
+      "covered_by": {
+        "stream": "api_v1_roles_role_ref_subscriptions_notification_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}/subscribe",
+      "covered_by": {
+        "write": "create_api_v1_roles_role_ref_subscriptions_notification_type_subscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/roles/{roleRef}/subscriptions/{notificationType}/unsubscribe",
+      "covered_by": {
+        "write": "create_api_v1_roles_role_ref_subscriptions_notification_type_unsubscribe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/security-events-providers",
+      "covered_by": {
+        "stream": "api_v1_security_events_providers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/security-events-providers",
+      "covered_by": {
+        "write": "create_api_v1_security_events_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/security-events-providers/{securityEventProviderId}",
+      "covered_by": {
+        "stream": "api_v1_security_events_providers_security_event_provider_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/security-events-providers/{securityEventProviderId}",
+      "covered_by": {
+        "write": "update_api_v1_security_events_providers_security_event_provider_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/security-events-providers/{securityEventProviderId}",
+      "covered_by": {
+        "write": "delete_api_v1_security_events_providers_security_event_provider_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/security-events-providers/{securityEventProviderId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_security_events_providers_security_event_provider_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/security-events-providers/{securityEventProviderId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_security_events_providers_security_event_provider_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions/{sessionId}",
+      "covered_by": {
+        "stream": "api_v1_sessions_session_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/sessions/{sessionId}",
+      "covered_by": {
+        "write": "delete_api_v1_sessions_session_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/sessions/{sessionId}/lifecycle/refresh",
+      "covered_by": {
+        "write": "execute_api_v1_sessions_session_id_lifecycle_refresh"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ssf/stream",
+      "covered_by": {
+        "stream": "api_v1_ssf_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ssf/stream",
+      "covered_by": {
+        "write": "create_api_v1_ssf_stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/ssf/stream",
+      "covered_by": {
+        "write": "update_api_v1_ssf_stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/ssf/stream",
+      "covered_by": {
+        "write": "update_api_v1_ssf_stream_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/ssf/stream",
+      "covered_by": {
+        "write": "delete_api_v1_ssf_stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ssf/stream/status",
+      "covered_by": {
+        "stream": "api_v1_ssf_stream_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ssf/stream/verification",
+      "covered_by": {
+        "write": "create_api_v1_ssf_stream_verification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/telephony-providers",
+      "covered_by": {
+        "stream": "api_v1_telephony_providers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/telephony-providers",
+      "covered_by": {
+        "write": "create_api_v1_telephony_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}",
+      "covered_by": {
+        "stream": "api_v1_telephony_providers_custom_telephony_provider_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}",
+      "covered_by": {
+        "write": "update_api_v1_telephony_providers_custom_telephony_provider_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}",
+      "covered_by": {
+        "write": "delete_api_v1_telephony_providers_custom_telephony_provider_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_telephony_providers_custom_telephony_provider_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_telephony_providers_custom_telephony_provider_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}/setAsPrimary",
+      "covered_by": {
+        "write": "create_api_v1_telephony_providers_custom_telephony_provider_id_set_as_primary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/telephony-providers/{customTelephonyProviderId}/test",
+      "covered_by": {
+        "write": "create_api_v1_telephony_providers_custom_telephony_provider_id_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/templates/sms",
+      "covered_by": {
+        "stream": "api_v1_templates_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/templates/sms",
+      "covered_by": {
+        "write": "create_api_v1_templates_sms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/templates/sms/{templateId}",
+      "covered_by": {
+        "stream": "api_v1_templates_sms_template_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/templates/sms/{templateId}",
+      "covered_by": {
+        "write": "create_api_v1_templates_sms_template_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/templates/sms/{templateId}",
+      "covered_by": {
+        "write": "update_api_v1_templates_sms_template_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/templates/sms/{templateId}",
+      "covered_by": {
+        "write": "delete_api_v1_templates_sms_template_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/threats/configuration",
+      "covered_by": {
+        "stream": "api_v1_threats_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/threats/configuration",
+      "covered_by": {
+        "write": "create_api_v1_threats_configuration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/trustedOrigins",
+      "covered_by": {
+        "stream": "api_v1_trusted_origins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/trustedOrigins",
+      "covered_by": {
+        "write": "create_api_v1_trusted_origins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/trustedOrigins/{trustedOriginId}",
+      "covered_by": {
+        "stream": "api_v1_trusted_origins_trusted_origin_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/trustedOrigins/{trustedOriginId}",
+      "covered_by": {
+        "write": "update_api_v1_trusted_origins_trusted_origin_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/trustedOrigins/{trustedOriginId}",
+      "covered_by": {
+        "write": "delete_api_v1_trusted_origins_trusted_origin_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/trustedOrigins/{trustedOriginId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_trusted_origins_trusted_origin_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/trustedOrigins/{trustedOriginId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_trusted_origins_trusted_origin_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users",
+      "covered_by": {
+        "write": "create_api_v1_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}",
+      "covered_by": {
+        "stream": "api_v1_users_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}",
+      "covered_by": {
+        "write": "create_api_v1_users_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{id}",
+      "covered_by": {
+        "write": "update_api_v1_users_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{id}",
+      "covered_by": {
+        "write": "delete_api_v1_users_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}/appLinks",
+      "covered_by": {
+        "stream": "api_v1_users_id_app_links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}/blocks",
+      "covered_by": {
+        "stream": "api_v1_users_id_blocks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}/groups",
+      "covered_by": {
+        "stream": "api_v1_users_id_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{id}/idps",
+      "covered_by": {
+        "stream": "api_v1_users_id_idps"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/expire_password",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_expire_password"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/expire_password_with_temp_password",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_expire_password_with_temp_password"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/reactivate",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_reactivate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/reset_factors",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_reset_factors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/reset_password",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) sendEmail, but declarative writes model path and body fields only."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/suspend",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_suspend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/unlock",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_unlock"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{id}/lifecycle/unsuspend",
+      "covered_by": {
+        "write": "execute_api_v1_users_id_lifecycle_unsuspend"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userIdOrLogin}/linkedObjects/{primaryRelationshipName}/{primaryUserId}",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_or_login_linked_objects_primary_relationship_name_primary_user_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userIdOrLogin}/linkedObjects/{relationshipName}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_or_login_linked_objects_relationship_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userIdOrLogin}/linkedObjects/{relationshipName}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_or_login_linked_objects_relationship_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/authenticator-enrollments",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_authenticator_enrollments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/authenticator-enrollments/phone",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_authenticator_enrollments_phone"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/authenticator-enrollments/tac",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_authenticator_enrollments_tac"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/authenticator-enrollments/{enrollmentId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_authenticator_enrollments_enrollment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/authenticator-enrollments/{enrollmentId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_authenticator_enrollments_enrollment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/classification",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_classification"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/classification",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_classification"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/clients",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_clients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/grants",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_clients_client_id_grants"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/grants",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_clients_client_id_grants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/tokens",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_clients_client_id_tokens"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/tokens",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_clients_client_id_tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/tokens/{tokenId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_clients_client_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/clients/{clientId}/tokens/{tokenId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_clients_client_id_tokens_token_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/credentials/change_password",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_credentials_change_password"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/credentials/change_recovery_question",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_credentials_change_recovery_question"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/credentials/forgot_password",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_credentials_forgot_password"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/credentials/forgot_password_recovery_question",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_credentials_forgot_password_recovery_question"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/devices",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_devices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/factors",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_factors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/factors",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_factors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/factors/catalog",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_factors_catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/factors/questions",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_factors_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/factors/{factorId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_factors_factor_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/factors/{factorId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_factors_factor_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/factors/{factorId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_users_user_id_factors_factor_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/factors/{factorId}/resend",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_factors_factor_id_resend"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/factors/{factorId}/transactions/{transactionId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_factors_factor_id_transactions_transaction_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/factors/{factorId}/verify",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_factors_factor_id_verify"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/grants",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_grants"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/grants",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_grants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/grants/{grantId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_grants_grant_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/grants/{grantId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_grants_grant_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/risk",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_risk"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/risk",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_risk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/roles",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id_governance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance/{grantId}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/governance/{grantId}/resources",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id_resources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_assignment_id_targets_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+      "covered_by": {
+        "write": "update_api_v1_users_user_id_roles_role_assignment_id_targets_groups_group_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_roles_role_assignment_id_targets_groups_group_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/roles/{roleIdOrEncodedRoleId}/targets",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/users/{userId}/sessions",
+      "covered_by": {
+        "write": "delete_api_v1_users_user_id_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/subscriptions",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/{userId}/subscriptions/{notificationType}",
+      "covered_by": {
+        "stream": "api_v1_users_user_id_subscriptions_notification_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/subscriptions/{notificationType}/subscribe",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_subscriptions_notification_type_subscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/users/{userId}/subscriptions/{notificationType}/unsubscribe",
+      "covered_by": {
+        "write": "create_api_v1_users_user_id_subscriptions_notification_type_unsubscribe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/zones",
+      "covered_by": {
+        "stream": "api_v1_zones"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/zones",
+      "covered_by": {
+        "write": "create_api_v1_zones"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/zones/{zoneId}",
+      "covered_by": {
+        "stream": "api_v1_zones_zone_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/zones/{zoneId}",
+      "covered_by": {
+        "write": "update_api_v1_zones_zone_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/zones/{zoneId}",
+      "covered_by": {
+        "write": "delete_api_v1_zones_zone_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/zones/{zoneId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_api_v1_zones_zone_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/zones/{zoneId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_api_v1_zones_zone_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attack-protection/api/v1/authenticator-settings",
+      "covered_by": {
+        "stream": "attack_protection_api_v1_authenticator_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/attack-protection/api/v1/authenticator-settings",
+      "covered_by": {
+        "write": "update_attack_protection_api_v1_authenticator_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attack-protection/api/v1/user-lockout-settings",
+      "covered_by": {
+        "stream": "attack_protection_api_v1_user_lockout_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/attack-protection/api/v1/user-lockout-settings",
+      "covered_by": {
+        "write": "update_attack_protection_api_v1_user_lockout_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/api/v1/api-services",
+      "covered_by": {
+        "stream": "integrations_api_v1_api_services"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/api/v1/api-services",
+      "covered_by": {
+        "write": "create_integrations_api_v1_api_services"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}",
+      "covered_by": {
+        "stream": "integrations_api_v1_api_services_api_service_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}",
+      "covered_by": {
+        "write": "delete_integrations_api_v1_api_services_api_service_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}/credentials/secrets",
+      "covered_by": {
+        "stream": "integrations_api_v1_api_services_api_service_id_credentials_secrets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}/credentials/secrets",
+      "covered_by": {
+        "write": "create_integrations_api_v1_api_services_api_service_id_credentials_secrets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}/credentials/secrets/{secretId}",
+      "covered_by": {
+        "write": "delete_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}/credentials/secrets/{secretId}/lifecycle/activate",
+      "covered_by": {
+        "write": "execute_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id_lifecycle_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/api/v1/api-services/{apiServiceId}/credentials/secrets/{secretId}/lifecycle/deactivate",
+      "covered_by": {
+        "write": "execute_integrations_api_v1_api_services_api_service_id_credentials_secrets_secret_id_lifecycle_deactivate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth2/v1/clients/{clientId}/roles",
+      "covered_by": {
+        "stream": "oauth2_v1_clients_client_id_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/v1/clients/{clientId}/roles",
+      "covered_by": {
+        "write": "create_oauth2_v1_clients_client_id_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "stream": "oauth2_v1_clients_client_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}",
+      "covered_by": {
+        "write": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps",
+      "covered_by": {
+        "stream": "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}",
+      "covered_by": {
+        "write": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}",
+      "covered_by": {
+        "write": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps_app_name_app_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups",
+      "covered_by": {
+        "stream": "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+      "covered_by": {
+        "write": "update_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups_group_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups/{groupId}",
+      "covered_by": {
+        "write": "delete_oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups_group_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/okta-personal-settings/api/v1/edit-feature",
+      "covered_by": {
+        "write": "update_okta_personal_settings_api_v1_edit_feature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/okta-personal-settings/api/v1/export-blocklists",
+      "covered_by": {
+        "stream": "okta_personal_settings_api_v1_export_blocklists"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/okta-personal-settings/api/v1/export-blocklists",
+      "covered_by": {
+        "write": "update_okta_personal_settings_api_v1_export_blocklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/privileged-access/api/v1/okta-service-accounts",
+      "covered_by": {
+        "stream": "privileged_access_api_v1_okta_service_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/privileged-access/api/v1/okta-service-accounts",
+      "covered_by": {
+        "write": "create_privileged_access_api_v1_okta_service_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/privileged-access/api/v1/okta-service-accounts/{id}",
+      "covered_by": {
+        "stream": "privileged_access_api_v1_okta_service_accounts_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/privileged-access/api/v1/okta-service-accounts/{id}",
+      "covered_by": {
+        "write": "update_privileged_access_api_v1_okta_service_accounts_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/privileged-access/api/v1/okta-service-accounts/{id}",
+      "covered_by": {
+        "write": "delete_privileged_access_api_v1_okta_service_accounts_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/privileged-access/api/v1/service-accounts",
+      "covered_by": {
+        "stream": "privileged_access_api_v1_service_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/privileged-access/api/v1/service-accounts",
+      "covered_by": {
+        "write": "create_privileged_access_api_v1_service_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/privileged-access/api/v1/service-accounts/{id}",
+      "covered_by": {
+        "stream": "privileged_access_api_v1_service_accounts_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/privileged-access/api/v1/service-accounts/{id}",
+      "covered_by": {
+        "write": "update_privileged_access_api_v1_service_accounts_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/privileged-access/api/v1/service-accounts/{id}",
+      "covered_by": {
+        "write": "delete_privileged_access_api_v1_service_accounts_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/security/api/v1/security-events",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Mutation request content type application/secevent+jwt is outside the JSON/bodyless declarative write dialect."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webauthn-registration/api/v1/activate",
+      "covered_by": {
+        "write": "execute_webauthn_registration_api_v1_activate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webauthn-registration/api/v1/enroll",
+      "covered_by": {
+        "write": "create_webauthn_registration_api_v1_enroll"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webauthn-registration/api/v1/initiate-fulfillment-request",
+      "covered_by": {
+        "write": "create_webauthn_registration_api_v1_initiate_fulfillment_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webauthn-registration/api/v1/send-pin",
+      "covered_by": {
+        "write": "create_webauthn_registration_api_v1_send_pin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webauthn-registration/api/v1/users/{userId}/enrollments",
+      "covered_by": {
+        "stream": "webauthn_registration_api_v1_users_user_id_enrollments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webauthn-registration/api/v1/users/{userId}/enrollments/{authenticatorEnrollmentId}",
+      "covered_by": {
+        "write": "delete_webauthn_registration_api_v1_users_user_id_enrollments_authenticator_enrollment_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webauthn-registration/api/v1/users/{userId}/enrollments/{authenticatorEnrollmentId}/mark-error",
+      "covered_by": {
+        "write": "create_webauthn_registration_api_v1_users_user_id_enrollments_authenticator_enrollment_id_mark_error"
+      }
+    }
+  ]
+}

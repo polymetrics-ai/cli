@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "data": {
+      "type": "account",
+      "attributes": {
+        "name": "Fixture Update Account"
+      }
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value",
+    "body": {
+      "data": {
+        "type": "account",
+        "attributes": {
+          "name": "Fixture Update Account"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

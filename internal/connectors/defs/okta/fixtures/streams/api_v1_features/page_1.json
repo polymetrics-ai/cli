@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/features",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "description": "description_fixture",
+        "id": "id_fixture",
+        "name": "name_fixture",
+        "stage": {
+          "state": "CLOSED",
+          "value": "BETA"
+        },
+        "status": "DISABLED",
+        "type": "self-service",
+        "_links": {
+          "dependents": {
+            "href": "https://example.invalid/fixture"
+          },
+          "dependencies": {
+            "href": "https://example.invalid/fixture"
+          }
+        }
+      }
+    ]
+  }
+}

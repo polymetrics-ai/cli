@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wiki/api/v2/blogposts",
+    "query": {
+      "limit": "25"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "blogposts_fixture_1",
+          "status": "current",
+          "title": "Fixture Blog Post 1",
+          "spaceId": "spaces_fixture_1",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": {
+            "number": 1
+          }
+        },
+        {
+          "id": "blogposts_fixture_2",
+          "status": "current",
+          "title": "Fixture Blog Post 2",
+          "spaceId": "spaces_fixture_1",
+          "authorId": "author_fixture_1",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "version": {
+            "number": 1
+          }
+        }
+      ],
+      "_links": {}
+    }
+  }
+}

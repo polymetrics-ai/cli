@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/widgets/verified_badge"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "badge": "<div class=\"jdgm-verified-badge\">Verified reviews</div>"
+    }
+  }
+}

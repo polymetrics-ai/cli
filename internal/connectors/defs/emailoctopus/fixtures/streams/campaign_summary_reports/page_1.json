@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/campaigns" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "campaign_fixture_1", "status": "SENT", "name": "Fixture Campaign 1" }
+      ],
+      "paging": { "next": null, "previous": null }
+    }
+  }
+}

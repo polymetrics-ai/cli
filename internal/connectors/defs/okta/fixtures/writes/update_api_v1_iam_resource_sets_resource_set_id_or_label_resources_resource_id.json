@@ -1,0 +1,30 @@
+{
+  "record": {
+    "resource_set_id_or_label": "synthetic-conformance-value",
+    "resource_id": "synthetic-conformance-value",
+    "conditions": {
+      "Exclude": {
+        "okta:ORN": [
+          "okta_orn_fixture"
+        ]
+      }
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/iam/resource-sets/synthetic-conformance-value/resources/synthetic-conformance-value",
+    "body": {
+      "conditions": {
+        "Exclude": {
+          "okta:ORN": [
+            "okta_orn_fixture"
+          ]
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

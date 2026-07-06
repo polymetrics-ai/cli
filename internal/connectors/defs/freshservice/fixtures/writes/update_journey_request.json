@@ -1,0 +1,15 @@
+{
+  "record": {
+    "request_id": 123,
+    "name": "Fixture update_journey_request",
+    "description": "Fixture update_journey_request record"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/journeys/requests/123",
+    "body": {
+      "name": "Fixture update_journey_request",
+      "description": "Fixture update_journey_request record"
+    }
+  }
+}

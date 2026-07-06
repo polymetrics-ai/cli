@@ -1,0 +1,39 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "data": {
+      "contentType": "markdown",
+      "content": "content_fixture",
+      "contentVersion": 1.25
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "parent": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/docs",
+    "body": {
+      "data": {
+        "contentType": "markdown",
+        "content": "content_fixture",
+        "contentVersion": 1.25
+      },
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "parent": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

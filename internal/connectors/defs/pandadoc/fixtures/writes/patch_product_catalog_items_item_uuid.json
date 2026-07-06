@@ -1,0 +1,36 @@
+{
+  "record": {
+    "item_uuid": "item_uuid_fixture",
+    "name": "Fixture patch_product_catalog_items_item_uuid",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v2/product-catalog/items/item_uuid_fixture",
+    "body": {
+      "name": "Fixture patch_product_catalog_items_item_uuid",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_product_catalog_items_item_uuid_response",
+      "status": "ok"
+    }
+  }
+}

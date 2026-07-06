@@ -1,0 +1,92 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/content" },
+    "error_map": [
+      { "status": 401, "hint": "eventee api_token is missing or invalid; re-run pm credentials add eventee" },
+      { "status": 429, "class": "rate_limited", "hint": "eventee rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "lectures",
+      "path": "/content",
+      "records": { "path": "lectures" },
+      "schema": "schemas/lectures.json"
+    },
+    {
+      "name": "speakers",
+      "path": "/content",
+      "records": { "path": "speakers" },
+      "schema": "schemas/speakers.json"
+    },
+    {
+      "name": "days",
+      "path": "/content",
+      "records": { "path": "days" },
+      "schema": "schemas/days.json"
+    },
+    {
+      "name": "halls",
+      "path": "/content",
+      "records": { "path": "halls" },
+      "schema": "schemas/halls.json"
+    },
+    {
+      "name": "tracks",
+      "path": "/content",
+      "records": { "path": "tracks" },
+      "schema": "schemas/tracks.json"
+    },
+    {
+      "name": "workshops",
+      "path": "/content",
+      "records": { "path": "workshops" },
+      "schema": "schemas/workshops.json"
+    },
+    {
+      "name": "pauses",
+      "path": "/content",
+      "records": { "path": "pauses" },
+      "schema": "schemas/pauses.json"
+    },
+    {
+      "name": "partners",
+      "path": "/partners",
+      "records": { "path": "" },
+      "schema": "schemas/partners.json"
+    },
+    {
+      "name": "reviews",
+      "path": "/reviews",
+      "records": { "path": "" },
+      "schema": "schemas/reviews.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "records": { "path": "" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "participants",
+      "path": "/participants",
+      "records": { "path": "" },
+      "schema": "schemas/participants.json"
+    },
+    {
+      "name": "registrations",
+      "path": "/registrations",
+      "records": { "path": "" },
+      "schema": "schemas/registrations.json"
+    }
+  ]
+}

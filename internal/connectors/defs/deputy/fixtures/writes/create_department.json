@@ -1,0 +1,20 @@
+{
+  "record": { "Company": 1, "OperationalUnitName": "Fixture Department" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/OperationalUnit",
+    "body": { "Company": 1, "OperationalUnitName": "Fixture Department" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "Company": 1,
+      "OperationalUnitName": "Fixture Department",
+      "Active": true,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:00:00"
+    }
+  }
+}

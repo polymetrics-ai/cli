@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "appAssignmentId": {
+      "type": "string"
+    },
+    "appInstanceId": {
+      "type": "string"
+    },
+    "appName": {
+      "type": "string"
+    },
+    "credentialsSetup": {
+      "type": "boolean"
+    },
+    "hidden": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "linkUrl": {
+      "type": "string"
+    },
+    "logoUrl": {
+      "type": "string"
+    },
+    "sortOrder": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

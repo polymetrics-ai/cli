@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/events", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "id": "evt_fixture_1",
+          "object": "Event",
+          "mode": "test",
+          "description": "tracker.created",
+          "status": "pending",
+          "user_id": "user_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,1369 @@
+{
+  "actions": [
+    {
+      "name": "delete_application",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/applications/{{ record.application_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Application.",
+      "path_fields": [
+        "application_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_application_to_candidate_prospect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/applications",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Application to Candidate/Prospect.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "update_application",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/applications/{{ record.application_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Application.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "advance_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/advance",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Advance Application.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "move_application_different_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/transfer_to_job",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Move Application (Different Job).",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "move_application_same_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/move",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Move Application (Same Job).",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "convert_prospect_to_candidate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/applications/{{ record.application_id }}/convert_prospect",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Convert Prospect To Candidate.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "add_attachment_to_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Attachment to Application.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "hire_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/hire",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Hire Application.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "reject_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/reject",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: POST: Reject Application.",
+      "path_fields": [
+        "application_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_rejection_reason",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/applications/{{ record.application_id }}/reject",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Rejection Reason.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "unreject_application",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_id }}/unreject",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Unreject Application.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "request_approvals",
+      "kind": "create",
+      "method": "POST",
+      "path": "/approval_flows/{{ record.approval_flow_id }}/request_approvals",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "approval_flow_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "approval_flow_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Request Approvals.",
+      "path_fields": [
+        "approval_flow_id"
+      ]
+    },
+    {
+      "name": "replace_an_approver_in_an_approver_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/approver_groups/{{ record.approver_group_id }}/replace_approvers",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "approver_group_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "approver_group_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Replace an approver in an approver group.",
+      "path_fields": [
+        "approver_group_id"
+      ]
+    },
+    {
+      "name": "create_or_replace_an_approval_flow",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/jobs/{{ record.job_id }}/approval_flows",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Create or replace an approval flow.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "delete_candidate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/candidates/{{ record.candidate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Candidate.",
+      "path_fields": [
+        "candidate_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "edit_candidate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/candidates/{{ record.candidate_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Edit Candidate.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "add_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Attachment.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "add_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add Candidate."
+    },
+    {
+      "name": "add_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/activity_feed/notes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Note.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "add_e_mail_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/activity_feed/emails",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add E-mail Note.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "add_education",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/educations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Education.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "remove_education_from_candidate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/candidates/{{ record.candidate_id }}/educations/{{ record.education_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "education_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id",
+          "education_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Education From Candidate.",
+      "path_fields": [
+        "candidate_id",
+        "education_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_employment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/employments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Employment.",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "remove_employment_from_candidate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/candidates/{{ record.candidate_id }}/employments/{{ record.employment_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "employment_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id",
+          "employment_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Employment From Candidate.",
+      "path_fields": [
+        "candidate_id",
+        "employment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_prospect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/prospects",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add Prospect."
+    },
+    {
+      "name": "anonymize_candidate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "field_names": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id",
+          "field_names"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: PUT: Anonymize Candidate.",
+      "path_fields": [
+        "candidate_id",
+        "field_names"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "merge_candidates",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/candidates/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Destructive Greenhouse mutation: PUT: Merge Candidates.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Create Custom Field."
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_fields/{{ record.custom_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Custom Field.",
+      "path_fields": [
+        "custom_field_id"
+      ]
+    },
+    {
+      "name": "delete_custom_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_fields/{{ record.custom_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Delete Custom Field.",
+      "path_fields": [
+        "custom_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_custom_field_options",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Create Custom Field Options.",
+      "path_fields": [
+        "custom_field_id"
+      ]
+    },
+    {
+      "name": "update_custom_field_options",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Custom Field Options.",
+      "path_fields": [
+        "custom_field_id"
+      ]
+    },
+    {
+      "name": "remove_custom_field_options",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_field_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Custom Field Options.",
+      "path_fields": [
+        "custom_field_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "edit_department",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/departments/{{ record.department_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "department_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Edit Department.",
+      "path_fields": [
+        "department_id"
+      ]
+    },
+    {
+      "name": "add_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/departments",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add Department."
+    },
+    {
+      "name": "edit_openings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/jobs/{{ record.job_id }}/openings/{{ record.opening_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "opening_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id",
+          "opening_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Edit Openings.",
+      "path_fields": [
+        "job_id",
+        "opening_id"
+      ]
+    },
+    {
+      "name": "create_new_openings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs/{{ record.job_id }}/openings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Create New Openings.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "update_job",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/jobs/{{ record.job_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Job.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "create_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Create Job."
+    },
+    {
+      "name": "replace_hiring_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/jobs/{{ record.job_id }}/hiring_team",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Replace Hiring Team.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "add_hiring_team_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs/{{ record.job_id }}/hiring_team",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add Hiring Team Members.",
+      "path_fields": [
+        "job_id"
+      ]
+    },
+    {
+      "name": "remove_hiring_team_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/jobs/{{ record.job_id }}/hiring_team",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "job_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.",
+      "path_fields": [
+        "job_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_current_offer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/applications/{{ record.application_id }}/offers/current_offer",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Update Current Offer.",
+      "path_fields": [
+        "application_id"
+      ]
+    },
+    {
+      "name": "edit_office",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/offices/{{ record.office_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "office_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "office_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PATCH: Edit Office.",
+      "path_fields": [
+        "office_id"
+      ]
+    },
+    {
+      "name": "add_office",
+      "kind": "create",
+      "method": "POST",
+      "path": "/offices",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add Office."
+    },
+    {
+      "name": "remove_scheduled_interview",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/scheduled_interviews/{{ record.scheduled_interview_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "scheduled_interview_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "scheduled_interview_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: Delete: Remove Scheduled Interview.",
+      "path_fields": [
+        "scheduled_interview_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_candidate_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags/candidate",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add New Candidate Tag."
+    },
+    {
+      "name": "remove_tag_from_candidate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tag_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id",
+          "tag_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove tag from candidate.",
+      "path_fields": [
+        "candidate_id",
+        "tag_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_a_candidate_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tag_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "candidate_id",
+          "tag_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Add a candidate tag.",
+      "path_fields": [
+        "candidate_id",
+        "tag_id"
+      ]
+    },
+    {
+      "name": "change_user_permission_level",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/permission_level",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: PATCH: Change user permission level."
+    },
+    {
+      "name": "add_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "Greenhouse mutation: POST: Add User."
+    },
+    {
+      "name": "add_e_mail_address_to_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.user_id }}/email_addresses",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: POST: Add E-mail Address To User.",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "remove_a_job_permission",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}/permissions/jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove a Job Permission.",
+      "path_fields": [
+        "user_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_a_job_permission",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}/permissions/jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Add a Job Permission.",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "remove_a_future_job_permission",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.user_id }}/permissions/future_jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Destructive Greenhouse mutation: DELETE: Remove a Future Job Permission.",
+      "path_fields": [
+        "user_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_a_future_job_permission",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.user_id }}/permissions/future_jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Greenhouse mutation: PUT: Add a Future Job Permission.",
+      "path_fields": [
+        "user_id"
+      ]
+    }
+  ]
+}

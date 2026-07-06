@@ -1,0 +1,133 @@
+{
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "object",
+      "properties": {
+        "current_actual_sales": {
+          "type": "integer",
+          "description": "The current actual sales in cents"
+        },
+        "current_projected_sales": {
+          "type": "integer",
+          "description": "The current projected sales in cents"
+        },
+        "past_actual_sales": {
+          "type": "integer",
+          "description": "The past actual sales in cents"
+        },
+        "past_projected_sales": {
+          "type": "integer",
+          "description": "The past projected sales in cents"
+        },
+        "current_actual_labor": {
+          "type": "integer",
+          "description": "The current actual labor in cents"
+        },
+        "current_projected_labor": {
+          "type": "integer",
+          "description": "The current projected labor in cents"
+        },
+        "past_actual_labor": {
+          "type": "integer",
+          "description": "The past actual labor in cents"
+        },
+        "current_labor_ratio": {
+          "type": "number",
+          "description": "The current labor ratio"
+        },
+        "current_labor_target": {
+          "type": "number",
+          "description": "The current labor target"
+        },
+        "past_labor_ratio": {
+          "type": "number",
+          "description": "The current labor ratio"
+        },
+        "current_spmh": {
+          "type": "number",
+          "description": "The current sales per man hour"
+        },
+        "past_spmh": {
+          "type": "number",
+          "description": "The past sales per man hour"
+        }
+      }
+    },
+    "intervals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actual_sales": {
+            "type": "integer",
+            "description": "The actual sales in cents"
+          },
+          "projected_sales": {
+            "type": "integer",
+            "description": "The projected sales in cents"
+          },
+          "past_actual_sales": {
+            "type": "integer",
+            "description": "The past actual sales in cents"
+          },
+          "past_projected_sales": {
+            "type": "integer",
+            "description": "The past projected sales in cents"
+          },
+          "actual_labor": {
+            "type": "integer",
+            "description": "The actual labor in cents"
+          },
+          "projected_labor": {
+            "type": "integer",
+            "description": "The projected labor in cents"
+          },
+          "projected_labor_minutes": {
+            "type": "number",
+            "description": "The projected labor minutes"
+          },
+          "labor_ratio": {
+            "type": "number",
+            "description": "The current labor ratio"
+          },
+          "projected_labor_ratio": {
+            "type": "number",
+            "description": "The projected labor ratio"
+          },
+          "actual_spmh": {
+            "type": "number",
+            "description": "The actual sales per man hour"
+          },
+          "projected_spmh": {
+            "type": "number",
+            "description": "The projected sales per man hour"
+          }
+        }
+      }
+    },
+    "stream_key": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_daily_stats",
+  "x-primary-key": [
+    "stream_key"
+  ],
+  "required": [
+    "stream_key"
+  ]
+}

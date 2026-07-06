@@ -1,0 +1,17 @@
+{
+  "record": {
+    "space_id": "synthetic-conformance-value",
+    "user_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/spaces/synthetic-conformance-value/permissions/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "remove_user_from_space_fixture_1"
+    }
+  }
+}

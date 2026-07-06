@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "departments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modified_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "remote_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "modified_at": { "type": "string" },
+    "remote_was_deleted": { "type": ["boolean", "null"] }
+  }
+}

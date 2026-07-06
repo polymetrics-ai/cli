@@ -1,0 +1,786 @@
+{
+  "api": "Invoiced API (https://api.invoiced.com)",
+  "docs": "https://developer.invoiced.com/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full documented REST API surface expansion from the official Invoiced API reference. GET list/detail endpoints are streams; dialect-expressible mutations are writes; multipart file upload is excluded as binary payload.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/charges",
+      "covered_by": {
+        "write": "create_charge"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/contacts",
+      "covered_by": {
+        "stream": "customer_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "covered_by": {
+        "stream": "customer_contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons",
+      "covered_by": {
+        "stream": "coupons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coupons",
+      "covered_by": {
+        "write": "create_coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "stream": "coupon"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "write": "update_coupon"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/coupons/{id}",
+      "covered_by": {
+        "write": "delete_coupon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_balance_adjustments",
+      "covered_by": {
+        "stream": "credit_balance_adjustments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_balance_adjustments",
+      "covered_by": {
+        "write": "create_credit_balance_adjustment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_balance_adjustments/{id}",
+      "covered_by": {
+        "stream": "credit_balance_adjustment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credit_balance_adjustments/{id}",
+      "covered_by": {
+        "write": "update_credit_balance_adjustment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credit_balance_adjustments/{id}",
+      "covered_by": {
+        "write": "delete_credit_balance_adjustment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes",
+      "covered_by": {
+        "stream": "credit_notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes",
+      "covered_by": {
+        "write": "create_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes/{id}",
+      "covered_by": {
+        "stream": "credit_note"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credit_notes/{id}",
+      "covered_by": {
+        "write": "update_credit_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes/{id}/emails",
+      "covered_by": {
+        "write": "send_credit_note_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes/{id}/void",
+      "covered_by": {
+        "write": "void_credit_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credit_notes/{id}",
+      "covered_by": {
+        "write": "delete_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes/{id}/attachments",
+      "covered_by": {
+        "stream": "credit_note_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/balance",
+      "covered_by": {
+        "stream": "customer_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/emails",
+      "covered_by": {
+        "write": "send_statement_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/text_messages",
+      "covered_by": {
+        "write": "send_statement_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/letters",
+      "covered_by": {
+        "write": "send_statement_letter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates",
+      "covered_by": {
+        "stream": "estimates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates",
+      "covered_by": {
+        "write": "create_an_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{id}",
+      "covered_by": {
+        "stream": "estimate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/estimates/{id}",
+      "covered_by": {
+        "write": "update_an_estimate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/emails",
+      "covered_by": {
+        "write": "send_estimate_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/void",
+      "covered_by": {
+        "write": "void_estimate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{id}",
+      "covered_by": {
+        "write": "delete_an_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{id}/attachments",
+      "covered_by": {
+        "stream": "estimate_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/invoice",
+      "covered_by": {
+        "write": "convert_estimate_to_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "The documented file upload requires multipart/form-data with a file part; the declarative write dialect supports JSON/form fields only."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{id}",
+      "covered_by": {
+        "stream": "file"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{id}",
+      "covered_by": {
+        "write": "delete_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "covered_by": {
+        "write": "create_an_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}",
+      "covered_by": {
+        "stream": "invoice"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/invoices/{id}",
+      "covered_by": {
+        "write": "update_an_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/emails",
+      "covered_by": {
+        "write": "send_invoice_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/text_messages",
+      "covered_by": {
+        "write": "send_invoice_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/letters",
+      "covered_by": {
+        "write": "send_invoice_letter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/pay",
+      "covered_by": {
+        "write": "pay_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}/attachments",
+      "covered_by": {
+        "stream": "invoice_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/consolidate_invoices",
+      "covered_by": {
+        "write": "create_consolidated_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/void",
+      "covered_by": {
+        "write": "void_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}",
+      "covered_by": {
+        "write": "delete_an_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items",
+      "covered_by": {
+        "write": "create_an_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/{id}",
+      "covered_by": {
+        "stream": "item"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/items/{id}",
+      "covered_by": {
+        "write": "update_an_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/items/{id}",
+      "covered_by": {
+        "write": "delete_an_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/line_items",
+      "covered_by": {
+        "stream": "customer_line_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/line_items",
+      "covered_by": {
+        "write": "create_customer_line_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/line_items/{id}",
+      "covered_by": {
+        "stream": "customer_line_item"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/customers/{customer_id}/line_items/{id}",
+      "covered_by": {
+        "write": "update_customer_line_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/line_items/{id}",
+      "covered_by": {
+        "write": "delete_customer_line_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/invoices",
+      "covered_by": {
+        "write": "create_customer_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notes",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notes",
+      "covered_by": {
+        "write": "create_note"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/notes/{id}",
+      "covered_by": {
+        "write": "update_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notes/{id}",
+      "covered_by": {
+        "write": "delete_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer/{id}/notes",
+      "covered_by": {
+        "stream": "customer_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoice/{id}/notes",
+      "covered_by": {
+        "stream": "invoice_notes"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{id}/payment_plan",
+      "covered_by": {
+        "write": "create_payment_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}/payment_plan",
+      "covered_by": {
+        "stream": "invoice_payment_plan"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}/payment_plan",
+      "covered_by": {
+        "write": "cancel_payment_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/payment_sources",
+      "covered_by": {
+        "write": "create_payment_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/payment_sources",
+      "covered_by": {
+        "stream": "customer_payment_sources"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/cards/{id}",
+      "covered_by": {
+        "write": "delete_card_payment_source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/bank_accounts/{id}",
+      "covered_by": {
+        "write": "delete_bank_account_payment_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments",
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments",
+      "covered_by": {
+        "write": "create_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/payments/{id}",
+      "covered_by": {
+        "stream": "payment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/payments/{id}",
+      "covered_by": {
+        "write": "update_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/{id}/emails",
+      "covered_by": {
+        "write": "send_a_payment_receipt_email"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/payments/{id}",
+      "covered_by": {
+        "write": "delete_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "covered_by": {
+        "stream": "plans"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans",
+      "covered_by": {
+        "write": "create_plan"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{id}",
+      "covered_by": {
+        "stream": "plan"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/plans/{id}",
+      "covered_by": {
+        "write": "update_plan"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/{id}",
+      "covered_by": {
+        "write": "delete_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/charges/{id}/refunds",
+      "covered_by": {
+        "write": "refund_charge"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "covered_by": {
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/preview",
+      "covered_by": {
+        "write": "preview_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{id}",
+      "covered_by": {
+        "stream": "subscription"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/subscriptions/{id}",
+      "covered_by": {
+        "write": "update_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "covered_by": {
+        "write": "cancel_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "covered_by": {
+        "write": "create_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{id}",
+      "covered_by": {
+        "stream": "task"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tasks/{id}",
+      "covered_by": {
+        "write": "update_task"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{id}",
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax_rates",
+      "covered_by": {
+        "stream": "tax_rates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tax_rates",
+      "covered_by": {
+        "write": "create_tax_rate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tax_rates/{id}",
+      "covered_by": {
+        "stream": "tax_rate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tax_rates/{id}",
+      "covered_by": {
+        "write": "update_tax_rate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tax_rates/{id}",
+      "covered_by": {
+        "write": "delete_tax_rate"
+      }
+    }
+  ]
+}

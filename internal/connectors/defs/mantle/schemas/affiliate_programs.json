@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "affiliate_programs",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id",
+    "name",
+    "createdAt",
+    "updatedAt",
+    "appId"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "object"
+    },
+    "allowAffiliateDashboardAccess": {
+      "type": "boolean"
+    },
+    "requireApprovalToJoin": {
+      "type": "boolean"
+    },
+    "termsUrl": {
+      "type": "string"
+    },
+    "requireTermsAcceptance": {
+      "type": "boolean"
+    },
+    "removeOnUninstallDays": {
+      "type": "integer"
+    },
+    "customAffiliateLink": {
+      "type": "string"
+    },
+    "startCountingCommissionFrom": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "showInMarketplace": {
+      "type": "boolean"
+    },
+    "requiredAffiliateFields": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "appId": {
+      "type": "string"
+    },
+    "signupLink": {
+      "type": "string",
+      "description": "Link to sign up for this program"
+    },
+    "affiliatesCount": {
+      "type": "integer",
+      "description": "Number of active affiliates in this program"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "object"
+          },
+          "showInMarketplace": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    }
+  }
+}

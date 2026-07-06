@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaign": [
+        { "campaignID": "campaign_fixture_1", "name": "Fixture Campaign 1", "subject": "Fixture subject", "type": "regular", "status": "sent", "fromName": "Fixture Store", "sent": 1000, "opened": 400, "clicked": 100, "bounced": 2, "unsubscribed": 1, "startDate": "2026-01-01T00:00:00Z", "endDate": "2026-01-02T00:00:00Z", "createdAt": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": { "next": null }
+    }
+  }
+}

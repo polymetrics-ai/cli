@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "consumables",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "model_number": { "type": ["string", "null"] },
+    "order_number": { "type": ["string", "null"] },
+    "purchase_date": { "type": ["string", "null"] },
+    "purchase_cost": { "type": ["number", "null"] },
+    "unit_cost": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "minimum_quantity": { "type": ["integer", "null"] },
+    "available": { "type": ["integer", "null"] },
+    "category_id": { "type": ["integer", "null"] },
+    "manufacturer_id": { "type": ["integer", "null"] },
+    "supplier_id": { "type": ["integer", "null"] },
+    "location_id": { "type": ["integer", "null"] },
+    "department_id": { "type": ["integer", "null"] },
+    "logo": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "custom_fields": { "type": ["array", "null"] },
+    "checked_out_to_employees": { "type": ["array", "null"] },
+    "checked_out_to_locations": { "type": ["array", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

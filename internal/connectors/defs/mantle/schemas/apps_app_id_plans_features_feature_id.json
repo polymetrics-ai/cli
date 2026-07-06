@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "apps_app_id_plans_features_feature_id",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the feature."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the feature."
+    },
+    "key": {
+      "type": "string",
+      "description": "The key associated with the feature."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the feature. Use \"string\" for multivariate (enum) features whose values are drawn from a fixed list of allowed strings.",
+      "enum": [
+        "boolean",
+        "limit",
+        "limit_with_overage",
+        "string"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the feature."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "The default value of the feature."
+    },
+    "allowedValues": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "For \"string\" (multivariate) features, the list of allowed enum values. Null for other types.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "usageMetric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the usage metric."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the usage metric."
+        },
+        "eventName": {
+          "type": "string",
+          "description": "The event name associated with the usage metric."
+        },
+        "calculation": {
+          "type": "string",
+          "description": "The calculation method for the usage metric.",
+          "enum": [
+            "count",
+            "sum"
+          ]
+        },
+        "params": {
+          "type": "object",
+          "description": "Additional parameters for the usage metric."
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "The creation timestamp of the feature.",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "The last update timestamp of the feature.",
+      "format": "date-time"
+    }
+  }
+}

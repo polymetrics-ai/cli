@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/replicas",
+    "query": {
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "replica_id": "replica_fixture_101",
+          "replica_name": "Fixture Replica 101",
+          "created_at": "2026-01-18T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

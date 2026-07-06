@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture List"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists",
+    "body": {
+      "name": "Fixture List"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "list_fixture_new", "name": "Fixture List" }
+  }
+}

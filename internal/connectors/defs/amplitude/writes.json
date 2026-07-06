@@ -1,0 +1,233 @@
+{
+  "actions": [
+    {
+      "name": "create_annotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/3/annotations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["label", "start"],
+        "properties": {
+          "label": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "category": { "type": "string" },
+          "chart_id": { "type": "string" },
+          "details": { "type": "string" }
+        }
+      },
+      "risk": "creates a chart annotation visible to every Amplitude project user"
+    },
+    {
+      "name": "update_annotation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/3/annotations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "label": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "category": { "type": "string" },
+          "chart_id": { "type": "string" },
+          "details": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing chart annotation visible to every Amplitude project user"
+    },
+    {
+      "name": "delete_annotation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/3/annotations/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes a chart annotation"
+    },
+    {
+      "name": "create_annotation_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/3/annotation-categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category"],
+        "properties": {
+          "category": { "type": "string" }
+        }
+      },
+      "risk": "creates a new annotation category shared across the Amplitude project"
+    },
+    {
+      "name": "update_annotation_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/3/annotation-categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "category"],
+        "properties": {
+          "id": { "type": "integer" },
+          "category": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing annotation category shared across the Amplitude project"
+    },
+    {
+      "name": "delete_annotation_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/3/annotation-categories/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes an annotation category shared across the Amplitude project"
+    },
+    {
+      "name": "create_taxonomy_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/2/taxonomy/category",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_name"],
+        "properties": {
+          "category_name": { "type": "string" }
+        }
+      },
+      "risk": "creates a new event category in the Amplitude project's governed taxonomy"
+    },
+    {
+      "name": "update_taxonomy_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/2/taxonomy/category/{{ record.category_id }}",
+      "path_fields": ["category_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_id", "category_name"],
+        "properties": {
+          "category_id": { "type": "integer" },
+          "category_name": { "type": "string" }
+        }
+      },
+      "risk": "renames an existing event category in the Amplitude project's governed taxonomy"
+    },
+    {
+      "name": "delete_taxonomy_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/category/{{ record.category_id }}",
+      "path_fields": ["category_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["category_id"],
+        "properties": {
+          "category_id": { "type": "integer" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "permanently deletes an event category from the Amplitude project's governed taxonomy"
+    },
+    {
+      "name": "create_taxonomy_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/2/taxonomy/event",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_type"],
+        "properties": {
+          "event_type": { "type": "string" },
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "owner": { "type": "string" }
+        }
+      },
+      "risk": "registers a new governed event type in the Amplitude project's taxonomy"
+    },
+    {
+      "name": "update_taxonomy_event",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/2/taxonomy/event/{{ record.event_type }}",
+      "path_fields": ["event_type"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_type"],
+        "properties": {
+          "event_type": { "type": "string" },
+          "new_event_type": { "type": "string" },
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "display_name": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "owner": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing governed event type's taxonomy metadata"
+    },
+    {
+      "name": "delete_taxonomy_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/2/taxonomy/event/{{ record.event_type }}",
+      "path_fields": ["event_type"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_type"],
+        "properties": {
+          "event_type": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "soft-deletes a governed event type from the Amplitude project's taxonomy (recoverable via the restore endpoint, not modeled as a separate write action)"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/api/V1/GetBalance" },
+  "response": {
+    "status": 200,
+    "body": {
+      "Balance": 1000.5,
+      "CurrencyIso": "USD"
+    }
+  }
+}

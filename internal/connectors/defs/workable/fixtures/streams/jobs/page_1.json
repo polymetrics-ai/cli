@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobs": [
+        {
+          "id": "job_fixture_1",
+          "shortcode": "JOB1",
+          "title": "Fixture Job",
+          "state": "published",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

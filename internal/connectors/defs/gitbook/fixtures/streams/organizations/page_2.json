@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/orgs", "query": { "limit": "50", "page": "cursor_fixture_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "org_fixture_3",
+          "title": "Fixture Org Three",
+          "type": "organization",
+          "createdAt": "2026-01-03T00:00:00Z",
+          "urls": { "location": "https://app.gitbook.com/o/org_fixture_3" }
+        }
+      ]
+    }
+  }
+}

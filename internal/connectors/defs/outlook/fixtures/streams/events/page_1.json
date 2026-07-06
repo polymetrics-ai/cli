@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/me/events" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_event_1", "subject": "Fixture event 1", "createdDateTime": "2026-01-01T00:00:00Z", "lastModifiedDateTime": "2026-01-01T00:00:00Z", "webLink": "https://outlook.office.com/calendar/fixture_event_1" },
+        { "id": "fixture_event_2", "subject": "Fixture event 2", "createdDateTime": "2026-01-02T00:00:00Z", "lastModifiedDateTime": "2026-01-02T00:00:00Z", "webLink": "https://outlook.office.com/calendar/fixture_event_2" }
+      ]
+    }
+  }
+}

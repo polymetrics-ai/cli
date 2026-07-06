@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "leave_types",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "company_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "identifier": { "type": ["string", "null"] },
+    "color": { "type": ["string", "null"] },
+    "approval_required": { "type": ["boolean", "null"] },
+    "active": { "type": ["boolean", "null"] }
+  }
+}

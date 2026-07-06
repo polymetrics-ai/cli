@@ -1,0 +1,20 @@
+{
+  "record": {
+    "enabled": true,
+    "autoExpunge": true,
+    "expungeBehavior": "archive"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/settings/imap",
+    "body": {
+      "enabled": true,
+      "autoExpunge": true,
+      "expungeBehavior": "archive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "enabled": true, "autoExpunge": true, "expungeBehavior": "archive" }
+  }
+}

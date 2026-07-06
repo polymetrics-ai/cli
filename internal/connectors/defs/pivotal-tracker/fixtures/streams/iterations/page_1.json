@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/iterations",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "number": 1, "kind": "iteration", "team_strength": 8.5, "finish": "2026-01-08T00:00:00Z" },
+      { "number": 2, "kind": "iteration", "team_strength": 7.5, "finish": "2026-01-15T00:00:00Z" }
+    ]
+  }
+}

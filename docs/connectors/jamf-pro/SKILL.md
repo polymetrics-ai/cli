@@ -7,7 +7,13 @@ description: Jamf Pro connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using token-based authentication.
+Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.
+
+## Icon
+
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -16,17 +22,40 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- max_pages
+- mode
+- page_size
+- username
+- password (secret)
+
+## ETL Streams
+
+- buildings:
+  - primary key: id
+  - fields: city(), country(), id(), name(), stateProvince(), streetAddress1(), streetAddress2(), zipPostalCode()
+- departments:
+  - primary key: id
+  - fields: id(), name()
+- categories:
+  - primary key: id
+  - fields: id(), name(), priority()
+- scripts:
+  - primary key: id
+  - fields: categoryId(), categoryName(), id(), info(), name(), notes(), osRequirements(), priority()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Jamf Pro API read of MDM configuration data (buildings, departments, categories, scripts)
+- approval: none; read-only, no reverse-ETL write surface
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +77,3 @@ pm connectors inspect jamf-pro --json
 - Run pm connectors inspect jamf-pro before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

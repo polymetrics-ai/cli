@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": { "note": "rss's real Check response is an RSS/XML document, not JSON; this fixture is documentation-only (fixtures_present static requirement) — conformance's dynamic checks are fully skipped for this bundle (metadata.json's bundle-level conformance.skip_dynamic marker), never replayed against this file. See internal/connectors/hooks/rss/hooks_test.go for the real XML-based Check test coverage." }
+  }
+}

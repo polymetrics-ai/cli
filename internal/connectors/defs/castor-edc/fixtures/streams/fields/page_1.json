@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/field",
+    "query": {
+      "page": "1",
+      "page_size": "100",
+      "include": "metadata,validations,optiongroup"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "fields": [
+          {
+            "id": "field_fixture_1",
+            "parent_id": "step_fixture_1",
+            "step_id": "step_fixture_1",
+            "report_id": null,
+            "field_number": 1,
+            "field_id": "weight",
+            "field_name": "weight",
+            "field_label": "Weight (kg)",
+            "field_type": "numeric",
+            "field_required": true,
+            "field_hidden": false,
+            "field_info": "Patient weight",
+            "field_units": "kg",
+            "field_min": 0,
+            "field_max": 300,
+            "field_summary_template": null,
+            "field_slider_step": null,
+            "field_length": null,
+            "additional_config": null,
+            "exclude_on_index": false,
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

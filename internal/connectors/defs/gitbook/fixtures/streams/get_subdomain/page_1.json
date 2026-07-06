@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subdomains/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_subdomain_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_subdomain",
+      "name": "Fixture get_subdomain",
+      "status": "active",
+      "operation_id": "getSubdomain"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "event_id": "ev_fixture_1",
+    "contact_id": "contact_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/events/ev_fixture_1/contacts"
+  }
+}

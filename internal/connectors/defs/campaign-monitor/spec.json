@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Campaign Monitor Connection Specification",
+  "type": "object",
+  "required": ["username"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Campaign Monitor API key, sent as the HTTP Basic auth username."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "HTTP Basic auth password. Campaign Monitor allows this to be blank or a dummy value alongside the API key username; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.createsend.com/api/v3.3",
+      "description": "Campaign Monitor API base URL override for tests or proxies."
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Campaign Monitor client id, required for every client-scoped stream ('campaigns', 'lists', 'suppressionlist', 'segments', 'templates') and every list-scoped fan-out stream ('list_custom_fields', 'list_webhooks', 'active_subscribers', 'unconfirmed_subscribers', 'unsubscribed_subscribers', 'bounced_subscribers', 'deleted_subscribers'), which fan out over this client's own lists."
+    }
+  }
+}

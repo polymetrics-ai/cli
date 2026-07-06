@@ -1,0 +1,117 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      { "mode": "api_key_header", "header": "X-API-Key", "value": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/products", "query": { "limit": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "retailexpress-by-maropost credentials are missing or invalid; re-run pm credentials add retailexpress-by-maropost" },
+      { "status": 403, "hint": "retailexpress-by-maropost account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "retailexpress-by-maropost rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "products"
+      },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "customers"
+      },
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "orders"
+      },
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "stock_levels",
+      "path": "/stock-levels",
+      "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "computed_fields": {
+        "stream": "stock_levels"
+      },
+      "schema": "schemas/stock_levels.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "stores",
+      "path": "/stores",
+      "records": { "path": "data" },
+      "query": {
+        "updated_after": { "template": "{{ config.updated_after }}", "omit_when_absent": true },
+        "created_after": { "template": "{{ config.created_after }}", "omit_when_absent": true },
+        "store_id": { "template": "{{ config.store_id }}", "omit_when_absent": true },
+        "status": { "template": "{{ config.status }}", "omit_when_absent": true }
+      },
+      "computed_fields": {
+        "stream": "stores"
+      },
+      "schema": "schemas/stores.json",
+      "projection": "passthrough"
+    }
+  ]
+}

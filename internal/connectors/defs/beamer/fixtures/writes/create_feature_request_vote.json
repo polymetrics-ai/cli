@@ -1,0 +1,13 @@
+{
+  "record": {
+    "feature_request_id": "fr_fixture_1",
+    "userEmail": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feature-requests/fr_fixture_1/votes",
+    "body": {
+      "userEmail": "fixture@example.com"
+    }
+  }
+}

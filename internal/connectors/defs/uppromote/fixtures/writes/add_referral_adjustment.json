@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "17567131",
+    "adjustment": -5
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/referral/17567131/adjustment",
+    "body": {
+      "adjustment": -5
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": 200, "message": "success", "data": { "referral_id": 17567131 } }
+  }
+}

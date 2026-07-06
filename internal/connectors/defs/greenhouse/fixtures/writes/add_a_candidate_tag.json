@@ -1,0 +1,14 @@
+{
+  "record": {
+    "candidate_id": "candidate_id_fixture",
+    "tag_id": "tag_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/candidates/candidate_id_fixture/tags/tag_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

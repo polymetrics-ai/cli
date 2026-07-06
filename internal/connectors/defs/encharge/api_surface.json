@@ -1,0 +1,75 @@
+{
+  "api": "Encharge API v1 (https://api.encharge.io/v1)",
+  "docs": "https://developers.encharge.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Encharge surface (events, flows, tag/segment mutation, etc.) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/people/all",
+      "covered_by": {
+        "stream": "peoples"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fields",
+      "covered_by": {
+        "stream": "fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags-management",
+      "covered_by": {
+        "stream": "account_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/schemas",
+      "covered_by": {
+        "stream": "schemas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/flows",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    }
+  ]
+}

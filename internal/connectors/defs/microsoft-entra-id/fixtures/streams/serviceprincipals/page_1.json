@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/servicePrincipals", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_sp_1", "appId": "app-fixture-1", "displayName": "Fixture Service Principal 1", "servicePrincipalType": "Application", "accountEnabled": true, "appOwnerOrganizationId": "org-fixture", "signInAudience": "AzureADMyOrg" }
+      ]
+    }
+  }
+}

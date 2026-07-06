@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_fields",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "idproductfield": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "values": { "type": ["array", "null"] },
+    "required": { "type": ["boolean", "null"] },
+    "visible_picklist": { "type": ["boolean", "null"] },
+    "visible_invoice": { "type": ["boolean", "null"] },
+    "visible_shippinglist": { "type": ["boolean", "null"] },
+    "visible_portal": { "type": ["boolean", "null"] },
+    "visible_purchase_order": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "token", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/accounts/{{ config.account_id }}/campaigns" },
+    "error_map": [
+      { "status": 401, "class": "auth_failed", "hint": "vwo api_key is missing or invalid" },
+      { "status": 429, "class": "rate_limited", "hint": "vwo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "campaigns",
+      "path": "/accounts/{{ config.account_id }}/campaigns",
+      "query": {
+        "type": { "template": "{{ config.campaign_type }}", "omit_when_absent": true },
+        "platform": { "template": "{{ config.platform }}", "omit_when_absent": true },
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "_data" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "created_at": "{{ coalesce record.created_at record.createdOn }}"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "campaign_variations",
+      "path": "/accounts/{{ config.account_id }}/campaigns/{{ fanout.id }}/variations",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/accounts/{{ config.account_id }}/campaigns",
+            "records_path": "_data",
+            "id_field": "id"
+          }
+        },
+        "into": { "path_var": "campaign_id" },
+        "stamp_field": "campaign_id"
+      },
+      "records": { "path": "_data" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "is_control": "{{ record.isControl }}",
+        "is_disabled": "{{ record.isDisabled }}",
+        "percent_split": "{{ record.percentSplit }}"
+      },
+      "schema": "schemas/campaign_variations.json"
+    }
+  ]
+}

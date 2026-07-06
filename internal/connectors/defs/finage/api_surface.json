@@ -1,0 +1,33 @@
+{
+  "api": "Finage REST API (https://api.finage.co.uk)",
+  "docs": "https://finage.co.uk/docs/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion within the Fundamentals/US-market-data product this connector already targets (legacy never covered forex, crypto, real-time quotes/trades, technical indicators, or per-symbol historical aggregates -- those are wholly separate Finage products with their own auth/config surface and are out of scope for this reverse-ETL account-metadata-style connector, not merely deferred). Adds earnings_calendar and ipo_calendar (both verified live: paths return 'permission' errors, not 404, confirming the routes exist; response field names cross-checked against a documented real-world usage sample since Finage's own docs site renders client-side and could not be scraped for an authoritative field list). dividend-calendar and stock-split-calendar endpoints are verified to exist (same live-path check) but their response field names could not be verified from any available source (Finage's JS-rendered docs pages returned generic template content for every URL fetched, no OpenAPI/Postman spec is publicly published, and legacy never modeled these two resources) -- implementing a schema from an unverified guess would violate the schema-as-projection rule (docs/migration/conventions.md section 2), so they are excluded rather than guessed at.",
+  "endpoints": [
+    { "method": "GET", "path": "/fnd/market-information/us/most-actives", "covered_by": { "stream": "most_active_us_stocks" } },
+    { "method": "GET", "path": "/fnd/market-information/us/most-gainers", "covered_by": { "stream": "most_gainers" } },
+    { "method": "GET", "path": "/fnd/market-information/us/most-losers", "covered_by": { "stream": "most_losers" } },
+    { "method": "GET", "path": "/fnd/market-information/us/sector-performance", "covered_by": { "stream": "sector_performance" } },
+    { "method": "GET", "path": "/fnd/delisted-companies/", "covered_by": { "stream": "delisted_companies" } },
+    { "method": "GET", "path": "/news/market/{symbol}", "covered_by": { "stream": "market_news" } },
+    { "method": "GET", "path": "/fnd/earning-calendar", "covered_by": { "stream": "earnings_calendar" } },
+    { "method": "GET", "path": "/fnd/ipo-calendar", "covered_by": { "stream": "ipo_calendar" } },
+
+    { "method": "GET", "path": "/fnd/dividend-calendar", "excluded": { "category": "out_of_scope", "reason": "SCHEMA_AMBIGUOUS: endpoint verified live (returns a permission error, not 404) but its response field names could not be confirmed from any available documentation source -- Finage's docs site is client-rendered and returned identical generic content for every URL fetched, no public OpenAPI/Postman spec exists, and legacy never modeled this resource to derive fields from; implementing with guessed field names would violate the schema-as-projection rule" } },
+    { "method": "GET", "path": "/fnd/stock-split-calendar", "excluded": { "category": "out_of_scope", "reason": "SCHEMA_AMBIGUOUS: same as dividend-calendar -- endpoint verified live but no source (docs, legacy, live authenticated response) confirms its actual response field names" } },
+    { "method": "GET", "path": "/last/stock/{symbol}", "excluded": { "category": "out_of_scope", "reason": "real-time last-quote data is the Stocks product's streaming/snapshot surface, a distinct product from the Fundamentals/market-information surface this connector targets; not modeled by legacy" } },
+    { "method": "GET", "path": "/last/trade/{symbol}", "excluded": { "category": "out_of_scope", "reason": "real-time last-trade tick data; streaming/snapshot Stocks product surface, not fundamentals data; not modeled by legacy" } },
+    { "method": "GET", "path": "/agg/stock/{symbol}", "excluded": { "category": "out_of_scope", "reason": "historical OHLCV aggregates require symbol+resolution+date-range config this connector's spec does not model; a distinct per-symbol time-series product, not modeled by legacy" } },
+    { "method": "GET", "path": "/snapshot/stock", "excluded": { "category": "out_of_scope", "reason": "full-market real-time snapshot is the Stocks streaming product surface, not fundamentals/market-information data; not modeled by legacy" } },
+    { "method": "GET", "path": "/history/stock/{symbol}", "excluded": { "category": "deprecated", "reason": "Finage's own Composio-catalogued action list marks the historical-data endpoint deprecated in favor of /agg/stock" } },
+    { "method": "GET", "path": "/last/forex/{pair}", "excluded": { "category": "out_of_scope", "reason": "Forex is a wholly separate Finage product (different symbol namespace, currency-pair config) never modeled by legacy, which only ever read US-stock market-information/fundamentals endpoints" } },
+    { "method": "GET", "path": "/agg/forex/{pair}", "excluded": { "category": "out_of_scope", "reason": "Forex aggregates; same distinct-product rationale as /last/forex" } },
+    { "method": "GET", "path": "/last/crypto/{pair}", "excluded": { "category": "out_of_scope", "reason": "Crypto is a wholly separate Finage product (different symbol namespace) never modeled by legacy" } },
+    { "method": "GET", "path": "/agg/crypto/{pair}", "excluded": { "category": "out_of_scope", "reason": "Crypto aggregates; same distinct-product rationale as /last/crypto" } },
+    { "method": "GET", "path": "/technical-indicator/{indicator}/stock/{symbol}", "excluded": { "category": "out_of_scope", "reason": "Technical Indicators is a distinct computed-analytics product surface with its own per-indicator parameter set (period, series type); not modeled by legacy" } },
+    { "method": "GET", "path": "/stock/market-status", "excluded": { "category": "non_data_endpoint", "reason": "open/closed market-hours status flag, not a data catalog resource with a stable record shape" } },
+    { "method": "GET", "path": "/symbol/stock", "excluded": { "category": "out_of_scope", "reason": "the full US-stock symbol/ticker reference list is a static reference dataset, not the market-movers/fundamentals data legacy read" } },
+    { "method": "GET", "path": "/bonds/rate/{maturity}", "excluded": { "category": "out_of_scope", "reason": "US Treasury bond rates are a distinct fixed-income product surface, not modeled by legacy" } },
+    { "method": "GET", "path": "/economy/country/{country}", "excluded": { "category": "out_of_scope", "reason": "macroeconomic country-detail data is a distinct product surface, not modeled by legacy" } }
+  ]
+}

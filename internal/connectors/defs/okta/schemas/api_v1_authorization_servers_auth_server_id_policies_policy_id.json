@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "ID of the Policy"
+    },
+    "type": {
+      "type": "string",
+      "description": "Indicates that the Policy is an authorization server Policy",
+      "enum": [
+        "OAUTH_AUTHORIZATION_POLICY"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the Policy"
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "clients": {
+          "type": "object",
+          "description": "Specifies which clients are included in the policy",
+          "properties": {
+            "include": {
+              "type": "array",
+              "description": "Which clients are included in the policy",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the Policy"
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Specifies the order in which this Policy is evaluated in relation to the other Policies in a custom authorization server"
+    },
+    "status": {
+      "type": "string",
+      "description": "Specifies whether requests have access to this Policy",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "system": {
+      "type": "boolean",
+      "description": "Specifies whether Okta created this Policy"
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the Policy was created",
+      "format": "date-time"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the Policy was last updated",
+      "format": "date-time"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "rules": {
+          "type": "object",
+          "description": "Link to the authorization server policy's rules",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

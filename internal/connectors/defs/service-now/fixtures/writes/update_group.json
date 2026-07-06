@@ -1,0 +1,17 @@
+{
+  "record": {
+    "sys_id": "group_fixture_1",
+    "description": "Updated by fixture write test"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/now/table/sys_user_group/group_fixture_1",
+    "body": {
+      "description": "Updated by fixture write test"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "result": { "sys_id": "group_fixture_1", "description": "Updated by fixture write test" } }
+  }
+}

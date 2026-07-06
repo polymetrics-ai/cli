@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/customers/synthetic-conformance-value/customer_center",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "customer_center_config",
+      "customer_center": {
+        "enabled": true
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/reservations" },
+  "response": {
+    "status": 200,
+    "body": {
+      "reservations": [
+        { "id": "res_fixture_1", "confirmation_number": "CN-1", "status": "booked", "arrival_date": "2026-01-02" }
+      ]
+    }
+  }
+}

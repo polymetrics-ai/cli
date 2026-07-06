@@ -1,0 +1,15 @@
+{
+  "record": {
+    "purchase_order_id": 123,
+    "name": "Fixture update_a_purchase_order",
+    "description": "Fixture update_a_purchase_order record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/purchase_orders/123",
+    "body": {
+      "name": "Fixture update_a_purchase_order",
+      "description": "Fixture update_a_purchase_order record"
+    }
+  }
+}

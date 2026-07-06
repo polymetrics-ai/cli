@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/activity",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "timestamp": "2026-01-01T00:00:01.000+00:00",
+        "user_id": 8,
+        "user_name": "Fixture User",
+        "user_email": "fixture@example.com",
+        "type": "Asset",
+        "event": "Checkout",
+        "item_id": 51,
+        "item_name": "Fixture item 51",
+        "checked_out_to_from_type": "Employee",
+        "checked_out_to_from_id": 51,
+        "checked_out_to_from_name": "Fixture Employee",
+        "checked_out_to_from_email": "fixture@example.com",
+        "notes": ""
+      }
+    ]
+  }
+}

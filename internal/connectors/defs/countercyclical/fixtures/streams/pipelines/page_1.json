@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/pipelines", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "pipeline_fixture_1", "name": "Fixture Pipeline 1" },
+      { "id": "pipeline_fixture_2", "name": "Fixture Pipeline 2" }
+    ]
+  }
+}

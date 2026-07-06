@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "data_currencies",
+  "type": "object",
+  "x-primary-key": ["Currency"],
+  "required": ["Currency"],
+  "properties": {
+    "Currency": { "type": "string" },
+    "Symbol": { "type": ["string", "null"] }
+  }
+}

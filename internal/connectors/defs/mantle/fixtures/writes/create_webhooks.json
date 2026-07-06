@@ -1,0 +1,30 @@
+{
+  "record": {
+    "topic": "fixture",
+    "address": "https://example.com/fixture",
+    "appIds": [
+      "app_id_fixture"
+    ],
+    "filter": {
+      "eventName": "fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/webhooks",
+    "body": {
+      "topic": "fixture",
+      "address": "https://example.com/fixture",
+      "appIds": [
+        "app_id_fixture"
+      ],
+      "filter": {
+        "eventName": "fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

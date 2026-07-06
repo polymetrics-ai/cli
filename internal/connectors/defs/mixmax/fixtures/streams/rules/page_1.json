@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/rules" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "_id": "rule_fixture_1", "name": "Fixture Rule One", "trigger": "manual", "isPaused": false, "userId": "usr_fixture_1", "createdAt": "2026-01-01T00:00:00Z", "modifiedAt": "2026-01-02T00:00:00Z" }
+      ],
+      "next": null,
+      "hasNext": false
+    }
+  }
+}

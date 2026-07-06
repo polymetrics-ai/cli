@@ -1,0 +1,16 @@
+{
+  "record": {
+    "job_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/1/rql/job/synthetic-conformance-value/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "createdAt": { "type": ["string", "null"], "format": "date-time" },
+    "updatedAt": { "type": ["string", "null"], "format": "date-time" },
+    "externalId": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "avatar": { "type": ["string", "null"] },
+    "traits": { "type": ["object", "null"] },
+    "firstKnown": { "type": ["string", "null"], "format": "date-time" },
+    "lastSeenTimestamp": { "type": ["string", "null"], "format": "date-time" },
+    "lastInboundMessageTimestamp": { "type": ["string", "null"], "format": "date-time" },
+    "lastOutboundMessageTimestamp": { "type": ["string", "null"], "format": "date-time" },
+    "npsLastScore": { "type": ["integer", "null"] },
+    "npsLastFeedback": { "type": ["string", "null"] },
+    "npsLastRespondedAt": { "type": ["string", "null"], "format": "date-time" },
+    "unsubscribedFromConversations": { "type": ["boolean", "null"] },
+    "unsubscribedFromConversationsAt": { "type": ["string", "null"], "format": "date-time" },
+    "deactivatedAt": { "type": ["string", "null"], "format": "date-time" },
+    "segments": { "type": ["array", "null"] },
+    "accounts": { "type": ["array", "null"], "description": "Array of associated Account objects." },
+    "organizations": { "type": ["array", "null"], "description": "Array of associated Organization objects." }
+  }
+}

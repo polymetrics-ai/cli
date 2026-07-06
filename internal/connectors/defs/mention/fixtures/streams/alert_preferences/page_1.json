@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/accounts/synthetic-conformance-value/alerts/synthetic-conformance-value/preferences" },
+  "response": {
+    "status": 200,
+    "body": {
+      "preferences": {
+        "send_email": true,
+        "send_push": false,
+        "frequency": "daily",
+        "notification_frequency": "daily",
+        "shared": false
+      }
+    }
+  }
+}

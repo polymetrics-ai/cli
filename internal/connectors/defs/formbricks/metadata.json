@@ -1,0 +1,25 @@
+{
+  "name": "formbricks",
+  "display_name": "Formbricks",
+  "description": "Reads Formbricks surveys, responses, contacts, contact attributes, action classes, webhooks, and account metadata; writes approved management API mutations.",
+  "integration_type": "api",
+  "docs_url": "https://formbricks.com/docs/api-reference/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Formbricks management API reads of surveys, responses, contacts, contact attributes, action classes, webhooks, and API-key metadata",
+    "write": "external Formbricks management API mutations for action classes, responses, public upload URLs, surveys, and webhooks",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

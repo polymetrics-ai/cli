@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/nonbusinessdays",
+    "query": { "year": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "nonbusinessdays": [
+        { "id": 1, "date": "2026-01-01", "name": "Fixture Holiday", "half_day": 0, "nonbusinessgroups_id": 1 }
+      ]
+    }
+  }
+}

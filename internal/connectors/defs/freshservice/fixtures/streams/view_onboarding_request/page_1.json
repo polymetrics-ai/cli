@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/onboarding_requests/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "onboarding_request": {
+        "id": "view_onboarding_request",
+        "name": "Fixture view_onboarding_request",
+        "subject": "Fixture view_onboarding_request",
+        "description": "Fixture view_onboarding_request record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

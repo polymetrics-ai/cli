@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "exchanges",
+  "type": "object",
+  "x-primary-key": ["exchange_id"],
+  "required": ["exchange_id"],
+  "properties": {
+    "exchange_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "data_quote_start": { "type": ["string", "null"] },
+    "data_quote_end": { "type": ["string", "null"] },
+    "data_symbols_count": { "type": ["integer", "null"] }
+  }
+}

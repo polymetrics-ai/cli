@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "housekeeping_status",
+  "type": "object",
+  "x-primary-key": ["roomID"],
+  "required": ["roomID"],
+  "properties": {
+    "roomID": { "type": "string" },
+    "date": { "type": ["string", "null"] },
+    "roomTypeID": { "type": ["string", "null"] },
+    "roomTypeName": { "type": ["string", "null"] },
+    "roomName": { "type": ["string", "null"] },
+    "roomCondition": { "type": ["string", "null"] },
+    "roomOccupied": { "type": ["boolean", "null"] },
+    "roomBlocked": { "type": ["boolean", "null"] },
+    "frontdeskStatus": { "type": ["string", "null"] },
+    "housekeeperID": { "type": ["string", "null"] },
+    "housekeeper": { "type": ["string", "null"] },
+    "doNotDisturb": { "type": ["boolean", "null"] },
+    "refusedService": { "type": ["boolean", "null"] },
+    "vacantPickup": { "type": ["boolean", "null"] },
+    "roomComments": { "type": ["string", "null"] }
+  }
+}

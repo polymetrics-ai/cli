@@ -1,0 +1,14 @@
+{
+  "record": {
+    "authenticator_id": "synthetic-conformance-value",
+    "web_authn_method_type": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/authenticators/synthetic-conformance-value/methods/synthetic-conformance-value/verify-rp-id-domain"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

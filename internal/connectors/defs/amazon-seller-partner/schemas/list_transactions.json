@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_transactions",
+  "type": "object",
+  "properties": {
+    "sellingPartnerMetadata": {
+      "type": "object"
+    },
+    "relatedIdentifiers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "transactionType": {
+      "type": "string"
+    },
+    "transactionId": {
+      "type": "string"
+    },
+    "transactionStatus": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "postedDate": {
+      "type": "string"
+    },
+    "totalAmount": {
+      "type": "object"
+    },
+    "marketplaceDetails": {
+      "type": "object"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "contexts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "breakdowns": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "transactionId"
+  ]
+}

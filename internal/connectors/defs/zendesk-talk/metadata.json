@@ -1,0 +1,22 @@
+{
+  "name": "zendesk-talk",
+  "display_name": "Zendesk Talk",
+  "description": "Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agent activity statistics through the Zendesk Talk (voice) REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/voice/talk-api/introduction/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Zendesk Talk API read of phone number, greeting, and agent activity data"
+  }
+}

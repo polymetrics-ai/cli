@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/admin/projects", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "projects": [
+        { "id": "default", "name": "Default" },
+        { "id": "proj_fixture_2", "name": "Fixture Project" }
+      ]
+    }
+  }
+}

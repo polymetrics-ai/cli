@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/invoices" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 601,
+        "publicId": "INV-0001",
+        "status": "draft",
+        "issueDate": "2026-01-10",
+        "dueDate": "2026-01-24",
+        "reference": "Fixture Invoice",
+        "clientId": "cl_fixture_1",
+        "tax": 0,
+        "discount": 0,
+        "createdAt": "2026-01-10T00:00:00Z"
+      }
+    ]
+  }
+}

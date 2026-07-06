@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shipping_fulfillments",
+  "type": "object",
+  "x-primary-key": ["order_id"],
+  "x-cursor-field": "creation_date",
+  "required": ["order_id"],
+  "properties": {
+    "order_id": { "type": "string" },
+    "legacy_order_id": { "type": ["string", "null"] },
+    "order_fulfillment_status": { "type": ["string", "null"] },
+    "shipping_step": { "type": ["string", "null"] },
+    "ship_to_name": { "type": ["string", "null"] },
+    "ship_to_city": { "type": ["string", "null"] },
+    "ship_to_state_or_province": { "type": ["string", "null"] },
+    "ship_to_postal_code": { "type": ["string", "null"] },
+    "ship_to_country_code": { "type": ["string", "null"] },
+    "creation_date": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

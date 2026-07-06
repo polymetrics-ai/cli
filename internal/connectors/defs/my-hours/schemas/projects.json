@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "projects",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "integer"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "billable": {
+      "type": "boolean"
+    },
+    "date_created": {
+      "type": "string"
+    },
+    "date_archived": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

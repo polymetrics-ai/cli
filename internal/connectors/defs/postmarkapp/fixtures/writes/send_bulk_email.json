@@ -1,0 +1,32 @@
+{
+  "record": {
+    "From": "sender@example.com",
+    "Subject": "Fixture subject",
+    "Messages": [
+      {
+        "To": "receiver@example.com",
+        "TemplateModel": {
+          "name": "Fixture"
+        }
+      }
+    ],
+    "MessageStream": "broadcast"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/email/bulk",
+    "body": {
+      "From": "sender@example.com",
+      "Subject": "Fixture subject",
+      "Messages": [
+        {
+          "To": "receiver@example.com",
+          "TemplateModel": {
+            "name": "Fixture"
+          }
+        }
+      ],
+      "MessageStream": "broadcast"
+    }
+  }
+}

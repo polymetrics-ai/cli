@@ -1,0 +1,859 @@
+{
+  "api": "Zoho Expense API v1 (https://www.zohoapis.com/expense/v1)",
+  "docs": "https://www.zoho.com/expense/api/v1/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion for the official Zoho Expense API v1 OpenAPI files linked from the API docs. JSON GET endpoints are covered as streams; JSON/no-body POST, PUT, and DELETE endpoints are covered as write actions. Receipt and attachment upload/download endpoints are excluded as binary_payload.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/expense/v1/settings/currencies",
+      "covered_by": {
+        "stream": "currencies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/settings/currencies",
+      "covered_by": {
+        "write": "create_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/settings/currencies/{currency_id}",
+      "covered_by": {
+        "stream": "currency"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/settings/currencies/{currency_id}",
+      "covered_by": {
+        "write": "update_currency"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/settings/currencies/{currency_id}",
+      "covered_by": {
+        "write": "delete_currency"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/contacts",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/contacts",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/contacts/{customer_id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/contacts/{customer_id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/contacts/{customer_id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/advancepayments",
+      "covered_by": {
+        "stream": "advance_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/advancepayments",
+      "covered_by": {
+        "write": "create_advance_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/advancepayments/{advance_payment_id}",
+      "covered_by": {
+        "stream": "advance_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/advancepayments/{advance_payment_id}",
+      "covered_by": {
+        "write": "update_advance_payment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/advancepayments/{advance_payment_id}",
+      "covered_by": {
+        "write": "delete_advance_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensecategories",
+      "covered_by": {
+        "stream": "expense_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensecategories",
+      "covered_by": {
+        "write": "create_expense_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensecategories/{expense_category_id}",
+      "covered_by": {
+        "stream": "expense_category"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/expensecategories/{expense_category_id}",
+      "covered_by": {
+        "write": "update_expense_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/expensecategories/{expense_category_id}",
+      "covered_by": {
+        "write": "delete_expense_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensecategories/{expense_category_id}/show",
+      "covered_by": {
+        "write": "enable_expense_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensecategories/{expense_category_id}/hide",
+      "covered_by": {
+        "write": "disable_expense_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports",
+      "covered_by": {
+        "write": "create_expense_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/expensereports",
+      "covered_by": {
+        "write": "bulk_delete_expense_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}",
+      "covered_by": {
+        "stream": "expense_report"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/expensereports/{expense_report_id}",
+      "covered_by": {
+        "write": "update_expense_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/expensereports/{expense_report_id}",
+      "covered_by": {
+        "write": "delete_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/submit",
+      "covered_by": {
+        "write": "submit_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/approve",
+      "covered_by": {
+        "write": "approve_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/reject",
+      "covered_by": {
+        "write": "reject_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/reimburse",
+      "covered_by": {
+        "write": "reimburse_expense_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/approvalhistory",
+      "covered_by": {
+        "stream": "expense_report_approval_history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/takeback",
+      "covered_by": {
+        "write": "takeback_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/archive",
+      "covered_by": {
+        "write": "archive_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/share",
+      "covered_by": {
+        "write": "share_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/forwardapproval",
+      "covered_by": {
+        "write": "forward_approval_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/expense/{expense_id}/reject",
+      "covered_by": {
+        "write": "reject_expense_in_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/expensebulkreject",
+      "covered_by": {
+        "write": "bulk_reject_expenses_in_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/validate",
+      "covered_by": {
+        "stream": "expense_report_validation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/receipt",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint retrieves receipt or attachment bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/comments",
+      "covered_by": {
+        "write": "add_comment_to_expense_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/expensereports/{expense_report_id}/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_comment_of_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/tags",
+      "covered_by": {
+        "write": "associate_tags_to_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/addexpenses",
+      "covered_by": {
+        "write": "add_expenses_to_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/removeexpenses",
+      "covered_by": {
+        "write": "remove_expenses_from_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/documents",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads receipt or attachment bytes; declarative writes support JSON/form request bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/documents/{document_id}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint retrieves receipt or attachment bytes rather than a JSON record stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/expensereports/{expense_report_id}/documents/{document_id}",
+      "covered_by": {
+        "write": "delete_expense_report_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/documents/{document_id}/upload",
+      "covered_by": {
+        "write": "reupload_expense_report_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/removeadvancepayment",
+      "covered_by": {
+        "write": "remove_advance_payment_from_expense_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/budgetsummary",
+      "covered_by": {
+        "stream": "expense_report_budget_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expensereports/{expense_report_id}/reimbursement",
+      "covered_by": {
+        "stream": "expense_report_reimbursement"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/status/{action}",
+      "covered_by": {
+        "write": "change_status_of_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/export",
+      "covered_by": {
+        "write": "export_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/{expense_report_id}/reimburse/cancel",
+      "covered_by": {
+        "write": "cancel_reimbursement_of_expense_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expenses/{expense_id}/addtoreport",
+      "covered_by": {
+        "write": "add_expense_to_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/submit",
+      "covered_by": {
+        "write": "bulk_submit_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/approve",
+      "covered_by": {
+        "write": "bulk_approve_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/reject",
+      "covered_by": {
+        "write": "bulk_reject_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/reimburse",
+      "covered_by": {
+        "write": "bulk_reimburse_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/archive",
+      "covered_by": {
+        "write": "bulk_archive_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/unarchive",
+      "covered_by": {
+        "write": "bulk_unarchive_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/forwardapproval",
+      "covered_by": {
+        "write": "bulk_forward_approval_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/status/{action}",
+      "covered_by": {
+        "write": "bulk_change_status_of_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/substatus/reset",
+      "covered_by": {
+        "write": "bulk_reset_substatus_of_expense_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expensereports/bulkfieldupdate",
+      "covered_by": {
+        "write": "bulk_field_update_expense_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/expenses",
+      "covered_by": {
+        "stream": "expenses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expenses",
+      "covered_by": {
+        "write": "create_expense"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/expenses/{expense_id}",
+      "covered_by": {
+        "write": "update_expense"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expenses/{expense_id}/merge",
+      "covered_by": {
+        "write": "merge_expenses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/organizations",
+      "covered_by": {
+        "write": "create_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/organizations/{organization_id}",
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/organizations/{organization_id}",
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/projects",
+      "covered_by": {
+        "write": "create_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/projects/{project_id}",
+      "covered_by": {
+        "stream": "project"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/projects/{project_id}",
+      "covered_by": {
+        "write": "update_project"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/projects/{project_id}",
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/projects/{project_id}/active",
+      "covered_by": {
+        "write": "activate_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/projects/{project_id}/inactive",
+      "covered_by": {
+        "write": "deactivate_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/expenses",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "endpoint uploads receipt or attachment bytes; declarative writes support JSON/form request bodies only"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/reportingtags",
+      "covered_by": {
+        "stream": "reporting_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "mark_default_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "update_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/reportingtags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/reportingtags/{tag_id}/options",
+      "covered_by": {
+        "write": "update_tag_options"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/reportingtags/{tag_id}/criteria",
+      "covered_by": {
+        "write": "update_tag_criteria"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags/{tag_id}/active",
+      "covered_by": {
+        "write": "active_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags/{tag_id}/inactive",
+      "covered_by": {
+        "write": "inactive_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags/{tag_id}/option/{option_id}/active",
+      "covered_by": {
+        "write": "active_tag_option"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/reportingtags/{tag_id}/option/{option_id}/inactive",
+      "covered_by": {
+        "write": "inactive_tag_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/reportingtags/options",
+      "covered_by": {
+        "stream": "tag_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/reportingtags/{tag_id}/options/all",
+      "covered_by": {
+        "stream": "reporting_tag_options_all"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/reportingtags/reorder",
+      "covered_by": {
+        "write": "reorder_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/settings/taxes",
+      "covered_by": {
+        "stream": "taxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/settings/taxes",
+      "covered_by": {
+        "write": "create_tax"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/settings/taxes/{tax_id}",
+      "covered_by": {
+        "stream": "tax"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/settings/taxes/{tax_id}",
+      "covered_by": {
+        "write": "update_tax"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/settings/taxes/{tax_id}",
+      "covered_by": {
+        "write": "delete_tax"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/settings/taxgroups/{tax_group_id}",
+      "covered_by": {
+        "stream": "tax_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/trips",
+      "covered_by": {
+        "stream": "trips"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/trips",
+      "covered_by": {
+        "write": "create_trip"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/trips/{trip_id}",
+      "covered_by": {
+        "stream": "trip"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/trips/{trip_id}",
+      "covered_by": {
+        "write": "update_trip"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/trips/{trip_id}",
+      "covered_by": {
+        "write": "delete_trip"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/trips/{trip_id}/approve",
+      "covered_by": {
+        "write": "approve_trip"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/trips/{trip_id}/reject",
+      "covered_by": {
+        "write": "reject_trip"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/trips/{trip_id}/cancel",
+      "covered_by": {
+        "write": "cancel_trip"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/trips/{trip_id}/close",
+      "covered_by": {
+        "write": "close_trip"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expense/v1/users/{user_id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/expense/v1/users/{user_id}",
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/expense/v1/users/{user_id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/users/{user_id}/inactive",
+      "covered_by": {
+        "write": "deactivate_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/users/{user_id}/active",
+      "covered_by": {
+        "write": "activate_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/expense/v1/users/{user_id}/role/{role_id}",
+      "covered_by": {
+        "write": "assign_role_to_user"
+      }
+    }
+  ]
+}

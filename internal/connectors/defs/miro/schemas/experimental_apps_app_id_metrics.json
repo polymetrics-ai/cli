@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "periodStart": {
+      "type": "string",
+      "description": "Date from which the metrics are aggregated.",
+      "format": "date"
+    },
+    "uniqueUsers": {
+      "type": "integer",
+      "description": "Number of unique users who performed at least one activity in the application."
+    },
+    "uniqueRecurringUsers": {
+      "type": "integer",
+      "description": "Number of unique users who have been active for more than one day over the past 30 days."
+    },
+    "uniqueOrganizations": {
+      "type": "integer",
+      "description": "Number of unique company accounts that have installed the application."
+    },
+    "installations": {
+      "type": "integer",
+      "description": "Number of application installations for a team."
+    },
+    "uninstallations": {
+      "type": "integer",
+      "description": "Number of application uninstallations for a team."
+    }
+  },
+  "additionalProperties": true
+}

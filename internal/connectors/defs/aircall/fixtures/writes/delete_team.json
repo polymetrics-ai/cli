@@ -1,0 +1,7 @@
+{
+  "record": { "id": 2001 },
+  "expect": {
+    "method": "DELETE",
+    "path": "/teams/2001"
+  }
+}

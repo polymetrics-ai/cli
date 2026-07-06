@@ -10,22 +10,545 @@ SYNOPSIS
   pm credentials add <name> --connector 7shifts [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads 7shifts companies, locations, departments, roles, users, shifts, and time punches through the 7shifts v2 REST API.
+  Reads the documented 7shifts v2 REST API surface and executes declarative single-request reverse-ETL actions for supported mutations.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  availability_id
+  base_url
+  company_id
+  date
+  date_end
+  date_start
+  department_id
+  employee_id
+  end_date
+  event_id
+  from
+  id
+  identifier
+  list_id
+  location_id
+  log_book_ids
+  payroll_period_id
+  punches
+  receipt_id
+  role_id
+  shift_id
+  start_date
+  time_off_id
+  time_punch_id
+  tip_pool_settings_uuid
+  to
+  user_id
+  uuid
+  access_token (secret)
+
+ETL STREAMS
+  companies:
+    primary key: id
+    cursor: modified
+    fields: active(), country_code(), created(), currency(), id(), modified(), name(), timezone()
+  locations:
+    primary key: id
+    cursor: modified
+    fields: address(), city(), company_id(), country(), created(), id(), modified(), name(), state(), timezone()
+  departments:
+    primary key: id
+    cursor: modified
+    fields: company_id(), created(), id(), location_id(), modified(), name()
+  roles:
+    primary key: id
+    cursor: modified
+    fields: color(), company_id(), created(), department_id(), id(), location_id(), modified(), name()
+  users:
+    primary key: id
+    cursor: modified
+    fields: active(), company_id(), created(), email(), first_name(), hire_date(), id(), last_name(), modified(), type()
+  shifts:
+    primary key: id
+    cursor: modified
+    fields: company_id(), created(), deleted(), department_id(), end(), id(), location_id(), modified(), open(), role_id(), start(), user_id()
+  time_punches:
+    primary key: id
+    cursor: modified
+    fields: approved(), clocked_in(), clocked_out(), company_id(), created(), department_id(), id(), location_id(), modified(), role_id(), user_id()
+  fetch_tip_pool_manual_entry:
+    primary key: uuid
+    fields: created(), day_part_uuid(), entry_date(), modified(), tip_amount(), tip_pool_settings_uuid(), uuid()
+  find_by_id:
+    primary key: id
+    fields: amount_of_hours(), category(), comments(), company_id(), created(), from_date(), hours(), id(), partial(), partial_from(), partial_to(), status(), status_action_message(), status_action_user_id(), to_date(), user_id()
+  get_assignments:
+    primary key: stream_key
+    fields: departments(), locations(), roles(), stream_key()
+  get_availability_by_id:
+    primary key: id
+    fields: company_id(), created(), fri(), fri_comments(), fri_from(), fri_reason(), fri_to(), id(), modified(), mon(), mon_comments(), mon_from(), mon_reason(), mon_to(), old_approved_data(), repeat(), sat(), sat_comments(), sat_from(), sat_reason(), sat_to(), status(), status_action_message(), status_action_user_id(), sun(), sun_comments(), sun_from(), sun_reason(), sun_to(), thu(), thu_comments(), thu_from(), thu_reason(), thu_to(), tue(), tue_comments(), tue_from(), tue_reason(), tue_to(), user_id(), wed(), wed_comments(), wed_from(), wed_reason(), wed_to(), week(), week_to()
+  get_daily_sales_and_labor:
+    primary key: id
+    fields: actual_items(), actual_labor_cost(), actual_labor_minutes(), actual_ot_minutes(), actual_sales(), date(), department_id(), id(), items_per_labor_hour(), labor_percent(), labor_target(), location_id(), projected_items(), projected_items_override(), projected_items_per_labor_hour(), projected_labor_cost(), projected_labor_minutes(), projected_sales(), projected_sales_override(), projected_sales_per_labor_hour(), sales_per_labor_hour()
+  get_engage_overview_by_location_id:
+    primary key: stream_key
+    fields: employee_stats(), engagement_scores(), location_stats(), shift_feedback(), stream_key(), tenure()
+  get_event:
+    primary key: id
+    fields: all_day(), color(), description(), end(), end_date(), end_time(), event_type(), id(), is_multi_day(), location_ids(), recurrence(), start(), start_date(), start_time(), title()
+  get_events:
+    primary key: id
+    fields: all_day(), color(), description(), end(), end_date(), end_time(), event_type(), id(), is_multi_day(), location_ids(), recurrence(), start(), start_date(), start_time(), title()
+  get_hours_and_wages:
+    primary key: stream_key
+    fields: end(), show_exception_costs(), show_tips(), start(), stream_key(), tip_tracking_enabled(), total(), users()
+  get_location_by_id:
+    primary key: id
+    fields: auto_send_log_book_time(), city(), company_id(), country(), created(), deleted(), department_based_budget(), formatted_address(), fri_hours_close(), fri_hours_open(), fri_is_closed(), hash(), holiday_pay(), id(), lat(), lng(), mapping_id(), message(), modified(), mon_hours_close(), mon_hours_open(), mon_is_closed(), name(), place_id(), sat_hours_close(), sat_hours_open(), sat_is_closed(), shift_feedback(), state(), sun_hours_close(), sun_hours_open(), sun_is_closed(), thu_hours_close(), thu_hours_open(), thu_is_closed(), timezone(), timezone_updated(), tue_hours_close(), tue_hours_open(), tue_is_closed(), wed_hours_close(), wed_hours_open(), wed_is_closed()
+  get_receipt:
+    primary key: uuid
+    fields: company_id(), created_date(), external_user_id(), gross_total(), location_id(), modified_date(), net_total(), pos_id(), receipt_close_date(), receipt_date(), receipt_id(), receipt_lines(), revenue_center(), status(), tip_details(), tips(), total_item_discounts(), total_receipt_discounts(), uuid()
+  get_role_assignments:
+    primary key: location_id
+    fields: department_id(), is_primary(), location_id(), name(), role_id(), skill_level(), sort()
+  get_task_list:
+    primary key: id
+    fields: assignments(), description(), due(), due_date(), id(), recurrence(), start(), task_list_template_uuid(), tasks(), time_frame(), title()
+  get_task_list_daily_summary:
+    primary key: date
+    fields: date(), has_recent_task_completed(), report_time(), task_lists(), total_completed_percentage(), total_in_progress_percentage(), total_incomplete_percentage()
+  get_task_list_template:
+    primary key: id
+    fields: activated_at(), assignments(), company_id(), created(), description(), due(), id(), recurrence(), status(), task_templates(), time_frame(), title(), uuid()
+  get_task_list_templates:
+    primary key: id
+    fields: activated_at(), assignments(), company_id(), created(), description(), due(), id(), recurrence(), status(), task_templates(), time_frame(), title(), uuid()
+  get_task_lists:
+    primary key: id
+    fields: assignments(), description(), due(), due_date(), id(), recurrence(), start(), task_list_template_uuid(), tasks(), time_frame(), title()
+  get_task_management_settings:
+    primary key: id
+    fields: can_use_task_management(), company_id(), employee_login(), employee_reminder(), enabled(), has_created_list(), id(), overdue_alert(), prompted_auto_assign_ids()
+  get_time_clocking_payroll_period:
+    primary key: id
+    fields: closed(), company_id(), end(), id(), start(), states()
+  get_time_clocking_payroll_periods:
+    primary key: id
+    fields: all_punches_approved(), closed(), company_id(), created(), employee_punch_approvals(), end(), finalized(), id(), modified(), start(), states()
+  get_time_off_list:
+    primary key: id
+    fields: amount_of_hours(), category(), comments(), company_id(), created(), from_date(), hours(), id(), partial(), partial_from(), partial_to(), status(), status_action_message(), status_action_user_id(), to_date(), user_id()
+  get_time_off_settings:
+    primary key: company_id
+    fields: categories(), company_id(), time_off_request_comment(), time_off_request_notice()
+  get_time_punch_by_id:
+    primary key: id
+    fields: approved(), auto_clocked_out(), breaks(), clocked_in(), clocked_in_offline(), clocked_out(), clocked_out_offline(), company_id(), created(), deleted(), department_id(), editable_punch(), hourly_wage(), id(), location_id(), modified(), notes(), pos_type(), role_id(), shift_id(), tips(), user_id()
+  get_tip_pool_settings:
+    primary key: uuid
+    fields: company_id(), contribution_type(), created(), day_part_uuids(), distribution_type(), enabled(), location_id(), modified(), name(), sales_tip_percentage(), tip_pool_cadence_settings(), tip_pool_contributions(), tip_pool_stakeholders(), unmapped_contribution_filters(), unmapped_contribution_method(), uuid()
+  get_total_hours:
+    primary key: user_id
+    fields: category(), hours(), user_id()
+  get_user:
+    primary key: id
+    fields: active(), address(), appear_as_employee(), birth_date(), city(), company_id(), created(), email(), employee_id(), first_name(), home_number(), hourly_wage(), id(), identity_id(), invite_accepted(), invite_status(), invited(), is_new(), language(), last_name(), max_weekly_hours(), meta(), mobile_number(), modified(), notes(), notify_ot_risk(), permissions_template_id(), photo(), postal_zip(), preferred_first_name(), preferred_last_name(), pronouns(), prov_state(), punch_id(), push(), reactivation_status(), skill_level(), sms_me_schedules(), subscribe_to_updates(), timezone(), type(), wage_type()
+  get_user_wages:
+    primary key: stream_key
+    fields: current_wages(), stream_key(), upcoming_wages(), wage_type()
+  list_availabilities:
+    primary key: id
+    fields: company_id(), created(), fri(), fri_comments(), fri_from(), fri_reason(), fri_to(), id(), modified(), mon(), mon_comments(), mon_from(), mon_reason(), mon_to(), old_approved_data(), repeat(), sat(), sat_comments(), sat_from(), sat_reason(), sat_to(), status(), status_action_message(), status_action_user_id(), sun(), sun_comments(), sun_from(), sun_reason(), sun_to(), thu(), thu_comments(), thu_from(), thu_reason(), thu_to(), tue(), tue_comments(), tue_from(), tue_reason(), tue_to(), user_id(), wed(), wed_comments(), wed_from(), wed_reason(), wed_to(), week(), week_to()
+  list_availability_reasons:
+    primary key: id
+    fields: comments_required(), company_id(), created(), id(), modified(), reason(), sort()
+  list_company_webhooks:
+    primary key: id
+    fields: company_id(), created(), event(), id(), method(), modified(), url()
+  list_department_assignments:
+    primary key: location_id
+    fields: appear_on_schedule(), department_id(), location_id(), name()
+  list_employment_record:
+    primary key: uuid
+    fields: business_entity_uuid(), classification(), company_id(), hire_date(), locked(), termination_date(), user_id(), uuid()
+  list_external_user_mappings:
+    primary key: id
+    fields: application_name(), company_id(), created(), external_user_id(), id(), location_id(), modified(), user_active(), user_id()
+  list_inactive_reasons:
+    primary key: stream_key
+    fields: stream_key(), value()
+  list_location_assignments:
+    primary key: location_id
+    fields: location_id(), name()
+  list_log_book_categories:
+    primary key: id
+    fields: col(), company_id(), created(), field_type(), id(), name(), notify(), required(), sort(), uuid()
+  list_log_book_comments:
+    primary key: id
+    fields: company_id(), created(), id(), log_book_id(), message(), user_id(), uuid()
+  list_log_book_posts:
+    primary key: id
+    fields: attachments(), company_id(), created(), date(), id(), location_id(), log_book_category_id(), log_book_comment_count(), message(), user_id(), uuid()
+  list_sales_receipts:
+    primary key: uuid
+    fields: company_id(), created_date(), external_user_id(), gross_total(), location_id(), modified_date(), net_total(), pos_id(), receipt_close_date(), receipt_date(), receipt_id(), receipt_lines(), revenue_center(), status(), tip_details(), tips(), total_item_discounts(), total_receipt_discounts(), uuid()
+  list_scheduled_shifts:
+    primary key: id
+    fields: attendance_status(), business_decline(), close(), company_id(), department_id(), end(), id(), location_id(), notes(), open(), publish_status(), role_id(), start(), station_id(), station_name(), user_id()
+  list_shift_feedback:
+    primary key: id
+    fields: comments(), department_id(), dismissed(), end(), id(), location_id(), notified(), rating(), role_id(), shift_id(), start(), station_name(), user_id()
+  list_user_contacts:
+    primary key: id
+    fields: company_id(), email(), first_name(), home_phone(), id(), last_name(), mobile_phone(), photo(), pronouns(), type()
+  list_users_authorized_locations:
+    primary key: id
+    fields: auto_send_log_book_time(), city(), company_id(), country(), created(), deleted(), department_based_budget(), formatted_address(), fri_hours_close(), fri_hours_open(), fri_is_closed(), hash(), holiday_pay(), id(), lat(), lng(), mapping_id(), message(), modified(), mon_hours_close(), mon_hours_open(), mon_is_closed(), name(), place_id(), sat_hours_close(), sat_hours_open(), sat_is_closed(), shift_feedback(), state(), sun_hours_close(), sun_hours_open(), sun_is_closed(), thu_hours_close(), thu_hours_open(), thu_is_closed(), timezone(), timezone_updated(), tue_hours_close(), tue_hours_open(), tue_is_closed(), wed_hours_close(), wed_hours_open(), wed_is_closed()
+  retrieve_company_labor_settings:
+    primary key: company_id
+    fields: auto_break_enabled(), auto_break_hours(), auto_break_hours_2(), auto_break_minutes(), auto_break_minutes_2(), company_id(), consecutive_days_multiplier(), consecutive_days_threshold(), custom_min_wages(), daily_overtime_multiplier(), daily_overtime_threshold(), exception_cost_enabled(), is_custom(), is_custom_min_wage(), jurisdiction(), ot_alerts_buffer_minutes(), ot_alerts_enabled(), overtime_by_location_enabled(), overtime_enabled(), premium_overtime_multiplier(), premium_overtime_threshold(), regular_rate_of_pay_enabled(), split_hours_on_holidays(), tipped_minimum_wage_enabled(), use_jurisdiction_minimum_wage_for_ot(), wage_based_roles_enabled(), weekly_overtime_multiplier(), weekly_overtime_threshold()
+  retrieve_daily_stats:
+    primary key: stream_key
+    fields: intervals(), stream_key(), summary()
+  retrieve_day_part_settings:
+    primary key: uuid
+    fields: created(), location_id(), modified(), name(), segments(), uuid()
+  retrieve_department:
+    primary key: id
+    fields: company_id(), created(), default(), deleted(), id(), location_id(), modified(), name()
+  retrieve_external_user_mapping:
+    primary key: id
+    fields: application_name(), company_id(), created(), external_user_id(), id(), location_id(), modified(), user_active(), user_id()
+  retrieve_log_book_comment:
+    primary key: id
+    fields: company_id(), created(), id(), log_book_id(), message(), user_id(), uuid()
+  retrieve_log_book_post:
+    primary key: id
+    fields: attachments(), company_id(), created(), date(), id(), location_id(), log_book_category_id(), log_book_comment_count(), message(), user_id(), uuid()
+  retrieve_receipts_summary:
+    primary key: date
+    fields: closed(), date(), deleted(), open(), voided()
+  retrieve_role:
+    primary key: id
+    fields: color(), color_code(), color_dark(), company_id(), created(), department_id(), id(), is_tipped_role(), job_code(), location_id(), modified(), name(), num_stations(), sort(), stations()
+  retrieve_shift:
+    primary key: id
+    fields: attendance_status(), breaks(), business_decline(), close(), created(), custom_flag(), deleted(), department_id(), draft(), end(), hourly_wage(), id(), late_minuets(), location_id(), modified(), notes(), notified(), open(), open_offer_type(), publish_status(), role_id(), soft_deleted(), start(), station(), station_id(), station_name(), unassigned(), unassigned_skill_level(), user_id()
+  retrieve_tip_pool_detailed_report:
+    primary key: location_id
+    fields: location_id(), location_name(), report_rows()
+  retrieve_tip_pool_summary_report:
+    primary key: tip_pool_uuid
+    fields: assigned_tips(), tip_pool_name(), tip_pool_uuid(), total(), unassigned_tips()
+  retrieve_user_contact:
+    primary key: id
+    fields: company_id(), email(), first_name(), home_phone(), id(), last_name(), mobile_phone(), photo(), pronouns(), type()
+  view_company:
+    primary key: id
+    fields: converted(), country(), created(), days_to_expire(), expires(), id(), meta(), modified(), name(), photo(), plan_id(), pos(), start_week_on(), status()
+  who_am_i:
+    primary key: identity_id
+    fields: identity_id(), users()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+
+REVERSE ETL ACTIONS
+  approve_time_off:
+    endpoint: POST /v2/time_off/{{ record.time_off_id }}/approve
+    required fields: time_off_id
+    risk: Approve Time Off Request in the configured 7shifts account.
+  clear_task:
+    endpoint: POST /v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/clear
+    required fields: list_id, task_id
+    risk: Clear Task in the configured 7shifts account.
+  complete_task:
+    endpoint: POST /v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/complete
+    required fields: list_id, task_id
+    risk: Complete Task in the configured 7shifts account.
+  create_availability:
+    endpoint: POST /v2/company/{{ config.company_id }}/availabilities
+    risk: Create Availability in the configured 7shifts account.
+  create_availability_reason:
+    endpoint: POST /v2/company/{{ config.company_id }}/availability_reasons
+    risk: Create Availability Reason in the configured 7shifts account.
+  create_bulk_forecast_overrides:
+    endpoint: POST /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_overrides
+    required fields: location_id
+    risk: Create Daily Projected Forecast Overrides in the configured 7shifts account.
+  create_complete_receipt:
+    endpoint: POST /v2/company/{{ config.company_id }}/receipts
+    risk: Create Receipt in the configured 7shifts account.
+  create_department:
+    endpoint: POST /v2/company/{{ config.company_id }}/departments
+    risk: Create Department in the configured 7shifts account.
+  create_department_assignment:
+    endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/department_assignments
+    required fields: user_id
+    risk: Create Department Assignment in the configured 7shifts account.
+  create_employment_record:
+    endpoint: POST /v2/company/{{ config.company_id }}/employment_records
+    risk: Create Employment Record in the configured 7shifts account.
+  create_event:
+    endpoint: POST /v2/company/{{ config.company_id }}/events
+    risk: Create Event in the configured 7shifts account.
+  create_external_user_mappings:
+    endpoint: POST /v2/company/{{ config.company_id }}/external_user_mappings
+    risk: Create External User Mapping in the configured 7shifts account.
+  create_forecast_override:
+    endpoint: POST /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override
+    required fields: location_id
+    risk: Create Daily Projected Forecast Override in the configured 7shifts account.
+  create_location:
+    endpoint: POST /v2/company/{{ config.company_id }}/locations
+    risk: Create Location in the configured 7shifts account.
+  create_location_assignment:
+    endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/location_assignments
+    required fields: user_id
+    risk: Create Location Assignments in the configured 7shifts account.
+  create_log_book_category:
+    endpoint: POST /v2/company/{{ config.company_id }}/log_book_categories
+    risk: Create Log Book Category in the configured 7shifts account.
+  create_log_book_comment:
+    endpoint: POST /v2/company/{{ config.company_id }}/log_book_comments
+    risk: Create Log Book Comment in the configured 7shifts account.
+  create_log_book_post:
+    endpoint: POST /v2/company/{{ config.company_id }}/log_book_posts
+    risk: Create Log Book Post in the configured 7shifts account.
+  create_projected_sales_interval_override:
+    endpoint: POST /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval
+    required fields: location_id
+    risk: Create Sales Forecast Override Interval in the configured 7shifts account.
+  create_role:
+    endpoint: POST /v2/company/{{ config.company_id }}/roles
+    risk: Create Role in the configured 7shifts account.
+  create_role_assignment:
+    endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments
+    required fields: user_id
+    risk: Create Role Assignment in the configured 7shifts account.
+  create_task_list_template:
+    endpoint: POST /v2/company/{{ config.company_id }}/task_list_templates
+    risk: Create Task List Template in the configured 7shifts account.
+  create_task_tags:
+    endpoint: POST /v2/company/{{ config.company_id }}/task_tags
+    risk: Create Task Tags in the configured 7shifts account.
+  create_time_off:
+    endpoint: POST /v2/time_off
+    risk: Create Time Off in the configured 7shifts account.
+  create_user_mappings_bulk:
+    endpoint: POST /v2/company/{{ config.company_id }}/external_user_mappings_bulk
+    risk: Create User External Mappings in the configured 7shifts account.
+  create_user_wages:
+    endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/wages
+    required fields: user_id
+    risk: Create User Wage in the configured 7shifts account.
+  create_webhook:
+    endpoint: POST /v2/company/{{ config.company_id }}/webhooks
+    risk: Create Webhook in the configured 7shifts account.
+  deactivate_user:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/users/{{ record.identifier }}
+    required fields: identifier
+    risk: Deactivate User in the configured 7shifts account.
+  decline_time_off:
+    endpoint: POST /v2/time_off/{{ record.time_off_id }}/decline
+    required fields: time_off_id
+    risk: Decline Time Off Request in the configured 7shifts account.
+  delete_availability:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}
+    required fields: availability_id
+    risk: Delete Availability in the configured 7shifts account.
+  delete_availability_reason:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/availability_reasons/{{ record.availability_reason_id }}
+    required fields: availability_reason_id
+    risk: Delete Availability Reason in the configured 7shifts account.
+  delete_company_webhook:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: Delete Webhook in the configured 7shifts account.
+  delete_department:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/departments/{{ record.department_id }}
+    required fields: department_id
+    risk: Delete Department in the configured 7shifts account.
+  delete_department_assignment:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/department_assignments/{{ record.department_id }}
+    required fields: user_id, department_id
+    risk: Delete Department Assignment in the configured 7shifts account.
+  delete_employment_record:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/employment_record/{{ record.uuid }}
+    required fields: uuid
+    risk: Delete Employment Record in the configured 7shifts account.
+  delete_event:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/events/{{ record.event_id }}
+    required fields: event_id
+    risk: Delete Event in the configured 7shifts account.
+  delete_external_user_mappings:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/external_user_mappings/{{ record.identifier }}
+    required fields: identifier
+    risk: Delete External User Mapping in the configured 7shifts account.
+  delete_forecast_override:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override
+    required fields: location_id
+    risk: Sync Daily Projected Forecast Override in the configured 7shifts account.
+  delete_location:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}
+    required fields: location_id
+    risk: Delete Location in the configured 7shifts account.
+  delete_location_assignment:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/location_assignments/{{ record.location_id }}
+    required fields: user_id, location_id
+    risk: Delete Location Assignment in the configured 7shifts account.
+  delete_log_book_category:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/log_book_categories/{{ record.id }}
+    required fields: id
+    risk: Delete Log Book Category in the configured 7shifts account.
+  delete_log_book_comment:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/log_book_comments/{{ record.id }}
+    required fields: id
+    risk: Delete Log Book Comment in the configured 7shifts account.
+  delete_log_book_post:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/log_book_posts/{{ record.id }}
+    required fields: id
+    risk: Delete Log Book Post in the configured 7shifts account.
+  delete_role:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/roles/{{ record.role_id }}
+    required fields: role_id
+    risk: Delete Role in the configured 7shifts account.
+  delete_role_assignment:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments/{{ record.role_id }}
+    required fields: user_id, role_id
+    risk: Delete Role Assignment in the configured 7shifts account.
+  delete_shift:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/shifts/{{ record.shift_id }}
+    required fields: shift_id
+    risk: Delete Shift in the configured 7shifts account.
+  delete_task_list_template:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/task_list_templates/{{ record.uuid }}
+    required fields: uuid
+    risk: Delete Task List Template in the configured 7shifts account.
+  delete_task_tags:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/task_tags
+    risk: Delete Task Tags in the configured 7shifts account.
+  delete_time_off:
+    endpoint: DELETE /v2/time_off/{{ record.time_off_id }}
+    required fields: time_off_id
+    risk: Delete Time Off in the configured 7shifts account.
+  delete_time_punch_by_id:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/time_punches/{{ record.time_punch_id }}
+    required fields: time_punch_id
+    risk: Delete Time Punch in the configured 7shifts account.
+  edit_availability:
+    endpoint: PUT /v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}
+    required fields: availability_id
+    risk: Update Availability in the configured 7shifts account.
+  edit_availability_reason:
+    endpoint: PUT /v2/company/{{ config.company_id }}/availability_reasons/{{ record.availability_reason_id }}
+    required fields: availability_reason_id
+    risk: Update Availability Reason in the configured 7shifts account.
+  edit_company_webhook:
+    endpoint: PUT /v2/company/{{ config.company_id }}/webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: Update Webhook in the configured 7shifts account.
+  edit_event:
+    endpoint: PATCH /v2/company/{{ config.company_id }}/events/{{ record.event_id }}
+    required fields: event_id
+    risk: Update Event in the configured 7shifts account.
+  edit_task_list_template:
+    endpoint: PUT /v2/company/{{ config.company_id }}/task_list_templates/{{ record.uuid }}
+    required fields: uuid
+    risk: Update Task List Template in the configured 7shifts account.
+  edit_time_off:
+    endpoint: PATCH /v2/time_off/{{ record.time_off_id }}
+    required fields: time_off_id
+    risk: Update Time Off in the configured 7shifts account.
+  post_shift:
+    endpoint: POST /v2/company/{{ config.company_id }}/shifts
+    risk: Create Shift in the configured 7shifts account.
+  post_time_punch:
+    endpoint: POST /v2/company/{{ config.company_id }}/time_punches
+    risk: Create Time Punch in the configured 7shifts account.
+  post_user:
+    endpoint: POST /v2/company/{{ config.company_id }}/users
+    risk: Create User in the configured 7shifts account.
+  put_time_punch:
+    endpoint: PUT /v2/company/{{ config.company_id }}/time_punches/{{ record.time_punch_id }}
+    required fields: time_punch_id
+    risk: Update Time Punch in the configured 7shifts account.
+  put_user:
+    endpoint: PUT /v2/company/{{ config.company_id }}/users/{{ record.identifier }}
+    required fields: identifier
+    risk: Update User in the configured 7shifts account.
+  save_time_off_settings:
+    endpoint: POST /v2/time_off_settings/{{ config.company_id }}
+    risk: Create Time Off Settings in the configured 7shifts account.
+  save_tip_pool_manual_entry:
+    endpoint: PUT /v2/company/{{ config.company_id }}/tip_pool/{{ record.tip_pool_settings_uuid }}/manual_entry
+    required fields: tip_pool_settings_uuid
+    risk: Update Tip Pool Manual Entries in the configured 7shifts account.
+  sync_overridden_projected_sales_interval:
+    endpoint: DELETE /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval
+    required fields: location_id
+    risk: Delete Sales Forecast Override Interval in the configured 7shifts account.
+  update_availability_status:
+    endpoint: PUT /v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}/status
+    required fields: availability_id
+    risk: Update Availability Status in the configured 7shifts account.
+  update_company:
+    endpoint: PATCH /v2/companies/{{ record.id }}
+    required fields: id
+    risk: Update Company in the configured 7shifts account.
+  update_complete_receipt:
+    endpoint: PUT /v2/company/{{ config.company_id }}/receipts/{{ record.receipt_id }}
+    required fields: receipt_id
+    risk: Update Receipt in the configured 7shifts account.
+  update_department:
+    endpoint: PUT /v2/company/{{ config.company_id }}/departments/{{ record.department_id }}
+    required fields: department_id
+    risk: Update Department in the configured 7shifts account.
+  update_employment_record:
+    endpoint: PUT /v2/company/{{ config.company_id }}/employment_record/{{ record.uuid }}
+    required fields: uuid
+    risk: Update Employment Record in the configured 7shifts account.
+  update_external_user_mappings:
+    endpoint: PUT /v2/company/{{ config.company_id }}/external_user_mappings/{{ record.identifier }}
+    required fields: identifier
+    risk: Update External User Mappings in the configured 7shifts account.
+  update_location:
+    endpoint: PUT /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}
+    required fields: location_id
+    risk: Update Location in the configured 7shifts account.
+  update_log_book_category:
+    endpoint: PATCH /v2/company/{{ config.company_id }}/log_book_categories/{{ record.id }}
+    required fields: id
+    risk: Update Log Book Category in the configured 7shifts account.
+  update_role:
+    endpoint: PUT /v2/company/{{ config.company_id }}/roles/{{ record.role_id }}
+    required fields: role_id
+    risk: Update Role in the configured 7shifts account.
+  update_role_assignment:
+    endpoint: PUT /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments/{{ record.role_id }}
+    required fields: user_id, role_id
+    risk: Update Role Assignment in the configured 7shifts account.
+  update_shift:
+    endpoint: PUT /v2/company/{{ config.company_id }}/shifts/{{ record.shift_id }}
+    required fields: shift_id
+    risk: Update Shift in the configured 7shifts account.
+  upsert_bulk_employment_records:
+    endpoint: POST /v2/company/{{ config.company_id }}/bulk_employment_records
+    risk: Create Many Employment Records in the configured 7shifts account.
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external 7shifts API reads of scheduling, roster, labor, sales, task, time off, webhook, and settings data
+  write risk: creates, updates, deletes, approves, declines, or otherwise mutates configured 7shifts account resources through single-request REST actions
+  approval: reverse ETL writes require plan preview and approval token
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +562,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect 7shifts before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

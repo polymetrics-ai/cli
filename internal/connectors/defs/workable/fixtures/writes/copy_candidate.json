@@ -1,0 +1,17 @@
+{
+  "record": {
+    "candidate_id": "candidate_fixture",
+    "member_id": "member_fixture",
+    "target_job_shortcode": "JOB2",
+    "target_stage": "applied"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/candidates/candidate_fixture/copy",
+    "body": {
+      "member_id": "member_fixture",
+      "target_job_shortcode": "JOB2",
+      "target_stage": "applied"
+    }
+  }
+}

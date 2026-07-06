@@ -1,0 +1,12 @@
+{
+  "record": {
+    "project_id": 1,
+    "environment_id": 5,
+    "name": "Fixture New Job",
+    "execute_steps": ["dbt build"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/jobs/"
+  }
+}

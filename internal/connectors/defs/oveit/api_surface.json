@@ -1,0 +1,213 @@
+{
+  "api": "Oveit API (https://l.oveit.com/api)",
+  "docs": "https://l.oveit.com/api-documentation/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion. metadata.json's docs_url (https://oveit.com/api/) 404s live; the real, current, reachable API documentation lives at https://l.oveit.com/api-documentation/ (Events/Tickets/Attendees/RFID/Virtual wallets/Advanced data/Webhooks/Channel Partner Management/Turnstile pages), discovered via web search since the docs_url itself no longer resolves to content. The real Oveit API is entirely POST-based with a token-exchange auth flow (POST /seller/login with organizer email/password returns an access token with its own expiry, then that token is sent as a request parameter -- or, per one endpoint's own docs, a Bearer header -- on every subsequent call) that has no equivalent among this dialect's declarative auth modes (bearer/basic/api_key_header/api_key_query/oauth2_client_credentials) and would require a new AuthHook Tier-2 package to express -- explicitly out of scope for this pass ('do NOT create new hook packages'). This bundle's existing 3 streams (events/orders/attendees) keep legacy's own fictional GET+HTTP-Basic-auth approximation of these resources unchanged (internal/connectors/oveit never called the real API either -- see docs.md); every other real, documented Oveit endpoint is excluded as requires_elevated_scope (blocked on the same token-exchange auth gap, or itself a real-time/operational/compound-write action beyond this bundle's write shape) or duplicate_of (a differently-authenticated view of a resource this bundle's 3 streams already nominally cover). No endpoint here is silently faked or invented.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/attendees",
+      "covered_by": {
+        "stream": "attendees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/seller/login",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "the token-exchange login itself: real Oveit auth is POST email/password -> access token, then that token is sent as a param/header on every subsequent call (with its own expires_at and periodic re-login needed) -- a token-exchange AuthHook shape (design conventions Tier-2 table), and this bundle may not create a new hook package this pass; the existing 3 streams keep their legacy-parity GET+Basic-auth shape (matching internal/connectors/oveit's own fictional approximation) rather than the real API, since neither this dialect's declarative auth modes (bearer/basic/api_key_*/oauth2_client_credentials) nor an existing hook can express Oveit's real login-then-token flow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/seller/events",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the real documented 'List events' endpoint; this bundle's existing events stream already covers the events resource (under legacy's fictional GET /events shape, not this real path) and adding a second, differently-authenticated version of the same resource is out of scope without first resolving the seller/login token-exchange gap above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/attendees",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the real documented 'List attendees' endpoint (paginated by a ticket_code-based since cursor); this bundle's existing attendees stream already covers the attendees resource under legacy's fictional shape; blocked on the same seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/attendees/download",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "downloads a single uploaded file attachment for a file-type registration-form field; a binary-response sub-resource fetch with no id-enumeration source, additionally blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/tickets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists all tickets generated for one event, keyed by event id with no bundle-level event-id source to fan out over (would need the events stream's real ids, which are only available once the token-exchange gap is resolved); also blocked on that same gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/checkin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "validates and checks in a ticket at the door; a real-time, side-effecting operational action (not a warehouse-style reverse-ETL write) blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/scan",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "looks up ticket/check-in status by ticket code or RFID code; a real-time lookup with no stable id-enumeration source, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/enable_addon",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "enables an unbundled per-ticket addon and sets its usage count; a per-ticket operational write with no ticket-id enumeration source, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/disable_addon",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "disables an unbundled per-ticket addon; same per-ticket operational-write gap as enable_addon above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/import",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk-imports up to 5000 tickets/attendees (with nested field_values/addons/wallet-credit) in one call; a materially complex compound write far beyond this bundle's simple single-object write shape, additionally blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/crm/orders",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the real documented 'List event orders' endpoint (paid-plan-only, supports an 'include' expansion parameter and page-number pagination); this bundle's existing orders stream already covers the orders resource under legacy's fictional shape; blocked on the same seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rfid/pair",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "pairs an RFID tag's code with a ticket; a real-time operational write with no ticket-id enumeration source, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/credit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates or credits a virtual wallet with a monetary amount for a ticket holder; a financial mutation with no ticket-id enumeration source, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/debit",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "debits a virtual wallet; same financial-mutation gap as credit above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/withdraw",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "withdraws funds from a virtual wallet; same financial-mutation gap as credit above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/cancel",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "cancels a previously-recorded wallet transaction; a financial-mutation write with no transaction-id enumeration source, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/balance",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "reads a single ticket-holder's wallet balance; a per-ticket lookup with no ticket-id enumeration source to fan out over, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wallet/vendor_products",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "lists sellable vendor products for wallet-based purchases at the event; a narrow point-of-sale catalog resource, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/turnstile/checkin",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "scans/validates a ticket or RFID code at a physical turnstile entry point; a real-time access-control operational action, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/turnstile/checkout",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "records a turnstile exit scan; same real-time access-control gap as checkin above"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channel_partner_management/get_countries",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "paid-plan-only reference list of countries/states for a checkout-page integration; a static reference list rather than operational event/order/attendee data, blocked on the seller/login token-exchange gap (this endpoint additionally uses Bearer-header auth per its own docs, a different shape from every other Oveit endpoint, underscoring how non-uniform this real API's auth actually is)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channel_partner_management/get_event_data",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "paid-plan-only detailed event+ticket-type+calendar+form-schema fetch, keyed by event id; a narrower, differently-shaped view of data this bundle's events stream already covers under legacy's fictional shape, blocked on the seller/login token-exchange gap"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channel_partner_management/place_order",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "places a ticket order on behalf of a channel partner, with nested ticket/billing/address objects and 3 materially different request shapes (registration+customer forms, addons, calendar-based tickets) in the docs' own examples; a compound, multi-shape write far beyond this bundle's simple single-object write pattern, additionally blocked on the seller/login token-exchange gap"
+      }
+    }
+  ]
+}

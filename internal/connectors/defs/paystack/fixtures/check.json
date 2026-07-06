@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/customer", "query": { "perPage": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "status": true, "message": "ok", "data": [], "meta": { "total": 0, "perPage": 1, "page": 1, "pageCount": 0, "next": null, "previous": null } }
+  }
+}

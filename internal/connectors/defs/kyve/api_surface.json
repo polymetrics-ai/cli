@@ -1,0 +1,12 @@
+{
+  "api": "KYVE public Cosmos-style REST query API (https://api.korellia.kyve.network)",
+  "docs": "https://docs.kyve.network/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 migration: the 4 legacy-parity read streams only (pools, stakers, funders, validators); KYVE's REST query surface has no mutation endpoints callable by an off-chain client (state changes are on-chain transactions, not synced here), so there are no write endpoints in or out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/kyve/query/v1beta1/pools", "covered_by": { "stream": "pools" } },
+    { "method": "GET", "path": "/kyve/query/v1beta1/stakers", "covered_by": { "stream": "stakers" } },
+    { "method": "GET", "path": "/kyve/query/v1beta1/funders", "covered_by": { "stream": "funders" } },
+    { "method": "GET", "path": "/cosmos/staking/v1beta1/validators", "covered_by": { "stream": "validators" } }
+  ]
+}

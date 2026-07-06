@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RevenueCat Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "RevenueCat secret API key, sent as an Authorization: Bearer <api_key> header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.revenuecat.com/v2",
+      "description": "RevenueCat API base URL override for tests or proxies."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "RevenueCat project id. Required by the apps/products/offerings/customers streams (project-scoped resources); not required by the projects stream itself, matching legacy's per-stream project_id check."
+    },
+    "starting_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: cursor id to resume a customers/apps/products/offerings listing after."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records created at or after this value."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional passthrough filter: only return records updated at or after this value."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "RevenueCat app id for app detail, API-key, and StoreKit config streams."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "RevenueCat customer id for customer detail and customer-scoped streams."
+    },
+    "entitlement_id": {
+      "type": "string",
+      "description": "RevenueCat entitlement id for entitlement detail/product streams."
+    },
+    "offering_id": {
+      "type": "string",
+      "description": "RevenueCat offering id for offering detail/package streams."
+    },
+    "package_id": {
+      "type": "string",
+      "description": "RevenueCat package id for package detail/product streams."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "RevenueCat product id for product detail streams."
+    },
+    "purchase_id": {
+      "type": "string",
+      "description": "RevenueCat purchase id for purchase detail streams."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "RevenueCat subscription id for subscription detail streams."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "RevenueCat invoice id for invoice-related operations."
+    },
+    "webhook_integration_id": {
+      "type": "string",
+      "description": "RevenueCat webhook integration id for webhook detail streams."
+    },
+    "paywall_id": {
+      "type": "string",
+      "description": "RevenueCat paywall id for paywall detail streams."
+    },
+    "virtual_currency_code": {
+      "type": "string",
+      "description": "RevenueCat virtual currency code for virtual currency detail streams."
+    },
+    "chart_name": {
+      "type": "string",
+      "description": "RevenueCat chart name for chart data and chart option streams."
+    },
+    "store_purchase_identifier": {
+      "type": "string",
+      "description": "Store purchase identifier used by the purchases search endpoint."
+    },
+    "store_subscription_identifier": {
+      "type": "string",
+      "description": "Store subscription identifier used by the subscriptions search endpoint."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "setting",
+  "type": "object",
+  "x-primary-key": ["settingId"],
+  "required": ["settingId"],
+  "properties": {
+    "settingId": { "type": "integer" },
+    "key": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "hint": { "type": ["string", "null"] },
+    "order": { "type": ["integer", "null"] },
+    "settingType": { "type": ["string", "null"] },
+    "isJson": { "type": ["boolean", "null"] },
+    "configId": { "type": ["string", "null"] },
+    "configName": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"] },
+    "predefinedVariations": { "type": ["array", "null"] }
+  }
+}

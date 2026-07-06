@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Fixture Client",
+    "app_type": "non_interactive"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/clients",
+    "body": {
+      "name": "Fixture Client",
+      "app_type": "non_interactive"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "client_id": "fixture_client_new",
+      "name": "Fixture Client",
+      "app_type": "non_interactive"
+    }
+  }
+}

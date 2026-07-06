@@ -1,0 +1,18 @@
+{
+  "record": {
+    "data_table_id": "dt_fixture_1",
+    "data_table_column_id": "col_fixture_1",
+    "name": "status"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/data-tables/dt_fixture_1/columns/col_fixture_1",
+    "body": {
+      "name": "status"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

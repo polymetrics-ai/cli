@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "1",
+    "amount": "19.99",
+    "cancel_subscription": false,
+    "revoke_access": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/orders/1/refund"
+  }
+}

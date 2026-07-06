@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Paddle customers, subscriptions, transactions, and products through the Paddle REST API.
 
+ICON
+  asset: icons/paddle.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.paddle.com/api-reference/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  transactions:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), currency_code(), customer_id(), id(), status(), subscription_id()
+  customers:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), email(), id(), name()
+  subscriptions:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), customer_id(), id(), status()
+  products:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), id(), name(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Paddle API read of customer, subscription, transaction, and product data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

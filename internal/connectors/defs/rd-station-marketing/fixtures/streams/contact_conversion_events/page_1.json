@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contacts/synthetic-conformance-value/events",
+    "query": { "event_type": "CONVERSION", "page": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "event_type": "CONVERSION",
+        "event_family": "CDP",
+        "event_identifier": "fixture_conversion",
+        "event_timestamp": "2026-01-03T00:00:00Z",
+        "payload": {
+          "name": "Fixture Conversion",
+          "email": "fixture.conversion@example.com",
+          "phone": "+15550300"
+        }
+      }
+    ]
+  }
+}

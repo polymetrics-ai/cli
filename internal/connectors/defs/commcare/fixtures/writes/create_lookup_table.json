@@ -1,0 +1,22 @@
+{
+  "record": {
+    "tag": "vaccines",
+    "fields": [
+      { "field_name": "name", "properties": ["lang"] },
+      { "field_name": "price", "properties": [] }
+    ],
+    "is_global": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/api/lookup_table/v1/",
+    "body": {
+      "tag": "vaccines",
+      "is_global": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "lookup_table_created_fixture_1" }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "agilecrm",
+  "display_name": "AgileCRM",
+  "description": "Reads AgileCRM contacts, deals, tasks, milestone pipelines, campaigns, and support tickets, and writes contact/deal/task create, update, and delete actions, through the AgileCRM REST API.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/agilecrm/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external AgileCRM API read of contacts, deals, tasks, pipeline, campaign, and ticket data",
+    "write": "external mutation of live AgileCRM contacts, deals, and tasks including irreversible deletes; approval required for every write action"
+  }
+}

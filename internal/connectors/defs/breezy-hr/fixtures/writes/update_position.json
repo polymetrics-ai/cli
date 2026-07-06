@@ -1,0 +1,14 @@
+{
+  "record": {
+    "position_id": "pos_fixture_1",
+    "name": "Fixture Engineer Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/position/pos_fixture_1",
+    "body": {
+      "name": "Fixture Engineer Updated"
+    }
+  },
+  "response": { "status": 200, "body": { "_id": "pos_fixture_1", "name": "Fixture Engineer Updated" } }
+}

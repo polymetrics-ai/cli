@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Group" },
+  "expect": {
+    "method": "POST",
+    "path": "/groups",
+    "body": { "name": "Fixture Group" }
+  },
+  "response": { "status": 201, "body": { "id": "group_fixture_1", "type": "group", "name": "Fixture Group" } }
+}

@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "uid": "agr_fixture_1", "title": "Fixture Agreement 1", "status": "DRAFT", "organizationId": 42 }
+    ]
+  }
+}

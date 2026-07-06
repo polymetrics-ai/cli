@@ -1,0 +1,23 @@
+{
+  "name": "plausible",
+  "display_name": "Plausible",
+  "description": "Reads Plausible Analytics sites and stats reports through the Stats API.",
+  "integration_type": "api",
+  "docs_url": "https://plausible.io/docs/stats-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Plausible Analytics API read of site analytics data",
+    "approval": "none; read-only analytics sync"
+  }
+}

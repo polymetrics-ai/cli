@@ -1,0 +1,22 @@
+{
+  "record": {
+    "user_name": "fixture.user",
+    "name": "Fixture User",
+    "email": "fixture.user@example.com",
+    "active": "true"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/now/table/sys_user",
+    "body": {
+      "user_name": "fixture.user",
+      "name": "Fixture User",
+      "email": "fixture.user@example.com",
+      "active": "true"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "result": { "sys_id": "user_fixture_1", "user_name": "fixture.user" } }
+  }
+}

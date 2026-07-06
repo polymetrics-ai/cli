@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": 1,
+    "name": "Fixture Promo",
+    "discount_type": "fixed",
+    "amount": 20
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/public/v1/promotions/1",
+    "body": {
+      "name": "Fixture Promo",
+      "discount_type": "fixed",
+      "amount": 20
+    }
+  }
+}

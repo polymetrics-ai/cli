@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "appUrl": "https://example.com/fixture",
+    "codebaseType": "upload",
+    "archiveKey": "fixture",
+    "localAnalysis": {
+      "id": "local_analysis_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/apps/id_fixture/analyze",
+    "body": {
+      "appUrl": "https://example.com/fixture",
+      "codebaseType": "upload",
+      "archiveKey": "fixture",
+      "localAnalysis": {
+        "id": "local_analysis_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "catalog_name": "fixture_catalog",
+    "item_id": "item_fixture_1",
+    "items": [
+      { "Name": "Fixture Item 1 Updated" }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/catalogs/fixture_catalog/items/item_fixture_1",
+    "body": {
+      "items": [
+        { "Name": "Fixture Item 1 Updated" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

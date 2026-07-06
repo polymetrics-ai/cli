@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/roles",
+    "query": { "page": "1", "items_per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "roles": [
+        {
+          "id": "roles_fixture_1",
+          "name": "Fixture roles 1",
+          "description": "fixture record",
+          "role": "agent"
+        }
+      ]
+    }
+  }
+}

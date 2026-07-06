@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stock_screener",
+  "type": "object",
+  "x-primary-key": ["symbol"],
+  "required": ["symbol"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "company_name": { "type": ["string", "null"] },
+    "market_cap": { "type": ["integer", "null"] },
+    "sector": { "type": ["string", "null"] },
+    "industry": { "type": ["string", "null"] },
+    "beta": { "type": ["number", "null"] },
+    "price": { "type": ["number", "null"] },
+    "last_annual_dividend": { "type": ["number", "null"] },
+    "volume": { "type": ["integer", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "exchange_short_name": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "is_etf": { "type": ["boolean", "null"] },
+    "is_actively_trading": { "type": ["boolean", "null"] }
+  }
+}

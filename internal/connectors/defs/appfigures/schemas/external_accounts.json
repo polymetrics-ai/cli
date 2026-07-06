@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "external_accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "account_id": { "type": ["integer", "null"] },
+    "nickname": { "type": ["string", "null"] },
+    "username": { "type": ["string", "null"] },
+    "auto_import": { "type": ["boolean", "null"] },
+    "store_id": { "type": ["integer", "null"] },
+    "store": { "type": ["string", "null"] },
+    "metadata": { "type": ["object", "null"] }
+  }
+}

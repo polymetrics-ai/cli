@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "size": "1000", "from": "1000" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1001,
+      "results": [
+        {
+          "jnid": "contacts_fixture_1001",
+          "type": "contact",
+          "display_name": "Fixture 1001",
+          "first_name": "Fixture",
+          "last_name": "1001",
+          "company": "Example Co",
+          "email": "fixture1001@example.com",
+          "mobile_phone": "+15550103",
+          "home_phone": "",
+          "work_phone": "",
+          "address_line1": "1001 Example St",
+          "city": "Minneapolis",
+          "state_text": "MN",
+          "zip": "55401",
+          "country_name": "United States",
+          "status_name": "Active",
+          "record_type_name": "contacts",
+          "sales_rep_name": "Fixture Rep",
+          "is_active": true,
+          "is_archived": false,
+          "date_created": 1767225603,
+          "date_updated": 1767225603
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "guideId": "guideId_fixture",
+    "name": "Fixture Segment",
+    "visitors": [
+      "visitor_fixture"
+    ],
+    "segmentId": "segment_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/guide/guideId_fixture/segment",
+    "body": {
+      "name": "Fixture Segment",
+      "visitors": [
+        "visitor_fixture"
+      ],
+      "segmentId": "segment_fixture"
+    }
+  }
+}

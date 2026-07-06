@@ -1,0 +1,231 @@
+{
+  "actions": [
+    {
+      "name": "create_asset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/assets.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["fixed_asset[name]", "fixed_asset[group_id]", "fixed_asset[location_id]"],
+        "properties": {
+          "fixed_asset[name]": { "type": "string" },
+          "fixed_asset[group_id]": { "type": "integer" },
+          "fixed_asset[location_id]": { "type": "integer" },
+          "fixed_asset[sub_group_id]": { "type": "integer" },
+          "fixed_asset[purchased_on]": { "type": "string" },
+          "fixed_asset[identifier]": { "type": "string" },
+          "fixed_asset[manufacturer]": { "type": "string" },
+          "fixed_asset[image_url]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new asset record; approval required"
+    },
+    {
+      "name": "update_asset",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/assets/{{ record.id }}.api",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "fixed_asset[name]": { "type": "string" },
+          "fixed_asset[group_id]": { "type": "integer" },
+          "fixed_asset[location_id]": { "type": "integer" },
+          "fixed_asset[identifier]": { "type": "string" },
+          "fixed_asset[description]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/members.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user[email]", "user[first_name]", "user[last_name]", "user[role_id]"],
+        "properties": {
+          "user[email]": { "type": "string" },
+          "user[first_name]": { "type": "string" },
+          "user[last_name]": { "type": "string" },
+          "user[role_id]": { "type": "integer" },
+          "user[employee_id]": { "type": "string" },
+          "user[phone_number]": { "type": "string" },
+          "user[login_enabled]": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a new member/user account; approval required"
+    },
+    {
+      "name": "update_member",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/members/{{ record.id }}.api",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "user[first_name]": { "type": "string" },
+          "user[last_name]": { "type": "string" },
+          "user[phone_number]": { "type": "string" },
+          "user[role_id]": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/locations.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["location[name]"],
+        "properties": {
+          "location[name]": { "type": "string" },
+          "location[city]": { "type": "string" },
+          "location[state]": { "type": "string" },
+          "location[zipcode]": { "type": "string" },
+          "location[street1]": { "type": "string" },
+          "location[street2]": { "type": "string" },
+          "location[description]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new location; approval required"
+    },
+    {
+      "name": "update_location",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/locations/{{ record.id }}.api",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "location[name]": { "type": "string" },
+          "location[city]": { "type": "string" },
+          "location[state]": { "type": "string" },
+          "location[description]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group[name]"],
+        "properties": {
+          "group[name]": { "type": "string" },
+          "group[description]": { "type": "string" },
+          "group[asset_depreciation_mode]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new asset group/classification; approval required"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.id }}.api",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "group[name]": { "type": "string" },
+          "group[description]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_vendor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/vendors.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["vendor[name]"],
+        "properties": {
+          "vendor[name]": { "type": "string" },
+          "vendor[description]": { "type": "string" },
+          "vendor[website]": { "type": "string" },
+          "vendor[address]": { "type": "string" },
+          "vendor[contact_person_name]": { "type": "string" },
+          "vendor[email]": { "type": "string" },
+          "vendor[phone_number]": { "type": "string" },
+          "vendor[fax]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new vendor; approval required"
+    },
+    {
+      "name": "update_vendor",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/vendors/{{ record.id }}.api",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "vendor[name]": { "type": "string" },
+          "vendor[email]": { "type": "string" },
+          "vendor[phone_number]": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_purchase_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchase_orders.api",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["vendor_id"],
+        "properties": {
+          "vendor_id": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a new purchase order (financial document); approval required"
+    }
+  ]
+}

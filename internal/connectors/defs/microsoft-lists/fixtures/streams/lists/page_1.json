@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/sites/synthetic-conformance-value/lists", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_list_1", "name": "Fixture-List-1", "displayName": "Fixture List 1", "description": "Sample list", "webUrl": "https://contoso.sharepoint.com/lists/1", "eTag": "etag-1", "createdDateTime": "2026-01-01T00:00:00Z", "lastModifiedDateTime": "2026-01-01T00:00:00Z", "list": { "template": "genericList" } },
+        { "id": "fixture_list_2", "name": "Fixture-List-2", "displayName": "Fixture List 2", "description": "Another sample list", "webUrl": "https://contoso.sharepoint.com/lists/2", "eTag": "etag-2", "createdDateTime": "2026-01-02T00:00:00Z", "lastModifiedDateTime": "2026-01-02T00:00:00Z", "list": { "template": "genericList" } }
+      ],
+      "@odata.nextLink": "https://graph.microsoft.com/v1.0/sites/synthetic-conformance-value/lists?$skiptoken=fixture-skiptoken-1"
+    }
+  }
+}

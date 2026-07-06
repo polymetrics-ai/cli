@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/1/dictionaries/*/languages" },
+  "response": {
+    "status": 200,
+    "body": {
+      "en": {
+        "plurals": { "nbCustomEntries": 0 },
+        "stopwords": { "nbCustomEntries": 0 },
+        "compounds": null
+      },
+      "fr": {
+        "plurals": { "nbCustomEntries": 1 },
+        "stopwords": { "nbCustomEntries": 0 },
+        "compounds": { "nbCustomEntries": 0 }
+      }
+    }
+  }
+}

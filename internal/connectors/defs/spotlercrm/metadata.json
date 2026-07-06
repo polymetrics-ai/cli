@@ -1,0 +1,23 @@
+{
+  "name": "spotlercrm",
+  "display_name": "Spotler CRM",
+  "description": "Reads Spotler CRM contacts, accounts, opportunities, and tasks, and (via the real CRM API v4) activities, campaigns, and cases.",
+  "integration_type": "api",
+  "docs_url": "https://support.reallysimplesystems.com/api-v4/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Spotler CRM API read of contact, account, opportunity, task, activity, campaign, and case data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

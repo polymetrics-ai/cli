@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "x-primary-key": ["ID"],
+  "properties": {
+    "ID": { "type": ["integer", "null"] },
+    "ContactID": { "type": ["integer", "null"] },
+    "CampaignID": { "type": ["integer", "null"] },
+    "Status": { "type": ["string", "null"] },
+    "ArrivedAt": { "type": ["string", "null"] },
+    "AttemptCount": { "type": ["integer", "null"] },
+    "IsClickTracked": { "type": ["boolean", "null"] },
+    "IsOpenTracked": { "type": ["boolean", "null"] },
+    "MessageSize": { "type": ["integer", "null"] }
+  }
+}

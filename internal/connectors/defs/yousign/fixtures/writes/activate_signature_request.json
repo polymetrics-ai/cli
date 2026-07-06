@@ -1,0 +1,7 @@
+{
+  "record": { "id": "sr_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/signature_requests/sr_fixture_1/activate"
+  }
+}

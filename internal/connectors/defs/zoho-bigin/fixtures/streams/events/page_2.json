@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/Events", "query": { "page": "2", "per_page": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "event_fixture_3", "Event_Title": "Fixture Event Three", "Location": "Fixture Office", "Start_DateTime": "2026-01-03T09:00:00+00:00", "End_DateTime": "2026-01-03T10:00:00+00:00" }
+      ],
+      "info": { "page": 2, "per_page": 200, "count": 1, "more_records": false }
+    }
+  }
+}

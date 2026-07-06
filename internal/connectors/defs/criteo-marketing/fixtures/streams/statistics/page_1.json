@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/2024-01/statistics/report", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Rows": [
+        {
+          "AdvertiserId": "adv_fixture_1",
+          "CampaignId": "cmp_fixture_1",
+          "Day": "2026-01-01",
+          "Clicks": 10,
+          "Displays": 1000,
+          "Spend": 12.5,
+          "Currency": "USD"
+        }
+      ]
+    }
+  }
+}

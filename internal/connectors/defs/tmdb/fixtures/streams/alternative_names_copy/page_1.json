@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/network/123/images"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "title": "Fixture alternative_names_copy",
+      "name": "Fixture alternative_names_copy",
+      "overview": "Deterministic TMDb fixture",
+      "release_date": "2026-01-01",
+      "vote_average": 7.5
+    }
+  }
+}

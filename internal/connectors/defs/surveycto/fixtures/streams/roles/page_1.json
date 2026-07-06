@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/roles",
+    "query": { "limit": "1000" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "limit": 1000,
+      "data": [
+        { "id": "role_fixture_1", "name": "Fixture Role" }
+      ],
+      "nextCursor": null
+    }
+  }
+}

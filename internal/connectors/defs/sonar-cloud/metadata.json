@@ -1,0 +1,24 @@
+{
+  "name": "sonar-cloud",
+  "display_name": "SonarCloud",
+  "description": "Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languages, quality gates, measures, webhooks, and project analyses through the Web API; writes webhook lifecycle, issue comment/assign/tag/transition, and project-tag mutations.",
+  "integration_type": "api",
+  "docs_url": "https://sonarcloud.io/web_api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external SonarCloud API read of issues, components, projects, hotspots, rules, metrics, languages, quality gates, measures, webhooks, and project analyses",
+    "write": "external SonarCloud API mutation of webhooks (create/update/delete), issue comments/assignment/tags/workflow transitions, and project tags",
+    "approval": "required for all write actions; each is an external, user-visible mutation on a connected SonarCloud organization or project"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "candidate_interviews",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "candidateId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jobId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "interviewDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "startTime": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "endTime": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timeZoneId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scheduledBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scheduledDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "interviewType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stageId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "panelMembers": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "employee_id": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employees/fixture_id/time_off/policies"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

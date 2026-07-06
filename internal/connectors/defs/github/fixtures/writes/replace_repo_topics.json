@@ -1,0 +1,8 @@
+{
+  "record": { "names": ["octocat", "fixture"] },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/topics",
+    "body": { "names": ["octocat", "fixture"] }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": { "ref": "main", "environment": "production", "auto_merge": false },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/deployments",
+    "body": { "ref": "main", "environment": "production", "auto_merge": false }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

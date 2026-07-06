@@ -1,0 +1,20 @@
+{
+  "record": {
+    "uuid": "fixture_event_1",
+    "reason": "Fixture cancellation reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/scheduled_events/fixture_event_1/cancellation"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "resource": {
+        "uri": "https://api.calendly.com/scheduled_events/fixture_event_1",
+        "reason": "Fixture cancellation reason",
+        "canceled_by": "host"
+      }
+    }
+  }
+}

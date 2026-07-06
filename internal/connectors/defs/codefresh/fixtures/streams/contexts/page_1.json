@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contexts",
+    "query": {
+      "limit": "50",
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "metadata": {
+          "name": "dockerhub-registry",
+          "project": ""
+        },
+        "type": "secret",
+        "owner": "account"
+      }
+    ]
+  }
+}

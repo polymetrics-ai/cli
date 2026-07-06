@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/calendars" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 7,
+        "name": "Main Calendar",
+        "email": "main@example.com",
+        "replyTo": "main@example.com",
+        "description": "Fixture calendar",
+        "location": "Online",
+        "timezone": "America/Los_Angeles"
+      }
+    ]
+  }
+}

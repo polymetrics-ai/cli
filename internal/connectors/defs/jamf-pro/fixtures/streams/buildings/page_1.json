@@ -1,0 +1,1018 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/buildings",
+    "query": {
+      "page": "0",
+      "page-size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalCount": 101,
+      "results": [
+        {
+          "id": "1",
+          "name": "Fixture Building 1",
+          "streetAddress1": "1 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "2",
+          "name": "Fixture Building 2",
+          "streetAddress1": "2 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "3",
+          "name": "Fixture Building 3",
+          "streetAddress1": "3 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "4",
+          "name": "Fixture Building 4",
+          "streetAddress1": "4 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "5",
+          "name": "Fixture Building 5",
+          "streetAddress1": "5 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "6",
+          "name": "Fixture Building 6",
+          "streetAddress1": "6 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "7",
+          "name": "Fixture Building 7",
+          "streetAddress1": "7 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "8",
+          "name": "Fixture Building 8",
+          "streetAddress1": "8 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "9",
+          "name": "Fixture Building 9",
+          "streetAddress1": "9 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "10",
+          "name": "Fixture Building 10",
+          "streetAddress1": "10 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "11",
+          "name": "Fixture Building 11",
+          "streetAddress1": "11 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "12",
+          "name": "Fixture Building 12",
+          "streetAddress1": "12 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "13",
+          "name": "Fixture Building 13",
+          "streetAddress1": "13 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "14",
+          "name": "Fixture Building 14",
+          "streetAddress1": "14 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "15",
+          "name": "Fixture Building 15",
+          "streetAddress1": "15 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "16",
+          "name": "Fixture Building 16",
+          "streetAddress1": "16 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "17",
+          "name": "Fixture Building 17",
+          "streetAddress1": "17 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "18",
+          "name": "Fixture Building 18",
+          "streetAddress1": "18 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "19",
+          "name": "Fixture Building 19",
+          "streetAddress1": "19 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "20",
+          "name": "Fixture Building 20",
+          "streetAddress1": "20 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "21",
+          "name": "Fixture Building 21",
+          "streetAddress1": "21 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "22",
+          "name": "Fixture Building 22",
+          "streetAddress1": "22 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "23",
+          "name": "Fixture Building 23",
+          "streetAddress1": "23 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "24",
+          "name": "Fixture Building 24",
+          "streetAddress1": "24 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "25",
+          "name": "Fixture Building 25",
+          "streetAddress1": "25 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "26",
+          "name": "Fixture Building 26",
+          "streetAddress1": "26 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "27",
+          "name": "Fixture Building 27",
+          "streetAddress1": "27 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "28",
+          "name": "Fixture Building 28",
+          "streetAddress1": "28 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "29",
+          "name": "Fixture Building 29",
+          "streetAddress1": "29 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "30",
+          "name": "Fixture Building 30",
+          "streetAddress1": "30 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "31",
+          "name": "Fixture Building 31",
+          "streetAddress1": "31 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "32",
+          "name": "Fixture Building 32",
+          "streetAddress1": "32 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "33",
+          "name": "Fixture Building 33",
+          "streetAddress1": "33 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "34",
+          "name": "Fixture Building 34",
+          "streetAddress1": "34 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "35",
+          "name": "Fixture Building 35",
+          "streetAddress1": "35 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "36",
+          "name": "Fixture Building 36",
+          "streetAddress1": "36 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "37",
+          "name": "Fixture Building 37",
+          "streetAddress1": "37 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "38",
+          "name": "Fixture Building 38",
+          "streetAddress1": "38 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "39",
+          "name": "Fixture Building 39",
+          "streetAddress1": "39 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "40",
+          "name": "Fixture Building 40",
+          "streetAddress1": "40 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "41",
+          "name": "Fixture Building 41",
+          "streetAddress1": "41 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "42",
+          "name": "Fixture Building 42",
+          "streetAddress1": "42 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "43",
+          "name": "Fixture Building 43",
+          "streetAddress1": "43 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "44",
+          "name": "Fixture Building 44",
+          "streetAddress1": "44 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "45",
+          "name": "Fixture Building 45",
+          "streetAddress1": "45 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "46",
+          "name": "Fixture Building 46",
+          "streetAddress1": "46 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "47",
+          "name": "Fixture Building 47",
+          "streetAddress1": "47 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "48",
+          "name": "Fixture Building 48",
+          "streetAddress1": "48 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "49",
+          "name": "Fixture Building 49",
+          "streetAddress1": "49 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "50",
+          "name": "Fixture Building 50",
+          "streetAddress1": "50 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "51",
+          "name": "Fixture Building 51",
+          "streetAddress1": "51 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "52",
+          "name": "Fixture Building 52",
+          "streetAddress1": "52 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "53",
+          "name": "Fixture Building 53",
+          "streetAddress1": "53 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "54",
+          "name": "Fixture Building 54",
+          "streetAddress1": "54 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "55",
+          "name": "Fixture Building 55",
+          "streetAddress1": "55 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "56",
+          "name": "Fixture Building 56",
+          "streetAddress1": "56 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "57",
+          "name": "Fixture Building 57",
+          "streetAddress1": "57 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "58",
+          "name": "Fixture Building 58",
+          "streetAddress1": "58 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "59",
+          "name": "Fixture Building 59",
+          "streetAddress1": "59 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "60",
+          "name": "Fixture Building 60",
+          "streetAddress1": "60 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "61",
+          "name": "Fixture Building 61",
+          "streetAddress1": "61 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "62",
+          "name": "Fixture Building 62",
+          "streetAddress1": "62 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "63",
+          "name": "Fixture Building 63",
+          "streetAddress1": "63 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "64",
+          "name": "Fixture Building 64",
+          "streetAddress1": "64 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "65",
+          "name": "Fixture Building 65",
+          "streetAddress1": "65 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "66",
+          "name": "Fixture Building 66",
+          "streetAddress1": "66 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "67",
+          "name": "Fixture Building 67",
+          "streetAddress1": "67 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "68",
+          "name": "Fixture Building 68",
+          "streetAddress1": "68 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "69",
+          "name": "Fixture Building 69",
+          "streetAddress1": "69 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "70",
+          "name": "Fixture Building 70",
+          "streetAddress1": "70 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "71",
+          "name": "Fixture Building 71",
+          "streetAddress1": "71 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "72",
+          "name": "Fixture Building 72",
+          "streetAddress1": "72 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "73",
+          "name": "Fixture Building 73",
+          "streetAddress1": "73 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "74",
+          "name": "Fixture Building 74",
+          "streetAddress1": "74 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "75",
+          "name": "Fixture Building 75",
+          "streetAddress1": "75 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "76",
+          "name": "Fixture Building 76",
+          "streetAddress1": "76 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "77",
+          "name": "Fixture Building 77",
+          "streetAddress1": "77 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "78",
+          "name": "Fixture Building 78",
+          "streetAddress1": "78 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "79",
+          "name": "Fixture Building 79",
+          "streetAddress1": "79 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "80",
+          "name": "Fixture Building 80",
+          "streetAddress1": "80 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "81",
+          "name": "Fixture Building 81",
+          "streetAddress1": "81 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "82",
+          "name": "Fixture Building 82",
+          "streetAddress1": "82 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "83",
+          "name": "Fixture Building 83",
+          "streetAddress1": "83 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "84",
+          "name": "Fixture Building 84",
+          "streetAddress1": "84 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "85",
+          "name": "Fixture Building 85",
+          "streetAddress1": "85 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "86",
+          "name": "Fixture Building 86",
+          "streetAddress1": "86 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "87",
+          "name": "Fixture Building 87",
+          "streetAddress1": "87 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "88",
+          "name": "Fixture Building 88",
+          "streetAddress1": "88 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "89",
+          "name": "Fixture Building 89",
+          "streetAddress1": "89 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "90",
+          "name": "Fixture Building 90",
+          "streetAddress1": "90 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "91",
+          "name": "Fixture Building 91",
+          "streetAddress1": "91 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "92",
+          "name": "Fixture Building 92",
+          "streetAddress1": "92 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "93",
+          "name": "Fixture Building 93",
+          "streetAddress1": "93 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "94",
+          "name": "Fixture Building 94",
+          "streetAddress1": "94 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "95",
+          "name": "Fixture Building 95",
+          "streetAddress1": "95 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "96",
+          "name": "Fixture Building 96",
+          "streetAddress1": "96 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "97",
+          "name": "Fixture Building 97",
+          "streetAddress1": "97 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "98",
+          "name": "Fixture Building 98",
+          "streetAddress1": "98 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "99",
+          "name": "Fixture Building 99",
+          "streetAddress1": "99 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        },
+        {
+          "id": "100",
+          "name": "Fixture Building 100",
+          "streetAddress1": "100 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        }
+      ]
+    }
+  }
+}

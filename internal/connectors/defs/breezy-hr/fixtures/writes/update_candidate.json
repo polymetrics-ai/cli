@@ -1,0 +1,15 @@
+{
+  "record": {
+    "position_id": "pos_fixture_1",
+    "candidate_id": "cand_fixture_1",
+    "name": "Fixture Candidate Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/position/pos_fixture_1/candidate/cand_fixture_1",
+    "body": {
+      "name": "Fixture Candidate Updated"
+    }
+  },
+  "response": { "status": 200, "body": { "_id": "cand_fixture_1", "name": "Fixture Candidate Updated" } }
+}

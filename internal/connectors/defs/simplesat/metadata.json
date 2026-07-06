@@ -1,0 +1,21 @@
+{
+  "name": "simplesat",
+  "display_name": "Simplesat",
+  "description": "Reads and writes Simplesat surveys, answers, questions, customers, and responses (including nested ticket data) through the Simplesat v1 API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.simplesat.io/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "reads survey/answer/customer/response data (including nested ticket/team-member sub-objects) from a connected Simplesat account",
+    "write": "creates/updates customers and team members, updates individual answers and survey responses, and can trigger a live survey-invitation email to a real customer inbox (send_survey_email)",
+    "approval": "none for customer/team-member/answer/response upserts (low-risk CRM-style data); send_survey_email sends a real outbound email and should be reviewed before enabling in a caller with untrusted input"
+  }
+}

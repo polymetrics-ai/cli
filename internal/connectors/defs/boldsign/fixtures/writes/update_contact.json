@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "contact_fixture_1",
+    "email": "contact1@example.com",
+    "name": "Fixture Contact 1",
+    "companyName": "Fixture Co"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/contacts/update",
+    "body": {
+      "email": "contact1@example.com",
+      "name": "Fixture Contact 1",
+      "companyName": "Fixture Co"
+    }
+  }
+}

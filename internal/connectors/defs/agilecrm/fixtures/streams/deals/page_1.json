@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/opportunity" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 10,
+        "name": "Fixture Deal One",
+        "created_time": 1767225601,
+        "expected_value": 1000,
+        "probability": 50,
+        "milestone": "Prospect",
+        "close_date": 1767225601,
+        "pipeline_id": 1,
+        "owner": { "id": "fixture-owner-1" }
+      }
+    ]
+  }
+}

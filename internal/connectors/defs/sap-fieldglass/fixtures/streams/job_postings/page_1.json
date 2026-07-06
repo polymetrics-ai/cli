@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/job_postings", "query": { "page": "1", "limit": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "job_posting_id": "jp_fixture_1", "name": "Fixture Job Posting", "status": "open" }
+      ],
+      "next": null
+    }
+  }
+}

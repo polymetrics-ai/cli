@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/files", "query": { "size": "1000", "from": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "files": [
+        {
+          "jnid": "files_fixture_1",
+          "type": "file",
+          "filename": "fixture_1.pdf",
+          "description": "fixture file description",
+          "content_type": "application/pdf",
+          "record_type_name": "files",
+          "customer": "cust_fixture_1",
+          "created_by_name": "Fixture User",
+          "size": 1024,
+          "md5": "00000000000000000000000000000000",
+          "is_active": true,
+          "date_file_created": 1767225601,
+          "date_created": 1767225601,
+          "date_updated": 1767225601
+        }
+      ]
+    }
+  }
+}

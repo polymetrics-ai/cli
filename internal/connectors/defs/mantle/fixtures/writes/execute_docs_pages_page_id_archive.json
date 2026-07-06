@@ -1,0 +1,13 @@
+{
+  "record": {
+    "page_id": "page_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/pages/page_id_fixture/archive"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

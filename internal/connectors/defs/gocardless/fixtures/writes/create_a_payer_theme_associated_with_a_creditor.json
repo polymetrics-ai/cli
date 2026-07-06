@@ -1,0 +1,20 @@
+{
+  "record": {
+    "branding": {
+      "description": "Synthetic create_a_payer_theme_associated_with_a_creditor fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/branding/payer_themes",
+    "body": {
+      "branding": {
+        "description": "Synthetic create_a_payer_theme_associated_with_a_creditor fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

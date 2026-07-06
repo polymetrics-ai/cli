@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "type": "dash-db",
+      "page": "2",
+      "limit": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "uid": "dash_fixture_1001",
+        "orgId": 1,
+        "title": "Fixture Dashboard 1001",
+        "url": "/d/dash_fixture_1001",
+        "type": "dash-db",
+        "tags": [
+          "fixture"
+        ],
+        "isStarred": true,
+        "folderId": 0,
+        "folderUid": "general",
+        "folderTitle": "General"
+      }
+    ]
+  }
+}

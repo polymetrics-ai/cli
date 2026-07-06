@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/accounts/acct_fixture_2/documents" },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

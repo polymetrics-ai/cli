@@ -1,0 +1,57 @@
+{
+  "record": {
+    "inline_hook_id": "synthetic-conformance-value",
+    "data": {
+      "action": {
+        "credential": "fixture"
+      },
+      "context": {
+        "request": {
+          "id": "id_fixture",
+          "ipAddress": "ip_address_fixture",
+          "method": "method_fixture",
+          "url": {
+            "value": "value_fixture"
+          }
+        },
+        "credential": {
+          "username": "username_fixture",
+          "password": "fixture"
+        }
+      }
+    },
+    "eventType": "event_type_fixture",
+    "source": "source_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/inlineHooks/synthetic-conformance-value/execute",
+    "body": {
+      "data": {
+        "action": {
+          "credential": "fixture"
+        },
+        "context": {
+          "request": {
+            "id": "id_fixture",
+            "ipAddress": "ip_address_fixture",
+            "method": "method_fixture",
+            "url": {
+              "value": "value_fixture"
+            }
+          },
+          "credential": {
+            "username": "username_fixture",
+            "password": "fixture"
+          }
+        }
+      },
+      "eventType": "event_type_fixture",
+      "source": "source_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

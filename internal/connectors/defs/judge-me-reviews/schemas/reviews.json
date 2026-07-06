@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reviews",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "created_at",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rating": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "product_external_id": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "reviewer_id": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "reviewer_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewer_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "curated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "published": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hidden": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "verified": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

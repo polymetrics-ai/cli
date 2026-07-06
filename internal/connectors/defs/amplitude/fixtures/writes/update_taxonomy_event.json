@@ -1,0 +1,19 @@
+{
+  "record": {
+    "event_type": "fixture_event_created",
+    "description": "updated fixture event description",
+    "is_active": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/2/taxonomy/event/fixture_event_created",
+    "body": {
+      "description": "updated fixture event description",
+      "is_active": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

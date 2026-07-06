@@ -1,0 +1,29 @@
+{
+  "api": "WaiterAid API (https://app.waiteraid.com/wa-api/<method>)",
+  "docs": "https://app.waiteraid.com/api-docs/index.html",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, researched against the live API documentation page (app.waiteraid.com/api-docs/index.html) and cross-checked against a third-party historical Apiary mirror (waiterapi.docs.apiary.io). MAJOR CORRECTION vs. the prior wave2 version: the real, currently-documented WaiterAid API has NO REST-shaped resource surface at all -- it is entirely a flat, POST-method, query-string-parameterized method-call API rooted at /wa-api/<methodName> (e.g. /wa-api/searchBooking, /wa-api/addBooking), authenticated via an auth_hash QUERY parameter (obtained once via /wa-api/auth?username=&password=&restaurant=, or configured directly as this bundle's auth_hash secret) plus a mandatory restid query parameter on every call. The prior version's /reservations, /tables, /guests REST-shaped paths do not exist on the real API at all. Every one of the 19 documented real methods is enumerated below; covered ones map to this bundle's 3 streams (reservations, meals, queue) and 6 write actions (add_booking, set_booking_status, edit_booking, add_guest, add_to_queue, delete_from_queue).",
+  "endpoints": [
+    { "method": "POST", "path": "/wa-api/auth", "excluded": { "category": "out_of_scope", "reason": "one-time username/password-to-auth_hash exchange; this connector's spec.json expects a pre-obtained auth_hash (matching legacy's own config contract), not an interactive credential-exchange flow -- out of scope for a declarative bundle" } },
+    { "method": "POST", "path": "/wa-api/getRestaurants", "excluded": { "category": "out_of_scope", "reason": "lists restaurants accessible to the authenticated user/auth_hash; an account-discovery/administration helper, not restaurant operational data this connector's identity (a single already-configured restid) targets" } },
+    { "method": "POST", "path": "/wa-api/searchBooking", "covered_by": { "stream": "reservations" } },
+    { "method": "POST", "path": "/wa-api/getBooking", "excluded": { "category": "duplicate_of", "reason": "single-booking detail by bookingId; identical record shape to the reservations stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/wa-api/addBooking", "covered_by": { "write": "add_booking" } },
+    { "method": "POST", "path": "/wa-api/editBooking", "covered_by": { "write": "edit_booking" } },
+    { "method": "POST", "path": "/wa-api/setBookingStatus", "covered_by": { "write": "set_booking_status" } },
+    { "method": "POST", "path": "/wa-api/getMeals", "covered_by": { "stream": "meals" } },
+    { "method": "POST", "path": "/wa-api/searchGuest", "excluded": { "category": "out_of_scope", "reason": "SCHEMA_AMBIGUOUS: the documented example response is a top-level object with numeric-string keys sitting alongside a sibling 'status' key (`{\"status\":\"OK\", 0: {...}, 1: {...}}`), not a named array or the records.keyed_object shape (whose VALUES must all be objects at one dotted path -- 'status' is a string, not an object, so keyed_object would mis-explode it too). Rather than guess a shape that could silently mis-parse or drop the leading/trailing entries, this is excluded pending a live API smoke test to confirm the real wire shape unambiguously" } },
+    { "method": "POST", "path": "/wa-api/addGuest", "covered_by": { "write": "add_guest" } },
+    { "method": "POST", "path": "/wa-api/getAvailibilityStatus", "excluded": { "category": "out_of_scope", "reason": "weekly meal-availability-status snapshot (blocked days/times, fully-booked flags per meal); a scheduling-configuration read, not reservation/guest data; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/wa-api/toggleMealAvailibility", "excluded": { "category": "out_of_scope", "reason": "enables/disables a meal slot for a given weekday or date; a scheduling-configuration mutation, not reservation/guest data; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/wa-api/toggleMealStatus", "excluded": { "category": "out_of_scope", "reason": "marks a meal as fully-booked for a given date; a scheduling-configuration mutation; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/wa-api/getSeatingLength", "excluded": { "category": "non_data_endpoint", "reason": "computes a default seating-length duration for a hypothetical booking (amount/meal/date/time), not a stored/syncable record" } },
+    { "method": "POST", "path": "/wa-api/controlSeatingLength", "excluded": { "category": "out_of_scope", "reason": "toggles whether guests may choose their own seating length in the booking widget; a scheduling-configuration mutation, not reservation/guest data; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/wa-api/getMessageThreads", "excluded": { "category": "out_of_scope", "reason": "lists guest-messaging thread ids; messaging is a distinct product surface from reservations/guests/queue, out of scope for this pass" } },
+    { "method": "POST", "path": "/wa-api/getMessage", "excluded": { "category": "out_of_scope", "reason": "lists messages within a thread; same messaging-surface scoping as getMessageThreads" } },
+    { "method": "POST", "path": "/wa-api/writeMessage", "excluded": { "category": "out_of_scope", "reason": "sends a message to a guest; same messaging-surface scoping as getMessageThreads" } },
+    { "method": "POST", "path": "/wa-api/queue/list", "covered_by": { "stream": "queue" } },
+    { "method": "POST", "path": "/wa-api/queue/add", "covered_by": { "write": "add_to_queue" } },
+    { "method": "POST", "path": "/wa-api/queue/delete", "covered_by": { "write": "delete_from_queue" } }
+  ]
+}

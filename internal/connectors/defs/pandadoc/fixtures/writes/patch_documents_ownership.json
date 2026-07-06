@@ -1,0 +1,35 @@
+{
+  "record": {
+    "name": "Fixture patch_documents_ownership",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v1/documents/ownership",
+    "body": {
+      "name": "Fixture patch_documents_ownership",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_documents_ownership_response",
+      "status": "ok"
+    }
+  }
+}

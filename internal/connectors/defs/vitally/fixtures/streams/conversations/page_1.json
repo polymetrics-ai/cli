@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/conversations",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "conv_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "thread-1",
+          "subject": "Regarding your account",
+          "traits": {},
+          "status": "Open",
+          "rating": null,
+          "source": null,
+          "accounts": [],
+          "users": [],
+          "admins": []
+        },
+        {
+          "id": "conv_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "thread-2",
+          "subject": "Thanks for the heads up",
+          "traits": {},
+          "status": "Closed",
+          "rating": "Satisfied",
+          "source": "intercom",
+          "accounts": [],
+          "users": [],
+          "admins": []
+        }
+      ],
+      "next": "fixture_cursor_conversations_1"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/cohorts/list" },
+  "response": {
+    "status": 200,
+    "body": { "cohorts": [] }
+  }
+}

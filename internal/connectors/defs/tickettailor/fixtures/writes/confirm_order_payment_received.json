@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "or_fixture_1",
+    "transaction_id": "OFF_PLATFORM_12345678"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/or_fixture_1/confirm-payment-received"
+  }
+}

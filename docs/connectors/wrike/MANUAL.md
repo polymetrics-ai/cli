@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 
+ICON
+  asset: icons/wrike.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.wrike.com/api/v4/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  access_token (secret)
+
+ETL STREAMS
+  tasks:
+    primary key: id
+    cursor: updatedDate
+    fields: id(), title(), updatedDate()
+  folders:
+    primary key: id
+    cursor: updatedDate
+    fields: id(), title(), updatedDate()
+  contacts:
+    primary key: id
+    fields: firstName(), id(), lastName()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Wrike API read of task, folder, and contact data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

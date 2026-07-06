@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/servername/flag/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "server_fixture",
+        "name": "fixture.example.com",
+        "flags": [
+          "synthetic-conformance-value"
+        ],
+        "lastUpdatedAt": 1760000000000
+      }
+    ]
+  }
+}

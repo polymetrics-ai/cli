@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "sequencestep",
+      "attributes": {
+        "name": "Fixture Create Sequence Step"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sequenceSteps",
+    "body": {
+      "data": {
+        "type": "sequencestep",
+        "attributes": {
+          "name": "Fixture Create Sequence Step"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fields",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "parent_id": { "type": ["string", "null"] },
+    "step_id": { "type": ["string", "null"] },
+    "report_id": { "type": ["string", "null"] },
+    "field_number": { "type": ["integer", "null"] },
+    "field_id": { "type": ["string", "null"] },
+    "field_name": { "type": ["string", "null"] },
+    "field_label": { "type": ["string", "null"] },
+    "field_type": { "type": ["string", "null"] },
+    "field_required": { "type": ["boolean", "null"] },
+    "field_hidden": { "type": ["boolean", "null"] },
+    "field_info": { "type": ["string", "null"] },
+    "field_units": { "type": ["string", "null"] },
+    "field_min": { "type": ["number", "null"] },
+    "field_max": { "type": ["number", "null"] },
+    "field_summary_template": { "type": ["string", "null"] },
+    "field_slider_step": { "type": ["number", "null"] },
+    "field_length": { "type": ["integer", "null"] },
+    "additional_config": { "type": ["string", "null"] },
+    "exclude_on_index": { "type": ["boolean", "null"] },
+    "created_on": { "type": ["string", "null"] },
+    "updated_on": { "type": ["string", "null"] }
+  }
+}

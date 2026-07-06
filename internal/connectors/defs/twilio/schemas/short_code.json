@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "short_code",
+  "type": "object",
+  "x-primary-key": [
+    "sid"
+  ],
+  "properties": {
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "api_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "friendly_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "short_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sms_fallback_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sms_fallback_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sms_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sms_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

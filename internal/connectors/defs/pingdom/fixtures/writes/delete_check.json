@@ -1,0 +1,5 @@
+{
+  "record": { "id": 100010 },
+  "expect": { "method": "DELETE", "path": "/checks/100010" },
+  "response": { "status": 200, "body": { "message": "Deletion of check was successful!" } }
+}

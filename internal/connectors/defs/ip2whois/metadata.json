@@ -1,0 +1,20 @@
+{
+  "name": "ip2whois",
+  "display_name": "IP2WHOIS",
+  "description": "Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.",
+  "integration_type": "api",
+  "docs_url": "https://www.ip2whois.com/developers-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external IP2WHOIS API read of WHOIS records for the configured domain set",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

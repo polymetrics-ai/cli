@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "releases",
+  "type": "object",
+  "x-primary-key": ["version"],
+  "x-cursor-field": "dateCreated",
+  "required": ["version"],
+  "properties": {
+    "version": { "type": "string" },
+    "shortVersion": { "type": ["string", "null"] },
+    "ref": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "dateCreated": { "type": ["string", "null"] },
+    "dateReleased": { "type": ["string", "null"] }
+  }
+}

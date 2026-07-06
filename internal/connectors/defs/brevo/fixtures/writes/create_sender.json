@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Sender",
+    "email": "sender@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/senders",
+    "body": {
+      "name": "Fixture Sender",
+      "email": "sender@example.com"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 5
+    }
+  }
+}

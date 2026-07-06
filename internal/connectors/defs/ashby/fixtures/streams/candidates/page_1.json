@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "name": "fixture",
+      "primaryEmailAddress": {
+        "fixture": "value"
+      },
+      "primaryPhoneNumber": {
+        "fixture": "value"
+      },
+      "company": "fixture",
+      "title": "fixture",
+      "locationSummary": "fixture",
+      "timezone": "fixture",
+      "createdAt": "fixture",
+      "updatedAt": "fixture"
+    }
+  ]
+}

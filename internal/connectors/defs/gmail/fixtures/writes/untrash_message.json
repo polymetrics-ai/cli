@@ -1,0 +1,11 @@
+{
+  "record": { "id": "msg_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/messages/msg_fixture_1/untrash"
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "msg_fixture_1", "labelIds": ["INBOX"] }
+  }
+}

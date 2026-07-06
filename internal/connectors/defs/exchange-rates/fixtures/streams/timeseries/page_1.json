@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/timeseries",
+    "query": {
+      "start_date": "synthetic-conformance-value",
+      "end_date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "timeseries": true,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-02",
+      "base": "EUR",
+      "rates": {
+        "2026-01-01": { "USD": 1.05, "GBP": 0.85 },
+        "2026-01-02": { "USD": 1.06, "GBP": 0.86 }
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "actions": [
+    {
+      "name": "create_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "timetable", "attribution-actor", "parameters"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "timetable": { "type": "object" },
+          "attribution-actor": { "type": "string" },
+          "parameters": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates a new scheduled-pipeline trigger for this project"
+    },
+    {
+      "name": "update_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/schedule/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "timetable": { "type": "object" },
+          "attribution-actor": { "type": "string" },
+          "parameters": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; updates an existing scheduled-pipeline trigger's timetable or parameters"
+    },
+    {
+      "name": "delete_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/schedule/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required"
+    },
+    {
+      "name": "create_environment_variable",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates or overwrites a project environment variable used by every future CI run"
+    },
+    {
+      "name": "delete_environment_variable",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}",
+      "path_fields": ["name"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required"
+    },
+    {
+      "name": "create_checkout_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new deploy/checkout SSH key with repository access"
+    },
+    {
+      "name": "delete_checkout_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}",
+      "path_fields": ["fingerprint"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["fingerprint"],
+        "properties": {
+          "fingerprint": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required"
+    }
+  ]
+}

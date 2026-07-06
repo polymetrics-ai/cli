@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "outbound_messages",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "request_id": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "provider": { "type": ["string", "null"] },
+    "from": { "type": ["object", "null"] },
+    "to": { "type": ["object", "null"] },
+    "template": { "type": ["object", "null"] },
+    "created_time": { "type": ["string", "null"] },
+    "updated_time": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,74 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "users",
+      "method": "GET",
+      "path": "/__legacy_hook/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "contacts",
+      "method": "GET",
+      "path": "/__legacy_hook/contacts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "tasks",
+      "method": "GET",
+      "path": "/__legacy_hook/tasks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json",
+      "incremental": {
+        "cursor_field": "DateCreated",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "notes",
+      "method": "GET",
+      "path": "/__legacy_hook/notes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "events",
+      "method": "GET",
+      "path": "/__legacy_hook/events",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/events.json",
+      "incremental": {
+        "cursor_field": "DateUpdated",
+        "client_filtered": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/apps/synthetic-conformance-value/plans/features"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "features": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "key": "fixture",
+        "type": "boolean",
+        "description": "fixture",
+        "defaultValue": "fixture",
+        "allowedValues": [
+          "fixture"
+        ],
+        "usageMetric": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "eventName": "fixture",
+          "calculation": "count",
+          "params": {
+            "id": "params_fixture_id"
+          }
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

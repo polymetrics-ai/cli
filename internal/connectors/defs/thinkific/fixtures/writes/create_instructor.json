@@ -1,0 +1,16 @@
+{
+  "record": {
+    "first_name": "Fixture",
+    "last_name": "Instructor",
+    "slug": "fixture-instructor"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/instructors",
+    "body": {
+      "first_name": "Fixture",
+      "last_name": "Instructor",
+      "slug": "fixture-instructor"
+    }
+  }
+}

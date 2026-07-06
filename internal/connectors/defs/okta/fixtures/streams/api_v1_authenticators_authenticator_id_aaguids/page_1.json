@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authenticators/synthetic-conformance-value/aaguids",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "aaguid": "aaguid_fixture",
+        "attestationRootCertificates": [
+          {
+            "x5c": "x5c_fixture",
+            "x5t#S256": "x5t_s256_fixture",
+            "iss": "iss_fixture",
+            "exp": "exp_fixture"
+          }
+        ],
+        "authenticatorCharacteristics": {
+          "fipsCompliant": true,
+          "hardwareProtected": true,
+          "platformAttached": true
+        },
+        "name": "name_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/buildings",
+    "query": { "page": "1", "page-size": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "totalCount": 101,
+      "results": [
+        {
+          "id": "101",
+          "name": "Fixture Building 101",
+          "streetAddress1": "101 Example St",
+          "streetAddress2": "",
+          "city": "Minneapolis",
+          "stateProvince": "MN",
+          "zipPostalCode": "55401",
+          "country": "United States"
+        }
+      ]
+    }
+  }
+}

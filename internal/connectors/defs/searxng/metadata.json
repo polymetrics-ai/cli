@@ -1,0 +1,23 @@
+{
+  "name": "searxng",
+  "display_name": "SearXNG",
+  "description": "Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.",
+  "integration_type": "api",
+  "docs_url": "https://docs.searxng.org",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 10
+  },
+  "risk": {
+    "read": "external SearXNG instance read of web/Reddit search results",
+    "approval": "none; read-only public search API"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/training/category",
+    "body": {
+      "name": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

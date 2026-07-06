@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "charges",
+  "type": "object",
+  "x-primary-key": ["charge_id"],
+  "x-cursor-field": "occurred",
+  "required": ["charge_id"],
+  "properties": {
+    "charge_id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "occurred": { "type": "integer" },
+    "amount": { "type": ["string", "null"] },
+    "amount_refunded": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "customer_id": { "type": ["string", "null"] },
+    "customer_email": { "type": ["string", "null"] },
+    "customer_name": { "type": ["string", "null"] },
+    "transaction_id": { "type": ["string", "null"] },
+    "subscription_id": { "type": ["string", "null"] },
+    "product_id": { "type": ["string", "null"] },
+    "payment_method": { "type": ["string", "null"] }
+  }
+}

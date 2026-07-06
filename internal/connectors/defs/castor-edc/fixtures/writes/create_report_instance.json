@@ -1,0 +1,10 @@
+{
+  "record": {
+    "record_id": "rec_fixture_1",
+    "report_id": "report_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/study/synthetic-conformance-value/record/rec_fixture_1/report-instance"
+  }
+}

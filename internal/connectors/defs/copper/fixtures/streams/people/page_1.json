@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "fixture",
+      "prefix": "fixture",
+      "first_name": "fixture",
+      "last_name": "fixture",
+      "title": "fixture",
+      "company_id": 1,
+      "company_name": "fixture",
+      "emails": [
+        "fixture"
+      ],
+      "phone_numbers": [
+        "fixture"
+      ],
+      "assignee_id": 1,
+      "contact_type_id": 1,
+      "date_created": 1,
+      "date_modified": 1
+    }
+  ]
+}

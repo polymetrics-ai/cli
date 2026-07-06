@@ -1,0 +1,5 @@
+{
+  "record": { "id": "1", "first_name": "Fixture", "last_name": "Updated", "team_id": 2 },
+  "expect": { "method": "PUT", "path": "/employees/1" },
+  "response": { "status": 200, "body": { "id": 1 } }
+}

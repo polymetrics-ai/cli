@@ -1,0 +1,73 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/brands/synthetic-conformance-value/domains",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "domains": [
+        {
+          "brandId": "brand_id_fixture",
+          "certificateSourceType": "MANUAL",
+          "dnsRecords": [
+            {
+              "expiration": "expiration_fixture",
+              "fqdn": "fqdn_fixture",
+              "recordType": "CAA",
+              "values": [
+                "value_fixture"
+              ]
+            }
+          ],
+          "domain": "domain_fixture",
+          "id": "id_fixture",
+          "publicCertificate": {
+            "expiration": "expiration_fixture",
+            "fingerprint": "fingerprint_fixture",
+            "subject": "subject_fixture"
+          },
+          "validationStatus": "COMPLETED",
+          "_links": {
+            "brand": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            },
+            "certificate": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            },
+            "verify": {
+              "hints": {
+                "allow": [
+                  {}
+                ]
+              },
+              "href": "https://example.invalid/fixture",
+              "name": "name_fixture",
+              "templated": true,
+              "type": "type_fixture"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

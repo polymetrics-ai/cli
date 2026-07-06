@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/sitemap" },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "data": [ { "id": 1, "name": "Fixture Sitemap", "url": "https://example.test" } ] }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/files", "query": { "limit": "synthetic-conformance-value", "after": "file-fixture-2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        { "id": "file-fixture-3", "object": "file", "created_at": 1767225603, "filename": "fixture-3.jsonl", "bytes": 3072, "purpose": "batch", "status": "processed" }
+      ]
+    }
+  }
+}

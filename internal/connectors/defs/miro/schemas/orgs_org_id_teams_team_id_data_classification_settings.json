@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "defaultLabelId": {
+      "type": "string",
+      "description": "Data classification default label id"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Data classification enabled for team"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true
+}

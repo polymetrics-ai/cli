@@ -1,0 +1,9 @@
+{
+  "name": "acme-bundle-marker",
+  "display_name": "Acme (bundle-level conformance marker self-test)",
+  "description": "conformance v2 self-test: a bundle-level skip_dynamic marker (synthetic, not a real API)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
+  "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme-bundle-marker (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why dynamic checks do not fail)" }
+}

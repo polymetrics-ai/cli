@@ -1,0 +1,244 @@
+{
+  "actions": [
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/clients",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "address": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockify client; approval required"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "address": { "type": "string" },
+          "note": { "type": "string" },
+          "archived": { "type": "boolean" },
+          "currencyId": { "type": "string" },
+          "ccEmails": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockify client's fields; approval required"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockify client; approval required"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "clientId": { "type": "string" },
+          "isPublic": { "type": "boolean" },
+          "billable": { "type": "boolean" },
+          "color": { "type": "string" },
+          "note": { "type": "string" },
+          "estimate": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockify project; approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "clientId": { "type": "string" },
+          "isPublic": { "type": "boolean" },
+          "billable": { "type": "boolean" },
+          "archived": { "type": "boolean" },
+          "color": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockify project's fields; approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockify project; approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockify tag; approval required"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "archived": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockify tag's fields; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockify tag; approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks",
+      "path_fields": ["projectId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectId", "name"],
+        "properties": {
+          "projectId": { "type": "string" },
+          "name": { "type": "string" },
+          "assigneeId": { "type": "string" },
+          "assigneeIds": { "type": "array" },
+          "status": { "type": "string" },
+          "estimate": { "type": "string" },
+          "budgetEstimate": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; creates a live Clockify task on a project; approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks/{{ record.id }}",
+      "path_fields": ["projectId", "id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectId", "id", "name"],
+        "properties": {
+          "projectId": { "type": "string" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "billable": { "type": "boolean" },
+          "assigneeId": { "type": "string" },
+          "assigneeIds": { "type": "array" },
+          "estimate": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Clockify task's fields; approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks/{{ record.id }}",
+      "path_fields": ["projectId", "id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["projectId", "id"],
+        "properties": {
+          "projectId": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Clockify task; approval required"
+    }
+  ]
+}

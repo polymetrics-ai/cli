@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/airlines",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": {
+        "limit": 100,
+        "offset": 100,
+        "count": 1,
+        "total": 101
+      },
+      "data": [
+        {
+          "id": "fixture_airline_101",
+          "airline_name": "Fixture Air 101",
+          "iata_code": "F101",
+          "icao_code": "FX101",
+          "callsign": "FIXAIR101",
+          "type": "scheduled",
+          "status": "active",
+          "fleet_size": "10",
+          "country_name": "Fixtureland",
+          "country_iso2": "FX",
+          "date_founded": "1990"
+        }
+      ]
+    }
+  }
+}

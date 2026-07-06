@@ -1,0 +1,1087 @@
+{
+  "actions": [
+    {
+      "name": "create_department",
+      "kind": "create",
+      "method": "POST",
+      "path": "/departments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /departments mutates Workable data; approval required"
+    },
+    {
+      "name": "update_department",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/departments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /departments mutates Workable data; approval required"
+    },
+    {
+      "name": "merge_department",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/departments/{{ record.department_id }}/merge",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "department_id",
+          "target_department_id"
+        ],
+        "properties": {
+          "department_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "target_department_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /departments/{{ record.department_id }}/merge mutates Workable data; approval required",
+      "path_fields": [
+        "department_id"
+      ]
+    },
+    {
+      "name": "delete_department",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/departments/{{ record.department_id }}?force={{ record.force }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "department_id",
+          "force"
+        ],
+        "properties": {
+          "department_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "force": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "DELETE /departments/{{ record.department_id }}?force={{ record.force }} mutates Workable data; approval required",
+      "path_fields": [
+        "department_id",
+        "force"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "invite_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/members/invite",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /members/invite mutates Workable data; approval required"
+    },
+    {
+      "name": "update_member",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /members mutates Workable data; approval required"
+    },
+    {
+      "name": "deactivate_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/members/{{ record.member_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "member_id"
+        ],
+        "properties": {
+          "member_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "DELETE /members/{{ record.member_id }} mutates Workable data; approval required",
+      "path_fields": [
+        "member_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "enable_member",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/members/{{ record.member_id }}/enable",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "member_id"
+        ],
+        "properties": {
+          "member_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "POST /members/{{ record.member_id }}/enable mutates Workable data; approval required",
+      "path_fields": [
+        "member_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "target",
+          "event"
+        ],
+        "properties": {
+          "target": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "args": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "POST /subscriptions mutates Workable data; approval required"
+    },
+    {
+      "name": "delete_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "subscription_id"
+        ],
+        "properties": {
+          "subscription_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "DELETE /subscriptions/{{ record.subscription_id }} mutates Workable data; approval required",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/employees",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "personal_email": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "POST /employees mutates Workable data; approval required"
+    },
+    {
+      "name": "update_employee",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/employees/{{ record.employee_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "firstname": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /employees/{{ record.employee_id }} mutates Workable data; approval required",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "create_review_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/review-cycles/templates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /review-cycles/templates mutates Workable data; approval required"
+    },
+    {
+      "name": "bulk_create_time_entries",
+      "kind": "create",
+      "method": "POST",
+      "path": "/time-tracking/time-entries",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "time_entries"
+        ],
+        "properties": {
+          "time_entries": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "POST /time-tracking/time-entries mutates Workable data; approval required"
+    },
+    {
+      "name": "create_time_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/time-tracking/employees/{{ record.employee_id }}/time-entries",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "from_date": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "POST /time-tracking/employees/{{ record.employee_id }}/time-entries mutates Workable data; approval required",
+      "path_fields": [
+        "employee_id"
+      ]
+    },
+    {
+      "name": "update_time_entry",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id",
+          "uuid"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "uuid": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "duration": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "PATCH /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required",
+      "path_fields": [
+        "employee_id",
+        "uuid"
+      ]
+    },
+    {
+      "name": "archive_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "employee_id",
+          "uuid"
+        ],
+        "properties": {
+          "employee_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "uuid": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "DELETE /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required",
+      "path_fields": [
+        "employee_id",
+        "uuid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "decide_timeoff_approval",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/timeoff/approvals/{{ record.approval_key }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "approval_key",
+          "state"
+        ],
+        "properties": {
+          "approval_key": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /timeoff/approvals/{{ record.approval_key }} mutates Workable data; approval required",
+      "path_fields": [
+        "approval_key"
+      ]
+    },
+    {
+      "name": "create_timeoff_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeoff/requests",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "from_date"
+        ],
+        "properties": {
+          "from_date": {
+            "type": "string"
+          },
+          "employee_id": {
+            "type": "string"
+          },
+          "to_date": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /timeoff/requests mutates Workable data; approval required"
+    },
+    {
+      "name": "update_candidate_custom_attribute",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/candidates/{{ record.candidate_id }}/update_custom_attribute_value",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "custom_attribute_id",
+          "value"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "custom_attribute_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "comment_on_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/comments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "comment"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/comments mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "copy_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/copy",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "member_id",
+          "target_job_shortcode",
+          "target_stage"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "member_id": {
+            "type": "string"
+          },
+          "target_job_shortcode": {
+            "type": "string"
+          },
+          "target_stage": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/copy mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "disqualify_candidate",
+      "kind": "update",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/disqualify",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "disqualification_reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/disqualify mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "create_job_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs/{{ record.job_shortcode }}/candidates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "job_shortcode",
+          "name"
+        ],
+        "properties": {
+          "job_shortcode": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /jobs/{{ record.job_shortcode }}/candidates mutates Workable data; approval required",
+      "path_fields": [
+        "job_shortcode"
+      ]
+    },
+    {
+      "name": "move_candidate",
+      "kind": "update",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/move",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "target_stage"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "target_stage": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/move mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "relocate_candidate",
+      "kind": "update",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/relocate",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "target_job_shortcode"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "target_job_shortcode": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/relocate mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "revert_candidate_disqualification",
+      "kind": "update",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/revert",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/revert mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_candidate_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/candidates/{{ record.candidate_id }}/tags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "tags"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "tags": {
+            "type": "array"
+          }
+        }
+      },
+      "risk": "PUT /candidates/{{ record.candidate_id }}/tags mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "rate_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/candidates/{{ record.candidate_id }}/ratings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "rating"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "rating": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "update_candidate_rating",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/candidates/{{ record.candidate_id }}/ratings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "rating"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "rating": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PUT /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "update_candidate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/candidates/{{ record.candidate_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "candidate_id"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /candidates/{{ record.candidate_id }} mutates Workable data; approval required",
+      "path_fields": [
+        "candidate_id"
+      ]
+    },
+    {
+      "name": "approve_offer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/offers/{{ record.offer_id }}/approve",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offer_id"
+        ],
+        "properties": {
+          "offer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "PATCH /offers/{{ record.offer_id }}/approve mutates Workable data; approval required",
+      "path_fields": [
+        "offer_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "reject_offer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/offers/{{ record.offer_id }}/reject",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "offer_id"
+        ],
+        "properties": {
+          "offer_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "PATCH /offers/{{ record.offer_id }}/reject mutates Workable data; approval required",
+      "path_fields": [
+        "offer_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_requisition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/requisitions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /requisitions mutates Workable data; approval required"
+    },
+    {
+      "name": "update_requisition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/requisitions/{{ record.requisition_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "requisition_id"
+        ],
+        "properties": {
+          "requisition_id": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "PATCH /requisitions/{{ record.requisition_id }} mutates Workable data; approval required",
+      "path_fields": [
+        "requisition_id"
+      ]
+    },
+    {
+      "name": "approve_requisition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/requisitions/{{ record.requisition_code }}/approve",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "requisition_code"
+        ],
+        "properties": {
+          "requisition_code": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "PATCH /requisitions/{{ record.requisition_code }}/approve mutates Workable data; approval required",
+      "path_fields": [
+        "requisition_code"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "reject_requisition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/requisitions/{{ record.requisition_code }}/reject",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "requisition_code"
+        ],
+        "properties": {
+          "requisition_code": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      },
+      "risk": "PATCH /requisitions/{{ record.requisition_code }}/reject mutates Workable data; approval required",
+      "path_fields": [
+        "requisition_code"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_talent_pool_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/talent_pool/{{ record.stage }}/candidates",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "stage",
+          "name"
+        ],
+        "properties": {
+          "stage": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "POST /talent_pool/{{ record.stage }}/candidates mutates Workable data; approval required",
+      "path_fields": [
+        "stage"
+      ]
+    }
+  ]
+}

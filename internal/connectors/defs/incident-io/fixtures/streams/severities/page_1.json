@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/severities" },
+  "response": {
+    "status": 200,
+    "body": {
+      "severities": [
+        { "id": "sev_fixture_1", "name": "Major", "description": "Significant impact", "rank": 1, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "sev_fixture_2", "name": "Minor", "description": "Low impact", "rank": 2, "created_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

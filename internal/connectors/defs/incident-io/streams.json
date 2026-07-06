@@ -1,0 +1,82 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/severities" },
+    "error_map": [
+      { "status": 401, "hint": "incident-io credentials are missing or invalid; re-run pm credentials add incident-io" },
+      { "status": 403, "hint": "incident-io account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "incident-io rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "incidents",
+      "path": "/v2/incidents",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "incidents" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "pagination_meta.after"
+      },
+      "computed_fields": {
+        "severity_id": "{{ record.severity.id }}",
+        "severity_name": "{{ record.severity.name }}",
+        "status_id": "{{ record.incident_status.id }}",
+        "status_name": "{{ record.incident_status.name }}",
+        "status_category": "{{ record.incident_status.category }}"
+      },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "severities",
+      "path": "/v1/severities",
+      "records": { "path": "severities" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/severities.json"
+    },
+    {
+      "name": "incident_roles",
+      "path": "/v2/incident_roles",
+      "records": { "path": "incident_roles" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/incident_roles.json"
+    },
+    {
+      "name": "users",
+      "path": "/v2/users",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "users" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "pagination_meta.after"
+      },
+      "computed_fields": {
+        "base_role_id": "{{ record.base_role.id }}",
+        "base_role_name": "{{ record.base_role.name }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "follow_ups",
+      "path": "/v2/follow_ups",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "follow_ups" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "pagination_meta.after"
+      },
+      "computed_fields": {
+        "assignee_id": "{{ record.assignee.id }}",
+        "assignee_name": "{{ record.assignee.name }}"
+      },
+      "schema": "schemas/follow_ups.json"
+    }
+  ]
+}

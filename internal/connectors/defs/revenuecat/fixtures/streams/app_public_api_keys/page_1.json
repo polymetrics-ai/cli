@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/apps/synthetic-conformance-value/public_api_keys",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "pubkey_fixture_1",
+          "object": "public_api_key",
+          "key": "public_fixture_key",
+          "app_id": "synthetic-conformance-value",
+          "environment": "sandbox",
+          "created_at": 1735689600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/apps/synthetic-conformance-value/public_api_keys"
+    }
+  }
+}

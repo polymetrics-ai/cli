@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/filters" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": 1,
+          "name": "Fixture Filter",
+          "filter_code": null,
+          "is_editable": true,
+          "active_flag": true,
+          "type": "deals",
+          "temporary_flag": false,
+          "user_id": 1,
+          "add_time": "2026-01-01 00:00:00",
+          "update_time": "2026-01-01 00:00:00",
+          "visible_to": "3"
+        }
+      ]
+    }
+  }
+}

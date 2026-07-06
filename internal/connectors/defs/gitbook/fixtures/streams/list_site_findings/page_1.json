@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/sites/synthetic-conformance-value/findings",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_site_findings_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_site_findings",
+          "name": "Fixture list_site_findings",
+          "status": "active",
+          "operation_id": "listSiteFindings"
+        }
+      ]
+    }
+  }
+}

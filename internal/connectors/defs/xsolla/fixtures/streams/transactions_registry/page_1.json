@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/registry.json",
+    "query": { "in_transfer_currency": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "transaction": {
+          "id": 200001,
+          "external_id": "fixture-ext-2",
+          "status": "done",
+          "transfer_date": "2026-01-05T00:00:00Z",
+          "dry_run": 0,
+          "direct_account": 0,
+          "refund_reason": null,
+          "refund_reason_comment": null,
+          "project": { "id": 123456, "name": "Fixture Project" },
+          "payment_method": { "class": "ps", "id": 1, "name": "PayPal" }
+        },
+        "user": {
+          "id": "user_fixture_2",
+          "name": "Fixture User Two",
+          "email": "fixture2@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null,
+          "marketplace": "steam",
+          "ip": "203.0.113.5"
+        },
+        "user_balance": {
+          "payment_currency": {
+            "deduction_amount": 0,
+            "payout_amount_from_balance": 0,
+            "purchase_amount_from_balance": 0
+          }
+        },
+        "purchase": {
+          "items_amount": 1,
+          "purchase_amount": 9.99
+        }
+      }
+    ]
+  }
+}

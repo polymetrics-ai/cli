@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipment_legs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/shipment_legs",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/shipment_leg",
+            "id": 11111,
+            "shipment": {
+              "_object": "/api/refs/object",
+              "ref_type": "/shipment",
+              "link": "https://api.flexport.com/shipments/2983",
+              "id": 2983
+            },
+            "transportation_mode": "ocean",
+            "estimated_departure_date": "2026-01-15T12:00:00Z",
+            "estimated_arrival_date": "2026-02-01T12:00:00Z",
+            "actual_departure_date": null,
+            "actual_arrival_date": null
+          }
+        ]
+      }
+    }
+  }
+}

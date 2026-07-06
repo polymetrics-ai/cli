@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/sections" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "sec_fixture_1", "project_id": "prj_fixture_1", "name": "Fixture Section One", "order": 1 },
+      { "id": "sec_fixture_2", "project_id": "prj_fixture_1", "name": "Fixture Section Two", "order": 2 }
+    ]
+  }
+}

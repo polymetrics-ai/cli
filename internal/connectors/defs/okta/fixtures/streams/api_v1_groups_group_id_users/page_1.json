@@ -1,0 +1,256 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/groups/synthetic-conformance-value/users",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "activated": "2026-01-01T00:00:00Z",
+        "created": "2026-01-01T00:00:00Z",
+        "credentials": {
+          "password": {
+            "hash": {
+              "algorithm": "BCRYPT",
+              "digestAlgorithm": "SHA256_HMAC",
+              "iterationCount": 1,
+              "keySize": 1,
+              "salt": "salt_fixture",
+              "saltOrder": "salt_order_fixture",
+              "value": "value_fixture",
+              "workFactor": 1
+            },
+            "hook": {
+              "type": "type_fixture"
+            },
+            "value": "value_fixture"
+          },
+          "provider": {
+            "name": "name_fixture",
+            "type": "ACTIVE_DIRECTORY"
+          },
+          "recovery_question": {
+            "answer": "answer_fixture",
+            "question": "question_fixture"
+          }
+        },
+        "id": "id_fixture",
+        "lastLogin": "fixture@example.invalid",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "passwordChanged": "fixture",
+        "profile": {
+          "city": "city_fixture",
+          "costCenter": "cost_center_fixture",
+          "countryCode": "country_code_fixture",
+          "department": "department_fixture",
+          "displayName": "display_name_fixture",
+          "division": "division_fixture",
+          "email": "fixture@example.invalid",
+          "employeeNumber": "employee_number_fixture",
+          "firstName": "first_name_fixture",
+          "honorificPrefix": "honorific_prefix_fixture",
+          "honorificSuffix": "honorific_suffix_fixture",
+          "lastName": "last_name_fixture",
+          "locale": "locale_fixture",
+          "login": "fixture@example.invalid",
+          "manager": "manager_fixture",
+          "managerId": "manager_id_fixture",
+          "middleName": "middle_name_fixture",
+          "mobilePhone": "mobile_phone_fixture",
+          "nickName": "nick_name_fixture",
+          "organization": "organization_fixture",
+          "postalAddress": "postal_address_fixture",
+          "preferredLanguage": "preferred_language_fixture",
+          "primaryPhone": "primary_phone_fixture",
+          "profileUrl": "https://example.invalid/fixture",
+          "secondEmail": "fixture@example.invalid",
+          "state": "state_fixture",
+          "streetAddress": "street_address_fixture",
+          "timezone": "2026-01-01T00:00:00Z",
+          "title": "title_fixture",
+          "userType": "user_type_fixture",
+          "zipCode": "zip_code_fixture"
+        },
+        "realmId": "realm_id_fixture",
+        "status": "ACTIVE",
+        "statusChanged": "2026-01-01T00:00:00Z",
+        "transitioningToStatus": "ACTIVE",
+        "type": {
+          "id": "id_fixture"
+        },
+        "_embedded": {},
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "activate": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "resetPassword": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "resetFactors": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "expirePassword": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "forgotPassword": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "changeRecoveryQuestion": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "deactivate": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "reactivate": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "changePassword": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "schema": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "suspend": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "unsuspend": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "unlock": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "type": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

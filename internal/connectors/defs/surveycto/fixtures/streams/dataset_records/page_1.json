@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/datasets"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "limit": 1000,
+      "data": [
+        { "id": "cases", "title": "Cases", "discriminator": "CASES" }
+      ],
+      "nextCursor": null
+    }
+  }
+}

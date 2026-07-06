@@ -1,0 +1,21 @@
+{
+  "record": {
+    "doc_token": "doc_fixture_1",
+    "name": "Fixture Signer Two",
+    "email": "fixture2@example.com",
+    "send_automatic_email": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/docs/doc_fixture_1/add-signer/",
+    "body": {
+      "name": "Fixture Signer Two",
+      "email": "fixture2@example.com",
+      "send_automatic_email": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "token": "signer_fixture_created_1" }
+  }
+}

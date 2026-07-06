@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "athlete",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "string"] },
+    "username": { "type": ["string", "null"] },
+    "firstname": { "type": ["string", "null"] },
+    "lastname": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "sex": { "type": ["string", "null"] },
+    "weight": { "type": ["number", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

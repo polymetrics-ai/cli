@@ -1,0 +1,420 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pokemon",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 101,
+      "next": "https://pokeapi.co/api/v2/pokemon?offset=100&limit=100",
+      "previous": null,
+      "results": [
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/1/",
+          "name": "fixture-pokemon-1"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/2/",
+          "name": "fixture-pokemon-2"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/3/",
+          "name": "fixture-pokemon-3"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/4/",
+          "name": "fixture-pokemon-4"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/5/",
+          "name": "fixture-pokemon-5"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/6/",
+          "name": "fixture-pokemon-6"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/7/",
+          "name": "fixture-pokemon-7"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/8/",
+          "name": "fixture-pokemon-8"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/9/",
+          "name": "fixture-pokemon-9"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/10/",
+          "name": "fixture-pokemon-10"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/11/",
+          "name": "fixture-pokemon-11"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/12/",
+          "name": "fixture-pokemon-12"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/13/",
+          "name": "fixture-pokemon-13"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/14/",
+          "name": "fixture-pokemon-14"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/15/",
+          "name": "fixture-pokemon-15"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/16/",
+          "name": "fixture-pokemon-16"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/17/",
+          "name": "fixture-pokemon-17"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/18/",
+          "name": "fixture-pokemon-18"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/19/",
+          "name": "fixture-pokemon-19"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/20/",
+          "name": "fixture-pokemon-20"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/21/",
+          "name": "fixture-pokemon-21"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/22/",
+          "name": "fixture-pokemon-22"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/23/",
+          "name": "fixture-pokemon-23"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/24/",
+          "name": "fixture-pokemon-24"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/25/",
+          "name": "fixture-pokemon-25"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/26/",
+          "name": "fixture-pokemon-26"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/27/",
+          "name": "fixture-pokemon-27"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/28/",
+          "name": "fixture-pokemon-28"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/29/",
+          "name": "fixture-pokemon-29"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/30/",
+          "name": "fixture-pokemon-30"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/31/",
+          "name": "fixture-pokemon-31"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/32/",
+          "name": "fixture-pokemon-32"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/33/",
+          "name": "fixture-pokemon-33"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/34/",
+          "name": "fixture-pokemon-34"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/35/",
+          "name": "fixture-pokemon-35"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/36/",
+          "name": "fixture-pokemon-36"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/37/",
+          "name": "fixture-pokemon-37"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/38/",
+          "name": "fixture-pokemon-38"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/39/",
+          "name": "fixture-pokemon-39"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/40/",
+          "name": "fixture-pokemon-40"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/41/",
+          "name": "fixture-pokemon-41"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/42/",
+          "name": "fixture-pokemon-42"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/43/",
+          "name": "fixture-pokemon-43"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/44/",
+          "name": "fixture-pokemon-44"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/45/",
+          "name": "fixture-pokemon-45"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/46/",
+          "name": "fixture-pokemon-46"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/47/",
+          "name": "fixture-pokemon-47"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/48/",
+          "name": "fixture-pokemon-48"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/49/",
+          "name": "fixture-pokemon-49"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/50/",
+          "name": "fixture-pokemon-50"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/51/",
+          "name": "fixture-pokemon-51"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/52/",
+          "name": "fixture-pokemon-52"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/53/",
+          "name": "fixture-pokemon-53"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/54/",
+          "name": "fixture-pokemon-54"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/55/",
+          "name": "fixture-pokemon-55"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/56/",
+          "name": "fixture-pokemon-56"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/57/",
+          "name": "fixture-pokemon-57"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/58/",
+          "name": "fixture-pokemon-58"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/59/",
+          "name": "fixture-pokemon-59"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/60/",
+          "name": "fixture-pokemon-60"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/61/",
+          "name": "fixture-pokemon-61"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/62/",
+          "name": "fixture-pokemon-62"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/63/",
+          "name": "fixture-pokemon-63"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/64/",
+          "name": "fixture-pokemon-64"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/65/",
+          "name": "fixture-pokemon-65"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/66/",
+          "name": "fixture-pokemon-66"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/67/",
+          "name": "fixture-pokemon-67"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/68/",
+          "name": "fixture-pokemon-68"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/69/",
+          "name": "fixture-pokemon-69"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/70/",
+          "name": "fixture-pokemon-70"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/71/",
+          "name": "fixture-pokemon-71"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/72/",
+          "name": "fixture-pokemon-72"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/73/",
+          "name": "fixture-pokemon-73"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/74/",
+          "name": "fixture-pokemon-74"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/75/",
+          "name": "fixture-pokemon-75"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/76/",
+          "name": "fixture-pokemon-76"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/77/",
+          "name": "fixture-pokemon-77"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/78/",
+          "name": "fixture-pokemon-78"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/79/",
+          "name": "fixture-pokemon-79"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/80/",
+          "name": "fixture-pokemon-80"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/81/",
+          "name": "fixture-pokemon-81"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/82/",
+          "name": "fixture-pokemon-82"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/83/",
+          "name": "fixture-pokemon-83"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/84/",
+          "name": "fixture-pokemon-84"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/85/",
+          "name": "fixture-pokemon-85"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/86/",
+          "name": "fixture-pokemon-86"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/87/",
+          "name": "fixture-pokemon-87"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/88/",
+          "name": "fixture-pokemon-88"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/89/",
+          "name": "fixture-pokemon-89"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/90/",
+          "name": "fixture-pokemon-90"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/91/",
+          "name": "fixture-pokemon-91"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/92/",
+          "name": "fixture-pokemon-92"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/93/",
+          "name": "fixture-pokemon-93"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/94/",
+          "name": "fixture-pokemon-94"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/95/",
+          "name": "fixture-pokemon-95"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/96/",
+          "name": "fixture-pokemon-96"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/97/",
+          "name": "fixture-pokemon-97"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/98/",
+          "name": "fixture-pokemon-98"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/99/",
+          "name": "fixture-pokemon-99"
+        },
+        {
+          "url": "https://pokeapi.co/api/v2/pokemon/100/",
+          "name": "fixture-pokemon-100"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "record": { "groupName": "Fixture Group" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/contactGroups/create",
+    "body": { "groupName": "Fixture Group" }
+  }
+}

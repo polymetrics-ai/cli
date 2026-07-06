@@ -1,0 +1,91 @@
+{
+  "api": "Grafana HTTP API (instance-hosted, e.g. https://your-grafana.grafana.net)",
+  "docs": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (dashboards, folders, datasources, org_users, alert_rules); the full Grafana surface (dashboard/datasource/alert-rule create/update/delete, annotations, teams, service accounts, snapshots, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/search?type=dash-db",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?type=dash-folder",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/datasources",
+      "covered_by": {
+        "stream": "datasources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/org/users",
+      "covered_by": {
+        "stream": "org_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/alert-rules",
+      "covered_by": {
+        "stream": "alert_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/dashboards/db",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/dashboards/db is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/datasources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/datasources is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/annotations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/annotations is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/teams/search is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/serviceaccounts/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/serviceaccounts/search is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboards/uid/{uid}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/dashboards/uid/{uid} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    }
+  ]
+}

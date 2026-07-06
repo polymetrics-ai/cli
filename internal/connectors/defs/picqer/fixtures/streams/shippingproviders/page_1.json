@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/shippingproviders", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "idshippingprovider": 1, "name": "Fixture Provider", "provider": "PostNL", "active": true, "created": "2026-01-01T00:00:00Z", "updated": "2026-01-01T00:00:00Z", "profiles": [] }
+    ]
+  }
+}

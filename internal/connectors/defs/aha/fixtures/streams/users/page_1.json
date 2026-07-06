@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/users", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": "user_fixture_1",
+          "email": "fixture1@example.com",
+          "name": "Fixture User One",
+          "enabled": true,
+          "administrator": true
+        },
+        {
+          "id": "user_fixture_2",
+          "email": "fixture2@example.com",
+          "name": "Fixture User Two",
+          "enabled": true,
+          "administrator": false
+        }
+      ],
+      "pagination": { "total_records": 2, "total_pages": 1, "current_page": 1 }
+    }
+  }
+}

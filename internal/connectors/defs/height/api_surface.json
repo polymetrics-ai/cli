@@ -1,0 +1,75 @@
+{
+  "api": "Height REST API (https://www.height.app/api)",
+  "docs": "https://www.height.app/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (tasks, lists, field_templates, users, workspace); Height's write endpoints (task create/update, comments, list membership) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fieldTemplates",
+      "covered_by": {
+        "stream": "field_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspace",
+      "covered_by": {
+        "stream": "workspace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented task creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tasks/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented task updates; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "activity/comment feed not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user profile introspection, not a syncable object stream"
+      }
+    }
+  ]
+}

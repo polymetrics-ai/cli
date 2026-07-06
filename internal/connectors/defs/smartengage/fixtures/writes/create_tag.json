@@ -1,0 +1,18 @@
+{
+  "record": {
+    "avatar_id": "av_fixture_1",
+    "name": "fixture-tag"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags/create"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "tag_fixture_1",
+      "avatar_id": "av_fixture_1",
+      "name": "fixture-tag"
+    }
+  }
+}

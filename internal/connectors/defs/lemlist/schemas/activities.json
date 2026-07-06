@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "activities",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "campaignId": { "type": ["string", "null"] },
+    "campaignName": { "type": ["string", "null"] },
+    "companyName": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "emailTemplateId": { "type": ["string", "null"] },
+    "emailTemplateName": { "type": ["string", "null"] },
+    "extra": { "type": ["object", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "icebreaker": { "type": ["string", "null"] },
+    "isFirst": { "type": ["boolean", "null"] },
+    "leadId": { "type": ["string", "null"] },
+    "leadEmail": { "type": ["string", "null"] },
+    "leadFirstName": { "type": ["string", "null"] },
+    "leadLastName": { "type": ["string", "null"] },
+    "linkedinUrl": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "sequenceId": { "type": ["string", "null"] },
+    "sequenceStep": { "type": ["integer", "null"] },
+    "teamId": { "type": ["string", "null"] }
+  }
+}

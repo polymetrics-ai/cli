@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/record",
+    "query": {
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "records": [
+          {
+            "record_id": "rec_fixture_3",
+            "ccr_patient_id": null,
+            "institute_id": "inst_fixture_2",
+            "email_address": "fixture3@example.com",
+            "randomization_group": null,
+            "randomization_group_name": null,
+            "randomization_datetime": null,
+            "status": "archived",
+            "archived": true,
+            "archived_reason": "withdrawn",
+            "progress": 100,
+            "locked": true,
+            "created_on": "2026-01-03T00:00:00Z",
+            "updated_on": "2026-01-03T00:00:00Z"
+          }
+        ]
+      },
+      "page": 2,
+      "page_count": 2,
+      "total_items": 3
+    }
+  }
+}

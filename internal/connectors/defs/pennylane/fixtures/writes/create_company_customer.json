@@ -1,0 +1,15 @@
+{
+  "record": {
+    "name": "Fixture Company Customer",
+    "billing_address": {
+      "address": "1 Fixture Street",
+      "postal_code": "75001",
+      "city": "Paris",
+      "country_alpha2": "FR"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/company_customers"
+  }
+}

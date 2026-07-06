@@ -1,0 +1,7 @@
+{
+  "api": "PostgreSQL wire protocol (libpq via pgx) — not a REST API",
+  "docs": "https://www.postgresql.org/docs/current/protocol.html",
+  "reviewed_at": "2026-07-02",
+  "scope": "This is a database connector: it speaks the PostgreSQL wire protocol over a pgx connection, not HTTP/REST. There is no REST endpoint surface to enumerate — Check/Catalog/Read are implemented as SQL queries (information_schema discovery, snapshot SELECT) against whatever tables/columns the target database exposes, which are discovered dynamically at runtime (capabilities.dynamic_schema: true) rather than declared as a fixed set of streams/endpoints. This api_surface.json intentionally has zero endpoints entries: there is nothing REST-shaped for either covered_by or excluded to describe, per the minimal-db surface pattern for Tier-3 SQL/CDC connectors (design §B.7).",
+  "endpoints": []
+}

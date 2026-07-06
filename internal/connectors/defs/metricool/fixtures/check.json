@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/admin/simpleProfiles",
+    "query": { "userId": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/books/", "query": { "languages": "en" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 11,
+          "title": "Alice's Adventures in Wonderland",
+          "authors": [{ "name": "Carroll, Lewis", "birth_year": 1832, "death_year": 1898 }],
+          "translators": [],
+          "subjects": ["Fantasy fiction", "Imaginary places -- Fiction"],
+          "bookshelves": ["Children's Literature"],
+          "languages": ["en"],
+          "copyright": false,
+          "media_type": "Text",
+          "download_count": 95000
+        }
+      ]
+    }
+  }
+}

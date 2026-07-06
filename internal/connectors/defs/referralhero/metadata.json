@@ -1,0 +1,24 @@
+{
+  "name": "referralhero",
+  "display_name": "ReferralHero",
+  "description": "Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and campaign-scoped subscriber resources, and performs approved ReferralHero API v2 mutations.",
+  "integration_type": "api",
+  "docs_url": "https://support.referralhero.com/integrate/rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ReferralHero API read of referral program list, subscriber, referral, reward, and coupon data",
+    "write": "creates and mutates live ReferralHero campaign, subscriber, transaction, reward, coupon, and qualification state; approval required before execution",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

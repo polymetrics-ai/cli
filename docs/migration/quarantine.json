@@ -1,0 +1,232 @@
+[
+  {
+    "name": "recruitee",
+    "blocker_type": "SCHEMA_AMBIGUOUS",
+    "reason": "Current Recruitee docs expose a 948-endpoint mixed HTML-only surface across ATS, admin, OAuth, billing, payment, SSO, security, attachments, and lifecycle controls, but no machine-readable OpenAPI/response schema was discoverable. Legacy only emits five list streams, so expanding every GET list/detail and dialect-expressible write would require inferring hundreds of response envelopes and write bodies, including privileged/security/payment actions, from headings rather than grounded schemas.",
+    "evidence": "https://apidocs.recruitee.com/ scraped on 2026-07-04: 948 h4.action-heading entries (GET=384, POST=181, PATCH=297, PUT=8, DELETE=78). Existing legacy ground truth internal/connectors/recruitee/recruitee.go declares only offers, candidates, departments, sources, and tags list streams and returns ErrUnsupportedOperation for Write.",
+    "attempts": [
+      "Fetched docs_url and parsed action headings from the rendered HTML.",
+      "Searched for a machine-readable OpenAPI/swagger/JSON schema in the docs page and page assets; none was found.",
+      "Compared against legacy internal/connectors/recruitee, which provides only five read endpoints and no write surface."
+    ]
+  },
+  {
+    "name": "segment",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Segment Public API OpenAPI v73.0.0 exposes a 187-operation graph-shaped surface. Most documented GET list/detail endpoints are nested under parent resources such as spaces, audiences, destination connections, schedules, warehouses, connected sources, tracking plans, functions, versions, IAM groups/users, and Reverse ETL models/syncs. Correct full-surface reads require multi-level resource graph discovery/fan-out and per-endpoint parent-id propagation; a Tier-1 workaround would either force users to hand-supply many unrelated IDs or silently miss resources. Legacy only emits three top-level metadata streams and declares Write unsupported, so exposing the 98 administrative mutations would also exceed the legacy connector's risk posture without a full scoped write design.",
+    "evidence": "Parsed https://docs.segmentapis.com/tag/Getting-Started Redocly state on 2026-07-04: OpenAPI 3.0.3 version 73.0.0 with 187 operations (GET=89, POST=42, PATCH=22, PUT=7, DELETE=27) across Activations, Audiences, Spaces, Warehouses, Sources, Reverse ETL, Deletion and Suppression, Destinations, Functions, IAM, Catalog, Monitoring, and other tags. Legacy internal/connectors/segment/segment.go defines only workspaces, sources, and destinations and returns connectors.ErrUnsupportedOperation from Write.",
+    "attempts": [
+      "Fetched and decoded the Segment Redocly state JavaScript from docs.segmentapis.com and extracted the embedded OpenAPI document.",
+      "Compared the documented operation graph against legacy internal/connectors/segment, confirming the migrated bundle must preserve only the three legacy passthrough streams for accepted inputs.",
+      "Checked the declarative fan_out dialect: it supports a single parent-id listing into one child stream, not arbitrary multi-level Segment resource graph traversal with nested parent IDs."
+    ]
+  },
+  {
+    "name": "hibob",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pass B coverage for HiBob requires declarative POST-body read/search streams and body cursor pagination. The current stream dialect exposes stream.body, but the engine read path calls Requester.Do with a nil body, and cursor pagination can only place the next token in query parameters or next URLs, not back into the next request body. This blocks core documented read endpoints such as POST /people/search, POST /people/{identifier}, attendance search endpoints, hiring search endpoints, job-catalog search, and workforce-planning search.",
+    "evidence": [
+      "https://apidocs.hibob.com/docs/people-read-api-contract.md documents POST /people/search and POST /people/{identifier} as read endpoints whose request body selects fields.",
+      "https://apidocs.hibob.com/reference/post_attendance-entries-search.md documents POST body filters with limit/cursor pagination and response_metadata.next_cursor for the next page.",
+      "internal/connectors/engine/read.go readOneSequence currently sends Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil), so declared stream.body is not transmitted."
+    ],
+    "attempts": [
+      "Reviewed HiBob docs index at https://apidocs.hibob.com/llms.txt and confirmed multiple documented GET-like data surfaces are POST-body reads with cursor state in the response body.",
+      "Validated existing legacy-parity hibob bundle still has zero connectorgen findings and passes TestConformance/hibob."
+    ]
+  },
+  {
+    "name": "linear",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pass B coverage for Linear requires GraphQL POST-body read streams with cursor state carried in request variables, plus mutation actions whose request body must include fixed GraphQL documents and variables. The current declarative read path ignores stream.body, write actions can only send record-shaped bodies, and exposing a generic GraphQL mutation/query body would violate the connector tool-surface rule against generic write tools. This shard is restricted to defs/linear and may not create or edit a Linear StreamHook/WriteHook package.",
+    "evidence": [
+      "https://linear.app/developers/graphql documents Linear's GraphQL API as the path for queries and mutations.",
+      "https://studio.apollographql.com/public/Linear-API/variant/current/schema/reference publishes Linear's Query and Mutation schema surfaces.",
+      "internal/connectors/linear/linear.go harvest builds a GraphQL JSON body with query and variables, then paginates via pageInfo.hasNextPage/endCursor into the next after variable.",
+      "internal/connectors/engine/read.go readOneSequence calls Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil), so declared stream.body is not transmitted.",
+      "internal/connectors/engine/write.go executeWriteRecord builds JSON bodies from record fields only; it has no static or templated body document facility for fixed GraphQL mutation documents.",
+      "No internal/connectors/hooks/linear package exists in this worktree."
+    ],
+    "attempts": [
+      "Reviewed the existing linear bundle, legacy Go package, and current Linear developer docs; confirmed every additional documented read/write goes through POST /graphql with a request body.",
+      "Confirmed the existing docs referenced internal/connectors/hooks/linear and internal/connectors/paritytest/linear, but neither path exists in this worktree.",
+      "Validated the existing legacy-parity linear bundle still has zero connectorgen findings and passes TestConformance/linear, and go build ./internal/connectors/... succeeds."
+    ]
+  },
+  {
+    "name": "microsoft-entra-id",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pass B read coverage for Microsoft Entra ID requires Microsoft Graph collection pagination through the literal top-level @odata.nextLink response key. The declarative next_url paginator reads next_url_path through a dotted-path helper and cannot address a key that itself contains a dot. The existing Tier-2 StreamHook handles this for only the five legacy streams; expanding additional documented Graph collections would require editing internal/connectors/hooks/microsoft-entra-id/hooks.go's routing and mapping tables, which this shard is explicitly forbidden to touch.",
+    "evidence": [
+      "https://learn.microsoft.com/en-us/graph/paging documents Graph collection paging via the @odata.nextLink property and says clients should request the entire returned URL for subsequent pages.",
+      "internal/connectors/hooks/microsoft-entra-id/hooks.go graphResource currently recognizes only users, groups, applications, serviceprincipals, and directoryroles.",
+      "internal/connectors/engine/paginate.go next_url pagination reads next_url_path through dotted-path extraction, which cannot select the literal top-level key @odata.nextLink.",
+      "internal/connectors/defs/microsoft-entra-id/metadata.json already carries a StreamHook dynamic-skip marker for this same @odata.nextLink engine gap."
+    ],
+    "attempts": [
+      "Reviewed the existing microsoft-entra-id bundle, legacy Go connector, and Tier-2 hook implementation.",
+      "Confirmed the documented Graph paging shape applies to collection reads and that the current hook must be extended for any additional collection stream to avoid silently reading only the first page.",
+      "Left the legacy-parity bundle behavior intact and updated api_surface/docs to remove Pass B placeholder reasons while recording this typed blocker."
+    ]
+  },
+  {
+    "name": "n8n",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pass B write coverage for n8n has two write-dialect gaps: PUT /workflows/{id}/tags and PUT /executions/{id}/tags require a root JSON array request body, while engine write actions can only construct JSON objects from record fields; DELETE /data-tables/{dataTableId}/rows/delete requires filter/returnData/dryRun query parameters on a DELETE request, while writes.json has no query field. The expressible read streams and non-secret, non-destructive writes are still expanded in defs/n8n.",
+    "evidence": [
+      "https://docs.n8n.io/connect/n8n-api/workflow.md documents PUT /workflows/{id}/tags with the tagIds schema, a root array of tag id objects.",
+      "https://docs.n8n.io/connect/n8n-api/execution.md documents PUT /executions/{id}/tags with the same root array body shape.",
+      "https://docs.n8n.io/connect/n8n-api/data-table.md documents DELETE /data-tables/{dataTableId}/rows/delete with filter, returnData, and dryRun query parameters.",
+      "internal/connectors/engine/write.go builds JSON bodies from map-shaped records and has no WriteAction query field."
+    ],
+    "attempts": [
+      "Parsed the current n8n public API Markdown reference pages for every operation group: Workflow, Execution, Credential, User, Audit, Tags, Source Control, Variables, Data Table, and Projects.",
+      "Expanded every documented GET list/detail endpoint that is expressible as a stream and every non-secret, non-destructive object-body mutation that writes.json can express.",
+      "Excluded credential create/update because their request bodies carry write-only credential data, which connector rules prohibit storing in ordinary write fixtures or records."
+    ]
+  },
+  {
+    "name": "nutshell",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pass B write coverage for Nutshell has a root-array body gap. Several documented PATCH endpoints use JSON Patch arrays, and POST /leads/{id}/installments requires a root JSON array of installment objects. The current writes.json dialect can build JSON objects from record maps or send no body, but cannot serialize the entire request body as a root array without a connector-specific WriteHook, which this shard is not allowed to add.",
+    "evidence": [
+      "https://developers.nutshell.com/reference/48bf7b1de74805c35713fb7b3a9f1e52.md documents PATCH /accounts/{id} with application/json-patch+json and a patchInput root array.",
+      "https://developers.nutshell.com/reference/5a47a634e21ffbad6a5c268af67a63ae.md documents PATCH /leads/{id} with the same root-array JSON Patch shape.",
+      "https://developers.nutshell.com/reference/32aed6101ab1c412a24275e076aaba1f.md documents POST /leads/{id}/installments as a root JSON array of installment objects.",
+      "internal/connectors/engine/write.go constructs JSON request bodies from map-shaped records and supports body_type json, form, or none; it has no root-array body mode."
+    ],
+    "attempts": [
+      "Parsed the current official Nutshell REST reference from developers.nutshell.com/llms.txt and expanded all documented JSON GET list/detail endpoints into streams.",
+      "Added write actions for every documented mutation whose request body is object-shaped or empty, including destructive DELETE actions with explicit risk metadata.",
+      "Excluded only root-array write bodies and the CSV export endpoint with concrete api_surface.json reasons."
+    ]
+  },
+  {
+    "name": "pendo",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Pendo Pass B coverage has several declarative engine gaps: base64 visitor/account detail reads require a per-stream x-pendo-base64-encoded-params header, but stream specs only support global base headers; Pendo aggregation is a semantic POST-body read/report DSL, while the read path currently ignores stream.body; event-ingestion writes on data.pendo.io require a different per-action x-pendo-integration-key secret, but writes share the bundle base authenticator; several documented endpoints return CSV/XLIFF or scalar JSON payloads rather than object records; and metadata bulk/single value writes require root array or scalar request bodies that writes.json cannot construct.",
+    "evidence": [
+      "https://engageapi.pendo.io/ documents GET /visitor/:b64_id and GET /account/:b64_id with the x-pendo-base64-encoded-params: true request header.",
+      "https://engageapi.pendo.io/ documents POST /api/v1/aggregation examples as JSON request-body reporting queries returning results.",
+      "https://engageapi.pendo.io/ documents POST https://data.pendo.io/data/track and /data/agentic using a Track Event shared secret distinct from the Engage integration key.",
+      "https://engageapi.pendo.io/ documents report CSV, guide experiment CSV, and guide localization XLIFF import/export payloads.",
+      "internal/connectors/engine/read.go calls Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil), so declared stream.body is not transmitted.",
+      "internal/connectors/engine/write.go builds JSON write bodies from map-shaped records and has no root-array, root-scalar, or per-action auth/header dialect."
+    ],
+    "attempts": [
+      "Fetched the current Pendo Postman collection behind https://engageapi.pendo.io/ and enumerated every documented request.",
+      "Expanded all documented JSON GET list/detail endpoints that return object/array records and do not require per-stream headers.",
+      "Added write actions for every safe object-body or empty-body mutation that can use the shared Engage integration-key auth.",
+      "Excluded destructive-admin, credential-rotation, binary/scalar payload, per-action-auth, root-array/root-scalar body, and aggregation DSL endpoints with concrete api_surface.json reasons."
+    ]
+  },
+  {
+    "name": "postmarkapp",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Postmark Pass B coverage requires per-stream/per-action authentication and root-array write bodies. The documented Servers, Domains, Sender Signatures, Data Removal, and template-push endpoints require X-Postmark-Account-Token, while this bundle and its legacy message streams use X-Postmark-Server-Token; engine HTTP auth is resolved once per bundle and WriteAction/StreamSpec have no auth/header override. The documented batch send endpoints POST /email/batch and POST /email/batchWithTemplates require root JSON array bodies, while writes.json can only construct object-shaped JSON request bodies from records.",
+    "evidence": [
+      "https://postmarkapp.com/developer/api/servers-api documents Servers API requests with X-Postmark-Account-Token.",
+      "https://postmarkapp.com/developer/api/domains-api and https://postmarkapp.com/developer/api/signatures-api document Domains and Sender Signatures with X-Postmark-Account-Token.",
+      "https://postmarkapp.com/developer/api/email-api documents POST /email/batch with a root JSON array body.",
+      "https://postmarkapp.com/developer/api/templates-api documents POST /email/batchWithTemplates with a root JSON array body.",
+      "internal/connectors/engine/bundle.go StreamSpec and WriteAction have no per-stream or per-action auth/header fields.",
+      "internal/connectors/engine/write.go builds JSON request bodies from map-shaped records and has no root-array body mode."
+    ],
+    "attempts": [
+      "Fetched current Postmark developer API pages from postmarkapp.com/developer/api and enumerated every API reference group.",
+      "Expanded server-token JSON GET endpoints as streams and server-token object/no-body mutations as write actions.",
+      "Excluded account-token endpoints and root-array batch sends with concrete api_surface.json reasons while preserving legacy message record projection."
+    ]
+  },
+  {
+    "name": "qualaroo",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Qualaroo's legacy endpoints and current Reporting API use different authentication shapes, but the declarative engine selects one authenticator and one check request for the whole bundle, not per stream. The bundle keeps legacy token-header reads when api_secret is absent and supports the documented Reporting API Basic-auth stream when api_secret is present, but cannot simultaneously assign auth/check behavior independently to /nudges, /responses, and /nudges/{survey_id}/responses.json.",
+    "evidence": [
+      "https://help.qualaroo.com/the-rest-reporting-api documents HTTP Basic Authentication using API Key and API Secret for GET /api/v1/nudges/SURVEY_ID/responses.json.",
+      "internal/connectors/qualaroo/qualaroo.go builds legacy Authorization: Token token=\"...\" headers and checks GET /nudges.",
+      "internal/connectors/engine/read.go newRuntime selects auth from b.HTTP.Auth once per Runtime, and HTTPBase.Check is a single base-level RequestSpec."
+    ],
+    "attempts": [
+      "Updated the Qualaroo bundle to preserve the legacy token-header streams and add the documented survey_responses Reporting API stream.",
+      "Used api_secret presence to select Basic auth for Reporting API reads while leaving the legacy one-secret path intact.",
+      "Documented the bundle-wide auth and legacy-shaped check limitations in defs/qualaroo/docs.md."
+    ]
+  },
+  {
+    "name": "reply-io",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Reply.io coverage still has several declarative gaps: legacy v1 reads use X-Api-Key while current v3 uses Bearer auth, but the engine selects one authenticator and one check request per runtime; POST-body read/report/filter endpoints cannot be modeled as streams because the read path ignores stream.body; root-array and multipart/binary writes cannot be constructed by writes.json; and required query parameters on write requests have no WriteAction query dialect.",
+    "evidence": [
+      "https://docs.reply.io/api-reference/introduction documents v3 Bearer auth under /v3 while internal/connectors/reply-io/reply_io.go uses X-Api-Key against https://api.reply.io/v1.",
+      "https://docs.reply.io/api-reference/bundled.yaml contains POST filter/report endpoints whose response is data but whose request requires a JSON body.",
+      "https://docs.reply.io/api-reference/bundled.yaml contains multipart uploads, root-array bulk bodies, and operations with required query parameters.",
+      "internal/connectors/engine/read.go calls Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil), so stream.body is not sent.",
+      "internal/connectors/engine/write.go builds JSON bodies from map-shaped records and WriteAction has no query or multipart/root-array body mode."
+    ],
+    "attempts": [
+      "Fetched the current Reply.io OpenAPI bundle from https://docs.reply.io/api-reference/bundled.yaml and generated streams/actions from the documented operation list.",
+      "Expanded all stable documented GET operations expressible as streams and all JSON-object/empty-body v3 mutations expressible as write actions.",
+      "Excluded coming-soon, credential-bearing, multipart/binary, root-array, required-query write, and semantic POST-body read/report endpoints with concrete api_surface.json reasons."
+    ]
+  },
+  {
+    "name": "rollbar",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Rollbar Pass B coverage has several declarative gaps and policy exclusions: POST-body analytics/RQL read/query endpoints cannot be represented as streams because the read path ignores stream.body; root-array notification-rule create/replace bodies cannot be constructed by writes.json; query-parameter-only person deletion cannot be represented because WriteAction has no query field; multipart upload endpoints require binary/form bodies; deploy reporting requires carrying an access token in the JSON body; and project access token endpoints expose credential material that connector records must not read or store.",
+    "evidence": [
+      "https://docs.rollbar.com/reference/getting-started-1 documents Rollbar API authentication, scopes, and the API reference index.",
+      "https://docs.rollbar.com/llms.txt lists the current Rollbar API Reference markdown pages used for this expansion.",
+      "https://docs.rollbar.com/reference/post_api-1-metrics-items.md and related metrics pages document POST-body analytics reads.",
+      "https://docs.rollbar.com/reference/put_api-1-notifications-slack-rules.md documents notification-rule replacement as a root JSON array body.",
+      "https://docs.rollbar.com/reference/delete-a-person.md documents person deletion identifiers as query parameters on POST /api/1/people/delete_jobs/.",
+      "internal/connectors/engine/read.go sends nil request bodies for stream reads, and internal/connectors/engine/write.go constructs object-shaped JSON bodies without a WriteAction query dialect."
+    ],
+    "attempts": [
+      "Fetched Rollbar docs from docs.rollbar.com/llms.txt and parsed each API Reference markdown page with an OpenAPI definition block.",
+      "Expanded every documented GET list/detail endpoint that does not expose credential material into a declarative stream.",
+      "Added write actions for every object-body or no-body mutating endpoint that can use the bundle-wide X-Rollbar-Access-Token header without storing additional secret values."
+    ]
+  },
+  {
+    "name": "sentry",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Full Sentry Pass B expansion requires extending internal/connectors/hooks/sentry or changing the engine hook contract. The existing Sentry StreamHook intercepts reads for every Sentry stream, implements Sentry Link-header pagination with the results=true stop attribute, and only knows the four legacy streams. Adding new streams in defs/sentry alone would make runtime reads fail with \"stream has no known endpoint\". Full write expansion is also deferred because legacy Sentry is read-only and the current Sentry surface includes destructive/admin mutations, query-parameter mutations, and binary/file endpoints needing separate policy and dialect review.",
+    "evidence": [
+      "https://docs.sentry.io/api/ documents the current Sentry Web API v0 surface and links endpoint groups.",
+      "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json publishes Sentry public API paths used to enumerate api_surface.json.",
+      "https://docs.sentry.io/api/pagination/ documents Sentry cursor pagination through the Link response header.",
+      "internal/connectors/hooks/sentry/hooks.go ReadStream handles Sentry reads and resolveStreamPath only recognizes projects, issues, events, and releases.",
+      "internal/connectors/hooks/sentry/hooks.go follows Sentry Link rel=next only when results=\"true\", a stop condition the declarative link_header paginator cannot express.",
+      "This workstream is limited to internal/connectors/defs/sentry plus quarantine and must not edit hook packages."
+    ],
+    "attempts": [
+      "Reviewed the legacy Sentry connector, existing defs/sentry bundle, and existing hooks/sentry StreamHook.",
+      "Fetched the current Sentry API docs and official getsentry/sentry-api-schema OpenAPI inventory.",
+      "Kept the legacy four streams unchanged and replaced placeholder api_surface exclusions with a complete endpoint inventory and concrete blocked reasons."
+    ]
+  },
+  {
+    "name": "printify",
+    "blocker_type": "ENGINE_GAP",
+    "reason": "Legacy printify mapRecord emits a nested raw field containing the full source API object for every stream. The declarative engine can project declared fields or pass through raw top-level fields, but it cannot copy the whole raw record under a single computed output key without a whole-record computed_fields primitive or a RecordHook.",
+    "evidence": [
+      "internal/connectors/printify/printify.go:204",
+      "internal/connectors/defs/printify/docs.md"
+    ],
+    "attempts": 1
+  },
+  {
+    "name": "sap-fieldglass",
+    "blocker_type": "DOCS_UNREACHABLE",
+    "reason": "The public metadata docs_url resolves to the SAP Business Accelerator Hub package, whose Fieldglass REST artifacts expose only catalog metadata anonymously. The downloadable OpenAPI/$value content for specific Fieldglass artifacts redirects to SAP login, while the accessible catalog documents generic /api/vc/connector/<connector name> download/upload resources rather than the legacy /api/v1/workers, /api/v1/job_postings, and /api/v1/time_sheets JSON endpoints. Expanding Pass B from partial catalog names would invent paths, methods, and record shapes.",
+    "evidence": [
+      "metadata docs_url: https://api.sap.com/package/SAPFieldglass/rest",
+      "catalog OData entry for activeWorkerDownload: ServiceUrl=https://sandbox.api.sap.com/api/vc/connector, Title=Active Worker Download",
+      "curl https://api.sap.com/odata/1.0/catalog.svc/APIContent.APIs('activeWorkerDownload')/$value redirects to SAP login",
+      "SAP Help REST API Integration guide documents connector resource URL https://<SAP Fieldglass environment URL>/api/vc/connector/<connector name> and says detailed connector specs live in SAP Connector Library",
+      "internal/connectors/sap-fieldglass/sap_fieldglass.go"
+    ],
+    "attempts": 1
+  }
+]

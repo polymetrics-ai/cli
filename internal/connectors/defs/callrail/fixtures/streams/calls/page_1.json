@@ -1,0 +1,72 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/calls.json",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 100,
+      "total_pages": 1,
+      "total_records": 3,
+      "calls": [
+        {
+          "id": "CAL_fixture_1",
+          "answered": true,
+          "business_phone_number": "+15555550001",
+          "customer_city": "Austin",
+          "customer_country": "US",
+          "customer_name": "Fixture Caller 1",
+          "customer_phone_number": "+15550000001",
+          "customer_state": "TX",
+          "direction": "inbound",
+          "duration": 30,
+          "recording": null,
+          "start_time": "2026-01-01T00:00:00Z",
+          "tracking_phone_number": "+15555550000",
+          "voicemail": false,
+          "company_id": "CMP_fixture_1"
+        },
+        {
+          "id": "CAL_fixture_2",
+          "answered": true,
+          "business_phone_number": "+15555550001",
+          "customer_city": "Austin",
+          "customer_country": "US",
+          "customer_name": "Fixture Caller 2",
+          "customer_phone_number": "+15550000002",
+          "customer_state": "TX",
+          "direction": "inbound",
+          "duration": 60,
+          "recording": null,
+          "start_time": "2026-01-02T00:00:00Z",
+          "tracking_phone_number": "+15555550000",
+          "voicemail": false,
+          "company_id": "CMP_fixture_1"
+        },
+        {
+          "id": "CAL_fixture_3",
+          "answered": false,
+          "business_phone_number": "+15555550001",
+          "customer_city": "Austin",
+          "customer_country": "US",
+          "customer_name": "Fixture Caller 3",
+          "customer_phone_number": "+15550000003",
+          "customer_state": "TX",
+          "direction": "inbound",
+          "duration": 15,
+          "recording": null,
+          "start_time": "2026-01-03T00:00:00Z",
+          "tracking_phone_number": "+15555550000",
+          "voicemail": true,
+          "company_id": "CMP_fixture_1"
+        }
+      ]
+    }
+  }
+}

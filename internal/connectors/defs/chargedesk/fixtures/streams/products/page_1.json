@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "offset": 0,
+      "data": [
+        {
+          "product_id": "prod_fixture_1",
+          "object": "product",
+          "occurred": 1767225600,
+          "name": "Fixture Product",
+          "amount": "10.00",
+          "currency": "usd",
+          "interval": "month",
+          "status": "complete"
+        }
+      ]
+    }
+  }
+}

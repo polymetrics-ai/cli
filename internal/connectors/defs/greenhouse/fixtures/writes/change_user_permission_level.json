@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PATCH",
+    "path": "/users/permission_level"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

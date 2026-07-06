@@ -10,22 +10,729 @@ SYNOPSIS
   pm credentials add <name> --connector twilio [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Twilio messages, calls, recordings, conferences, and usage records through the Twilio REST API (2010-04-01).
+  Reads and writes Twilio public REST API v2010 resources through declarative JSON bundle streams and typed write actions.
+
+ICON
+  asset: icons/twilio.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.twilio.com/docs/usage/api
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  add_on_result_sid
+  address_sid
+  assigned_add_on_sid
+  base_url
+  call_sid
+  conference_sid
+  connect_app_sid
+  country_code
+  credential_list_sid
+  domain_sid
+  ip_access_control_list_sid
+  max_pages
+  message_sid
+  mode
+  page_size
+  payload_sid
+  queue_sid
+  recording_sid
+  reference_sid
+  resource_sid
+  sid
+  account_sid (secret)
+  auth_token (secret)
+
+ETL STREAMS
+  messages:
+    primary key: sid
+    cursor: date_sent
+    fields: account_sid(), body(), date_created(), date_sent(), date_updated(), direction(), error_code(), error_message(), from(), messaging_service_sid(), num_media(), num_segments(), price(), price_unit(), sid(), status(), to()
+  calls:
+    primary key: sid
+    cursor: start_time
+    fields: account_sid(), date_created(), date_updated(), direction(), duration(), end_time(), from(), price(), price_unit(), sid(), start_time(), status(), to()
+  recordings:
+    primary key: sid
+    cursor: date_created
+    fields: account_sid(), call_sid(), channels(), date_created(), date_updated(), duration(), price(), price_unit(), sid(), source(), start_time(), status()
+  conferences:
+    primary key: sid
+    cursor: date_created
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), region(), sid(), status()
+  usage_records:
+    primary key: category
+    cursor: start_date
+    fields: account_sid(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), usage(), usage_unit()
+  account:
+    primary key: sid
+    fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+  accounts:
+    primary key: sid
+    fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+  address:
+    primary key: sid
+    fields: account_sid(), city(), customer_name(), date_created(), date_updated(), emergency_enabled(), friendly_name(), iso_country(), postal_code(), region(), sid(), street(), street_secondary(), uri(), validated(), verified()
+  address_2:
+    primary key: sid
+    fields: account_sid(), city(), customer_name(), date_created(), date_updated(), emergency_enabled(), friendly_name(), iso_country(), postal_code(), region(), sid(), street(), street_secondary(), uri(), validated(), verified()
+  application:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), message_status_callback(), public_application_connect_enabled(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_status_callback(), sms_url(), status_callback(), status_callback_method(), uri(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  applications:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), message_status_callback(), public_application_connect_enabled(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_status_callback(), sms_url(), status_callback(), status_callback_method(), uri(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  authorized_connect_app:
+    primary key: account_sid
+    fields: account_sid(), connect_app_company_name(), connect_app_description(), connect_app_friendly_name(), connect_app_homepage_url(), connect_app_sid(), permissions(), uri()
+  authorized_connect_apps:
+    primary key: account_sid
+    fields: account_sid(), connect_app_company_name(), connect_app_description(), connect_app_friendly_name(), connect_app_homepage_url(), connect_app_sid(), permissions(), uri()
+  available_phone_number_countries:
+    primary key: country_code
+    fields: beta(), country(), country_code(), subresource_uris(), uri()
+  available_phone_number_country:
+    primary key: country_code
+    fields: beta(), country(), country_code(), subresource_uris(), uri()
+  available_phone_number_locals:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_machine_to_machines:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_mobiles:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_nationals:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_shared_costs:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_toll_frees:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  available_phone_number_voips:
+    primary key: phone_number
+    fields: address_requirements(), beta(), capabilities(), country_code(), friendly_name(), iso_country(), lata(), latitude(), locality(), longitude(), phone_number(), postal_code(), rate_center(), region()
+  balance:
+    primary key: account_sid
+    fields: account_sid(), balance(), currency()
+  call:
+    primary key: sid
+    fields: account_sid(), answered_by(), api_version(), caller_name(), date_created(), date_updated(), direction(), duration(), end_time(), forwarded_from(), from(), from_formatted(), group_sid(), parent_call_sid(), phone_number_sid(), price(), price_unit(), queue_time(), sid(), start_time(), status(), subresource_uris(), to(), to_formatted(), trunk_sid(), uri()
+  call_events:
+    primary key: call_sid
+    fields: call_sid(), request(), response()
+  call_notification:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), request_variables(), response_body(), response_headers(), sid(), uri()
+  call_notifications:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), sid(), uri()
+  call_recording:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), track(), uri()
+  call_recordings:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), track(), uri()
+  conference:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid_ending_conference(), date_created(), date_updated(), friendly_name(), reason_conference_ended(), region(), sid(), status(), subresource_uris(), uri()
+  conference_recording:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), uri()
+  conference_recordings:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), price(), price_unit(), sid(), source(), start_time(), status(), uri()
+  connect_app:
+    primary key: sid
+    fields: account_sid(), authorize_redirect_url(), company_name(), deauthorize_callback_method(), deauthorize_callback_url(), description(), friendly_name(), homepage_url(), permissions(), sid(), uri()
+  connect_apps:
+    primary key: sid
+    fields: account_sid(), authorize_redirect_url(), company_name(), deauthorize_callback_method(), deauthorize_callback_url(), description(), friendly_name(), homepage_url(), permissions(), sid(), uri()
+  dependent_phone_numbers:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_status(), friendly_name(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_url()
+  incoming_phone_number:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), type(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  incoming_phone_number_assigned_add_on:
+    primary key: sid
+    fields: account_sid(), configuration(), date_created(), date_updated(), description(), friendly_name(), resource_sid(), sid(), subresource_uris(), unique_name(), uri()
+  incoming_phone_number_assigned_add_on_extension:
+    primary key: sid
+    fields: account_sid(), assigned_add_on_sid(), enabled(), friendly_name(), product_name(), resource_sid(), sid(), unique_name(), uri()
+  incoming_phone_number_assigned_add_on_extensions:
+    primary key: sid
+    fields: account_sid(), assigned_add_on_sid(), enabled(), friendly_name(), product_name(), resource_sid(), sid(), unique_name(), uri()
+  incoming_phone_number_assigned_add_ons:
+    primary key: sid
+    fields: account_sid(), configuration(), date_created(), date_updated(), description(), friendly_name(), resource_sid(), sid(), subresource_uris(), unique_name(), uri()
+  incoming_phone_number_locals:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  incoming_phone_number_mobiles:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  incoming_phone_number_toll_frees:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  incoming_phone_numbers:
+    primary key: sid
+    fields: account_sid(), address_requirements(), address_sid(), api_version(), beta(), bundle_sid(), capabilities(), date_created(), date_updated(), emergency_address_sid(), emergency_address_status(), emergency_status(), friendly_name(), identity_sid(), origin(), phone_number(), sid(), sms_application_sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), status(), status_callback(), status_callback_method(), trunk_sid(), type(), uri(), voice_application_sid(), voice_caller_id_lookup(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_receive_mode(), voice_url()
+  key:
+    primary key: sid
+    fields: date_created(), date_updated(), friendly_name(), sid()
+  keys:
+    primary key: sid
+    fields: date_created(), date_updated(), friendly_name(), sid()
+  media:
+    primary key: sid
+    fields: account_sid(), content_type(), date_created(), date_updated(), message_sid(), parent_sid(), sid(), uri()
+  medias:
+    primary key: sid
+    fields: account_sid(), content_type(), date_created(), date_updated(), message_sid(), parent_sid(), sid(), uri()
+  member:
+    primary key: call_sid
+    fields: call_sid(), date_enqueued(), position(), queue_sid(), uri(), wait_time()
+  members:
+    primary key: call_sid
+    fields: call_sid(), date_enqueued(), position(), queue_sid(), uri(), wait_time()
+  message:
+    primary key: sid
+    fields: account_sid(), api_version(), body(), date_created(), date_sent(), date_updated(), direction(), error_code(), error_message(), from(), messaging_service_sid(), num_media(), num_segments(), price(), price_unit(), sid(), status(), subresource_uris(), to(), uri()
+  notification:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), request_variables(), response_body(), response_headers(), sid(), uri()
+  notifications:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), date_created(), date_updated(), error_code(), log(), message_date(), message_text(), more_info(), request_method(), request_url(), sid(), uri()
+  outgoing_caller_id:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), phone_number(), sid(), uri()
+  outgoing_caller_ids:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), phone_number(), sid(), uri()
+  participant:
+    primary key: account_sid
+    fields: account_sid(), call_sid(), call_sid_to_coach(), coaching(), conference_sid(), date_created(), date_updated(), end_conference_on_exit(), hold(), label(), muted(), queue_time(), start_conference_on_enter(), status(), uri()
+  participants:
+    primary key: account_sid
+    fields: account_sid(), call_sid(), call_sid_to_coach(), coaching(), conference_sid(), date_created(), date_updated(), end_conference_on_exit(), hold(), label(), muted(), queue_time(), start_conference_on_enter(), status(), uri()
+  queue:
+    primary key: sid
+    fields: account_sid(), average_wait_time(), current_size(), date_created(), date_updated(), friendly_name(), max_size(), sid(), uri()
+  queues:
+    primary key: sid
+    fields: account_sid(), average_wait_time(), current_size(), date_created(), date_updated(), friendly_name(), max_size(), sid(), uri()
+  recording:
+    primary key: sid
+    fields: account_sid(), api_version(), call_sid(), channels(), conference_sid(), date_created(), date_updated(), duration(), encryption_details(), error_code(), media_url(), price(), price_unit(), sid(), source(), start_time(), status(), subresource_uris(), uri()
+  recording_add_on_result:
+    primary key: sid
+    fields: account_sid(), add_on_configuration_sid(), add_on_sid(), date_completed(), date_created(), date_updated(), reference_sid(), sid(), status(), subresource_uris()
+  recording_add_on_result_payload:
+    primary key: sid
+    fields: account_sid(), add_on_configuration_sid(), add_on_result_sid(), add_on_sid(), content_type(), date_created(), date_updated(), label(), reference_sid(), sid(), subresource_uris()
+  recording_add_on_result_payload_data:
+    primary key: reference_sid
+    fields: add_on_result_sid(), payload_sid(), reference_sid()
+  recording_add_on_result_payloads:
+    primary key: sid
+    fields: account_sid(), add_on_configuration_sid(), add_on_result_sid(), add_on_sid(), content_type(), date_created(), date_updated(), label(), reference_sid(), sid(), subresource_uris()
+  recording_add_on_results:
+    primary key: sid
+    fields: account_sid(), add_on_configuration_sid(), add_on_sid(), date_completed(), date_created(), date_updated(), reference_sid(), sid(), status(), subresource_uris()
+  recording_transcription:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  recording_transcriptions:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  short_code:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), short_code(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), uri()
+  short_codes:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), friendly_name(), short_code(), sid(), sms_fallback_method(), sms_fallback_url(), sms_method(), sms_url(), uri()
+  signing_key:
+    primary key: sid
+    fields: date_created(), date_updated(), friendly_name(), sid()
+  signing_keys:
+    primary key: sid
+    fields: date_created(), date_updated(), friendly_name(), sid()
+  sip_auth_calls_credential_list_mapping:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_auth_calls_credential_list_mappings:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_auth_calls_ip_access_control_list_mapping:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_auth_calls_ip_access_control_list_mappings:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_auth_registrations_credential_list_mapping:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_auth_registrations_credential_list_mappings:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid()
+  sip_credential:
+    primary key: sid
+    fields: account_sid(), credential_list_sid(), date_created(), date_updated(), sid(), uri(), username()
+  sip_credential_list:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  sip_credential_list_mapping:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  sip_credential_list_mappings:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  sip_credential_lists:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  sip_credentials:
+    primary key: sid
+    fields: account_sid(), credential_list_sid(), date_created(), date_updated(), sid(), uri(), username()
+  sip_domain:
+    primary key: sid
+    fields: account_sid(), api_version(), auth_type(), byoc_trunk_sid(), date_created(), date_updated(), domain_name(), emergency_caller_sid(), emergency_calling_enabled(), friendly_name(), secure(), sid(), sip_registration(), subresource_uris(), uri(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_status_callback_method(), voice_status_callback_url(), voice_url()
+  sip_domains:
+    primary key: sid
+    fields: account_sid(), api_version(), auth_type(), byoc_trunk_sid(), date_created(), date_updated(), domain_name(), emergency_caller_sid(), emergency_calling_enabled(), friendly_name(), secure(), sid(), sip_registration(), subresource_uris(), uri(), voice_fallback_method(), voice_fallback_url(), voice_method(), voice_status_callback_method(), voice_status_callback_url(), voice_url()
+  sip_ip_access_control_list:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  sip_ip_access_control_list_mapping:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  sip_ip_access_control_list_mappings:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), domain_sid(), friendly_name(), sid(), uri()
+  sip_ip_access_control_lists:
+    primary key: sid
+    fields: account_sid(), date_created(), date_updated(), friendly_name(), sid(), subresource_uris(), uri()
+  sip_ip_address:
+    primary key: sid
+    fields: account_sid(), cidr_prefix_length(), date_created(), date_updated(), friendly_name(), ip_access_control_list_sid(), ip_address(), sid(), uri()
+  sip_ip_address_2:
+    primary key: sid
+    fields: account_sid(), cidr_prefix_length(), date_created(), date_updated(), friendly_name(), ip_access_control_list_sid(), ip_address(), sid(), uri()
+  transcription:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  transcriptions:
+    primary key: sid
+    fields: account_sid(), api_version(), date_created(), date_updated(), duration(), price(), price_unit(), recording_sid(), sid(), status(), transcription_text(), type(), uri()
+  usage_record_all_times:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_dailies:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_last_months:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_monthlies:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_this_months:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_todays:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_yearlies:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_record_yesterdays:
+    primary key: account_sid
+    fields: account_sid(), api_version(), as_of(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), subresource_uris(), uri(), usage(), usage_unit()
+  usage_trigger:
+    primary key: sid
+    fields: account_sid(), api_version(), callback_method(), callback_url(), current_value(), date_created(), date_fired(), date_updated(), friendly_name(), recurring(), sid(), trigger_by(), trigger_value(), uri(), usage_category(), usage_record_uri()
+  usage_triggers:
+    primary key: sid
+    fields: account_sid(), api_version(), callback_method(), callback_url(), current_value(), date_created(), date_fired(), date_updated(), friendly_name(), recurring(), sid(), trigger_by(), trigger_value(), uri(), usage_category(), usage_record_uri()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  create_account:
+    endpoint: POST /Accounts.json
+    risk: creates Twilio account resources in the connected account; approval required
+  create_address:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Addresses.json
+    risk: creates Twilio address resources in the connected account; approval required
+  delete_address:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio address resources in the connected account; approval required
+  update_address:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio address resources in the connected account; approval required
+  create_application:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Applications.json
+    risk: creates Twilio application resources in the connected account; approval required
+  delete_application:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Applications/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio application resources in the connected account; approval required
+  update_application:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Applications/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio application resources in the connected account; approval required
+  create_call:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls.json
+    risk: creates Twilio call resources in the connected account; approval required
+  create_payments:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments.json
+    required fields: call_sid
+    risk: creates Twilio payments resources in the connected account; approval required
+  update_payments:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: mutates Twilio payments resources in the connected account; approval required
+  create_call_recording:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings.json
+    required fields: call_sid
+    risk: creates Twilio call recording resources in the connected account; approval required
+  delete_call_recording:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: deletes Twilio call recording resources in the connected account; approval required
+  update_call_recording:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: mutates Twilio call recording resources in the connected account; approval required
+  create_siprec:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec.json
+    required fields: call_sid
+    risk: creates Twilio siprec resources in the connected account; approval required
+  update_siprec:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: mutates Twilio siprec resources in the connected account; approval required
+  create_stream:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams.json
+    required fields: call_sid
+    risk: creates Twilio stream resources in the connected account; approval required
+  update_stream:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: mutates Twilio stream resources in the connected account; approval required
+  create_realtime_transcription:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions.json
+    required fields: call_sid
+    risk: creates Twilio realtime transcription resources in the connected account; approval required
+  update_realtime_transcription:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: mutates Twilio realtime transcription resources in the connected account; approval required
+  create_user_defined_message:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessages.json
+    required fields: call_sid
+    risk: creates Twilio user defined message resources in the connected account; approval required
+  create_user_defined_message_subscription:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions.json
+    required fields: call_sid
+    risk: creates Twilio user defined message subscription resources in the connected account; approval required
+  delete_user_defined_message_subscription:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions/{{ record.sid }}.json
+    required fields: call_sid, sid
+    risk: deletes Twilio user defined message subscription resources in the connected account; approval required
+  delete_call:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Calls/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio call resources in the connected account; approval required
+  update_call:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio call resources in the connected account; approval required
+  create_participant:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants.json
+    required fields: conference_sid
+    risk: creates Twilio participant resources in the connected account; approval required
+  delete_participant:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json
+    required fields: conference_sid, call_sid
+    risk: deletes Twilio participant resources in the connected account; approval required
+  update_participant:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json
+    required fields: conference_sid, call_sid
+    risk: mutates Twilio participant resources in the connected account; approval required
+  delete_conference_recording:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json
+    required fields: conference_sid, sid
+    risk: deletes Twilio conference recording resources in the connected account; approval required
+  update_conference_recording:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json
+    required fields: conference_sid, sid
+    risk: mutates Twilio conference recording resources in the connected account; approval required
+  update_conference:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio conference resources in the connected account; approval required
+  delete_connect_app:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/ConnectApps/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio connect app resources in the connected account; approval required
+  update_connect_app:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/ConnectApps/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio connect app resources in the connected account; approval required
+  create_incoming_phone_number:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers.json
+    risk: creates Twilio incoming phone number resources in the connected account; approval required
+  create_incoming_phone_number_assigned_add_on:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns.json
+    required fields: resource_sid
+    risk: creates Twilio incoming phone number assigned add on resources in the connected account; approval required
+  delete_incoming_phone_number_assigned_add_on:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns/{{ record.sid }}.json
+    required fields: resource_sid, sid
+    risk: deletes Twilio incoming phone number assigned add on resources in the connected account; approval required
+  delete_incoming_phone_number:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio incoming phone number resources in the connected account; approval required
+  update_incoming_phone_number:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio incoming phone number resources in the connected account; approval required
+  create_incoming_phone_number_local:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Local.json
+    risk: creates Twilio incoming phone number local resources in the connected account; approval required
+  create_incoming_phone_number_mobile:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Mobile.json
+    risk: creates Twilio incoming phone number mobile resources in the connected account; approval required
+  create_incoming_phone_number_toll_free:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/TollFree.json
+    risk: creates Twilio incoming phone number toll free resources in the connected account; approval required
+  create_key:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Keys.json
+    risk: creates Twilio key resources in the connected account; approval required
+  delete_key:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Keys/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio key resources in the connected account; approval required
+  update_key:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Keys/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio key resources in the connected account; approval required
+  create_message:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages.json
+    risk: creates Twilio message resources in the connected account; approval required
+  create_message_feedback:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Feedback.json
+    required fields: message_sid
+    risk: creates Twilio message feedback resources in the connected account; approval required
+  delete_media:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Media/{{ record.sid }}.json
+    required fields: message_sid, sid
+    risk: deletes Twilio media resources in the connected account; approval required
+  delete_message:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Messages/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio message resources in the connected account; approval required
+  update_message:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio message resources in the connected account; approval required
+  create_outgoing_caller_id_validation_request:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds.json
+    risk: creates Twilio validation request resources in the connected account; approval required
+  delete_outgoing_caller_id:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio outgoing caller id resources in the connected account; approval required
+  update_outgoing_caller_id:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio outgoing caller id resources in the connected account; approval required
+  create_queue:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues.json
+    risk: creates Twilio queue resources in the connected account; approval required
+  update_member:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues/{{ record.queue_sid }}/Members/{{ record.call_sid }}.json
+    required fields: queue_sid, call_sid
+    risk: mutates Twilio member resources in the connected account; approval required
+  delete_queue:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio queue resources in the connected account; approval required
+  update_queue:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio queue resources in the connected account; approval required
+  delete_recording_transcription:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Recordings/{{ record.recording_sid }}/Transcriptions/{{ record.sid }}.json
+    required fields: recording_sid, sid
+    risk: deletes Twilio recording transcription resources in the connected account; approval required
+  delete_recording_add_on_result_payload:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Recordings/{{ record.reference_sid }}/AddOnResults/{{ record.add_on_result_sid }}/Payloads/{{ record.sid }}.json
+    required fields: reference_sid, add_on_result_sid, sid
+    risk: deletes Twilio recording add on result payload resources in the connected account; approval required
+  delete_recording_add_on_result:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Recordings/{{ record.reference_sid }}/AddOnResults/{{ record.sid }}.json
+    required fields: reference_sid, sid
+    risk: deletes Twilio recording add on result resources in the connected account; approval required
+  delete_recording:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Recordings/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio recording resources in the connected account; approval required
+  create_signing_key:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SigningKeys.json
+    risk: creates Twilio signing key resources in the connected account; approval required
+  delete_signing_key:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SigningKeys/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio signing key resources in the connected account; approval required
+  update_signing_key:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SigningKeys/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio signing key resources in the connected account; approval required
+  create_sip_credential_list:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists.json
+    risk: creates Twilio sip credential list resources in the connected account; approval required
+  create_sip_credential:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials.json
+    required fields: credential_list_sid
+    risk: creates Twilio sip credential resources in the connected account; approval required
+  delete_sip_credential:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json
+    required fields: credential_list_sid, sid
+    risk: deletes Twilio sip credential resources in the connected account; approval required
+  update_sip_credential:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json
+    required fields: credential_list_sid, sid
+    risk: mutates Twilio sip credential resources in the connected account; approval required
+  delete_sip_credential_list:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio sip credential list resources in the connected account; approval required
+  update_sip_credential_list:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio sip credential list resources in the connected account; approval required
+  create_sip_domain:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains.json
+    risk: creates Twilio sip domain resources in the connected account; approval required
+  create_sip_auth_calls_credential_list_mapping:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings.json
+    required fields: domain_sid
+    risk: creates Twilio sip auth calls credential list mapping resources in the connected account; approval required
+  delete_sip_auth_calls_credential_list_mapping:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings/{{ record.sid }}.json
+    required fields: domain_sid, sid
+    risk: deletes Twilio sip auth calls credential list mapping resources in the connected account; approval required
+  create_sip_auth_calls_ip_access_control_list_mapping:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings.json
+    required fields: domain_sid
+    risk: creates Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
+  delete_sip_auth_calls_ip_access_control_list_mapping:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings/{{ record.sid }}.json
+    required fields: domain_sid, sid
+    risk: deletes Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
+  create_sip_auth_registrations_credential_list_mapping:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings.json
+    required fields: domain_sid
+    risk: creates Twilio sip auth registrations credential list mapping resources in the connected account; approval required
+  delete_sip_auth_registrations_credential_list_mapping:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings/{{ record.sid }}.json
+    required fields: domain_sid, sid
+    risk: deletes Twilio sip auth registrations credential list mapping resources in the connected account; approval required
+  create_sip_credential_list_mapping:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings.json
+    required fields: domain_sid
+    risk: creates Twilio sip credential list mapping resources in the connected account; approval required
+  delete_sip_credential_list_mapping:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings/{{ record.sid }}.json
+    required fields: domain_sid, sid
+    risk: deletes Twilio sip credential list mapping resources in the connected account; approval required
+  create_sip_ip_access_control_list_mapping:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings.json
+    required fields: domain_sid
+    risk: creates Twilio sip ip access control list mapping resources in the connected account; approval required
+  delete_sip_ip_access_control_list_mapping:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings/{{ record.sid }}.json
+    required fields: domain_sid, sid
+    risk: deletes Twilio sip ip access control list mapping resources in the connected account; approval required
+  delete_sip_domain:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio sip domain resources in the connected account; approval required
+  update_sip_domain:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio sip domain resources in the connected account; approval required
+  create_sip_ip_access_control_list:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists.json
+    risk: creates Twilio sip ip access control list resources in the connected account; approval required
+  create_sip_ip_address:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses.json
+    required fields: ip_access_control_list_sid
+    risk: creates Twilio sip ip address resources in the connected account; approval required
+  delete_sip_ip_address:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json
+    required fields: ip_access_control_list_sid, sid
+    risk: deletes Twilio sip ip address resources in the connected account; approval required
+  update_sip_ip_address:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json
+    required fields: ip_access_control_list_sid, sid
+    risk: mutates Twilio sip ip address resources in the connected account; approval required
+  delete_sip_ip_access_control_list:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio sip ip access control list resources in the connected account; approval required
+  update_sip_ip_access_control_list:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio sip ip access control list resources in the connected account; approval required
+  update_short_code:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/SMS/ShortCodes/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio short code resources in the connected account; approval required
+  create_token:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Tokens.json
+    risk: creates Twilio token resources in the connected account; approval required
+  delete_transcription:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Transcriptions/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio transcription resources in the connected account; approval required
+  create_usage_trigger:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Usage/Triggers.json
+    risk: creates Twilio usage trigger resources in the connected account; approval required
+  delete_usage_trigger:
+    endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json
+    required fields: sid
+    risk: deletes Twilio usage trigger resources in the connected account; approval required
+  update_usage_trigger:
+    endpoint: POST /Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio usage trigger resources in the connected account; approval required
+  update_account:
+    endpoint: POST /Accounts/{{ record.sid }}.json
+    required fields: sid
+    risk: mutates Twilio account resources in the connected account; approval required
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Twilio API read of account, messaging, voice, phone-number, recording, SIP, usage, and related v2010 resources
+  write risk: creates, updates, and deletes Twilio v2010 resources including messages, calls, phone numbers, recordings, queues, SIP resources, keys, and usage triggers
+  approval: reverse ETL writes require plan preview and approval token; delete actions are marked destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +746,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect twilio before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

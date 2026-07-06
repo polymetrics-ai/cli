@@ -1,0 +1,106 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.public_key }}", "password": "{{ secrets.private_key }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page",
+      "token_path": "pagination.next_page"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/merchants/{{ config.merchant_id }}/transactions",
+      "query": { "page_size": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "braintree public_key/private_key are missing or invalid; re-run pm credentials add braintree" },
+      { "status": 403, "hint": "braintree account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "braintree rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "transactions",
+      "path": "/merchants/{{ config.merchant_id }}/transactions",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "transactions" },
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "customers",
+      "path": "/merchants/{{ config.merchant_id }}/customers",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "customers" },
+      "schema": "schemas/customers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "subscriptions",
+      "path": "/merchants/{{ config.merchant_id }}/subscriptions",
+      "query": { "page_size": "{{ config.page_size }}" },
+      "records": { "path": "subscriptions" },
+      "schema": "schemas/subscriptions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "add_ons",
+      "path": "/merchants/{{ config.merchant_id }}/add_ons",
+      "pagination": { "type": "none" },
+      "records": { "path": "add_ons" },
+      "schema": "schemas/add_ons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "discounts",
+      "path": "/merchants/{{ config.merchant_id }}/discounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "discounts" },
+      "schema": "schemas/discounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "plans",
+      "path": "/merchants/{{ config.merchant_id }}/plans",
+      "pagination": { "type": "none" },
+      "records": { "path": "plans" },
+      "schema": "schemas/plans.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "merchant_accounts",
+      "path": "/merchants/{{ config.merchant_id }}/merchant_accounts",
+      "pagination": { "type": "none" },
+      "records": { "path": "merchant_accounts" },
+      "schema": "schemas/merchant_accounts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "payment_methods",
+      "path": "/merchants/{{ config.merchant_id }}/payment_methods",
+      "pagination": { "type": "none" },
+      "records": { "path": "payment_methods" },
+      "schema": "schemas/payment_methods.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "disputes",
+      "path": "/merchants/{{ config.merchant_id }}/disputes",
+      "pagination": { "type": "none" },
+      "records": { "path": "disputes" },
+      "schema": "schemas/disputes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "apple_pay_domains",
+      "path": "/merchants/{{ config.merchant_id }}/apple_pay/registered_domains",
+      "pagination": { "type": "none" },
+      "records": { "path": "domains" },
+      "schema": "schemas/apple_pay_domains.json",
+      "projection": "passthrough"
+    }
+  ]
+}

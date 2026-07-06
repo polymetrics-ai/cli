@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "translations",
+  "type": "object",
+  "properties": {
+    "translation_id": {
+      "type": "integer"
+    },
+    "key_id": {
+      "type": "integer"
+    },
+    "language_iso": {
+      "type": "string"
+    },
+    "translation": {
+      "type": "string"
+    },
+    "modified_at": {
+      "type": "string"
+    },
+    "modified_at_timestamp": {
+      "type": "integer"
+    },
+    "modified_by": {
+      "type": "integer"
+    },
+    "modified_by_email": {
+      "type": "string"
+    },
+    "is_reviewed": {
+      "type": "boolean"
+    },
+    "is_unverified": {
+      "type": "boolean"
+    },
+    "reviewed_by": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "translation_id"
+  ],
+  "x-cursor-field": "modified_at_timestamp"
+}

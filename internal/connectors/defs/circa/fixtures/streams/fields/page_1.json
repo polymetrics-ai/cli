@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fields",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "field_fixture_1",
+          "label": "Types",
+          "field_for": "Event",
+          "field_name": "types",
+          "field_type": "MULTISELECT",
+          "options": ["Conference", "Workshop"],
+          "section": "Basics",
+          "required": false,
+          "order": 0
+        },
+        {
+          "id": "field_fixture_2",
+          "label": "Text Field",
+          "field_for": "Event",
+          "field_name": null,
+          "field_type": "TEXT",
+          "options": null,
+          "section": "Custom",
+          "required": false,
+          "order": 1
+        }
+      ]
+    }
+  }
+}

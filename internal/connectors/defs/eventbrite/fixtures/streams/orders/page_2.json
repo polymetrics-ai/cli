@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/orders/", "query": { "expand": "venue,ticket_classes", "continuation": "order_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": false, "continuation": "order_cursor_2" },
+      "orders": [
+        {
+          "id": "order_fixture_3",
+          "event_id": "event_fixture_1",
+          "created": "2026-01-01T00:00:00Z",
+          "changed": "2026-01-03T00:00:00Z",
+          "status": "refunded",
+          "name": "Fixture Buyer Three",
+          "email": "fixture3@example.com",
+          "time_remaining": null
+        }
+      ]
+    }
+  }
+}

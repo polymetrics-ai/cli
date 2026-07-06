@@ -1,0 +1,40 @@
+{
+  "record": {
+    "name": "fixture",
+    "type": "manual",
+    "subject": "fixture",
+    "previewText": "fixture",
+    "html": "<p>Fixture</p>",
+    "plainText": "fixture",
+    "senderId": "sender_id_fixture",
+    "layoutId": "layout_id_fixture",
+    "appId": "app_id_fixture",
+    "unsubscribeGroupId": "unsubscribe_group_id_fixture",
+    "criteria": {
+      "id": "criteria_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/campaigns",
+    "body": {
+      "name": "fixture",
+      "type": "manual",
+      "subject": "fixture",
+      "previewText": "fixture",
+      "html": "<p>Fixture</p>",
+      "plainText": "fixture",
+      "senderId": "sender_id_fixture",
+      "layoutId": "layout_id_fixture",
+      "appId": "app_id_fixture",
+      "unsubscribeGroupId": "unsubscribe_group_id_fixture",
+      "criteria": {
+        "id": "criteria_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

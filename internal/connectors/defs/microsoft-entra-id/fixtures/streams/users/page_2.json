@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/users", "query": { "$skiptoken": "fixture-skiptoken-1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_user_3", "displayName": "Fixture User 3", "userPrincipalName": "fixture3@example.com", "givenName": "Fixture", "surname": "User3", "mail": "fixture3@example.com", "jobTitle": "Manager", "department": "Platform", "officeLocation": "Remote", "mobilePhone": "+15550102", "accountEnabled": false }
+      ]
+    }
+  }
+}

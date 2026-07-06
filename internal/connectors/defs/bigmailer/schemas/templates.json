@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "templates",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "brand_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "shared_with_account": { "type": ["boolean", "null"] },
+    "created": { "type": ["integer", "null"] }
+  }
+}

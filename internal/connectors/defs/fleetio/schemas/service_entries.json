@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "service_entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "vehicle_id": { "type": ["integer", "null"] },
+    "vehicle_name": { "type": ["string", "null"] },
+    "started_at": { "type": ["string", "null"], "format": "date-time" },
+    "completed_at": { "type": ["string", "null"], "format": "date-time" },
+    "total_amount": { "type": ["string", "null"] },
+    "labor_subtotal": { "type": ["string", "null"] },
+    "parts_subtotal": { "type": ["string", "null"] },
+    "meter_value": { "type": ["string", "null"] },
+    "is_sample": { "type": ["boolean", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

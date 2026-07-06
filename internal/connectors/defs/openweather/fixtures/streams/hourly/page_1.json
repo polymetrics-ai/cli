@@ -1,0 +1,45 @@
+{
+  "request": { "method": "GET", "path": "/onecall", "query": { "lat": "synthetic-conformance-value", "lon": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "lat": 33.44,
+      "lon": -94.04,
+      "timezone": "America/Chicago",
+      "hourly": [
+        {
+          "dt": 1767225600,
+          "temp": 292.55,
+          "feels_like": 292.87,
+          "pressure": 1014,
+          "humidity": 89,
+          "dew_point": 290.9,
+          "uvi": 0.0,
+          "clouds": 75,
+          "visibility": 10000,
+          "wind_speed": 3.13,
+          "wind_deg": 93,
+          "wind_gust": 5.2,
+          "pop": 0.1,
+          "weather": [{ "id": 803, "main": "Clouds", "description": "broken clouds", "icon": "04d" }]
+        },
+        {
+          "dt": 1767229200,
+          "temp": 293.55,
+          "feels_like": 293.87,
+          "pressure": 1013,
+          "humidity": 87,
+          "dew_point": 291.0,
+          "uvi": 0.0,
+          "clouds": 60,
+          "visibility": 10000,
+          "wind_speed": 3.4,
+          "wind_deg": 100,
+          "wind_gust": 5.5,
+          "pop": 0.05,
+          "weather": [{ "id": 801, "main": "Clouds", "description": "few clouds", "icon": "02d" }]
+        }
+      ]
+    }
+  }
+}

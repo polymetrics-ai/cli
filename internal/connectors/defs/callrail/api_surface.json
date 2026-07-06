@@ -1,0 +1,98 @@
+{
+  "api": "CallRail API v3 (https://api.callrail.com/v3)",
+  "docs": "https://apidocs.callrail.com/ (fetched 2026-07-04; Slate-generated single-page docs covering Accounts/Calls/Tags/Companies/Form Submissions/Integrations/Integration Filters/Notifications/Outbound Caller IDs/Page Views/SMS Threads/Summary Emails/Text Messages/Message Flows/Trackers/Users/Leads/Lead Timelines/MCP/Webhooks)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every resource category documented on apidocs.callrail.com is now accounted for. 17 read streams (the 4 legacy streams plus accounts, tags, trackers, form_submissions, integrations, integration_filters, notifications, caller_ids, sms_threads, message_flows, leads, plus 2 fan-out sub-resource streams: page_views (per-call) and lead_timeline (per-lead)) and 27 write actions covering the full documented create/update/delete surface for tags, companies, users, calls, outbound calls, text messages, integrations, integration filters, notifications, caller ids, message flows, and sms threads. Excluded: aggregate/summary/timeseries analytics endpoints (calls/summary, calls/timeseries, forms/summary) which return grouped statistics rather than syncable per-record objects; the call-recording redirect endpoint (an ephemeral signed-URL lookup, not a data object); every single-item detail GET that duplicates an already-covered list stream's record shape; bulk_update/update-multiple-companies (a batch variant of the already-covered per-company update write, not independently expressible with the engine's one-record-per-request write dialect); tracker creation and deletion (real billable phone-number provisioning/deprovisioning, a materially higher-risk action than an ordinary data-record mutation); and account-level administrative summary-email subscriptions (a notification-preference config object, judged out_of_scope alongside the other lower-priority admin config surfaces for this pass). Per-call tag application (formerly mis-recorded in this file as a standalone 'POST /calls/{id}/tags.json' endpoint) does not exist as its own endpoint at all - the real API applies/removes tags via the 'tags'/'append_tags' fields on 'PUT /calls/{call_id}.json', now covered by update_call.",
+  "endpoints": [
+    { "method": "GET", "path": "/a.json", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/a/{account_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+
+    { "method": "GET", "path": "/a/{account_id}/calls.json", "covered_by": { "stream": "calls" } },
+    { "method": "GET", "path": "/a/{account_id}/calls/{call_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-call detail; identical record shape to the calls list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/calls.json", "covered_by": { "write": "create_outbound_call" } },
+    { "method": "PUT", "path": "/a/{account_id}/calls/{call_id}.json", "covered_by": { "write": "update_call" } },
+    { "method": "GET", "path": "/a/{account_id}/calls/summary.json", "excluded": { "category": "out_of_scope", "reason": "returns grouped aggregate statistics (total/missed/answered calls, average duration) bucketed by source/keywords/campaign/company, not a row-per-record syncable object; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/a/{account_id}/calls/timeseries.json", "excluded": { "category": "out_of_scope", "reason": "returns a time-bucketed aggregate series (calls per day/hour), not a row-per-record syncable object; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/a/{account_id}/calls/{call_id}/recording.json", "excluded": { "category": "non_data_endpoint", "reason": "returns a single ephemeral (often 24-hour-expiring; permanent for HIPAA accounts only as a re-fetchable pointer) signed playback URL, not a syncable data object; the docs explicitly warn never to store the returned URL" } },
+    { "method": "GET", "path": "/a/{account_id}/calls/{call_id}/page_views.json", "covered_by": { "stream": "page_views" } },
+
+    { "method": "GET", "path": "/a/{account_id}/tags.json", "covered_by": { "stream": "tags" } },
+    { "method": "POST", "path": "/a/{account_id}/tags.json", "covered_by": { "write": "create_tag" } },
+    { "method": "PUT", "path": "/a/{account_id}/tags/{tag_id}.json", "covered_by": { "write": "update_tag" } },
+    { "method": "DELETE", "path": "/a/{account_id}/tags/{tag_id}.json", "covered_by": { "write": "delete_tag" } },
+
+    { "method": "GET", "path": "/a/{account_id}/companies.json", "covered_by": { "stream": "companies" } },
+    { "method": "GET", "path": "/a/{account_id}/companies/{company_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-company detail; identical record shape to the companies list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/companies.json", "covered_by": { "write": "create_company" } },
+    { "method": "PUT", "path": "/a/{account_id}/companies/{company_id}.json", "covered_by": { "write": "update_company" } },
+    { "method": "PUT", "path": "/a/{account_id}/companies/bulk_update.json", "excluded": { "category": "duplicate_of", "reason": "batch variant of PUT /companies/{company_id}.json applying the same field set to several company ids in one request body; the engine's write dialect is one-request-per-record, and update_company already covers the identical per-company field-update shape" } },
+    { "method": "DELETE", "path": "/a/{account_id}/companies/{company_id}.json", "excluded": { "category": "deprecated", "reason": "the docs section is titled 'Disabling a Company', not deleting; the same effect is achieved via update_company setting status to disabled, already covered as a non-destructive field update rather than a separate delete verb" } },
+
+    { "method": "GET", "path": "/a/{account_id}/form_submissions.json", "covered_by": { "stream": "form_submissions" } },
+    { "method": "POST", "path": "/a/{account_id}/form_submissions.json", "excluded": { "category": "requires_elevated_scope", "reason": "synthetically injects a new inbound form-submission event into CallRail's attribution pipeline (the mechanism customers use to feed their own website's form-tracking snippet), not an ordinary CRUD create of a plain data record; out of scope for a data-sync connector" } },
+    { "method": "PUT", "path": "/a/{account_id}/form_submissions/{form_submission_id}.json", "excluded": { "category": "requires_elevated_scope", "reason": "same attribution-pipeline write path as creating a form submission; not a plain data-record update" } },
+    { "method": "GET", "path": "/a/{account_id}/form_submissions/ignored_fields.json", "excluded": { "category": "non_data_endpoint", "reason": "account-level field-ignore configuration list, not a syncable form-submission record stream" } },
+    { "method": "GET", "path": "/a/{account_id}/forms/summary.json", "excluded": { "category": "out_of_scope", "reason": "returns grouped aggregate form statistics (total/first forms, leads) bucketed by source/campaign/form_name, not a row-per-record syncable object; Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/a/{account_id}/integrations.json", "covered_by": { "stream": "integrations" } },
+    { "method": "GET", "path": "/a/{account_id}/integrations/{integration_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-integration detail; identical record shape to the integrations list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/integrations.json", "covered_by": { "write": "create_integration" } },
+    { "method": "PUT", "path": "/a/{account_id}/integrations/{integration_id}.json", "covered_by": { "write": "update_integration" } },
+    { "method": "DELETE", "path": "/a/{account_id}/integrations/{integration_id}.json", "covered_by": { "write": "disable_integration" } },
+    { "method": "GET", "path": "/a/{account_id}/integrations/configurations", "excluded": { "category": "non_data_endpoint", "reason": "returns the static schema/menu of available integration TYPES and their configurable fields (a form-builder metadata document), not a syncable object collection" } },
+
+    { "method": "GET", "path": "/a/{account_id}/integration_triggers.json", "covered_by": { "stream": "integration_filters" } },
+    { "method": "GET", "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-integration-filter detail; identical record shape to the integration_filters list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/integration_triggers.json", "covered_by": { "write": "create_integration_filter" } },
+    { "method": "PUT", "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json", "covered_by": { "write": "update_integration_filter" } },
+    { "method": "DELETE", "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json", "covered_by": { "write": "delete_integration_filter" } },
+
+    { "method": "GET", "path": "/a/{account_id}/notifications.json", "covered_by": { "stream": "notifications" } },
+    { "method": "POST", "path": "/a/{account_id}/notifications.json", "covered_by": { "write": "create_notification" } },
+    { "method": "PUT", "path": "/a/{account_id}/notifications/{notification_id}.json", "covered_by": { "write": "update_notification" } },
+    { "method": "DELETE", "path": "/a/{account_id}/notifications/{notification_id}.json", "covered_by": { "write": "delete_notification" } },
+
+    { "method": "GET", "path": "/a/{account_id}/caller_ids.json", "covered_by": { "stream": "caller_ids" } },
+    { "method": "GET", "path": "/a/{account_id}/caller_ids/{caller_ids_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-outbound-caller-id detail; identical record shape to the caller_ids list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/caller_ids.json", "covered_by": { "write": "create_caller_id" } },
+    { "method": "DELETE", "path": "/a/{account_id}/caller_ids/{caller_ids_id}.json", "covered_by": { "write": "delete_caller_id" } },
+
+    { "method": "GET", "path": "/a/{account_id}/sms-threads.json", "covered_by": { "stream": "sms_threads" } },
+    { "method": "GET", "path": "/a/{account_id}/sms-threads/{thread_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-SMS-thread detail; identical record shape to the sms_threads list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/a/{account_id}/sms-threads/{thread_id}.json", "covered_by": { "write": "update_sms_thread" } },
+
+    { "method": "GET", "path": "/a/{account_id}/summary_emails.json", "excluded": { "category": "out_of_scope", "reason": "per-user summary-email notification-preference subscriptions (which stats sections a user receives by email, and how often), an admin config object rather than call/lead tracking data; Pass B breadth-vs-cost triage alongside integrations/configurations" } },
+    { "method": "POST", "path": "/a/{account_id}/summary_emails.json", "excluded": { "category": "out_of_scope", "reason": "create counterpart of the excluded summary_emails read stream; not implemented in this pass" } },
+    { "method": "GET", "path": "/a/{account_id}/summary_emails/{summary_email_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-subscription detail of the excluded summary_emails resource" } },
+    { "method": "PUT", "path": "/a/{account_id}/summary_emails/{summary_email_id}.json", "excluded": { "category": "out_of_scope", "reason": "update counterpart of the excluded summary_emails resource; not implemented in this pass" } },
+    { "method": "DELETE", "path": "/a/{account_id}/summary_emails/{summary_email_id}.json", "excluded": { "category": "out_of_scope", "reason": "delete counterpart of the excluded summary_emails resource; not implemented in this pass" } },
+
+    { "method": "GET", "path": "/a/{account_id}/text-messages.json", "covered_by": { "stream": "text_messages" } },
+    { "method": "GET", "path": "/a/{account_id}/text-messages/{conversation_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-conversation detail; identical record shape to the text_messages list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/text-messages.json", "covered_by": { "write": "send_text_message" } },
+
+    { "method": "GET", "path": "/a/{account_id}/message-flows.json", "covered_by": { "stream": "message_flows" } },
+    { "method": "GET", "path": "/a/{account_id}/message-flows/{message_flow_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-message-flow detail; identical record shape to the message_flows list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/message-flows.json", "covered_by": { "write": "create_message_flow" } },
+    { "method": "PUT", "path": "/a/{account_id}/message-flows.json", "covered_by": { "write": "update_message_flow" } },
+    { "method": "DELETE", "path": "/a/{account_id}/message-flows/{message_flow_id}.json", "covered_by": { "write": "delete_message_flow" } },
+    { "method": "GET", "path": "/a/{account_id}/message-flows/configurations", "excluded": { "category": "non_data_endpoint", "reason": "returns the static schema/menu of available message-flow step TYPES and their configurable fields (a form-builder metadata document), not a syncable object collection" } },
+
+    { "method": "GET", "path": "/a/{account_id}/trackers.json", "covered_by": { "stream": "trackers" } },
+    { "method": "GET", "path": "/a/{account_id}/trackers/{tracker_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-tracker detail; identical record shape to the trackers list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/trackers.json", "excluded": { "category": "requires_elevated_scope", "reason": "creating a session tracker allocates and provisions a real, billable CallRail tracking phone number (destination routing, call-flow, and SMS provisioning); a materially higher-risk provisioning action than an ordinary data-record create, out of scope for this pass" } },
+    { "method": "POST", "path": "/a/{agency_id}/trackers.json", "excluded": { "category": "requires_elevated_scope", "reason": "creating a source tracker likewise provisions a real, billable tracking phone number at the agency level; same provisioning-risk exclusion as the session-tracker create" } },
+    { "method": "PUT", "path": "/a/{account_id}/trackers/{tracker_id}.json", "covered_by": { "write": "update_tracker" } },
+    { "method": "DELETE", "path": "/a/{account_id}/trackers/{tracker_id}.json", "excluded": { "category": "destructive_admin", "reason": "the docs section is titled 'Disabling a Tracker' - it deprovisions a live tracking phone number, permanently breaking any campaign/creative still pointing at it; destructive relative to update_tracker's plain field-update shape, and legacy never implemented tracker writes at all" } },
+    { "method": "GET", "path": "/a/{account_id}/trackers/request_number.json", "excluded": { "category": "non_data_endpoint", "reason": "searches CallRail's available phone-number inventory for a number to allocate; a provisioning-support lookup, not a syncable data stream" } },
+
+    { "method": "GET", "path": "/a/{account_id}/users.json", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/a/{account_id}/users/{user_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/a/{account_id}/users.json", "covered_by": { "write": "create_user" } },
+    { "method": "PUT", "path": "/a/{account_id}/users/{user_id}.json", "covered_by": { "write": "update_user" } },
+    { "method": "DELETE", "path": "/a/{account_id}/users/{user_id}.json", "covered_by": { "write": "delete_user" } },
+
+    { "method": "GET", "path": "/a/{account_id}/leads.json", "covered_by": { "stream": "leads" } },
+    { "method": "GET", "path": "/a/{agency_id}/leads/{lead_id}/timeline.json", "covered_by": { "stream": "lead_timeline" } }
+  ]
+}

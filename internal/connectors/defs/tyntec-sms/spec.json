@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tyntec SMS Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "tyntec API key, sent as the apikey header on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.tyntec.com",
+      "description": "tyntec API base URL override for tests or proxies."
+    }
+  }
+}

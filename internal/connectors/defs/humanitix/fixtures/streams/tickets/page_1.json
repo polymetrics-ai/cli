@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/tickets" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tickets": [
+        {
+          "_id": "ticket_fixture_1",
+          "eventId": "event_fixture_1",
+          "eventDateId": "date_fixture_1",
+          "orderId": "order_fixture_1",
+          "orderName": "ORDER-1",
+          "ticketTypeId": "tt_fixture_1",
+          "ticketTypeName": "General Admission",
+          "firstName": "Fixture",
+          "lastName": "User1",
+          "status": "complete",
+          "currency": "AUD",
+          "price": 50.0,
+          "total": 100.0,
+          "number": 1,
+          "isDonation": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

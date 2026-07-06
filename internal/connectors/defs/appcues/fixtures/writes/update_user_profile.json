@@ -1,0 +1,9 @@
+{
+  "record": { "user_id": "user_fixture_1", "first_name": "Fixture", "last_name": "User" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/users/user_fixture_1/profile",
+    "body": { "first_name": "Fixture", "last_name": "User" }
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

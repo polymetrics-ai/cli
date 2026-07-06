@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "marketing",
+    "attributes": ["name", "description"],
+    "sort_order": 1,
+    "labels": { "en_US": "Marketing" }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/attribute-groups/marketing",
+    "body": {
+      "attributes": ["name", "description"],
+      "sort_order": 1,
+      "labels": { "en_US": "Marketing" }
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

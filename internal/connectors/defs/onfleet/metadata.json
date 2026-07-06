@@ -1,0 +1,22 @@
+{
+  "name": "onfleet",
+  "display_name": "Onfleet",
+  "description": "Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onfleet REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.onfleet.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Onfleet API read of delivery task and workforce data"
+  }
+}

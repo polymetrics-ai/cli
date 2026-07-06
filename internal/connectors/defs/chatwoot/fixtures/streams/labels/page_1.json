@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/labels" },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "id": 1,
+          "title": "billing",
+          "description": "Conversations that need billing follow-up",
+          "color": "#1f93ff",
+          "show_on_sidebar": true
+        },
+        {
+          "id": 2,
+          "title": "urgent",
+          "description": "High-priority conversations",
+          "color": "#ff4040",
+          "show_on_sidebar": true
+        }
+      ]
+    }
+  }
+}

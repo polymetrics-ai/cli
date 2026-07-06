@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/opportunities",
+    "query": {
+      "limit": "200",
+      "fields": "id,name,campaignId,closedAt,createdAt,createdById,updatedAt,updatedById,value,probability,stage,status,isDeleted"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "name": "name_fixture",
+          "campaignId": 1,
+          "closedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "createdById": 1,
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "updatedById": 1,
+          "value": "value_fixture",
+          "probability": 0.5,
+          "stage": "stage_fixture",
+          "status": "status_fixture",
+          "isDeleted": false
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

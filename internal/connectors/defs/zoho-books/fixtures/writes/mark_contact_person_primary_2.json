@@ -1,0 +1,16 @@
+{
+  "record": {
+    "contactperson_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/contactpersons/synthetic-conformance-value/primary"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

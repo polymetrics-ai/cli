@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/comments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "a6822b5b9e8d87a3d67d50d01b95394d": {
+        "uuid": "a6822b5b9e8d87a3d67d50d01b95394d",
+        "visibility": "COMPANY",
+        "reply": [],
+        "createdAt": 1735689600000,
+        "createdBy": { "id": 7, "name": "Fixture User" },
+        "commentedText": "the clause text",
+        "text": "Fixture comment text.",
+        "version": 1,
+        "resolved": false
+      }
+    }
+  }
+}

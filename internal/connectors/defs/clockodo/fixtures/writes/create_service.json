@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Service" },
+  "expect": { "method": "POST", "path": "/v2/services" }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "type": "text",
+    "is_duplicate": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/fields",
+    "body": {
+      "name": "Fixture Name",
+      "type": "text",
+      "is_duplicate": false
+    }
+  }
+}

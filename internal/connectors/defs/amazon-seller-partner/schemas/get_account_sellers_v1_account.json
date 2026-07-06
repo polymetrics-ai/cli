@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_account_sellers_v1_account",
+  "type": "object",
+  "properties": {
+    "marketplace": {
+      "type": "object"
+    },
+    "participation": {
+      "type": "object"
+    },
+    "storeName": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

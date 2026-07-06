@@ -1,0 +1,23 @@
+{
+  "name": "twilio-taskrouter",
+  "display_name": "Twilio TaskRouter",
+  "description": "Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows for a workspace.",
+  "integration_type": "api",
+  "docs_url": "https://www.twilio.com/docs/taskrouter/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Twilio TaskRouter API read of workspace workers, tasks, activities, task queues, and workflows",
+    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+  }
+}

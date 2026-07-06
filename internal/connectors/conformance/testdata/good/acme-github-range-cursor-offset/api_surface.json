@@ -1,0 +1,9 @@
+{
+  "api": "Acme GitHub Range Cursor Offset API v1 (synthetic, conformance self-test)",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-02",
+  "scope": "events endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/events", "covered_by": { "stream": "events" } }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "N_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/networks/N_fixture_1"
+  }
+}

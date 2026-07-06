@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/leads",
+    "query": {
+      "page[limit]": "500",
+      "page[page]": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "leads": [
+        {
+          "id": 501,
+          "entityType": "Lead",
+          "name": "Fixture Lead 501",
+          "status": 0,
+          "confidence": 50,
+          "value": "$1,000",
+          "isOverdue": false,
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:21+0000",
+          "closedTime": null
+        }
+      ]
+    }
+  }
+}

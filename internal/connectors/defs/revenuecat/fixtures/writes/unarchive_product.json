@@ -1,0 +1,14 @@
+{
+  "record": {
+    "product_id": "prod_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/products/prod_fixture_1/actions/unarchive"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

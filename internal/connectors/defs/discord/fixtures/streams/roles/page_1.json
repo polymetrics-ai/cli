@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/guilds/synthetic-conformance-value/roles" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "role_fixture_1", "name": "@everyone", "color": 0, "position": 0, "permissions": "0", "hoist": false, "managed": false, "mentionable": false },
+      { "id": "role_fixture_2", "name": "Admin", "color": 15158332, "position": 1, "permissions": "8", "hoist": true, "managed": false, "mentionable": true }
+    ]
+  }
+}

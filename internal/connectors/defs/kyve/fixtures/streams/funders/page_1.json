@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/kyve/query/v1beta1/funders", "query": { "pagination.limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "funders": [
+        { "address": "kyve1fixturefunder1", "amount": "1000000000" },
+        { "address": "kyve1fixturefunder2", "amount": "2000000000" }
+      ],
+      "pagination": { "next_key": "fixture-next-key-1", "total": "3" }
+    }
+  }
+}

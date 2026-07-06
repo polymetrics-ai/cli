@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_account_shipping_v1_account",
+  "type": "object",
+  "properties": {
+    "accountId": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "accountId"
+  ]
+}

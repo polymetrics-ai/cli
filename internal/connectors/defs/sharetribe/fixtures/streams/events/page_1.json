@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/events/query", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "event_1", "type": "event", "attributes": { "eventType": "listing/updated" }, "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

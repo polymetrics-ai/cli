@@ -1,0 +1,94 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/v1/events" },
+    "error_map": [
+      { "status": 401, "hint": "savvycal API key is missing or invalid; re-run pm credentials add savvycal" },
+      { "status": 429, "class": "rate_limited", "hint": "savvycal rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/v1/events?page=1&per_page={{ config.page_size }}",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "links",
+      "path": "/v1/links?page=1&per_page={{ config.page_size }}",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/links.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contacts",
+      "path": "/v1/contacts?page=1&per_page={{ config.page_size }}",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "time_zones",
+      "path": "/v1/time_zones",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/time_zones.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks?page=1&per_page={{ config.page_size }}",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workflows",
+      "path": "/v1/workflows?page=1&per_page={{ config.page_size }}",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/workflows.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workflow_rules",
+      "path": "/v1/workflows/{{ fanout.id }}/rules",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/v1/workflows", "records_path": "data", "id_field": "id" }
+        },
+        "into": { "path_var": "id" },
+        "stamp_field": "workflow_id"
+      },
+      "schema": "schemas/workflow_rules.json",
+      "projection": "passthrough"
+    }
+  ]
+}

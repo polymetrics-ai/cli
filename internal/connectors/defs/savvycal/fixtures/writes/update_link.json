@@ -1,0 +1,9 @@
+{
+  "record": { "id": "lnk_fixture_1", "name": "Fixture Renamed Link" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/links/lnk_fixture_1",
+    "body": { "name": "Fixture Renamed Link" }
+  },
+  "response": { "status": 200, "body": { "id": "lnk_fixture_1", "name": "Fixture Renamed Link" } }
+}

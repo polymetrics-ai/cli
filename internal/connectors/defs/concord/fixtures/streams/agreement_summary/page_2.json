@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/agreements/agr_fixture_1/summary"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agreementUid": "agr_fixture_1",
+      "organizationId": 42,
+      "description": "Deterministic fixture record.",
+      "lifecycle": { "stage": "REVIEW" },
+      "signedwithlabels": [],
+      "endclauses": [],
+      "clauses": [],
+      "totalAgreementValue": 1000.0,
+      "documentType": "CONTRACT",
+      "agreementCategory": "SALES"
+    }
+  }
+}

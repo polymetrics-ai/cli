@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "as:2001",
+    "archived": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/as:2001/archive",
+    "body": {
+      "archived": true
+    }
+  }
+}

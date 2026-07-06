@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/items",
+    "query": {
+      "page[number]": "1",
+      "page[size]": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "item_fixture_1",
+          "type": "item",
+          "attributes": {
+            "title": "Fixture Poll One",
+            "status": "published",
+            "timestamps": {
+              "created": "2026-01-01T00:00:00Z",
+              "modified": "2026-01-02T00:00:00Z"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

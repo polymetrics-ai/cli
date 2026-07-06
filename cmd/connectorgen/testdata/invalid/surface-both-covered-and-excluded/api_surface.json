@@ -1,0 +1,13 @@
+{
+  "api": "Goodconn API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-06-01",
+  "scope": "widgets endpoints only; account admin endpoints out of scope",
+  "endpoints": [
+    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" },
+      "excluded": { "category": "out_of_scope", "reason": "accidentally dual-tagged" } },
+    { "method": "PATCH", "path": "/widgets/{id}", "covered_by": { "write": "update_widget" } },
+    { "method": "DELETE", "path": "/account",
+      "excluded": { "category": "destructive_admin", "reason": "account deletion is never a reverse-ETL action" } }
+  ]
+}

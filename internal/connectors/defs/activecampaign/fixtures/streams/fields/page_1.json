@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/fields", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        {
+          "id": "1",
+          "title": "Fixture Field",
+          "descript": "Fixture field description",
+          "type": "text",
+          "isrequired": "0",
+          "perstag": "FIXTURE_FIELD",
+          "visible": "1",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

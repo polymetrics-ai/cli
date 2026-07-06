@@ -1,0 +1,50 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/vnd.pagerduty+json"
+    },
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Token token=" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/incidents", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "pagerduty api_key is missing or invalid; re-run pm credentials add pagerduty" },
+      { "status": 403, "hint": "pagerduty account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pagerduty rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "incidents",
+      "path": "/incidents",
+      "records": { "path": "incidents" },
+      "schema": "schemas/incidents.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "services",
+      "path": "/services",
+      "records": { "path": "services" },
+      "schema": "schemas/services.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    }
+  ]
+}

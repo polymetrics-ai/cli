@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/contacts" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Contact 1",
+        "email": "fixture1@example.com",
+        "phone": "",
+        "mobile": "",
+        "company_id": 4000,
+        "active": true,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    ]
+  }
+}

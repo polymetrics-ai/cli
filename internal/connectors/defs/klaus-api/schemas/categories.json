@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "categories",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "groupId": { "type": ["string", "null"] },
+    "groupName": { "type": ["string", "null"] },
+    "groupPosition": { "type": ["integer", "null"] },
+    "position": { "type": ["integer", "null"] },
+    "maxRating": { "type": ["integer", "null"] },
+    "weight": { "type": ["number", "null"] },
+    "critical": { "type": ["boolean", "null"] },
+    "archived": { "type": ["boolean", "null"] },
+    "rootCauses": { "type": ["array", "null"] },
+    "scorecards": { "type": ["array", "null"] }
+  }
+}

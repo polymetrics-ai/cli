@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/analytics/workflow_emails" },
+  "response": {
+    "status": 200,
+    "body": {
+      "account_id": 1001,
+      "query_date": { "start_date": "2026-01-01", "end_date": "2026-01-31" },
+      "workflow_email_statistics": [
+        {
+          "workflow_id": "workflow_fixture_1",
+          "workflow_name": "Fixture Workflow",
+          "workflow_action_id": "workflow_action_fixture_1",
+          "workflow_created_at": "2026-01-01",
+          "workflow_updated_at": "2026-01-02",
+          "email_name": "Fixture Automation Email",
+          "email_dropped_count": 10,
+          "email_delivered_count": 477,
+          "email_bounced_unique_count": 2,
+          "email_opened_unique_count": 300,
+          "email_clicked_unique_count": 75,
+          "email_unsubscribed_count": 2,
+          "email_spam_reported_count": 0,
+          "email_delivered_rate": 95.2,
+          "email_opened_rate": 50.2,
+          "email_clicked_rate": 15.1,
+          "email_spam_reported_rate": 0.0
+        }
+      ]
+    }
+  }
+}

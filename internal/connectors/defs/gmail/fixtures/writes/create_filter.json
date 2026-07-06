@@ -1,0 +1,18 @@
+{
+  "record": {
+    "criteria": { "from": "fixture-sender@example.com" },
+    "action": { "addLabelIds": ["IMPORTANT"] }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/settings/filters",
+    "body": {
+      "criteria": { "from": "fixture-sender@example.com" },
+      "action": { "addLabelIds": ["IMPORTANT"] }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "filter_fixture_created_1" }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "taskdisposition",
+      "attributes": {
+        "name": "Fixture Create Task Disposition"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/taskDispositions",
+    "body": {
+      "data": {
+        "type": "taskdisposition",
+        "attributes": {
+          "name": "Fixture Create Task Disposition"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/brands", "query": { "limit": "100", "cursor": "cursor_fixture_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "brand_fixture_3",
+          "name": "Fixture Brand 3",
+          "from_name": "Fixture Sender 3",
+          "from_email": "sender3@example.com",
+          "connection_id": "conn_fixture_3",
+          "num_contacts": 30,
+          "contact_limit": 3000,
+          "created": 1767225603
+        }
+      ],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

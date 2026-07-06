@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/envvar"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "name": "FIXTURE_VAR", "value": "xxxx1234", "created-at": "2026-01-01T00:00:00Z" }
+      ],
+      "next_page_token": null
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/timeoff/requests"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requests": [
+        {
+          "id": "timeoff_request_fixture_1",
+          "employee_id": "employee_fixture_1",
+          "state": "approved",
+          "from_date": "2026-01-01T00:00:00.000"
+        }
+      ],
+      "total_count": 1
+    }
+  }
+}

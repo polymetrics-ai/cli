@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/projects" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "gid": "fixture_proj_1" },
+        { "gid": "fixture_proj_2" }
+      ],
+      "next_page": null
+    }
+  }
+}

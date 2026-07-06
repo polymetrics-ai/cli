@@ -1,0 +1,25 @@
+{
+  "name": "safetyculture",
+  "display_name": "SafetyCulture",
+  "description": "Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+  "integration_type": "api",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external SafetyCulture API reads performed by the legacy connector via a Tier-2 hook",
+    "write": "unsupported",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Tier-2 hook-owned quarantine migration: internal/connectors/hooks/safetyculture delegates Check/Read to legacy internal/connectors/safetyculture, so conformance dynamic replay of the declarative shadow path is intentionally skipped. Static schema/docs/surface checks still run; behavior is covered by the hook unit tests and the existing legacy connector tests during the pre-cutover period."
+  },
+  "docs_url": "https://developer.safetyculture.com/"
+}

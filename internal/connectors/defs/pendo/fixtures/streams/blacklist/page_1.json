@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/blacklist"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "blacklist_fixture",
+        "name": "Fixture exclusion",
+        "type": "ip"
+      }
+    ]
+  }
+}

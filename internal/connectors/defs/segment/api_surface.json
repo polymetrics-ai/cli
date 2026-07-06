@@ -1,0 +1,1509 @@
+{
+  "api": "Segment Public API (https://docs.segmentapis.com/tag/Getting-Started)",
+  "docs": "https://docs.segmentapis.com/tag/Getting-Started",
+  "reviewed_at": "2026-07-04",
+  "scope": "Current Segment Redocly OpenAPI v73.0.0 exposes 187 documented operations (89 GET, 98 mutations). This bundle keeps the three legacy-parity streams unchanged and quarantines the rest as ENGINE_GAP: complete coverage requires multi-level parent-resource graph discovery/fan-out across spaces, audiences, destinations, warehouses, sources, functions, IAM, and Reverse ETL resources. The extra /workspaces entry is the legacy endpoint used by the existing stream; current docs publish workspace metadata as GET /.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sources/{sourceId}/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{userGroupId}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{userGroupId}/permissions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{userGroupId}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/messaging-subscriptions/batch",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}/cancel",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/previews",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations/cloudsources/{sourceId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/computed-traits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/computed-traits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dbt-model-syncs/trigger",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations",
+      "covered_by": {
+        "stream": "destinations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destinations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/subscriptions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destinations/{destinationId}/subscriptions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer-insights/download",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "starts or returns a customer-insights download artifact rather than a simple structured record write"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destination/{destinationId}/filters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destination/{destinationId}/filters",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filters",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/filters",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions/{functionId}/deploy",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insert-function-instances",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/insert-function-instances",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invites",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invites",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invites",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labels",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/labels",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/live-plugins/create",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/profiles-warehouses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/profiles-warehouses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-syncs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-models",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations/sources/{sourceId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations/sources/{sourceId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tracking-plans",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transformations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transformations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/validation",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/writekey",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destinations/{destinationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/destinations/{destinationId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filters/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/filters/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/filters/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/functions/{functionId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/functions/{functionId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insert-function-instances/{instanceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/insert-function-instances/{instanceId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/insert-function-instances/{instanceId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/labels/{key}/{value}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sources/{sourceId}/live-plugins/delete-code",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/reverse-etl-models/{modelId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reverse-etl-models/{modelId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/sources/{sourceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sources/{sourceId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transformations/{transformationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/transformations/{transformationId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/transformations/{transformationId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/groups/{userGroupId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{userGroupId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/warehouses/{warehouseId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/echo",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "testing echo endpoint, not a data stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/runs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/previews/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connection-state",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/api-calls/sources/daily",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/mtu/sources/daily",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/api-calls/daily",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/mtu/daily",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/destinations/{destinationMetadataId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/destinations",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/failed-delivery",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/successful-delivery",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/volume",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/filtered-at-destination",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/filtered-at-source",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}/versions/{versionId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/failed-on-ingest",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/successfully-received",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/live-plugins/latest",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations/{regulateId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/sources/{sourceMetadataId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/sources",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/warehouses/{warehouseMetadataId}",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/warehouses",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "current Segment OpenAPI exposes workspace metadata at the API root; the existing legacy-parity workspaces stream preserves the older /workspaces endpoint and top-level workspaces array shape until the Segment surface is unblocked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/audience-references",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit-events",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/connected-destinations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/connected-warehouses",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/delivery-metrics",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}/versions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions/{functionId}/versions",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}/invites",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/sources/{sourceId}/settings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/syncs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/groups",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destination/filters/preview",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/group/{userGroupId}/users",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/group/{userGroupId}/users",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sources/{sourceId}/writekey/{writeKey}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spaces/{spaceId}/messaging-subscriptions",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/warehouses/{warehouseId}/selective-sync",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      }
+    }
+  ]
+}

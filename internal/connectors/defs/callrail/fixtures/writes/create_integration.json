@@ -1,0 +1,17 @@
+{
+  "record": {
+    "type": "Webhooks",
+    "company_id": "CMP_fixture_1",
+    "config": { "pre_call_webhook": ["https://example.com/webhook"] }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/integrations.json",
+    "body": {
+      "type": "Webhooks",
+      "company_id": "CMP_fixture_1",
+      "config": { "pre_call_webhook": ["https://example.com/webhook"] }
+    }
+  },
+  "response": { "status": 201, "body": { "id": 1, "type": "Webhooks", "state": "active" } }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 456,
+    "reviewer": {
+      "id": 999999,
+      "name": "Fixture Reviewer",
+      "email": "reviewer@example.com"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/reviewers/456",
+    "body": {
+      "reviewer": {
+        "id": 999999,
+        "name": "Fixture Reviewer",
+        "email": "reviewer@example.com"
+      }
+    }
+  }
+}

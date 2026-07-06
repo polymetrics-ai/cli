@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 240,
+    "name": "Updated Fixture Break",
+    "description": "<p>Updated sanitized fixture break.</p>",
+    "start": "2026-06-01 10:15:00",
+    "end": "2026-06-01 10:45:00"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/pause/240",
+    "body": {
+      "name": "Updated Fixture Break",
+      "start": "2026-06-01 10:15:00",
+      "end": "2026-06-01 10:45:00"
+    }
+  },
+  "response": { "status": 200, "body": { "id": 240, "name": "Updated Fixture Break" } }
+}

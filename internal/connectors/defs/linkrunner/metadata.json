@@ -1,0 +1,25 @@
+{
+  "name": "linkrunner",
+  "display_name": "Linkrunner",
+  "description": "Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.linkrunner.io/sdk-less/api-reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 60
+  },
+  "risk": {
+    "read": "external Linkrunner API read of mobile attribution campaign and user data"
+  }
+}

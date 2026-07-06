@@ -1,0 +1,15 @@
+{
+  "name": "skip-marker-missing-reason",
+  "display_name": "Skip Marker Missing Reason",
+  "description": "seeded-invalid: a stream-level conformance.skip_dynamic marker with no reason",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

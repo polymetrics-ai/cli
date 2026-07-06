@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/locales", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          { "code": "en_US", "enabled": true }
+        ]
+      }
+    }
+  }
+}

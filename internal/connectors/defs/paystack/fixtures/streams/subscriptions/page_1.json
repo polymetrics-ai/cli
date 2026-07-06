@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/subscription" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": true,
+      "message": "ok",
+      "data": [
+        { "id": 10, "subscription_code": "SUB_fixture_1", "email_token": "tok_fixture_1", "status": "active", "amount": 5000, "domain": "test", "next_payment_date": "2026-02-01T00:00:00.000Z", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" }
+      ],
+      "meta": { "total": 1, "perPage": 100, "page": 1, "pageCount": 1, "next": null, "previous": null }
+    }
+  }
+}

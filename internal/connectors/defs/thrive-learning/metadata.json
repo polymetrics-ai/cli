@@ -1,0 +1,23 @@
+{
+  "name": "thrive-learning",
+  "display_name": "Thrive Learning",
+  "description": "Reads users, content, completions, assignments, audiences, tags, CPD records, and activity data through the Thrive Learning Public API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.thrivelearning.com/apidocs/thrive-api-v1",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Thrive Learning API read of user, content, completion, assignment, audience, tag, and CPD data",
+    "approval": "none; read-only, no dialect-expressible write path could be safely conformance-verified for this connector (see docs.md Known limits' write-actions ENGINE_GAP)"
+  }
+}

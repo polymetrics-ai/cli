@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/inbound/fba/2024-03-20/items/compliance",
+    "query": {
+      "mskus": "synthetic-conformance-value",
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "complianceDetails": [
+        {
+          "asin": "asin-fixture-1",
+          "fnsku": "fnsku-fixture-1",
+          "msku": "msku-fixture-1",
+          "taxDetails": {}
+        }
+      ]
+    }
+  }
+}

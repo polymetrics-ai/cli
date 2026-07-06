@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calls",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "start_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "answered": { "type": ["boolean", "null"] },
+    "business_phone_number": { "type": ["string", "null"] },
+    "customer_city": { "type": ["string", "null"] },
+    "customer_country": { "type": ["string", "null"] },
+    "customer_name": { "type": ["string", "null"] },
+    "customer_phone_number": { "type": ["string", "null"] },
+    "customer_state": { "type": ["string", "null"] },
+    "direction": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "recording": { "type": ["string", "null"] },
+    "start_time": { "type": ["string", "null"] },
+    "tracking_phone_number": { "type": ["string", "null"] },
+    "voicemail": { "type": ["boolean", "null"] },
+    "company_id": { "type": ["string", "null"] }
+  }
+}

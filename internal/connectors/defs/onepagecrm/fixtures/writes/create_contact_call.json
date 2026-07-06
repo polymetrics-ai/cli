@@ -1,0 +1,19 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "call_time_int": 1,
+    "text": "Fixture text",
+    "phone_number": "fixture_value",
+    "call_result": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_id/calls",
+    "body": {
+      "call_time_int": 1,
+      "text": "Fixture text",
+      "phone_number": "fixture_value",
+      "call_result": "fixture_value"
+    }
+  }
+}

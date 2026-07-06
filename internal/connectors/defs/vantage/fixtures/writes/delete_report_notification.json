@@ -1,0 +1,9 @@
+{
+  "record": {
+    "report_notification_token": "rptntf_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/report_notifications/rptntf_fixture_1"
+  }
+}

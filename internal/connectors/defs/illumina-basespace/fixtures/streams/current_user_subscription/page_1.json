@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1pre3/users/current/subscription"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {
+        "Id": "current_user_subscription_fixture_1",
+        "Name": "Fixture Current User Subscription",
+        "Href": "v1pre3/current_user_subscription/current_user_subscription_fixture_1",
+        "DateCreated": "2026-01-01T00:00:00Z",
+        "DateModified": "2026-01-01T01:00:00Z",
+        "TotalSize": 1000
+      }
+    }
+  }
+}

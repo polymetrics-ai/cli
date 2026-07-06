@@ -1,0 +1,23 @@
+{
+  "name": "wrike",
+  "display_name": "Wrike",
+  "description": "Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.wrike.com/api/v4/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Wrike API read of task, folder, and contact data",
+    "approval": "none; read-only"
+  }
+}

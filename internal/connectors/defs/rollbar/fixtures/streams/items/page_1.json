@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/items/",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Fixture items",
+            "title": "Fixture items",
+            "status": "active"
+          }
+        ],
+        "page": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

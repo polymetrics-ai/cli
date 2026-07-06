@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rollbar Connection Specification",
+  "type": "object",
+  "required": [
+    "access_token"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Rollbar API access token, sent as the X-Rollbar-Access-Token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.rollbar.com",
+      "description": "Rollbar API base URL override for tests or proxies."
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Occurrence UUID for the item_by_uuid stream."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Rollbar item ID for item detail, item occurrence, and item mutation endpoints."
+    },
+    "counter": {
+      "type": "string",
+      "description": "Project-local Rollbar item counter for item_by_counter."
+    },
+    "instance_id": {
+      "type": "string",
+      "description": "Rollbar occurrence instance ID."
+    },
+    "deploy_id": {
+      "type": "string",
+      "description": "Rollbar deploy ID."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Rollbar RQL or person-deletion job ID."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Rollbar project ID for project-scoped streams and writes."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Rollbar team ID."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Rollbar user ID."
+    },
+    "invite_id": {
+      "type": "string",
+      "description": "Rollbar team invitation ID."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Rollbar notification rule ID."
+    },
+    "environment": {
+      "type": "string",
+      "description": "Rollbar environment for version and session replay streams."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Rollbar session ID for session replay endpoints."
+    },
+    "replay_id": {
+      "type": "string",
+      "description": "Rollbar replay ID for session replay endpoints."
+    },
+    "service_link_id": {
+      "type": "string",
+      "description": "Rollbar service link ID."
+    },
+    "version": {
+      "type": "string",
+      "description": "Application code version for Rollbar version streams."
+    },
+    "event": {
+      "type": "string",
+      "enum": [
+        "new",
+        "repeated",
+        "reactivated",
+        "resolved"
+      ],
+      "default": "new",
+      "description": "Version item event filter required by Rollbar for version_items."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/definitions/2020-09-01/productTypes/synthetic-conformance-value",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metaSchema": {},
+      "schema": {},
+      "requirements": "requirements-fixture-1",
+      "requirementsEnforced": "requirementsEnforced-fixture-1",
+      "propertyGroups": {},
+      "locale": "locale-fixture-1",
+      "marketplaceIds": [],
+      "productType": "productType-fixture-1",
+      "displayName": "displayName-fixture-1",
+      "productTypeVersion": {},
+      "product_type": "product_type-fixture-1"
+    }
+  }
+}

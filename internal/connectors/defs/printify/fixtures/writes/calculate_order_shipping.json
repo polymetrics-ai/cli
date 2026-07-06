@@ -1,0 +1,20 @@
+{
+  "record": {
+    "line_items": [
+      {
+        "sku": "SKU-FIXTURE",
+        "quantity": 1
+      }
+    ],
+    "address_to": {
+      "country": "US",
+      "address1": "1 Fixture St",
+      "city": "New York",
+      "zip": "10001"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/orders/shipping.json"
+  }
+}

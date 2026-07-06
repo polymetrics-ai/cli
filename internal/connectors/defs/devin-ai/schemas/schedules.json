@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "schedules",
+  "type": "object",
+  "x-primary-key": ["scheduled_session_id"],
+  "required": ["scheduled_session_id"],
+  "properties": {
+    "scheduled_session_id": { "type": "string" },
+    "org_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "prompt": { "type": ["string", "null"] },
+    "enabled": { "type": ["boolean", "null"] },
+    "frequency": { "type": ["string", "null"] },
+    "schedule_type": { "type": ["string", "null"] },
+    "scheduled_at": { "type": ["string", "null"] },
+    "notify_on": { "type": ["string", "null"] },
+    "agent": { "type": ["string", "null"] },
+    "platform": { "type": ["string", "null"] },
+    "playbook": { "type": ["object", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "target_devin_id": { "type": ["string", "null"] },
+    "created_by": { "type": ["string", "null"] },
+    "last_edited_by": { "type": ["string", "null"] },
+    "last_error_message": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "last_executed_at": { "type": ["string", "null"] },
+    "last_error_at": { "type": ["string", "null"] },
+    "consecutive_failures": { "type": ["integer", "null"] },
+    "interval_count": { "type": ["integer", "null"] },
+    "bypass_approval": { "type": ["boolean", "null"] }
+  }
+}

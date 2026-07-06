@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v4/checkins",
+    "query": { "limit": "synthetic-conformance-value", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "checkins": {
+        "checkins": [
+          {
+            "checkinId": "ck_fixture_1",
+            "waiverId": "wv_fixture_1",
+            "templateId": "tp_fixture_1",
+            "date": "2026-01-01T00:00:00Z",
+            "dateSigned": "2026-01-01T00:00:00Z",
+            "firstName": "Fixture",
+            "lastName": "One"
+          },
+          {
+            "checkinId": "ck_fixture_2",
+            "waiverId": "wv_fixture_2",
+            "templateId": "tp_fixture_1",
+            "date": "2026-01-02T00:00:00Z",
+            "dateSigned": "2026-01-02T00:00:00Z",
+            "firstName": "Fixture",
+            "lastName": "Two"
+          }
+        ]
+      }
+    }
+  }
+}

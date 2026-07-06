@@ -1,0 +1,32 @@
+{
+  "record": {
+    "delivery": {
+      "authorization_header": "authorization_header_fixture",
+      "endpoint_url": "https://example.invalid/fixture",
+      "method": "https://schemas.openid.net/secevent/risc/delivery-method/push"
+    },
+    "events_requested": [
+      "https://example.invalid/fixture"
+    ],
+    "format": "iss_sub"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/ssf/stream",
+    "body": {
+      "delivery": {
+        "authorization_header": "authorization_header_fixture",
+        "endpoint_url": "https://example.invalid/fixture",
+        "method": "https://schemas.openid.net/secevent/risc/delivery-method/push"
+      },
+      "events_requested": [
+        "https://example.invalid/fixture"
+      ],
+      "format": "iss_sub"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

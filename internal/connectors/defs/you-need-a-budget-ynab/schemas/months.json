@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "months",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "month": { "type": ["string", "null"] },
+    "note": { "type": ["string", "null"] },
+    "income": { "type": ["integer", "null"] },
+    "budgeted": { "type": ["integer", "null"] },
+    "activity": { "type": ["integer", "null"] },
+    "to_be_budgeted": { "type": ["integer", "null"] },
+    "age_of_money": { "type": ["integer", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

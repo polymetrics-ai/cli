@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/carrier_accounts" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "ca_fixture_1",
+        "object": "CarrierAccount",
+        "type": "UspsAccount",
+        "clone": false,
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:05:00Z",
+        "description": "Fixture USPS account",
+        "reference": "fixture-carrier-account",
+        "billing_type": "easypost",
+        "readable": "USPS",
+        "logo": null,
+        "fields": {}
+      }
+    ]
+  }
+}

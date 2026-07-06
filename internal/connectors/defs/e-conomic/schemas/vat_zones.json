@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vat_zones",
+  "type": "object",
+  "x-primary-key": ["vat_zone_number"],
+  "required": ["vat_zone_number"],
+  "properties": {
+    "vat_zone_number": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

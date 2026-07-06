@@ -1,0 +1,176 @@
+{
+  "actions": [
+    {
+      "name": "add_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "subscribers/add",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "full_name": { "type": "string" },
+          "email": { "type": "string" },
+          "facebook_id": { "type": "string" },
+          "push_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new subscriber on the connected SmartEngage account; approval required"
+    },
+    {
+      "name": "update_subscriber",
+      "kind": "update",
+      "method": "POST",
+      "path": "subscribers/update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "full_name": { "type": "string" },
+          "email": { "type": "string" },
+          "facebook_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites subscriber fields on the connected SmartEngage account (fields omitted from the record remain unchanged); approval required"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "tags/create",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "name"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new tag on the connected SmartEngage account; approval required"
+    },
+    {
+      "name": "add_tag_to_subscriber",
+      "kind": "custom",
+      "method": "POST",
+      "path": "tags/add",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id", "tag"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; attaches an existing tag to a subscriber; approval required"
+    },
+    {
+      "name": "remove_tag_from_subscriber",
+      "kind": "custom",
+      "method": "POST",
+      "path": "tags/delete",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id", "tag"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "tag": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; detaches a tag from a subscriber; approval required"
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "customfields/create",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "custom_field_name", "custom_field_type"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "custom_field_name": { "type": "string" },
+          "custom_field_title": { "type": "string" },
+          "custom_field_type": { "type": "string" },
+          "custom_field_desc": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new custom field definition on the connected SmartEngage account; approval required"
+    },
+    {
+      "name": "set_custom_field_value",
+      "kind": "update",
+      "method": "POST",
+      "path": "customfields/update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id", "field", "value"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "field": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; sets a custom field value on a subscriber; approval required"
+    },
+    {
+      "name": "add_subscriber_to_sequence",
+      "kind": "custom",
+      "method": "POST",
+      "path": "sequences/add",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id", "sequence"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "sequence": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; enrolls a subscriber into an automation sequence, triggering scheduled messages; approval required"
+    },
+    {
+      "name": "remove_subscriber_from_sequence",
+      "kind": "custom",
+      "method": "POST",
+      "path": "sequences/remove",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["avatar_id", "subscriber_id", "sequence"],
+        "properties": {
+          "avatar_id": { "type": "string" },
+          "subscriber_id": { "type": "string" },
+          "sequence": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; unenrolls a subscriber from an automation sequence, stopping scheduled messages; approval required"
+    }
+  ]
+}

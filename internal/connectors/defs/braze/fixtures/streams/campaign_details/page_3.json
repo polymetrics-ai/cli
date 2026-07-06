@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns/details",
+    "query": { "campaign_id": "campaign_fixture_2", "page": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "success",
+      "created_at": "2026-01-01T00:00:02Z",
+      "updated_at": "2026-01-01T00:00:03Z",
+      "archived": false,
+      "draft": false,
+      "enabled": true,
+      "has_post_launch_draft": false,
+      "name": "Fixture Campaign 2",
+      "description": "Fixture campaign description",
+      "schedule_type": "action_based",
+      "channels": ["email"],
+      "first_sent": "2026-01-01T00:00:02Z",
+      "last_sent": "2026-01-01T00:00:03Z",
+      "tags": ["fixture"],
+      "teams": [],
+      "conversion_behaviors": []
+    }
+  }
+}

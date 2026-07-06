@@ -1,0 +1,95 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/v2/suggestions" },
+    "error_map": [
+      { "status": 401, "hint": "uservoice api_key is missing or invalid; re-run pm credentials add uservoice" },
+      { "status": 403, "hint": "uservoice account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "uservoice rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "suggestions",
+      "path": "/api/v2/suggestions",
+      "query": {
+        "start_date": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "suggestions" },
+      "computed_fields": {
+        "id": "{{ record.id | last_path_segment }}",
+        "title": "{{ record.title }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}"
+      },
+      "schema": "schemas/suggestions.json"
+    },
+    {
+      "name": "forums",
+      "path": "/api/v2/admin/forums",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "forums" },
+      "schema": "schemas/forums.json"
+    },
+    {
+      "name": "users",
+      "path": "/api/v2/admin/users",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "categories",
+      "path": "/api/v2/admin/categories",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "categories" },
+      "schema": "schemas/categories.json"
+    },
+    {
+      "name": "statuses",
+      "path": "/api/v2/admin/statuses",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "statuses" },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "labels",
+      "path": "/api/v2/admin/labels",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "labels" },
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "comments",
+      "path": "/api/v2/admin/comments",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "comments" },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "notes",
+      "path": "/api/v2/admin/notes",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "updated_after", "param_format": "rfc3339" },
+      "records": { "path": "notes" },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "teams",
+      "path": "/api/v2/admin/teams",
+      "pagination": { "type": "page_number", "page_param": "page", "size_param": "per_page", "start_page": 1, "page_size": 30 },
+      "records": { "path": "teams" },
+      "schema": "schemas/teams.json"
+    }
+  ]
+}

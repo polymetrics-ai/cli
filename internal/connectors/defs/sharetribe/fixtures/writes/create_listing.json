@@ -1,0 +1,20 @@
+{
+  "record": {
+    "title": "Fixture Listing",
+    "authorId": "author_fixture_1",
+    "state": "published"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integration_api/listings/create",
+    "body": {
+      "title": "Fixture Listing",
+      "authorId": "author_fixture_1",
+      "state": "published"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "data": { "id": "listing_fixture_1", "type": "listing" } }
+  }
+}

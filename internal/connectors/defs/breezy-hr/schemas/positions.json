@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "positions",
+  "type": "object",
+  "x-primary-key": ["position_id"],
+  "required": ["position_id"],
+  "properties": {
+    "position_id": { "type": "string", "description": "Computed from the raw API's `_id` field, falling back to `position_id` to match legacy firstString." },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"], "description": "Computed from the raw API's nested `type.name` object field, falling back to scalar `type` to match legacy nestedName." },
+    "state": { "type": ["string", "null"] },
+    "department": { "type": ["string", "null"] },
+    "org_type": { "type": ["string", "null"] },
+    "pipeline_id": { "type": ["string", "null"] },
+    "country_id": { "type": ["string", "null"], "description": "Computed from the raw API's nested `location.country.id` object field." },
+    "country_name": { "type": ["string", "null"], "description": "Computed from the raw API's nested `location.country.name` object field." },
+    "creation_date": { "type": ["string", "null"] },
+    "updated_date": { "type": ["string", "null"] }
+  }
+}

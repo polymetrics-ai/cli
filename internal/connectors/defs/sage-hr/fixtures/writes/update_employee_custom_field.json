@@ -1,0 +1,5 @@
+{
+  "record": { "employee_id": "1", "custom_field_id": "2", "value": "Hockey" },
+  "expect": { "method": "PUT", "path": "/employees/1/custom-fields/2" },
+  "response": { "status": 200, "body": {} }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "taboola",
+  "display_name": "Taboola",
+  "description": "Reads Taboola campaigns through the Backstage API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.taboola.com/backstage-api/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Taboola Backstage API read of campaign data",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth's token_url is derived from config.base_url ({{ config.base_url }}/backstage/oauth/token); conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"base_url\"] itself, so the token_url template still resolves to the synthetic non-secret value (\"synthetic-conformance-value/backstage/oauth/token\"), an unreachable non-URL — the OAuth token exchange fails before any declarative stream/check request is ever issued, so every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass. This bundle has no Tier-2 AuthHook (auth is fully declarative oauth2_client_credentials), so there is no paritytest/taboola package for this wave; the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/taboola instead. Matches dwolla's, clazar's, and sendpulse's identical documented precedent."
+  }
+}

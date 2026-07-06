@@ -1,0 +1,25 @@
+{
+  "record": {
+    "data": {
+      "type": "notes",
+      "attributes": { "note": "Fixture recruiter note" },
+      "relationships": {
+        "candidate": { "data": { "id": "candidate_fixture_1", "type": "candidates" } }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/notes",
+    "body": {
+      "data": {
+        "type": "notes",
+        "attributes": { "note": "Fixture recruiter note" },
+        "relationships": {
+          "candidate": { "data": { "id": "candidate_fixture_1", "type": "candidates" } }
+        }
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "data": { "id": "note_fixture_new", "type": "notes" } } }
+}

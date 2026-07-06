@@ -1,0 +1,19 @@
+{
+  "record": {
+    "company": "Fixture Partner",
+    "description": "Sanitized fixture partner.",
+    "photo_url": "https://example.com/partner-photo.png",
+    "logo_url": "https://example.com/partner-logo.png",
+    "web": "https://example.com",
+    "email": "partner@example.test",
+    "phone": "(555) 010-0101",
+    "address": "1 Fixture Way",
+    "booth_number": "E42"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/partner",
+    "body": { "company": "Fixture Partner", "booth_number": "E42" }
+  },
+  "response": { "status": 200, "body": { "id": 420, "company": "Fixture Partner" } }
+}

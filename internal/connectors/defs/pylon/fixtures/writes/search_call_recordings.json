@@ -1,0 +1,13 @@
+{
+  "record": {
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/call-recordings/search"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

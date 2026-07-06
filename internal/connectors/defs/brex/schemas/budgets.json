@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "budgets",
+  "type": "object",
+  "x-primary-key": ["budget_id"],
+  "required": ["budget_id"],
+  "properties": {
+    "budget_id": { "type": "string" },
+    "parent_budget_id": { "type": ["string", "null"] },
+    "account_id": { "type": ["string", "null"] },
+    "creator_user_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "limit": { "type": ["object", "null"] },
+    "period_type": { "type": ["string", "null"] }
+  }
+}

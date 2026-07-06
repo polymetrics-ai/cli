@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/Contacts", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-1",
+      "Status": "OK",
+      "Contacts": [
+        {
+          "ContactID": "contact_fixture_1",
+          "ContactStatus": "ACTIVE",
+          "Name": "Fixture Customer",
+          "FirstName": "Fixture",
+          "LastName": "Customer",
+          "EmailAddress": "fixture1@example.com",
+          "IsSupplier": false,
+          "IsCustomer": true,
+          "AccountNumber": "ACC-1",
+          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

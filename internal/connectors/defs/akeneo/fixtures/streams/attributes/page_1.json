@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/api/rest/v1/attributes", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_links": { "self": { "href": "x" } },
+      "_embedded": {
+        "items": [
+          {
+            "code": "attribute_fixture_1",
+            "type": "pim_catalog_text",
+            "group": "marketing",
+            "localizable": false,
+            "scopable": false,
+            "labels": { "en_US": "Fixture Attribute 1" }
+          },
+          {
+            "code": "attribute_fixture_2",
+            "type": "pim_catalog_boolean",
+            "group": "marketing",
+            "localizable": true,
+            "scopable": true,
+            "labels": { "en_US": "Fixture Attribute 2" }
+          }
+        ]
+      }
+    }
+  }
+}

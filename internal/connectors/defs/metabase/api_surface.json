@@ -1,0 +1,43 @@
+{
+  "api": "Metabase legacy connector hook surface",
+  "docs": "https://www.metabase.com/docs/latest/api-documentation",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy metabase connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/metabase, which delegates to internal/connectors/metabase until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase cards read path",
+      "covered_by": {
+        "stream": "cards"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase dashboards read path",
+      "covered_by": {
+        "stream": "dashboards"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase collections read path",
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase databases read path",
+      "covered_by": {
+        "stream": "databases"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/metabase users read path",
+      "covered_by": {
+        "stream": "users"
+      }
+    }
+  ]
+}

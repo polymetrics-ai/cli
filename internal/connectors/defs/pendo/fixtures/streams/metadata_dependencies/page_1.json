@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metadata/dependencies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "visitor.agent.email": [
+        {
+          "kind": "guide",
+          "id": "guide_fixture"
+        }
+      ]
+    }
+  }
+}

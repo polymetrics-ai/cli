@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adAccounts",
+    "query": {
+      "q": "search",
+      "count": "100",
+      "start": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "id": 510101,
+          "name": "Fixture Account 101",
+          "type": "BUSINESS",
+          "status": "DRAFT",
+          "currency": "USD",
+          "reference": "urn:li:organization:900101",
+          "test": false,
+          "version": {
+            "versionTag": "1"
+          },
+          "changeAuditStamps": {
+            "created": {
+              "time": 1767235600000
+            },
+            "lastModified": {
+              "time": 1767235660000
+            }
+          }
+        }
+      ]
+    }
+  }
+}

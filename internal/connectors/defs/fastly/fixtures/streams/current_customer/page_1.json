@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/current_customer" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "cus_fixture_1",
+      "name": "Fixture Customer",
+      "owner_id": "usr_fixture_1",
+      "billing_contact_id": "usr_fixture_1",
+      "can_stream_syslog": true,
+      "has_account_panel": true,
+      "pricing_plan": "fixture-plan",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

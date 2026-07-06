@@ -1,0 +1,75 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.oauth_access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100,
+      "max_pages": 1
+    },
+    "check": { "method": "GET", "path": "/integration_api/listings/query" },
+    "error_map": [
+      { "status": 401, "hint": "sharetribe oauth_access_token is missing or invalid; re-run pm credentials add sharetribe" },
+      { "status": 403, "hint": "sharetribe account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "sharetribe rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "listings",
+      "path": "/integration_api/listings/query",
+      "records": { "path": "data" },
+      "schema": "schemas/listings.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users",
+      "path": "/integration_api/users/query",
+      "records": { "path": "data" },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transactions",
+      "path": "/integration_api/transactions/query",
+      "records": { "path": "data" },
+      "schema": "schemas/transactions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "events",
+      "path": "/integration_api/events/query",
+      "records": { "path": "data" },
+      "schema": "schemas/events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "marketplace",
+      "path": "/integration_api/marketplace/show",
+      "records": { "path": "data" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/marketplace.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "files",
+      "path": "/integration_api/files/query",
+      "records": { "path": "data" },
+      "schema": "schemas/files.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "file_attachments",
+      "path": "/integration_api/file_attachments/query",
+      "records": { "path": "data" },
+      "schema": "schemas/file_attachments.json",
+      "projection": "passthrough"
+    }
+  ]
+}

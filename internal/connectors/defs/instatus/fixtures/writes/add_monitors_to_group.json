@@ -1,0 +1,25 @@
+{
+  "record": {
+    "monitors_group_id": "monitors_group_id_fixture_1",
+    "name": "Fixture add monitors to group",
+    "monitors": [
+      "monitor_fixture_1"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/monitors-groups/monitors_group_id_fixture_1/monitors",
+    "body": {
+      "name": "Fixture add monitors to group",
+      "monitors": [
+        "monitor_fixture_1"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "add_monitors_to_group_fixture_response"
+    }
+  }
+}

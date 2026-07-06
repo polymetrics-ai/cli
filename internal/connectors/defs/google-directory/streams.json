@@ -1,0 +1,91 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": {
+      "method": "GET",
+      "path": "users",
+      "query": {
+        "customer": "{{ config.customer_id }}",
+        "maxResults": "1"
+      }
+    },
+    "error_map": [
+      { "status": 401, "hint": "google-directory access_token is missing, expired, or invalid; re-run pm credentials add google-directory" },
+      { "status": 403, "hint": "google-directory account lacks Admin SDK Directory API access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "google-directory rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "users",
+      "query": {
+        "customer": "{{ config.customer_id }}",
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "users" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "primary_email": "{{ record.primaryEmail }}",
+        "name": "{{ record.name.fullName }}",
+        "org_unit_path": "{{ record.orgUnitPath }}"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "groups",
+      "path": "groups",
+      "query": {
+        "customer": "{{ config.customer_id }}",
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "groups" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "email": "{{ record.email }}",
+        "name": "{{ record.name }}",
+        "description": "{{ record.description }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "orgunits",
+      "path": "customer/{{ config.customer_id }}/orgunits",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "organizationUnits" },
+      "computed_fields": {
+        "id": "{{ record.orgUnitId }}",
+        "name": "{{ record.name }}",
+        "org_unit_path": "{{ record.orgUnitPath }}",
+        "description": "{{ record.description }}"
+      },
+      "schema": "schemas/orgunits.json"
+    },
+    {
+      "name": "chromeos_devices",
+      "path": "customer/{{ config.customer_id }}/devices/chromeos",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "chromeosdevices" },
+      "computed_fields": {
+        "id": "{{ record.deviceId }}",
+        "serial_number": "{{ record.serialNumber }}",
+        "status": "{{ record.status }}",
+        "org_unit_path": "{{ record.orgUnitPath }}"
+      },
+      "schema": "schemas/chromeos_devices.json"
+    }
+  ]
+}

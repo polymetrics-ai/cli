@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/v1/products" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "productId": "prod_fixture_1",
+        "name": "Fixture Product 1",
+        "description": "fixture product",
+        "order": 0,
+        "reasonRequired": false,
+        "approveRequired": false,
+        "organization": { "organizationId": "org_fixture_1" }
+      },
+      {
+        "productId": "prod_fixture_2",
+        "name": "Fixture Product 2",
+        "description": "fixture product",
+        "order": 1,
+        "reasonRequired": true,
+        "approveRequired": false,
+        "organization": { "organizationId": "org_fixture_1" }
+      }
+    ]
+  }
+}

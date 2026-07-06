@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Captain Data Connection Specification",
+  "type": "object",
+  "required": ["api_key", "project_uid"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Captain Data API key. Sent as the X-API-Key header; never logged."
+    },
+    "project_uid": {
+      "type": "string",
+      "description": "Captain Data project id. Sent as the X-Project-Id header on every request; required, matching legacy."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.captaindata.co/v3",
+      "description": "Captain Data API base URL override for tests or proxies."
+    },
+    "workflow_uid": {
+      "type": "string",
+      "description": "Parent workflow uid; required to read the jobs stream (scopes GET /workflows/{workflow_uid}/jobs)."
+    },
+    "job_uid": {
+      "type": "string",
+      "description": "Parent job uid; required to read the job_results stream (scopes GET /jobs/{job_uid}/results)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

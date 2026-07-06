@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/maintenance.occurrences" },
+  "response": {
+    "status": 200,
+    "body": {
+      "occurrences": [
+        { "id": 900101, "maintenanceid": 900001, "from": 1767225600, "to": 1767229200 }
+      ]
+    }
+  }
+}

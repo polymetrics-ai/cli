@@ -1,0 +1,23 @@
+{
+  "name": "defillama",
+  "display_name": "DefiLlama",
+  "description": "Reads DefiLlama DeFi analytics: protocols, chains, stablecoins, DEX volumes, and fees/revenue from the public DefiLlama REST API. Read-only; no authentication required.",
+  "integration_type": "api",
+  "docs_url": "https://defillama.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external DefiLlama API read of public DeFi analytics data",
+    "approval": "none; read-only public analytics API"
+  }
+}

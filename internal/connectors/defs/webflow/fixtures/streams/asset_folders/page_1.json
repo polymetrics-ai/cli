@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/asset_folders"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "assetFolders": [
+        {
+          "id": "asset_folder_fixture_1",
+          "displayName": "Fixture Folder 1",
+          "parentFolder": null,
+          "assets": ["asset_fixture_1", "asset_fixture_2"],
+          "siteId": "synthetic-conformance-value",
+          "createdOn": "2026-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "asset_folder_fixture_2",
+          "displayName": "Fixture Folder 2",
+          "parentFolder": "asset_folder_fixture_1",
+          "assets": [],
+          "siteId": "synthetic-conformance-value",
+          "createdOn": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

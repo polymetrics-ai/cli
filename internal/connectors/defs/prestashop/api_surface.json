@@ -1,0 +1,43 @@
+{
+  "api": "PrestaShop legacy connector hook surface",
+  "docs": "https://devdocs.prestashop-project.org/9/webservice/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy prestashop connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/prestashop, which delegates to internal/connectors/prestashop until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/prestashop customers read path",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/prestashop orders read path",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/prestashop products read path",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/prestashop addresses read path",
+      "covered_by": {
+        "stream": "addresses"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/prestashop carts read path",
+      "covered_by": {
+        "stream": "carts"
+      }
+    }
+  ]
+}

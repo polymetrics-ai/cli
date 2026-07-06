@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subscribers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "sent": { "type": ["integer", "null"] },
+    "opens_count": { "type": ["integer", "null"] },
+    "clicks_count": { "type": ["integer", "null"] },
+    "open_rate": { "type": ["number", "null"] },
+    "click_rate": { "type": ["number", "null"] },
+    "ip_address": { "type": ["string", "null"] },
+    "subscribed_at": { "type": ["string", "null"] },
+    "unsubscribed_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "fields": { "type": ["object", "null"] }
+  }
+}

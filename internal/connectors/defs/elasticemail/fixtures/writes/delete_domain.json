@@ -1,0 +1,9 @@
+{
+  "record": {
+    "Domain": "fixture-domain-1.example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/domains/fixture-domain-1.example.com"
+  }
+}

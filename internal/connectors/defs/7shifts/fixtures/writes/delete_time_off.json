@@ -1,0 +1,13 @@
+{
+  "record": {
+    "time_off_id": 1001
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/time_off/1001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns",
+    "query": {
+      "offset": "0",
+      "limit": "1000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 111000111,
+          "orgId": 123456,
+          "name": "Fixture campaign 1",
+          "status": "ENABLED",
+          "servingStatus": "RUNNING",
+          "displayStatus": "RUNNING",
+          "adChannelType": "SEARCH",
+          "supplySources": ["APPSTORE_SEARCH_RESULTS"],
+          "billingEvent": "TAPS",
+          "dailyBudgetAmount": { "amount": "100.00", "currency": "USD" },
+          "budgetAmount": { "amount": "1000.00", "currency": "USD" },
+          "countriesOrRegions": ["US"],
+          "creationTime": "2026-01-01T00:00:00.000Z",
+          "modificationTime": "2026-01-01T00:00:00.000Z",
+          "deleted": false
+        },
+        {
+          "id": 111000112,
+          "orgId": 123456,
+          "name": "Fixture campaign 2",
+          "status": "PAUSED",
+          "servingStatus": "NOT_RUNNING",
+          "displayStatus": "PAUSED",
+          "adChannelType": "SEARCH",
+          "supplySources": ["APPSTORE_SEARCH_RESULTS"],
+          "billingEvent": "TAPS",
+          "dailyBudgetAmount": { "amount": "200.00", "currency": "USD" },
+          "budgetAmount": { "amount": "2000.00", "currency": "USD" },
+          "countriesOrRegions": ["US"],
+          "creationTime": "2026-01-01T00:00:00.000Z",
+          "modificationTime": "2026-01-02T00:00:00.000Z",
+          "deleted": false
+        }
+      ],
+      "pagination": { "totalResults": 2, "startIndex": 0, "itemsPerPage": 2 }
+    }
+  }
+}

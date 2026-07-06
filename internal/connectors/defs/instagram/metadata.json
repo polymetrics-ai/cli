@@ -1,0 +1,23 @@
+{
+  "name": "instagram",
+  "display_name": "Instagram",
+  "description": "Reads Instagram Business/Creator account profile, media, and stories through the Facebook Graph API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.facebook.com/docs/instagram-platform/changelog",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Facebook Graph API read of Instagram Business/Creator account data",
+    "approval": "none; read-only source"
+  }
+}

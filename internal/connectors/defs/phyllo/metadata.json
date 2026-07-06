@@ -1,0 +1,24 @@
+{
+  "name": "phyllo",
+  "display_name": "Phyllo",
+  "description": "Reads Phyllo users, accounts, profiles, social content/comments, audience, and income data, and writes user/webhook/account-config mutations using Basic-auth REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://docs.getphyllo.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Phyllo API read of user, account, profile, social content/comment, audience, and income data",
+    "write": "creates Phyllo users and webhooks, updates account monitoring configuration and webhook subscriptions, and disconnects linked creator accounts",
+    "approval": "required for update_account/update_webhook/disconnect_account/delete_webhook; create_user/create_webhook require no approval (low-risk, non-destructive)"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users/synthetic-conformance-value/roles/synthetic-conformance-value/governance/synthetic-conformance-value/resources"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "resources": [
+        {
+          "label": "label_fixture",
+          "resource": "resource_fixture"
+        }
+      ],
+      "_links": {
+        "next": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

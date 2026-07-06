@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/transactions",
+    "query": { "page_size": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        { "id": "txn_fixture_1", "status": "settled", "amount": "10.00" },
+        { "id": "txn_fixture_2", "status": "submitted", "amount": "11.00" }
+      ],
+      "pagination": { "next_page": "2" }
+    }
+  }
+}

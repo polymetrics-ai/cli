@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Renamed Fixture Team"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/team",
+    "body": {
+      "name": "Renamed Fixture Team"
+    }
+  }
+}

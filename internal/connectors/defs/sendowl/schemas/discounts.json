@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "discounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "code": { "type": ["string", "null"] },
+    "discount_percentage": { "type": ["string", "null"] },
+    "discount_flat_rate": { "type": ["string", "null"] },
+    "currency_code": { "type": ["string", "null"] },
+    "start_at": { "type": ["string", "null"] },
+    "end_at": { "type": ["string", "null"] },
+    "max_uses": { "type": ["integer", "null"] },
+    "current_uses": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

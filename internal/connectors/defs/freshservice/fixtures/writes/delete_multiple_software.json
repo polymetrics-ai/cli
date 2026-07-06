@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "Fixture delete_multiple_software",
+    "description": "Fixture delete_multiple_software record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/applications"
+  }
+}

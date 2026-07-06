@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "participant",
+  "type": "object",
+  "x-primary-key": [
+    "account_sid"
+  ],
+  "properties": {
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "call_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "call_sid_to_coach": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coaching": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "conference_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_conference_on_exit": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "muted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hold": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "start_conference_on_enter": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "queue_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

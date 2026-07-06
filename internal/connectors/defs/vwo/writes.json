@@ -1,0 +1,64 @@
+{
+  "actions": [
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ config.account_id }}/campaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["type", "urls", "primaryUrl", "goals"],
+        "properties": {
+          "type": { "type": "string" },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "value"],
+              "properties": {
+                "type": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "primaryUrl": { "type": "string" },
+          "goals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "urls"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "urls": { "type": "array" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new A/B testing campaign visible to the workspace; external mutation, approval required"
+    },
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ config.account_id }}/campaigns/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "percentTraffic": { "type": "integer" }
+        }
+      },
+      "risk": "updates an existing campaign's configuration (name, status, traffic allocation, etc.); can start/pause/stop a live experiment; external mutation, approval required"
+    }
+  ]
+}

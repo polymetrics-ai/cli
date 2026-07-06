@@ -1,0 +1,15 @@
+{
+  "record": {
+    "display_id": 123,
+    "name": "Fixture create_service_request",
+    "description": "Fixture create_service_request record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/service_catalog/items/123/place_request",
+    "body": {
+      "name": "Fixture create_service_request",
+      "description": "Fixture create_service_request record"
+    }
+  }
+}

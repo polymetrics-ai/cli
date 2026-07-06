@@ -1,0 +1,479 @@
+{
+  "actions": [
+    {
+      "name": "add_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/responses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "surveyId",
+          "response"
+        ],
+        "properties": {
+          "surveyId": {
+            "type": "string"
+          },
+          "surveyStartTime": {
+            "type": "string"
+          },
+          "surveyEndTime": {
+            "type": "string"
+          },
+          "submitDateTime": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "agent": {
+            "type": "object"
+          },
+          "deviceid": {
+            "type": "object"
+          },
+          "channel": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "object"
+          },
+          "attributes": {
+            "type": "object"
+          },
+          "response": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Zonka Feedback survey response; approval required"
+    },
+    {
+      "name": "update_response",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/responses/{{ record.responseId }}",
+      "path_fields": [
+        "responseId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "responseId"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "responseId": {
+            "type": "string"
+          },
+          "surveyStartTime": {
+            "type": "string"
+          },
+          "surveyEndTime": {
+            "type": "string"
+          },
+          "submitDateTime": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "agent": {
+            "type": "object"
+          },
+          "deviceid": {
+            "type": "object"
+          },
+          "channel": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "object"
+          },
+          "attributes": {
+            "type": "object"
+          },
+          "response": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates a Zonka Feedback survey response; approval required"
+    },
+    {
+      "name": "upsert_contacts",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/contacts/upsert",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "uniqueId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attributes": {
+            "type": [
+              "array",
+              "object"
+            ]
+          }
+        }
+      },
+      "risk": "creates or updates Zonka Feedback contact records; approval required"
+    },
+    {
+      "name": "send_email_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sendemail",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "surveyId",
+          "email"
+        ],
+        "properties": {
+          "surveyId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "embedField": {
+            "type": "boolean"
+          },
+          "scheduleDateTime": {
+            "type": "string"
+          },
+          "reminder": {
+            "type": "boolean"
+          },
+          "reminderMaxCount": {
+            "type": "string"
+          },
+          "reminderSendAfter": {
+            "type": "string"
+          },
+          "reminderMessage": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "ignoreThrottling": {
+            "type": "boolean"
+          },
+          "attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends or schedules email survey invitations; approval required"
+    },
+    {
+      "name": "send_sms_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sendsms",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "surveyId",
+          "mobile"
+        ],
+        "properties": {
+          "surveyId": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scheduleDateTime": {
+            "type": "string"
+          },
+          "ignoreThrottling": {
+            "type": "boolean"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends or schedules SMS survey invitations; approval required"
+    },
+    {
+      "name": "send_two_way_sms_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/send2waysms",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "surveyId",
+          "mobile"
+        ],
+        "properties": {
+          "surveyId": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scheduleDateTime": {
+            "type": "string"
+          },
+          "ignoreThrottling": {
+            "type": "boolean"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends or schedules two-way SMS survey invitations; approval required"
+    },
+    {
+      "name": "send_whatsapp_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/send-wa-message",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "surveyId",
+          "mobile"
+        ],
+        "properties": {
+          "surveyId": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "templateName": {
+            "type": "string"
+          },
+          "templateLanguage": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "locationId": {
+            "type": "string"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scheduleDateTime": {
+            "type": "string"
+          },
+          "ignoreThrottling": {
+            "type": "boolean"
+          },
+          "attributes": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "sends or schedules WhatsApp survey invitations; approval required"
+    },
+    {
+      "name": "add_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tasks/add",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "taskName"
+        ],
+        "properties": {
+          "taskName": {
+            "type": "string"
+          },
+          "typeName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "dueDateTime": {
+            "type": "string"
+          },
+          "reminderSetting": {
+            "type": "string"
+          },
+          "assignTo": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contactId": {
+            "type": "string"
+          },
+          "responseId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Zonka Feedback task; approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "POST",
+      "path": "/tasks/{{ record.taskId }}",
+      "path_fields": [
+        "taskId"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "minProperties": 2,
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "taskName": {
+            "type": "string"
+          },
+          "typeName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "dueDateTime": {
+            "type": "string"
+          },
+          "reminderSetting": {
+            "type": "string"
+          },
+          "assignTo": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "updates a Zonka Feedback task; approval required"
+    },
+    {
+      "name": "delete_tasks",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tasks/delete",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "risk": "deletes one or more Zonka Feedback tasks; approval required"
+    }
+  ]
+}

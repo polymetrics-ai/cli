@@ -1,0 +1,14 @@
+{
+  "record": {
+    "uid": "booking_fixture_1",
+    "reason": "Fixture decline reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/bookings/booking_fixture_1/decline"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 1, "uid": "booking_fixture_1", "status": "rejected" } }
+  }
+}

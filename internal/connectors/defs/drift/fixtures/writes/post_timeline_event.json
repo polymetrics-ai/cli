@@ -1,0 +1,22 @@
+{
+  "record": {
+    "contactId": 301,
+    "event": "Fixture External Event",
+    "createdAt": 1767225601000,
+    "attributes": { "plan": "pro" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/timeline",
+    "body": {
+      "contactId": 301,
+      "event": "Fixture External Event",
+      "createdAt": 1767225601000,
+      "attributes": { "plan": "pro" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

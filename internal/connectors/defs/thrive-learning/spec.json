@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Thrive Learning Connection Specification",
+  "type": "object",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Thrive Learning tenant username, sent via HTTP Basic auth."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Thrive Learning API password, sent via HTTP Basic auth. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.thrivelearning.com",
+      "description": "Thrive Learning API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional lower-bound timestamp sent as the updated_since query parameter on every stream; when unset, no updated_since filter is applied."
+    }
+  }
+}

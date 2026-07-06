@@ -1,0 +1,21 @@
+{
+  "record": {
+    "surveyId": "survey_fixture_1",
+    "mobile": "+15555550100",
+    "name": "Fixture Recipient"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sendsms",
+    "body": {
+      "surveyId": "survey_fixture_1",
+      "mobile": "+15555550100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": "true"
+    }
+  }
+}

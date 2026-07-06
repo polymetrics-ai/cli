@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "users_fixture_1",
+    "name": "fixture-users-1",
+    "firstName": "Fixture",
+    "lastName": "One-Updated",
+    "email": "fixture+1@example.com",
+    "active": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/user/users_fixture_1",
+    "body": {
+      "name": "fixture-users-1",
+      "firstName": "Fixture",
+      "lastName": "One-Updated",
+      "email": "fixture+1@example.com",
+      "active": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "users_fixture_1", "name": "fixture-users-1" }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/fonts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fontFaces": [
+        {
+          "id": "get_custom_font_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_custom_font",
+          "name": "Fixture get_custom_font",
+          "status": "active",
+          "operation_id": "getCustomFont"
+        }
+      ]
+    }
+  }
+}

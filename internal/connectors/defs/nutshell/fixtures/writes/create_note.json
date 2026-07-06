@@ -1,0 +1,28 @@
+{
+  "record": {
+    "data": {
+      "body": "Fixture note body",
+      "links": {
+        "parent": "1-leads"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/notes",
+    "body": {
+      "data": {
+        "body": "Fixture note body",
+        "links": {
+          "parent": "1-leads"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

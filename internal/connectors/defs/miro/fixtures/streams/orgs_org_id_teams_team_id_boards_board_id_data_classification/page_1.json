@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/boards/synthetic-conformance-value/data-classification"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "color": "#ffffff",
+      "description": "description_fixture",
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "sharingRecommendation": "sharing_recommendation_fixture",
+      "guidelineUrl": "https://example.invalid/fixture",
+      "type": "board-data-classification-label"
+    }
+  }
+}

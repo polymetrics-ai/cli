@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/actions/assign_offering"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

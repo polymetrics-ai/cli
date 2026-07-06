@@ -1,0 +1,15 @@
+{
+  "record": {
+    "problem_id": 123,
+    "name": "Fixture create_problem_note",
+    "description": "Fixture create_problem_note record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/problems/123/notes",
+    "body": {
+      "name": "Fixture create_problem_note",
+      "description": "Fixture create_problem_note record"
+    }
+  }
+}

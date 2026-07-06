@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "accountTypeId": {
+      "type": "string"
+    },
+    "currencyId": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "ownerUserId": {
+      "type": "string"
+    },
+    "payingStatus": {
+      "type": "string"
+    },
+    "billingCountry": {
+      "type": "string"
+    },
+    "annualRevenue": {
+      "type": "number"
+    },
+    "employees": {
+      "type": "integer"
+    },
+    "netPaymentDays": {
+      "type": "integer"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt"
+}

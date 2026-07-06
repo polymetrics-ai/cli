@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/webhooks",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "company_id": 1001,
+          "url": "https://example.com/fixture",
+          "method": "post",
+          "event": "fixture.event",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "cursor": {
+          "next": null
+        }
+      }
+    }
+  }
+}

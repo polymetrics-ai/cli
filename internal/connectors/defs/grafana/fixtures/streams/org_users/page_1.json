@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/api/org/users" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "orgId": 1,
+        "userId": 1,
+        "email": "fixture1@example.com",
+        "login": "fixture_user_1",
+        "role": "Admin",
+        "lastSeenAt": "2026-01-01T00:00:00Z"
+      },
+      {
+        "orgId": 1,
+        "userId": 2,
+        "email": "fixture2@example.com",
+        "login": "fixture_user_2",
+        "role": "Viewer",
+        "lastSeenAt": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

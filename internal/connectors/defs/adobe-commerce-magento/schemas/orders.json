@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adobe Commerce (Magento) Order",
+  "type": "object",
+  "x-primary-key": ["entity_id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "entity_id": { "type": "integer" },
+    "increment_id": { "type": "string" },
+    "state": { "type": "string" },
+    "status": { "type": "string" },
+    "customer_id": { "type": "integer" },
+    "customer_email": { "type": "string" },
+    "grand_total": { "type": "number" },
+    "base_grand_total": { "type": "number" },
+    "order_currency_code": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

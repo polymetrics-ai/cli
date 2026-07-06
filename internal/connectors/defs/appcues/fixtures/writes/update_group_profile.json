@@ -1,0 +1,9 @@
+{
+  "record": { "group_id": "group_fixture_1", "name": "Fixture Group" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/accounts/synthetic-conformance-value/groups/group_fixture_1/profile",
+    "body": { "name": "Fixture Group" }
+  },
+  "response": { "status": 200, "body": { "status": 200, "title": "OK" } }
+}

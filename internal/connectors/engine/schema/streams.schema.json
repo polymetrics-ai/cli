@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "streams.json",
+  "type": "object",
+  "required": ["base", "streams"],
+  "additionalProperties": false,
+  "properties": {
+    "base": {
+      "type": "object",
+      "required": ["url"],
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string" },
+        "user_agent": { "type": "string" },
+        "headers": { "type": "object" },
+        "auth": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "mode": { "type": "string" },
+              "token": { "type": "string" },
+              "username": { "type": "string" },
+              "password": { "type": "string" },
+              "header": { "type": "string" },
+              "prefix": { "type": "string" },
+              "param": { "type": "string" },
+              "value": { "type": "string" },
+              "token_url": { "type": "string" },
+              "client_id": { "type": "string" },
+              "client_secret": { "type": "string" },
+              "scopes": { "type": "string" },
+              "extra_params": { "type": "object" },
+              "hook": { "type": "string" },
+              "when": { "type": "string" }
+            }
+          }
+        },
+        "pagination": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": { "type": "string" },
+            "size_param": { "type": "string" },
+            "page_param": { "type": "string" },
+            "start_page": { "type": "integer" },
+            "limit_param": { "type": "string" },
+            "offset_param": { "type": "string" },
+            "cursor_param": { "type": "string" },
+            "token_path": { "type": "string" },
+            "last_record_field": { "type": "string" },
+            "stop_path": { "type": "string" },
+            "next_url_path": { "type": "string" },
+            "page_size": { "type": "integer" },
+            "max_pages": { "type": "integer" },
+            "allow_cross_host": { "type": "boolean" }
+          }
+        },
+        "check": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "method": { "type": "string" },
+            "path": { "type": "string" },
+            "query": { "type": "object" }
+          }
+        },
+        "error_map": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": { "type": "integer" },
+              "match_body": { "type": "string" },
+              "class": { "type": "string" },
+              "hint": { "type": "string" }
+            }
+          }
+        },
+        "rate_limit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests_per_minute": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "streams": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "records", "schema"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "query": { "type": "object" },
+          "body": { "type": "object" },
+          "records": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string" },
+              "single_object": { "type": "boolean" },
+              "keyed_object": { "type": "boolean" },
+              "key_field": { "type": "string" },
+              "filter": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "field_absent": { "type": "string" },
+                  "field_equals": { "type": "object" }
+                }
+              }
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "type": { "type": "string" },
+              "size_param": { "type": "string" },
+              "page_param": { "type": "string" },
+              "start_page": { "type": "integer" },
+              "limit_param": { "type": "string" },
+              "offset_param": { "type": "string" },
+              "cursor_param": { "type": "string" },
+              "token_path": { "type": "string" },
+              "last_record_field": { "type": "string" },
+              "stop_path": { "type": "string" },
+              "next_url_path": { "type": "string" },
+              "page_size": { "type": "integer" },
+              "max_pages": { "type": "integer" },
+              "allow_cross_host": { "type": "boolean" }
+            }
+          },
+          "incremental": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cursor_field": { "type": "string" },
+              "request_param": { "type": "string" },
+              "param_format": { "type": "string" },
+              "start_config_key": { "type": "string" },
+              "client_filtered": { "type": "boolean" }
+            }
+          },
+          "computed_fields": { "type": "object" },
+          "response_fields": { "type": "object" },
+          "projection": { "type": "string", "enum": ["schema", "passthrough"] },
+          "schema": { "type": "string" },
+          "conformance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "skip_dynamic": { "type": "boolean" },
+              "reason": { "type": "string" }
+            }
+          },
+          "fan_out": {
+            "type": "object",
+            "required": ["ids_from", "into"],
+            "additionalProperties": false,
+            "properties": {
+              "ids_from": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "config_key": { "type": "string" },
+                  "request": {
+                    "type": "object",
+                    "required": ["path", "records_path", "id_field"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": { "type": "string" },
+                      "records_path": { "type": "string" },
+                      "id_field": { "type": "string" }
+                    }
+                  }
+                }
+              },
+              "into": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "query_param": { "type": "string" },
+                  "path_var": { "type": "string" }
+                }
+              },
+              "stamp_field": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

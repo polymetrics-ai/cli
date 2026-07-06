@@ -1,0 +1,24 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "name": "Fixture",
+    "text": "Fixture text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workspaces/workspace_id_fixture/sheets",
+    "body": {
+      "name": "Fixture",
+      "text": "Fixture text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

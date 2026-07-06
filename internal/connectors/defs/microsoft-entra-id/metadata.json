@@ -1,0 +1,27 @@
+{
+  "name": "microsoft-entra-id",
+  "display_name": "Microsoft Entra ID",
+  "description": "Reads Microsoft Entra ID (Azure AD) directory objects — users, groups, applications, service principals, and directory roles — from the Microsoft Graph API using an OAuth2 client-credentials grant. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/graph/api/overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Microsoft Graph API read of tenant directory (users/groups/applications/service principals/directory roles) data",
+    "approval": "none; read-only source connector"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-entra-id ENGINE_GAP entry). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+  }
+}

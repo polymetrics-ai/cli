@@ -1,0 +1,24 @@
+{
+  "name": "younium",
+  "display_name": "Younium",
+  "description": "Reads and writes Younium accounts, subscriptions, invoices, products, payment terms, currencies, and webhooks through the Younium REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.younium.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Younium API read of account, subscription, invoice, product, payment term, currency, and webhook data",
+    "write": "external mutation of billing-critical Younium records: account create/update, subscription cancellation (ends future billing), and invoice posting/cancellation",
+    "approval": "required for all write actions; cancel_subscription and cancel_invoice require explicit destructive confirmation"
+  }
+}

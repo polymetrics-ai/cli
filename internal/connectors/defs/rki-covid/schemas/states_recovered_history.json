@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "states_recovered_history",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "number"
+      ],
+      "description": "Primary key emitted by the bundle; for Pass B streams this is usually a stable date, state abbreviation, AGS code, age-group key, or static germany marker."
+    },
+    "stream": {
+      "type": "string",
+      "description": "Static stream marker matching legacy rki-covid mapRecord behavior."
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "abbreviation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ags": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "age_group": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "history": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object"
+      }
+    },
+    "cases": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "deaths": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "recovered": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "weekIncidence": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "cases7Days": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "incidence7Days": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "rValue4Days": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "rValue7Days": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "calendarWeek": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "performedTests": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "positiveTests": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "positivityRate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "laboratoryCount": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "administeredVaccinations": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "vaccinated": {
+      "type": [
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "delta": {
+      "type": [
+        "integer",
+        "number",
+        "object",
+        "null"
+      ]
+    },
+    "quote": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "dataSource": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

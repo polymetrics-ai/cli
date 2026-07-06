@@ -1,0 +1,15 @@
+{
+  "record": {
+    "agent_id": 123,
+    "name": "Fixture update_an_agent",
+    "description": "Fixture update_an_agent record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/agents/123",
+    "body": {
+      "name": "Fixture update_an_agent",
+      "description": "Fixture update_an_agent record"
+    }
+  }
+}

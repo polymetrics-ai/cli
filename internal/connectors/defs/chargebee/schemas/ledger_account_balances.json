@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ledger_account_balances",
+  "type": "object",
+  "x-primary-key": [
+    "subscription_id",
+    "unit_id",
+    "unit_type"
+  ],
+  "required": [
+    "subscription_id",
+    "unit_id",
+    "unit_type"
+  ],
+  "properties": {
+    "subscription_id": {
+      "type": "string"
+    },
+    "unit_id": {
+      "type": "string"
+    },
+    "unit_type": {
+      "type": "string"
+    },
+    "modified_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    }
+  }
+}

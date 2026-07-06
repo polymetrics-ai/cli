@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture create_a_group",
+    "description": "Fixture create_a_group record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups",
+    "body": {
+      "name": "Fixture create_a_group",
+      "description": "Fixture create_a_group record"
+    }
+  }
+}

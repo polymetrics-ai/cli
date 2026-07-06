@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/complianceRequests",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "compliance_requests_fixture_1",
+          "type": "complianceRequest",
+          "attributes": {
+            "name": "Fixture Compliance Requests",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          },
+          "relationships": {
+          },
+          "links": {
+            "self": "https://api.outreach.io/api/v2/complianceRequests"
+          }
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

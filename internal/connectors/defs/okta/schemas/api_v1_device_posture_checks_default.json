@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "createdBy": {
+      "type": "string",
+      "description": "User who created the device posture check"
+    },
+    "createdDate": {
+      "type": "string",
+      "description": "Time the device posture check was created"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the device posture check"
+    },
+    "id": {
+      "type": "string",
+      "description": "The ID of the device posture check"
+    },
+    "lastUpdate": {
+      "type": "string",
+      "description": "Time the device posture check was updated"
+    },
+    "lastUpdatedBy": {
+      "type": "string",
+      "description": "User who updated the device posture check"
+    },
+    "mappingType": {
+      "type": "string",
+      "description": "Represents how the device posture check is rendered in device assurance policies",
+      "enum": [
+        "CHECKBOX",
+        "TEXTBOX"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the device posture check"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "MACOS",
+        "WINDOWS"
+      ]
+    },
+    "query": {
+      "type": "string",
+      "description": "OSQuery for the device posture check"
+    },
+    "remediationSettings": {
+      "type": "object",
+      "description": "Represents the remediation instructions shown to the end user when the device posture check fails",
+      "properties": {
+        "link": {
+          "type": "object",
+          "properties": {
+            "defaultUrl": {
+              "type": "string",
+              "description": "Default URL for the link. This property is only relevant if type is set to `BUILTIN`. If type is set to `CUSTOM`, this field is ignored."
+            },
+            "customUrl": {
+              "type": "string",
+              "description": "Custom URL for the link"
+            }
+          },
+          "additionalProperties": true
+        },
+        "message": {
+          "type": "object",
+          "properties": {
+            "defaultI18nKey": {
+              "type": "string",
+              "description": "Default i18n key for the message. This property is only relevant if type is set to `BUILTIN`. If type is set to `CUSTOM`, this field is ignored."
+            },
+            "customText": {
+              "type": "string",
+              "description": "Custom text for the message"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "BUILTIN",
+        "CUSTOM"
+      ]
+    },
+    "variableName": {
+      "type": "string",
+      "description": "Unique name of the device posture check"
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "self": {
+          "type": "object",
+          "description": "Link to the resource (self)",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "description": "Describes allowed HTTP verbs for the `href`",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "DELETE",
+                      "GET",
+                      "POST",
+                      "PUT"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "name": {
+              "type": "string",
+              "description": "Link name"
+            },
+            "templated": {
+              "type": "boolean",
+              "description": "Indicates whether the link object's `href` property is a URI template."
+            },
+            "type": {
+              "type": "string",
+              "description": "The media type of the link. If omitted, it is implicitly `application/json`."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

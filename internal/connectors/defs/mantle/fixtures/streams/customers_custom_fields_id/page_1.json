@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/customers/custom_fields/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "customField": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "type": "string",
+        "options": [
+          "fixture"
+        ],
+        "defaultValue": "fixture",
+        "appId": "app_id_fixture",
+        "appLevel": true,
+        "showOnCustomerDetail": true,
+        "private": true,
+        "filterable": true
+      }
+    }
+  }
+}

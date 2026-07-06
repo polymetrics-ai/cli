@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Linear Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.linear.app/graphql",
+      "description": "Full Linear GraphQL endpoint URL override for tests or proxies. Must be the complete endpoint (including any path); unlike legacy, a bare-host override is NOT auto-suffixed with /graphql by this bundle (see docs.md Known limits). Defaults to https://api.linear.app/graphql."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Linear personal API key, sent as a bare Authorization header (no Bearer prefix). Provide either api_key or access_token."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Linear OAuth access token, sent as a Bearer Authorization header. Provide either api_key or access_token; access_token takes priority when both are set."
+    },
+    "auth_type": {
+      "type": "string",
+      "enum": ["", "oauth", "oauth2.0"],
+      "default": "",
+      "description": "Optional. Set to oauth or oauth2.0 to send api_key with a Bearer prefix instead of the default bare personal-API-key header (legacy's isOAuth config-forced-Bearer path). Not needed when access_token is set (access_token always uses Bearer regardless of this value)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "50",
+      "description": "GraphQL connection page size (1-250, Linear's own cap). Hooks-consumed; see docs.md Known limits."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of pages read per stream. Empty, \"all\", or \"unlimited\" means unbounded (the default). Hooks-consumed; see docs.md Known limits."
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/pages/synthetic-conformance-value/incident_templates", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "incident_template_fixture_1", "name": "Fixture Template One", "title": "Fixture Incident Title", "body": "fixture record" }
+    ]
+  }
+}

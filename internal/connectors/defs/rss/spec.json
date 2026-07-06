@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RSS Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "feed_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://xkcd.com/rss.xml",
+      "description": "The RSS feed URL to read. Defaults to https://xkcd.com/rss.xml, matching legacy's final fallback."
+    }
+  }
+}

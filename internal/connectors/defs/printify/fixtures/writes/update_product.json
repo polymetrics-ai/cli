@@ -1,0 +1,13 @@
+{
+  "record": {
+    "product_id": "product_fixture_1",
+    "title": "Updated fixture product"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/shops/synthetic-conformance-value/products/product_fixture_1.json",
+    "body": {
+      "title": "Updated fixture product"
+    }
+  }
+}

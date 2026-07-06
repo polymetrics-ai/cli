@@ -1,0 +1,268 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/v1/shops.json"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "printify api_token is missing or invalid; re-run pm credentials add printify"
+      },
+      {
+        "status": 403,
+        "hint": "printify account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "printify rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "shops",
+      "path": "/v1/shops.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/shops.json"
+    },
+    {
+      "name": "products",
+      "path": "/v1/shops/{{ config.shop_id }}/products.json",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page_url"
+      },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "orders",
+      "path": "/v1/shops/{{ config.shop_id }}/orders.json",
+      "query": {
+        "limit": "100",
+        "status": {
+          "template": "{{ config.order_status }}",
+          "omit_when_absent": true
+        },
+        "sku": {
+          "template": "{{ config.order_sku }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page_url"
+      },
+      "schema": "schemas/orders.json"
+    },
+    {
+      "name": "blueprints",
+      "path": "/v1/catalog/blueprints.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/blueprints.json"
+    },
+    {
+      "name": "print_providers",
+      "path": "/v1/catalog/print_providers.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/print_providers.json"
+    },
+    {
+      "name": "blueprint_detail",
+      "path": "/v1/catalog/blueprints/{{ config.blueprint_id }}.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/blueprint_detail.json"
+    },
+    {
+      "name": "blueprint_print_providers",
+      "path": "/v1/catalog/blueprints/{{ config.blueprint_id }}/print_providers.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/blueprint_print_providers.json"
+    },
+    {
+      "name": "blueprint_variants",
+      "path": "/v1/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/variants.json",
+      "query": {
+        "show_out_of_stock": {
+          "template": "{{ config.show_out_of_stock }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "variants"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}"
+      },
+      "schema": "schemas/blueprint_variants.json"
+    },
+    {
+      "name": "shipping_profiles",
+      "path": "/v1/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping.json",
+      "records": {
+        "path": "profiles"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}"
+      },
+      "schema": "schemas/shipping_profiles.json"
+    },
+    {
+      "name": "print_provider_detail",
+      "path": "/v1/catalog/print_providers/{{ config.print_provider_id }}.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/print_provider_detail.json"
+    },
+    {
+      "name": "product_detail",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ config.product_id }}.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/product_detail.json"
+    },
+    {
+      "name": "product_gpsr",
+      "path": "/v1/shops/{{ config.shop_id }}/products/{{ config.product_id }}/gpsr.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/product_gpsr.json"
+    },
+    {
+      "name": "order_detail",
+      "path": "/v1/shops/{{ config.shop_id }}/orders/{{ config.order_id }}.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/order_detail.json"
+    },
+    {
+      "name": "uploads",
+      "path": "/v1/uploads.json",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page_url"
+      },
+      "schema": "schemas/uploads.json"
+    },
+    {
+      "name": "upload_detail",
+      "path": "/v1/uploads/{{ config.image_id }}.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/uploads.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/shops/{{ config.shop_id }}/webhooks.json",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "v2_shipping_methods",
+      "path": "/v2/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping.json",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}"
+      },
+      "schema": "schemas/v2_shipping_methods.json"
+    },
+    {
+      "name": "v2_shipping_standard",
+      "path": "/v2/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping/standard.json",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}",
+        "shipping_method": "standard"
+      },
+      "schema": "schemas/v2_shipping_rates.json"
+    },
+    {
+      "name": "v2_shipping_priority",
+      "path": "/v2/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping/priority.json",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}",
+        "shipping_method": "priority"
+      },
+      "schema": "schemas/v2_shipping_rates.json"
+    },
+    {
+      "name": "v2_shipping_express",
+      "path": "/v2/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping/express.json",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}",
+        "shipping_method": "express"
+      },
+      "schema": "schemas/v2_shipping_rates.json"
+    },
+    {
+      "name": "v2_shipping_economy",
+      "path": "/v2/catalog/blueprints/{{ config.blueprint_id }}/print_providers/{{ config.print_provider_id }}/shipping/economy.json",
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "blueprint_id": "{{ config.blueprint_id }}",
+        "print_provider_id": "{{ config.print_provider_id }}",
+        "shipping_method": "economy"
+      },
+      "schema": "schemas/v2_shipping_rates.json"
+    }
+  ]
+}

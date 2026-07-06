@@ -1,0 +1,35 @@
+{
+  "record": {
+    "name": "Fixture post_notary_notarization_requests",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/public/v2/notary/notarization-requests",
+    "body": {
+      "name": "Fixture post_notary_notarization_requests",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "post_notary_notarization_requests_response",
+      "status": "ok"
+    }
+  }
+}

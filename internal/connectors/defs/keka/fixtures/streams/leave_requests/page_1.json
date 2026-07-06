@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/leaverequests",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "leave_requests_fixture_1",
+          "employeeIdentifier": "leave_requests_fixture_1",
+          "employeeNumber": "FIX-1",
+          "fromDate": "2026-01-01T00:00:00Z",
+          "toDate": "2026-01-01T00:00:00Z",
+          "fromSession": 1,
+          "toSession": 1,
+          "requestedOn": "fixture_leave_requests_1",
+          "note": "fixture_leave_requests_1",
+          "status": 1,
+          "selection": [
+            {
+              "leaveTypeIdentifier": "leave_requests_fixture_1",
+              "leaveTypeName": "Fixture leave requests 1",
+              "count": 3,
+              "duration": {
+                "unit": 2,
+                "duration": 3,
+                "getString": "fixture_leave_requests_1"
+              }
+            }
+          ]
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/leave_requests",
+      "lastPage": "https://example.invalid/keka/leave_requests",
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

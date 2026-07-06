@@ -1,0 +1,121 @@
+{
+  "api": "Stripe API v1 (https://api.stripe.com/v1)",
+  "docs": "https://stripe.com/docs/api",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave0 golden migration: the 5 legacy-parity read streams and 2 legacy-parity write actions only; the full Stripe surface (payment intents, refunds, disputes, payouts, webhooks, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/charges",
+      "covered_by": {
+        "stream": "charges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/invoices",
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customers/{id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/customers/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/customers/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment_intents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/payment_intents is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payment_intents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/payment_intents is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/refunds",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/refunds is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payouts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/payouts is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/disputes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/disputes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhook_endpoints",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/webhook_endpoints is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/balance",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "account balance snapshot, not a syncable object stream"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/email/unsubscribe_groups/id_fixture/members"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

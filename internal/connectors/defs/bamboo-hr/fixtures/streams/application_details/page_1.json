@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/applicant_tracking/applications/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "questionsAndAnswers": [
+        {
+          "id": "fixture_id",
+          "answer": {
+            "id": 1001,
+            "label": "fixture_value"
+          },
+          "archivedDate": "2026-01-01T00:00:00Z",
+          "editedDate": "2026-01-01T00:00:00Z",
+          "editedEndDate": "2026-01-01T00:00:00Z",
+          "hasRevisions": true,
+          "isArchived": true,
+          "question": {
+            "id": 1001,
+            "label": "fixture_value"
+          }
+        }
+      ]
+    }
+  }
+}

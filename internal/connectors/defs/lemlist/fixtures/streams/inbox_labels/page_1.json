@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/inbox/labels" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "lbl_fixture_1",
+        "name": "Fixture Label",
+        "color": "#336699",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "createdBy": "fixture1@example.com"
+      }
+    ]
+  }
+}

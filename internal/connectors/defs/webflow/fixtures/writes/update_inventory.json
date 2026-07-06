@@ -1,0 +1,23 @@
+{
+  "record": {
+    "sku_collection_id": "collection_fixture_sku_1",
+    "sku_id": "sku_fixture_1",
+    "inventoryType": "finite",
+    "quantity": 42
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/collections/collection_fixture_sku_1/items/sku_fixture_1/inventory",
+    "body": {
+      "inventoryType": "finite",
+      "quantity": 42
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "inventoryType": "finite",
+      "quantity": 42
+    }
+  }
+}

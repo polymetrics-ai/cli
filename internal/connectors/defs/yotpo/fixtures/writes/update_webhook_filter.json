@@ -1,0 +1,18 @@
+{
+  "record": {
+    "yotpo_id": "6792",
+    "webhook_filter": {
+      "events": ["review_created"]
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/core/v3/stores/synthetic-conformance-value/webhooks/filters/6792",
+    "body": {
+      "webhook_filter": {
+        "events": ["review_created"]
+      }
+    }
+  },
+  "response": { "status": 200, "body": { "webhook_filter": { "yotpo_id": 6792 } } }
+}

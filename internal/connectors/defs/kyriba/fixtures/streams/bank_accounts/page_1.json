@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bank-accounts",
+    "query": {
+      "page": "1",
+      "size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ba_fixture_1",
+          "accountNumber": "001",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_2",
+          "accountNumber": "002",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_3",
+          "accountNumber": "003",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_4",
+          "accountNumber": "004",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_5",
+          "accountNumber": "005",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_6",
+          "accountNumber": "006",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_7",
+          "accountNumber": "007",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_8",
+          "accountNumber": "008",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_9",
+          "accountNumber": "009",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_10",
+          "accountNumber": "010",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_11",
+          "accountNumber": "011",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_12",
+          "accountNumber": "012",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_13",
+          "accountNumber": "013",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_14",
+          "accountNumber": "014",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_15",
+          "accountNumber": "015",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_16",
+          "accountNumber": "016",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_17",
+          "accountNumber": "017",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_18",
+          "accountNumber": "018",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_19",
+          "accountNumber": "019",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_20",
+          "accountNumber": "020",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_21",
+          "accountNumber": "021",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_22",
+          "accountNumber": "022",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_23",
+          "accountNumber": "023",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_24",
+          "accountNumber": "024",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_25",
+          "accountNumber": "025",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_26",
+          "accountNumber": "026",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_27",
+          "accountNumber": "027",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_28",
+          "accountNumber": "028",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_29",
+          "accountNumber": "029",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_30",
+          "accountNumber": "030",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_31",
+          "accountNumber": "031",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_32",
+          "accountNumber": "032",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_33",
+          "accountNumber": "033",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_34",
+          "accountNumber": "034",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_35",
+          "accountNumber": "035",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_36",
+          "accountNumber": "036",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_37",
+          "accountNumber": "037",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_38",
+          "accountNumber": "038",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_39",
+          "accountNumber": "039",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_40",
+          "accountNumber": "040",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_41",
+          "accountNumber": "041",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_42",
+          "accountNumber": "042",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_43",
+          "accountNumber": "043",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_44",
+          "accountNumber": "044",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_45",
+          "accountNumber": "045",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_46",
+          "accountNumber": "046",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_47",
+          "accountNumber": "047",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_48",
+          "accountNumber": "048",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_49",
+          "accountNumber": "049",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_50",
+          "accountNumber": "050",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_51",
+          "accountNumber": "051",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_52",
+          "accountNumber": "052",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_53",
+          "accountNumber": "053",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_54",
+          "accountNumber": "054",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_55",
+          "accountNumber": "055",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_56",
+          "accountNumber": "056",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_57",
+          "accountNumber": "057",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_58",
+          "accountNumber": "058",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_59",
+          "accountNumber": "059",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_60",
+          "accountNumber": "060",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_61",
+          "accountNumber": "061",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_62",
+          "accountNumber": "062",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_63",
+          "accountNumber": "063",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_64",
+          "accountNumber": "064",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_65",
+          "accountNumber": "065",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_66",
+          "accountNumber": "066",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_67",
+          "accountNumber": "067",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_68",
+          "accountNumber": "068",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_69",
+          "accountNumber": "069",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_70",
+          "accountNumber": "070",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_71",
+          "accountNumber": "071",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_72",
+          "accountNumber": "072",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_73",
+          "accountNumber": "073",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_74",
+          "accountNumber": "074",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_75",
+          "accountNumber": "075",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_76",
+          "accountNumber": "076",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_77",
+          "accountNumber": "077",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_78",
+          "accountNumber": "078",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_79",
+          "accountNumber": "079",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_80",
+          "accountNumber": "080",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_81",
+          "accountNumber": "081",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_82",
+          "accountNumber": "082",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_83",
+          "accountNumber": "083",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_84",
+          "accountNumber": "084",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_85",
+          "accountNumber": "085",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_86",
+          "accountNumber": "086",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_87",
+          "accountNumber": "087",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_88",
+          "accountNumber": "088",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_89",
+          "accountNumber": "089",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_90",
+          "accountNumber": "090",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_91",
+          "accountNumber": "091",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_92",
+          "accountNumber": "092",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_93",
+          "accountNumber": "093",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_94",
+          "accountNumber": "094",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_95",
+          "accountNumber": "095",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_96",
+          "accountNumber": "096",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_97",
+          "accountNumber": "097",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_98",
+          "accountNumber": "098",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_99",
+          "accountNumber": "099",
+          "currency": "USD",
+          "status": "active"
+        },
+        {
+          "id": "ba_fixture_100",
+          "accountNumber": "100",
+          "currency": "USD",
+          "status": "active"
+        }
+      ]
+    }
+  }
+}

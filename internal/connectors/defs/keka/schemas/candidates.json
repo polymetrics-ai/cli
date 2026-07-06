@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "candidates",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "firstName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "middleName": {
+      "type": [
+        "null"
+      ]
+    },
+    "gender": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mobilePhone": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "educationDetails": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "experienceDetails": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "skills": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "additionalCandidateDetails": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "jobApplicationDetails": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

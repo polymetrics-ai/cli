@@ -1,0 +1,419 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/broadcasts",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "total_pages": 2,
+      "broadcasts": [
+        {
+          "id": 1,
+          "subject": "Broadcast 1",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "subject": "Broadcast 2",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 3,
+          "subject": "Broadcast 3",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 4,
+          "subject": "Broadcast 4",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 5,
+          "subject": "Broadcast 5",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 6,
+          "subject": "Broadcast 6",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 7,
+          "subject": "Broadcast 7",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 8,
+          "subject": "Broadcast 8",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 9,
+          "subject": "Broadcast 9",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 10,
+          "subject": "Broadcast 10",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 11,
+          "subject": "Broadcast 11",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 12,
+          "subject": "Broadcast 12",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 13,
+          "subject": "Broadcast 13",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 14,
+          "subject": "Broadcast 14",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 15,
+          "subject": "Broadcast 15",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 16,
+          "subject": "Broadcast 16",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 17,
+          "subject": "Broadcast 17",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 18,
+          "subject": "Broadcast 18",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 19,
+          "subject": "Broadcast 19",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 20,
+          "subject": "Broadcast 20",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 21,
+          "subject": "Broadcast 21",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 22,
+          "subject": "Broadcast 22",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 23,
+          "subject": "Broadcast 23",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 24,
+          "subject": "Broadcast 24",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 25,
+          "subject": "Broadcast 25",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 26,
+          "subject": "Broadcast 26",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 27,
+          "subject": "Broadcast 27",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 28,
+          "subject": "Broadcast 28",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 29,
+          "subject": "Broadcast 29",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 30,
+          "subject": "Broadcast 30",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 31,
+          "subject": "Broadcast 31",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 32,
+          "subject": "Broadcast 32",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 33,
+          "subject": "Broadcast 33",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 34,
+          "subject": "Broadcast 34",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 35,
+          "subject": "Broadcast 35",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 36,
+          "subject": "Broadcast 36",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 37,
+          "subject": "Broadcast 37",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 38,
+          "subject": "Broadcast 38",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 39,
+          "subject": "Broadcast 39",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 40,
+          "subject": "Broadcast 40",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 41,
+          "subject": "Broadcast 41",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 42,
+          "subject": "Broadcast 42",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 43,
+          "subject": "Broadcast 43",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 44,
+          "subject": "Broadcast 44",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 45,
+          "subject": "Broadcast 45",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 46,
+          "subject": "Broadcast 46",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 47,
+          "subject": "Broadcast 47",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 48,
+          "subject": "Broadcast 48",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 49,
+          "subject": "Broadcast 49",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 50,
+          "subject": "Broadcast 50",
+          "description": "fixture broadcast",
+          "public": true,
+          "published_at": "2026-01-01T00:00:00Z",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

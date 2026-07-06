@@ -1,0 +1,19 @@
+{
+  "record": {
+    "on_call_schedule_id": "on_call_schedule_id_fixture_1",
+    "name": "Fixture update on call schedule"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/on-call-schedules/on_call_schedule_id_fixture_1",
+    "body": {
+      "name": "Fixture update on call schedule"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_on_call_schedule_fixture_response"
+    }
+  }
+}

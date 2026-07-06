@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/site_scripts/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Fixture site_script",
+      "slug": "fixture-site_script",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

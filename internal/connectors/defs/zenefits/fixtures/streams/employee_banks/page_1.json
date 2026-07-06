@@ -1,0 +1,31 @@
+{
+  "request": { "method": "GET", "path": "/core/banks" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "employee_bank_fixture_1",
+            "bank_name": "Fixture Bank",
+            "account_type": "checking",
+            "account_number": "0000000002",
+            "routing_number": "000000000",
+            "percentage_per_paycheck": null,
+            "amount_per_paycheck": null,
+            "is_salary_account": true,
+            "is_primary_account": true,
+            "priority": null,
+            "person": { "object": "/meta/ref/detail", "ref_object": "/core/people", "url": "https://api.zenefits.com/core/people/person_fixture_1" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/banks"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/post-incident-reports/templates/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "post_incident_report_template": {
+        "id": "get_pir_templates_by_id",
+        "name": "Fixture get_pir_templates_by_id",
+        "subject": "Fixture get_pir_templates_by_id",
+        "description": "Fixture get_pir_templates_by_id record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

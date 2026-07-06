@@ -1,0 +1,15 @@
+{
+  "record": {
+    "gid": "fixture_section_1",
+    "data": {
+      "name": "Renamed fixture section"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sections/fixture_section_1",
+    "body": {
+      "data": { "name": "Renamed fixture section" }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "component_id": "synthetic-conformance-value",
+    "props": "synthetic-conformance-value",
+    "context": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value/render",
+    "body": {
+      "component_id": "synthetic-conformance-value",
+      "props": "synthetic-conformance-value",
+      "context": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "render_integration_ui_with_post_fixture_1"
+    }
+  }
+}

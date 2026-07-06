@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 301
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/schedules/301"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 301 } }
+  }
+}

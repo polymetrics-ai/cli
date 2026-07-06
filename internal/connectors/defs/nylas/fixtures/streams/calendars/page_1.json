@@ -1,0 +1,34 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/calendars", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_1",
+      "data": [
+        {
+          "id": "cal_fixture_1",
+          "grant_id": "me",
+          "name": "Fixture Calendar 1",
+          "description": "Primary fixture calendar",
+          "timezone": "UTC",
+          "object": "calendar",
+          "is_primary": true,
+          "read_only": false,
+          "hex_color": "#2A2A2A"
+        },
+        {
+          "id": "cal_fixture_2",
+          "grant_id": "me",
+          "name": "Fixture Calendar 2",
+          "description": "Secondary fixture calendar",
+          "timezone": "UTC",
+          "object": "calendar",
+          "is_primary": false,
+          "read_only": true,
+          "hex_color": "#3B3B3B"
+        }
+      ],
+      "next_cursor": "cursor_fixture_2"
+    }
+  }
+}

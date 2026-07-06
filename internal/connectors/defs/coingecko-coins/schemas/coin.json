@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "coin",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "symbol": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "market_cap_rank": { "type": ["integer", "null"] },
+    "hashing_algorithm": { "type": ["string", "null"] },
+    "categories": { "type": ["array", "null"] },
+    "market_data": { "type": ["object", "null"] },
+    "last_updated": { "type": ["string", "null"] }
+  }
+}

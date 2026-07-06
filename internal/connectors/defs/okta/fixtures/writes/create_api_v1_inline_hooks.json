@@ -1,0 +1,28 @@
+{
+  "record": {
+    "channel": {
+      "type": "HTTP",
+      "version": "version_fixture"
+    },
+    "name": "name_fixture",
+    "type": "com.okta.import.transform",
+    "version": "version_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/inlineHooks",
+    "body": {
+      "channel": {
+        "type": "HTTP",
+        "version": "version_fixture"
+      },
+      "name": "name_fixture",
+      "type": "com.okta.import.transform",
+      "version": "version_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

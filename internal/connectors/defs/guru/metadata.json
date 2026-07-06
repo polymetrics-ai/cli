@@ -1,0 +1,23 @@
+{
+  "name": "guru",
+  "display_name": "Guru",
+  "description": "Reads Guru collections, groups, members, and teams through the Guru REST API using HTTP Basic authentication (email + API token).",
+  "integration_type": "api",
+  "docs_url": "https://developer.getguru.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Guru API read of collections, groups, members, and teams",
+    "approval": "none; read-only source connector"
+  }
+}

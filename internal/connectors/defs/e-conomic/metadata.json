@@ -1,0 +1,24 @@
+{
+  "name": "e-conomic",
+  "display_name": "e-conomic",
+  "description": "Reads and writes e-conomic customers, products, suppliers, accounts, invoices (booked/draft), orders, and reference data (currencies, payment terms, VAT zones, customer/product/supplier groups) through the e-conomic REST API.",
+  "integration_type": "api",
+  "docs_url": "https://restdocs.e-conomic.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external e-conomic API read of customer, product, supplier, account, invoice, order, and reference-data (currencies/payment-terms/vat-zones/groups) records",
+    "write": "creates/updates/deletes customer, product, and supplier master-data records; creates/updates draft invoices; books a draft invoice into a legally-binding, thereafter-immutable booked invoice",
+    "approval": "none for master-data CRUD and draft-invoice authoring; book_invoice is irreversible (correction requires a credit note) and should be gated by the caller's own review step before use"
+  }
+}

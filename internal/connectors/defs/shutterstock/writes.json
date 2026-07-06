@@ -1,0 +1,431 @@
+{
+  "actions": [
+    {
+      "name": "create_image_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/images/collections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/images/collections; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "rename_image_collection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/images/collections/{{ record.image_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "image_collection_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "image_collection_id",
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}; approval required",
+      "path_fields": [
+        "image_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_image_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/images/collections/{{ record.image_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "image_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "image_collection_id"
+        ]
+      },
+      "risk": "destructive external Shutterstock DELETE /v2/images/collections/{{ record.image_collection_id }}; approval required",
+      "path_fields": [
+        "image_collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_image_collection_items",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/images/collections/{{ record.image_collection_id }}/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "image_collection_id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "image_collection_id",
+          "items"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}/items; approval required",
+      "path_fields": [
+        "image_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_video_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/videos/collections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/videos/collections; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "rename_video_collection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/videos/collections/{{ record.video_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "video_collection_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "video_collection_id",
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}; approval required",
+      "path_fields": [
+        "video_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_video_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/videos/collections/{{ record.video_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "video_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "video_collection_id"
+        ]
+      },
+      "risk": "destructive external Shutterstock DELETE /v2/videos/collections/{{ record.video_collection_id }}; approval required",
+      "path_fields": [
+        "video_collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_video_collection_items",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/videos/collections/{{ record.video_collection_id }}/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "video_collection_id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "video_collection_id",
+          "items"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}/items; approval required",
+      "path_fields": [
+        "video_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_audio_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/audio/collections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/audio/collections; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "rename_audio_collection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/audio/collections/{{ record.audio_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "audio_collection_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "audio_collection_id",
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}; approval required",
+      "path_fields": [
+        "audio_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_audio_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/audio/collections/{{ record.audio_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "audio_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "audio_collection_id"
+        ]
+      },
+      "risk": "destructive external Shutterstock DELETE /v2/audio/collections/{{ record.audio_collection_id }}; approval required",
+      "path_fields": [
+        "audio_collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_audio_collection_items",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/audio/collections/{{ record.audio_collection_id }}/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "audio_collection_id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "audio_collection_id",
+          "items"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}/items; approval required",
+      "path_fields": [
+        "audio_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_catalog_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/catalog/collections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/catalog/collections; approval required",
+      "body_type": "json"
+    },
+    {
+      "name": "update_catalog_collection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/catalog/collections/{{ record.catalog_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "catalog_collection_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "catalog_collection_id"
+        ]
+      },
+      "risk": "external Shutterstock PATCH /v2/catalog/collections/{{ record.catalog_collection_id }}; approval required",
+      "path_fields": [
+        "catalog_collection_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_catalog_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/catalog/collections/{{ record.catalog_collection_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "catalog_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "catalog_collection_id"
+        ]
+      },
+      "risk": "destructive external Shutterstock DELETE /v2/catalog/collections/{{ record.catalog_collection_id }}; approval required",
+      "path_fields": [
+        "catalog_collection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_catalog_collection_items",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v2/catalog/collections/{{ record.catalog_collection_id }}/items",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "catalog_collection_id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "catalog_collection_id",
+          "items"
+        ]
+      },
+      "risk": "external Shutterstock POST /v2/catalog/collections/{{ record.catalog_collection_id }}/items; approval required",
+      "path_fields": [
+        "catalog_collection_id"
+      ],
+      "body_type": "json"
+    }
+  ]
+}

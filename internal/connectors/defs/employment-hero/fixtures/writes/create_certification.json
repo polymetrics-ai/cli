@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "Working With Children",
+    "type": "check"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/certifications",
+    "body": {
+      "name": "Working With Children"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_certification_fixture_response"
+    }
+  }
+}

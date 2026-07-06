@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/conversations/list", "query": { "limit": "50" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "orgId": 42,
+          "status": "open",
+          "contactId": 201,
+          "inboxId": 7,
+          "participants": [],
+          "conversationTags": [],
+          "relatedPlaybookId": null,
+          "createdAt": 1767225601,
+          "updatedAt": 1767225601
+        },
+        {
+          "id": 102,
+          "orgId": 42,
+          "status": "closed",
+          "contactId": 202,
+          "inboxId": 7,
+          "participants": [],
+          "conversationTags": [],
+          "relatedPlaybookId": null,
+          "createdAt": 1767225602,
+          "updatedAt": 1767225602
+        }
+      ],
+      "pagination": { "more": true, "next": "cursor_fixture_page_2" }
+    }
+  }
+}

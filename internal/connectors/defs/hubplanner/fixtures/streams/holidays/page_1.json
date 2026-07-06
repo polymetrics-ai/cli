@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/holiday",
+    "query": { "page": "0", "limit": "200" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "holiday_fixture_1",
+        "name": "Fixture Holiday 1",
+        "date": "2026-12-25",
+        "start": "2026-01-01T00:00:00Z",
+        "end": "2026-01-08T00:00:00Z",
+        "holidayGroup": "default"
+      }
+    ]
+  }
+}

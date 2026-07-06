@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": "user_id_fixture",
+    "alternate_email_id": "alternate_email_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/user_id_fixture/alternateemails/alternate_email_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "code": 0,
+        "message": "SUCCESS"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "tbl_fixture_1",
+    "name": "Fixture Table Renamed"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/meta/bases/synthetic-conformance-value/tables/tbl_fixture_1",
+    "body": {
+      "name": "Fixture Table Renamed"
+    }
+  }
+}

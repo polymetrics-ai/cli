@@ -1,0 +1,19 @@
+{
+  "record": {
+    "enabled": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/1/notifications/email",
+    "body": {
+      "enabled": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "audienceIds": [
+      "audience_id_fixture"
+    ],
+    "criteria": {
+      "conditions": [
+        [
+          {
+            "id": "condition_fixture_id"
+          }
+        ]
+      ],
+      "filterContacts": true,
+      "contactConditions": [
+        "fixture"
+      ]
+    },
+    "triggerIdempotencyKey": "fixture",
+    "anyApp": true,
+    "scheduledAt": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/email/campaigns/id_fixture/send",
+    "body": {
+      "audienceIds": [
+        "audience_id_fixture"
+      ],
+      "criteria": {
+        "conditions": [
+          [
+            {
+              "id": "condition_fixture_id"
+            }
+          ]
+        ],
+        "filterContacts": true,
+        "contactConditions": [
+          "fixture"
+        ]
+      },
+      "triggerIdempotencyKey": "fixture",
+      "anyApp": true,
+      "scheduledAt": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

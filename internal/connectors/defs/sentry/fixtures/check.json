@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/api/0/projects/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "fixture_project_1", "slug": "backend", "name": "Backend", "platform": "python", "status": "active", "dateCreated": "2026-01-01T00:00:00Z", "isPublic": false, "isBookmarked": true }
+    ]
+  }
+}

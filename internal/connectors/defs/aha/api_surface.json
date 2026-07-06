@@ -1,0 +1,69 @@
+{
+  "api": "Aha! REST API v1 (https://www.aha.io/api)",
+  "docs": "https://www.aha.io/api",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: 8 read streams (features, products, ideas, releases, initiatives, goals, epics, users). Aha!'s real API v1 surface is very large (strategic models, custom fields, custom layouts, custom reports, comments, to-dos, requirements, teams, integrations, webhooks, knowledge-base pages, workflows, competitors, personas, creative briefs, capacity investments, account backups, and more); this pass covers every core planning/roadmap object list endpoint reachable as a flat, un-nested `GET /api/v1/<resource>` list under this dialect's existing page_number pagination and bearer auth, matching the shape all 6 pre-existing streams already share. Writes remain unimplemented (`capabilities.write: false`) — see the ENGINE_GAP recorded in docs.md: every Aha! mutation endpoint requires a resource-named JSON envelope wrapper (e.g. `{\"feature\": {...}}`, `{\"idea\": {...}}`) around the body, which this dialect's write-body construction (the record's own fields, minus path_fields, sent as the top-level JSON body) has no mechanism to express; declaring a write action here would silently send a wrong-shaped, envelope-less body that the real Aha! API would reject or misinterpret, which the conventions.md §5 meta-rule forbids shipping as a workaround.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/features", "covered_by": { "stream": "features" } },
+    { "method": "GET", "path": "/api/v1/features/{id}", "excluded": { "category": "duplicate_of", "reason": "single-feature detail; identical record shape to the features list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/releases/{release_id}/features", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: feature creation requires a `{\"feature\": {...}}` JSON envelope wrapper this dialect's flat write-body construction cannot express; see docs.md" } },
+    { "method": "PUT", "path": "/api/v1/features/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: feature update requires a `{\"feature\": {...}}` JSON envelope wrapper this dialect's flat write-body construction cannot express; see docs.md" } },
+    { "method": "DELETE", "path": "/api/v1/features/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; feature deletion is irreversible and out of scope" } },
+    { "method": "GET", "path": "/api/v1/features/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "comments are enumerable only per already-covered parent feature (or idea/initiative/etc.), requiring a fan_out hop not modeled this pass; Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/api/v1/features/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: comment creation requires a `{\"comment\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "GET", "path": "/api/v1/features/{id}/to-dos", "excluded": { "category": "out_of_scope", "reason": "to-dos are enumerable only per already-covered parent feature (or release/product/epic/idea), requiring a fan_out hop not modeled this pass; the flat top-level to-dos list endpoint's own real path could not be confirmed with sufficient confidence from available docs this pass" } },
+
+    { "method": "GET", "path": "/api/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/api/v1/products/{id}", "excluded": { "category": "duplicate_of", "reason": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: product creation requires a `{\"product\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/products/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: product update requires a `{\"product\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "GET", "path": "/api/v1/products/{id}/competitors", "excluded": { "category": "out_of_scope", "reason": "competitors are enumerable only per already-covered parent product (`/products/{id}/competitors`), not a flat top-level list; would require a fan_out hop not modeled this pass" } },
+    { "method": "GET", "path": "/api/v1/products/{id}/teams", "excluded": { "category": "out_of_scope", "reason": "teams are enumerable only per already-covered parent product, not a flat top-level list; would require a fan_out hop not modeled this pass" } },
+
+    { "method": "GET", "path": "/api/v1/ideas", "covered_by": { "stream": "ideas" } },
+    { "method": "GET", "path": "/api/v1/ideas/{id}", "excluded": { "category": "duplicate_of", "reason": "single-idea detail; identical record shape to the ideas list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products/{product_id}/ideas", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: idea creation requires a `{\"idea\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/ideas/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: idea update requires a `{\"idea\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "DELETE", "path": "/api/v1/ideas/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; idea deletion is irreversible and out of scope" } },
+    { "method": "POST", "path": "/api/v1/ideas/{id}/promote", "excluded": { "category": "out_of_scope", "reason": "promotes an idea to a feature/epic/initiative; a workflow state-transition action layered on the same envelope-wrapper ENGINE_GAP as other idea mutations" } },
+    { "method": "GET", "path": "/api/v1/ideas/{id}/comments", "excluded": { "category": "out_of_scope", "reason": "comments are enumerable only per already-covered parent idea, requiring a fan_out hop not modeled this pass" } },
+    { "method": "GET", "path": "/api/v1/ideas/{id}/votes", "excluded": { "category": "out_of_scope", "reason": "votes are enumerable only per already-covered parent idea, requiring a fan_out hop not modeled this pass" } },
+
+    { "method": "GET", "path": "/api/v1/releases", "covered_by": { "stream": "releases" } },
+    { "method": "GET", "path": "/api/v1/releases/{id}", "excluded": { "category": "duplicate_of", "reason": "single-release detail; identical record shape to the releases list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products/{product_id}/releases", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: release creation requires a `{\"release\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/products/{product_id}/releases/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: release update requires a `{\"release\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "DELETE", "path": "/api/v1/releases/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; release deletion is irreversible and out of scope" } },
+    { "method": "GET", "path": "/api/v1/releases/{id}/release_phases", "excluded": { "category": "out_of_scope", "reason": "release phases are enumerable only per already-covered parent release, requiring a fan_out hop not modeled this pass" } },
+
+    { "method": "GET", "path": "/api/v1/initiatives", "covered_by": { "stream": "initiatives" } },
+    { "method": "GET", "path": "/api/v1/initiatives/{id}", "excluded": { "category": "duplicate_of", "reason": "single-initiative detail; identical record shape to the initiatives list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products/{product_id}/initiatives", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: initiative creation requires a `{\"initiative\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/products/{product_id}/initiatives/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: initiative update requires a `{\"initiative\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "DELETE", "path": "/api/v1/initiatives/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; initiative deletion is irreversible and out of scope" } },
+
+    { "method": "GET", "path": "/api/v1/goals", "covered_by": { "stream": "goals" } },
+    { "method": "GET", "path": "/api/v1/goals/{id}", "excluded": { "category": "duplicate_of", "reason": "single-goal detail; identical record shape to the goals list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products/{product_id}/goals", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: goal creation requires a `{\"goal\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/products/{product_id}/goals/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: goal update requires a `{\"goal\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "DELETE", "path": "/api/v1/goals/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; goal deletion is irreversible and out of scope" } },
+
+    { "method": "GET", "path": "/api/v1/epics", "covered_by": { "stream": "epics" } },
+    { "method": "GET", "path": "/api/v1/epics/{id}", "excluded": { "category": "duplicate_of", "reason": "single-epic detail; identical record shape to the epics list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/api/v1/products/{product_id}/epics", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: epic creation requires a `{\"epic\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "PUT", "path": "/api/v1/epics/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: epic update requires a `{\"epic\": {...}}` JSON envelope wrapper this dialect cannot express" } },
+    { "method": "DELETE", "path": "/api/v1/epics/{id}", "excluded": { "category": "destructive_admin", "reason": "no allow-listed reverse-ETL delete writes; epic deletion is irreversible and out of scope" } },
+
+    { "method": "GET", "path": "/api/v1/users", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/api/v1/users/{id}", "excluded": { "category": "duplicate_of", "reason": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/api/v1/users/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "user account/role mutation (administrator flag, product-role assignment); treated as elevated-scope admin action, not an allow-listed reverse-ETL write" } },
+
+    { "method": "GET", "path": "/api/v1/strategic_models", "excluded": { "category": "out_of_scope", "reason": "strategic-planning canvas objects (visions/positionings) are a distinct planning-tool surface from the core roadmap objects this connector covers; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/api/v1/custom_fields", "excluded": { "category": "non_data_endpoint", "reason": "custom-field schema/definition metadata, not a syncable business-object stream" } },
+    { "method": "GET", "path": "/api/v1/integrations", "excluded": { "category": "non_data_endpoint", "reason": "configured third-party integration connections/credentials metadata, not a syncable business-object stream" } },
+    { "method": "GET", "path": "/api/v1/workflows", "excluded": { "category": "non_data_endpoint", "reason": "workflow-status definition metadata (the set of statuses a product's records can be in), not itself a syncable business-object stream" } },
+    { "method": "GET", "path": "/api/v1/teams", "excluded": { "category": "out_of_scope", "reason": "teams are enumerable only per parent product (`/products/{id}/teams`), not a flat top-level list; would require a fan_out hop not modeled this pass" } },
+    { "method": "GET", "path": "/api/v1/account/backups", "excluded": { "category": "non_data_endpoint", "reason": "account backup-file metadata/download handles, not a syncable business-object stream" } },
+    { "method": "GET", "path": "/api/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-user profile introspection, not a syncable object stream" } }
+  ]
+}

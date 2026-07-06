@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SearXNG Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your SearXNG instance's base URL (e.g. https://searx.example.com). No default: a SearXNG instance must be named explicitly."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional Bearer token for SearXNG instances behind an auth proxy, applied via streams.json base.auth's when-gated bearer spec (falls back to no auth when unset). Public instances are open and need no credentials."
+    },
+    "query": {
+      "type": "string",
+      "description": "Search terms for the 'search' stream (required for that stream) and appended to the reddit-scoped query for the 'reddit' stream."
+    }
+  }
+}

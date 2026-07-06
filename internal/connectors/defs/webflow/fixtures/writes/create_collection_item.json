@@ -1,0 +1,30 @@
+{
+  "record": {
+    "collection_id": "collection_fixture_1",
+    "fieldData": { "name": "Fixture Item", "slug": "fixture-item" },
+    "isArchived": false,
+    "isDraft": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/collections/collection_fixture_1/items",
+    "body": {
+      "fieldData": { "name": "Fixture Item", "slug": "fixture-item" },
+      "isArchived": false,
+      "isDraft": false
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {
+      "id": "item_fixture_1",
+      "cmsLocaleId": "locale_fixture_1",
+      "lastPublished": "2026-01-01T00:00:00.000Z",
+      "lastUpdated": "2026-01-01T00:00:00.000Z",
+      "createdOn": "2026-01-01T00:00:00.000Z",
+      "isArchived": false,
+      "isDraft": false,
+      "fieldData": { "name": "Fixture Item", "slug": "fixture-item" }
+    }
+  }
+}

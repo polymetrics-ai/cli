@@ -1,0 +1,18 @@
+{
+  "record": {
+    "enableEnduserEntryPoints": true,
+    "enableExportApps": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/okta-personal-settings/api/v1/edit-feature",
+    "body": {
+      "enableEnduserEntryPoints": true,
+      "enableExportApps": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

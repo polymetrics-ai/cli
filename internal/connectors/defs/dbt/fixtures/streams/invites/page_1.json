@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/invites/",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "account_id": 1,
+          "email_address": "fixture1@example.com",
+          "license_type": "developer",
+          "status": 1,
+          "type": "invite",
+          "group_ids": [1],
+          "redeemed_at": null,
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 2,
+          "account_id": 1,
+          "email_address": "fixture2@example.com",
+          "license_type": "read_only",
+          "status": 2,
+          "type": "invite",
+          "group_ids": [2],
+          "redeemed_at": "2026-01-02T00:00:00Z",
+          "created_at": "2026-01-01T01:00:00Z"
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 100, "offset": 0 }, "pagination": { "count": 2, "total_count": 2 } }
+    }
+  }
+}

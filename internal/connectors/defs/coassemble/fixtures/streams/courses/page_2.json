@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/headless/courses", "query": { "page": "2", "length": "20" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1021,
+        "title": "Compliance Refresher",
+        "description": "Annual compliance refresher.",
+        "key": "compliance-refresher",
+        "image": "https://cdn.coassemble.example/img/compliance.png",
+        "active": true,
+        "private": false,
+        "paid": false,
+        "identified": false,
+        "is_sharable": true
+      }
+    ]
+  }
+}

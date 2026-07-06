@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/replicas",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "replica_id": "replica_fixture_1",
+          "replica_name": "Fixture Replica 1",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_2",
+          "replica_name": "Fixture Replica 2",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_3",
+          "replica_name": "Fixture Replica 3",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_4",
+          "replica_name": "Fixture Replica 4",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_5",
+          "replica_name": "Fixture Replica 5",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_6",
+          "replica_name": "Fixture Replica 6",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_7",
+          "replica_name": "Fixture Replica 7",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_8",
+          "replica_name": "Fixture Replica 8",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_9",
+          "replica_name": "Fixture Replica 9",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_10",
+          "replica_name": "Fixture Replica 10",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_11",
+          "replica_name": "Fixture Replica 11",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_12",
+          "replica_name": "Fixture Replica 12",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_13",
+          "replica_name": "Fixture Replica 13",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_14",
+          "replica_name": "Fixture Replica 14",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_15",
+          "replica_name": "Fixture Replica 15",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_16",
+          "replica_name": "Fixture Replica 16",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_17",
+          "replica_name": "Fixture Replica 17",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_18",
+          "replica_name": "Fixture Replica 18",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_19",
+          "replica_name": "Fixture Replica 19",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_20",
+          "replica_name": "Fixture Replica 20",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_21",
+          "replica_name": "Fixture Replica 21",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_22",
+          "replica_name": "Fixture Replica 22",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_23",
+          "replica_name": "Fixture Replica 23",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_24",
+          "replica_name": "Fixture Replica 24",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_25",
+          "replica_name": "Fixture Replica 25",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_26",
+          "replica_name": "Fixture Replica 26",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_27",
+          "replica_name": "Fixture Replica 27",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_28",
+          "replica_name": "Fixture Replica 28",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_29",
+          "replica_name": "Fixture Replica 29",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_30",
+          "replica_name": "Fixture Replica 30",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_31",
+          "replica_name": "Fixture Replica 31",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_32",
+          "replica_name": "Fixture Replica 32",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_33",
+          "replica_name": "Fixture Replica 33",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_34",
+          "replica_name": "Fixture Replica 34",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_35",
+          "replica_name": "Fixture Replica 35",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_36",
+          "replica_name": "Fixture Replica 36",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_37",
+          "replica_name": "Fixture Replica 37",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_38",
+          "replica_name": "Fixture Replica 38",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_39",
+          "replica_name": "Fixture Replica 39",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_40",
+          "replica_name": "Fixture Replica 40",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_41",
+          "replica_name": "Fixture Replica 41",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_42",
+          "replica_name": "Fixture Replica 42",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_43",
+          "replica_name": "Fixture Replica 43",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_44",
+          "replica_name": "Fixture Replica 44",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_45",
+          "replica_name": "Fixture Replica 45",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_46",
+          "replica_name": "Fixture Replica 46",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_47",
+          "replica_name": "Fixture Replica 47",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_48",
+          "replica_name": "Fixture Replica 48",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_49",
+          "replica_name": "Fixture Replica 49",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_50",
+          "replica_name": "Fixture Replica 50",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_51",
+          "replica_name": "Fixture Replica 51",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_52",
+          "replica_name": "Fixture Replica 52",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_53",
+          "replica_name": "Fixture Replica 53",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_54",
+          "replica_name": "Fixture Replica 54",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_55",
+          "replica_name": "Fixture Replica 55",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_56",
+          "replica_name": "Fixture Replica 56",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_57",
+          "replica_name": "Fixture Replica 57",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_58",
+          "replica_name": "Fixture Replica 58",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_59",
+          "replica_name": "Fixture Replica 59",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_60",
+          "replica_name": "Fixture Replica 60",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_61",
+          "replica_name": "Fixture Replica 61",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_62",
+          "replica_name": "Fixture Replica 62",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_63",
+          "replica_name": "Fixture Replica 63",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_64",
+          "replica_name": "Fixture Replica 64",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_65",
+          "replica_name": "Fixture Replica 65",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_66",
+          "replica_name": "Fixture Replica 66",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_67",
+          "replica_name": "Fixture Replica 67",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_68",
+          "replica_name": "Fixture Replica 68",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_69",
+          "replica_name": "Fixture Replica 69",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_70",
+          "replica_name": "Fixture Replica 70",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_71",
+          "replica_name": "Fixture Replica 71",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_72",
+          "replica_name": "Fixture Replica 72",
+          "created_at": "2026-01-17T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_73",
+          "replica_name": "Fixture Replica 73",
+          "created_at": "2026-01-18T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_74",
+          "replica_name": "Fixture Replica 74",
+          "created_at": "2026-01-19T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_75",
+          "replica_name": "Fixture Replica 75",
+          "created_at": "2026-01-20T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_76",
+          "replica_name": "Fixture Replica 76",
+          "created_at": "2026-01-21T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_77",
+          "replica_name": "Fixture Replica 77",
+          "created_at": "2026-01-22T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_78",
+          "replica_name": "Fixture Replica 78",
+          "created_at": "2026-01-23T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_79",
+          "replica_name": "Fixture Replica 79",
+          "created_at": "2026-01-24T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_80",
+          "replica_name": "Fixture Replica 80",
+          "created_at": "2026-01-25T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_81",
+          "replica_name": "Fixture Replica 81",
+          "created_at": "2026-01-26T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_82",
+          "replica_name": "Fixture Replica 82",
+          "created_at": "2026-01-27T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_83",
+          "replica_name": "Fixture Replica 83",
+          "created_at": "2026-01-28T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_84",
+          "replica_name": "Fixture Replica 84",
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_85",
+          "replica_name": "Fixture Replica 85",
+          "created_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_86",
+          "replica_name": "Fixture Replica 86",
+          "created_at": "2026-01-03T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_87",
+          "replica_name": "Fixture Replica 87",
+          "created_at": "2026-01-04T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_88",
+          "replica_name": "Fixture Replica 88",
+          "created_at": "2026-01-05T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_89",
+          "replica_name": "Fixture Replica 89",
+          "created_at": "2026-01-06T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_90",
+          "replica_name": "Fixture Replica 90",
+          "created_at": "2026-01-07T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_91",
+          "replica_name": "Fixture Replica 91",
+          "created_at": "2026-01-08T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_92",
+          "replica_name": "Fixture Replica 92",
+          "created_at": "2026-01-09T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_93",
+          "replica_name": "Fixture Replica 93",
+          "created_at": "2026-01-10T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_94",
+          "replica_name": "Fixture Replica 94",
+          "created_at": "2026-01-11T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_95",
+          "replica_name": "Fixture Replica 95",
+          "created_at": "2026-01-12T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_96",
+          "replica_name": "Fixture Replica 96",
+          "created_at": "2026-01-13T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_97",
+          "replica_name": "Fixture Replica 97",
+          "created_at": "2026-01-14T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_98",
+          "replica_name": "Fixture Replica 98",
+          "created_at": "2026-01-15T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_99",
+          "replica_name": "Fixture Replica 99",
+          "created_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "replica_id": "replica_fixture_100",
+          "replica_name": "Fixture Replica 100",
+          "created_at": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

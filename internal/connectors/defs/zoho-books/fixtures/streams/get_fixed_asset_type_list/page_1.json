@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fixedassettypes",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "fixed_asset_types": [
+        {
+          "fixed_asset_type_id": "get_fixed_asset_type_list_fixture_1",
+          "fixed_asset_type_name": "get_fixed_asset_type_list fixture 1",
+          "updated_at": "2026-01-01T00:00:01Z",
+          "status": "active",
+          "id": "get_fixed_asset_type_list_fixture_1",
+          "name": "get_fixed_asset_type_list fixture 1"
+        }
+      ],
+      "page_context": {
+        "page": 1,
+        "per_page": 200,
+        "has_more_page": false
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customer",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "101",
+          "entityId": "CUST-101",
+          "companyName": "Fixture Customer 101",
+          "email": "fixture101@example.com",
+          "status": "active",
+          "lastModifiedDate": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "hasMore": false
+    }
+  }
+}

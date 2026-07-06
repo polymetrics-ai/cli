@@ -1,0 +1,37 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/entries", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 429, "class": "rate_limited", "hint": "public-apis.org rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "entries",
+      "path": "/entries",
+      "records": { "path": "entries" },
+      "computed_fields": {
+        "id": "{{ coalesce record.API record.api }}",
+        "api": "{{ coalesce record.API record.api }}",
+        "description": "{{ coalesce record.Description record.description }}",
+        "category": "{{ coalesce record.Category record.category }}",
+        "auth": "{{ coalesce record.Auth record.auth }}",
+        "https": "{{ coalesce record.HTTPS record.https }}",
+        "cors": "{{ coalesce record.Cors record.cors }}",
+        "link": "{{ coalesce record.Link record.link }}"
+      },
+      "schema": "schemas/entries.json"
+    }
+  ]
+}

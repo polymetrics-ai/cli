@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v1/campaigns", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        { "id": "campaign_fixture_1", "name": "Fixture Campaign", "email": null, "status": "active" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "Fixture New Client",
+    "email": "fixture-new-client@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/clients",
+    "body": {
+      "name": "Fixture New Client",
+      "email": "fixture-new-client@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "client_fixture_new",
+      "name": "Fixture New Client"
+    }
+  }
+}

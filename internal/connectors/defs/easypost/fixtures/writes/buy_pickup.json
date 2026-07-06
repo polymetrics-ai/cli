@@ -1,0 +1,9 @@
+{
+  "record": { "id": "pickup_fixture_1", "carrier": "USPS", "service": "NextDay" },
+  "expect": {
+    "method": "POST",
+    "path": "/pickups/pickup_fixture_1/buy",
+    "body": { "carrier": "USPS", "service": "NextDay" }
+  },
+  "response": { "status": 200, "body": { "id": "pickup_fixture_1", "object": "Pickup", "status": "scheduled" } }
+}

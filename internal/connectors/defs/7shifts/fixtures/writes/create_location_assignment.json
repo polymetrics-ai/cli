@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": 1001,
+    "location_id": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/location_assignments",
+    "body": {
+      "location_id": 1001
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

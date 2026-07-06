@@ -1,0 +1,21 @@
+{
+  "record": {
+    "orderId": "order_fixture_1",
+    "sendOrderFulfilledEmail": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/sites/synthetic-conformance-value/orders/order_fixture_1/fulfill",
+    "body": {
+      "sendOrderFulfilledEmail": false
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orderId": "order_fixture_1",
+      "status": "fulfilled",
+      "fulfilledOn": "2026-01-02T00:00:00.000Z"
+    }
+  }
+}

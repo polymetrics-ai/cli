@@ -1,0 +1,8 @@
+{
+  "name": "acme-github-range-cursor-offset",
+  "display_name": "Acme GitHub Range Cursor Offset",
+  "description": "conformance v2 self-test bundle for param_format github_date_range fed a non-UTC-offset RFC3339 STRING incremental cursor field (synthetic, not a real API); locks in N1 (wave0 REVIEW.md)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": false, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
+}

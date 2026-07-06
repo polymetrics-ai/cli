@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/subscriptions", "query": { "count": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "offset": 0,
+      "data": [
+        {
+          "subscription_id": "sub_fixture_1",
+          "object": "subscription",
+          "occurred": 1767225600,
+          "customer_id": "cus_fixture_1",
+          "status": "active",
+          "amount": "10.00",
+          "currency": "usd",
+          "interval": "month",
+          "current_period_start": 1767225600,
+          "current_period_end": 1769904000,
+          "product_id": "prod_fixture_1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "spreadsheet_id": "234",
+    "prospect_id": "345",
+    "id": "123",
+    "content": "Fixture content",
+    "activity_id": "42"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/spreadsheets/234/rows/345/comments/123",
+    "body": {
+      "content": "Fixture content",
+      "activity_id": "42"
+    }
+  }
+}

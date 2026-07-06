@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "level": { "type": ["number", "null"] },
+    "parent_id": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

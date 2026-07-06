@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intercom Company",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "company_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["integer", "null"] },
+    "last_request_at": { "type": ["integer", "null"] },
+    "monthly_spend": { "type": ["number", "null"] },
+    "session_count": { "type": ["integer", "null"] },
+    "user_count": { "type": ["integer", "null"] },
+    "size": { "type": ["integer", "null"] },
+    "website": { "type": ["string", "null"] },
+    "industry": { "type": ["string", "null"] }
+  },
+  "required": ["id"]
+}

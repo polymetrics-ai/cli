@@ -1,0 +1,28 @@
+{
+  "record": {
+    "connection": {},
+    "safety": {},
+    "signature": {},
+    "optOut": {},
+    "rampUp": {},
+    "tags": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/email-accounts",
+    "body": {
+      "connection": {},
+      "safety": {},
+      "signature": {},
+      "optOut": {},
+      "rampUp": {},
+      "tags": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

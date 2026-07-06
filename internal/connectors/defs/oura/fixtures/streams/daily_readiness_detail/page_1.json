@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_readiness/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "daily_readiness_detail_fixture_1",
+      "contributors": {},
+      "day": "2026-01-01",
+      "score": 80,
+      "temperature_deviation": 80.5,
+      "temperature_trend_deviation": 80.5,
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    }
+  }
+}

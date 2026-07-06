@@ -1,0 +1,24 @@
+{
+  "name": "fillout",
+  "display_name": "Fillout",
+  "description": "Reads Fillout forms and manages webhooks/submission deletion through the Fillout REST API. Question definitions and submissions LIST remain on the legacy connector pending an engine fan_out fallback-mode gap (see docs.md Known limits).",
+  "integration_type": "api",
+  "docs_url": "https://www.fillout.com/help/fillout-rest-api",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Fillout API read of form metadata",
+    "write": "creates/removes outbound webhook subscriptions and deletes individual form submissions; external mutation, approval required",
+    "approval": "required for write actions; none for read"
+  }
+}

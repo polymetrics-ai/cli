@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/members/me/boards"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "board_fixture_1",
+        "name": "Fixture Board One",
+        "desc": "fixture board",
+        "closed": false,
+        "idOrganization": "org_fixture_1",
+        "url": "https://trello.com/b/fixture1",
+        "shortUrl": "https://trello.com/b/f1",
+        "dateLastActivity": "2026-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "board_fixture_2",
+        "name": "Fixture Board Two",
+        "desc": "",
+        "closed": false,
+        "idOrganization": "org_fixture_1",
+        "url": "https://trello.com/b/fixture2",
+        "shortUrl": "https://trello.com/b/f2",
+        "dateLastActivity": "2026-01-02T00:00:00.000Z"
+      }
+    ]
+  }
+}

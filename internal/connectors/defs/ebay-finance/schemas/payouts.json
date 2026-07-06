@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payouts",
+  "type": "object",
+  "x-primary-key": ["payoutId"],
+  "x-cursor-field": "payoutDate",
+  "required": ["payoutId"],
+  "properties": {
+    "payoutId": { "type": "string" },
+    "payoutStatus": { "type": ["string", "null"] },
+    "payoutStatusDescription": { "type": ["string", "null"] },
+    "payoutDate": { "type": ["string", "null"] },
+    "transactionCount": { "type": ["integer", "null"] },
+    "amount_value": { "type": ["string", "null"] },
+    "amount_currency": { "type": ["string", "null"] },
+    "payoutInstrument_nickname": { "type": ["string", "null"] },
+    "payoutInstrument_accountLastFourDigits": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,1100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.bearer_token }}",
+        "when": "{{ secrets.bearer_token }}"
+      },
+      {
+        "mode": "api_key_header",
+        "header": "X-Api-Key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v1/people",
+      "query": {
+        "limit": "1",
+        "page": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "reply.io api key is missing or invalid; re-run pm credentials add reply-io"
+      },
+      {
+        "status": 403,
+        "hint": "reply.io account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "reply.io rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "people",
+      "path": "/v1/people",
+      "schema": "schemas/people.json",
+      "computed_fields": {
+        "stream": "people"
+      },
+      "records": {
+        "path": ""
+      },
+      "query": {
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.email }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "campaigns",
+      "path": "/v1/campaigns",
+      "schema": "schemas/campaigns.json",
+      "computed_fields": {
+        "stream": "campaigns"
+      },
+      "records": {
+        "path": ""
+      },
+      "query": {
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.email }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "tasks",
+      "path": "/v1/tasks",
+      "schema": "schemas/tasks.json",
+      "computed_fields": {
+        "stream": "tasks"
+      },
+      "records": {
+        "path": ""
+      },
+      "query": {
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.email }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "email_accounts",
+      "path": "/v1/emailAccounts",
+      "schema": "schemas/email_accounts.json",
+      "computed_fields": {
+        "stream": "email_accounts"
+      },
+      "records": {
+        "path": ""
+      },
+      "query": {
+        "updated_after": {
+          "template": "{{ config.updated_after }}",
+          "omit_when_absent": true
+        },
+        "created_after": {
+          "template": "{{ config.created_after }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.email }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "list_knowledge_bases",
+      "path": "/v3/ai-sdr/knowledge-bases",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_knowledge_bases.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_knowledge_base",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_knowledge_base.json"
+    },
+    {
+      "name": "list_knowledge_base_links",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/links",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_knowledge_base_links.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_knowledge_base_documents",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/documents",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_knowledge_base_documents.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_reply_handlers",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/reply-handlers",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_reply_handlers.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_reply_handler",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/reply-handlers/{{ config.reply_handler_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reply_handler.json"
+    },
+    {
+      "name": "list_reengagement_cards",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/reengagement-cards",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_reengagement_cards.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_reengagement_card",
+      "path": "/v3/ai-sdr/knowledge-bases/{{ config.knowledge_base_id }}/reengagement-cards/{{ config.reengagement_card_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_reengagement_card.json"
+    },
+    {
+      "name": "list_offers",
+      "path": "/v3/ai-sdr/offers",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_offers.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_offer",
+      "path": "/v3/ai-sdr/offers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_offer.json"
+    },
+    {
+      "name": "list_playbooks",
+      "path": "/v3/ai-sdr/playbooks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_playbooks.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_playbook",
+      "path": "/v3/ai-sdr/playbooks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_playbook.json"
+    },
+    {
+      "name": "get_contact_accounts",
+      "path": "/v3/contact-accounts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_accounts.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_account_by_id",
+      "path": "/v3/contact-accounts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_account_by_id.json"
+    },
+    {
+      "name": "get_contact_account_contacts",
+      "path": "/v3/contact-accounts/{{ config.id }}/contacts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_account_contacts.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_account_lists",
+      "path": "/v3/contact-account-lists",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_account_lists.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_account_list_by_id",
+      "path": "/v3/contact-account-lists/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_account_list_by_id.json"
+    },
+    {
+      "name": "get_background_jobs",
+      "path": "/v3/background-jobs",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_background_jobs.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_background_job_by_id",
+      "path": "/v3/background-jobs/{{ config.jobId }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_background_job_by_id.json"
+    },
+    {
+      "name": "get_contacts",
+      "path": "/v3/contacts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contacts.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_by_id",
+      "path": "/v3/contacts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_by_id.json"
+    },
+    {
+      "name": "get_contact_sequences",
+      "path": "/v3/contacts/{{ config.id }}/sequences",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_sequences.json"
+    },
+    {
+      "name": "get_contact_activities",
+      "path": "/v3/contacts/{{ config.id }}/activities",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_activities.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_statuses",
+      "path": "/v3/contacts/{{ config.id }}/statuses",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_statuses.json"
+    },
+    {
+      "name": "get_blacklist_domain_rules",
+      "path": "/v3/contact-blacklist-rules/domains",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_domain_rules.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_blacklist_domain_rule_by_id",
+      "path": "/v3/contact-blacklist-rules/domains/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_domain_rule_by_id.json"
+    },
+    {
+      "name": "get_blacklist_email_rules",
+      "path": "/v3/contact-blacklist-rules/emails",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_email_rules.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_blacklist_email_rule_by_id",
+      "path": "/v3/contact-blacklist-rules/emails/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_email_rule_by_id.json"
+    },
+    {
+      "name": "get_blacklist_email_exception_rules",
+      "path": "/v3/contact-blacklist-rules/email-exceptions",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_email_exception_rules.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_blacklist_email_exception_rule_by_id",
+      "path": "/v3/contact-blacklist-rules/email-exceptions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_blacklist_email_exception_rule_by_id.json"
+    },
+    {
+      "name": "get_contact_lists",
+      "path": "/v3/contact-lists",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_lists.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_contact_list_by_id",
+      "path": "/v3/contact-lists/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_list_by_id.json"
+    },
+    {
+      "name": "get_contact_lists_for_contact",
+      "path": "/v3/contacts/{{ config.id }}/lists",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_contact_lists_for_contact.json"
+    },
+    {
+      "name": "get_custom_fields",
+      "path": "/v3/custom-fields",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_custom_fields.json"
+    },
+    {
+      "name": "get_custom_field_by_id",
+      "path": "/v3/custom-fields/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_custom_field_by_id.json"
+    },
+    {
+      "name": "list_email_accounts",
+      "path": "/v3/email-accounts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_email_accounts.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_email_account",
+      "path": "/v3/email-accounts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_email_account.json"
+    },
+    {
+      "name": "connect_gmail_account",
+      "path": "/v3/email-accounts/connect/gmail",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/connect_gmail_account.json"
+    },
+    {
+      "name": "connect_office365_account",
+      "path": "/v3/email-accounts/connect/office-365",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/connect_office365_account.json"
+    },
+    {
+      "name": "list_email_account_tags",
+      "path": "/v3/email-accounts/tags",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_email_account_tags.json"
+    },
+    {
+      "name": "list_email_templates",
+      "path": "/v3/email-templates",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_email_templates.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_email_template",
+      "path": "/v3/email-templates/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_email_template.json"
+    },
+    {
+      "name": "get_email_template_variables",
+      "path": "/v3/email-templates/variables",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_email_template_variables.json"
+    },
+    {
+      "name": "list_email_template_folders",
+      "path": "/v3/email-template-folders",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_email_template_folders.json"
+    },
+    {
+      "name": "get_email_template_folder",
+      "path": "/v3/email-template-folders/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_email_template_folder.json"
+    },
+    {
+      "name": "list_holiday_calendars",
+      "path": "/v3/holiday-calendars",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_holiday_calendars.json"
+    },
+    {
+      "name": "get_holiday_calendar",
+      "path": "/v3/holiday-calendars/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_holiday_calendar.json"
+    },
+    {
+      "name": "list_inbox_threads",
+      "path": "/v3/inbox/threads",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbox_threads.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_inbox_thread",
+      "path": "/v3/inbox/threads/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_inbox_thread.json"
+    },
+    {
+      "name": "list_inbox_thread_messages",
+      "path": "/v3/inbox/threads/{{ config.id }}/messages",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbox_thread_messages.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_inbox_categories",
+      "path": "/v3/inbox/threads/categories",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_inbox_categories.json"
+    },
+    {
+      "name": "get_inbox_category",
+      "path": "/v3/inbox/threads/categories/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_inbox_category.json"
+    },
+    {
+      "name": "list_linked_in_accounts",
+      "path": "/v3/linkedin-accounts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_linked_in_accounts.json"
+    },
+    {
+      "name": "get_linked_in_account",
+      "path": "/v3/linkedin-accounts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_linked_in_account.json"
+    },
+    {
+      "name": "list_pending_linked_in_accounts",
+      "path": "/v3/linkedin-accounts/pending",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_pending_linked_in_accounts.json"
+    },
+    {
+      "name": "list_schedules",
+      "path": "/v3/schedules",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_schedules.json"
+    },
+    {
+      "name": "get_schedule",
+      "path": "/v3/schedules/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_schedule.json"
+    },
+    {
+      "name": "list_schedule_holiday_calendars",
+      "path": "/v3/schedules/{{ config.id }}/holiday-calendars",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_schedule_holiday_calendars.json"
+    },
+    {
+      "name": "get_sequences",
+      "path": "/v3/sequences",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequences.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_sequence_by_id",
+      "path": "/v3/sequences/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_by_id.json"
+    },
+    {
+      "name": "get_sequence_contacts",
+      "path": "/v3/sequences/{{ config.id }}/contacts",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_contacts.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_sequence_contact_by_id",
+      "path": "/v3/sequences/{{ config.id }}/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_contact_by_id.json"
+    },
+    {
+      "name": "get_sequence_contacts_state",
+      "path": "/v3/sequences/{{ config.id }}/contacts/state",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_contacts_state.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_sequence_email_accounts",
+      "path": "/v3/sequences/{{ config.id }}/email-accounts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_email_accounts.json"
+    },
+    {
+      "name": "get_sequence_folders",
+      "path": "/v3/sequence-folders",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_folders.json"
+    },
+    {
+      "name": "get_sequence_folder_by_id",
+      "path": "/v3/sequence-folders/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_folder_by_id.json"
+    },
+    {
+      "name": "get_folder_sequences",
+      "path": "/v3/sequence-folders/{{ config.id }}/sequences",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_folder_sequences.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_sequence_linked_in_accounts",
+      "path": "/v3/sequences/{{ config.id }}/linkedin-accounts",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_linked_in_accounts.json"
+    },
+    {
+      "name": "get_sequence_steps",
+      "path": "/v3/sequences/{{ config.id }}/steps",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_steps.json"
+    },
+    {
+      "name": "get_sequence_step_by_id",
+      "path": "/v3/sequences/{{ config.id }}/steps/{{ config.step_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_step_by_id.json"
+    },
+    {
+      "name": "get_sequence_step_variants",
+      "path": "/v3/sequences/{{ config.id }}/steps/{{ config.step_id }}/variants",
+      "records": {
+        "path": ""
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_step_variants.json"
+    },
+    {
+      "name": "get_condition_properties",
+      "path": "/v3/sequences/steps/contact-filter-properties",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_condition_properties.json"
+    },
+    {
+      "name": "get_sequence_templates",
+      "path": "/v3/sequence-templates",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_sequence_templates.json"
+    },
+    {
+      "name": "get_settings",
+      "path": "/v3/settings",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_settings.json"
+    },
+    {
+      "name": "get_tasks",
+      "path": "/v3/tasks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_tasks.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_task_by_id",
+      "path": "/v3/tasks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_task_by_id.json"
+    },
+    {
+      "name": "whoami",
+      "path": "/v3/whoami",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/whoami.json"
+    },
+    {
+      "name": "list_webhooks",
+      "path": "/v3/webhooks",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/list_webhooks.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_webhook_events",
+      "path": "/v3/webhooks/events",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_webhook_events.json"
+    },
+    {
+      "name": "get_webhook_by_id",
+      "path": "/v3/webhooks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_webhook_by_id.json"
+    },
+    {
+      "name": "get_webhook_logs",
+      "path": "/v3/webhooks/{{ config.id }}/logs",
+      "records": {
+        "path": "items"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/get_webhook_logs.json",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "top",
+        "offset_param": "skip",
+        "page_size": 100
+      }
+    }
+  ]
+}

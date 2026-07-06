@@ -12,7 +12,9 @@ type BadgeVariant =
   | 'support-community'
   | 'type-source'
   | 'type-destination'
+  | 'capability'
   | 'release-generally_available'
+  | 'release-ga'
   | 'release-beta'
   | 'release-alpha'
   | 'release-custom'
@@ -33,7 +35,11 @@ const variantClasses: Record<BadgeVariant, string> = {
     'bg-surface-1 text-text-secondary border border-line-structure',
   'type-destination':
     'bg-surface-2 text-text-secondary border border-line-structure',
+  capability:
+    '[background:rgba(52,211,153,0.10)] text-line-cta [border-color:rgba(52,211,153,0.32)] border',
   'release-generally_available':
+    '[background:rgba(52,211,153,0.12)] text-line-cta [border-color:rgba(52,211,153,0.4)] border',
+  'release-ga':
     '[background:rgba(52,211,153,0.12)] text-line-cta [border-color:rgba(52,211,153,0.4)] border',
   /* Spec §4: beta → rgba(251,191,36,0.12) bg, rgba(251,191,36,0.4) border, #78350f text */
   'release-beta':
@@ -71,7 +77,7 @@ Badge.displayName = 'Badge';
 // ── Helpers to resolve variant from data ──────────────────────────────────
 
 export function statusVariant(status: string): BadgeVariant {
-  return status === 'enabled' ? 'status-enabled' : 'status-planned';
+  return status === 'enabled' || status === 'available' ? 'status-enabled' : 'status-planned';
 }
 
 export function supportVariant(level: string): BadgeVariant {

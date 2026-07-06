@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tickets",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "requester": { "type": ["object", "null"] },
+    "subject": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "description_html": { "type": ["string", "null"] },
+    "priority": { "type": ["object", "null"] },
+    "status": { "type": ["object", "null"] },
+    "template_id": { "type": ["integer", "null"] },
+    "custom_fields": { "type": ["object", "null"] },
+    "source": { "type": ["object", "null"] },
+    "agent": { "type": ["object", "null"] },
+    "team": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"], "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "deleted_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "integer" },
+    "createdAt": { "type": ["string", "null"] },
+    "lastModifiedAt": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "isEmailVerified": { "type": ["boolean", "null"] },
+    "customerNumber": { "type": ["string", "null"] },
+    "addresses": { "type": ["array", "null"] },
+    "authenticationMode": { "type": ["string", "null"] }
+  }
+}

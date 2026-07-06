@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "portfolios",
+  "type": "object",
+  "x-primary-key": ["portfolio_id"],
+  "required": ["portfolio_id"],
+  "properties": {
+    "portfolio_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "in_budget": { "type": ["boolean", "null"] }
+  }
+}

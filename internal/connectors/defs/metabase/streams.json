@@ -1,0 +1,66 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "cards",
+      "method": "GET",
+      "path": "/__legacy_hook/cards",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/cards.json"
+    },
+    {
+      "name": "dashboards",
+      "method": "GET",
+      "path": "/__legacy_hook/dashboards",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/dashboards.json"
+    },
+    {
+      "name": "collections",
+      "method": "GET",
+      "path": "/__legacy_hook/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/collections.json"
+    },
+    {
+      "name": "databases",
+      "method": "GET",
+      "path": "/__legacy_hook/databases",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/databases.json"
+    },
+    {
+      "name": "users",
+      "method": "GET",
+      "path": "/__legacy_hook/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

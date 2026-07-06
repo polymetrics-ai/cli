@@ -1,0 +1,67 @@
+{
+  "api": "Twilio TaskRouter API v1 (https://taskrouter.twilio.com/v1)",
+  "docs": "https://www.twilio.com/docs/taskrouter/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read-only streams (workers, tasks, activities, task_queues, workflows) only, matching internal/connectors/twilio-taskrouter's exact endpoint set; the full TaskRouter surface (events, reservations, statistics, workspace/queue/workflow mutation) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Workers",
+      "covered_by": {
+        "stream": "workers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Tasks",
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Activities",
+      "covered_by": {
+        "stream": "activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/TaskQueues",
+      "covered_by": {
+        "stream": "task_queues"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Workflows",
+      "covered_by": {
+        "stream": "workflows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/Workspaces/{workspace_sid}/Tasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/Workspaces/{workspace_sid}/Statistics",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "aggregated workspace statistics snapshot, not a syncable object stream"
+      }
+    }
+  ]
+}

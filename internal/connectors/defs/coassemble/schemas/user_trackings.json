@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user_trackings",
+  "type": "object",
+  "x-primary-key": ["identifier"],
+  "required": ["identifier"],
+  "properties": {
+    "identifier": { "type": "string" },
+    "clientIdentifier": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "avatar": { "type": ["string", "null"] },
+    "totals": { "type": ["object", "null"] },
+    "trackings": { "type": ["array", "null"] }
+  }
+}

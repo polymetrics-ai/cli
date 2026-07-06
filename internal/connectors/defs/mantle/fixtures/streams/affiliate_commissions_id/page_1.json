@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/affiliate_commissions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "affiliateCommission": {
+        "id": "id_fixture",
+        "affiliateId": "affiliate_id_fixture",
+        "affiliateProgramId": "affiliate_program_id_fixture",
+        "affiliateReferralId": "affiliate_referral_id_fixture",
+        "transactionId": "transaction_id_fixture",
+        "appInstallationId": "app_installation_id_fixture",
+        "type": "fixture",
+        "amount": 1.23,
+        "date": "2026-01-01T00:00:00Z",
+        "cancelled": true,
+        "cancelReason": "fixture",
+        "payoutId": "payout_id_fixture",
+        "name": "fixture",
+        "notes": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

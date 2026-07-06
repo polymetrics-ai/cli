@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/synthetic-conformance-value",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "event_fixture_1",
+      "name": "Fixture event",
+      "title": "Fixture event",
+      "sku": "SKU-FIXTURE-1",
+      "email": "fixture@example.invalid",
+      "status": "fixture",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations/synthetic-conformance-value/installations/synthetic-conformance-value/spaces/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "externalIds": [
+        {
+          "id": "get_integration_space_installation_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_integration_space_installation",
+          "name": "Fixture get_integration_space_installation",
+          "status": "active",
+          "operation_id": "getIntegrationSpaceInstallation"
+        }
+      ]
+    }
+  }
+}

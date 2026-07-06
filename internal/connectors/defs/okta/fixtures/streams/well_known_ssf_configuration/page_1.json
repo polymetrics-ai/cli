@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/.well-known/ssf-configuration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "authorization_schemes": [
+        {
+          "spec_urn": "https://example.invalid/fixture"
+        }
+      ],
+      "configuration_endpoint": "https://example.invalid/fixture",
+      "default_subjects": "ALL",
+      "delivery_methods_supported": [
+        "https://example.invalid/fixture"
+      ],
+      "issuer": "issuer_fixture",
+      "jwks_uri": "https://example.invalid/fixture",
+      "spec_version": "spec_version_fixture",
+      "verification_endpoint": "https://example.invalid/fixture"
+    }
+  }
+}

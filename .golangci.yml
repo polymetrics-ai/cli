@@ -1,0 +1,22 @@
+version: "2"
+
+# Scope note: this config enables a minimal, non-weakened linter set. The
+# Makefile `lint` target applies it to the declarative connector architecture
+# packages.
+
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+    - misspell
+
+  exclusions:
+    generated: strict
+    paths:
+      - '(^|/)[^/]+_gen\.go$'

@@ -1,0 +1,23 @@
+{
+  "name": "perk",
+  "display_name": "Perk",
+  "description": "Reads Perk/TravelPerk trips and invoices through read-only REST list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://api.travelperk.com",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Perk/TravelPerk API read of trip and invoice data",
+    "approval": "none; read-only, no writes"
+  }
+}

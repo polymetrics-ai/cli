@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/record-progress/steps",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "records": [
+          {
+            "record_id": "rec_fixture_1",
+            "steps": [
+              {
+                "step_id": "step_fixture_1",
+                "status": "complete"
+              }
+            ],
+            "progress": 100
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

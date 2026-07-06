@@ -1,0 +1,73 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.username }}", "password": "{{ secrets.password }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "nextCursor"
+    },
+    "check": { "method": "GET", "path": "/datasets", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "surveycto username/password is missing or invalid; re-run pm credentials add surveycto" },
+      { "status": 403, "hint": "surveycto credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "surveycto rate limit exceeded (30 req/min per server); the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "datasets",
+      "path": "/datasets",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "schema": "schemas/datasets.json"
+    },
+    {
+      "name": "dataset_records",
+      "path": "/datasets/{{ fanout.id }}/records",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/datasets", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "dataset_id" },
+        "stamp_field": "dataset_id"
+      },
+      "schema": "schemas/dataset_records.json"
+    },
+    {
+      "name": "submissions",
+      "path": "/forms/{{ config.form_id }}/submissions",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.submissionId }}",
+        "form_id": "{{ config.form_id }}"
+      },
+      "schema": "schemas/submissions.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "limit": "1000" },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

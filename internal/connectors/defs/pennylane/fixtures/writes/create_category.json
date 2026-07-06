@@ -1,0 +1,7 @@
+{
+  "record": { "label": "Fixture Category", "category_group_id": 10 },
+  "expect": {
+    "method": "POST",
+    "path": "/categories"
+  }
+}

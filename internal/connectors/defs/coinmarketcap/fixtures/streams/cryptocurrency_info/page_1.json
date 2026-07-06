@@ -1,0 +1,43 @@
+{
+  "request": { "method": "GET", "path": "/v2/cryptocurrency/info" },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": { "timestamp": "2026-01-01T00:00:00.000Z", "error_code": 0, "error_message": null, "credit_count": 1 },
+      "data": {
+        "1": {
+          "id": 1,
+          "name": "Fixture Coin One",
+          "symbol": "FIX1",
+          "slug": "fixture-coin-one",
+          "category": "coin",
+          "description": "Deterministic fixture record.",
+          "logo": "https://example.com/fixture1.png",
+          "subreddit": "fixturecoin",
+          "notice": "",
+          "tags": ["mineable"],
+          "platform": null,
+          "date_added": "2013-04-28T00:00:00.000Z",
+          "date_launched": "2013-04-28T00:00:00.000Z",
+          "urls": { "website": ["https://example.com"] }
+        },
+        "1027": {
+          "id": 1027,
+          "name": "Fixture Coin Two",
+          "symbol": "FIX2",
+          "slug": "fixture-coin-two",
+          "category": "coin",
+          "description": "Deterministic fixture record.",
+          "logo": "https://example.com/fixture2.png",
+          "subreddit": "fixturecointwo",
+          "notice": "",
+          "tags": ["pos"],
+          "platform": null,
+          "date_added": "2015-07-30T00:00:00.000Z",
+          "date_launched": "2015-07-30T00:00:00.000Z",
+          "urls": { "website": ["https://example.com/2"] }
+        }
+      }
+    }
+  }
+}

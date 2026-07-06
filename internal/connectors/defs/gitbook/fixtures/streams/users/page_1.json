@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/user" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "user_fixture_1",
+      "displayName": "Fixture User",
+      "email": "fixture1@example.com",
+      "photoURL": "https://gitbook.com/fixture-photo.png"
+    }
+  }
+}

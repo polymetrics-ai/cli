@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/surveypackage",
+    "query": {
+      "page": "1",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "survey_packages": [
+          {
+            "id": "pkg_fixture_1",
+            "name": "Baseline Package",
+            "description": "Baseline surveys",
+            "expire_after_hours": 72,
+            "auto_send": true,
+            "auto_lock_on_finish": false
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

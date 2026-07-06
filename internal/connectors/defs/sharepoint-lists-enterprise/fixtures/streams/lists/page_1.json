@@ -1,0 +1,617 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sites/fixture-site/lists",
+    "query": {
+      "$top": "100",
+      "$skip": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        {
+          "id": "list_1",
+          "name": "List1",
+          "displayName": "List 1",
+          "lastModifiedDateTime": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "list_2",
+          "name": "List2",
+          "displayName": "List 2",
+          "lastModifiedDateTime": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "list_3",
+          "name": "List3",
+          "displayName": "List 3",
+          "lastModifiedDateTime": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "list_4",
+          "name": "List4",
+          "displayName": "List 4",
+          "lastModifiedDateTime": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "list_5",
+          "name": "List5",
+          "displayName": "List 5",
+          "lastModifiedDateTime": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "list_6",
+          "name": "List6",
+          "displayName": "List 6",
+          "lastModifiedDateTime": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "list_7",
+          "name": "List7",
+          "displayName": "List 7",
+          "lastModifiedDateTime": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "list_8",
+          "name": "List8",
+          "displayName": "List 8",
+          "lastModifiedDateTime": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "list_9",
+          "name": "List9",
+          "displayName": "List 9",
+          "lastModifiedDateTime": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "list_10",
+          "name": "List10",
+          "displayName": "List 10",
+          "lastModifiedDateTime": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "list_11",
+          "name": "List11",
+          "displayName": "List 11",
+          "lastModifiedDateTime": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "list_12",
+          "name": "List12",
+          "displayName": "List 12",
+          "lastModifiedDateTime": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "list_13",
+          "name": "List13",
+          "displayName": "List 13",
+          "lastModifiedDateTime": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "list_14",
+          "name": "List14",
+          "displayName": "List 14",
+          "lastModifiedDateTime": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "list_15",
+          "name": "List15",
+          "displayName": "List 15",
+          "lastModifiedDateTime": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "list_16",
+          "name": "List16",
+          "displayName": "List 16",
+          "lastModifiedDateTime": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "list_17",
+          "name": "List17",
+          "displayName": "List 17",
+          "lastModifiedDateTime": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "list_18",
+          "name": "List18",
+          "displayName": "List 18",
+          "lastModifiedDateTime": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "list_19",
+          "name": "List19",
+          "displayName": "List 19",
+          "lastModifiedDateTime": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "list_20",
+          "name": "List20",
+          "displayName": "List 20",
+          "lastModifiedDateTime": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "list_21",
+          "name": "List21",
+          "displayName": "List 21",
+          "lastModifiedDateTime": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "list_22",
+          "name": "List22",
+          "displayName": "List 22",
+          "lastModifiedDateTime": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "list_23",
+          "name": "List23",
+          "displayName": "List 23",
+          "lastModifiedDateTime": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "list_24",
+          "name": "List24",
+          "displayName": "List 24",
+          "lastModifiedDateTime": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "list_25",
+          "name": "List25",
+          "displayName": "List 25",
+          "lastModifiedDateTime": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "list_26",
+          "name": "List26",
+          "displayName": "List 26",
+          "lastModifiedDateTime": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "list_27",
+          "name": "List27",
+          "displayName": "List 27",
+          "lastModifiedDateTime": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "list_28",
+          "name": "List28",
+          "displayName": "List 28",
+          "lastModifiedDateTime": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_29",
+          "name": "List29",
+          "displayName": "List 29",
+          "lastModifiedDateTime": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "list_30",
+          "name": "List30",
+          "displayName": "List 30",
+          "lastModifiedDateTime": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "list_31",
+          "name": "List31",
+          "displayName": "List 31",
+          "lastModifiedDateTime": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "list_32",
+          "name": "List32",
+          "displayName": "List 32",
+          "lastModifiedDateTime": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "list_33",
+          "name": "List33",
+          "displayName": "List 33",
+          "lastModifiedDateTime": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "list_34",
+          "name": "List34",
+          "displayName": "List 34",
+          "lastModifiedDateTime": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "list_35",
+          "name": "List35",
+          "displayName": "List 35",
+          "lastModifiedDateTime": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "list_36",
+          "name": "List36",
+          "displayName": "List 36",
+          "lastModifiedDateTime": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "list_37",
+          "name": "List37",
+          "displayName": "List 37",
+          "lastModifiedDateTime": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "list_38",
+          "name": "List38",
+          "displayName": "List 38",
+          "lastModifiedDateTime": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "list_39",
+          "name": "List39",
+          "displayName": "List 39",
+          "lastModifiedDateTime": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "list_40",
+          "name": "List40",
+          "displayName": "List 40",
+          "lastModifiedDateTime": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "list_41",
+          "name": "List41",
+          "displayName": "List 41",
+          "lastModifiedDateTime": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "list_42",
+          "name": "List42",
+          "displayName": "List 42",
+          "lastModifiedDateTime": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "list_43",
+          "name": "List43",
+          "displayName": "List 43",
+          "lastModifiedDateTime": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "list_44",
+          "name": "List44",
+          "displayName": "List 44",
+          "lastModifiedDateTime": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "list_45",
+          "name": "List45",
+          "displayName": "List 45",
+          "lastModifiedDateTime": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "list_46",
+          "name": "List46",
+          "displayName": "List 46",
+          "lastModifiedDateTime": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "list_47",
+          "name": "List47",
+          "displayName": "List 47",
+          "lastModifiedDateTime": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "list_48",
+          "name": "List48",
+          "displayName": "List 48",
+          "lastModifiedDateTime": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "list_49",
+          "name": "List49",
+          "displayName": "List 49",
+          "lastModifiedDateTime": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "list_50",
+          "name": "List50",
+          "displayName": "List 50",
+          "lastModifiedDateTime": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "list_51",
+          "name": "List51",
+          "displayName": "List 51",
+          "lastModifiedDateTime": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "list_52",
+          "name": "List52",
+          "displayName": "List 52",
+          "lastModifiedDateTime": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "list_53",
+          "name": "List53",
+          "displayName": "List 53",
+          "lastModifiedDateTime": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "list_54",
+          "name": "List54",
+          "displayName": "List 54",
+          "lastModifiedDateTime": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "list_55",
+          "name": "List55",
+          "displayName": "List 55",
+          "lastModifiedDateTime": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "list_56",
+          "name": "List56",
+          "displayName": "List 56",
+          "lastModifiedDateTime": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_57",
+          "name": "List57",
+          "displayName": "List 57",
+          "lastModifiedDateTime": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "list_58",
+          "name": "List58",
+          "displayName": "List 58",
+          "lastModifiedDateTime": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "list_59",
+          "name": "List59",
+          "displayName": "List 59",
+          "lastModifiedDateTime": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "list_60",
+          "name": "List60",
+          "displayName": "List 60",
+          "lastModifiedDateTime": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "list_61",
+          "name": "List61",
+          "displayName": "List 61",
+          "lastModifiedDateTime": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "list_62",
+          "name": "List62",
+          "displayName": "List 62",
+          "lastModifiedDateTime": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "list_63",
+          "name": "List63",
+          "displayName": "List 63",
+          "lastModifiedDateTime": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "list_64",
+          "name": "List64",
+          "displayName": "List 64",
+          "lastModifiedDateTime": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "list_65",
+          "name": "List65",
+          "displayName": "List 65",
+          "lastModifiedDateTime": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "list_66",
+          "name": "List66",
+          "displayName": "List 66",
+          "lastModifiedDateTime": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "list_67",
+          "name": "List67",
+          "displayName": "List 67",
+          "lastModifiedDateTime": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "list_68",
+          "name": "List68",
+          "displayName": "List 68",
+          "lastModifiedDateTime": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "list_69",
+          "name": "List69",
+          "displayName": "List 69",
+          "lastModifiedDateTime": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "list_70",
+          "name": "List70",
+          "displayName": "List 70",
+          "lastModifiedDateTime": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "list_71",
+          "name": "List71",
+          "displayName": "List 71",
+          "lastModifiedDateTime": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "list_72",
+          "name": "List72",
+          "displayName": "List 72",
+          "lastModifiedDateTime": "2026-01-17T00:00:00Z"
+        },
+        {
+          "id": "list_73",
+          "name": "List73",
+          "displayName": "List 73",
+          "lastModifiedDateTime": "2026-01-18T00:00:00Z"
+        },
+        {
+          "id": "list_74",
+          "name": "List74",
+          "displayName": "List 74",
+          "lastModifiedDateTime": "2026-01-19T00:00:00Z"
+        },
+        {
+          "id": "list_75",
+          "name": "List75",
+          "displayName": "List 75",
+          "lastModifiedDateTime": "2026-01-20T00:00:00Z"
+        },
+        {
+          "id": "list_76",
+          "name": "List76",
+          "displayName": "List 76",
+          "lastModifiedDateTime": "2026-01-21T00:00:00Z"
+        },
+        {
+          "id": "list_77",
+          "name": "List77",
+          "displayName": "List 77",
+          "lastModifiedDateTime": "2026-01-22T00:00:00Z"
+        },
+        {
+          "id": "list_78",
+          "name": "List78",
+          "displayName": "List 78",
+          "lastModifiedDateTime": "2026-01-23T00:00:00Z"
+        },
+        {
+          "id": "list_79",
+          "name": "List79",
+          "displayName": "List 79",
+          "lastModifiedDateTime": "2026-01-24T00:00:00Z"
+        },
+        {
+          "id": "list_80",
+          "name": "List80",
+          "displayName": "List 80",
+          "lastModifiedDateTime": "2026-01-25T00:00:00Z"
+        },
+        {
+          "id": "list_81",
+          "name": "List81",
+          "displayName": "List 81",
+          "lastModifiedDateTime": "2026-01-26T00:00:00Z"
+        },
+        {
+          "id": "list_82",
+          "name": "List82",
+          "displayName": "List 82",
+          "lastModifiedDateTime": "2026-01-27T00:00:00Z"
+        },
+        {
+          "id": "list_83",
+          "name": "List83",
+          "displayName": "List 83",
+          "lastModifiedDateTime": "2026-01-28T00:00:00Z"
+        },
+        {
+          "id": "list_84",
+          "name": "List84",
+          "displayName": "List 84",
+          "lastModifiedDateTime": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "list_85",
+          "name": "List85",
+          "displayName": "List 85",
+          "lastModifiedDateTime": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "list_86",
+          "name": "List86",
+          "displayName": "List 86",
+          "lastModifiedDateTime": "2026-01-03T00:00:00Z"
+        },
+        {
+          "id": "list_87",
+          "name": "List87",
+          "displayName": "List 87",
+          "lastModifiedDateTime": "2026-01-04T00:00:00Z"
+        },
+        {
+          "id": "list_88",
+          "name": "List88",
+          "displayName": "List 88",
+          "lastModifiedDateTime": "2026-01-05T00:00:00Z"
+        },
+        {
+          "id": "list_89",
+          "name": "List89",
+          "displayName": "List 89",
+          "lastModifiedDateTime": "2026-01-06T00:00:00Z"
+        },
+        {
+          "id": "list_90",
+          "name": "List90",
+          "displayName": "List 90",
+          "lastModifiedDateTime": "2026-01-07T00:00:00Z"
+        },
+        {
+          "id": "list_91",
+          "name": "List91",
+          "displayName": "List 91",
+          "lastModifiedDateTime": "2026-01-08T00:00:00Z"
+        },
+        {
+          "id": "list_92",
+          "name": "List92",
+          "displayName": "List 92",
+          "lastModifiedDateTime": "2026-01-09T00:00:00Z"
+        },
+        {
+          "id": "list_93",
+          "name": "List93",
+          "displayName": "List 93",
+          "lastModifiedDateTime": "2026-01-10T00:00:00Z"
+        },
+        {
+          "id": "list_94",
+          "name": "List94",
+          "displayName": "List 94",
+          "lastModifiedDateTime": "2026-01-11T00:00:00Z"
+        },
+        {
+          "id": "list_95",
+          "name": "List95",
+          "displayName": "List 95",
+          "lastModifiedDateTime": "2026-01-12T00:00:00Z"
+        },
+        {
+          "id": "list_96",
+          "name": "List96",
+          "displayName": "List 96",
+          "lastModifiedDateTime": "2026-01-13T00:00:00Z"
+        },
+        {
+          "id": "list_97",
+          "name": "List97",
+          "displayName": "List 97",
+          "lastModifiedDateTime": "2026-01-14T00:00:00Z"
+        },
+        {
+          "id": "list_98",
+          "name": "List98",
+          "displayName": "List 98",
+          "lastModifiedDateTime": "2026-01-15T00:00:00Z"
+        },
+        {
+          "id": "list_99",
+          "name": "List99",
+          "displayName": "List 99",
+          "lastModifiedDateTime": "2026-01-16T00:00:00Z"
+        },
+        {
+          "id": "list_100",
+          "name": "List100",
+          "displayName": "List 100",
+          "lastModifiedDateTime": "2026-01-17T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

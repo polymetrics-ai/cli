@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "daily_stress",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "day_summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recovery_high": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "stress_high": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

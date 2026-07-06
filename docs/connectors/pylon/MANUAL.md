@@ -10,22 +10,518 @@ SYNOPSIS
   pm credentials add <name> --connector pylon [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Pylon issues, accounts, contacts, users, and messages through the Pylon API. Read-only.
+  Reads and writes the documented Pylon REST API surface through concrete streams and write actions.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  account_id
+  article_id
+  base_url
+  call_recording_id
+  collection_id
+  contact_id
+  custom_field_id
+  custom_fields_object_type
+  custom_object_id
+  custom_object_type
+  feature_request_id
+  issue_id
+  knowledge_base_id
+  macro_id
+  milestone_id
+  mode
+  project_id
+  start_date
+  survey_id
+  tag_id
+  task_id
+  team_id
+  ticket_form_id
+  training_data_id
+  user_id
+  api_token (secret)
+
+ETL STREAMS
+  issues:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+  accounts:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+  users:
+    primary key: id
+    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+  messages:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), state(), title(), updated_at()
+  account_relationships:
+    primary key: id
+    fields: child_account_id(), created_at(), id(), parent_account_id(), related_object_id(), relationship_type(), updated_at()
+  account:
+    primary key: id
+    fields: channels(), created_at(), crm_settings(), custom_fields(), domain(), domains(), external_ids(), id(), is_disabled(), latest_customer_activity_time(), name(), owner(), primary_domain(), tags(), type(), updated_at()
+  activity_types:
+    primary key: id
+    fields: icon_url(), id(), label(), slug()
+  audit_logs:
+    primary key: id
+    fields: action(), action_happened_at(), actor_contact_id(), actor_user_id(), attributes(), created_at(), id(), link(), metadata(), object_id(), object_type(), source()
+  call_recording:
+    primary key: id
+    fields: account_id(), calendar_event_id(), created_at(), custom_fields(), duration_ms(), end_time(), external_id(), id(), participant_emails(), source(), start_time(), summary(), title(), updated_at(), url()
+  contact:
+    primary key: id
+    fields: account(), avatar_url(), custom_fields(), email(), emails(), external_ids(), id(), integration_user_ids(), name(), phone_numbers(), portal_role(), portal_role_id(), primary_phone_number()
+  custom_fields:
+    primary key: id
+    fields: created_at(), default_value(), default_values(), description(), id(), is_read_only(), label(), number_metadata(), object_type(), select_metadata(), slug(), source(), type(), updated_at()
+  custom_field:
+    primary key: id
+    fields: created_at(), default_value(), default_values(), description(), id(), is_read_only(), label(), number_metadata(), object_type(), select_metadata(), slug(), source(), type(), updated_at()
+  custom_objects:
+    primary key: id
+    fields: created_at(), custom_fields(), id(), name(), relations(), type(), updated_at()
+  custom_object:
+    primary key: id
+    fields: created_at(), custom_fields(), id(), name(), relations(), type(), updated_at()
+  feature_request:
+    primary key: id
+    fields: created_at(), custom_fields(), description(), evidence(), evidence_count(), id(), portal_visible_to_account_ids(), request_status(), title(), updated_at()
+  issue_statuses:
+    primary key: slug
+    fields: category(), is_archived(), is_default_status(), label(), slug()
+  issue:
+    primary key: id
+    fields: account(), assignee(), attachment_urls(), author_unverified(), body_html(), business_hours_first_response_seconds(), business_hours_resolution_seconds(), business_hours_time_in_status_seconds(), chat_widget_info(), child_issues(), created_at(), csat_responses(), custom_fields(), customer_portal_visible(), external_issues(), first_response_breach_time(), first_response_seconds(), first_response_time(), id(), latest_message_time(), link(), number(), number_of_touches(), parent_issue_group(), requester(), resolution_breach_time(), resolution_seconds(), resolution_time(), slack(), snoozed_until_time(), source(), state(), tags(), team(), team_slas(), time_in_status_seconds(), title(), type(), updated_at()
+  issue_followers:
+    primary key: id
+    fields: id(), type()
+  issue_messages:
+    primary key: id
+    fields: author(), email_info(), file_urls(), id(), is_private(), message_html(), source(), thread_id(), timestamp()
+  issue_threads:
+    primary key: id
+    fields: channel_id(), id(), issue_id(), name(), source(), thread_id()
+  issue_voice_calls:
+    primary key: id
+    fields: created_at(), duration_sec(), from_phone_number(), id(), recordings(), to_phone_number()
+  knowledge_bases:
+    primary key: id
+    fields: default_language(), id(), slug(), supported_languages(), title()
+  knowledge_base:
+    primary key: id
+    fields: default_language(), id(), slug(), supported_languages(), title()
+  articles:
+    primary key: id
+    fields: approval_info(), author_user_id(), collection_id(), created_at(), current_draft_content_html(), current_published_content_html(), id(), identifier(), is_published(), is_unlisted(), last_edited_at(), last_published_at(), slug(), title(), url(), visibility_config()
+  article:
+    primary key: id
+    fields: approval_info(), author_user_id(), collection_id(), created_at(), current_draft_content_html(), current_published_content_html(), id(), identifier(), is_published(), is_unlisted(), last_edited_at(), last_published_at(), slug(), title(), url(), visibility_config()
+  collections:
+    primary key: id
+    fields: created_at(), description(), icon(), id(), parent_collection_id(), slug(), title(), visibility_config()
+  collection:
+    primary key: id
+    fields: created_at(), description(), icon(), id(), parent_collection_id(), slug(), title(), visibility_config()
+  macro_groups:
+    primary key: id
+    fields: created_at(), id(), title(), updated_at()
+  macros:
+    primary key: id
+    fields: actions(), created_at(), has_actions(), id(), macro_group_id(), name(), text_html(), text_type(), updated_at(), visibility()
+  macro:
+    primary key: id
+    fields: actions(), created_at(), has_actions(), id(), macro_group_id(), name(), text_html(), text_type(), updated_at(), visibility()
+  me:
+    primary key: id
+    fields: id(), name()
+  milestone:
+    primary key: id
+    fields: account(), created_at(), due_date(), id(), name(), project(), updated_at()
+  project:
+    primary key: id
+    fields: account(), archived_at(), created_at(), custom_fields(), customer_portal_visible(), description_html(), end_date(), id(), is_archived(), name(), owner_id(), project_template(), start_date(), updated_at()
+  surveys:
+    primary key: id
+    fields: id(), name(), type(), updated_at()
+  survey:
+    primary key: id
+    fields: id(), name(), type(), updated_at()
+  survey_responses:
+    primary key: id
+    fields: account_id(), answers(), contact_id(), id(), submitted_at()
+  tags:
+    primary key: id
+    fields: hex_color(), id(), object_type(), value()
+  tag:
+    primary key: id
+    fields: hex_color(), id(), object_type(), value()
+  tasks:
+    primary key: id
+    fields: account(), assignee(), body_html(), created_at(), custom_fields(), customer_portal_visible(), due_date(), id(), milestone(), parent_task_id(), project(), status(), subtask_ids(), title(), updated_at()
+  task:
+    primary key: id
+    fields: account(), assignee(), body_html(), created_at(), custom_fields(), customer_portal_visible(), due_date(), id(), milestone(), parent_task_id(), project(), status(), subtask_ids(), title(), updated_at()
+  task_comments:
+    primary key: id
+    fields: author(), body_html(), created_at(), id(), is_internal(), last_edited_at(), task_id(), updated_at()
+  teams:
+    primary key: id
+    fields: id(), name(), users()
+  team:
+    primary key: id
+    fields: id(), name(), users()
+  ticket_forms:
+    primary key: id
+    fields: description_html(), fields(), id(), is_public(), name(), slug(), url()
+  ticket_form:
+    primary key: id
+    fields: description_html(), fields(), id(), is_public(), name(), slug(), url()
+  training_data:
+    primary key: id
+    fields: created_at(), documents(), exclude_from_kb_search(), id(), name(), scrape_status(), type(), updated_at(), visibility()
+  training_data_detail:
+    primary key: id
+    fields: created_at(), documents(), exclude_from_kb_search(), id(), name(), scrape_status(), type(), updated_at(), visibility()
+  user_roles:
+    primary key: id
+    fields: id(), name(), slug()
+  user:
+    primary key: id
+    fields: avatar_url(), email(), emails(), id(), name(), role_id(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  update_accounts:
+    endpoint: PATCH /accounts
+    risk: external Pylon PATCH /accounts; approval required
+  create_account:
+    endpoint: POST /accounts
+    risk: external Pylon POST /accounts; approval required
+  merge_accounts:
+    endpoint: POST /accounts/merge
+    risk: destructive external Pylon POST /accounts/merge; approval required
+  search_accounts:
+    endpoint: POST /accounts/search
+    risk: external Pylon POST /accounts/search; approval required
+  create_account_highlight:
+    endpoint: POST /accounts/{{ record.account_id }}/highlights
+    required fields: account_id
+    risk: external Pylon POST /accounts/{account_id}/highlights; approval required
+  delete_account_highlight:
+    endpoint: DELETE /accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}
+    required fields: account_id, highlight_id
+    risk: destructive external Pylon DELETE /accounts/{account_id}/highlights/{highlight_id}; approval required
+  update_account_highlight:
+    endpoint: PATCH /accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}
+    required fields: account_id, highlight_id
+    risk: external Pylon PATCH /accounts/{account_id}/highlights/{highlight_id}; approval required
+  create_account_relationship:
+    endpoint: POST /accounts/{{ record.account_id }}/relationship
+    required fields: account_id
+    risk: external Pylon POST /accounts/{account_id}/relationship; approval required
+  delete_account_relationship:
+    endpoint: DELETE /accounts/{{ record.account_id }}/relationships/{{ record.relationship_id }}
+    required fields: account_id, relationship_id
+    risk: destructive external Pylon DELETE /accounts/{account_id}/relationships/{relationship_id}; approval required
+  delete_account:
+    endpoint: DELETE /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: destructive external Pylon DELETE /accounts/{id}; approval required
+  update_account:
+    endpoint: PATCH /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: external Pylon PATCH /accounts/{id}; approval required
+  create_activity:
+    endpoint: POST /accounts/{{ record.account_id }}/activities
+    required fields: account_id
+    risk: external Pylon POST /accounts/{id}/activities; approval required
+  search_audit_logs:
+    endpoint: POST /audit-logs/search
+    risk: external Pylon POST /audit-logs/search; approval required
+  search_call_recordings:
+    endpoint: POST /call-recordings/search
+    risk: external Pylon POST /call-recordings/search; approval required
+  delete_call_recording:
+    endpoint: DELETE /call-recordings/{{ record.call_recording_id }}
+    required fields: call_recording_id
+    risk: destructive external Pylon DELETE /call-recordings/{id}; approval required
+  update_call_recording:
+    endpoint: PATCH /call-recordings/{{ record.call_recording_id }}
+    required fields: call_recording_id
+    risk: external Pylon PATCH /call-recordings/{id}; approval required
+  create_contact:
+    endpoint: POST /contacts
+    risk: external Pylon POST /contacts; approval required
+  search_contacts:
+    endpoint: POST /contacts/search
+    risk: external Pylon POST /contacts/search; approval required
+  delete_contact:
+    endpoint: DELETE /contacts/{{ record.contact_id }}
+    required fields: contact_id
+    risk: destructive external Pylon DELETE /contacts/{id}; approval required
+  update_contact:
+    endpoint: PATCH /contacts/{{ record.contact_id }}
+    required fields: contact_id
+    risk: external Pylon PATCH /contacts/{id}; approval required
+  create_custom_field:
+    endpoint: POST /custom-fields
+    risk: external Pylon POST /custom-fields; approval required
+  update_custom_field:
+    endpoint: PATCH /custom-fields/{{ record.custom_field_id }}
+    required fields: custom_field_id
+    risk: external Pylon PATCH /custom-fields/{id}; approval required
+  update_custom_objects:
+    endpoint: PATCH /custom-objects/{{ record.custom_object_type }}
+    required fields: custom_object_type
+    risk: external Pylon PATCH /custom-objects/{type}; approval required
+  create_custom_object:
+    endpoint: POST /custom-objects/{{ record.custom_object_type }}
+    required fields: custom_object_type
+    risk: external Pylon POST /custom-objects/{type}; approval required
+  search_custom_objects:
+    endpoint: POST /custom-objects/{{ record.custom_object_type }}/search
+    required fields: custom_object_type
+    risk: external Pylon POST /custom-objects/{type}/search; approval required
+  delete_custom_object:
+    endpoint: DELETE /custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}
+    required fields: custom_object_type, custom_object_id
+    risk: destructive external Pylon DELETE /custom-objects/{type}/{id}; approval required
+  update_custom_object:
+    endpoint: PATCH /custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}
+    required fields: custom_object_type, custom_object_id
+    risk: external Pylon PATCH /custom-objects/{type}/{id}; approval required
+  create_feature_request:
+    endpoint: POST /feature-requests
+    risk: external Pylon POST /feature-requests; approval required
+  search_feature_requests:
+    endpoint: POST /feature-requests/search
+    risk: external Pylon POST /feature-requests/search; approval required
+  delete_feature_request:
+    endpoint: DELETE /feature-requests/{{ record.feature_request_id }}
+    required fields: feature_request_id
+    risk: destructive external Pylon DELETE /feature-requests/{id}; approval required
+  update_feature_request:
+    endpoint: PATCH /feature-requests/{{ record.feature_request_id }}
+    required fields: feature_request_id
+    risk: external Pylon PATCH /feature-requests/{id}; approval required
+  set_feature_request_portal_visibility:
+    endpoint: POST /feature-requests/{{ record.feature_request_id }}/set-portal-visibility
+    required fields: feature_request_id
+    risk: external Pylon POST /feature-requests/{id}/set-portal-visibility; approval required
+  import_contact:
+    endpoint: POST /import/contacts
+    risk: external Pylon POST /import/contacts; approval required
+  import_issue:
+    endpoint: POST /import/issues
+    risk: external Pylon POST /import/issues; approval required
+  import_messages:
+    endpoint: POST /import/issues/{{ record.issue_id }}/messages
+    required fields: issue_id
+    risk: external Pylon POST /import/issues/{id}/messages; approval required
+  create_issue:
+    endpoint: POST /issues
+    risk: external Pylon POST /issues; approval required
+  search_issues:
+    endpoint: POST /issues/search
+    risk: external Pylon POST /issues/search; approval required
+  delete_issue:
+    endpoint: DELETE /issues/{{ record.issue_id }}
+    required fields: issue_id
+    risk: destructive external Pylon DELETE /issues/{id}; approval required
+  update_issue:
+    endpoint: PATCH /issues/{{ record.issue_id }}
+    required fields: issue_id
+    risk: external Pylon PATCH /issues/{id}; approval required
+  create_issue_ai_response:
+    endpoint: POST /issues/{{ record.issue_id }}/ai-response
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/ai-response; approval required
+  link_external_issue:
+    endpoint: POST /issues/{{ record.issue_id }}/external-issues
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/external-issues; approval required
+  add_issue_followers:
+    endpoint: POST /issues/{{ record.issue_id }}/followers
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/followers; approval required
+  delete_message:
+    endpoint: DELETE /issues/{{ record.issue_id }}/messages/{{ record.message_id }}
+    required fields: issue_id, message_id
+    risk: destructive external Pylon DELETE /issues/{id}/messages/{message_id}; approval required
+  redact_message:
+    endpoint: POST /issues/{{ record.issue_id }}/messages/{{ record.message_id }}/redact
+    required fields: issue_id, message_id
+    risk: destructive external Pylon POST /issues/{id}/messages/{message_id}/redact; approval required
+  create_issue_note:
+    endpoint: POST /issues/{{ record.issue_id }}/note
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/note; approval required
+  create_issue_reply:
+    endpoint: POST /issues/{{ record.issue_id }}/reply
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/reply; approval required
+  snooze_issue:
+    endpoint: POST /issues/{{ record.issue_id }}/snooze
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/snooze; approval required
+  create_issue_thread:
+    endpoint: POST /issues/{{ record.issue_id }}/threads
+    required fields: issue_id
+    risk: external Pylon POST /issues/{id}/threads; approval required
+  create_article:
+    endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/articles
+    required fields: knowledge_base_id
+    risk: external Pylon POST /knowledge-bases/{id}/articles; approval required
+  delete_article:
+    endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}
+    required fields: knowledge_base_id, article_id
+    risk: destructive external Pylon DELETE /knowledge-bases/{id}/articles/{article_id}; approval required
+  update_article:
+    endpoint: PATCH /knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}
+    required fields: knowledge_base_id, article_id
+    risk: external Pylon PATCH /knowledge-bases/{id}/articles/{article_id}; approval required
+  request_article_review:
+    endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}/request-review
+    required fields: knowledge_base_id, article_id
+    risk: external Pylon POST /knowledge-bases/{id}/articles/{article_id}/request-review; approval required
+  create_collection:
+    endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/collections
+    required fields: knowledge_base_id
+    risk: external Pylon POST /knowledge-bases/{id}/collections; approval required
+  delete_collection:
+    endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}
+    required fields: knowledge_base_id, collection_id
+    risk: destructive external Pylon DELETE /knowledge-bases/{id}/collections/{collection_id}; approval required
+  update_collection:
+    endpoint: PATCH /knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}
+    required fields: knowledge_base_id, collection_id
+    risk: external Pylon PATCH /knowledge-bases/{id}/collections/{collection_id}; approval required
+  create_route_redirect:
+    endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/route-redirects
+    required fields: knowledge_base_id
+    risk: external Pylon POST /knowledge-bases/{id}/route-redirects; approval required
+  create_macro:
+    endpoint: POST /macros
+    risk: external Pylon POST /macros; approval required
+  update_macro:
+    endpoint: PATCH /macros/{{ record.macro_id }}
+    required fields: macro_id
+    risk: external Pylon PATCH /macros/{id}; approval required
+  create_milestone:
+    endpoint: POST /milestones
+    risk: external Pylon POST /milestones; approval required
+  delete_milestone:
+    endpoint: DELETE /milestones/{{ record.milestone_id }}
+    required fields: milestone_id
+    risk: destructive external Pylon DELETE /milestones/{id}; approval required
+  update_milestone:
+    endpoint: PATCH /milestones/{{ record.milestone_id }}
+    required fields: milestone_id
+    risk: external Pylon PATCH /milestones/{id}; approval required
+  create_project:
+    endpoint: POST /projects
+    risk: external Pylon POST /projects; approval required
+  search_projects:
+    endpoint: POST /projects/search
+    risk: external Pylon POST /projects/search; approval required
+  delete_project:
+    endpoint: DELETE /projects/{{ record.project_id }}
+    required fields: project_id
+    risk: destructive external Pylon DELETE /projects/{id}; approval required
+  update_project:
+    endpoint: PATCH /projects/{{ record.project_id }}
+    required fields: project_id
+    risk: external Pylon PATCH /projects/{id}; approval required
+  search_surveys:
+    endpoint: POST /surveys/search
+    risk: external Pylon POST /surveys/search; approval required
+  create_tag:
+    endpoint: POST /tags
+    risk: external Pylon POST /tags; approval required
+  delete_tag:
+    endpoint: DELETE /tags/{{ record.tag_id }}
+    required fields: tag_id
+    risk: destructive external Pylon DELETE /tags/{id}; approval required
+  update_tag:
+    endpoint: PATCH /tags/{{ record.tag_id }}
+    required fields: tag_id
+    risk: external Pylon PATCH /tags/{id}; approval required
+  create_task:
+    endpoint: POST /tasks
+    risk: external Pylon POST /tasks; approval required
+  search_tasks:
+    endpoint: POST /tasks/search
+    risk: external Pylon POST /tasks/search; approval required
+  delete_task:
+    endpoint: DELETE /tasks/{{ record.task_id }}
+    required fields: task_id
+    risk: destructive external Pylon DELETE /tasks/{id}; approval required
+  update_task:
+    endpoint: PATCH /tasks/{{ record.task_id }}
+    required fields: task_id
+    risk: external Pylon PATCH /tasks/{id}; approval required
+  create_task_comment:
+    endpoint: POST /tasks/{{ record.task_id }}/comments
+    required fields: task_id
+    risk: external Pylon POST /tasks/{id}/comments; approval required
+  delete_task_comment:
+    endpoint: DELETE /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
+    required fields: task_id, comment_id
+    risk: destructive external Pylon DELETE /tasks/{id}/comments/{comment_id}; approval required
+  update_task_comment:
+    endpoint: PATCH /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
+    required fields: task_id, comment_id
+    risk: external Pylon PATCH /tasks/{id}/comments/{comment_id}; approval required
+  create_team:
+    endpoint: POST /teams
+    risk: external Pylon POST /teams; approval required
+  update_team:
+    endpoint: PATCH /teams/{{ record.team_id }}
+    required fields: team_id
+    risk: external Pylon PATCH /teams/{id}; approval required
+  create_training_data:
+    endpoint: POST /training-data
+    risk: external Pylon POST /training-data; approval required
+  upload_training_data_file_content:
+    endpoint: POST /training-data/upload-content
+    risk: external Pylon POST /training-data/upload-content; approval required
+  delete_training_data_documents:
+    endpoint: DELETE /training-data/{{ record.training_data_id }}/documents
+    required fields: training_data_id
+    risk: destructive external Pylon DELETE /training-data/{id}/documents; approval required
+  search_users:
+    endpoint: POST /users/search
+    risk: external Pylon POST /users/search; approval required
+  update_user:
+    endpoint: PATCH /users/{{ record.user_id }}
+    required fields: user_id
+    risk: external Pylon PATCH /users/{id}; approval required
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Pylon API read of support issues, accounts, contacts, users, and messages
+  write risk: external Pylon API mutations for support, account, knowledge-base, project, task, tag, survey, and training-data records; approval required
+  approval: writes require explicit operator approval; delete/redact/merge actions are destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +535,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect pylon before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

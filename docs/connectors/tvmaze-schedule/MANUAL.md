@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads public TVmaze broadcast and web schedules without credentials.
 
+ICON
+  asset: icons/tvmazeschedule.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.tvmaze.com/api
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
@@ -20,12 +26,26 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  country
+  date
+
+ETL STREAMS
+  schedule:
+    primary key: id
+    cursor: airdate
+    fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+  web_schedule:
+    primary key: id
+    cursor: airdate
+    fields: airdate(), airtime(), id(), name(), show_id(), show_name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external TVmaze public API read of broadcast/web schedule data
+  approval: none; read-only public schedule API, no credentials
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

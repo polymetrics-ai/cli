@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "multimedia_upload_status",
+  "type": "object",
+  "x-primary-key": ["processing_id"],
+  "required": ["processing_id"],
+  "properties": {
+    "processing_id": { "type": "string" },
+    "success": { "type": ["boolean", "null"] },
+    "complete": { "type": ["boolean", "null"] },
+    "in_celery": { "type": ["boolean", "null"] },
+    "progress": { "type": ["object", "null"] },
+    "errors": { "type": ["array", "null"] }
+  }
+}

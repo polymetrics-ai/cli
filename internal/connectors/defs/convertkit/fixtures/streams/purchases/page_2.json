@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/purchases",
+    "query": { "page": "2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 2,
+      "total_pages": 2,
+      "purchases": [
+        {
+          "id": 3,
+          "transaction_id": "txn_fixture_3",
+          "status": "paid",
+          "email_address": "fixture3@example.com",
+          "currency": "USD",
+          "transaction_time": "2026-01-03T00:00:00Z",
+          "subtotal": "30.00",
+          "tax": "3.00",
+          "shipping": "0.00",
+          "discount": "0.00",
+          "total": "33.00"
+        }
+      ]
+    }
+  }
+}

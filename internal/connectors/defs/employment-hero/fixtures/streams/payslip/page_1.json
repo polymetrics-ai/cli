@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/synthetic-conformance-value/payslips/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "employee_id": "synthetic-conformance-value",
+        "period_start": "2026-01-01",
+        "period_end": "2026-01-15",
+        "gross_pay": 1000
+      }
+    }
+  }
+}

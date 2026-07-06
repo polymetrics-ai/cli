@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "sequenceId": 1,
+    "removeFromExisting": true,
+    "startStepId": 1,
+    "ignoreStepDelay": true,
+    "startFrom": "fixture_startFrom"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/contacts/synthetic-conformance-value/move-to-sequence",
+    "body": {
+      "sequenceId": 1,
+      "removeFromExisting": true,
+      "startStepId": 1,
+      "ignoreStepDelay": true,
+      "startFrom": "fixture_startFrom"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "folders",
+  "type": "object",
+  "x-primary-key": ["folderId"],
+  "required": ["folderId"],
+  "properties": {
+    "folderId": { "type": "string" },
+    "folderName": { "type": ["string", "null"] },
+    "folderDesc": { "type": ["string", "null"] },
+    "folderIndex": { "type": ["integer", "null"] },
+    "isDefault": { "type": ["boolean", "null"] },
+    "parentFolderId": { "type": ["string", "null"] }
+  }
+}

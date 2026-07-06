@@ -1,0 +1,15 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "name": "Fixture create_a_note",
+    "description": "Fixture create_a_note record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/notes",
+    "body": {
+      "name": "Fixture create_a_note",
+      "description": "Fixture create_a_note record"
+    }
+  }
+}

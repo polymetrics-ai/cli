@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "altcoin_season_index_historical",
+  "type": "object",
+  "x-primary-key": ["timestamp"],
+  "properties": {
+    "timestamp": { "type": ["string", "null"] },
+    "altcoin_index": { "type": ["integer", "null"] },
+    "altcoin_marketcap": { "type": ["number", "null"] }
+  }
+}

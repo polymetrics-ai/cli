@@ -1,0 +1,335 @@
+{
+  "actions": [
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v11/projects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "framework": { "type": "string" },
+          "buildCommand": { "type": "string" },
+          "installCommand": { "type": "string" },
+          "outputDirectory": { "type": "string" },
+          "rootDirectory": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_project",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v9/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "buildCommand": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v9/projects/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_deployment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v13/deployments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "target": { "type": "string" },
+          "project": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "cancel_deployment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v12/deployments/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_deployment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v13/deployments/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_project_domain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v10/projects/{{ record.project_id }}/domains",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "name"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "remove_project_domain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v9/projects/{{ record.project_id }}/domains/{{ record.domain }}",
+      "path_fields": ["project_id", "domain"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "domain"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "domain": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project_env_var",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v10/projects/{{ record.project_id }}/env",
+      "path_fields": ["project_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "key", "value", "type"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "key": { "type": "string" },
+          "value": { "type": "string" },
+          "type": { "type": "string", "enum": ["system", "encrypted", "plain", "sensitive"] },
+          "target": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_project_env_var",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v9/projects/{{ record.project_id }}/env/{{ record.id }}",
+      "path_fields": ["project_id", "id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["project_id", "id"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "events"],
+        "properties": {
+          "url": { "type": "string" },
+          "events": { "type": "array" },
+          "projectIds": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_log_drain",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/log-drains",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["deliveryFormat", "url", "sources"],
+        "properties": {
+          "deliveryFormat": { "type": "string", "enum": ["json", "ndjson"] },
+          "url": { "type": "string" },
+          "sources": { "type": "array" },
+          "projectIds": { "type": "array" },
+          "environments": { "type": "array" },
+          "headers": { "type": "object" },
+          "secret": { "type": "string" },
+          "samplingRate": { "type": "number" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_log_drain",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/log-drains/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_edge_config",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/edge-config",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": { "type": "string" },
+          "items": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_edge_config",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/edge-config/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "slug"],
+        "properties": {
+          "id": { "type": "string" },
+          "slug": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_edge_config",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/edge-config/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_alias",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/aliases/{{ record.uid }}",
+      "path_fields": ["uid"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uid"],
+        "properties": { "uid": { "type": "string" } }
+      },
+      "risk": "destructive external mutation (removes a deployment alias); approval required",
+      "confirm": "destructive"
+    }
+  ]
+}

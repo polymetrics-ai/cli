@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "href": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "htmlUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "modifiedTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "deletedTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

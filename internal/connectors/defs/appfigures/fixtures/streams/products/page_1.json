@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/products/mine"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "111": {
+        "id": 111,
+        "name": "Fixture App One",
+        "developer": "Fixture Dev",
+        "vendor_identifier": "com.fixture.appone",
+        "ref_no": "REF-111",
+        "sku": "SKU-111",
+        "store": "apple",
+        "store_id": 1,
+        "added": "2026-01-01T00:00:00",
+        "updated": "2026-01-02T00:00:00"
+      },
+      "222": {
+        "id": 222,
+        "name": "Fixture App Two",
+        "developer": "Fixture Dev",
+        "vendor_identifier": "com.fixture.apptwo",
+        "ref_no": "REF-222",
+        "sku": "SKU-222",
+        "store": "google_play",
+        "store_id": 2,
+        "added": "2026-01-03T00:00:00",
+        "updated": "2026-01-04T00:00:00"
+      }
+    }
+  }
+}

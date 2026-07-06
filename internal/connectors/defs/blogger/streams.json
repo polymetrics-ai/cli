@@ -1,0 +1,101 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "blogger",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/blogs/{{ config.blog_id }}" },
+    "error_map": [
+      { "status": 401, "hint": "blogger OAuth refresh grant failed or access token expired; re-run pm credentials add blogger" },
+      { "status": 403, "hint": "blogger account lacks access to this blog_id/scope" },
+      { "status": 404, "hint": "blog_id not found or not accessible with the configured account" },
+      { "status": 429, "class": "rate_limited", "hint": "Blogger API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "blogs",
+      "path": "/blogs/{{ config.blog_id }}",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "incremental": { "cursor_field": "updated" },
+      "computed_fields": {
+        "posts_total": "{{ record.posts.totalItems }}",
+        "pages_total": "{{ record.pages.totalItems }}"
+      },
+      "schema": "schemas/blogs.json"
+    },
+    {
+      "name": "posts",
+      "path": "/blogs/{{ config.blog_id }}/posts",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "items" },
+      "incremental": { "cursor_field": "updated" },
+      "computed_fields": {
+        "blog_id": "{{ record.blog.id }}",
+        "author_id": "{{ record.author.id }}",
+        "author_display_name": "{{ record.author.displayName }}",
+        "replies_total": "{{ record.replies.totalItems }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "pages",
+      "path": "/blogs/{{ config.blog_id }}/pages",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "items" },
+      "incremental": { "cursor_field": "updated" },
+      "computed_fields": {
+        "blog_id": "{{ record.blog.id }}",
+        "author_id": "{{ record.author.id }}",
+        "author_display_name": "{{ record.author.displayName }}"
+      },
+      "schema": "schemas/pages.json"
+    },
+    {
+      "name": "comments",
+      "path": "/blogs/{{ config.blog_id }}/comments",
+      "query": {
+        "maxResults": "{{ config.page_size }}"
+      },
+      "records": { "path": "items" },
+      "incremental": { "cursor_field": "updated" },
+      "computed_fields": {
+        "post_id": "{{ record.post.id }}",
+        "blog_id": "{{ record.blog.id }}",
+        "author_id": "{{ record.author.id }}",
+        "author_display_name": "{{ record.author.displayName }}"
+      },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "pageviews",
+      "path": "/blogs/{{ config.blog_id }}/pageviews",
+      "records": { "path": "counts" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "blog_id": "{{ config.blog_id }}",
+        "time_range": "{{ record.timeRange }}"
+      },
+      "schema": "schemas/pageviews.json"
+    }
+  ]
+}

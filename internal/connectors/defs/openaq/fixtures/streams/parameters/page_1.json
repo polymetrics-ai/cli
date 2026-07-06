@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/parameters", "query": { "limit": "100", "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "page": 1, "limit": 100, "found": 1 },
+      "results": [
+        { "id": 2, "name": "pm25", "units": "µg/m³", "displayName": "PM2.5", "description": "Particulate matter less than 2.5 micrometers in diameter" }
+      ]
+    }
+  }
+}

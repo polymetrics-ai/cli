@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/accounts", "query": { "limit": "50", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": 1, "key": "ACCT1", "name": "Fixture Account 1", "status": "OPEN", "global": false, "monthlyBudget": 1000.0 },
+        { "id": 2, "key": "ACCT2", "name": "Fixture Account 2", "status": "OPEN", "global": false, "monthlyBudget": 2000.0 }
+      ],
+      "metadata": { "count": 2, "offset": 0, "limit": 50 }
+    }
+  }
+}

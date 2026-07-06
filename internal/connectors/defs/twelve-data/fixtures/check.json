@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/quote", "query": { "symbol": "AAPL" } },
+  "response": {
+    "status": 200,
+    "body": { "symbol": "AAPL", "name": "Apple Inc", "currency": "USD", "close": "150.00" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "aliases",
+  "type": "object",
+  "x-primary-key": ["uid"],
+  "required": ["uid"],
+  "properties": {
+    "uid": { "type": "string" },
+    "alias": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "createdAt": { "type": ["integer", "null"] },
+    "deployment": { "type": ["object", "null"] },
+    "deploymentId": { "type": ["string", "null"] },
+    "projectId": { "type": ["string", "null"] }
+  }
+}

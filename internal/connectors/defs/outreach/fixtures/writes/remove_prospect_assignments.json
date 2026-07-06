@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "removeprospectassignments",
+      "attributes": {
+        "name": "Fixture Remove Prospect Assignments"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsRemoveAssignments",
+    "body": {
+      "data": {
+        "type": "removeprospectassignments",
+        "attributes": {
+          "name": "Fixture Remove Prospect Assignments"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

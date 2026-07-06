@@ -1,0 +1,27 @@
+{
+  "name": "apple-search-ads",
+  "display_name": "Apple Ads",
+  "description": "Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the Apple Search Ads Campaign Management API using an OAuth2 client-credentials grant scoped to an organization. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developer.apple.com/documentation/apple_search_ads",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "external Apple Search Ads API read of campaign, ad group, keyword, and ad data",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Two independent, additive reasons every dynamic check would fail identically and uninformatively: (1) oauth2_client_credentials's token_url is a separate declared config.token_url property; conformance's withReplayURL only overrides b.HTTP.URL (the base request URL used for stream/check paths), never RuntimeConfig.Config[\"token_url\"] itself, so the token exchange always targets the synthetic non-secret value (\"synthetic-conformance-value\"), an unreachable non-URL, before any declarative stream/check request is ever issued -- matches box's/clazar's/kyriba's identical documented precedent; (2) 3 of the 4 streams (adgroups, keywords, ads) are StreamHook-handled (POST .../find with pagination carried in the JSON request body -- StreamSpec.Body is declared but never read back out by the declarative read path, engine/read.go always sends a nil body), so even with a reachable token_url those streams could not be fixture-replayed against the declarative path at all. hook-covered, proven live by internal/connectors/hooks/apple-search-ads's own unit tests (real httptest.Server driving the StreamHook's POST-body pagination, the GET-with-query campaigns path, and the OAuth2 client-credentials token exchange). Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass."
+  }
+}

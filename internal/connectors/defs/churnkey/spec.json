@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Churnkey Connection Specification",
+  "type": "object",
+  "required": ["api_key", "app_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Churnkey Data API key. Sent as the x-ck-api-key header; never logged."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Churnkey application id. Sent as the x-ck-app header on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.churnkey.co",
+      "description": "Churnkey API host. Individual streams/writes append their own /v1/data or /v1/api path prefix (the Data API and the Event Tracking API share this host but live at different path prefixes)."
+    }
+  }
+}

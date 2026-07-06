@@ -1,0 +1,61 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "link_header",
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/user" },
+    "error_map": [
+      { "status": 401, "hint": "gitlab access_token is missing or invalid; re-run pm credentials add gitlab" },
+      { "status": 403, "hint": "gitlab token lacks access for this resource" },
+      { "status": 429, "class": "rate_limited", "hint": "gitlab rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "projects",
+      "path": "/projects",
+      "query": {
+        "per_page": "50",
+        "last_activity_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": { "per_page": "50" },
+      "records": { "path": "" },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "per_page": "50",
+        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "issues",
+      "path": "/issues",
+      "query": {
+        "per_page": "50",
+        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "" },
+      "computed_fields": {
+        "author_id": "{{ record.author.id }}"
+      },
+      "schema": "schemas/issues.json"
+    }
+  ]
+}

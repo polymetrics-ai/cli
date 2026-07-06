@@ -1,0 +1,20 @@
+{
+  "record": {
+    "integration_name": "synthetic-conformance-value",
+    "organization": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations/synthetic-conformance-value/installations",
+    "body": {
+      "organization": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "install_integration_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_transfer_preview",
+  "type": "object",
+  "properties": {
+    "feeId": {
+      "type": "string"
+    },
+    "feeType": {
+      "type": "string"
+    },
+    "feeRateValue": {
+      "type": "string"
+    },
+    "feeAmount": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "feeId"
+  ]
+}

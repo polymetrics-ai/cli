@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/opportunities/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "type": "opportunity",
+        "attributes": {
+          "name": "Fixture Opportunity",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "relationships": {
+        },
+        "links": {
+          "self": "https://api.outreach.io/api/v2/opportunities/synthetic-conformance-value"
+        }
+      }
+    }
+  }
+}

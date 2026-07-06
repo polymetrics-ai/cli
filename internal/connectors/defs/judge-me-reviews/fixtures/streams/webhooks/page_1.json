@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shop_id": 10,
+      "shop_domain": "example.myshopify.com",
+      "webhooks": [
+        {
+          "id": 1,
+          "key": "review/created",
+          "url": "https://example.com/webhooks/review-created",
+          "failure_count": 0
+        }
+      ]
+    }
+  }
+}

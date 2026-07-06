@@ -1,0 +1,27 @@
+{
+  "name": "primetric",
+  "display_name": "Primetric",
+  "description": "Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://developer.primetric.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Primetric API read of employee, project, client, and role data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/primetric (this bundle has no Tier-2 hook, so there is no paritytest package for this wave)."
+  }
+}

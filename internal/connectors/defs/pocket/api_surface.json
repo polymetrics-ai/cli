@@ -1,0 +1,15 @@
+{
+  "api": "Pocket legacy connector hook surface",
+  "docs": "manual intervention needed",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy pocket connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/pocket, which delegates to internal/connectors/pocket until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/pocket items read path",
+      "covered_by": {
+        "stream": "items"
+      }
+    }
+  ]
+}

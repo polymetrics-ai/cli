@@ -1,0 +1,27 @@
+{
+  "name": "stripe",
+  "display_name": "Stripe",
+  "description": "Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.",
+  "integration_type": "api",
+  "docs_url": "https://stripe.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
+  },
+  "risk": {
+    "read": "external Stripe API read of customer and billing data",
+    "write": "external Stripe API mutation",
+    "approval": "reverse ETL plan approval required before writes"
+  }
+}

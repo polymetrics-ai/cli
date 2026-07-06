@@ -1,0 +1,12 @@
+{
+  "record": {
+    "form_name": "Fixture Form",
+    "form_code": "F-1",
+    "question_name": "inspector_notes",
+    "question_value": "Updated fixture answer value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/change_form_answer"
+  }
+}

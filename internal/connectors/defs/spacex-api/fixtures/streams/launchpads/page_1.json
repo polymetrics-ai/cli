@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/launchpads" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "launchpad_fixture_1", "name": "Fixture Pad", "full_name": "Fixture Launch Complex", "locality": "Cape Canaveral", "region": "Florida", "latitude": 28.5, "longitude": -80.5, "launch_attempts": 2, "launch_successes": 1, "status": "active", "launches": ["launch_fixture_1", "launch_fixture_2"] }
+    ]
+  }
+}

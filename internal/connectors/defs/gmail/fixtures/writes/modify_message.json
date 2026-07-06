@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "msg_fixture_1",
+    "addLabelIds": ["IMPORTANT"],
+    "removeLabelIds": ["UNREAD"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/messages/msg_fixture_1/modify",
+    "body": {
+      "addLabelIds": ["IMPORTANT"],
+      "removeLabelIds": ["UNREAD"]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "msg_fixture_1", "labelIds": ["IMPORTANT", "INBOX"] }
+  }
+}

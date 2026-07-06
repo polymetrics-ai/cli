@@ -1,0 +1,918 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/templates/email/list",
+    "query": {
+      "offset": "0",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 100,
+      "templates": [
+        {
+          "email_template_id": "tpl_fixture_1",
+          "template_name": "Fixture Template 1",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:01.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_2",
+          "template_name": "Fixture Template 2",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:02.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_3",
+          "template_name": "Fixture Template 3",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:03.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_4",
+          "template_name": "Fixture Template 4",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:04.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_5",
+          "template_name": "Fixture Template 5",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:05.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_6",
+          "template_name": "Fixture Template 6",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:06.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_7",
+          "template_name": "Fixture Template 7",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:07.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_8",
+          "template_name": "Fixture Template 8",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:08.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_9",
+          "template_name": "Fixture Template 9",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:09.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_10",
+          "template_name": "Fixture Template 10",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:10.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_11",
+          "template_name": "Fixture Template 11",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:11.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_12",
+          "template_name": "Fixture Template 12",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:12.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_13",
+          "template_name": "Fixture Template 13",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:13.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_14",
+          "template_name": "Fixture Template 14",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:14.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_15",
+          "template_name": "Fixture Template 15",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:15.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_16",
+          "template_name": "Fixture Template 16",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:16.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_17",
+          "template_name": "Fixture Template 17",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:17.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_18",
+          "template_name": "Fixture Template 18",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:18.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_19",
+          "template_name": "Fixture Template 19",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:19.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_20",
+          "template_name": "Fixture Template 20",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:20.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_21",
+          "template_name": "Fixture Template 21",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:21.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_22",
+          "template_name": "Fixture Template 22",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:22.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_23",
+          "template_name": "Fixture Template 23",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:23.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_24",
+          "template_name": "Fixture Template 24",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:24.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_25",
+          "template_name": "Fixture Template 25",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:25.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_26",
+          "template_name": "Fixture Template 26",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:26.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_27",
+          "template_name": "Fixture Template 27",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:27.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_28",
+          "template_name": "Fixture Template 28",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:28.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_29",
+          "template_name": "Fixture Template 29",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:29.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_30",
+          "template_name": "Fixture Template 30",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:30.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_31",
+          "template_name": "Fixture Template 31",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:31.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_32",
+          "template_name": "Fixture Template 32",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:32.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_33",
+          "template_name": "Fixture Template 33",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:33.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_34",
+          "template_name": "Fixture Template 34",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:34.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_35",
+          "template_name": "Fixture Template 35",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:35.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_36",
+          "template_name": "Fixture Template 36",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:36.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_37",
+          "template_name": "Fixture Template 37",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:37.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_38",
+          "template_name": "Fixture Template 38",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:38.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_39",
+          "template_name": "Fixture Template 39",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:39.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_40",
+          "template_name": "Fixture Template 40",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:40.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_41",
+          "template_name": "Fixture Template 41",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:41.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_42",
+          "template_name": "Fixture Template 42",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:42.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_43",
+          "template_name": "Fixture Template 43",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:43.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_44",
+          "template_name": "Fixture Template 44",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:44.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_45",
+          "template_name": "Fixture Template 45",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:45.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_46",
+          "template_name": "Fixture Template 46",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:46.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_47",
+          "template_name": "Fixture Template 47",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:47.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_48",
+          "template_name": "Fixture Template 48",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:48.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_49",
+          "template_name": "Fixture Template 49",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:49.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_50",
+          "template_name": "Fixture Template 50",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:50.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_51",
+          "template_name": "Fixture Template 51",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:51.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_52",
+          "template_name": "Fixture Template 52",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:52.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_53",
+          "template_name": "Fixture Template 53",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:53.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_54",
+          "template_name": "Fixture Template 54",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:54.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_55",
+          "template_name": "Fixture Template 55",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:55.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_56",
+          "template_name": "Fixture Template 56",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:56.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_57",
+          "template_name": "Fixture Template 57",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:57.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_58",
+          "template_name": "Fixture Template 58",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:58.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_59",
+          "template_name": "Fixture Template 59",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:59.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_60",
+          "template_name": "Fixture Template 60",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:00.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_61",
+          "template_name": "Fixture Template 61",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:01.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_62",
+          "template_name": "Fixture Template 62",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:02.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_63",
+          "template_name": "Fixture Template 63",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:03.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_64",
+          "template_name": "Fixture Template 64",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:04.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_65",
+          "template_name": "Fixture Template 65",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:05.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_66",
+          "template_name": "Fixture Template 66",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:06.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_67",
+          "template_name": "Fixture Template 67",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:07.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_68",
+          "template_name": "Fixture Template 68",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:08.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_69",
+          "template_name": "Fixture Template 69",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:09.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_70",
+          "template_name": "Fixture Template 70",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:10.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_71",
+          "template_name": "Fixture Template 71",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:11.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_72",
+          "template_name": "Fixture Template 72",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:12.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_73",
+          "template_name": "Fixture Template 73",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:13.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_74",
+          "template_name": "Fixture Template 74",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:14.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_75",
+          "template_name": "Fixture Template 75",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:15.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_76",
+          "template_name": "Fixture Template 76",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:16.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_77",
+          "template_name": "Fixture Template 77",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:17.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_78",
+          "template_name": "Fixture Template 78",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:18.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_79",
+          "template_name": "Fixture Template 79",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:19.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_80",
+          "template_name": "Fixture Template 80",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:20.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_81",
+          "template_name": "Fixture Template 81",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:21.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_82",
+          "template_name": "Fixture Template 82",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:22.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_83",
+          "template_name": "Fixture Template 83",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:23.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_84",
+          "template_name": "Fixture Template 84",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:24.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_85",
+          "template_name": "Fixture Template 85",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:25.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_86",
+          "template_name": "Fixture Template 86",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:26.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_87",
+          "template_name": "Fixture Template 87",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:27.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_88",
+          "template_name": "Fixture Template 88",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:28.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_89",
+          "template_name": "Fixture Template 89",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:29.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_90",
+          "template_name": "Fixture Template 90",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:30.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_91",
+          "template_name": "Fixture Template 91",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:31.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_92",
+          "template_name": "Fixture Template 92",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:32.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_93",
+          "template_name": "Fixture Template 93",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:33.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_94",
+          "template_name": "Fixture Template 94",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:34.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_95",
+          "template_name": "Fixture Template 95",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:35.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_96",
+          "template_name": "Fixture Template 96",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:36.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_97",
+          "template_name": "Fixture Template 97",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:37.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_98",
+          "template_name": "Fixture Template 98",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:38.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_99",
+          "template_name": "Fixture Template 99",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:39.000000",
+          "tags": [
+            "fixture"
+          ]
+        },
+        {
+          "email_template_id": "tpl_fixture_100",
+          "template_name": "Fixture Template 100",
+          "created_at": "2026-01-01T00:00:00.000000",
+          "updated_at": "2026-01-01T00:00:40.000000",
+          "tags": [
+            "fixture"
+          ]
+        }
+      ]
+    }
+  }
+}

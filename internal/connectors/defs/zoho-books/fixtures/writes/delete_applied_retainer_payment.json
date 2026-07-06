@@ -1,0 +1,17 @@
+{
+  "record": {
+    "retainerinvoice_id": "synthetic-conformance-value",
+    "invoice_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/retainerinvoices/synthetic-conformance-value/invoices/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

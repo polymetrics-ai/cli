@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Judge.me Reviews Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key",
+    "shop_domain"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Judge.me private, public, or OAuth API token. Sent as the X-Api-Token header."
+    },
+    "shop_domain": {
+      "type": "string",
+      "description": "The Shopify shop domain (for example example.myshopify.com). Sent as the shop_domain query parameter on every request."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.judge.me/api/v1",
+      "description": "Judge.me API base URL override for tests or proxies."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for legacy reviews/products/widgets streams (1-100)."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Optional Judge.me product id for review/widget filters."
+    },
+    "product_external_id": {
+      "type": "string",
+      "description": "Optional external platform product id for widget lookups."
+    },
+    "product_handle": {
+      "type": "string",
+      "description": "Optional product handle for widget lookups."
+    },
+    "review_id": {
+      "type": "string",
+      "description": "Judge.me review id for the review detail stream."
+    },
+    "reviewer_id": {
+      "type": "string",
+      "description": "Judge.me reviewer id for reviewer detail and filters."
+    },
+    "reviewer_external_id": {
+      "type": "string",
+      "description": "Optional external platform reviewer id for reviewer detail lookups."
+    },
+    "reviewer_email": {
+      "type": "string",
+      "description": "Optional reviewer email for reviewer detail lookups."
+    },
+    "rating": {
+      "type": "string",
+      "description": "Optional review rating filter (1-5)."
+    },
+    "widget_page": {
+      "type": "string",
+      "description": "Optional page value for widget HTML endpoints that accept page."
+    },
+    "widget_per_page": {
+      "type": "string",
+      "description": "Optional per_page value for widget HTML endpoints that accept per_page."
+    },
+    "widget_review_type": {
+      "type": "string",
+      "description": "Optional review_type for reviews_tab and all_reviews_page widgets."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Judge.me webhook id for the webhook detail stream."
+    },
+    "setting_keys": {
+      "type": "string",
+      "description": "Optional setting key value for settings stream; sent as setting_keys[]."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

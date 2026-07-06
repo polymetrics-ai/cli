@@ -1,0 +1,567 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/variants",
+    "query": {
+      "page": "1",
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "sku": "SKU-1",
+          "product_id": 1,
+          "material_id": null,
+          "sales_price": 10.0,
+          "purchase_price": 5.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "sku": "SKU-2",
+          "product_id": 2,
+          "material_id": null,
+          "sales_price": 20.0,
+          "purchase_price": 10.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 3,
+          "sku": "SKU-3",
+          "product_id": 3,
+          "material_id": null,
+          "sales_price": 30.0,
+          "purchase_price": 15.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 4,
+          "sku": "SKU-4",
+          "product_id": 4,
+          "material_id": null,
+          "sales_price": 40.0,
+          "purchase_price": 20.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 5,
+          "sku": "SKU-5",
+          "product_id": 5,
+          "material_id": null,
+          "sales_price": 50.0,
+          "purchase_price": 25.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 6,
+          "sku": "SKU-6",
+          "product_id": 6,
+          "material_id": null,
+          "sales_price": 60.0,
+          "purchase_price": 30.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 7,
+          "sku": "SKU-7",
+          "product_id": 7,
+          "material_id": null,
+          "sales_price": 70.0,
+          "purchase_price": 35.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 8,
+          "sku": "SKU-8",
+          "product_id": 8,
+          "material_id": null,
+          "sales_price": 80.0,
+          "purchase_price": 40.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 9,
+          "sku": "SKU-9",
+          "product_id": 9,
+          "material_id": null,
+          "sales_price": 90.0,
+          "purchase_price": 45.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 10,
+          "sku": "SKU-10",
+          "product_id": 10,
+          "material_id": null,
+          "sales_price": 100.0,
+          "purchase_price": 50.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 11,
+          "sku": "SKU-11",
+          "product_id": 11,
+          "material_id": null,
+          "sales_price": 110.0,
+          "purchase_price": 55.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 12,
+          "sku": "SKU-12",
+          "product_id": 12,
+          "material_id": null,
+          "sales_price": 120.0,
+          "purchase_price": 60.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 13,
+          "sku": "SKU-13",
+          "product_id": 13,
+          "material_id": null,
+          "sales_price": 130.0,
+          "purchase_price": 65.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 14,
+          "sku": "SKU-14",
+          "product_id": 14,
+          "material_id": null,
+          "sales_price": 140.0,
+          "purchase_price": 70.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 15,
+          "sku": "SKU-15",
+          "product_id": 15,
+          "material_id": null,
+          "sales_price": 150.0,
+          "purchase_price": 75.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 16,
+          "sku": "SKU-16",
+          "product_id": 16,
+          "material_id": null,
+          "sales_price": 160.0,
+          "purchase_price": 80.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 17,
+          "sku": "SKU-17",
+          "product_id": 17,
+          "material_id": null,
+          "sales_price": 170.0,
+          "purchase_price": 85.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 18,
+          "sku": "SKU-18",
+          "product_id": 18,
+          "material_id": null,
+          "sales_price": 180.0,
+          "purchase_price": 90.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 19,
+          "sku": "SKU-19",
+          "product_id": 19,
+          "material_id": null,
+          "sales_price": 190.0,
+          "purchase_price": 95.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 20,
+          "sku": "SKU-20",
+          "product_id": 20,
+          "material_id": null,
+          "sales_price": 200.0,
+          "purchase_price": 100.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 21,
+          "sku": "SKU-21",
+          "product_id": 21,
+          "material_id": null,
+          "sales_price": 210.0,
+          "purchase_price": 105.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 22,
+          "sku": "SKU-22",
+          "product_id": 22,
+          "material_id": null,
+          "sales_price": 220.0,
+          "purchase_price": 110.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 23,
+          "sku": "SKU-23",
+          "product_id": 23,
+          "material_id": null,
+          "sales_price": 230.0,
+          "purchase_price": 115.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 24,
+          "sku": "SKU-24",
+          "product_id": 24,
+          "material_id": null,
+          "sales_price": 240.0,
+          "purchase_price": 120.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 25,
+          "sku": "SKU-25",
+          "product_id": 25,
+          "material_id": null,
+          "sales_price": 250.0,
+          "purchase_price": 125.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 26,
+          "sku": "SKU-26",
+          "product_id": 26,
+          "material_id": null,
+          "sales_price": 260.0,
+          "purchase_price": 130.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 27,
+          "sku": "SKU-27",
+          "product_id": 27,
+          "material_id": null,
+          "sales_price": 270.0,
+          "purchase_price": 135.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 28,
+          "sku": "SKU-28",
+          "product_id": 28,
+          "material_id": null,
+          "sales_price": 280.0,
+          "purchase_price": 140.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 29,
+          "sku": "SKU-29",
+          "product_id": 29,
+          "material_id": null,
+          "sales_price": 290.0,
+          "purchase_price": 145.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 30,
+          "sku": "SKU-30",
+          "product_id": 30,
+          "material_id": null,
+          "sales_price": 300.0,
+          "purchase_price": 150.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 31,
+          "sku": "SKU-31",
+          "product_id": 31,
+          "material_id": null,
+          "sales_price": 310.0,
+          "purchase_price": 155.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 32,
+          "sku": "SKU-32",
+          "product_id": 32,
+          "material_id": null,
+          "sales_price": 320.0,
+          "purchase_price": 160.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 33,
+          "sku": "SKU-33",
+          "product_id": 33,
+          "material_id": null,
+          "sales_price": 330.0,
+          "purchase_price": 165.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 34,
+          "sku": "SKU-34",
+          "product_id": 34,
+          "material_id": null,
+          "sales_price": 340.0,
+          "purchase_price": 170.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 35,
+          "sku": "SKU-35",
+          "product_id": 35,
+          "material_id": null,
+          "sales_price": 350.0,
+          "purchase_price": 175.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 36,
+          "sku": "SKU-36",
+          "product_id": 36,
+          "material_id": null,
+          "sales_price": 360.0,
+          "purchase_price": 180.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 37,
+          "sku": "SKU-37",
+          "product_id": 37,
+          "material_id": null,
+          "sales_price": 370.0,
+          "purchase_price": 185.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 38,
+          "sku": "SKU-38",
+          "product_id": 38,
+          "material_id": null,
+          "sales_price": 380.0,
+          "purchase_price": 190.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 39,
+          "sku": "SKU-39",
+          "product_id": 39,
+          "material_id": null,
+          "sales_price": 390.0,
+          "purchase_price": 195.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 40,
+          "sku": "SKU-40",
+          "product_id": 40,
+          "material_id": null,
+          "sales_price": 400.0,
+          "purchase_price": 200.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 41,
+          "sku": "SKU-41",
+          "product_id": 41,
+          "material_id": null,
+          "sales_price": 410.0,
+          "purchase_price": 205.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 42,
+          "sku": "SKU-42",
+          "product_id": 42,
+          "material_id": null,
+          "sales_price": 420.0,
+          "purchase_price": 210.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 43,
+          "sku": "SKU-43",
+          "product_id": 43,
+          "material_id": null,
+          "sales_price": 430.0,
+          "purchase_price": 215.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 44,
+          "sku": "SKU-44",
+          "product_id": 44,
+          "material_id": null,
+          "sales_price": 440.0,
+          "purchase_price": 220.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 45,
+          "sku": "SKU-45",
+          "product_id": 45,
+          "material_id": null,
+          "sales_price": 450.0,
+          "purchase_price": 225.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 46,
+          "sku": "SKU-46",
+          "product_id": 46,
+          "material_id": null,
+          "sales_price": 460.0,
+          "purchase_price": 230.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 47,
+          "sku": "SKU-47",
+          "product_id": 47,
+          "material_id": null,
+          "sales_price": 470.0,
+          "purchase_price": 235.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 48,
+          "sku": "SKU-48",
+          "product_id": 48,
+          "material_id": null,
+          "sales_price": 480.0,
+          "purchase_price": 240.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 49,
+          "sku": "SKU-49",
+          "product_id": 49,
+          "material_id": null,
+          "sales_price": 490.0,
+          "purchase_price": 245.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "id": 50,
+          "sku": "SKU-50",
+          "product_id": 50,
+          "material_id": null,
+          "sales_price": 500.0,
+          "purchase_price": 250.0,
+          "type": "product",
+          "created_at": "2026-01-01T00:00:00.000Z",
+          "updated_at": "2026-01-02T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/Notes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "note_fixture_1", "Note_Title": "Fixture Note One", "Note_Content": "Fixture note content one.", "Parent_Id": { "id": "record_fixture_1", "name": "Fixture Deal One", "module": "Deals" } },
+        { "id": "note_fixture_2", "Note_Title": "Fixture Note Two", "Note_Content": "Fixture note content two.", "Parent_Id": { "id": "contact_fixture_1", "name": "Fixture One", "module": "Contacts" } }
+      ],
+      "info": { "page": 1, "per_page": 200, "count": 2, "more_records": true }
+    }
+  }
+}

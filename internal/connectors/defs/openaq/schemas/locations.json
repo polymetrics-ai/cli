@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "locations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "locality": { "type": ["string", "null"] },
+    "timezone": { "type": ["string", "null"] },
+    "country": { "type": ["object", "null"] },
+    "owner": { "type": ["object", "null"] },
+    "provider": { "type": ["object", "null"] },
+    "coordinates": { "type": ["object", "null"] },
+    "sensors": { "type": ["array", "null"] },
+    "isMobile": { "type": ["boolean", "null"] },
+    "isMonitor": { "type": ["boolean", "null"] },
+    "datetimeFirst": { "type": ["object", "null"] },
+    "datetimeLast": { "type": ["object", "null"] }
+  }
+}

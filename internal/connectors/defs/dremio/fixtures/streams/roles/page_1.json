@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/role" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "role_fixture_1",
+          "name": "fixture-analysts",
+          "type": "INTERNAL",
+          "description": "Fixture analysts role",
+          "memberCount": 3,
+          "roles": []
+        },
+        {
+          "id": "role_fixture_2",
+          "name": "PUBLIC",
+          "type": "SYSTEM",
+          "description": "Fixture public role",
+          "memberCount": 10,
+          "roles": []
+        }
+      ],
+      "nextPageToken": ""
+    }
+  }
+}

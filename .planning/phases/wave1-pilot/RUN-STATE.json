@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "wave1-pilot",
+  "status": "completed_with_warnings",
+  "reason": "Phase closed by gsd-loop-reviewer re-review (REVIEW-A.md 'Re-review (gap loop cycle 1)': GO). All REVIEW-B blockers + REVIEW-A majors resolved at HEAD f7632b9; full gate green (VERIFICATION.md). Warnings: 2 queued ENGINE_GAP items are pre-fan-out BLOCKERS \u2014 (1) incremental-lower-bound query vars (chargebee sort_by[asc]=updated_at, s2-chargebee-sentry-ledger.md STOP), (2) ResolveCheck ==/in when-grammar static parsing (github auth_type rendering, ledger G14). Pass A dispatch is conditioned on both landing; carried minors enumerated in SUMMARY.md.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "agents",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationMissingRequired": [],
+    "warnings": [
+      "ENGINE_GAP queued (pre-fan-out blocker): incremental-lower-bound query vars \u2014 chargebee sort_by[asc]=updated_at inexpressible; documented OPEN in defs/chargebee/docs.md",
+      "ENGINE_GAP queued (pre-fan-out blocker): ResolveCheck ==/in when-grammar static parsing \u2014 legacy auth_type enums rendered as dedicated opt-in keys until landed (github public_access, ledger G14)",
+      "Carried minors (fan-out template pass): chargebee blanket stringify main-compare; github compound-write body assertions; github close_* fixture bodies; monday max_pages declaration; sentry inert per_page entries; gmail interpolateOptional comment drift; github hooks.go at 400-line hard ceiling"
+    ]
+  },
+  "updatedAt": "2026-07-02T15:40:13.693Z"
+}

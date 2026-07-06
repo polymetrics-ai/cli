@@ -1,0 +1,30 @@
+{
+  "record": {
+    "name": "Fixture Product Session",
+    "description": "Sanitized fixture lecture.",
+    "start": "2026-06-01 09:00:00",
+    "end": "2026-06-01 10:00:00",
+    "hall_id": 42,
+    "speakers": [],
+    "discussion": true,
+    "moderating": true,
+    "polling": true,
+    "capacity": 100,
+    "type": 0,
+    "stream": "https://example.com/live",
+    "virtual_meeting": "https://example.com/meeting",
+    "tracks": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lecture",
+    "body": {
+      "name": "Fixture Product Session",
+      "start": "2026-06-01 09:00:00",
+      "end": "2026-06-01 10:00:00",
+      "hall_id": 42,
+      "type": 0
+    }
+  },
+  "response": { "status": 200, "body": { "id": 420, "name": "Fixture Product Session" } }
+}

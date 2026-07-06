@@ -1,0 +1,75 @@
+{
+  "api": "Omnisend API v3 (https://api.omnisend.com/v3)",
+  "docs": "https://api-docs.omnisend.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Omnisend surface (events, automations, webhooks, batch endpoints) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/carts",
+      "covered_by": {
+        "stream": "carts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/events",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/automations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

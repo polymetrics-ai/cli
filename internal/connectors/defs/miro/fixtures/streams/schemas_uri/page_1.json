@@ -1,0 +1,81 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Schemas/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "attributes": [
+        {
+          "schemas": [
+            "urn:ietf:params:scim:schemas:core:2.0:User"
+          ],
+          "name": "name_fixture",
+          "type": "type_fixture",
+          "multiValued": true,
+          "description": "description_fixture",
+          "required": true,
+          "subAttributes": [
+            {
+              "schemas": [
+                "urn:ietf:params:scim:schemas:core:2.0:User"
+              ],
+              "name": "name_fixture",
+              "type": "type_fixture",
+              "multiValued": true,
+              "description": "description_fixture",
+              "required": true,
+              "subAttributes": [
+                {
+                  "schemas": [
+                    "urn:ietf:params:scim:schemas:core:2.0:User"
+                  ],
+                  "name": "name_fixture",
+                  "type": "type_fixture",
+                  "multiValued": true,
+                  "description": "description_fixture",
+                  "required": true,
+                  "subAttributes": [
+                    {
+                      "schemas": {},
+                      "name": {},
+                      "type": {},
+                      "multiValued": {},
+                      "description": {},
+                      "required": {},
+                      "subAttributes": {},
+                      "caseExact": {},
+                      "mutability": {},
+                      "returned": {},
+                      "uniqueness": {}
+                    }
+                  ],
+                  "caseExact": true,
+                  "mutability": "mutability_fixture",
+                  "returned": "returned_fixture",
+                  "uniqueness": "uniqueness_fixture"
+                }
+              ],
+              "caseExact": true,
+              "mutability": "mutability_fixture",
+              "returned": "returned_fixture",
+              "uniqueness": "uniqueness_fixture"
+            }
+          ],
+          "caseExact": true,
+          "mutability": "mutability_fixture",
+          "returned": "returned_fixture",
+          "uniqueness": "uniqueness_fixture"
+        }
+      ],
+      "meta": {
+        "resourceType": "resource_type_fixture",
+        "location": "location_fixture"
+      }
+    }
+  }
+}

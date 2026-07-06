@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/budgets/synthetic-conformance-value/accounts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "accounts": [
+          {
+            "id": "account_fixture_1",
+            "name": "Fixture Checking",
+            "type": "checking",
+            "on_budget": true,
+            "closed": false,
+            "balance": 150000,
+            "cleared_balance": 150000,
+            "uncleared_balance": 0,
+            "deleted": false
+          },
+          {
+            "id": "account_fixture_2",
+            "name": "Fixture Savings",
+            "type": "savings",
+            "on_budget": true,
+            "closed": false,
+            "balance": 500000,
+            "cleared_balance": 500000,
+            "uncleared_balance": 0,
+            "deleted": false
+          }
+        ]
+      }
+    }
+  }
+}

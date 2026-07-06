@@ -1,0 +1,15 @@
+{
+  "record": {
+    "template_id": "template_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/organisations/synthetic-conformance-value/form_templates/template_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_form_template_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "cursor": "fixture_cursor_abc" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 3,
+        "type": "PERSON",
+        "created_time": 1767225603,
+        "updated_time": 1767225603,
+        "star_value": 0,
+        "lead_score": 30,
+        "tags": ["fixture"],
+        "properties": [],
+        "owner": { "id": "fixture-owner-1" }
+      }
+    ]
+  }
+}

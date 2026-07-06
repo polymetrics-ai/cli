@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/timeentries",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "timesheet_entries_fixture_1",
+          "name": "Fixture timesheet entries"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

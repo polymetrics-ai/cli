@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Fixture Agent",
+    "email": "fixture.agent@example.com",
+    "available": true,
+    "time_zone": "America/New_York"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "name": "Fixture Agent",
+      "email": "fixture.agent@example.com",
+      "available": true,
+      "time_zone": "America/New_York"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "user": { "id": 1001, "name": "Fixture Agent", "email": "fixture.agent@example.com" } }
+  }
+}

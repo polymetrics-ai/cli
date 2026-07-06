@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/idps/synthetic-conformance-value/users/synthetic-conformance-value/credentials/tokens",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "expiresAt": "2026-01-01T00:00:00Z",
+        "id": "id_fixture",
+        "scopes": [
+          "scope_fixture"
+        ],
+        "token": "fixture",
+        "tokenAuthScheme": "fixture",
+        "tokenType": "fixture"
+      }
+    ]
+  }
+}

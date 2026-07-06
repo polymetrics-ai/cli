@@ -1,0 +1,8 @@
+{
+  "record": { "id": "MFL_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/a/synthetic-conformance-value/message-flows/MFL_fixture_1.json"
+  },
+  "response": { "status": 204, "body": {} }
+}

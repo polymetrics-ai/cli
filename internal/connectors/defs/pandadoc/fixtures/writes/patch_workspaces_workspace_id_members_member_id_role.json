@@ -1,0 +1,37 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "member_id": "member_id_fixture",
+    "name": "Fixture patch_workspaces_workspace_id_members_member_id_role",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/public/v1/workspaces/workspace_id_fixture/members/member_id_fixture/role",
+    "body": {
+      "name": "Fixture patch_workspaces_workspace_id_members_member_id_role",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "patch_workspaces_workspace_id_members_member_id_role_response",
+      "status": "ok"
+    }
+  }
+}

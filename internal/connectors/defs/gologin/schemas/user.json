@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "user",
+  "type": "object",
+  "x-primary-key": ["_id"],
+  "x-cursor-field": "createdAt",
+  "required": ["_id"],
+  "properties": {
+    "_id": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "firstName": { "type": ["string", "null"] },
+    "lastName": { "type": ["string", "null"] },
+    "plan": { "type": ["string", "null"] },
+    "profilesCount": { "type": ["integer", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/template/list", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "templates": [
+        {
+          "template_id": "tpl_fixture_1",
+          "title": "Fixture NDA Template",
+          "message": "Fixture template message",
+          "is_creator": true,
+          "is_embedded": false,
+          "is_locked": false,
+          "updated_at": 1767225601
+        },
+        {
+          "template_id": "tpl_fixture_2",
+          "title": "Fixture MSA Template",
+          "message": "Fixture template message",
+          "is_creator": true,
+          "is_embedded": false,
+          "is_locked": true,
+          "updated_at": 1767225602
+        }
+      ],
+      "list_info": { "page": 1, "num_pages": 1, "num_results": 2, "page_size": 100 }
+    }
+  }
+}

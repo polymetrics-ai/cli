@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "title": "Updated fixture feedback"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/feedback/id_fixture",
+    "body": {
+      "title": "Updated fixture feedback"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/custom-fields/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,fieldId,type,isRecordMultipleResponses,salesforceId,isUseValues,isRequired,isAnalyticsSynced,createdAt,updatedAt,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "fieldId": 1,
+      "type": 1,
+      "isRecordMultipleResponses": false,
+      "salesforceId": 1,
+      "isUseValues": false,
+      "isRequired": false,
+      "isAnalyticsSynced": false,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

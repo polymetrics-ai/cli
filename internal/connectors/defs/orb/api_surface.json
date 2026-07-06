@@ -1,0 +1,12 @@
+{
+  "api": "Orb API v1 (https://api.withorb.com/v1)",
+  "docs": "https://docs.withorb.com/reference/api-reference",
+  "reviewed_at": "2026-07-02",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/customers", "covered_by": { "stream": "customers" } },
+    { "method": "GET", "path": "/v1/subscriptions", "covered_by": { "stream": "subscriptions" } },
+    { "method": "GET", "path": "/v1/plans", "covered_by": { "stream": "plans" } },
+    { "method": "GET", "path": "/v1/invoices", "covered_by": { "stream": "invoices" } }
+  ]
+}

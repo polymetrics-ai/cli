@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/receipts_summary",
+    "query": {
+      "location_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "date": "2026-01-01",
+          "open": {
+            "receipt_count": 1001,
+            "net_total": 1001,
+            "gross_total": 1001,
+            "tip_total": 1001,
+            "receipt_discounts": 1001
+          },
+          "closed": {
+            "receipt_count": 1001,
+            "net_total": 1001,
+            "gross_total": 1001,
+            "tip_total": 1001,
+            "receipt_discounts": 1001
+          },
+          "voided": {
+            "receipt_count": 1001,
+            "net_total": 1001,
+            "gross_total": 1001,
+            "tip_total": 1001,
+            "receipt_discounts": 1001
+          },
+          "deleted": {
+            "receipt_count": 1001,
+            "net_total": 1001,
+            "gross_total": 1001,
+            "tip_total": 1001,
+            "receipt_discounts": 1001
+          }
+        }
+      ]
+    }
+  }
+}

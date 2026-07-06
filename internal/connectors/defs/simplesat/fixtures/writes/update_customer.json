@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "401",
+    "name": "Updated Fixture Customer"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/401",
+    "body": {
+      "name": "Updated Fixture Customer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 401, "name": "Updated Fixture Customer" }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "api": "Public APIs directory API (https://api.publicapis.org)",
+  "docs": "https://github.com/davemachado/public-api",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-1 declarative migration: the entries stream only (legacy-parity list read); categories is out of scope, see excluded entry below",
+  "endpoints": [
+    { "method": "GET", "path": "/entries", "covered_by": { "stream": "entries" } },
+    { "method": "GET", "path": "/categories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: the raw response is a bare array of scalar strings (or an object wrapping one), fanned out one record per string by legacy's own readCategories/stringSlice helper; connsdk.RecordsAt only extracts array elements that decode as JSON objects (a scalar string element is silently dropped, yielding zero records) and records.keyed_object explodes an object's VALUES which must themselves be objects, so neither declarative primitive can express a scalar-array-to-record fan-out — the same gap class as ip2whois's nameservers deviation (docs/migration/conventions.md ledger item 12)" } }
+  ]
+}

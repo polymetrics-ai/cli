@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/ssls", "query": { "marid": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Result": {
+        "ssls": [
+          {
+            "SSL": "0101    0801",
+            "MarId": "fixture_1",
+            "FullAddress": "100 FIXTURE ST NW",
+            "Square": "0101",
+            "Lot": "0801",
+            "Col": "",
+            "Lot_type": "RECORD"
+          }
+        ]
+      }
+    }
+  }
+}

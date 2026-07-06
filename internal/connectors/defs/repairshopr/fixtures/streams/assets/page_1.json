@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/customer_assets", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "assets": [
+        { "id": 1, "customer_id": 1, "name": "Fixture Asset 1", "serial_number": "SN-0001", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": 2, "customer_id": 2, "name": "Fixture Asset 2", "serial_number": "SN-0002", "updated_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

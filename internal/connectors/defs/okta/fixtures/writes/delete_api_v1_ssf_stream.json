@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/ssf/stream"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

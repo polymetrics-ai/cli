@@ -1,0 +1,33 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "appId": "app_id_fixture",
+    "defaultValue": "fixture",
+    "options": [
+      "fixture"
+    ],
+    "appLevel": true,
+    "showOnCustomerDetail": true,
+    "private": true,
+    "filterable": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/customers/custom_fields/id_fixture",
+    "body": {
+      "appId": "app_id_fixture",
+      "defaultValue": "fixture",
+      "options": [
+        "fixture"
+      ],
+      "appLevel": true,
+      "showOnCustomerDetail": true,
+      "private": true,
+      "filterable": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

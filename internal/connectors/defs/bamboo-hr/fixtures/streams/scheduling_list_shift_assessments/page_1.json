@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/scheduling/shift-assessments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "fixture_id",
+          "employeeId": 1001,
+          "date": "2026-01-01T00:00:00Z",
+          "result": "compliant",
+          "violations": [
+            {
+              "type": "missed",
+              "amount": 1001,
+              "assessmentId": "fixture_id",
+              "employeeTimesheetClockEntryId": 1001
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "shiftId": "fixture_id",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

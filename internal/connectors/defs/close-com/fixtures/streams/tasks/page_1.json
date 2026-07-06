@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/task/", "query": { "_limit": "100", "_skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "task_fixture_1",
+          "_type": "lead",
+          "text": "Fixture follow-up task",
+          "lead_id": "lead_1",
+          "contact_id": null,
+          "assigned_to": "user_fixture_1",
+          "assigned_to_name": "Fixture User",
+          "created_by": "user_fixture_1",
+          "created_by_name": "Fixture User",
+          "organization_id": "orga_fixture",
+          "is_complete": false,
+          "is_dateless": false,
+          "date": "2026-01-05T00:00:00Z",
+          "due_date": "2026-01-05",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_updated": "2026-01-01T00:00:00Z",
+          "view": "inbox"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

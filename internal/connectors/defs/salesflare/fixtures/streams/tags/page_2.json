@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/tags", "query": { "limit": "2", "offset": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 3, "name": "Fixture Tag Three" }
+      ]
+    }
+  }
+}

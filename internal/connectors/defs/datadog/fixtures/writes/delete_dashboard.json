@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "abc-def-ghi"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/dashboard/abc-def-ghi"
+  }
+}

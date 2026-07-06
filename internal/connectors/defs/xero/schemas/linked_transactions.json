@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "linked_transactions",
+  "type": "object",
+  "x-primary-key": [
+    "ContactID"
+  ],
+  "properties": {
+    "SourceTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SourceLineItemID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ContactID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TargetTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TargetLineItemID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LinkedTransactionID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UpdatedDateUTC": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SourceTransactionTypeCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ValidationErrors": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

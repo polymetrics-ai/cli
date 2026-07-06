@@ -1,0 +1,2601 @@
+[
+[
+{
+"name": "opuswatch",
+"loc": 272,
+"docs": "https://opuswatch.com/api"
+},
+{
+"name": "orb",
+"loc": 291,
+"docs": "https://docs.withorb.com/reference/api-reference"
+},
+{
+"name": "oveit",
+"loc": 271,
+"docs": "https://oveit.com/api/"
+},
+{
+"name": "pabbly-subscriptions-billing",
+"loc": 271,
+"docs": "https://www.pabbly.com/subscriptions/api/"
+},
+{
+"name": "pennylane",
+"loc": 272,
+"docs": "https://pennylane.com/api/"
+},
+{
+"name": "perigon",
+"loc": 279,
+"docs": "https://docs.goperigon.com/"
+}
+],
+[
+{
+"name": "perk",
+"loc": 251,
+"docs": "manual intervention needed"
+},
+{
+"name": "persistiq",
+"loc": 241,
+"docs": "https://persistiq.com/api-docs/index.html"
+},
+{
+"name": "persona",
+"loc": 266,
+"docs": "https://docs.withpersona.com/reference"
+},
+{
+"name": "pexels-api",
+"loc": 283,
+"docs": "https://www.pexels.com/api/documentation/"
+},
+{
+"name": "phyllo",
+"loc": 254,
+"docs": "https://docs.getphyllo.com/"
+},
+{
+"name": "picqer",
+"loc": 271,
+"docs": "https://picqer.com/en/api"
+}
+],
+[
+{
+"name": "pingdom",
+"loc": 238,
+"docs": "https://docs.pingdom.com/api/"
+},
+{
+"name": "pipedrive",
+"loc": 272,
+"docs": "https://developers.pipedrive.com/docs/api/v1"
+},
+{
+"name": "pivotal-tracker",
+"loc": 296,
+"docs": "manual intervention needed"
+},
+{
+"name": "planhat",
+"loc": 282,
+"docs": "https://docs.planhat.com/"
+},
+{
+"name": "pokeapi",
+"loc": 253,
+"docs": "https://pokeapi.co/docs/v2"
+},
+{
+"name": "poplar",
+"loc": 283,
+"docs": "https://docs.poplar.studio/"
+}
+],
+[
+{
+"name": "repairshopr",
+"loc": 271,
+"docs": "https://api-docs.repairshopr.com/"
+},
+{
+"name": "rollbar",
+"loc": 283,
+"docs": "https://docs.rollbar.com/reference/getting-started"
+},
+{
+"name": "rootly",
+"loc": 284,
+"docs": "https://rootly.com/api"
+},
+{
+"name": "safetyculture",
+"loc": 291,
+"docs": "https://developer.safetyculture.com/"
+},
+{
+"name": "sage-hr",
+"loc": 218,
+"docs": "https://developers.sage.hr/"
+},
+{
+"name": "salesflare",
+"loc": 292,
+"docs": "https://api.salesflare.com/docs"
+}
+],
+[
+{
+"name": "savvycal",
+"loc": 279,
+"docs": "https://savvycal.com/api"
+},
+{
+"name": "scryfall",
+"loc": 265,
+"docs": "https://scryfall.com/docs/api"
+},
+{
+"name": "secoda",
+"loc": 236,
+"docs": "https://docs.secoda.co/api.md"
+},
+{
+"name": "segment",
+"loc": 231,
+"docs": "https://docs.segmentapis.com/tag/Getting-Started"
+},
+{
+"name": "sendinblue",
+"loc": 228,
+"docs": "https://developers.brevo.com/reference"
+},
+{
+"name": "sendowl",
+"loc": 232,
+"docs": "https://www.sendowl.com/developers/"
+}
+],
+[
+{
+"name": "sendpulse",
+"loc": 248,
+"docs": "https://sendpulse.com/integrations/api"
+},
+{
+"name": "senseforce",
+"loc": 218,
+"docs": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints"
+},
+{
+"name": "serpstat",
+"loc": 260,
+"docs": "https://api-docs.serpstat.com/"
+},
+{
+"name": "service-now",
+"loc": 232,
+"docs": "manual intervention needed"
+},
+{
+"name": "sharepoint-lists-enterprise",
+"loc": 274,
+"docs": "https://learn.microsoft.com/en-us/graph/api/resources/list?view=graph-rest-1.0"
+},
+{
+"name": "sharetribe",
+"loc": 229,
+"docs": "https://www.sharetribe.com/api-reference/"
+}
+],
+[
+{
+"name": "simplesat",
+"loc": 265,
+"docs": "https://docs.simplesat.io/"
+},
+{
+"name": "smaily",
+"loc": 231,
+"docs": "https://smaily.com/help/api/"
+},
+{
+"name": "smartengage",
+"loc": 229,
+"docs": "https://smartengage.com/docs/api/"
+},
+{
+"name": "smartreach",
+"loc": 248,
+"docs": "https://api.smartreach.io/"
+},
+{
+"name": "smartwaiver",
+"loc": 258,
+"docs": "https://api.smartwaiver.com/"
+},
+{
+"name": "solarwinds-service-desk",
+"loc": 243,
+"docs": "https://documentation.solarwinds.com/en/success_center/swsd/content/api/swsd-api.htm"
+}
+],
+[
+{
+"name": "sonar-cloud",
+"loc": 277,
+"docs": "https://sonarcloud.io/web_api"
+},
+{
+"name": "spacex-api",
+"loc": 224,
+"docs": "https://github.com/r-spacex/SpaceX-API/tree/master/docs"
+},
+{
+"name": "sparkpost",
+"loc": 236,
+"docs": "https://developers.sparkpost.com/api/"
+},
+{
+"name": "split-io",
+"loc": 296,
+"docs": "https://docs.split.io/reference/api-overview"
+},
+{
+"name": "spotify-ads",
+"loc": 278,
+"docs": "https://ads.spotify.com/en-US/api/"
+},
+{
+"name": "spotlercrm",
+"loc": 260,
+"docs": "https://api.spotler.com/"
+}
+],
+[
+{
+"name": "squarespace",
+"loc": 267,
+"docs": "https://developers.squarespace.com/"
+},
+{
+"name": "statsig",
+"loc": 260,
+"docs": "https://docs.statsig.com/console-api"
+},
+{
+"name": "statuspage",
+"loc": 278,
+"docs": "https://developer.statuspage.io/"
+},
+{
+"name": "stigg",
+"loc": 243,
+"docs": "https://api-docs.stigg.io/how-to-use-stigg-api"
+},
+{
+"name": "survey-sparrow",
+"loc": 284,
+"docs": "https://developers.surveysparrow.com/"
+},
+{
+"name": "survicate",
+"loc": 277,
+"docs": "https://developers.survicate.com/"
+}
+],
+[
+{
+"name": "svix",
+"loc": 283,
+"docs": "https://docs.svix.com/api-reference"
+},
+{
+"name": "systeme",
+"loc": 282,
+"docs": "https://systeme.io/api"
+},
+{
+"name": "tavus",
+"loc": 232,
+"docs": "https://docs.tavus.io/"
+},
+{
+"name": "teamtailor",
+"loc": 233,
+"docs": "https://docs.teamtailor.com/"
+},
+{
+"name": "teamwork",
+"loc": 213,
+"docs": "https://apidocs.teamwork.com/"
+},
+{
+"name": "testrail",
+"loc": 195,
+"docs": "https://support.testrail.com/hc/en-us/articles/7077039051284-Introduction-to-the-TestRail-API"
+}
+],
+[
+{
+"name": "the-guardian-api",
+"loc": 222,
+"docs": "https://open-platform.theguardian.com/documentation/"
+},
+{
+"name": "thinkific",
+"loc": 216,
+"docs": "https://developers.thinkific.com/"
+},
+{
+"name": "thrive-learning",
+"loc": 292,
+"docs": "https://developers.thrivelearning.com/"
+},
+{
+"name": "tickettailor",
+"loc": 267,
+"docs": "https://developers.tickettailor.com/"
+},
+{
+"name": "ticktick",
+"loc": 254,
+"docs": "https://developer.ticktick.com/api"
+},
+{
+"name": "timely",
+"loc": 261,
+"docs": "https://dev.timelyapp.com/"
+}
+],
+[
+{
+"name": "tinyemail",
+"loc": 267,
+"docs": "https://tinyemail.com/api"
+},
+{
+"name": "todoist",
+"loc": 254,
+"docs": "https://developer.todoist.com/rest/v2/"
+},
+{
+"name": "toggl",
+"loc": 279,
+"docs": "https://developers.track.toggl.com/docs/"
+},
+{
+"name": "track-pms",
+"loc": 287,
+"docs": "https://www.trackhs.com/api"
+},
+{
+"name": "tremendous",
+"loc": 284,
+"docs": "https://developers.tremendous.com/"
+},
+{
+"name": "trustpilot",
+"loc": 299,
+"docs": "https://developers.trustpilot.com/"
+}
+],
+[
+{
+"name": "tvmaze-schedule",
+"loc": 220,
+"docs": "https://www.tvmaze.com/api"
+},
+{
+"name": "twelve-data",
+"loc": 285,
+"docs": "https://twelvedata.com/docs"
+},
+{
+"name": "twilio-taskrouter",
+"loc": 296,
+"docs": "https://www.twilio.com/docs/taskrouter/api"
+},
+{
+"name": "tyntec-sms",
+"loc": 286,
+"docs": "https://api.tyntec.com/reference/messaging"
+},
+{
+"name": "ubidots",
+"loc": 278,
+"docs": "https://docs.ubidots.com/reference/welcome"
+},
+{
+"name": "uppromote",
+"loc": 247,
+"docs": "https://uppromote.com/api"
+}
+],
+[
+{
+"name": "us-census",
+"loc": 258,
+"docs": "https://www.census.gov/data/developers/data-sets.html"
+},
+{
+"name": "uservoice",
+"loc": 244,
+"docs": "https://developer.uservoice.com/"
+},
+{
+"name": "vantage",
+"loc": 234,
+"docs": "https://docs.vantage.sh/"
+},
+{
+"name": "veeqo",
+"loc": 239,
+"docs": "https://developers.veeqo.com/"
+},
+{
+"name": "vercel",
+"loc": 185,
+"docs": "https://vercel.com/docs/rest-api"
+},
+{
+"name": "visma-economic",
+"loc": 189,
+"docs": "https://restdocs.e-conomic.com/"
+}
+],
+[
+{
+"name": "vwo",
+"loc": 191,
+"docs": "https://developers.vwo.com/"
+},
+{
+"name": "waiteraid",
+"loc": 190,
+"docs": "https://waiteraid.com/api"
+},
+{
+"name": "wasabi-stats-api",
+"loc": 263,
+"docs": "https://docs.wasabi.com/docs/stats-api"
+},
+{
+"name": "watchmode",
+"loc": 258,
+"docs": "https://api.watchmode.com/"
+},
+{
+"name": "weatherstack",
+"loc": 264,
+"docs": "https://weatherstack.com/documentation"
+},
+{
+"name": "web-scrapper",
+"loc": 238,
+"docs": "https://webscraper.io/documentation/api"
+}
+],
+[
+{
+"name": "when-i-work",
+"loc": 241,
+"docs": "https://apidocs.wheniwork.com/"
+},
+{
+"name": "whisky-hunter",
+"loc": 225,
+"docs": "https://whiskyhunter.net/api/"
+},
+{
+"name": "wordpress",
+"loc": 283,
+"docs": "https://developer.wordpress.org/rest-api/"
+},
+{
+"name": "workday",
+"loc": 289,
+"docs": "https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html"
+},
+{
+"name": "workday-rest",
+"loc": 288,
+"docs": "manual intervention needed"
+},
+{
+"name": "workflowmax",
+"loc": 246,
+"docs": "https://www.workflowmax.com/api"
+}
+],
+[
+{
+"name": "workramp",
+"loc": 246,
+"docs": "https://developers.workramp.com/"
+},
+{
+"name": "wrike",
+"loc": 246,
+"docs": "https://developers.wrike.com/api/v4/"
+},
+{
+"name": "wufoo",
+"loc": 260,
+"docs": "https://wufoo.github.io/docs/"
+},
+{
+"name": "xsolla",
+"loc": 261,
+"docs": "https://developers.xsolla.com/"
+},
+{
+"name": "yahoo-finance-price",
+"loc": 275,
+"docs": "https://www.yahoofinanceapi.com/"
+},
+{
+"name": "yotpo",
+"loc": 261,
+"docs": "https://apidocs.yotpo.com/reference"
+}
+],
+[
+{
+"name": "you-need-a-budget-ynab",
+"loc": 281,
+"docs": "https://api.ynab.com/"
+},
+{
+"name": "younium",
+"loc": 263,
+"docs": "https://developer.younium.com/"
+},
+{
+"name": "yousign",
+"loc": 261,
+"docs": "https://developers.yousign.com/"
+},
+{
+"name": "youtube-data",
+"loc": 224,
+"docs": "https://developers.google.com/youtube/v3"
+},
+{
+"name": "zapier-supported-storage",
+"loc": 179,
+"docs": "https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps"
+},
+{
+"name": "zapsign",
+"loc": 215,
+"docs": "https://docs.zapsign.com.br/"
+}
+],
+[
+{
+"name": "zendesk-sunshine",
+"loc": 220,
+"docs": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/"
+},
+{
+"name": "zenefits",
+"loc": 204,
+"docs": "https://developers.zenefits.com/"
+},
+{
+"name": "zoho-analytics-metadata-api",
+"loc": 286,
+"docs": "https://www.zoho.com/analytics/api/"
+},
+{
+"name": "zoho-bigin",
+"loc": 292,
+"docs": "https://www.zoho.com/bigin/developer/api.html"
+}
+],
+[
+{
+"name": "100ms",
+"loc": 556,
+"docs": "https://www.100ms.live/docs/api-reference/javascript/v2/home/content"
+},
+{
+"name": "activecampaign",
+"loc": 535,
+"docs": "https://developers.activecampaign.com/reference/overview"
+},
+{
+"name": "acuity-scheduling",
+"loc": 587,
+"docs": "https://developers.acuityscheduling.com/"
+}
+],
+[
+{
+"name": "adobe-commerce-magento",
+"loc": 642,
+"docs": "https://developer.adobe.com/commerce/webapi/rest/"
+},
+{
+"name": "agilecrm",
+"loc": 557,
+"docs": "https://github.com/agilecrm/rest-api"
+},
+{
+"name": "aha",
+"loc": 638,
+"docs": "https://www.aha.io/api"
+}
+],
+[
+{
+"name": "aircall",
+"loc": 598,
+"docs": "https://developer.aircall.io/api-references/"
+},
+{
+"name": "airtable",
+"loc": 510,
+"docs": "https://support.airtable.com/docs/airtable-api-deprecation-guidelines"
+},
+{
+"name": "akeneo",
+"loc": 686,
+"docs": "https://api.akeneo.com/"
+}
+],
+[
+{
+"name": "algolia",
+"loc": 546,
+"docs": "https://www.algolia.com/doc/rest-api/search/"
+},
+{
+"name": "alpaca-broker-api",
+"loc": 628,
+"docs": "https://docs.alpaca.markets/docs/broker-api"
+},
+{
+"name": "alpha-vantage",
+"loc": 604,
+"docs": "https://www.alphavantage.co/documentation/"
+}
+],
+[
+{
+"name": "amplitude",
+"loc": 432,
+"docs": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/"
+},
+{
+"name": "apify-dataset",
+"loc": 569,
+"docs": "https://docs.apify.com/api/v2"
+},
+{
+"name": "appcues",
+"loc": 540,
+"docs": "https://docs.appcues.com/en_US/api"
+}
+],
+[
+{
+"name": "appfigures",
+"loc": 638,
+"docs": "https://docs.appfigures.com/"
+},
+{
+"name": "appfollow",
+"loc": 597,
+"docs": "https://appfollow.docs.apiary.io/"
+},
+{
+"name": "apptivo",
+"loc": 552,
+"docs": "https://www.apptivo.com/api/"
+}
+],
+[
+{
+"name": "ashby",
+"loc": 516,
+"docs": "https://developers.ashbyhq.com/"
+},
+{
+"name": "assemblyai",
+"loc": 445,
+"docs": "https://www.assemblyai.com/docs"
+},
+{
+"name": "auth0",
+"loc": 606,
+"docs": "https://auth0.com/docs/api/management/v2"
+}
+],
+[
+{
+"name": "aviationstack",
+"loc": 601,
+"docs": "https://aviationstack.com/documentation"
+},
+{
+"name": "awin-advertiser",
+"loc": 566,
+"docs": "https://wiki.awin.com/index.php/Advertiser_API"
+},
+{
+"name": "aws-cloudtrail",
+"loc": 663,
+"docs": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+}
+],
+[
+{
+"name": "babelforce",
+"loc": 588,
+"docs": "https://api.babelforce.com/"
+},
+{
+"name": "bamboo-hr",
+"loc": 631,
+"docs": "https://documentation.bamboohr.com/reference/getting-started"
+},
+{
+"name": "basecamp",
+"loc": 613,
+"docs": "https://github.com/basecamp/bc3-api"
+}
+],
+[
+{
+"name": "beamer",
+"loc": 580,
+"docs": "https://www.getbeamer.com/api"
+},
+{
+"name": "bigmailer",
+"loc": 624,
+"docs": "https://www.bigmailer.io/api"
+},
+{
+"name": "bluetally",
+"loc": 633,
+"docs": "https://bluetally.readme.io/"
+}
+],
+[
+{
+"name": "boldsign",
+"loc": 568,
+"docs": "https://developers.boldsign.com/api-reference"
+},
+{
+"name": "box",
+"loc": 664,
+"docs": "https://developer.box.com/reference/"
+},
+{
+"name": "braze",
+"loc": 520,
+"docs": "https://www.braze.com/docs/api/home"
+}
+],
+[
+{
+"name": "breezometer",
+"loc": 558,
+"docs": "https://docs.breezometer.com/api-documentation/"
+},
+{
+"name": "breezy-hr",
+"loc": 631,
+"docs": "https://developer.breezy.hr/"
+},
+{
+"name": "brevo",
+"loc": 554,
+"docs": "https://developers.brevo.com/reference"
+}
+],
+[
+{
+"name": "brex",
+"loc": 605,
+"docs": "https://developer.brex.com/openapi/"
+},
+{
+"name": "buildkite",
+"loc": 578,
+"docs": "https://buildkite.com/docs/apis/rest-api"
+},
+{
+"name": "bunny-inc",
+"loc": 638,
+"docs": "https://docs.bunny.net/reference/bunnynet-api-overview"
+}
+],
+[
+{
+"name": "buzzsprout",
+"loc": 546,
+"docs": "https://github.com/Buzzsprout/buzzsprout-api"
+},
+{
+"name": "cal-com",
+"loc": 621,
+"docs": "https://cal.com/docs/api-reference/introduction"
+},
+{
+"name": "callrail",
+"loc": 598,
+"docs": "https://apidocs.callrail.com/"
+}
+],
+[
+{
+"name": "campaign-monitor",
+"loc": 571,
+"docs": "https://www.campaignmonitor.com/api/"
+},
+{
+"name": "campayn",
+"loc": 615,
+"docs": "https://github.com/nebojsac/Campayn-API"
+},
+{
+"name": "canny",
+"loc": 597,
+"docs": "https://developers.canny.io/api-reference"
+}
+],
+[
+{
+"name": "capsule-crm",
+"loc": 599,
+"docs": "https://developer.capsulecrm.com/"
+},
+{
+"name": "captain-data",
+"loc": 536,
+"docs": "https://docs.captaindata.co/api-documentation"
+},
+{
+"name": "care-quality-commission",
+"loc": 523,
+"docs": "https://www.cqc.org.uk/about-us/transparency/using-cqc-data"
+}
+],
+[
+{
+"name": "castor-edc",
+"loc": 636,
+"docs": "https://data.castoredc.com/api"
+},
+{
+"name": "chameleon",
+"loc": 471,
+"docs": "https://developers.chameleon.io/reference/introduction"
+},
+{
+"name": "chargedesk",
+"loc": 558,
+"docs": "https://chargedesk.com/api-docs"
+}
+],
+[
+{
+"name": "chargify",
+"loc": 626,
+"docs": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api"
+},
+{
+"name": "chartmogul",
+"loc": 671,
+"docs": "https://dev.chartmogul.com/reference"
+},
+{
+"name": "chift",
+"loc": 571,
+"docs": "https://docs.chift.eu/docs/introduction/welcome"
+}
+],
+[
+{
+"name": "churnkey",
+"loc": 620,
+"docs": "https://docs.churnkey.co/api"
+},
+{
+"name": "cimis",
+"loc": 533,
+"docs": "https://cimis.water.ca.gov/WSNReportCriteria.aspx"
+},
+{
+"name": "cin7",
+"loc": 613,
+"docs": "https://api.cin7.com/api/v1"
+}
+],
+[
+{
+"name": "circa",
+"loc": 564,
+"docs": "https://docs.circa.co/"
+},
+{
+"name": "circleci",
+"loc": 609,
+"docs": "https://circleci.com/docs/api/v2/"
+},
+{
+"name": "cisco-meraki",
+"loc": 632,
+"docs": "https://developer.cisco.com/meraki/api-v1/"
+}
+],
+[
+{
+"name": "clarif-ai",
+"loc": 525,
+"docs": "https://docs.clarifai.com/api-guide/api-overview"
+},
+{
+"name": "clazar",
+"loc": 609,
+"docs": "https://clazar.io/api-docs"
+},
+{
+"name": "clickup-api",
+"loc": 612,
+"docs": "https://clickup.com/api/"
+}
+],
+[
+{
+"name": "clockify",
+"loc": 556,
+"docs": "https://docs.clockify.me/"
+},
+{
+"name": "clockodo",
+"loc": 513,
+"docs": "https://www.clockodo.com/en/api/"
+},
+{
+"name": "close-com",
+"loc": 582,
+"docs": "https://developer.close.com/"
+}
+],
+[
+{
+"name": "cloudbeds",
+"loc": 561,
+"docs": "https://hotels.cloudbeds.com/api/docs/"
+},
+{
+"name": "coassemble",
+"loc": 449,
+"docs": "https://developers.coassemble.com/"
+},
+{
+"name": "coda",
+"loc": 541,
+"docs": "https://coda.io/developers/apis/v1"
+}
+],
+[
+{
+"name": "codefresh",
+"loc": 531,
+"docs": "https://g.codefresh.io/api/"
+},
+{
+"name": "coin-api",
+"loc": 649,
+"docs": "https://docs.coinapi.io/"
+},
+{
+"name": "coingecko-coins",
+"loc": 622,
+"docs": "https://www.coingecko.com/en/api/documentation"
+}
+],
+[
+{
+"name": "coinmarketcap",
+"loc": 593,
+"docs": "https://coinmarketcap.com/api/documentation/v1/"
+},
+{
+"name": "concord",
+"loc": 553,
+"docs": "https://concord.walmartlabs.com/docs/api/"
+},
+{
+"name": "configcat",
+"loc": 514,
+"docs": "https://api.configcat.com/docs/"
+}
+],
+[
+{
+"name": "confluence",
+"loc": 558,
+"docs": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/"
+},
+{
+"name": "convertkit",
+"loc": 532,
+"docs": "https://developers.convertkit.com/"
+},
+{
+"name": "copper",
+"loc": 598,
+"docs": "https://developer.copper.com/"
+}
+],
+[
+{
+"name": "countercyclical",
+"loc": 572,
+"docs": "https://countercyclical.io/docs/api"
+},
+{
+"name": "criteo-marketing",
+"loc": 673,
+"docs": "https://developers.criteo.com/marketing-solutions/reference/getting-started"
+},
+{
+"name": "customerly",
+"loc": 522,
+"docs": "https://docs.customerly.io/api/"
+}
+],
+[
+{
+"name": "datadog",
+"loc": 633,
+"docs": "https://docs.datadoghq.com/api/latest/"
+},
+{
+"name": "datascope",
+"loc": 577,
+"docs": "https://app.mydatascope.com/api/external/docs/"
+},
+{
+"name": "dbt",
+"loc": 657,
+"docs": "https://docs.getdbt.com/dbt-cloud/api-v2"
+}
+],
+[
+{
+"name": "defillama",
+"loc": 648,
+"docs": "https://defillama.com/docs/api"
+},
+{
+"name": "delighted",
+"loc": 653,
+"docs": "https://delighted.com/docs/api"
+},
+{
+"name": "deputy",
+"loc": 580,
+"docs": "https://www.deputy.com/api-doc/API/Getting_Started"
+}
+],
+[
+{
+"name": "devin-ai",
+"loc": 579,
+"docs": "https://docs.devin.ai/api-reference/overview"
+},
+{
+"name": "ding-connect",
+"loc": 546,
+"docs": "https://docs.ding.com/"
+},
+{
+"name": "discord",
+"loc": 651,
+"docs": "https://discord.com/developers/docs/reference"
+}
+],
+[
+{
+"name": "dixa",
+"loc": 583,
+"docs": "https://docs.dixa.io/openapi/"
+},
+{
+"name": "dockerhub",
+"loc": 608,
+"docs": "https://docs.docker.com/docker-hub/api/latest/"
+},
+{
+"name": "docuseal",
+"loc": 538,
+"docs": "https://www.docuseal.co/docs/api"
+}
+],
+[
+{
+"name": "dolibarr",
+"loc": 671,
+"docs": "https://wiki.dolibarr.org/index.php/REST_API"
+},
+{
+"name": "dremio",
+"loc": 513,
+"docs": "https://docs.dremio.com/software/rest-api/"
+},
+{
+"name": "drift",
+"loc": 618,
+"docs": "https://devdocs.drift.com/"
+}
+],
+[
+{
+"name": "drip",
+"loc": 574,
+"docs": "https://developer.drip.com/"
+},
+{
+"name": "dropbox-sign",
+"loc": 544,
+"docs": "https://developers.hellosign.com/api/reference/"
+},
+{
+"name": "dwolla",
+"loc": 538,
+"docs": "https://developers.dwolla.com/api-reference"
+}
+],
+[
+{
+"name": "e-conomic",
+"loc": 626,
+"docs": "https://restdocs.e-conomic.com/"
+},
+{
+"name": "easypost",
+"loc": 647,
+"docs": "https://www.easypost.com/docs/api"
+},
+{
+"name": "easypromos",
+"loc": 605,
+"docs": "https://developers.easypromos.com/"
+}
+],
+[
+{
+"name": "ebay-finance",
+"loc": 686,
+"docs": "https://developer.ebay.com/api-docs/sell/finances/overview.html"
+},
+{
+"name": "elasticemail",
+"loc": 524,
+"docs": "https://elasticemail.com/developers/api-documentation/"
+},
+{
+"name": "emailoctopus",
+"loc": 519,
+"docs": "https://emailoctopus.com/api-documentation"
+}
+],
+[
+{
+"name": "employment-hero",
+"loc": 608,
+"docs": "https://developer.employmenthero.com/"
+},
+{
+"name": "encharge",
+"loc": 626,
+"docs": "https://developers.encharge.io/"
+},
+{
+"name": "eventee",
+"loc": 567,
+"docs": "https://eventee.co/api-documentation"
+}
+],
+[
+{
+"name": "eventzilla",
+"loc": 636,
+"docs": "https://www.eventzilla.net/api/"
+},
+{
+"name": "everhour",
+"loc": 561,
+"docs": "https://everhour.docs.apiary.io/"
+},
+{
+"name": "exchange-rates",
+"loc": 564,
+"docs": "https://exchangeratesapi.io/documentation/"
+}
+],
+[
+{
+"name": "ezofficeinventory",
+"loc": 581,
+"docs": "https://ezofficeinventory.com/developers"
+},
+{
+"name": "factorial",
+"loc": 604,
+"docs": "https://apidoc.factorialhr.com/"
+},
+{
+"name": "fastbill",
+"loc": 562,
+"docs": "https://apidocs.fastbill.com/"
+}
+],
+[
+{
+"name": "fastly",
+"loc": 569,
+"docs": "https://developer.fastly.com/reference/api/"
+},
+{
+"name": "feishu",
+"loc": 681,
+"docs": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview"
+},
+{
+"name": "fillout",
+"loc": 592,
+"docs": "https://www.fillout.com/help/fillout-rest-api"
+}
+],
+[
+{
+"name": "finage",
+"loc": 523,
+"docs": "https://finage.co.uk/docs/api"
+},
+{
+"name": "financial-modelling",
+"loc": 538,
+"docs": "https://site.financialmodelingprep.com/developer/docs"
+},
+{
+"name": "finnhub",
+"loc": 632,
+"docs": "https://finnhub.io/docs/api"
+}
+],
+[
+{
+"name": "finnworlds",
+"loc": 498,
+"docs": "https://api.finnworlds.com/docs"
+},
+{
+"name": "firehydrant",
+"loc": 533,
+"docs": "https://firehydrant.com/docs/api/"
+},
+{
+"name": "fleetio",
+"loc": 647,
+"docs": "https://developer.fleetio.com/"
+}
+],
+[
+{
+"name": "flexmail",
+"loc": 536,
+"docs": "https://api.flexmail.eu/documentation/"
+},
+{
+"name": "flexport",
+"loc": 578,
+"docs": "https://developers.flexport.com/"
+},
+{
+"name": "float",
+"loc": 607,
+"docs": "https://dev.float.com/"
+}
+],
+[
+{
+"name": "flowlu",
+"loc": 622,
+"docs": "https://www.flowlu.com/api/"
+},
+{
+"name": "formbricks",
+"loc": 578,
+"docs": "https://formbricks.com/docs/api/overview"
+},
+{
+"name": "free-agent-connector",
+"loc": 665,
+"docs": "https://dev.freeagent.com/"
+}
+],
+[
+{
+"name": "freshbooks",
+"loc": 621,
+"docs": "https://www.freshbooks.com/api/start"
+},
+{
+"name": "freshchat",
+"loc": 539,
+"docs": "https://developers.freshchat.com/api/"
+},
+{
+"name": "freshdesk",
+"loc": 622,
+"docs": "https://developers.freshdesk.com/api/#change_log"
+}
+],
+[
+{
+"name": "freshsales",
+"loc": 561,
+"docs": "https://developers.freshworks.com/crm/api/"
+},
+{
+"name": "freshservice",
+"loc": 660,
+"docs": "https://api.freshservice.com/"
+},
+{
+"name": "front",
+"loc": 565,
+"docs": "https://dev.frontapp.com/reference/introduction"
+}
+],
+[
+{
+"name": "fulcrum",
+"loc": 532,
+"docs": "https://developer.fulcrumapp.com/"
+},
+{
+"name": "fullstory",
+"loc": 493,
+"docs": "https://developer.fullstory.com/reference"
+},
+{
+"name": "gainsight-px",
+"loc": 556,
+"docs": "https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs"
+}
+],
+[
+{
+"name": "getgist",
+"loc": 578,
+"docs": "https://developers.getgist.com/"
+},
+{
+"name": "getlago",
+"loc": 576,
+"docs": "https://doc.getlago.com/api-reference/intro"
+},
+{
+"name": "giphy",
+"loc": 512,
+"docs": "https://developers.giphy.com/docs/api/"
+}
+],
+[
+{
+"name": "gitbook",
+"loc": 540,
+"docs": "https://developer.gitbook.com/"
+},
+{
+"name": "gitlab",
+"loc": 561,
+"docs": "https://docs.gitlab.com/ee/api/rest/"
+},
+{
+"name": "glassfrog",
+"loc": 544,
+"docs": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY"
+}
+],
+[
+{
+"name": "gnews",
+"loc": 522,
+"docs": "https://gnews.io/docs/"
+},
+{
+"name": "gocardless",
+"loc": 594,
+"docs": "https://developer.gocardless.com/api-reference/"
+},
+{
+"name": "goldcast",
+"loc": 545,
+"docs": "https://www.goldcast.io/api-docs"
+}
+],
+[
+{
+"name": "gologin",
+"loc": 513,
+"docs": "https://api.gologin.com/docs"
+},
+{
+"name": "gong",
+"loc": 555,
+"docs": "https://us-66463.app.gong.io/settings/api/documentation"
+},
+{
+"name": "google-analytics-data-api",
+"loc": 631,
+"docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog"
+}
+],
+[
+{
+"name": "google-pagespeed-insights",
+"loc": 457,
+"docs": "https://developers.google.com/speed/docs/insights/v5/get-started"
+},
+{
+"name": "google-tasks",
+"loc": 509,
+"docs": "https://developers.google.com/tasks/reference/rest"
+},
+{
+"name": "google-webfonts",
+"loc": 521,
+"docs": "https://developers.google.com/fonts/docs/developer_api"
+}
+],
+[
+{
+"name": "gorgias",
+"loc": 578,
+"docs": "https://developers.gorgias.com/reference"
+},
+{
+"name": "grafana",
+"loc": 601,
+"docs": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/"
+},
+{
+"name": "granola",
+"loc": 571,
+"docs": "https://docs.granola.ai/introduction"
+}
+],
+[
+{
+"name": "greenhouse",
+"loc": 521,
+"docs": "https://developers.greenhouse.io/harvest.html"
+},
+{
+"name": "guru",
+"loc": 481,
+"docs": "https://developer.getguru.com/"
+},
+{
+"name": "gutendex",
+"loc": 509,
+"docs": "https://gutendex.com/"
+}
+],
+[
+{
+"name": "harness",
+"loc": 583,
+"docs": "https://developer.harness.io/docs/platform/automation/api/api-quickstart/"
+},
+{
+"name": "harvest",
+"loc": 647,
+"docs": "https://www.harveststatus.com/"
+},
+{
+"name": "height",
+"loc": 618,
+"docs": "https://www.height.app/api"
+}
+],
+[
+{
+"name": "hellobaton",
+"loc": 571,
+"docs": "manual intervention needed"
+},
+{
+"name": "help-scout",
+"loc": 607,
+"docs": "https://developer.helpscout.com/"
+},
+{
+"name": "hibob",
+"loc": 533,
+"docs": "https://apidocs.hibob.com/"
+}
+],
+[
+{
+"name": "high-level",
+"loc": 686,
+"docs": "https://highlevel.stoplight.io/"
+},
+{
+"name": "hoorayhr",
+"loc": 602,
+"docs": "https://api.hoorayhr.io/swagger.json"
+},
+{
+"name": "hubplanner",
+"loc": 591,
+"docs": "manual intervention needed"
+}
+],
+[
+{
+"name": "hugging-face-datasets",
+"loc": 584,
+"docs": "https://huggingface.co/docs/datasets/"
+},
+{
+"name": "humanitix",
+"loc": 563,
+"docs": "https://developers.humanitix.com/"
+},
+{
+"name": "huntr",
+"loc": 518,
+"docs": "manual intervention needed"
+}
+],
+[
+{
+"name": "illumina-basespace",
+"loc": 625,
+"docs": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference"
+},
+{
+"name": "imagga",
+"loc": 607,
+"docs": "https://docs.imagga.com/"
+},
+{
+"name": "incident-io",
+"loc": 588,
+"docs": "https://api-docs.incident.io/"
+}
+],
+[
+{
+"name": "inflowinventory",
+"loc": 602,
+"docs": "https://developer.inflowinventory.com/"
+},
+{
+"name": "insightful",
+"loc": 547,
+"docs": "https://developer.insightful.io/"
+},
+{
+"name": "insightly",
+"loc": 660,
+"docs": "https://api.na1.insightly.com/v3.1/"
+}
+],
+[
+{
+"name": "instagram",
+"loc": 654,
+"docs": "https://developers.facebook.com/docs/instagram-platform/changelog"
+},
+{
+"name": "instatus",
+"loc": 522,
+"docs": "https://instatus.com/help/api"
+},
+{
+"name": "intercom",
+"loc": 592,
+"docs": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes"
+}
+],
+[
+{
+"name": "interzoid",
+"loc": 464,
+"docs": "https://docs.interzoid.com/entries/interzoid-core-apis"
+},
+{
+"name": "intruder",
+"loc": 573,
+"docs": "https://developers.intruder.io/docs/welcome"
+},
+{
+"name": "invoiced",
+"loc": 566,
+"docs": "https://www.invoiced.com/docs/api/"
+}
+],
+[
+{
+"name": "invoiceninja",
+"loc": 623,
+"docs": "https://api-docs.invoicing.co/"
+},
+{
+"name": "ip2whois",
+"loc": 550,
+"docs": "https://www.ip2whois.com/developers-api"
+},
+{
+"name": "jamf-pro",
+"loc": 539,
+"docs": "https://developer.jamf.com/jamf-pro/reference/classic-api"
+}
+],
+[
+{
+"name": "jira",
+"loc": 631,
+"docs": "https://developer.atlassian.com/changelog/#"
+},
+{
+"name": "jobnimbus",
+"loc": 670,
+"docs": "https://documenter.getpostman.com/view/3919598/S11PpG4x"
+},
+{
+"name": "jotform",
+"loc": 598,
+"docs": "https://api.jotform.com/docs/"
+}
+],
+[
+{
+"name": "judge-me-reviews",
+"loc": 540,
+"docs": "https://judge.me/api"
+},
+{
+"name": "just-sift",
+"loc": 544,
+"docs": "https://sift.com/developers/docs/curl/apis-overview"
+},
+{
+"name": "justcall",
+"loc": 609,
+"docs": "https://developer.justcall.io/"
+}
+],
+[
+{
+"name": "k6-cloud",
+"loc": 619,
+"docs": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/"
+},
+{
+"name": "katana",
+"loc": 551,
+"docs": "https://docs.katanamrp.com/api/"
+},
+{
+"name": "kisi",
+"loc": 527,
+"docs": "https://api.kisi.io/docs"
+}
+],
+[
+{
+"name": "kissmetrics",
+"loc": 508,
+"docs": "https://support.kissmetrics.io/reference"
+},
+{
+"name": "klarna",
+"loc": 521,
+"docs": "https://docs.klarna.com/api/"
+},
+{
+"name": "klaus-api",
+"loc": 635,
+"docs": "https://help.klausapp.com/en/articles/2911907-klaus-api"
+}
+],
+[
+{
+"name": "klaviyo",
+"loc": 617,
+"docs": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+},
+{
+"name": "launchdarkly",
+"loc": 493,
+"docs": "https://apidocs.launchdarkly.com/"
+},
+{
+"name": "leadfeeder",
+"loc": 635,
+"docs": "https://docs.leadfeeder.com/api/"
+}
+],
+[
+{
+"name": "lemlist",
+"loc": 547,
+"docs": "https://developer.lemlist.com/"
+},
+{
+"name": "less-annoying-crm",
+"loc": 572,
+"docs": "https://www.lessannoyingcrm.com/help/topic/API"
+},
+{
+"name": "lever-hiring",
+"loc": 613,
+"docs": "https://hire.lever.co/developer/documentation"
+}
+],
+[
+{
+"name": "lightspeed-retail",
+"loc": 683,
+"docs": "https://developers.lightspeedhq.com/retail/introduction/introduction/"
+},
+{
+"name": "linkedin-ads",
+"loc": 591,
+"docs": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10"
+},
+{
+"name": "linkrunner",
+"loc": 507,
+"docs": "https://docs.linkrunner.io/sdk-less/api-reference"
+}
+],
+[
+{
+"name": "lob",
+"loc": 549,
+"docs": "https://docs.lob.com/"
+},
+{
+"name": "lokalise",
+"loc": 650,
+"docs": "https://developers.lokalise.com/reference/api-introduction"
+},
+{
+"name": "luma",
+"loc": 525,
+"docs": "https://docs.lu.ma/reference/getting-started"
+}
+],
+[
+{
+"name": "mailchimp",
+"loc": 590,
+"docs": "https://mailchimp.com/developer/release-notes/"
+},
+{
+"name": "mailerlite",
+"loc": 611,
+"docs": "https://developers.mailerlite.com/"
+},
+{
+"name": "mailersend",
+"loc": 566,
+"docs": "https://developers.mailersend.com/"
+}
+],
+[
+{
+"name": "mailgun",
+"loc": 621,
+"docs": "https://documentation.mailgun.com/en/latest/api_reference.html"
+},
+{
+"name": "mailjet-mail",
+"loc": 528,
+"docs": "https://dev.mailjet.com/email/reference/"
+},
+{
+"name": "mailjet-sms",
+"loc": 531,
+"docs": "https://dev.mailjet.com/sms/reference/"
+}
+],
+[
+{
+"name": "mailosaur",
+"loc": 546,
+"docs": "https://mailosaur.com/docs/api/"
+},
+{
+"name": "mailtrap",
+"loc": 552,
+"docs": "https://api-docs.mailtrap.io/"
+},
+{
+"name": "mantle",
+"loc": 517,
+"docs": "https://docs.mantle.xyz/"
+}
+],
+[
+{
+"name": "marketstack",
+"loc": 618,
+"docs": "https://marketstack.com/documentation"
+},
+{
+"name": "mendeley",
+"loc": 649,
+"docs": "https://dev.mendeley.com/"
+},
+{
+"name": "mention",
+"loc": 594,
+"docs": "https://dev.mention.com/"
+}
+],
+[
+{
+"name": "mercado-ads",
+"loc": 650,
+"docs": "https://developers.mercadolibre.com.ar/en_us/advertising"
+},
+{
+"name": "merge",
+"loc": 612,
+"docs": "https://docs.merge.dev/api-reference/"
+},
+{
+"name": "metabase",
+"loc": 611,
+"docs": "https://www.metabase.com/docs/latest/api-documentation"
+}
+],
+[
+{
+"name": "metricool",
+"loc": 690,
+"docs": "https://metricool.com/api/"
+},
+{
+"name": "microsoft-entra-id",
+"loc": 622,
+"docs": "https://learn.microsoft.com/en-us/graph/api/resources/azure-ad-overview"
+},
+{
+"name": "microsoft-lists",
+"loc": 638,
+"docs": "https://learn.microsoft.com/en-us/graph/api/resources/list"
+}
+],
+[
+{
+"name": "microsoft-teams",
+"loc": 607,
+"docs": "https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview"
+},
+{
+"name": "miro",
+"loc": 571,
+"docs": "https://developers.miro.com/reference/api-reference"
+},
+{
+"name": "missive",
+"loc": 466,
+"docs": "https://missiveapp.com/help/api-documentation"
+}
+],
+[
+{
+"name": "mixmax",
+"loc": 621,
+"docs": "https://developer.mixmax.com/"
+},
+{
+"name": "mode",
+"loc": 561,
+"docs": "https://mode.com/developer/api-reference/"
+},
+{
+"name": "mux",
+"loc": 498,
+"docs": "https://docs.mux.com/api-reference"
+}
+],
+[
+{
+"name": "my-hours",
+"loc": 664,
+"docs": "https://myhours.com/api"
+},
+{
+"name": "n8n",
+"loc": 559,
+"docs": "https://docs.n8n.io/api/"
+},
+{
+"name": "nasa",
+"loc": 606,
+"docs": "https://api.nasa.gov/"
+}
+],
+[
+{
+"name": "navan",
+"loc": 556,
+"docs": "https://developer.navan.com/"
+},
+{
+"name": "nebius-ai",
+"loc": 520,
+"docs": "https://nebius.ai/docs/"
+},
+{
+"name": "news-api",
+"loc": 504,
+"docs": "https://newsapi.org/docs"
+}
+],
+[
+{
+"name": "newsdata",
+"loc": 511,
+"docs": "https://newsdata.io/documentation"
+},
+{
+"name": "newsdata-io",
+"loc": 518,
+"docs": "https://newsdata.io/documentation"
+},
+{
+"name": "nexiopay",
+"loc": 631,
+"docs": "https://docs.nexiopay.com/"
+}
+],
+[
+{
+"name": "nexus-datasets",
+"loc": 522,
+"docs": "https://developer.infornexus.com/api"
+},
+{
+"name": "ninjaone-rmm",
+"loc": 547,
+"docs": "https://developer.ninjarmm.com/"
+},
+{
+"name": "nocrm",
+"loc": 598,
+"docs": "https://www.nocrm.io/api"
+}
+],
+[
+{
+"name": "northpass-lms",
+"loc": 517,
+"docs": "https://developers.northpass.com/"
+},
+{
+"name": "notion",
+"loc": 557,
+"docs": "https://developers.notion.com/reference/changes-by-version"
+},
+{
+"name": "nutshell",
+"loc": 544,
+"docs": "https://developers.nutshell.com/"
+}
+],
+[
+{
+"name": "nylas",
+"loc": 587,
+"docs": "https://developer.nylas.com/docs/api/"
+},
+{
+"name": "nytimes",
+"loc": 570,
+"docs": "https://developer.nytimes.com/apis"
+},
+{
+"name": "omnisend",
+"loc": 671,
+"docs": "https://api-docs.omnisend.com/"
+}
+],
+[
+{
+"name": "oncehub",
+"loc": 632,
+"docs": "https://developers.oncehub.com/"
+},
+{
+"name": "onepagecrm",
+"loc": 599,
+"docs": "https://developer.onepagecrm.com/"
+},
+{
+"name": "onesignal",
+"loc": 651,
+"docs": "https://documentation.onesignal.com/reference"
+}
+],
+[
+{
+"name": "onfleet",
+"loc": 577,
+"docs": "https://docs.onfleet.com/reference"
+},
+{
+"name": "open-data-dc",
+"loc": 509,
+"docs": "https://opendata.dc.gov/"
+},
+{
+"name": "open-exchange-rates",
+"loc": 557,
+"docs": "https://docs.openexchangerates.org/"
+}
+],
+[
+{
+"name": "openaq",
+"loc": 552,
+"docs": "https://docs.openaq.org/"
+},
+{
+"name": "openfda",
+"loc": 536,
+"docs": "https://open.fda.gov/apis/"
+},
+{
+"name": "openweather",
+"loc": 669,
+"docs": "https://openweathermap.org/api"
+}
+],
+[
+{
+"name": "opinion-stage",
+"loc": 559,
+"docs": "https://www.opinionstage.com/api"
+},
+{
+"name": "opsgenie",
+"loc": 571,
+"docs": "https://docs.opsgenie.com/docs/api-overview"
+},
+{
+"name": "oura",
+"loc": 310,
+"docs": "https://cloud.ouraring.com/docs/"
+}
+],
+[
+{
+"name": "outlook",
+"loc": 401,
+"docs": "https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview"
+},
+{
+"name": "outreach",
+"loc": 395,
+"docs": "https://api.outreach.io/api/v2/docs"
+},
+{
+"name": "paddle",
+"loc": 340,
+"docs": "https://developer.paddle.com/api-reference/"
+}
+],
+[
+{
+"name": "pagerduty",
+"loc": 318,
+"docs": "https://developer.pagerduty.com/api-reference/"
+},
+{
+"name": "pandadoc",
+"loc": 315,
+"docs": "https://developers.pandadoc.com/reference/about"
+},
+{
+"name": "paperform",
+"loc": 321,
+"docs": "https://paperform.co/help/api/"
+}
+],
+[
+{
+"name": "papersign",
+"loc": 316,
+"docs": "https://papersign.com/api"
+},
+{
+"name": "pardot",
+"loc": 324,
+"docs": "https://developer.salesforce.com/docs/marketing/pardot/overview"
+},
+{
+"name": "partnerize",
+"loc": 320,
+"docs": "https://api-documentation.partnerize.com/"
+}
+],
+[
+{
+"name": "partnerstack",
+"loc": 320,
+"docs": "https://docs.partnerstack.com/docs/api-overview"
+},
+{
+"name": "payfit",
+"loc": 316,
+"docs": "https://developers.payfit.io/"
+},
+{
+"name": "paystack",
+"loc": 633,
+"docs": "https://paystack.com/docs/api/"
+}
+],
+[
+{
+"name": "pendo",
+"loc": 317,
+"docs": "https://engageapi.pendo.io/"
+},
+{
+"name": "pipeliner",
+"loc": 312,
+"docs": "https://workspace.pipelinersales.com/community/api/"
+},
+{
+"name": "piwik",
+"loc": 318,
+"docs": "https://developer.matomo.org/api-reference/reporting-api"
+}
+],
+[
+{
+"name": "plaid",
+"loc": 330,
+"docs": "https://plaid.com/docs/"
+},
+{
+"name": "plausible",
+"loc": 356,
+"docs": "https://plausible.io/docs/stats-api"
+},
+{
+"name": "pocket",
+"loc": 318,
+"docs": "manual intervention needed"
+}
+],
+[
+{
+"name": "polygon-stock-api",
+"loc": 309,
+"docs": "https://polygon.io/docs/stocks/getting-started"
+},
+{
+"name": "postmarkapp",
+"loc": 354,
+"docs": "https://postmarkapp.com/developer"
+},
+{
+"name": "prestashop",
+"loc": 672,
+"docs": "https://devdocs.prestashop-project.org/9/webservice/"
+}
+],
+[
+{
+"name": "pretix",
+"loc": 345,
+"docs": "https://docs.pretix.eu/en/latest/api/"
+},
+{
+"name": "primetric",
+"loc": 343,
+"docs": "https://developer.primetric.com/"
+},
+{
+"name": "printify",
+"loc": 382,
+"docs": "https://developers.printify.com/"
+}
+],
+[
+{
+"name": "productboard",
+"loc": 318,
+"docs": "https://developer.productboard.com/"
+},
+{
+"name": "productive",
+"loc": 331,
+"docs": "https://developer.productive.io/"
+},
+{
+"name": "pylon",
+"loc": 309,
+"docs": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference"
+}
+],
+[
+{
+"name": "pypi",
+"loc": 330,
+"docs": "https://warehouse.pypa.io/api-reference/"
+},
+{
+"name": "qonto",
+"loc": 334,
+"docs": "https://api-doc.qonto.com/"
+},
+{
+"name": "qualaroo",
+"loc": 320,
+"docs": "https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API"
+}
+],
+[
+{
+"name": "quickbooks",
+"loc": 324,
+"docs": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account"
+},
+{
+"name": "railz",
+"loc": 312,
+"docs": "manual intervention needed"
+},
+{
+"name": "rd-station-marketing",
+"loc": 317,
+"docs": "https://developers.rdstation.com/"
+}
+],
+[
+{
+"name": "recreation",
+"loc": 307,
+"docs": "https://ridb.recreation.gov/docs"
+},
+{
+"name": "recruitee",
+"loc": 316,
+"docs": "https://apidocs.recruitee.com/"
+},
+{
+"name": "recurly",
+"loc": 300,
+"docs": "https://developers.recurly.com/api/v2021-02-25/"
+}
+],
+[
+{
+"name": "reddit",
+"loc": 323,
+"docs": "https://www.reddit.com/dev/api/"
+},
+{
+"name": "referralhero",
+"loc": 309,
+"docs": "https://support.referralhero.com/integrate/rest-api"
+},
+{
+"name": "rentcast",
+"loc": 321,
+"docs": "https://developers.rentcast.io/"
+}
+],
+[
+{
+"name": "reply-io",
+"loc": 318,
+"docs": "https://docs.reply.io/"
+},
+{
+"name": "retailexpress-by-maropost",
+"loc": 334,
+"docs": "https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview"
+},
+{
+"name": "retently",
+"loc": 318,
+"docs": "https://www.retently.com/api/"
+}
+],
+[
+{
+"name": "revenuecat",
+"loc": 339,
+"docs": "https://www.revenuecat.com/docs/api-v1"
+},
+{
+"name": "revolut-merchant",
+"loc": 318,
+"docs": "https://developer.revolut.com/docs/guides/merchant/reference/api"
+},
+{
+"name": "ringcentral",
+"loc": 320,
+"docs": "https://developers.ringcentral.com/api-reference"
+}
+],
+[
+{
+"name": "rocket-chat",
+"loc": 329,
+"docs": "https://developer.rocket.chat/apidocs"
+},
+{
+"name": "rocketlane",
+"loc": 320,
+"docs": "https://apidocs.rocketlane.com/"
+},
+{
+"name": "ruddr",
+"loc": 302,
+"docs": "https://docs.ruddr.io/"
+}
+],
+[
+{
+"name": "sap-fieldglass",
+"loc": 300,
+"docs": "https://api.sap.com/package/SAPFieldglass/rest"
+},
+{
+"name": "sendgrid",
+"loc": 558,
+"docs": "https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication"
+},
+{
+"name": "shippo",
+"loc": 319,
+"docs": "https://docs.goshippo.com/docs/intro"
+}
+],
+[
+{
+"name": "shipstation",
+"loc": 319,
+"docs": "https://www.shipstation.com/docs/api/"
+},
+{
+"name": "shopwired",
+"loc": 305,
+"docs": "https://www.shopwired.com/api"
+},
+{
+"name": "shortcut",
+"loc": 312,
+"docs": "https://developer.shortcut.com/api/rest/v3"
+}
+],
+[
+{
+"name": "shortio",
+"loc": 310,
+"docs": "https://developers.short.io/"
+},
+{
+"name": "shutterstock",
+"loc": 314,
+"docs": "https://api-reference.shutterstock.com/"
+},
+{
+"name": "sigma-computing",
+"loc": 312,
+"docs": "https://help.sigmacomputing.com/reference/api-overview"
+}
+],
+[
+{
+"name": "signnow",
+"loc": 311,
+"docs": "https://docs.signnow.com/"
+},
+{
+"name": "simfin",
+"loc": 303,
+"docs": "https://simfin.com/api/v3/documentation/"
+},
+{
+"name": "simplecast",
+"loc": 314,
+"docs": "https://developers.simplecast.com/"
+}
+],
+[
+{
+"name": "slack",
+"loc": 601,
+"docs": "https://api.slack.com/changelog"
+},
+{
+"name": "square",
+"loc": 598,
+"docs": "https://developer.squareup.com/reference/square"
+},
+{
+"name": "stockdata",
+"loc": 303,
+"docs": "https://www.stockdata.org/documentation"
+}
+],
+[
+{
+"name": "taboola",
+"loc": 312,
+"docs": "https://developers.taboola.com/backstage-api/reference"
+},
+{
+"name": "tempo",
+"loc": 480,
+"docs": "https://apidocs.tempo.io/"
+},
+{
+"name": "thinkific-courses",
+"loc": 318,
+"docs": "https://developers.thinkific.com/"
+}
+],
+[
+{
+"name": "ticketmaster",
+"loc": 328,
+"docs": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/"
+},
+{
+"name": "tiktok-marketing",
+"loc": 568,
+"docs": "https://business-api.tiktok.com/portal/docs?id=1740029169927169"
+},
+{
+"name": "tmdb",
+"loc": 334,
+"docs": "https://developer.themoviedb.org/reference/intro/getting-started"
+}
+],
+[
+{
+"name": "twilio",
+"loc": 650,
+"docs": "https://www.twilio.com/docs/usage/api"
+},
+{
+"name": "twitter",
+"loc": 514,
+"docs": "https://developer.twitter.com/en/docs/twitter-api"
+},
+{
+"name": "typeform",
+"loc": 633,
+"docs": "https://www.typeform.com/developers/changelog/"
+}
+],
+[
+{
+"name": "unleash",
+"loc": 300,
+"docs": "https://docs.getunleash.io/reference/api/unleash"
+},
+{
+"name": "wikipedia-pageviews",
+"loc": 312,
+"docs": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews"
+},
+{
+"name": "woocommerce",
+"loc": 664,
+"docs": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+}
+],
+[
+{
+"name": "workable",
+"loc": 306,
+"docs": "https://workable.readme.io/reference"
+},
+{
+"name": "xero",
+"loc": 687,
+"docs": "https://developer.xero.com/documentation/"
+},
+{
+"name": "youtube-analytics",
+"loc": 617,
+"docs": "https://developers.google.com/youtube/analytics"
+}
+],
+[
+{
+"name": "zendesk-chat",
+"loc": 563,
+"docs": "https://developer.zendesk.com/api-reference/changelog/changelog/"
+},
+{
+"name": "zendesk-talk",
+"loc": 610,
+"docs": "https://developer.zendesk.com/api-reference/changelog/changelog/"
+},
+{
+"name": "zoho-billing",
+"loc": 336,
+"docs": "https://www.zoho.com/billing/api/v1/"
+}
+],
+[
+{
+"name": "zoho-books",
+"loc": 312,
+"docs": "https://www.zoho.com/books/api/v3/"
+},
+{
+"name": "zoho-campaign",
+"loc": 303,
+"docs": "https://www.zoho.com/campaigns/help/developers/api-overview.html"
+},
+{
+"name": "zoho-desk",
+"loc": 312,
+"docs": "https://desk.zoho.com/DeskAPIDocument"
+}
+],
+[
+{
+"name": "zoho-expense",
+"loc": 307,
+"docs": "https://www.zoho.com/expense/api/v1/"
+},
+{
+"name": "zoho-inventory",
+"loc": 312,
+"docs": "https://www.zoho.com/inventory/api/v1/"
+},
+{
+"name": "zoho-invoice",
+"loc": 312,
+"docs": "https://www.zoho.com/invoice/api/v3/"
+}
+],
+[
+{
+"name": "zonka-feedback",
+"loc": 318,
+"docs": "https://help.zonkafeedback.com/en/articles/6273783-api-documentation"
+},
+{
+"name": "zoom",
+"loc": 335,
+"docs": "https://developers.zoom.us/docs/api/"
+}
+]
+]

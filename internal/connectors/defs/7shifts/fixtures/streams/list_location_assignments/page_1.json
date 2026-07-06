@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value/location_assignments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "location_id": 1001,
+          "name": "fixture name"
+        }
+      ]
+    }
+  }
+}

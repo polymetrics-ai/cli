@@ -12,20 +12,52 @@ SYNOPSIS
 DESCRIPTION
   Reads GNews articles from the keyword search and top-headlines endpoints of the GNews REST API. Read-only.
 
+ICON
+  asset: icons/gnews.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://gnews.io/docs/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  country
+  end_date
+  in
+  language
+  max_pages
+  mode
+  nullable
+  page_size
+  query
+  sortby
+  start_date
+  top_headlines_query
+  top_headlines_topic
+  api_key (secret)
+
+ETL STREAMS
+  search:
+    primary key: id
+    cursor: published_at
+    fields: content(), description(), id(), image(), lang(), published_at(), source_country(), source_id(), source_name(), source_url(), title(), url()
+  top_headlines:
+    primary key: id
+    cursor: published_at
+    fields: content(), description(), id(), image(), lang(), published_at(), source_country(), source_id(), source_name(), source_url(), title(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external GNews API read of news article search results
+  approval: none; read-only news search API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

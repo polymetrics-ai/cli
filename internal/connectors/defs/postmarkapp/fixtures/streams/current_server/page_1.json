@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/server"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ID": 1,
+      "Name": "Fixture Server"
+    }
+  }
+}

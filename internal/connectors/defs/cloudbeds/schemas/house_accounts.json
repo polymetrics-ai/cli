@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "house_accounts",
+  "type": "object",
+  "x-primary-key": ["accountID"],
+  "required": ["accountID"],
+  "properties": {
+    "accountID": { "type": "string" },
+    "propertyID": { "type": ["string", "null"] },
+    "accountName": { "type": ["string", "null"] },
+    "accountStatus": { "type": ["string", "null"] },
+    "isPrivate": { "type": ["boolean", "null"] },
+    "userName": { "type": ["string", "null"] }
+  }
+}

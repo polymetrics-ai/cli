@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "send_as",
+  "type": "object",
+  "x-primary-key": ["send_as_email"],
+  "required": ["send_as_email"],
+  "properties": {
+    "send_as_email": { "type": "string", "description": "The email address that appears in the From: header (renamed from raw sendAsEmail; also this stream's primary key)." },
+    "display_name": { "type": ["string", "null"] },
+    "reply_to_address": { "type": ["string", "null"] },
+    "signature": { "type": ["string", "null"] },
+    "is_primary": { "type": ["boolean", "null"] },
+    "is_default": { "type": ["boolean", "null"] },
+    "treat_as_alias": { "type": ["boolean", "null"] },
+    "verification_status": { "type": ["string", "null"] },
+    "smtpMsa": { "type": ["object", "null"], "description": "Raw SMTP relay config for a custom-domain send-as alias, when set; passthrough field, not renamed (nested object, no flat rename needed)." }
+  }
+}

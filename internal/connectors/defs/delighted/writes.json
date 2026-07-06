@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "name": "create_person",
+      "kind": "create",
+      "method": "POST",
+      "path": "/people.json",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "properties": { "type": "object" },
+          "send": { "type": "boolean" },
+          "delay": { "type": "string" }
+        }
+      },
+      "risk": "creates or updates a Delighted person and may trigger survey workflow depending on account settings"
+    },
+    {
+      "name": "delete_person",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/people/{{ record.person_id }}.json",
+      "path_fields": ["person_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["person_id"],
+        "properties": {
+          "person_id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "deletes a Delighted person record"
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "actions": [
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/teams/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["teamName"],
+        "properties": {
+          "teamName": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new BoldSign team; approval required"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/teams/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["teamId", "teamName"],
+        "properties": {
+          "teamId": { "type": "string" },
+          "teamName": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames an existing BoldSign team; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/contacts/update?id={{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "email", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "phoneNumber": { "type": "object" },
+          "jobTitle": { "type": "string" },
+          "companyName": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites an existing BoldSign contact's details; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/contacts/delete?id={{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently deletes a BoldSign contact; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/contactGroups/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["groupName"],
+        "properties": {
+          "groupName": { "type": "string" },
+          "directories": { "type": "array", "items": { "type": "string" } },
+          "contacts": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a new BoldSign contact group; approval required"
+    },
+    {
+      "name": "update_contact_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/contactGroups/update?groupId={{ record.groupId }}",
+      "path_fields": ["groupId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["groupId", "groupName"],
+        "properties": {
+          "groupId": { "type": "string" },
+          "groupName": { "type": "string" },
+          "directories": { "type": "array", "items": { "type": "string" } },
+          "contacts": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; overwrites an existing BoldSign contact group's members/name; approval required"
+    },
+    {
+      "name": "delete_contact_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/contactGroups/delete?groupId={{ record.groupId }}",
+      "path_fields": ["groupId"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["groupId"],
+        "properties": {
+          "groupId": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; permanently deletes a BoldSign contact group; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "revoke_document",
+      "kind": "update",
+      "method": "POST",
+      "path": "/v1/document/revoke?documentId={{ record.documentId }}",
+      "path_fields": ["documentId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["documentId", "message"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "message": { "type": "string" },
+          "onBehalfOf": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; revokes a BoldSign document, permanently ending its signature request; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remind_document",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/v1/document/remind?documentId={{ record.documentId }}",
+      "path_fields": ["documentId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["documentId"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "message": { "type": "string" },
+          "onBehalfOf": { "type": "string" },
+          "reminderPhoneNumbers": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; sends an email/SMS reminder to a document's pending signers; approval required"
+    },
+    {
+      "name": "delete_document",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/document/delete?documentId={{ record.documentId }}&deletePermanently={{ record.deletePermanently }}",
+      "path_fields": ["documentId", "deletePermanently"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["documentId", "deletePermanently"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "deletePermanently": { "type": "boolean" }
+        }
+      },
+      "risk": "destructive external mutation; moves a BoldSign document to trash (or permanently deletes it when deletePermanently=true); approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_document_tags",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/document/addTags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["documentId", "tags"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; adds label tags to a BoldSign document; approval required"
+    },
+    {
+      "name": "delete_document_tags",
+      "kind": "update",
+      "method": "DELETE",
+      "path": "/v1/document/deleteTags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["documentId", "tags"],
+        "properties": {
+          "documentId": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "external mutation; removes label tags from a BoldSign document; approval required"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/users/update",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["userId"],
+        "properties": {
+          "userId": { "type": "string" },
+          "userRole": { "type": "string", "enum": ["Admin", "TeamAdmin", "Member"] },
+          "userStatus": { "type": "string", "enum": ["Activate", "Deactivate"] },
+          "toUserId": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes a BoldSign user's role or active/deactivated status; approval required"
+    },
+    {
+      "name": "change_user_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/users/changeTeam?userId={{ record.userId }}",
+      "path_fields": ["userId"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["userId", "toTeamId"],
+        "properties": {
+          "userId": { "type": "string" },
+          "toTeamId": { "type": "string" },
+          "transferDocumentsToUserId": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; moves a BoldSign user to a different team; approval required"
+    }
+  ]
+}

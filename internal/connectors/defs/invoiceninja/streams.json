@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-API-TOKEN", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/clients", "query": { "per_page": "1", "page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "invoiceninja api_key is missing or invalid; re-run pm credentials add invoiceninja" },
+      { "status": 403, "hint": "invoiceninja credentials lack access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "invoiceninja rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "clients",
+      "path": "/clients",
+      "records": { "path": "data" },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "invoices",
+      "path": "/invoices",
+      "records": { "path": "data" },
+      "schema": "schemas/invoices.json"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": { "path": "data" },
+      "schema": "schemas/products.json"
+    },
+    {
+      "name": "payments",
+      "path": "/payments",
+      "records": { "path": "data" },
+      "schema": "schemas/payments.json"
+    },
+    {
+      "name": "quotes",
+      "path": "/quotes",
+      "records": { "path": "data" },
+      "schema": "schemas/quotes.json"
+    }
+  ]
+}

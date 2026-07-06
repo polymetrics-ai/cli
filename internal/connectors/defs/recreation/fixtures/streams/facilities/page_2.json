@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/facilities",
+    "query": {
+      "limit": "50",
+      "offset": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "RECDATA": [
+        {
+          "FacilityID": "51",
+          "FacilityName": "Fixture Facility 51",
+          "FacilityTypeDescription": "Campground",
+          "LastUpdatedDate": "2026-01-01"
+        }
+      ],
+      "METADATA": {
+        "RESULTS": {
+          "TOTAL_COUNT": "51"
+        }
+      }
+    }
+  }
+}

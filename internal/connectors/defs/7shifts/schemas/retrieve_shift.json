@@ -1,0 +1,283 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Shift ID"
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "User ID"
+    },
+    "start": {
+      "type": "string",
+      "description": "Start date time of the shift. UTC in ISO8601 format",
+      "format": "date-time"
+    },
+    "end": {
+      "type": "string",
+      "description": "End date time of the shift. UTC in ISO8601 format",
+      "format": "date-time"
+    },
+    "close": {
+      "type": "boolean",
+      "description": "If true the shift ends at closing time. If set end is not used."
+    },
+    "business_decline": {
+      "type": "boolean",
+      "description": "If true the shift ends at business decline."
+    },
+    "hourly_wage": {
+      "type": "number",
+      "description": "Read Only. The hourly wage for this shift. In cents."
+    },
+    "department_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Department ID. Required if the location uses departments."
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "The ID of the location that the shift is assigned to."
+    },
+    "role_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Role ID. Required if the location uses roles."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes displayed on a shift"
+    },
+    "draft": {
+      "type": "boolean",
+      "description": "Whether or not the shift is a draft shift. Draft shifts are shifts that have not yet been published."
+    },
+    "notified": {
+      "type": "boolean",
+      "description": "Whether or not the individual assigned to the shift has been notified of the shifts existence."
+    },
+    "open": {
+      "type": "boolean",
+      "description": "If true the shift is not assigned to any user. Open shifts can be requested by users."
+    },
+    "unassigned": {
+      "type": "boolean",
+      "description": "Shifts in a template that could not be assigned to any eligible employees."
+    },
+    "unassigned_skill_level": {
+      "type": "integer",
+      "description": "Specify the minimum user skill level required for the shift. Levels 1 - beginner, 2 - intermediate, 3 - Experienced."
+    },
+    "open_offer_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Specifies the scope of who can pick up the shift.",
+      "enum": [
+        "all_location_members",
+        "all_role_members",
+        "set_of_location_members",
+        "all_company_employees"
+      ]
+    },
+    "attendance_status": {
+      "type": "string",
+      "description": "Specified shift flags to track employee attendance",
+      "enum": [
+        "none",
+        "sick",
+        "no_show",
+        "late",
+        "called_off",
+        "called_in",
+        "custom"
+      ]
+    },
+    "custom_flag": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Custom shift flag assigned to this shift, present when attendance_status is 'custom'",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "color"
+      ]
+    },
+    "publish_status": {
+      "type": "string",
+      "description": "Current publication status of the shift",
+      "enum": [
+        "draft",
+        "published",
+        "draft_deleted",
+        "published_deleted"
+      ]
+    },
+    "late_minuets": {
+      "type": "integer",
+      "description": "Specify the grace minutes they can clock-in late."
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The created date of the shift in UTC",
+      "format": "date-time"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The last modified date of the shift in UTC",
+      "format": "date-time"
+    },
+    "deleted": {
+      "type": "boolean",
+      "description": "Whether or not this shift is deleted."
+    },
+    "soft_deleted": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Whether or not this shift is soft-deleted."
+    },
+    "station": {
+      "type": "integer",
+      "description": "Station Number"
+    },
+    "station_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Station name"
+    },
+    "station_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Station id"
+    },
+    "breaks": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Breaks on the shift",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Break ID"
+          },
+          "shift_id": {
+            "type": "integer",
+            "description": "Shift ID"
+          },
+          "start": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Start date time of the break. UTC in ISO8601 format.",
+            "format": "date-time"
+          },
+          "end": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "End date time of the break. UTC in ISO8601 format.",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "description": "Break type name"
+          },
+          "length": {
+            "type": "integer",
+            "description": "Break type length in minutes"
+          },
+          "break_type_id": {
+            "type": "integer",
+            "description": "Break type ID"
+          },
+          "type": {
+            "type": "string",
+            "description": "Break type paid or unpaid",
+            "enum": [
+              "paid",
+              "unpaid"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "shift_id",
+          "name",
+          "length",
+          "break_type_id"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "user_id",
+    "start",
+    "end",
+    "close",
+    "business_decline",
+    "department_id",
+    "location_id",
+    "role_id",
+    "notes",
+    "draft",
+    "notified",
+    "open",
+    "unassigned",
+    "unassigned_skill_level",
+    "open_offer_type",
+    "attendance_status",
+    "publish_status",
+    "created",
+    "modified",
+    "deleted",
+    "soft_deleted",
+    "station",
+    "station_name",
+    "station_id"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_shift",
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "api": "Apple Search Ads Campaign Management API v5, https://api.searchads.apple.com/api/v5",
+  "docs": "https://developer.apple.com/documentation/apple_search_ads",
+  "reviewed_at": "2026-07-03",
+  "scope": "Campaign Management read scope: the 4 legacy-parity read streams only (campaigns, ad groups, targeting keywords, ads). Creative sets, reporting endpoints, ACL discovery, and mutating campaign-management endpoints remain excluded because the current connector has no write surface and the additional read endpoints either require selector/report request bodies handled by the existing StreamHook scope or introduce resource families legacy never synced. adgroups/keywords/ads are declared method GET (not the literal wire HTTP verb, which is POST for Apple's .../find selector-body search endpoints) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4; monday's and plaid's api_surface.json document the identical convention for their own POST-verb read endpoints) -- these are read-only record listings (a POST-with-body search, not a mutation), and this bundle's Write always rejects with an unsupported-operation error.",
+  "endpoints": [
+    { "method": "GET", "path": "/campaigns", "covered_by": { "stream": "campaigns" } },
+    { "method": "GET", "path": "/adgroups/find", "covered_by": { "stream": "adgroups" } },
+    { "method": "GET", "path": "/targetingkeywords/find", "covered_by": { "stream": "keywords" } },
+    { "method": "GET", "path": "/ads/find", "covered_by": { "stream": "ads" } },
+    { "method": "POST", "path": "/campaigns", "excluded": { "category": "out_of_scope", "reason": "campaign creation is a mutation and this connector is intentionally read-only; no reverse-ETL write action is exposed" } },
+    { "method": "PUT", "path": "/campaigns/{campaignId}", "excluded": { "category": "out_of_scope", "reason": "campaign updates are mutations and this connector is intentionally read-only; no reverse-ETL write action is exposed" } },
+    { "method": "GET", "path": "/creativesets/find", "excluded": { "category": "out_of_scope", "reason": "creative-set search uses the same selector-body read family as the hook-covered streams but is a separate resource family not implemented by legacy or this bundle" } },
+    { "method": "GET", "path": "/reports/campaigns", "excluded": { "category": "out_of_scope", "reason": "campaign reporting requires report selector/body semantics outside the existing StreamHook scope; this bundle only syncs campaign-management entity records" } },
+    { "method": "GET", "path": "/acls", "excluded": { "category": "requires_elevated_scope", "reason": "ACL discovery enumerates organization access/permissions rather than campaign entity records and may require broader account-management scope" } }
+  ]
+}

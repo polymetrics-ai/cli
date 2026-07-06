@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/service/svc_fixture_2/details" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "svc_fixture_2",
+      "name": "Fixture Service 2",
+      "type": "wasm",
+      "customer_id": "cus_fixture_1",
+      "comment": "conformance fixture service",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z",
+      "deleted_at": null,
+      "version": {
+        "service_id": "svc_fixture_2",
+        "active": true,
+        "testing": false,
+        "number": 3
+      },
+      "versions": [
+        { "number": 3, "active": true }
+      ]
+    }
+  }
+}

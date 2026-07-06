@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobStatus": "CREATED"
+    }
+  }
+}

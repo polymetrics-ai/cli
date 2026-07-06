@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/v1/campaigns/campaign_fixture_1/leads", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "has_more": false,
+      "next_page": null,
+      "status": "success",
+      "errors": null,
+      "campaign_leads": [
+        {
+          "id": "campaign_lead_fixture_1",
+          "campaign_id": "campaign_fixture_1",
+          "mailbox_id": "mailbox_fixture_1",
+          "lead": { "id": "lead_fixture_1", "status": "active" }
+        }
+      ]
+    }
+  }
+}

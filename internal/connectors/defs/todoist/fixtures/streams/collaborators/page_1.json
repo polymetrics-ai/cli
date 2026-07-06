@@ -1,0 +1,38 @@
+{
+  "request": { "method": "GET", "path": "/projects" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "prj_fixture_1",
+        "name": "Fixture Project One",
+        "color": "charcoal",
+        "parent_id": null,
+        "order": 1,
+        "comment_count": 2,
+        "is_shared": false,
+        "is_favorite": true,
+        "is_inbox_project": false,
+        "is_team_inbox": false,
+        "view_style": "list",
+        "url": "https://todoist.com/showProject?id=prj_fixture_1",
+        "is_archived": false
+      },
+      {
+        "id": "prj_fixture_2",
+        "name": "Fixture Project Two",
+        "color": "blue",
+        "parent_id": "prj_fixture_1",
+        "order": 2,
+        "comment_count": 0,
+        "is_shared": true,
+        "is_favorite": false,
+        "is_inbox_project": false,
+        "is_team_inbox": false,
+        "view_style": "board",
+        "url": "https://todoist.com/showProject?id=prj_fixture_2",
+        "is_archived": false
+      }
+    ]
+  }
+}

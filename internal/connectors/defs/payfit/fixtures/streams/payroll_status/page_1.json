@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/payroll-status",
+    "query": {
+      "date": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "company_id": "synthetic-conformance-value",
+      "name": "Fixture payroll status"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/integration_api/users/query", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "user_1", "type": "user", "attributes": { "profile": { "displayName": "Fixture User 1" } }, "updated_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

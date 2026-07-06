@@ -1,0 +1,19 @@
+{
+  "record": {
+    "subscription_url": "https://example.com/hooks/pipedrive",
+    "event_action": "*",
+    "event_object": "deal",
+    "name": "Fixture Webhook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "subscription_url": "https://example.com/hooks/pipedrive",
+      "event_action": "*",
+      "event_object": "deal",
+      "name": "Fixture Webhook"
+    }
+  },
+  "response": { "status": 201, "body": { "success": true, "data": { "id": 1, "name": "Fixture Webhook" } } }
+}

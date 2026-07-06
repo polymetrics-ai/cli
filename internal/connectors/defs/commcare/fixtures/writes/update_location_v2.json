@@ -1,0 +1,17 @@
+{
+  "record": {
+    "location_id": "location_v2_fixture_1",
+    "name": "Fixture Town Updated",
+    "location_type_code": "county",
+    "parent_location_id": "location_v2_parent_fixture_1",
+    "location_data": { "pop": "1001" }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/a/synthetic-conformance-value/api/location/v2/location_v2_fixture_1",
+    "body": {
+      "name": "Fixture Town Updated",
+      "location_type_code": "county"
+    }
+  }
+}

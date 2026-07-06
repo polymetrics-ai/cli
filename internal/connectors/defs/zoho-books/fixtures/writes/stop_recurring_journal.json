@@ -1,0 +1,16 @@
+{
+  "record": {
+    "recurring_journal_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recurringjournals/synthetic-conformance-value/status/stop"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

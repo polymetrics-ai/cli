@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/translations",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_translations_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_translations",
+          "name": "Fixture list_translations",
+          "status": "active",
+          "operation_id": "listTranslations"
+        }
+      ]
+    }
+  }
+}

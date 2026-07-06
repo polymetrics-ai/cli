@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/videoCategories",
+    "query": {
+      "part": "snippet",
+      "regionCode": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "1", "snippet": { "title": "Film & Animation" } },
+        { "id": "2", "snippet": { "title": "Autos & Vehicles" } }
+      ]
+    }
+  }
+}

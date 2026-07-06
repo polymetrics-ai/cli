@@ -1,0 +1,46 @@
+{
+  "api": "Paperform API v1 (https://api.paperform.co/v1)",
+  "docs": "https://paperform.co/help/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; the full Paperform surface (partial submissions, form fields metadata, webhooks) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/forms/{form_id}/submissions",
+      "covered_by": {
+        "stream": "submissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/forms/{form_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/forms/{form_id}/submissions/{submission_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/forms/{form_id}/submissions/{submission_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "delete mutation, not a read stream"
+      }
+    }
+  ]
+}

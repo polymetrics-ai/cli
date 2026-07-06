@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/webhooks"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "event": "consumer.created",
+        "api": null
+      },
+      {
+        "event": "sync.completed",
+        "api": "Accounting"
+      }
+    ]
+  }
+}

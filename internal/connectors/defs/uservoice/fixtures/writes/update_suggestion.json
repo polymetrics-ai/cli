@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "101",
+    "title": "Fixture updated title"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/admin/suggestions/101",
+    "body": {
+      "title": "Fixture updated title"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "suggestions": [{ "id": 101, "title": "Fixture updated title" }] }
+  }
+}

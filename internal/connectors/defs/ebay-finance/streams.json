@@ -1,0 +1,101 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.client_access_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 200
+    },
+    "check": { "method": "GET", "path": "/seller_funds_summary" },
+    "error_map": [
+      { "status": 401, "hint": "ebay-finance client_access_token is missing or invalid; re-run pm credentials add ebay-finance" },
+      { "status": 429, "class": "rate_limited", "hint": "ebay-finance rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "transactions",
+      "path": "/transaction",
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 2
+      },
+      "query": {
+        "filter": { "template": "transactionDate:[{{ incremental.lower_bound }}..]", "omit_when_absent": true }
+      },
+      "records": { "path": "transactions" },
+      "incremental": {
+        "cursor_field": "transactionDate",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "amount_value": "{{ record.amount.value }}",
+        "amount_currency": "{{ record.amount.currency }}"
+      },
+      "schema": "schemas/transactions.json"
+    },
+    {
+      "name": "payouts",
+      "path": "/payout",
+      "query": {
+        "filter": { "template": "payoutDate:[{{ incremental.lower_bound }}..]", "omit_when_absent": true }
+      },
+      "records": { "path": "payouts" },
+      "incremental": {
+        "cursor_field": "payoutDate",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "amount_value": "{{ record.amount.value }}",
+        "amount_currency": "{{ record.amount.currency }}",
+        "payoutInstrument_nickname": "{{ record.payoutInstrument.nickname }}",
+        "payoutInstrument_accountLastFourDigits": "{{ record.payoutInstrument.accountLastFourDigits }}"
+      },
+      "schema": "schemas/payouts.json"
+    },
+    {
+      "name": "transfers",
+      "path": "/transfer",
+      "query": {
+        "filter": { "template": "transactionDate:[{{ incremental.lower_bound }}..]", "omit_when_absent": true }
+      },
+      "records": { "path": "transfers" },
+      "incremental": {
+        "cursor_field": "transferDate",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "amount_value": "{{ record.amount.value }}",
+        "amount_currency": "{{ record.amount.currency }}"
+      },
+      "schema": "schemas/transfers.json"
+    },
+    {
+      "name": "seller_funds_summary",
+      "path": "/seller_funds_summary",
+      "pagination": { "type": "none" },
+      "records": { "path": "" },
+      "computed_fields": {
+        "totalFunds_value": "{{ record.totalFunds.value }}",
+        "totalFunds_currency": "{{ record.totalFunds.currency }}",
+        "availableFunds_value": "{{ record.availableFunds.value }}",
+        "availableFunds_currency": "{{ record.availableFunds.currency }}",
+        "fundsOnHold_value": "{{ record.fundsOnHold.value }}",
+        "fundsOnHold_currency": "{{ record.fundsOnHold.currency }}",
+        "processingFunds_value": "{{ record.processingFunds.value }}",
+        "processingFunds_currency": "{{ record.processingFunds.currency }}"
+      },
+      "schema": "schemas/seller_funds_summary.json"
+    }
+  ]
+}

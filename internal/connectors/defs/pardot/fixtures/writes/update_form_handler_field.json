@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated form_handler_field"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/form-handler-fields/101",
+    "body": {
+      "name": "Updated form_handler_field"
+    }
+  }
+}

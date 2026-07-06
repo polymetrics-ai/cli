@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/folders/synthetic-conformance-value/children",
+    "query": {
+      "maxItems": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 12345,
+          "name": "Fixture folder_children",
+          "type": "folder_children",
+          "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

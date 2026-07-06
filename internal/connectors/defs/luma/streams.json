@@ -1,0 +1,349 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "x-luma-api-key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pagination_cursor",
+      "token_path": "next_cursor",
+      "stop_path": "has_more"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v1/users/get-self"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "luma api_key is missing or invalid; re-run pm credentials add luma"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "luma rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "events",
+      "path": "/v1/calendars/events/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/events.json",
+      "computed_fields": {
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "calendar_api_id": "{{ coalesce record.calendar_api_id record.calendar_id }}"
+      }
+    },
+    {
+      "name": "event_guests",
+      "path": "/v1/events/guests/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/event_guests.json",
+      "query": {
+        "event_id": "{{ config.event_api_id }}"
+      },
+      "computed_fields": {
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "event_api_id": "{{ record.event_api_id }}",
+        "name": "{{ coalesce record.name record.user_name }}",
+        "email": "{{ coalesce record.email record.user_email }}",
+        "user_api_id": "{{ coalesce record.user_api_id record.user_id }}"
+      }
+    },
+    {
+      "name": "event_hosts",
+      "path": "/v1/events/get",
+      "records": {
+        "path": "hosts"
+      },
+      "schema": "schemas/event_hosts.json",
+      "query": {
+        "event_id": "{{ config.event_api_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "api_id": "{{ coalesce record.api_id record.id }}",
+        "access_level": "{{ record.access_level }}"
+      }
+    },
+    {
+      "name": "event",
+      "path": "/v1/events/get",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/event.json",
+      "query": {
+        "event_id": "{{ config.event_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "calendar",
+      "path": "/v1/calendars/get",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/calendar.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "calendar_events",
+      "path": "/v1/calendars/events/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/calendar_events.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "guest",
+      "path": "/v1/events/guests/get",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/guest.json",
+      "query": {
+        "event_id": "{{ config.event_id }}",
+        "id": "{{ config.guest_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "guests",
+      "path": "/v1/events/guests/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/guests.json",
+      "query": {
+        "event_id": "{{ config.event_id }}"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "self_user",
+      "path": "/v1/users/get-self",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/self_user.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_tags",
+      "path": "/v1/calendars/contact-tags/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/contact_tags.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "event_tags",
+      "path": "/v1/calendars/event-tags/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/event_tags.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "calendar_admins",
+      "path": "/v1/calendars/admins/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/calendar_admins.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "entity_lookup",
+      "path": "/v1/entities/lookup",
+      "records": {
+        "path": "entity"
+      },
+      "schema": "schemas/entity_lookup.json",
+      "query": {
+        "slug": "{{ config.slug }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "event_lookup",
+      "path": "/v1/calendars/events/lookup",
+      "records": {
+        "path": "event"
+      },
+      "schema": "schemas/event_lookup.json",
+      "query": {
+        "event_id": "{{ config.event_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "calendar_contacts",
+      "path": "/v1/calendars/contacts/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/calendar_contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "event_coupons",
+      "path": "/v1/events/coupons/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/event_coupons.json",
+      "query": {
+        "event_id": "{{ config.event_id }}"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "calendar_coupons",
+      "path": "/v1/calendars/coupons/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/calendar_coupons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "event_ticket_types",
+      "path": "/v1/events/ticket-types/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/event_ticket_types.json",
+      "query": {
+        "event_id": "{{ config.event_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "event_ticket_type",
+      "path": "/v1/events/ticket-types/get",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/event_ticket_type.json",
+      "query": {
+        "event_ticket_type_id": "{{ config.event_ticket_type_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "membership_tiers",
+      "path": "/v1/memberships/tiers/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/membership_tiers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhooks",
+      "path": "/v1/webhooks/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook",
+      "path": "/v2/webhooks/get",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/webhook.json",
+      "query": {
+        "id": "{{ config.webhook_id }}"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "organization_admins",
+      "path": "/v1/organizations/admins/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/organization_admins.json",
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough"
+    },
+    {
+      "name": "organization_calendars",
+      "path": "/v1/organizations/calendars/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/organization_calendars.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organization_events",
+      "path": "/v1/organizations/events/list",
+      "records": {
+        "path": "entries"
+      },
+      "schema": "schemas/organization_events.json",
+      "projection": "passthrough"
+    }
+  ]
+}

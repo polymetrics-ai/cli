@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "id": "fixture_group_1", "displayName": "Fixture Groups 1", "description": "deterministic fixture record", "mail": "fixture+1@example.com", "mailNickname": "fixture1", "visibility": "Private", "createdDateTime": "2026-01-01T00:00:00Z", "securityEnabled": true, "mailEnabled": true }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "surveyId": "srv_fixture_1",
+    "data": { "question_fixture_1": "fixture answer" },
+    "finished": false,
+    "language": "en"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/management/responses",
+    "body": {
+      "surveyId": "srv_fixture_1",
+      "finished": false,
+      "language": "en"
+    }
+  }
+}

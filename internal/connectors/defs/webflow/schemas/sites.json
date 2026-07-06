@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sites",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "workspaceId": { "type": ["string", "null"] },
+    "displayName": { "type": ["string", "null"] },
+    "shortName": { "type": ["string", "null"] },
+    "timeZone": { "type": ["string", "null"] },
+    "createdOn": { "type": ["string", "null"], "format": "date-time" },
+    "lastUpdated": { "type": ["string", "null"], "format": "date-time" },
+    "lastPublished": { "type": ["string", "null"], "format": "date-time" },
+    "parentFolderId": { "type": ["string", "null"] }
+  }
+}

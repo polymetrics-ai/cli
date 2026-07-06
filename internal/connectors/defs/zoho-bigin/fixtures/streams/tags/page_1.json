@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/settings/tags", "query": { "module": "Deals" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        { "id": "tag_fixture_1", "name": "hot-lead", "created_time": "2026-01-01T00:00:00+00:00", "modified_time": "2026-01-01T00:00:00+00:00" },
+        { "id": "tag_fixture_2", "name": "follow-up", "created_time": "2026-01-01T00:00:00+00:00", "modified_time": "2026-01-01T00:00:00+00:00" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "analytics_funnel",
+  "type": "object",
+  "x-primary-key": ["reference_day"],
+  "required": ["reference_day"],
+  "properties": {
+    "reference_day": { "type": "string" },
+    "visitors_count": { "type": ["integer", "null"] },
+    "contacts_count": { "type": ["integer", "null"] },
+    "qualified_contacts_count": { "type": ["integer", "null"] },
+    "opportunities_count": { "type": ["integer", "null"] },
+    "sales_count": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/community/posts",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "posts": [
+        {
+          "author_id": 12.5,
+          "closed": true,
+          "comment_count": 7,
+          "content_tag_ids": [
+
+          ],
+          "details": "fixture_details",
+          "featured": true,
+          "follower_count": 7,
+          "frozen": true,
+          "html_url": "fixture_html_url",
+          "id": 12.5,
+          "non_author_editor_id": 1,
+          "non_author_updated_at": "2026-01-01T00:00:00Z",
+          "pinned": true,
+          "status": "fixture_status",
+          "title": "fixture_title",
+          "topic_id": 1,
+          "vote_count": 7,
+          "vote_sum": 7,
+          "created_at": "2026-01-01T00:00:00Z",
+          "url": "fixture_url",
+          "description": "fixture_description",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": null
+      },
+      "meta": {
+        "has_more": false,
+        "after_cursor": null
+      }
+    }
+  }
+}

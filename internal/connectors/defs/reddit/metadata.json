@@ -1,0 +1,23 @@
+{
+  "name": "reddit",
+  "display_name": "Reddit",
+  "description": "Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://www.reddit.com/dev/api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Reddit OAuth API read of public subreddit posts and comments",
+    "approval": "none; read-only, caller-supplied OAuth token"
+  }
+}

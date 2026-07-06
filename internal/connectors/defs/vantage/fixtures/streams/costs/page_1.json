@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v2/costs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "costs": [
+        {
+          "id": "cost_fixture_1",
+          "service": "compute",
+          "amount": "12.34",
+          "date": "2026-01-01"
+        },
+        {
+          "id": "cost_fixture_2",
+          "service": "storage",
+          "amount": "3.21",
+          "date": "2026-01-02"
+        }
+      ]
+    }
+  }
+}

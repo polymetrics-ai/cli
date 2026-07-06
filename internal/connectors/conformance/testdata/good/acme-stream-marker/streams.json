@@ -1,0 +1,28 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "acme-conformance/1.0",
+    "headers": {},
+    "auth": [ { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ secrets.token }}" }, { "mode": "none", "when": "{{ config.base_url }}" } ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ping" },
+    "error_map": [ { "status": 401, "hint": "token is missing or expired" } ]
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": { "path": "data" },
+      "pagination": { "type": "page_number", "page_param": "page", "start_page": 1, "page_size": 1 },
+      "incremental": { "cursor_field": "updated_at", "request_param": "since", "param_format": "rfc3339", "start_config_key": "start_date" },
+      "schema": "schemas/widgets.json",
+      "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme-stream-marker (self-test marker: this stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why it does not fail)" }
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "records": { "path": "data" },
+      "schema": "schemas/notes.json"
+    }
+  ]
+}

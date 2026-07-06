@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/synthetic-conformance-value/audience-groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "audience_group_fixture_1",
+      "name": "Fixture audience_group_fixture_1"
+    }
+  }
+}

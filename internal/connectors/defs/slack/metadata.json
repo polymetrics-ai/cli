@@ -1,0 +1,23 @@
+{
+  "name": "slack",
+  "display_name": "Slack",
+  "description": "Reads Slack workspace users, channels, and channel messages through the Slack Web API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://api.slack.com/changelog",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Slack Web API read of workspace members/channels/channel message history",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

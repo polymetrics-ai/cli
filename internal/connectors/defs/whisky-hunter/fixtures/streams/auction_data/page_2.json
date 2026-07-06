@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/api/auction_data/fixture-auction-one/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "dt": "2026-01-01", "auction_slug": "fixture-auction-one", "auction_name": "Fixture Auction One", "winning_bid_mean": 186.35, "auction_trading_volume": 681293.3, "auction_lots_count": 3656, "all_auctions_lots_count": 53262 },
+      { "dt": "2025-12-01", "auction_slug": "fixture-auction-one", "auction_name": "Fixture Auction One", "winning_bid_mean": 166.62, "auction_trading_volume": 830912.6, "auction_lots_count": 4987, "all_auctions_lots_count": 50746 }
+    ]
+  }
+}

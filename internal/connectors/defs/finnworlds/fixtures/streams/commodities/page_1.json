@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/commodities",
+    "query": { "commodity_name": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": {
+        "output": [
+          {
+            "commodity_name": "synthetic-conformance-value",
+            "datetime": "2026-01-01T00:00:00Z",
+            "commodity_price": "75.50",
+            "commodity_unit": "USD/Bbl",
+            "price_change_day": "0.50",
+            "percentage_day": "0.66",
+            "percentage_week": "1.20",
+            "percentage_month": "3.40",
+            "percentage_year": "12.00"
+          },
+          {
+            "commodity_name": "synthetic-conformance-value",
+            "datetime": "2026-01-02T00:00:00Z",
+            "commodity_price": "76.00",
+            "commodity_unit": "USD/Bbl",
+            "price_change_day": "0.60",
+            "percentage_day": "0.79",
+            "percentage_week": "1.30",
+            "percentage_month": "3.50",
+            "percentage_year": "12.50"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "store_id": "store_id_fixture_1",
+    "customer_id": "customer_id_fixture_1",
+    "total": "42.00"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ecommerce/stores/store_id_fixture_1/customers/customer_id_fixture_1/cart"
+  },
+  "response": {
+    "status": 404,
+    "body": {
+      "status": "not_found"
+    }
+  }
+}

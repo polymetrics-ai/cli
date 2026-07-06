@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/admin/labels", "query": { "page": "1", "per_page": "30" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "labels": [
+        { "id": 5001, "name": "Fixture Label", "full_name": "Fixture Label", "level": 0, "can_recommend": true, "open_suggestions_count": 1, "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "pagination": { "page": 1, "per_page": 30, "total_pages": 1, "total_records": 1 }
+    }
+  }
+}

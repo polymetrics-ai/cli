@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/pickups", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pickups": [
+        {
+          "id": "pickup_fixture_1",
+          "object": "Pickup",
+          "mode": "test",
+          "status": "scheduled",
+          "reference": "fixture-pickup",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "min_datetime": "2026-01-02T10:00:00Z",
+          "max_datetime": "2026-01-02T16:00:00Z",
+          "is_account_address": false,
+          "instructions": "Fixture pickup instructions",
+          "confirmation": "CONFIRM1",
+          "address": { "id": "adr_fixture_1", "object": "Address", "city": "San Francisco", "state": "CA" },
+          "pickup_rates": [
+            { "id": "pickuprate_fixture_1", "object": "PickupRate", "carrier": "USPS", "service": "NextDay", "rate": "0.00", "currency": "USD" }
+          ]
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

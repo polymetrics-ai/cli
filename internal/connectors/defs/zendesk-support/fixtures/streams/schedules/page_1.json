@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/business_hours/schedules.json",
+    "query": {
+      "page[size]": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schedules": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "intervals": [
+
+          ],
+          "time_zone": "fixture_time_zone",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next_page": null
+    }
+  }
+}

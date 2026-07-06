@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "fixture_template"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/templates/fixture_template"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "team_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "real_name": { "type": ["string", "null"] },
+    "display_name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] },
+    "is_admin": { "type": ["boolean", "null"] },
+    "is_bot": { "type": ["boolean", "null"] },
+    "tz": { "type": ["string", "null"] },
+    "updated": { "type": ["integer", "null"] }
+  }
+}

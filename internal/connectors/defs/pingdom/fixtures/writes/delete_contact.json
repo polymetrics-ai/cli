@@ -1,0 +1,5 @@
+{
+  "record": { "id": 700010 },
+  "expect": { "method": "DELETE", "path": "/alerting/contacts/700010" },
+  "response": { "status": 200, "body": { "message": "Deletion of contact 700010 was successful" } }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/settlements",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "settlement_fixture_1",
+        "amount": 5000,
+        "currency": "USD",
+        "created_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "settlement_fixture_2",
+        "amount": 6000,
+        "currency": "USD",
+        "created_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

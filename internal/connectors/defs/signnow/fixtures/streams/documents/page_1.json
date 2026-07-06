@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/document", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "doc_fixture_1", "document_name": "Fixture Contract One", "updated": "2026-01-01T00:00:00Z" },
+        { "id": "doc_fixture_2", "document_name": "Fixture Contract Two", "updated": "2026-01-02T00:00:00Z" }
+      ],
+      "next": "fixture_cursor_2"
+    }
+  }
+}

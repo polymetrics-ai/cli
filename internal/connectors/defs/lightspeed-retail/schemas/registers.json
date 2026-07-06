@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "registers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "version",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "outlet_id": { "type": ["string", "null"] },
+    "invoice_prefix": { "type": ["string", "null"] },
+    "invoice_sequence": { "type": ["integer", "null"] },
+    "is_open": { "type": ["boolean", "null"] },
+    "email_receipt": { "type": ["boolean", "null"] },
+    "print_receipt": { "type": ["boolean", "null"] }
+  }
+}

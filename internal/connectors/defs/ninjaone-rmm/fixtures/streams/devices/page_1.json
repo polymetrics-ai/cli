@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v2/devices", "query": { "pageSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 10, "organizationId": 1, "locationId": 1, "systemName": "host-10", "dnsName": "host-10.example.com", "nodeClass": "WINDOWS_WORKSTATION", "offline": false, "approvalStatus": "APPROVED" },
+      { "id": 11, "organizationId": 1, "locationId": 1, "systemName": "host-11", "dnsName": "host-11.example.com", "nodeClass": "WINDOWS_SERVER", "offline": true, "approvalStatus": "APPROVED" }
+    ]
+  }
+}

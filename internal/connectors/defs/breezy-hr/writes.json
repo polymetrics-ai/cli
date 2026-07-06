@@ -1,0 +1,142 @@
+{
+  "actions": [
+    {
+      "name": "create_position",
+      "kind": "create",
+      "method": "POST",
+      "path": "/positions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "description", "type", "location"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string" },
+          "location": { "type": "object" },
+          "requisition_id": { "type": "string" },
+          "category": { "type": "string" },
+          "department": { "type": "string" },
+          "experience": { "type": "string" },
+          "education": { "type": "string" },
+          "pipeline_id": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "creates a new job opening; if not left in draft state, may become publicly visible on the company's careers page and job boards depending on the configured state"
+    },
+    {
+      "name": "update_position",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/position/{{ record.position_id }}",
+      "path_fields": ["position_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["position_id"],
+        "properties": {
+          "position_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string" },
+          "location": { "type": "object" },
+          "department": { "type": "string" },
+          "category": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "risk": "mutates an existing job opening's title/description/location/department; a live (published) posting's public listing reflects the change immediately"
+    },
+    {
+      "name": "update_position_state",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/position/{{ record.position_id }}/state",
+      "path_fields": ["position_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["position_id", "state"],
+        "properties": {
+          "position_id": { "type": "string" },
+          "state": { "type": "string" }
+        }
+      },
+      "risk": "changes a position's lifecycle state (published/draft/closed/archived); setting state to published makes the job publicly visible on the company's careers page and job boards, and closed/archived stops accepting new applicants"
+    },
+    {
+      "name": "create_candidate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/position/{{ record.position_id }}/candidates",
+      "path_fields": ["position_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["position_id", "name"],
+        "properties": {
+          "position_id": { "type": "string" },
+          "name": { "type": "string" },
+          "email_address": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "address": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "origin": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      },
+      "risk": "adds a new candidate to a position's hiring pipeline; low-risk additive mutation, no approval required"
+    },
+    {
+      "name": "update_candidate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/position/{{ record.position_id }}/candidate/{{ record.candidate_id }}",
+      "path_fields": ["position_id", "candidate_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["position_id", "candidate_id"],
+        "properties": {
+          "position_id": { "type": "string" },
+          "candidate_id": { "type": "string" },
+          "name": { "type": "string" },
+          "email_address": { "type": "string" },
+          "phone_number": { "type": "string" },
+          "summary": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "headline": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      },
+      "risk": "mutates an existing candidate's contact/profile information"
+    },
+    {
+      "name": "move_candidate_stage",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/position/{{ record.position_id }}/candidate/{{ record.candidate_id }}/stage",
+      "path_fields": ["position_id", "candidate_id"],
+      "body_type": "json",
+      "body_fields": ["stage_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["position_id", "candidate_id", "stage_id"],
+        "properties": {
+          "position_id": { "type": "string" },
+          "candidate_id": { "type": "string" },
+          "stage_id": { "type": "string" }
+        }
+      },
+      "risk": "moves a candidate to a different pipeline stage within the SAME position (e.g. Applied to Interviewing to Hired/Disqualified); moving to a terminal stage (hired/disqualified) may trigger configured stage actions (auto-emails, webhook notifications) depending on the position's stage_actions_enabled setting"
+    }
+  ]
+}

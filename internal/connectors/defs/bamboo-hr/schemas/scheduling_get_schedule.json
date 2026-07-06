@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "scheduling_get_schedule",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "createdAt": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "earlyClockInThreshold": {
+      "type": "integer"
+    },
+    "employeeIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "locationId": {
+      "type": "integer"
+    },
+    "managerUserIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "name": {
+      "type": "string"
+    },
+    "startOfWeek": {
+      "type": "string"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

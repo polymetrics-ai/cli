@@ -1,0 +1,64 @@
+{
+  "request": { "method": "GET", "path": "/wp-json/wp/v2/posts", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "date": "2026-01-01T00:00:00",
+        "date_gmt": "2026-01-01T00:00:00",
+        "guid": { "rendered": "https://example.com/?p=1" },
+        "modified": "2026-01-01T00:00:00",
+        "modified_gmt": "2026-01-01T00:00:00",
+        "slug": "fixture-post-1",
+        "status": "publish",
+        "type": "post",
+        "link": "https://example.com/fixture-post-1/",
+        "title": { "rendered": "Fixture Post One" },
+        "content": { "rendered": "<p>Fixture post one body.</p>", "protected": false },
+        "excerpt": { "rendered": "<p>Fixture post one excerpt.</p>", "protected": false },
+        "author": 1,
+        "featured_media": 0,
+        "comment_status": "open",
+        "ping_status": "open",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "categories": [1],
+        "tags": [],
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/posts/1" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/posts" }]
+        }
+      },
+      {
+        "id": 2,
+        "date": "2026-01-01T00:01:00",
+        "date_gmt": "2026-01-01T00:01:00",
+        "guid": { "rendered": "https://example.com/?p=2" },
+        "modified": "2026-01-01T00:01:00",
+        "modified_gmt": "2026-01-01T00:01:00",
+        "slug": "fixture-post-2",
+        "status": "publish",
+        "type": "post",
+        "link": "https://example.com/fixture-post-2/",
+        "title": { "rendered": "Fixture Post Two" },
+        "content": { "rendered": "<p>Fixture post two body.</p>", "protected": false },
+        "excerpt": { "rendered": "<p>Fixture post two excerpt.</p>", "protected": false },
+        "author": 1,
+        "featured_media": 0,
+        "comment_status": "open",
+        "ping_status": "open",
+        "sticky": false,
+        "template": "",
+        "format": "standard",
+        "categories": [2],
+        "tags": [1],
+        "_links": {
+          "self": [{ "href": "https://example.com/wp-json/wp/v2/posts/2" }],
+          "collection": [{ "href": "https://example.com/wp-json/wp/v2/posts" }]
+        }
+      }
+    ]
+  }
+}

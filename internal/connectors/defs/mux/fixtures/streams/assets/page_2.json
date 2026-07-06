@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/video/v1/assets", "query": { "page": "2", "limit": "25" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "asset_fixture_26",
+          "status": "ready",
+          "created_at": "1767225626",
+          "duration": 60,
+          "max_resolution_tier": "1080p",
+          "encoding_tier": "smart",
+          "mp4_support": "none",
+          "master_access": "none",
+          "test": true
+        }
+      ]
+    }
+  }
+}

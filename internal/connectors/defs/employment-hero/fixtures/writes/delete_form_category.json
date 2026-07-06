@@ -1,0 +1,15 @@
+{
+  "record": {
+    "form_category_id": "form_category_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/organisations/synthetic-conformance-value/form_categories/form_category_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_form_category_fixture_response"
+    }
+  }
+}

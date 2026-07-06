@@ -1,0 +1,9 @@
+{
+  "record": {
+    "run_id": 1301
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/actions/runs/1301/rerun"
+  }
+}

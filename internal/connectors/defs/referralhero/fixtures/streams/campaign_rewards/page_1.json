@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/rewards",
+    "query": {
+      "page": "1",
+      "per_page": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "data": {
+        "response": "rewards_retrieved",
+        "rewards": [
+          {
+            "id": 214,
+            "name": "10% commission",
+            "status": "sent",
+            "referrals": 1,
+            "created_at": 1729166882,
+            "unlocked_date": 1752823036,
+            "sent_date": 1752823044,
+            "referral": "fixture@example.com",
+            "value": 100.0,
+            "total": "",
+            "signup_type": null,
+            "referrals_type": "confirmed",
+            "recurring_count": null,
+            "coupon_code": null,
+            "coupon_group": null,
+            "image_url": null,
+            "subscriber_email": "jane.fixture@example.com",
+            "subscriber_id": "sub_fixture_1"
+          }
+        ],
+        "pagination": {
+          "total_pages": 1,
+          "current_page": 1,
+          "per_page": 10,
+          "total_objects": 1
+        }
+      },
+      "calls_left": null,
+      "timestamp": 1729186260
+    }
+  }
+}

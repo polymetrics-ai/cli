@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "name": "fixture_name",
+    "instructions": "fixture_instructions"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value",
+    "body": {
+      "name": "fixture_name",
+      "instructions": "fixture_instructions"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

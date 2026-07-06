@@ -1,0 +1,14 @@
+{
+  "record": {
+    "offering_id": "offering_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/synthetic-conformance-value/offerings/offering_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

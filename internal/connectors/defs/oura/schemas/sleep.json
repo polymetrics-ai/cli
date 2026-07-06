@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sleep",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "average_breath": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "average_heart_rate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "average_hrv": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "awake_time": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bedtime_end": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bedtime_start": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deep_sleep_duration": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "efficiency": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "heart_rate": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "hrv": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "latency": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "light_sleep_duration": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "low_battery_alert": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lowest_heart_rate": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "movement_30_sec": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "period": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "readiness": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "readiness_score_delta": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "rem_sleep_duration": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "restless_periods": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "sleep_algorithm_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sleep_analysis_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sleep_phase_30_sec": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sleep_phase_5_min": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sleep_score_delta": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "time_in_bed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "total_sleep_duration": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ring_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "app_sleep_phase_5_min": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

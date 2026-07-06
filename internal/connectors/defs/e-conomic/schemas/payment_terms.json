@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payment_terms",
+  "type": "object",
+  "x-primary-key": ["payment_terms_number"],
+  "required": ["payment_terms_number"],
+  "properties": {
+    "payment_terms_number": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "days_of_credit": { "type": ["integer", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

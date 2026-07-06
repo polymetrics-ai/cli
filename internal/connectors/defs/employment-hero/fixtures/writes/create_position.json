@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Floor Lead"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/positions",
+    "body": {
+      "name": "Floor Lead"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_position_fixture_response"
+    }
+  }
+}

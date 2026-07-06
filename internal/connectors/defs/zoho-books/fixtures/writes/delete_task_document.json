@@ -1,0 +1,17 @@
+{
+  "record": {
+    "task_id": "synthetic-conformance-value",
+    "document_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tasks/synthetic-conformance-value/documents/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "form_category_id": "form_category_fixture_1",
+    "name": "Updated Category"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/form_categories/form_category_fixture_1",
+    "body": {
+      "name": "Updated Category"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_form_category_fixture_response"
+    }
+  }
+}

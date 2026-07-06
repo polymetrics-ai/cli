@@ -1,0 +1,12 @@
+{
+  "record": { "category_id": 7001, "category_name": "Fixture Taxonomy Category Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/2/taxonomy/category/7001",
+    "body": { "category_name": "Fixture Taxonomy Category Renamed" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

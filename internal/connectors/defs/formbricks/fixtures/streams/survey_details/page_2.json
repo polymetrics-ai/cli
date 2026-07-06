@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/management/surveys/srv_fixture_1" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "srv_fixture_1",
+        "name": "Fixture Survey One",
+        "type": "link",
+        "status": "inProgress",
+        "workspaceId": "wrk_fixture_1",
+        "createdBy": "usr_fixture_1",
+        "displayOption": "displayOnce",
+        "questions": [
+          { "id": "question_fixture_1", "type": "openText" }
+        ],
+        "blocks": [
+          { "id": "block_fixture_1", "name": "Block 1" }
+        ],
+        "endings": [],
+        "languages": [],
+        "triggers": [],
+        "welcomeCard": { "enabled": true },
+        "singleUse": { "enabled": false },
+        "hiddenFields": { "enabled": false, "fieldIds": [] },
+        "segment": null,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-02T00:00:00.000Z"
+      }
+    }
+  }
+}

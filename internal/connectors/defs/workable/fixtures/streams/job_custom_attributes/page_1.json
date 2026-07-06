@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value/custom_attributes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "custom_attributes": [
+        {
+          "id": "job_custom_attribute_fixture_1",
+          "name": "Fixture Job Attribute"
+        }
+      ]
+    }
+  }
+}

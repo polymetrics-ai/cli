@@ -1,0 +1,30 @@
+{
+  "record": {
+    "timesheets": [
+      {
+        "employee_id": "emp_fixture_1",
+        "date": "2026-01-01",
+        "units": 7.5
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/timesheet_entries",
+    "body": {
+      "timesheets": [
+        {
+          "employee_id": "emp_fixture_1",
+          "date": "2026-01-01",
+          "units": 7.5
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_timesheet_entries_fixture_response"
+    }
+  }
+}

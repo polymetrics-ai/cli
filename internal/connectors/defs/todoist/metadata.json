@@ -1,0 +1,21 @@
+{
+  "name": "todoist",
+  "display_name": "Todoist",
+  "description": "Reads projects, sections, tasks, comments, labels, and project collaborators, and writes project/section/task/comment/label create, update, and delete actions (plus task close/reopen), through the Todoist REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.todoist.com/rest/v2/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Todoist API read of project, section, task, comment, label, and collaborator data",
+    "write": "external Todoist API mutation: creates, updates, or deletes projects/sections/tasks/comments/labels, and closes/reopens tasks",
+    "approval": "reverse ETL plan approval required before writes; delete actions on projects/sections/tasks/comments/labels are irreversible"
+  }
+}

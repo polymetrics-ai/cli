@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customs_entries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/customs_entries",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/customs_entry",
+            "id": 7001,
+            "entry_number": "ABC1234567",
+            "status": "released",
+            "shipment": {
+              "_object": "/api/refs/object",
+              "ref_type": "/shipment",
+              "link": "https://api.flexport.com/shipments/2983",
+              "id": 2983
+            }
+          }
+        ]
+      }
+    }
+  }
+}

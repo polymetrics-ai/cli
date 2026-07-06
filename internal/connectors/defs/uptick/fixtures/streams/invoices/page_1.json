@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/invoices/",
+    "query": {
+      "ordering": "-updated",
+      "page_size": "synthetic-conformance-value",
+      "fields[Invoice]": "id,created,updated,number,ref,description,currency,date,due_date,status,subtotal,gst,total,is_overdue,is_sent,property,task"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "number": "INV-1",
+          "ref": "REF-1",
+          "description": "fixture invoice 1",
+          "currency": "AUD",
+          "date": "2026-01-01",
+          "due_date": "2026-01-31",
+          "status": "sent",
+          "subtotal": "100.00",
+          "gst": "10.00",
+          "total": "110.00",
+          "is_overdue": false,
+          "is_sent": true,
+          "property": "1",
+          "task": "1"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "balances",
+  "type": "object",
+  "x-primary-key": ["currency"],
+  "required": ["currency"],
+  "properties": {
+    "currency": { "type": "string" },
+    "primary": { "type": ["boolean", "null"] },
+    "total_currency_code": { "type": ["string", "null"] },
+    "total_value": { "type": ["string", "null"] },
+    "available_value": { "type": ["string", "null"] },
+    "withheld_value": { "type": ["string", "null"] }
+  }
+}

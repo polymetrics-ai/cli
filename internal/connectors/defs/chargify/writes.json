@@ -1,0 +1,266 @@
+{
+  "actions": [
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer"],
+        "properties": {
+          "customer": {
+            "type": "object",
+            "required": ["first_name", "last_name", "email"],
+            "properties": {
+              "first_name": { "type": "string" },
+              "last_name": { "type": "string" },
+              "email": { "type": "string" },
+              "organization": { "type": "string" },
+              "reference": { "type": "string" },
+              "phone": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "customer"],
+        "properties": {
+          "id": { "type": "string" },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "first_name": { "type": "string" },
+              "last_name": { "type": "string" },
+              "email": { "type": "string" },
+              "organization": { "type": "string" },
+              "reference": { "type": "string" },
+              "phone": { "type": "string" },
+              "country": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["subscription"],
+        "properties": {
+          "subscription": {
+            "type": "object",
+            "required": ["product_handle", "customer_id"],
+            "properties": {
+              "product_handle": { "type": "string" },
+              "customer_id": { "type": "string" },
+              "payment_collection_method": { "type": "string" },
+              "coupon_code": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation with billing side effects; approval required"
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "subscription"],
+        "properties": {
+          "id": { "type": "string" },
+          "subscription": {
+            "type": "object",
+            "properties": {
+              "product_handle": { "type": "string" },
+              "coupon_code": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation with billing side effects; approval required"
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.id }}/cancel.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "subscription": {
+            "type": "object",
+            "properties": {
+              "cancellation_message": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation with billing side effects; approval required"
+    },
+    {
+      "name": "create_product_family",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product_families.json",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_family"],
+        "properties": {
+          "product_family": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "handle": { "type": "string" },
+              "description": { "type": "string" },
+              "accounting_code": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product_families/{{ record.product_family_id }}/products.json",
+      "path_fields": ["product_family_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_family_id", "product"],
+        "properties": {
+          "product_family_id": { "type": "string" },
+          "product": {
+            "type": "object",
+            "required": ["name", "price_in_cents", "interval", "interval_unit"],
+            "properties": {
+              "name": { "type": "string" },
+              "handle": { "type": "string" },
+              "description": { "type": "string" },
+              "price_in_cents": { "type": "integer" },
+              "interval": { "type": "integer" },
+              "interval_unit": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "product"],
+        "properties": {
+          "id": { "type": "string" },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "price_in_cents": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product_families/{{ record.product_family_id }}/coupons.json",
+      "path_fields": ["product_family_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product_family_id", "coupon"],
+        "properties": {
+          "product_family_id": { "type": "string" },
+          "coupon": {
+            "type": "object",
+            "required": ["name", "code"],
+            "properties": {
+              "name": { "type": "string" },
+              "code": { "type": "string" },
+              "description": { "type": "string" },
+              "percentage": { "type": "string" },
+              "amount_in_cents": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/coupons/{{ record.id }}.json",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "coupon"],
+        "properties": {
+          "id": { "type": "string" },
+          "coupon": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "percentage": { "type": "string" },
+              "amount_in_cents": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    }
+  ]
+}

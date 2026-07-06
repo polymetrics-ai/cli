@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "account",
+      "attributes": {
+        "name": "Fixture Create Account"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts",
+    "body": {
+      "data": {
+        "type": "account",
+        "attributes": {
+          "name": "Fixture Create Account"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

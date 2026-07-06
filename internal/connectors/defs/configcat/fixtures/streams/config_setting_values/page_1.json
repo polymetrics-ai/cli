@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/configs/synthetic-conformance-value/environments/synthetic-conformance-value/values" },
+  "response": {
+    "status": 200,
+    "body": {
+      "config": { "configId": "config_fixture_1" },
+      "environment": { "environmentId": "env_fixture_1" },
+      "readOnly": false,
+      "featureFlagLimitations": { "maxSettingCount": 100 },
+      "settingValues": []
+    }
+  }
+}

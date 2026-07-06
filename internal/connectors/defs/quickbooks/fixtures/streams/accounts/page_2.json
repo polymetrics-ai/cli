@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/company/synthetic-conformance-value/query",
+    "query": { "query": "SELECT * FROM Account STARTPOSITION 3 MAXRESULTS 2" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "QueryResponse": {
+        "Account": [
+          { "Id": "3", "Name": "Accounts Receivable", "Classification": "Asset", "AccountType": "Accounts Receivable" }
+        ]
+      }
+    }
+  }
+}

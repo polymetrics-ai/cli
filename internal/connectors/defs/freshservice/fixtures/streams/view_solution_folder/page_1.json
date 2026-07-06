@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/solutions/folders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "folder": {
+        "id": "view_solution_folder",
+        "name": "Fixture view_solution_folder",
+        "subject": "Fixture view_solution_folder",
+        "description": "Fixture view_solution_folder record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "milestones",
+  "type": "object",
+  "x-primary-key": [
+    "number"
+  ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "number"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "state": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "open_issues": {
+      "type": "integer"
+    },
+    "closed_issues": {
+      "type": "integer"
+    },
+    "creator_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "due_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "campaign_fixture_1",
+    "status": "PAUSED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaign_fixture_1"
+  }
+}

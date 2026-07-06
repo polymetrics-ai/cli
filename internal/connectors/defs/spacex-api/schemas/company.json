@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "company",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "founder": { "type": ["string", "null"] },
+    "founded": { "type": ["integer", "null"] },
+    "employees": { "type": ["integer", "null"] },
+    "ceo": { "type": ["string", "null"] },
+    "cto": { "type": ["string", "null"] },
+    "valuation": { "type": ["integer", "null"] },
+    "headquarters": { "type": ["object", "null"] },
+    "summary": { "type": ["string", "null"] }
+  }
+}

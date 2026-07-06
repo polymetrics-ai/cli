@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerFeedback/2024-06-01/browseNodes/synthetic-conformance-value/reviews/topics",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "sortBy": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "topics": {
+        "positiveTopics": [
+          {
+            "topic": "topic-fixture-1",
+            "browseNodeMetrics": {},
+            "reviewSnippets": [],
+            "subtopics": [],
+            "browse_node_id": "browse_node_id-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "categoryName": "Fixture Category" },
+  "expect": { "method": "POST", "path": "/postItemCategory" },
+  "response": { "status": 200, "body": { "success": true, "categoryID": "cat_fixture_new" } }
+}

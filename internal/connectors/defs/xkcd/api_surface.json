@@ -1,0 +1,10 @@
+{
+  "api": "XKCD JSON API (https://xkcd.com/json.html)",
+  "docs": "https://xkcd.com/json.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion, re-confirmed against the live docs page (https://xkcd.com/json.html, fetched 2026-07-03) and the live JSON responses (https://xkcd.com/info.0.json, https://xkcd.com/614/info.0.json): xkcd's documented JSON interface publishes EXACTLY two endpoint shapes, both already implemented as streams below. There is no list/search/index JSON endpoint (the JSON API has no way to enumerate or query comics; a caller wanting comic #N must already know N), no other GET resource, and no mutation capability of any kind (xkcd is a static, unauthenticated, publicly-cached comic site with no accounts, no user data, and no documented write path) — this is not a scoping choice, it is the full extent of the real surface. Non-JSON site surfaces (the HTML site itself, /atom.xml, /rss.xml, the What-If blog, the third-party explainxkcd.com wiki) are separate products from a separate/undocumented interface and are out of scope for this JSON-API connector, not omissions from it.",
+  "endpoints": [
+    { "method": "GET", "path": "/info.0.json", "covered_by": { "stream": "latest" } },
+    { "method": "GET", "path": "/{num}/info.0.json", "covered_by": { "stream": "comic" } }
+  ]
+}

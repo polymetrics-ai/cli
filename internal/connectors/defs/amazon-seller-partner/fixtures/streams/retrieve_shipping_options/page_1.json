@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/externalFulfillment/2024-09-11/shipments/synthetic-conformance-value/shippingOptions",
+    "query": {
+      "packageId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shippingOptions": [
+        {
+          "shippingOptionId": "shippingOptionId-fixture-1",
+          "shipBy": "shipBy-fixture-1",
+          "carrierName": "carrierName-fixture-1",
+          "pickupWindow": {},
+          "timeSlot": {},
+          "handoverLocation": {},
+          "shipment_id": "shipment_id-fixture-1"
+        }
+      ]
+    }
+  }
+}

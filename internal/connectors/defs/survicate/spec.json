@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Survicate Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Survicate Data Export API key (Survicate panel > Surveys Settings > Access Keys), sent verbatim as 'Authorization: Basic <api_key>' per Survicate's documented scheme (docs.survicate.com/data-export/setup: 'The format for this should be Basic {{apiKey}}' -- a raw key, NOT base64-encoded user:pass HTTP Basic auth). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://data-api.survicate.com/v2",
+      "description": "Survicate Data Export API base URL override for tests or proxies. Current documented API version is v2."
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "status": "ok",
+        "userTier": "developer",
+        "total": 1,
+        "content": {
+          "id": "world/fixture-1",
+          "type": "article",
+          "sectionId": "world",
+          "sectionName": "World news",
+          "webPublicationDate": "2026-01-02T00:00:00Z",
+          "webTitle": "Fixture Article 1",
+          "webUrl": "https://www.theguardian.com/world/fixture-1",
+          "apiUrl": "https://content.guardianapis.com/world/fixture-1",
+          "isHosted": false,
+          "pillarId": "pillar/news",
+          "pillarName": "News"
+        }
+      }
+    }
+  }
+}

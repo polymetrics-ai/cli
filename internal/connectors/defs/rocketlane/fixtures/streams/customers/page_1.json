@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "cust_fixture_1", "name": "Fixture Customer Co", "domain": "fixture-customer.example.com", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "pageInfo": { "page": 1, "pageSize": 100, "totalRecords": 1 }
+    }
+  }
+}

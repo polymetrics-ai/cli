@@ -1,0 +1,13 @@
+{
+  "record": {
+    "block_id": "block_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blocks/block_id_fixture/actions/disable"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

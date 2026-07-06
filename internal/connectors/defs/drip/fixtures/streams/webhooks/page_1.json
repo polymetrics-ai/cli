@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value/webhooks", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "webhook_fixture_1",
+          "post_url": "https://example.com/fixture-webhook-endpoint",
+          "event_types": ["subscriber.created", "subscriber.unsubscribed_all"]
+        }
+      ]
+    }
+  }
+}

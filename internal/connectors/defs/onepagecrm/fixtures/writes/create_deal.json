@@ -1,0 +1,18 @@
+{
+  "record": {
+    "contact_id": "fixture_value",
+    "owner_id": "fixture_value",
+    "pipeline_id": "fixture_value",
+    "sales_pipeline_id": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/deals",
+    "body": {
+      "contact_id": "fixture_value",
+      "owner_id": "fixture_value",
+      "pipeline_id": "fixture_value",
+      "sales_pipeline_id": "fixture_value"
+    }
+  }
+}

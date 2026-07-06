@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_entries",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "person_id": { "type": ["string", "null"] },
+    "project_id": { "type": ["string", "null"] },
+    "todo_item_id": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "hours": { "type": ["string", "null"] },
+    "minutes": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "isbillable": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

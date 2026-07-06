@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sights/synthetic-conformance-value/publish",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "readOnlyLiteEnabled": false,
+      "readOnlyFullEnabled": false,
+      "icalEnabled": false
+    }
+  }
+}

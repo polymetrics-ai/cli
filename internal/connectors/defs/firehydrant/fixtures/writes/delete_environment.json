@@ -1,0 +1,13 @@
+{
+  "record": {
+    "environment_id": "env_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/environments/env_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/marketing/lists", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        { "id": "list_fixture_1", "name": "Fixture List 1", "contact_count": 10 },
+        { "id": "list_fixture_2", "name": "Fixture List 2", "contact_count": 20 }
+      ],
+      "_metadata": { "next": "" }
+    }
+  }
+}

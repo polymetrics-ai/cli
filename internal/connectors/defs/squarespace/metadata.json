@@ -1,0 +1,24 @@
+{
+  "name": "squarespace",
+  "display_name": "Squarespace",
+  "description": "Reads Squarespace orders, products, inventory, profiles, transactions, store pages, webhook subscriptions, and contacts, and writes webhook subscription mutations through the Squarespace Commerce API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.squarespace.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Squarespace API read of commerce orders, products, inventory, profiles, transactions, store pages, webhook subscriptions, and contacts",
+    "write": "external Squarespace API mutation (webhook subscription create/delete)",
+    "approval": "reverse ETL plan approval required before destructive writes (delete_webhook_subscription); create_webhook_subscription is low-risk"
+  }
+}

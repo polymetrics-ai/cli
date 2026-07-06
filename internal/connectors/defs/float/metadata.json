@@ -1,0 +1,23 @@
+{
+  "name": "float",
+  "display_name": "Float",
+  "description": "Reads Float people, projects, clients, tasks, and departments through the Float v3 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://dev.float.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external Float API read of resource-planning and staffing data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

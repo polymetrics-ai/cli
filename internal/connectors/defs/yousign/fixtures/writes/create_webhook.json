@@ -1,0 +1,22 @@
+{
+  "record": {
+    "endpoint": "https://example.com/hooks/fixture",
+    "subscribed_events": ["signature_request.done"],
+    "scopes": ["public_api"],
+    "sandbox": false,
+    "auto_retry": true,
+    "enabled": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "endpoint": "https://example.com/hooks/fixture",
+      "subscribed_events": ["signature_request.done"],
+      "scopes": ["public_api"],
+      "sandbox": false,
+      "auto_retry": true,
+      "enabled": true
+    }
+  }
+}

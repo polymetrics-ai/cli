@@ -13,9 +13,16 @@ USAGE
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
-  Reverse ETL reads local warehouse rows, maps fields, and writes records to a
-  destination connector. The outbox connector records writes as JSONL. The
-  github connector can execute approved issue and pull request mutations.
+  Reverse ETL reads local warehouse rows, maps fields, and writes records
+  through a connector write action. It is available for any connector that
+  declares capabilities.write=true. Use pm connectors catalog --capability
+  write --json to discover writable connectors. The remaining connectors are
+  read-only because their APIs expose no supported mutations.
+
+  Run pm connectors inspect <name> to see write=true/false, available ETL
+  streams, and reverse ETL write actions for a connector. The outbox connector
+  records writes as JSONL. GitHub is one example of an external API connector
+  with approved mutation actions.
 
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
@@ -45,13 +52,16 @@ FLAGS
   --source-table table         local warehouse table to read
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
-  --action action              destination action; GitHub writes require an explicit action
+  --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
   --approve token              approval token required by run
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 
-GITHUB ACTIONS
+GITHUB ACTION EXAMPLES
+  These are examples from one writable connector. Other connectors expose
+  different actions; pm connectors inspect <name> is the authoritative list.
+
   create_issue
     Requires title. Optional body, labels, assignees, milestone, type.
 
@@ -96,7 +106,8 @@ SECURITY
 LEARN MORE
   Run pm reverse --help for this manual.
   Run pm connectors inspect outbox --json to inspect the local outbox destination.
-  Run pm connectors inspect github --json to inspect GitHub write actions.
+  Run pm connectors inspect <name> --json to inspect streams and write actions.
+  Run pm connectors inspect github --json to inspect one connector's write actions.
   Run pm skills generate --dir docs/skills --json for agent-specific workflows.
 
 EXIT STATUS

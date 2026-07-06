@@ -1,0 +1,9 @@
+{
+  "record": {
+    "group[name]": "Fixture Group"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups.api"
+  }
+}

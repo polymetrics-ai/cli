@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/call_results",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 0,
+      "message": "OK",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "data": [
+        {
+          "call_result": {
+            "id": "call_results_fixture_1",
+            "name": "Fixture call results",
+            "text": "Fixture call results text",
+            "result": "call_results_fixture_1",
+            "code": "call_results_fixture_1",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T00:00:00Z"
+          }
+        }
+      ]
+    }
+  }
+}

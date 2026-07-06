@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/2/openshiftapprovalrequests" },
+  "response": {
+    "status": 200,
+    "body": {
+      "openshiftapprovalrequests": [
+        { "id": 1, "shift_id": 1, "status": 0, "created_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

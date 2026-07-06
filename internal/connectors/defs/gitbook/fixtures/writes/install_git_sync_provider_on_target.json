@@ -1,0 +1,25 @@
+{
+  "record": {
+    "provider": "github",
+    "target": {
+      "synthetic": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/git/installations",
+    "body": {
+      "provider": "github",
+      "target": {
+        "synthetic": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "install_git_sync_provider_on_target_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/v2/users", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "user_fixture_1", "object": "user", "first_name": "Fixture", "last_name": "Example", "email": "fixture1@example.com", "role_name": "member", "status": "active" }
+      ]
+    }
+  }
+}

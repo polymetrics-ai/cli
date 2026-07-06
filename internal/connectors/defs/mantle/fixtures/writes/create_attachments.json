@@ -1,0 +1,18 @@
+{
+  "record": {
+    "filename": "fixture",
+    "contentType": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/attachments",
+    "body": {
+      "filename": "fixture",
+      "contentType": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

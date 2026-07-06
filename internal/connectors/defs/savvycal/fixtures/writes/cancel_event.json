@@ -1,0 +1,8 @@
+{
+  "record": { "id": "ev_fixture_1" },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/ev_fixture_1/cancel"
+  },
+  "response": { "status": 200, "body": { "id": "ev_fixture_1", "status": "canceled" } }
+}

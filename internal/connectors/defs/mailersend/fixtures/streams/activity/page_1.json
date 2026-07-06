@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/activity/synthetic-conformance-value", "query": { "page": "1", "limit": "25", "date_from": "synthetic-conformance-value", "date_to": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "activity_fixture_1",
+          "type": "delivered",
+          "created_at": "2026-01-01T00:00:00.000000Z",
+          "updated_at": "2026-01-01T00:00:00.000000Z",
+          "email": { "id": "email_fixture_1", "recipient": { "email": "fixture1@example.com" } }
+        }
+      ]
+    }
+  }
+}

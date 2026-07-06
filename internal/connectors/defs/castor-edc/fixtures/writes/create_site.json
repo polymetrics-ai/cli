@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "Fixture Hospital",
+    "abbreviation": "FH",
+    "code": "001",
+    "country_id": "1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/study/synthetic-conformance-value/site"
+  }
+}

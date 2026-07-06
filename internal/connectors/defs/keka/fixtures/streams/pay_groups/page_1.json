@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/paygroups",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "identifier": "pay_groups_fixture_1",
+          "name": "Fixture pay groups 1",
+          "description": "fixture_pay_groups_1",
+          "legalEntityId": "pay_groups_fixture_1",
+          "legalEntityName": "Fixture pay groups 1"
+        },
+        {
+          "identifier": "pay_groups_fixture_2",
+          "name": "Fixture pay groups 2",
+          "description": "fixture_pay_groups_2",
+          "legalEntityId": "pay_groups_fixture_2",
+          "legalEntityName": "Fixture pay groups 2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/pay_groups",
+      "lastPage": "https://example.invalid/keka/pay_groups",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

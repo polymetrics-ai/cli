@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/clips/search",
+    "query": { "limit": "25", "offset": "0", "q": "synthetic-conformance-value", "rating": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "clip_search_fixture_1",
+          "type": "video",
+          "slug": "fixture-clip_search-1",
+          "url": "https://giphy.com/clips/clip_search_fixture_1",
+          "bitly_url": "https://gph.is/fixture-1",
+          "embed_url": "https://giphy.com/embed/clip_search_fixture_1",
+          "title": "Fixture video 1",
+          "rating": "g",
+          "username": "polymetrics-fixture",
+          "source": "https://example.com",
+          "source_tld": "example.com",
+          "content_url": "",
+          "import_datetime": "2026-01-01 00:00:00",
+          "trending_datetime": "0000-00-00 00:00:00"
+        }
+      ],
+      "pagination": { "total_count": 1, "count": 1, "offset": 0 }
+    }
+  }
+}

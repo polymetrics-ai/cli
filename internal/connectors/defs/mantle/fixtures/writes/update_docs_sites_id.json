@@ -1,0 +1,45 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "shortDescription": "fixture",
+    "locale": "fixture",
+    "defaultLocale": "fixture",
+    "supportedLocales": [
+      "fixture"
+    ],
+    "visibility": "public",
+    "customDomain": "fixture",
+    "useCustomDomain": true,
+    "widgetId": "widget_id_fixture",
+    "config": {
+      "id": "config_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/sites/id_fixture",
+    "body": {
+      "handle": "fixture",
+      "title": "fixture",
+      "shortDescription": "fixture",
+      "locale": "fixture",
+      "defaultLocale": "fixture",
+      "supportedLocales": [
+        "fixture"
+      ],
+      "visibility": "public",
+      "customDomain": "fixture",
+      "useCustomDomain": true,
+      "widgetId": "widget_id_fixture",
+      "config": {
+        "id": "config_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

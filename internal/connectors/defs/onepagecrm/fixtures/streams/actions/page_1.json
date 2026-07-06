@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/actions", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "page": 1,
+        "max_page": 1,
+        "actions": [
+          {
+            "action": {
+              "id": "action_fixture_1",
+              "contact_id": "contact_fixture_1",
+              "text": "Follow up",
+              "status": "open",
+              "date": "2026-01-05",
+              "done": false,
+              "assignee_id": "user_fixture_1",
+              "created_at": "2026-01-01T00:00:00Z",
+              "updated_at": "2026-01-01T00:00:00Z"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

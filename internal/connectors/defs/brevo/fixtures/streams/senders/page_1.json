@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/senders" },
+  "response": {
+    "status": 200,
+    "body": {
+      "senders": [
+        {
+          "id": 1,
+          "name": "Fixture Sender",
+          "email": "fixture-sender@example.com",
+          "active": true
+        },
+        {
+          "id": 2,
+          "name": "Fixture Support",
+          "email": "fixture-support@example.com",
+          "active": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Giphy Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Giphy API key. Sent as the api_key query parameter on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.giphy.com/v1",
+      "description": "Giphy API base URL override for tests or proxies."
+    },
+    "query_for_gif": {
+      "type": "string",
+      "description": "Search terms for the gif_search stream (required for that stream)."
+    },
+    "query_for_stickers": {
+      "type": "string",
+      "description": "Search terms for the sticker_search stream (required for that stream)."
+    },
+    "query_for_clips": {
+      "type": "string",
+      "description": "Search terms for the clip_search stream (required for that stream)."
+    },
+    "rating": {
+      "type": "string",
+      "description": "Optional content rating filter (y, g, pg, pg-13, r) applied to every search/trending request."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "25",
+      "description": "Records per page (1-50; Giphy caps limit at 50)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

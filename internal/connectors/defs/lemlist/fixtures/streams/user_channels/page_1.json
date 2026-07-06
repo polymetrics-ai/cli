@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/user/channels" },
+  "response": {
+    "status": 200,
+    "body": {
+      "plan": "fixture",
+      "email": {
+        "connected": true,
+        "available": true,
+        "accounts": [
+          { "id": "mailbox_fixture_1", "email": "fixture1@example.com", "provider": "google" }
+        ]
+      },
+      "linkedin": { "connected": false, "available": true },
+      "whatsapp": {
+        "connected": false,
+        "available": false,
+        "addonActive": false,
+        "accounts": []
+      }
+    }
+  }
+}

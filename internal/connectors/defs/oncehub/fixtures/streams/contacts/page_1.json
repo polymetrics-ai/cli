@@ -1,0 +1,21 @@
+{
+  "request": { "method": "GET", "path": "/v2/contacts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "contact_fixture_1",
+          "object": "contact",
+          "first_name": "Fixture1",
+          "email": "fixture1@example.com",
+          "mobile_phone": "+15550100",
+          "timezone": "UTC",
+          "owner": "user_fixture_1",
+          "creation_time": "2026-01-01T00:00:00.000Z",
+          "last_updated_time": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

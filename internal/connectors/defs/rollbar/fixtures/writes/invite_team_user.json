@@ -1,0 +1,20 @@
+{
+  "record": {
+    "team_id": "synthetic-conformance-value",
+    "email": "synthetic@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/1/team/synthetic-conformance-value/invites",
+    "body": {
+      "email": "synthetic@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

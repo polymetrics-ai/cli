@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  interval
+  output_size
+  symbol
+  api_key (secret)
+
+ETL STREAMS
+  time_series:
+    primary key: symbol, datetime
+    cursor: datetime
+    fields: close(), datetime(), high(), low(), open(), symbol(), volume()
+  quote:
+    primary key: symbol
+    fields: close(), currency(), name(), symbol()
+  stocks:
+    primary key: symbol
+    fields: currency(), name(), symbol()
+  forex_pairs:
+    primary key: symbol
+    fields: currency(), name(), symbol()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Twelve Data API read of market time series, quote, and reference data
+  approval: none; read-only, no reverse-ETL writes implemented by legacy
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

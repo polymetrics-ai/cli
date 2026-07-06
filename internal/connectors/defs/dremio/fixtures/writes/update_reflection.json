@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "reflections_fixture_1",
+    "name": "fixture-reflections-1-renamed",
+    "enabled": false,
+    "tag": "tag_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/reflection/reflections_fixture_1",
+    "body": {
+      "name": "fixture-reflections-1-renamed",
+      "enabled": false,
+      "tag": "tag_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "reflections_fixture_1", "name": "fixture-reflections-1-renamed" }
+  }
+}

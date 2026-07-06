@@ -1,0 +1,21 @@
+{
+  "record": {
+    "api_identifier": "cf_fixture_field",
+    "data_type": "STRING",
+    "name": { "pt-BR": "Campo Fixture" },
+    "label": { "pt-BR": "Campo Fixture" },
+    "presentation_type": "TEXT_INPUT"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fields",
+    "body": {
+      "api_identifier": "cf_fixture_field",
+      "data_type": "STRING",
+      "name": { "pt-BR": "Campo Fixture" },
+      "label": { "pt-BR": "Campo Fixture" },
+      "presentation_type": "TEXT_INPUT"
+    }
+  },
+  "response": { "status": 201, "body": { "uuid": "field_create_fixture_1" } }
+}

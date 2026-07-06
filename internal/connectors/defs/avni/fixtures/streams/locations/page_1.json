@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/locations",
+    "query": { "page_size": "synthetic-conformance-value", "start_date": "2020-01-01T00:00:00Z" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "locations_fixture_1", "title": "Fixture Village", "type": "Village", "level": 1, "parent_id": "locations_fixture_2", "updated_at": "2026-01-01T00:00:00Z" },
+        { "id": "locations_fixture_2", "title": "Fixture Block", "type": "Block", "level": 2, "parent_id": null, "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "next_page": ""
+    }
+  }
+}

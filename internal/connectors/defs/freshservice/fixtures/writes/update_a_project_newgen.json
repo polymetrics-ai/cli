@@ -1,0 +1,15 @@
+{
+  "record": {
+    "project_id": 123,
+    "name": "Fixture update_a_project_newgen",
+    "description": "Fixture update_a_project_newgen record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/pm/projects/123",
+    "body": {
+      "name": "Fixture update_a_project_newgen",
+      "description": "Fixture update_a_project_newgen record"
+    }
+  }
+}

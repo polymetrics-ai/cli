@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/transactions/v1/transactions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "transactionStatus": {},
+        "transaction_id": "transaction_id-fixture-1"
+      }
+    }
+  }
+}

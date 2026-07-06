@@ -1,0 +1,25 @@
+{
+  "name": "7shifts",
+  "display_name": "7shifts",
+  "description": "Reads the documented 7shifts v2 REST API surface and executes declarative single-request reverse-ETL actions for supported mutations.",
+  "integration_type": "api",
+  "docs_url": "https://developers.7shifts.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external 7shifts API reads of scheduling, roster, labor, sales, task, time off, webhook, and settings data",
+    "write": "creates, updates, deletes, approves, declines, or otherwise mutates configured 7shifts account resources through single-request REST actions",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

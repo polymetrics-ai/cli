@@ -1,0 +1,23 @@
+{
+  "name": "ebay-finance",
+  "display_name": "eBay Finance",
+  "description": "Reads eBay seller financial data — transactions, payouts, transfers, and the seller funds summary — through the eBay Sell Finances REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.ebay.com/api-docs/sell/finances/overview.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external eBay Sell Finances API read of a seller's monetary records",
+    "approval": "none; read-only"
+  }
+}

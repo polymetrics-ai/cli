@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "available_phone_number_mobiles",
+  "type": "object",
+  "x-primary-key": [
+    "phone_number"
+  ],
+  "properties": {
+    "friendly_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lata": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locality": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rate_center": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "latitude": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "longitude": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "region": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "postal_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "iso_country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "address_requirements": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "beta": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "capabilities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "country_code": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

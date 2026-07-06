@@ -1,0 +1,19 @@
+{
+  "record": {
+    "jobId": "synthetic-conformance-value",
+    "reason": "fixture_reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/background-jobs/synthetic-conformance-value/cancel",
+    "body": {
+      "reason": "fixture_reason"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

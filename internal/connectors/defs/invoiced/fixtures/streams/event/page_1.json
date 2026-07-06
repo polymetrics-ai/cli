@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "event",
+      "created_at": 1767225600,
+      "updated_at": 1767225601,
+      "type": "invoice.created",
+      "data": {
+        "object": {
+          "id": 2001
+        }
+      }
+    }
+  }
+}

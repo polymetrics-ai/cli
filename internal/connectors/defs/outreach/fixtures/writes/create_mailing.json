@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "mailing",
+      "attributes": {
+        "name": "Fixture Create Mailing"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/mailings",
+    "body": {
+      "data": {
+        "type": "mailing",
+        "attributes": {
+          "name": "Fixture Create Mailing"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

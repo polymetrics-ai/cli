@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/publishers/",
+    "query": { "page": "1", "pageSize": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 7,
+        "name": "Fixture Publisher",
+        "displayUrl": "https://fixture-publisher.example.com",
+        "kind": "standard",
+        "status": "active"
+      }
+    ]
+  }
+}

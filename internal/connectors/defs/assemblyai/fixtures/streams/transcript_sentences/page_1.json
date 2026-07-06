@@ -1,0 +1,27 @@
+{
+  "request": { "method": "GET", "path": "/v2/transcript" },
+  "response": {
+    "status": 200,
+    "body": {
+      "transcripts": [
+        {
+          "id": "fixture_transcript_1",
+          "resource_url": "https://api.assemblyai.com/v2/transcript/fixture_transcript_1",
+          "status": "completed",
+          "created": "2026-01-01T00:00:00.000000Z"
+        },
+        {
+          "id": "fixture_transcript_2",
+          "resource_url": "https://api.assemblyai.com/v2/transcript/fixture_transcript_2",
+          "status": "completed",
+          "created": "2026-01-02T00:00:00.000000Z"
+        }
+      ],
+      "page_details": {
+        "limit": 100,
+        "result_count": 2,
+        "next_url": null
+      }
+    }
+  }
+}

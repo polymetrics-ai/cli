@@ -23,15 +23,29 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  query
+  api_key (secret)
+
+ETL STREAMS
+  search:
+    primary key: url
+    cursor: published_date
+    fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+  reddit:
+    primary key: url
+    cursor: published_date
+    fields: category(), content(), engine(), engines(), published_date(), score(), stream(), thumbnail(), title(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external SearXNG instance read of web/Reddit search results
+  approval: none; read-only public search API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

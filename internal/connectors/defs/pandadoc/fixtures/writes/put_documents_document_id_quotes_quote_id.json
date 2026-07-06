@@ -1,0 +1,37 @@
+{
+  "record": {
+    "document_id": "document_id_fixture",
+    "quote_id": "quote_id_fixture",
+    "name": "Fixture put_documents_document_id_quotes_quote_id",
+    "email": "fixture@example.com",
+    "status": "document.draft",
+    "data": {
+      "fixture": true
+    },
+    "ids": [
+      "doc_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/public/v1/documents/document_id_fixture/quotes/quote_id_fixture",
+    "body": {
+      "name": "Fixture put_documents_document_id_quotes_quote_id",
+      "email": "fixture@example.com",
+      "status": "document.draft",
+      "data": {
+        "fixture": true
+      },
+      "ids": [
+        "doc_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "put_documents_document_id_quotes_quote_id_response",
+      "status": "ok"
+    }
+  }
+}

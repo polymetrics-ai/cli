@@ -1,0 +1,9 @@
+{
+  "api": "Fanout Valid API v1",
+  "docs": "https://example.invalid/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "tasks endpoint only",
+  "endpoints": [
+    { "method": "GET", "path": "/projects/{id}/tasks", "covered_by": { "stream": "tasks" } }
+  ]
+}

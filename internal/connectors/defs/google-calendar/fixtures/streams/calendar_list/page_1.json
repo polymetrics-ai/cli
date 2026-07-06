@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "summary": "fixture",
+      "description": "fixture",
+      "timeZone": "fixture",
+      "colorId": "fixture",
+      "accessRole": "fixture",
+      "primary": true,
+      "selected": true,
+      "hidden": true,
+      "deleted": true,
+      "etag": "fixture",
+      "kind": "fixture"
+    }
+  ]
+}

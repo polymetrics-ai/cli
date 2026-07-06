@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/hook-keys/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

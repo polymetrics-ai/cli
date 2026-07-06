@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/core/labor_groups" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "labor_group_fixture_1",
+            "name": "Fixture Team",
+            "code": "FIXTURE001",
+            "labor_group_type": { "object": "/meta/ref/detail", "ref_object": "/core/labor_group_types", "url": "https://api.zenefits.com/core/labor_group_types/labor_group_type_fixture_1" },
+            "assigned_members": { "object": "/meta/list", "data": [] }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/core/labor_groups"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/awd/2024-05-09/inboundOrders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "createdAt": "createdAt-fixture-1",
+      "destinationDetails": {},
+      "externalReferenceId": "externalReferenceId-fixture-1",
+      "orderId": "orderId-fixture-1",
+      "orderStatus": "orderStatus-fixture-1",
+      "originAddress": {},
+      "packagesToInbound": [],
+      "preferences": {},
+      "updatedAt": "updatedAt-fixture-1",
+      "order_id": "order_id-fixture-1"
+    }
+  }
+}

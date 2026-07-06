@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/status/opportunity/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "ostat_1", "label": "Active", "type": "active", "pipeline_id": "pipe_1", "organization_id": "orga_fixture" }
+      ]
+    }
+  }
+}

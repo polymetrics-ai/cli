@@ -1,0 +1,9 @@
+{
+  "record": { "project_id": "1", "milestone": { "title": "Fixture New Milestone", "deadline": "20260601" } },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/milestones.json",
+    "body": { "milestone": { "title": "Fixture New Milestone", "deadline": "20260601" } }
+  },
+  "response": { "status": 201, "body": { "id": "2" } }
+}

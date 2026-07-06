@@ -1,0 +1,23 @@
+{
+  "record": { "Id": 1, "Employee": 5, "Published": true },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/resource/Roster/1",
+    "body": { "Employee": 5, "Published": true }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": 1,
+      "OperationalUnit": 1,
+      "Employee": 5,
+      "StartTime": 1769904000,
+      "EndTime": 1769932800,
+      "Published": true,
+      "Open": false,
+      "Creator": 1,
+      "Created": "2026-01-01T00:00:00",
+      "Modified": "2026-01-01T00:05:00"
+    }
+  }
+}

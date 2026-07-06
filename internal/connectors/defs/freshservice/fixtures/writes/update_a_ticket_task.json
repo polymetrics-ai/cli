@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "task_id": 123,
+    "name": "Fixture update_a_ticket_task",
+    "description": "Fixture update_a_ticket_task record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/tasks/123",
+    "body": {
+      "name": "Fixture update_a_ticket_task",
+      "description": "Fixture update_a_ticket_task record"
+    }
+  }
+}

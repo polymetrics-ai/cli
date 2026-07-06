@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "task_fixture_1",
+    "completedAt": "2026-01-10T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resources/tasks/task_fixture_1",
+    "body": {
+      "completedAt": "2026-01-10T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "task_fixture_1", "completedAt": "2026-01-10T00:00:00Z" }
+  }
+}

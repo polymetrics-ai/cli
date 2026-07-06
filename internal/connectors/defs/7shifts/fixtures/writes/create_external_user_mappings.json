@@ -1,0 +1,20 @@
+{
+  "record": {
+    "user_id": 1001,
+    "external_user_id": "fixture-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/external_user_mappings",
+    "body": {
+      "user_id": 1001,
+      "external_user_id": "fixture-id"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

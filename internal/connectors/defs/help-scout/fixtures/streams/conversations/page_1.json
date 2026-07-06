@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations",
+    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "conversations": [
+          {
+            "id": 101,
+            "number": 1001,
+            "type": "email",
+            "folderId": 1,
+            "status": "active",
+            "state": "published",
+            "subject": "Fixture conversation one",
+            "mailboxId": 1,
+            "assignee": {
+              "id": 1,
+              "type": "user",
+              "first": "Fixture",
+              "last": "Agent",
+              "email": "agent.one@example.com"
+            },
+            "preview": "fixture preview one",
+            "threads": 2,
+            "createdAt": "2026-01-01T00:00:00Z",
+            "closedAt": null,
+            "userUpdatedAt": "2026-01-01T00:00:00Z"
+          },
+          {
+            "id": 102,
+            "number": 1002,
+            "type": "email",
+            "folderId": 1,
+            "status": "closed",
+            "state": "published",
+            "subject": "Fixture conversation two",
+            "mailboxId": 1,
+            "assignee": {
+              "id": 2,
+              "type": "user",
+              "first": "Fixture",
+              "last": "Agent Two",
+              "email": "agent.two@example.com"
+            },
+            "preview": "fixture preview two",
+            "threads": 1,
+            "createdAt": "2026-01-02T00:00:00Z",
+            "closedAt": "2026-01-03T00:00:00Z",
+            "userUpdatedAt": "2026-01-02T00:00:00Z"
+          }
+        ]
+      },
+      "page": { "number": 1, "size": 50, "totalElements": 3, "totalPages": 2 }
+    }
+  }
+}

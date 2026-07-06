@@ -1,0 +1,20 @@
+{
+  "record": {
+    "lastname": "User",
+    "firstname": "Fixture",
+    "email": "fixture-user@example.invalid",
+    "is_admin": false,
+    "dont_send_email": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "lastname": "User",
+      "firstname": "Fixture",
+      "email": "fixture-user@example.invalid",
+      "is_admin": false,
+      "dont_send_email": true
+    }
+  }
+}

@@ -1,0 +1,517 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/list",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sim_fixture_1",
+          "name": "Fixture Corp 1",
+          "ticker": "FIX1"
+        },
+        {
+          "id": "sim_fixture_2",
+          "name": "Fixture Corp 2",
+          "ticker": "FIX2"
+        },
+        {
+          "id": "sim_fixture_3",
+          "name": "Fixture Corp 3",
+          "ticker": "FIX3"
+        },
+        {
+          "id": "sim_fixture_4",
+          "name": "Fixture Corp 4",
+          "ticker": "FIX4"
+        },
+        {
+          "id": "sim_fixture_5",
+          "name": "Fixture Corp 5",
+          "ticker": "FIX5"
+        },
+        {
+          "id": "sim_fixture_6",
+          "name": "Fixture Corp 6",
+          "ticker": "FIX6"
+        },
+        {
+          "id": "sim_fixture_7",
+          "name": "Fixture Corp 7",
+          "ticker": "FIX7"
+        },
+        {
+          "id": "sim_fixture_8",
+          "name": "Fixture Corp 8",
+          "ticker": "FIX8"
+        },
+        {
+          "id": "sim_fixture_9",
+          "name": "Fixture Corp 9",
+          "ticker": "FIX9"
+        },
+        {
+          "id": "sim_fixture_10",
+          "name": "Fixture Corp 10",
+          "ticker": "FIX10"
+        },
+        {
+          "id": "sim_fixture_11",
+          "name": "Fixture Corp 11",
+          "ticker": "FIX11"
+        },
+        {
+          "id": "sim_fixture_12",
+          "name": "Fixture Corp 12",
+          "ticker": "FIX12"
+        },
+        {
+          "id": "sim_fixture_13",
+          "name": "Fixture Corp 13",
+          "ticker": "FIX13"
+        },
+        {
+          "id": "sim_fixture_14",
+          "name": "Fixture Corp 14",
+          "ticker": "FIX14"
+        },
+        {
+          "id": "sim_fixture_15",
+          "name": "Fixture Corp 15",
+          "ticker": "FIX15"
+        },
+        {
+          "id": "sim_fixture_16",
+          "name": "Fixture Corp 16",
+          "ticker": "FIX16"
+        },
+        {
+          "id": "sim_fixture_17",
+          "name": "Fixture Corp 17",
+          "ticker": "FIX17"
+        },
+        {
+          "id": "sim_fixture_18",
+          "name": "Fixture Corp 18",
+          "ticker": "FIX18"
+        },
+        {
+          "id": "sim_fixture_19",
+          "name": "Fixture Corp 19",
+          "ticker": "FIX19"
+        },
+        {
+          "id": "sim_fixture_20",
+          "name": "Fixture Corp 20",
+          "ticker": "FIX20"
+        },
+        {
+          "id": "sim_fixture_21",
+          "name": "Fixture Corp 21",
+          "ticker": "FIX21"
+        },
+        {
+          "id": "sim_fixture_22",
+          "name": "Fixture Corp 22",
+          "ticker": "FIX22"
+        },
+        {
+          "id": "sim_fixture_23",
+          "name": "Fixture Corp 23",
+          "ticker": "FIX23"
+        },
+        {
+          "id": "sim_fixture_24",
+          "name": "Fixture Corp 24",
+          "ticker": "FIX24"
+        },
+        {
+          "id": "sim_fixture_25",
+          "name": "Fixture Corp 25",
+          "ticker": "FIX25"
+        },
+        {
+          "id": "sim_fixture_26",
+          "name": "Fixture Corp 26",
+          "ticker": "FIX26"
+        },
+        {
+          "id": "sim_fixture_27",
+          "name": "Fixture Corp 27",
+          "ticker": "FIX27"
+        },
+        {
+          "id": "sim_fixture_28",
+          "name": "Fixture Corp 28",
+          "ticker": "FIX28"
+        },
+        {
+          "id": "sim_fixture_29",
+          "name": "Fixture Corp 29",
+          "ticker": "FIX29"
+        },
+        {
+          "id": "sim_fixture_30",
+          "name": "Fixture Corp 30",
+          "ticker": "FIX30"
+        },
+        {
+          "id": "sim_fixture_31",
+          "name": "Fixture Corp 31",
+          "ticker": "FIX31"
+        },
+        {
+          "id": "sim_fixture_32",
+          "name": "Fixture Corp 32",
+          "ticker": "FIX32"
+        },
+        {
+          "id": "sim_fixture_33",
+          "name": "Fixture Corp 33",
+          "ticker": "FIX33"
+        },
+        {
+          "id": "sim_fixture_34",
+          "name": "Fixture Corp 34",
+          "ticker": "FIX34"
+        },
+        {
+          "id": "sim_fixture_35",
+          "name": "Fixture Corp 35",
+          "ticker": "FIX35"
+        },
+        {
+          "id": "sim_fixture_36",
+          "name": "Fixture Corp 36",
+          "ticker": "FIX36"
+        },
+        {
+          "id": "sim_fixture_37",
+          "name": "Fixture Corp 37",
+          "ticker": "FIX37"
+        },
+        {
+          "id": "sim_fixture_38",
+          "name": "Fixture Corp 38",
+          "ticker": "FIX38"
+        },
+        {
+          "id": "sim_fixture_39",
+          "name": "Fixture Corp 39",
+          "ticker": "FIX39"
+        },
+        {
+          "id": "sim_fixture_40",
+          "name": "Fixture Corp 40",
+          "ticker": "FIX40"
+        },
+        {
+          "id": "sim_fixture_41",
+          "name": "Fixture Corp 41",
+          "ticker": "FIX41"
+        },
+        {
+          "id": "sim_fixture_42",
+          "name": "Fixture Corp 42",
+          "ticker": "FIX42"
+        },
+        {
+          "id": "sim_fixture_43",
+          "name": "Fixture Corp 43",
+          "ticker": "FIX43"
+        },
+        {
+          "id": "sim_fixture_44",
+          "name": "Fixture Corp 44",
+          "ticker": "FIX44"
+        },
+        {
+          "id": "sim_fixture_45",
+          "name": "Fixture Corp 45",
+          "ticker": "FIX45"
+        },
+        {
+          "id": "sim_fixture_46",
+          "name": "Fixture Corp 46",
+          "ticker": "FIX46"
+        },
+        {
+          "id": "sim_fixture_47",
+          "name": "Fixture Corp 47",
+          "ticker": "FIX47"
+        },
+        {
+          "id": "sim_fixture_48",
+          "name": "Fixture Corp 48",
+          "ticker": "FIX48"
+        },
+        {
+          "id": "sim_fixture_49",
+          "name": "Fixture Corp 49",
+          "ticker": "FIX49"
+        },
+        {
+          "id": "sim_fixture_50",
+          "name": "Fixture Corp 50",
+          "ticker": "FIX50"
+        },
+        {
+          "id": "sim_fixture_51",
+          "name": "Fixture Corp 51",
+          "ticker": "FIX51"
+        },
+        {
+          "id": "sim_fixture_52",
+          "name": "Fixture Corp 52",
+          "ticker": "FIX52"
+        },
+        {
+          "id": "sim_fixture_53",
+          "name": "Fixture Corp 53",
+          "ticker": "FIX53"
+        },
+        {
+          "id": "sim_fixture_54",
+          "name": "Fixture Corp 54",
+          "ticker": "FIX54"
+        },
+        {
+          "id": "sim_fixture_55",
+          "name": "Fixture Corp 55",
+          "ticker": "FIX55"
+        },
+        {
+          "id": "sim_fixture_56",
+          "name": "Fixture Corp 56",
+          "ticker": "FIX56"
+        },
+        {
+          "id": "sim_fixture_57",
+          "name": "Fixture Corp 57",
+          "ticker": "FIX57"
+        },
+        {
+          "id": "sim_fixture_58",
+          "name": "Fixture Corp 58",
+          "ticker": "FIX58"
+        },
+        {
+          "id": "sim_fixture_59",
+          "name": "Fixture Corp 59",
+          "ticker": "FIX59"
+        },
+        {
+          "id": "sim_fixture_60",
+          "name": "Fixture Corp 60",
+          "ticker": "FIX60"
+        },
+        {
+          "id": "sim_fixture_61",
+          "name": "Fixture Corp 61",
+          "ticker": "FIX61"
+        },
+        {
+          "id": "sim_fixture_62",
+          "name": "Fixture Corp 62",
+          "ticker": "FIX62"
+        },
+        {
+          "id": "sim_fixture_63",
+          "name": "Fixture Corp 63",
+          "ticker": "FIX63"
+        },
+        {
+          "id": "sim_fixture_64",
+          "name": "Fixture Corp 64",
+          "ticker": "FIX64"
+        },
+        {
+          "id": "sim_fixture_65",
+          "name": "Fixture Corp 65",
+          "ticker": "FIX65"
+        },
+        {
+          "id": "sim_fixture_66",
+          "name": "Fixture Corp 66",
+          "ticker": "FIX66"
+        },
+        {
+          "id": "sim_fixture_67",
+          "name": "Fixture Corp 67",
+          "ticker": "FIX67"
+        },
+        {
+          "id": "sim_fixture_68",
+          "name": "Fixture Corp 68",
+          "ticker": "FIX68"
+        },
+        {
+          "id": "sim_fixture_69",
+          "name": "Fixture Corp 69",
+          "ticker": "FIX69"
+        },
+        {
+          "id": "sim_fixture_70",
+          "name": "Fixture Corp 70",
+          "ticker": "FIX70"
+        },
+        {
+          "id": "sim_fixture_71",
+          "name": "Fixture Corp 71",
+          "ticker": "FIX71"
+        },
+        {
+          "id": "sim_fixture_72",
+          "name": "Fixture Corp 72",
+          "ticker": "FIX72"
+        },
+        {
+          "id": "sim_fixture_73",
+          "name": "Fixture Corp 73",
+          "ticker": "FIX73"
+        },
+        {
+          "id": "sim_fixture_74",
+          "name": "Fixture Corp 74",
+          "ticker": "FIX74"
+        },
+        {
+          "id": "sim_fixture_75",
+          "name": "Fixture Corp 75",
+          "ticker": "FIX75"
+        },
+        {
+          "id": "sim_fixture_76",
+          "name": "Fixture Corp 76",
+          "ticker": "FIX76"
+        },
+        {
+          "id": "sim_fixture_77",
+          "name": "Fixture Corp 77",
+          "ticker": "FIX77"
+        },
+        {
+          "id": "sim_fixture_78",
+          "name": "Fixture Corp 78",
+          "ticker": "FIX78"
+        },
+        {
+          "id": "sim_fixture_79",
+          "name": "Fixture Corp 79",
+          "ticker": "FIX79"
+        },
+        {
+          "id": "sim_fixture_80",
+          "name": "Fixture Corp 80",
+          "ticker": "FIX80"
+        },
+        {
+          "id": "sim_fixture_81",
+          "name": "Fixture Corp 81",
+          "ticker": "FIX81"
+        },
+        {
+          "id": "sim_fixture_82",
+          "name": "Fixture Corp 82",
+          "ticker": "FIX82"
+        },
+        {
+          "id": "sim_fixture_83",
+          "name": "Fixture Corp 83",
+          "ticker": "FIX83"
+        },
+        {
+          "id": "sim_fixture_84",
+          "name": "Fixture Corp 84",
+          "ticker": "FIX84"
+        },
+        {
+          "id": "sim_fixture_85",
+          "name": "Fixture Corp 85",
+          "ticker": "FIX85"
+        },
+        {
+          "id": "sim_fixture_86",
+          "name": "Fixture Corp 86",
+          "ticker": "FIX86"
+        },
+        {
+          "id": "sim_fixture_87",
+          "name": "Fixture Corp 87",
+          "ticker": "FIX87"
+        },
+        {
+          "id": "sim_fixture_88",
+          "name": "Fixture Corp 88",
+          "ticker": "FIX88"
+        },
+        {
+          "id": "sim_fixture_89",
+          "name": "Fixture Corp 89",
+          "ticker": "FIX89"
+        },
+        {
+          "id": "sim_fixture_90",
+          "name": "Fixture Corp 90",
+          "ticker": "FIX90"
+        },
+        {
+          "id": "sim_fixture_91",
+          "name": "Fixture Corp 91",
+          "ticker": "FIX91"
+        },
+        {
+          "id": "sim_fixture_92",
+          "name": "Fixture Corp 92",
+          "ticker": "FIX92"
+        },
+        {
+          "id": "sim_fixture_93",
+          "name": "Fixture Corp 93",
+          "ticker": "FIX93"
+        },
+        {
+          "id": "sim_fixture_94",
+          "name": "Fixture Corp 94",
+          "ticker": "FIX94"
+        },
+        {
+          "id": "sim_fixture_95",
+          "name": "Fixture Corp 95",
+          "ticker": "FIX95"
+        },
+        {
+          "id": "sim_fixture_96",
+          "name": "Fixture Corp 96",
+          "ticker": "FIX96"
+        },
+        {
+          "id": "sim_fixture_97",
+          "name": "Fixture Corp 97",
+          "ticker": "FIX97"
+        },
+        {
+          "id": "sim_fixture_98",
+          "name": "Fixture Corp 98",
+          "ticker": "FIX98"
+        },
+        {
+          "id": "sim_fixture_99",
+          "name": "Fixture Corp 99",
+          "ticker": "FIX99"
+        },
+        {
+          "id": "sim_fixture_100",
+          "name": "Fixture Corp 100",
+          "ticker": "FIX100"
+        }
+      ]
+    }
+  }
+}

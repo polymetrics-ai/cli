@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "financial_reports",
+  "type": "object",
+  "x-primary-key": ["report_id"],
+  "required": ["report_id"],
+  "properties": {
+    "report_id": { "type": "integer" },
+    "agreement_document_id": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "is_direct_payout": { "type": ["boolean", "null"] },
+    "is_draft_by_agreement": { "type": ["boolean", "null"] },
+    "month": { "type": ["string", "null"] },
+    "year": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/products",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "created_at": "2026-01-02T00:00:00Z",
+          "productable_id": 101,
+          "productable_type": "Course",
+          "price": 99.0,
+          "status": "published",
+          "name": "Fixture Product 101",
+          "private": false,
+          "hidden": false,
+          "subscription": false,
+          "slug": "fixture-product-101"
+        }
+      ]
+    }
+  }
+}

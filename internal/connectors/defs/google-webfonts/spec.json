@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Web Fonts Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.googleapis.com/webfonts/v1",
+      "description": "Google Fonts Developer API base URL. Defaults to the public googleapis.com endpoint, matching legacy's in-code default."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Google API key, sent as the `key` query parameter (legacy requires this secret; Read/Check hard-error when it is unset)."
+    },
+    "family": {
+      "type": "string",
+      "description": "Optional passthrough filter: restrict results to a comma-separated list of font family names."
+    },
+    "subset": {
+      "type": "string",
+      "description": "Optional passthrough filter: restrict results to families supporting this comma-separated list of subsets."
+    },
+    "category": {
+      "type": "string",
+      "description": "Optional passthrough filter: restrict results to this comma-separated list of font categories (e.g. serif, sans-serif)."
+    },
+    "capability": {
+      "type": "string",
+      "description": "Optional passthrough filter: restrict results to families supporting this comma-separated list of capabilities (e.g. WOFF2, VF)."
+    },
+    "alt": {
+      "type": "string",
+      "description": "Optional passthrough: alternate response representation (API-standard `alt` query parameter, e.g. json)."
+    },
+    "pretty_print": {
+      "type": "string",
+      "description": "Optional passthrough: API-standard `prettyPrint` query parameter (sent verbatim as prettyPrint)."
+    }
+  }
+}

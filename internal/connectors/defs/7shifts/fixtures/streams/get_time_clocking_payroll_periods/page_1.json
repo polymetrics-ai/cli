@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/time_clocking/payroll_periods",
+    "query": {
+      "limit": "100",
+      "company_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "company_id": 1001,
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:00:00Z",
+          "closed": true,
+          "finalized": true,
+          "states": [
+            {
+              "id": 1001,
+              "location_id": 1001,
+              "closed": true,
+              "processed": "2026-01-01",
+              "modified_by_user_id": 1001,
+              "closed_or_reopened_at": "2026-01-01T00:00:00Z"
+            }
+          ],
+          "all_punches_approved": true,
+          "employee_punch_approvals": "fixture employee punch approvals",
+          "created": "2026-01-01T00:00:00Z",
+          "modified": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "cursor": {
+          "next": null
+        }
+      }
+    }
+  }
+}

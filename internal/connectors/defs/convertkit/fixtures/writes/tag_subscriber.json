@@ -1,0 +1,15 @@
+{
+  "record": {
+    "tag_id": 100,
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tags/100/subscribe",
+    "body": { "email": "fixture@example.com" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "subscription": { "id": 1, "state": "active" } }
+  }
+}

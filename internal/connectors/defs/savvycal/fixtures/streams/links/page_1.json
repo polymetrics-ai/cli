@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/links",
+    "query": {
+      "page": "1",
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "lnk_fixture_1",
+          "name": "Fixture Scheduling Link"
+        }
+      ],
+      "links": {
+        "next": null
+      }
+    }
+  }
+}

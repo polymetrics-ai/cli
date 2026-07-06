@@ -1,0 +1,13 @@
+{
+  "record": {
+    "slug": "fixture-web"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/organizations/synthetic-conformance-value/pipelines/fixture-web"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

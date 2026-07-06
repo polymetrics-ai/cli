@@ -1,0 +1,18 @@
+{
+  "record": {
+    "task": {
+      "description": "Fixture Task",
+      "dueOn": "2026-02-01"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks",
+    "body": {
+      "task": {
+        "description": "Fixture Task",
+        "dueOn": "2026-02-01"
+      }
+    }
+  }
+}

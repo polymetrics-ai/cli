@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
 
+ICON
+  asset: icons/mailchimp.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://mailchimp.com/developer/release-notes/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  data_center
+  mode
+  start_date
+  access_token (secret)
+  api_key (secret)
+
+ETL STREAMS
+  lists:
+    primary key: id
+    cursor: date_created
+    fields: date_created(), email_type_option(), id(), list_rating(), name(), subscribe_url_short(), visibility(), web_id()
+  campaigns:
+    primary key: id
+    cursor: create_time
+    fields: archive_url(), create_time(), emails_sent(), id(), send_time(), status(), type(), web_id()
+  reports:
+    primary key: id
+    cursor: send_time
+    fields: abuse_reports(), campaign_title(), emails_sent(), id(), list_id(), send_time(), type(), unsubscribed()
+  automations:
+    primary key: id
+    cursor: create_time
+    fields: create_time(), emails_sent(), id(), start_time(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mailchimp API read of audience, campaign, report, and automation data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

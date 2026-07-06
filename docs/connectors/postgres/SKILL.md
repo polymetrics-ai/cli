@@ -9,6 +9,13 @@ description: PostgreSQL connector knowledge and safe action guide.
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.
 
+## Icon
+
+- asset: icons/postgresql.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.postgresql.org/docs/
+
 ## Capabilities
 
 - check=true catalog=true read=true write=false query=false
@@ -48,4 +55,3 @@ pm connectors inspect postgres --json
 - Run pm connectors inspect postgres before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

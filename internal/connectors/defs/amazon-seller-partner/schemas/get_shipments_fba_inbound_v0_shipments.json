@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipments_fba_inbound_v0_shipments",
+  "type": "object",
+  "properties": {
+    "ShipmentId": {
+      "type": "string"
+    },
+    "ShipmentName": {
+      "type": "string"
+    },
+    "ShipFromAddress": {
+      "type": "object"
+    },
+    "DestinationFulfillmentCenterId": {
+      "type": "string"
+    },
+    "ShipmentStatus": {
+      "type": "string"
+    },
+    "LabelPrepType": {
+      "type": "string"
+    },
+    "AreCasesRequired": {
+      "type": "boolean"
+    },
+    "ConfirmedNeedByDate": {
+      "type": "string"
+    },
+    "BoxContentsSource": {
+      "type": "string"
+    },
+    "EstimatedBoxContentsFee": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "ShipmentId"
+  ]
+}

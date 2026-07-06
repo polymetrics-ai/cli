@@ -1,0 +1,24 @@
+{
+  "record": {
+    "triggerType": "form_submission",
+    "url": "https://example.test/webhooks/webflow"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/sites/synthetic-conformance-value/webhooks",
+    "body": {
+      "triggerType": "form_submission",
+      "url": "https://example.test/webhooks/webflow"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "webhook_fixture_1",
+      "triggerType": "form_submission",
+      "url": "https://example.test/webhooks/webflow",
+      "siteId": "synthetic-conformance-value",
+      "createdOn": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

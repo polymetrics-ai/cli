@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/news/similar/uuid-fixture-1",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "uuid": "uuid-fixture-1",
+          "title": "Fixture market news",
+          "url": "https://example.com/news",
+          "published_at": "2026-07-03T10:58:00Z",
+          "source": "example.com",
+          "language": "en"
+        }
+      ]
+    }
+  }
+}

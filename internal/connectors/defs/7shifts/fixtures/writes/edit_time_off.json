@@ -1,0 +1,49 @@
+{
+  "record": {
+    "time_off_id": 1001,
+    "user_id": 1001,
+    "from_date": "2026-01-01",
+    "to_date": "2026-01-01",
+    "partial": true,
+    "partial_from": "fixture partial from",
+    "partial_to": "fixture partial to",
+    "comments": "fixture comments",
+    "status": 1001,
+    "status_action_message": "fixture status action message",
+    "category": "fixture category",
+    "hours": [
+      {
+        "date": "2026-01-01",
+        "num_hours": 12.34
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/time_off/1001",
+    "body": {
+      "user_id": 1001,
+      "from_date": "2026-01-01",
+      "to_date": "2026-01-01",
+      "partial": true,
+      "partial_from": "fixture partial from",
+      "partial_to": "fixture partial to",
+      "comments": "fixture comments",
+      "status": 1001,
+      "status_action_message": "fixture status action message",
+      "category": "fixture category",
+      "hours": [
+        {
+          "date": "2026-01-01",
+          "num_hours": 12.34
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

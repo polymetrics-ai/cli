@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/listings", "query": { "response_format": "common", "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": { "results": [], "next": null, "count": 0 }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "fs_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/funding-sources/fs_fixture_1/initiate-micro-deposits"
+  }
+}

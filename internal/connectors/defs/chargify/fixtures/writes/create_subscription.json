@@ -1,0 +1,18 @@
+{
+  "record": {
+    "subscription": {
+      "product_handle": "pro-plan",
+      "customer_id": "1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions.json",
+    "body": {
+      "subscription": {
+        "product_handle": "pro-plan",
+        "customer_id": "1"
+      }
+    }
+  }
+}

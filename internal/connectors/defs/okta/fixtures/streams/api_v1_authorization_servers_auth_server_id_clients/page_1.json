@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/clients",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "client_id": "client_id_fixture",
+        "client_name": "client_name_fixture",
+        "client_uri": "https://example.invalid/fixture",
+        "logo_uri": "https://example.invalid/fixture",
+        "_links": {
+          "grants": {
+            "href": "https://example.invalid/fixture"
+          },
+          "tokens": {
+            "href": "https://example.invalid/fixture"
+          }
+        }
+      }
+    ]
+  }
+}

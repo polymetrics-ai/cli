@@ -1,0 +1,210 @@
+{
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "integer",
+      "description": "The company_id"
+    },
+    "consecutive_days_threshold": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Number of consecutive days threshold an employee works before overtime"
+    },
+    "consecutive_days_multiplier": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "The overtime pay multiplier"
+    },
+    "regular_rate_of_pay_enabled": {
+      "type": "boolean",
+      "description": "When true, the regular rate of pay considers the number of hours worked at different pay rates while calculating overtime"
+    },
+    "exception_cost_enabled": {
+      "type": "boolean",
+      "description": "When true, exception costs are displayed in reports"
+    },
+    "overtime_by_location_enabled": {
+      "type": "boolean",
+      "description": "The overtime_by_location_enabled"
+    },
+    "auto_break_enabled": {
+      "type": "boolean",
+      "description": "When true, use break conditions to alter labor costs and hour"
+    },
+    "auto_break_hours": {
+      "type": "number",
+      "description": "The auto_break_hours"
+    },
+    "auto_break_minutes": {
+      "type": "integer",
+      "description": "The auto_break_minutes"
+    },
+    "auto_break_hours_2": {
+      "type": "number",
+      "description": "The auto_break_hours_2"
+    },
+    "auto_break_minutes_2": {
+      "type": "integer",
+      "description": "The auto_break_minutes_2"
+    },
+    "overtime_enabled": {
+      "type": "boolean",
+      "description": "The overtime_enabled"
+    },
+    "daily_overtime_threshold": {
+      "type": "integer",
+      "description": "The daily_overtime_threshold"
+    },
+    "daily_overtime_multiplier": {
+      "type": "number",
+      "description": "The daily_overtime_multiplier"
+    },
+    "premium_overtime_threshold": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "The premium_overtime_threshold"
+    },
+    "premium_overtime_multiplier": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "The premium_overtime_multiplier"
+    },
+    "weekly_overtime_threshold": {
+      "type": "integer",
+      "description": "The weekly_overtime_threshold"
+    },
+    "weekly_overtime_multiplier": {
+      "type": "number",
+      "description": "The weekly_overtime_multiplier"
+    },
+    "ot_alerts_enabled": {
+      "type": "boolean",
+      "description": "The ot_alerts_enabled"
+    },
+    "ot_alerts_buffer_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "The ot_alerts_buffer_minutes"
+    },
+    "split_hours_on_holidays": {
+      "type": "boolean",
+      "description": "The split_hours_on_holidays"
+    },
+    "wage_based_roles_enabled": {
+      "type": "boolean",
+      "description": "When true, allows employees to have a separate wage for"
+    },
+    "tipped_minimum_wage_enabled": {
+      "type": "boolean",
+      "description": "When true, calculates the tip credit owed to employees when their wage for tipped roles is below the jurisdiction minimum wage"
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The jurisdiction"
+    },
+    "is_custom": {
+      "type": "boolean",
+      "description": "The is_custom"
+    },
+    "use_jurisdiction_minimum_wage_for_ot": {
+      "type": "boolean",
+      "description": "When true, minimum wage will be used when calculating overtime pay"
+    },
+    "is_custom_min_wage": {
+      "type": "boolean",
+      "description": "When true, custom_min_wages returns a list of wages, otherwise custom_min_wages returns null."
+    },
+    "custom_min_wages": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Returns a list of custom minimum wages when is_custom_min_wage is true. Otherwise null is returned.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Custom Minimum Wage ID"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "Company Id"
+          },
+          "location_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Location Id"
+          },
+          "wage_cents": {
+            "type": "integer",
+            "description": "The custom minimum wage in cents"
+          },
+          "effective_date": {
+            "type": "string",
+            "description": "It is one representation of ISO8601 date extended format"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "description": "If true the custom wage will be deleted when editing labor settings."
+          }
+        },
+        "required": [
+          "company_id",
+          "wage_cents",
+          "effective_date"
+        ]
+      }
+    }
+  },
+  "required": [
+    "company_id",
+    "consecutive_days_threshold",
+    "consecutive_days_multiplier",
+    "regular_rate_of_pay_enabled",
+    "exception_cost_enabled",
+    "overtime_by_location_enabled",
+    "auto_break_enabled",
+    "auto_break_hours",
+    "auto_break_minutes",
+    "auto_break_hours_2",
+    "auto_break_minutes_2",
+    "overtime_enabled",
+    "daily_overtime_threshold",
+    "daily_overtime_multiplier",
+    "premium_overtime_threshold",
+    "premium_overtime_multiplier",
+    "weekly_overtime_threshold",
+    "weekly_overtime_multiplier",
+    "ot_alerts_enabled",
+    "ot_alerts_buffer_minutes",
+    "split_hours_on_holidays",
+    "wage_based_roles_enabled",
+    "tipped_minimum_wage_enabled",
+    "jurisdiction",
+    "is_custom",
+    "use_jurisdiction_minimum_wage_for_ot",
+    "is_custom_min_wage",
+    "custom_min_wages"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_company_labor_settings",
+  "x-primary-key": [
+    "company_id"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "custom_field_id": "custom_field_id_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/custom_fields/custom_field_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

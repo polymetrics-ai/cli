@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "fixture",
+    "description": "fixture",
+    "url": "https://example.com/fixture",
+    "settingsSchema": {
+      "id": "settings_schema_fixture_id"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/flow/extensions/actions/id_fixture",
+    "body": {
+      "name": "fixture",
+      "description": "fixture",
+      "url": "https://example.com/fixture",
+      "settingsSchema": {
+        "id": "settings_schema_fixture_id"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

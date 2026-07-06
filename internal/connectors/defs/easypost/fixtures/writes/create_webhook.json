@@ -1,0 +1,23 @@
+{
+  "record": {
+    "webhook": {
+      "url": "https://example.com/easypost/webhook",
+      "custom_headers": [
+        { "name": "X-Fixture-Header", "value": "fixture" }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "webhook": {
+        "url": "https://example.com/easypost/webhook",
+        "custom_headers": [
+          { "name": "X-Fixture-Header", "value": "fixture" }
+        ]
+      }
+    }
+  },
+  "response": { "status": 201, "body": { "id": "hook_fixture_new", "object": "Webhook" } }
+}

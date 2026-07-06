@@ -1,0 +1,42 @@
+{
+  "request": { "method": "GET", "path": "/candidates", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": "cursor_fixture_page2",
+      "previous": null,
+      "results": [
+        {
+          "id": "candidate_fixture_1",
+          "remote_id": "remote_1",
+          "first_name": "Fixture1",
+          "last_name": "Example",
+          "company": "Example Inc",
+          "title": "Engineer",
+          "is_private": false,
+          "can_email": true,
+          "remote_created_at": "2026-01-01T00:00:00Z",
+          "remote_updated_at": "2026-01-01T00:00:00Z",
+          "last_interaction_at": "2026-01-01T00:00:00Z",
+          "modified_at": "2026-01-01T00:00:00Z",
+          "remote_was_deleted": false
+        },
+        {
+          "id": "candidate_fixture_2",
+          "remote_id": "remote_2",
+          "first_name": "Fixture2",
+          "last_name": "Example",
+          "company": "Example Inc",
+          "title": "Recruiter",
+          "is_private": false,
+          "can_email": true,
+          "remote_created_at": "2026-01-02T00:00:00Z",
+          "remote_updated_at": "2026-01-02T00:00:00Z",
+          "last_interaction_at": "2026-01-02T00:00:00Z",
+          "modified_at": "2026-01-02T00:00:00Z",
+          "remote_was_deleted": false
+        }
+      ]
+    }
+  }
+}

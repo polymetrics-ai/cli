@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Data classification enabled for organization"
+    },
+    "labels": {
+      "type": "array",
+      "description": "Data classification labels",
+      "items": {
+        "type": "object",
+        "description": "Data classification label",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Label id."
+          },
+          "color": {
+            "type": "string",
+            "description": "Label color."
+          },
+          "default": {
+            "type": "boolean",
+            "description": "Label is default."
+          },
+          "description": {
+            "type": "string",
+            "description": "Label description."
+          },
+          "name": {
+            "type": "string",
+            "description": "Label name."
+          },
+          "orderNumber": {
+            "type": "integer",
+            "description": "Label order number."
+          },
+          "sharingRecommendation": {
+            "type": "string",
+            "description": "Sharing Recommendation (one of NO_SHARING_RESTRICTIONS, ONLY_WITHIN_ORGANIZATION, ONLY_WITHIN_TEAM or ONLY_WITH_AUTHORIZED_TEAM_MEMBERS )."
+          },
+          "guidelineUrl": {
+            "type": "string",
+            "description": "Indicates the URL for the board classification label guidelines."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the object returned."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object returned."
+    }
+  },
+  "additionalProperties": true
+}

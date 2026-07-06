@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "employee_update_fields",
+  "type": "object",
+  "properties": {
+    "profileFields": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "jobFields": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

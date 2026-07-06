@@ -1,0 +1,20 @@
+{
+  "name": "us-census",
+  "display_name": "US Census",
+  "description": "Reads configured datasets from the US Census Bureau's API via a caller-supplied query path and query-string qualifier, and reads the Bureau's own published dataset catalog.",
+  "integration_type": "api",
+  "docs_url": "https://www.census.gov/data/developers/guidance/api-user-guide.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external US Census Bureau API read of a caller-configured dataset endpoint, plus the Bureau's own public dataset catalog (no auth required for the catalog)",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

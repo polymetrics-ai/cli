@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "redirect_id": "redirect_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v1/docs/sites/id_fixture/redirects/redirect_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

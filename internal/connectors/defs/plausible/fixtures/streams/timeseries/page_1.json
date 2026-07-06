@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stats/timeseries",
+    "query": {
+      "site_id": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "metrics": "synthetic-conformance-value",
+      "filters": "synthetic-conformance-value",
+      "compare": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "date": "2026-01-01", "visitors": 36085, "visits": 37500, "pageviews": 120000, "events": 121000, "bounce_rate": 50.0, "visit_duration": 90.0 },
+        { "date": "2026-01-02", "visitors": 27688, "visits": 28900, "pageviews": 95000, "events": 96000, "bounce_rate": 55.0, "visit_duration": 80.0 }
+      ]
+    }
+  }
+}

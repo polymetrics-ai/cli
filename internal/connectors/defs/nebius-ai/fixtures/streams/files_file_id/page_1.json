@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/files/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "bytes": 1,
+      "created_at": 1,
+      "filename": "filename_fixture",
+      "object": "object_fixture",
+      "purpose": "purpose_fixture",
+      "status": "status_fixture",
+      "status_details": "status_details_fixture"
+    }
+  }
+}

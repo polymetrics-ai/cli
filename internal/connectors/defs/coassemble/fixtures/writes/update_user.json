@@ -1,0 +1,9 @@
+{
+  "record": { "identifier": "fixture-user-1", "name": "Fixture Learner Renamed" },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/headless/user/fixture-user-1",
+    "body": { "name": "Fixture Learner Renamed" }
+  },
+  "response": { "status": 200, "body": { "identifier": "fixture-user-1", "name": "Fixture Learner Renamed" } }
+}

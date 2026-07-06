@@ -1,0 +1,12 @@
+{
+  "request": { "method": "POST", "path": "/Campaigns/QueryByAccountId", "body": { "AccountId": "1000001" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Campaigns": [
+        { "Id": "4000001", "Name": "Fixture Brand Campaign", "Status": "Active", "CampaignType": "Search", "BudgetType": "DailyBudgetStandard", "DailyBudget": 50.0, "TimeZone": "PacificTimeUSCanadaTijuana" },
+        { "Id": "4000002", "Name": "Fixture Shopping Campaign", "Status": "Paused", "CampaignType": "Shopping", "BudgetType": "DailyBudgetStandard", "DailyBudget": 25.0, "TimeZone": "PacificTimeUSCanadaTijuana" }
+      ]
+    }
+  }
+}

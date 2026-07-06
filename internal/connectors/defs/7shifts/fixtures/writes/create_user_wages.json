@@ -1,0 +1,39 @@
+{
+  "record": {
+    "user_id": 1001,
+    "effective_date": "2026-01-01",
+    "wage_type": "hourly",
+    "wage_cents": 1001,
+    "role_id": 1001,
+    "enabled_days": {},
+    "allocations": [
+      {
+        "location_id": 1001,
+        "amount_tenths": 1001
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/users/1001/wages",
+    "body": {
+      "effective_date": "2026-01-01",
+      "wage_type": "hourly",
+      "wage_cents": 1001,
+      "role_id": 1001,
+      "enabled_days": {},
+      "allocations": [
+        {
+          "location_id": 1001,
+          "amount_tenths": 1001
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

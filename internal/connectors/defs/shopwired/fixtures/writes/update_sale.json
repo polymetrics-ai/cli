@@ -1,0 +1,26 @@
+{
+  "record": {
+    "id": 1,
+    "targetType": "targetType_fixture",
+    "targetId": "targetId_fixture",
+    "discount": 1,
+    "validFrom": "validFrom_fixture",
+    "active": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sales/1",
+    "body": {
+      "targetType": "targetType_fixture",
+      "targetId": "targetId_fixture",
+      "discount": 1,
+      "validFrom": "validFrom_fixture",
+      "active": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

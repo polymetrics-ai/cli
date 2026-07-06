@@ -10,22 +10,52 @@ SYNOPSIS
   pm credentials add <name> --connector microsoft-teams [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Microsoft Teams users, groups, channels, and device-usage reports through the Microsoft Graph REST API using an OAuth2 client-credentials grant.
+  Reads Microsoft Teams users, groups, channels, and device-usage reports through the Microsoft Graph REST API using an OAuth2 client-credentials grant. Read-only.
+
+ICON
+  asset: icons/microsoft-teams.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  client_id
+  login_base_url
+  max_pages
+  period
+  scope
+  token_url
+  client_secret (secret)
+  tenant_id (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: account_enabled(), display_name(), id(), job_title(), mail(), mobile_phone(), office_location(), user_principal_name()
+  groups:
+    primary key: id
+    fields: created_date_time(), description(), display_name(), id(), mail(), mail_enabled(), mail_nickname(), security_enabled(), visibility()
+  channels:
+    primary key: id
+    fields: created_date_time(), description(), display_name(), email(), id(), membership_type(), web_url()
+  team_device_usage_report:
+    primary key: id
+    fields: id(), is_deleted(), last_activity_date(), report_period(), used_android_phone(), used_i_os(), used_mac(), used_web(), used_windows_phone(), user_principal_name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Microsoft Graph API read of tenant users/groups/channels/device-usage data
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

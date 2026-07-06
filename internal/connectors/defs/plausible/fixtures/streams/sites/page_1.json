@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/sites" },
+  "response": {
+    "status": 200,
+    "body": {
+      "sites": [
+        { "domain": "fixture1.example.com", "timezone": "Europe/London" },
+        { "domain": "fixture2.example.com", "timezone": "Europe/London" }
+      ],
+      "meta": { "after": null, "before": null, "limit": 100 }
+    }
+  }
+}

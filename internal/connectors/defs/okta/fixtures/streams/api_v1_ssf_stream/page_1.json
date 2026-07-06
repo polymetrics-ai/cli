@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/ssf/stream"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "aud": "https://example.invalid/fixture",
+        "delivery": {
+          "authorization_header": "authorization_header_fixture",
+          "endpoint_url": "https://example.invalid/fixture",
+          "method": "https://schemas.openid.net/secevent/risc/delivery-method/push"
+        },
+        "events_delivered": [
+          "https://example.invalid/fixture"
+        ],
+        "events_requested": [
+          "https://example.invalid/fixture"
+        ],
+        "events_supported": [
+          "https://example.invalid/fixture"
+        ],
+        "format": "iss_sub",
+        "iss": "iss_fixture",
+        "min_verification_interval": 1,
+        "stream_id": "stream_id_fixture"
+      }
+    ]
+  }
+}

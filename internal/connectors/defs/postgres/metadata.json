@@ -1,0 +1,20 @@
+{
+  "name": "postgres",
+  "display_name": "PostgreSQL",
+  "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.",
+  "integration_type": "database",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "risk": {
+    "read": "low",
+    "write": "n/a (read-only source)",
+    "approval": "none required for read-only sync"
+  }
+}

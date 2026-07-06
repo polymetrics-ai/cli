@@ -1,0 +1,15 @@
+{
+  "record": {
+    "trash_id": "trash_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1pre3/trash/trash_id_fixture/restorefromtrash"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Response": {}
+    }
+  }
+}

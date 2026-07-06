@@ -1,0 +1,8 @@
+{
+  "record": { "id": "folder_fixture_1", "name": "Renamed Fixture Folder" },
+  "expect": {
+    "method": "PUT",
+    "path": "/folder/folder_fixture_1",
+    "body": { "name": "Renamed Fixture Folder" }
+  }
+}

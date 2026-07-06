@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Retail Express by Maropost Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Retail Express account base URL, e.g. https://<account>.retailexpress.com.au/api/v2. Legacy derives this from a bare `account` config alias when base_url is unset; this bundle requires the full base_url instead (see docs.md Known limits)."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth-style access token, sent as a Bearer token. Takes priority over api_key when both are configured, matching legacy's access-token-first precedence. Never logged."
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "API key, sent as the X-API-Key header. Used only when access_token is not configured. Never logged."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional updated-after filter applied to every stream's request, matching legacy's config-driven query filter."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional created-after filter applied to every stream's request."
+    },
+    "store_id": {
+      "type": "string",
+      "description": "Optional store ID filter applied to every stream's request."
+    },
+    "status": {
+      "type": "string",
+      "description": "Optional status filter applied to every stream's request."
+    }
+  }
+}

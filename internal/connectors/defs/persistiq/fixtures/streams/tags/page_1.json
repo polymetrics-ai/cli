@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/v1/tags", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "has_more": false,
+      "next_page": null,
+      "status": "success",
+      "errors": null,
+      "tags": [
+        { "id": "tag_fixture_1", "name": "fixture-tag" }
+      ]
+    }
+  }
+}

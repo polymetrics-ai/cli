@@ -12,20 +12,54 @@ SYNOPSIS
 DESCRIPTION
   Reads Lago customers, invoices, subscriptions, plans, and billable metrics through the Lago REST API.
 
+ICON
+  asset: icons/getlago.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://doc.getlago.com/api-reference/intro
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  api_url
+  max_pages
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  customers:
+    primary key: lago_id
+    cursor: created_at
+    fields: country(), created_at(), currency(), customer_type(), email(), external_id(), lago_id(), name(), sequential_id(), slug(), updated_at()
+  invoices:
+    primary key: lago_id
+    cursor: created_at
+    fields: created_at(), currency(), fees_amount_cents(), invoice_type(), issuing_date(), lago_id(), number(), payment_status(), status(), taxes_amount_cents(), total_amount_cents(), updated_at()
+  subscriptions:
+    primary key: lago_id
+    cursor: created_at
+    fields: billing_time(), created_at(), external_customer_id(), external_id(), lago_customer_id(), lago_id(), plan_code(), started_at(), status(), terminated_at()
+  plans:
+    primary key: lago_id
+    cursor: created_at
+    fields: amount_cents(), amount_currency(), code(), created_at(), interval(), lago_id(), name(), pay_in_advance(), trial_period()
+  billable_metrics:
+    primary key: lago_id
+    cursor: created_at
+    fields: aggregation_type(), code(), created_at(), field_name(), lago_id(), name(), recurring()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Lago API read of billing and subscription data
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

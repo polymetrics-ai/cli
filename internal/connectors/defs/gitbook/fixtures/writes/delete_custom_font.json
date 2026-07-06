@@ -1,0 +1,17 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "font_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/orgs/synthetic-conformance-value/fonts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "id": "delete_custom_font_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/fba/outbound/2020-07-01/fulfillmentOrders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "fulfillmentOrder": {},
+        "fulfillmentOrderItems": [],
+        "fulfillmentShipments": [],
+        "returnItems": [],
+        "returnAuthorizations": [],
+        "paymentInformation": [],
+        "seller_fulfillment_order_id": "seller_fulfillment_order_id-fixture-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "dpl_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v12/deployments/dpl_fixture_1/cancel"
+  }
+}

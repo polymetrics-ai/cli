@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pools"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "chain": "Ethereum",
+          "project": "fixture-lend",
+          "symbol": "FIXUSD",
+          "tvlUsd": 1000000.0,
+          "apyBase": 2.5,
+          "apyReward": 0.5,
+          "apy": 3.0,
+          "rewardTokens": ["0xfixture000000000000000000000000000000001"],
+          "pool": "fixture-pool-guid-1",
+          "apyPct1D": 0.1,
+          "apyPct7D": 0.2,
+          "apyPct30D": -0.3,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "poolMeta": null,
+          "underlyingTokens": ["0xfixture000000000000000000000000000000002"]
+        },
+        {
+          "chain": "Polygon",
+          "project": "fixture-dex",
+          "symbol": "FIX-WETH",
+          "tvlUsd": 250000.0,
+          "apyBase": 5.1,
+          "apyReward": null,
+          "apy": 5.1,
+          "rewardTokens": null,
+          "pool": "fixture-pool-guid-2",
+          "apyPct1D": -0.05,
+          "apyPct7D": 0.4,
+          "apyPct30D": 1.1,
+          "stablecoin": false,
+          "ilRisk": "yes",
+          "exposure": "multi",
+          "poolMeta": "0.3%",
+          "underlyingTokens": ["0xfixture000000000000000000000000000000003", "0xfixture000000000000000000000000000000004"]
+        }
+      ]
+    }
+  }
+}

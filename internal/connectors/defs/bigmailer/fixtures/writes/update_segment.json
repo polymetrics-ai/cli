@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "segment_fixture_1",
+    "name": "Updated Fixture Segment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/segments/segment_fixture_1",
+    "body": {
+      "name": "Updated Fixture Segment"
+    }
+  }
+}

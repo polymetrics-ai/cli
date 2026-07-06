@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "name": "Fixture Policy Object",
+    "category": "network",
+    "type": "cidr",
+    "cidr": "10.0.0.0/24"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organizations/org_1/policyObjects"
+  }
+}

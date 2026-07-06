@@ -1,0 +1,11 @@
+{
+  "record": {
+    "resource_id": 123,
+    "name": "Fixture delete_cloud_resource",
+    "description": "Fixture delete_cloud_resource record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/itam/resources/123"
+  }
+}

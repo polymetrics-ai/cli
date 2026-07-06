@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 1001,
+        "company_id": 1001,
+        "first_name": "fixture first name",
+        "photo": "fixture photo",
+        "active": true,
+        "last_name": "fixture last name",
+        "email": "fixture@example.com",
+        "mobile_number": "fixture mobile number",
+        "home_number": "fixture home number",
+        "birth_date": "2026-01-01",
+        "address": "fixture address",
+        "postal_zip": "fixture postal zip",
+        "city": "fixture city",
+        "prov_state": "fixture prov state",
+        "invite_status": "accepted",
+        "notes": "fixture notes",
+        "timezone": "12:00:00",
+        "type": "employee",
+        "punch_id": "fixture-id",
+        "employee_id": "fixture-id",
+        "max_weekly_hours": "fixture max weekly hours",
+        "invited": "fixture invited",
+        "invite_accepted": "fixture invite accepted",
+        "is_new": true,
+        "identity_id": 1001,
+        "preferred_first_name": "fixture preferred first name",
+        "preferred_last_name": "fixture preferred last name",
+        "pronouns": "fixture pronouns",
+        "created": "2026-01-01T00:00:00Z",
+        "modified": "2026-01-01T00:00:00Z",
+        "appear_as_employee": true,
+        "subscribe_to_updates": true,
+        "language": "fixture language",
+        "push": true,
+        "skill_level": 1001,
+        "hourly_wage": 1001,
+        "wage_type": "fixture wage type",
+        "sms_me_schedules": true,
+        "notify_ot_risk": true,
+        "permissions_template_id": 1001,
+        "reactivation_status": "accepted",
+        "meta": {
+          "readonly_fields": [
+            "fixture readonly field"
+          ],
+          "identity_status": "created"
+        }
+      }
+    }
+  }
+}

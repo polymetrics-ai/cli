@@ -1,0 +1,25 @@
+{
+  "record": {
+    "group_id": "group_id_fixture",
+    "handle": "fixture",
+    "title": "fixture",
+    "icon": "fixture",
+    "locale": "fixture",
+    "displayOrder": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/docs/groups/group_id_fixture",
+    "body": {
+      "handle": "fixture",
+      "title": "fixture",
+      "icon": "fixture",
+      "locale": "fixture",
+      "displayOrder": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -12,20 +12,47 @@ SYNOPSIS
 DESCRIPTION
   Reads Tempo accounts, customers, worklogs, and workload schemes through the Tempo Cloud REST API v4.
 
+ICON
+  asset: icons/tempo.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://apidocs.tempo.io/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  api_token (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    fields: global(), id(), key(), monthly_budget(), name(), status()
+  customers:
+    primary key: id
+    fields: id(), key(), name()
+  worklogs:
+    primary key: tempo_worklog_id
+    cursor: updated_at
+    fields: billable_seconds(), created_at(), description(), issue_id(), jira_worklog_id(), start_date(), start_time(), tempo_worklog_id(), time_spent_seconds(), updated_at()
+  workload_schemes:
+    primary key: id
+    fields: default_scheme(), description(), id(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Tempo Cloud API read of account, customer, and worklog data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

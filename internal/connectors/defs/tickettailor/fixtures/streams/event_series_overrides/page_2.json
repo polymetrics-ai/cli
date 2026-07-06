@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/event_series/es_fixture_1/overrides",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "ov_fixture_1",
+          "name": "Fixture Override",
+          "max_sellable_tickets": 100,
+          "created_at": 1767225600
+        }
+      ],
+      "links": {
+        "next": null,
+        "previous": null
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/accounts/card/primary/statements",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "stmt_fixture_1",
+          "start_balance": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "end_balance": {
+            "amount": 250000,
+            "currency": "USD"
+          },
+          "period": {
+            "start_date": "2026-01-01",
+            "end_date": "2026-01-31"
+          }
+        }
+      ],
+      "next_cursor": null
+    }
+  }
+}

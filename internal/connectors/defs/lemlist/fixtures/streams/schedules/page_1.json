@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/schedules",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schedules": [
+        {
+          "_id": "sch_fixture_1",
+          "name": "Fixture Schedule",
+          "secondsToWait": 300,
+          "timezone": "UTC",
+          "start": "09:00",
+          "end": "17:00",
+          "weekdays": [1, 2, 3, 4, 5],
+          "public": false,
+          "teamId": "team_fixture_1",
+          "createdBy": "usr_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "pagination": {
+        "totalRecords": 1,
+        "currentPage": 0,
+        "nextPage": null,
+        "totalPage": 1
+      }
+    }
+  }
+}

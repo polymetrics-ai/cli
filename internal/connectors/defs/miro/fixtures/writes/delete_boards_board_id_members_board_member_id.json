@@ -1,0 +1,14 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "board_member_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/boards/synthetic-conformance-value/members/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

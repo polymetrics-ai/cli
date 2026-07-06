@@ -1,0 +1,9 @@
+{
+  "record": {
+    "template_id": "tmpl_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/template/delete/tmpl_fixture_1"
+  }
+}

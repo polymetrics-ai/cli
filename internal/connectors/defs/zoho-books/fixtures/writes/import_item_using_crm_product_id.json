@@ -1,0 +1,16 @@
+{
+  "record": {
+    "crm_product_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/crm/item/synthetic-conformance-value/import"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

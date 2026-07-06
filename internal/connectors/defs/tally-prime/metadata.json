@@ -1,0 +1,21 @@
+{
+  "name": "tally-prime",
+  "display_name": "TallyPrime",
+  "description": "Reads TallyPrime accounting data (companies, ledgers, groups, stock items, vouchers) via TDL Export/Collection envelope requests POSTed to a locally-running TallyPrime Gateway Server. Read-only source; schema is discovered dynamically since TallyPrime has no static REST resource surface.",
+  "integration_type": "accounting",
+  "docs_url": "https://help.tallysolutions.com/tally-prime-integration-using-json-1/",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": true
+  },
+  "risk": {
+    "read": "local TallyPrime Gateway Server read of accounting masters (companies/ledgers/groups/stock items) and transactional vouchers via TDL Export/Collection envelopes over HTTP POST to a locally-running TallyPrime instance (no public network egress)",
+    "write": "n/a (read-only source)",
+    "approval": "none required for read-only sync"
+  }
+}

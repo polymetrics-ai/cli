@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": 1001,
+    "notes": "Updated fixture note"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/appointments/1001",
+    "body": {
+      "notes": "Updated fixture note"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": 1001, "notes": "Updated fixture note" }
+  }
+}

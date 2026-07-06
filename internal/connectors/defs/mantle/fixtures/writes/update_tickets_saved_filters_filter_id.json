@@ -1,0 +1,25 @@
+{
+  "record": {
+    "filter_id": "filter_id_fixture",
+    "name": "fixture",
+    "filters": {
+      "id": "filters_fixture_id"
+    },
+    "displayOrder": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/tickets/saved_filters/filter_id_fixture",
+    "body": {
+      "name": "fixture",
+      "filters": {
+        "id": "filters_fixture_id"
+      },
+      "displayOrder": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

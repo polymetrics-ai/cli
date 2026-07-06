@@ -1,0 +1,25 @@
+{
+  "record": {
+    "video_collection_id": "video-collection-id-fixture-1",
+    "items": [
+      {
+        "id": "add_video_collection_items-item-fixture-1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/videos/collections/video-collection-id-fixture-1/items",
+    "body": {
+      "items": [
+        {
+          "id": "add_video_collection_items-item-fixture-1"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

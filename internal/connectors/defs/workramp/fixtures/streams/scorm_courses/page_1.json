@@ -1,0 +1,143 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/scorms",
+    "query": {
+      "page": "1",
+      "per_page": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": 1,
+      "per_page": 20,
+      "has_more": true,
+      "url": "/api/v1/scorms",
+      "data": {
+        "scorms": [
+          {
+            "id": "scorm-fixture-1",
+            "title": "Fixture SCORM 1",
+            "created_at": 1700000000001,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-2",
+            "title": "Fixture SCORM 2",
+            "created_at": 1700000000002,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-3",
+            "title": "Fixture SCORM 3",
+            "created_at": 1700000000003,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-4",
+            "title": "Fixture SCORM 4",
+            "created_at": 1700000000004,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-5",
+            "title": "Fixture SCORM 5",
+            "created_at": 1700000000005,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-6",
+            "title": "Fixture SCORM 6",
+            "created_at": 1700000000006,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-7",
+            "title": "Fixture SCORM 7",
+            "created_at": 1700000000007,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-8",
+            "title": "Fixture SCORM 8",
+            "created_at": 1700000000008,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-9",
+            "title": "Fixture SCORM 9",
+            "created_at": 1700000000009,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-10",
+            "title": "Fixture SCORM 10",
+            "created_at": 1700000000010,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-11",
+            "title": "Fixture SCORM 11",
+            "created_at": 1700000000011,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-12",
+            "title": "Fixture SCORM 12",
+            "created_at": 1700000000012,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-13",
+            "title": "Fixture SCORM 13",
+            "created_at": 1700000000013,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-14",
+            "title": "Fixture SCORM 14",
+            "created_at": 1700000000014,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-15",
+            "title": "Fixture SCORM 15",
+            "created_at": 1700000000015,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-16",
+            "title": "Fixture SCORM 16",
+            "created_at": 1700000000016,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-17",
+            "title": "Fixture SCORM 17",
+            "created_at": 1700000000017,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-18",
+            "title": "Fixture SCORM 18",
+            "created_at": 1700000000018,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-19",
+            "title": "Fixture SCORM 19",
+            "created_at": 1700000000019,
+            "time_estimate": 10
+          },
+          {
+            "id": "scorm-fixture-20",
+            "title": "Fixture SCORM 20",
+            "created_at": 1700000000020,
+            "time_estimate": 10
+          }
+        ]
+      }
+    }
+  }
+}

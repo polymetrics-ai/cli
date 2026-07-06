@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/athlete/clubs", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 9001,
+        "name": "Fixture Runners Club",
+        "sport_type": "running",
+        "city": "London",
+        "state": "England",
+        "country": "United Kingdom",
+        "member_count": 128,
+        "private": false,
+        "membership": "member",
+        "url": "fixture-runners"
+      },
+      {
+        "id": 9002,
+        "name": "Fixture Cyclists Club",
+        "sport_type": "cycling",
+        "city": "Cambridge",
+        "state": "England",
+        "country": "United Kingdom",
+        "member_count": 56,
+        "private": true,
+        "membership": "member",
+        "url": "fixture-cyclists"
+      }
+    ]
+  }
+}

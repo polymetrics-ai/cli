@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/assets", "query": { "limit": "50", "offset": "50" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 51,
+        "asset_id": "BT-0051",
+        "asset_name": "Fixture asset 51",
+        "asset_serial": "SN-FIXTURE-51",
+        "status_id": 1,
+        "category_id": 2,
+        "category_name": "Laptops",
+        "product_id": 3,
+        "product_name": "Fixture Model",
+        "location_id": 4,
+        "department_id": 5,
+        "supplier_id": 6,
+        "purchase_date": "2026-01-01",
+        "purchase_cost": 1000,
+        "currency": "USD",
+        "warranty_expiration_date": "2027-01-01",
+        "notes": "fixture record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

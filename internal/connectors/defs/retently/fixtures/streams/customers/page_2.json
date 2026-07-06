@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "cust_fixture_101",
+          "email": "fixture101@example.com",
+          "full_name": "Fixture Customer 101",
+          "company": "Fixture Co",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

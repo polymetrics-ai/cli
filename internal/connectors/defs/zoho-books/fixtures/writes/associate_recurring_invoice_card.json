@@ -1,0 +1,17 @@
+{
+  "record": {
+    "recurring_invoice_id": "synthetic-conformance-value",
+    "card_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recurringinvoices/synthetic-conformance-value/card/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

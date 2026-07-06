@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "formId": "fixture_form_1", "revisionId": "00000001", "responderUri": "https://docs.google.com/forms/d/e/fixture_1/viewform" }
+  }
+}

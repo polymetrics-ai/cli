@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/scraping-job" },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "data": [
+        { "id": 101, "sitemap_id": 7, "status": "finished" },
+        { "id": 102, "sitemap_id": 8, "status": "running" }
+      ]
+    }
+  }
+}

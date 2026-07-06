@@ -1,0 +1,20 @@
+{
+  "record": {
+    "action": "set_value_if",
+    "data": {
+      "key": "fixture_key",
+      "value": "fixture value"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/records",
+    "body": {
+      "action": "set_value_if",
+      "data": {
+        "key": "fixture_key",
+        "value": "fixture value"
+      }
+    }
+  }
+}

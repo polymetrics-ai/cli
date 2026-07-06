@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "fixture-project",
+        "created_at": "fixture-project",
+        "updated_at": "fixture-project"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

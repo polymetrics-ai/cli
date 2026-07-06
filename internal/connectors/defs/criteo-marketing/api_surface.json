@@ -1,0 +1,767 @@
+{
+  "api": "Criteo Marketing Solutions API (https://api.criteo.com); existing streams target the bundle's pre-existing 2024-01 path prefix, new mpo_* streams target 2026-01 (the only version where marketplace-performance-outcomes exists)",
+  "docs": "https://developers.criteo.com/marketing-solutions/reference/getting-started + live OpenAPI spec at https://api.criteo.com/2026-01/marketingsolutions/open-api-specifications.json (fetched 2026-07-04)",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: every one of the 91 method+path operations in the real 2026-01 Marketing Solutions OpenAPI spec is accounted for below (mapped onto this bundle's actual 2024-01-pathed streams where applicable), XOR'd between covered_by (5 legacy streams + 4 new mpo_* streams, entries reflecting the METHOD THE BUNDLE ACTUALLY ISSUES, i.e. GET, not the real API's documented method where they differ -- see the 5 companion 'ENGINE_GAP: this is the REAL...method' excluded entries below) and excluded (with a real closed-vocabulary category+reason). requires_elevated_scope covers every write-shaped mutation needing MarketingSolutions_Campaign_Manage/Audience_Manage/creative-or-catalog-management scopes beyond this connector's read-only MarketingSolutions_Campaign_Read/Audience_Read grant (capabilities.write stays false -- see docs.md Known limits for why no write actions were added this pass). duplicate_of covers every per-id detail/sub-resource already reachable in full via a covered list stream. out_of_scope covers genuinely distinct product surfaces (creative/coupon/product-feed authoring, Commerce-Grid audience-segments, binary preview rendering, reference/taxonomy metadata), POST-with-body report endpoints of the same ENGINE_GAP class as the flagged search endpoints, and the 5 companion entries documenting where this bundle's 4 legacy streams (ad_sets/campaigns/audiences/statistics use GET; advertisers targets a path with no bulk-list endpoint at all in any spec version) diverge from the real API's actual method/existence -- a pre-existing wave2-migration defect discovered during this review, not introduced by it; flagged separately for a dedicated fix, see docs.md Known limits.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/2024-01/marketing-solutions/ad-sets/search",
+      "covered_by": {
+        "stream": "ad_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2024-01/marketing-solutions/advertisers",
+      "covered_by": {
+        "stream": "advertisers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2024-01/marketing-solutions/campaigns/search",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2024-01/marketing-solutions/audiences",
+      "covered_by": {
+        "stream": "audiences"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2024-01/statistics/report",
+      "covered_by": {
+        "stream": "statistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers",
+      "covered_by": {
+        "stream": "mpo_advertisers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers",
+      "covered_by": {
+        "stream": "mpo_sellers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets",
+      "covered_by": {
+        "stream": "mpo_budgets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns",
+      "covered_by": {
+        "stream": "mpo_seller_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/log-level/advertisers/{advertiser-id}/report",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "granular log-level analytics report (POST body carries report dimensions/metrics/date range) -- a POST-with-body report endpoint the read dialect cannot express (see statistics' own known method, but this one has no GET alternative at all and a materially different, much larger dimension set); out of scope for wave2-parity breadth"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/ad-sets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH mutation of ad-set names/dates/bids/targeting; requires MarketingSolutions_Campaign_Manage write scope beyond this connector's read-only MarketingSolutions_Campaign_Read grant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/ad-sets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates new ad sets; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/ad-sets/start",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "starts (activates) an ad set; requires MarketingSolutions_Campaign_Manage write scope, and this connector implements no ad-set catalog write actions yet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/ad-sets/stop",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "stops (pauses) an ad set; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-ad-set detail, keyed by a single ad-set-id; the ad_sets stream (once its ENGINE_GAP is resolved) would already enumerate every ad set's full attributes via ad-sets/search, so this single-record detail fetch adds no new fields and has no bulk variant"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}/audience",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "reassigns an ad set's targeted audience; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}/category-bids",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-ad-set category-bid detail, keyed by a single ad-set-id with no bulk/list-all-ad-sets' category-bids variant"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}/category-bids",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific ad-set's per-category bid overrides; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}/display-multipliers",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-ad-set display-multiplier detail, keyed by a single ad-set-id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/ad-sets/{ad-set-id}/display-multipliers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific ad-set's display multiplier overrides; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/ads/{ad-id}/product-filter",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "removes a product filter from a specific ad; requires creative-management write scope, a distinct product surface (ad creative/product-feed targeting) from this connector's advertiser/campaign/audience/statistics read scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/ads/{ad-id}/product-filter",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-ad product-filter detail, keyed by a single ad-id with no bulk list-all-ads variant reachable without first listing ads (which itself requires a per-advertiser fan-out, see advertiser-scoped ads/coupons/creatives below)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/ads/{ad-id}/product-filter",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "sets a product filter on a specific ad; requires creative-management write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/ads/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a specific ad creative; requires creative-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/ads/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-ad detail, keyed by a single ad id with no bulk list-all-ads-across-advertisers variant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/ads",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "list endpoint scoped to a single advertiser-id path parameter (ads/coupons/creatives) -- creative/coupon management is a distinct product surface (ad creative authoring) from this connector's advertiser/campaign/audience/statistics data scope; would require a fan_out over advertiser ids to cover every advertiser, which this connector's wave2-parity scope does not implement for any stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/ads",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new ad/coupon/creative under a specific advertiser -- creative-authoring write, requires elevated creative-management scope beyond this connector's read-only grant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "list endpoint scoped to a single advertiser-id path parameter (ads/coupons/creatives) -- creative/coupon management is a distinct product surface (ad creative authoring) from this connector's advertiser/campaign/audience/statistics data scope; would require a fan_out over advertiser ids to cover every advertiser, which this connector's wave2-parity scope does not implement for any stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new ad/coupon/creative under a specific advertiser -- creative-authoring write, requires elevated creative-management scope beyond this connector's read-only grant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/creatives",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "list endpoint scoped to a single advertiser-id path parameter (ads/coupons/creatives) -- creative/coupon management is a distinct product surface (ad creative authoring) from this connector's advertiser/campaign/audience/statistics data scope; would require a fan_out over advertiser ids to cover every advertiser, which this connector's wave2-parity scope does not implement for any stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/creatives",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new ad/coupon/creative under a specific advertiser -- creative-authoring write, requires elevated creative-management scope beyond this connector's read-only grant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons-supported-sizes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns the coupon image dimensions Criteo supports for a given advertiser/ad-set -- static reference/capability metadata, not advertiser/campaign business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a specific coupon creative; requires elevated creative-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-coupon detail, keyed by advertiser-id+id, under the already-excluded coupons list surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific coupon creative; requires elevated creative-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/advertisers/{advertiser-id}/coupons/{id}/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns a rendered image preview (binary/URL) of a coupon creative, not structured catalog data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/audience-segments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH of Commerce Grid audience-segment definitions; requires elevated audience-management write scope, a distinct (Commerce-Grid-specific) product surface from the audiences stream already covered"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audience-segments/compute-sizes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience-segment compute sizes action; requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audience-segments/create",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience-segment create action; requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audience-segments/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience-segment delete action; requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audience-segments/estimate-size",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience-segment estimate size action; requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audience-segments/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Commerce-Grid audience-segments search (a related but distinct resource from the plain audiences the audiences stream covers, per Criteo's own API tagging) -- same POST-with-body ENGINE_GAP as ad_sets/campaigns/audiences and lower-priority than the already-covered plain-audiences resource; not implemented this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/audience-segments/in-market-brands",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "static reference list of in-market-brand taxonomy values for audience targeting, not advertiser/campaign business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/audience-segments/in-market-interests",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "static reference list of in-market-interest taxonomy values for audience targeting, not advertiser/campaign business data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/audience-segments/{audience-segment-id}/contact-list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "clears a segment's uploaded contact list (PII); requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/audience-segments/{audience-segment-id}/contact-list",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "adds/removes PII contact-list entries on a segment; requires elevated audience-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/audience-segments/{audience-segment-id}/contact-list/statistics",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-segment contact-list match-rate statistics, keyed by a single audience-segment-id under the already-excluded Commerce-Grid audience-segments surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/audiences",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH of audience definitions; requires MarketingSolutions_Audience_Manage write scope beyond this connector's read-only grant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audiences/compute-sizes",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience compute sizes action; requires MarketingSolutions_Audience_Manage write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audiences/create",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience create action; requires MarketingSolutions_Audience_Manage write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audiences/delete",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience delete action; requires MarketingSolutions_Audience_Manage write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audiences/estimate-size",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "audience estimate size action; requires MarketingSolutions_Audience_Manage write scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/campaigns",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH of campaign objective/spend-limit; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/campaigns",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates new campaigns; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/campaigns/{campaign-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-campaign detail, keyed by a single campaign-id; the campaigns stream (once its ENGINE_GAP is resolved) already enumerates every campaign's full attributes via campaigns/search"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/creatives/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a specific creative; requires elevated creative-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/creatives/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-creative detail, keyed by a single creative id, under the already-excluded advertiser-scoped creatives list surface"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2026-01/marketing-solutions/creatives/{id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific creative; requires elevated creative-management write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/creatives/{id}/preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns a rendered image preview (binary/URL) of a creative, not structured catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/preview-limit",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns a static configuration value (the max number of ad-preview requests allowed), not advertiser business data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-MPO-advertiser detail, keyed by a single advertiserId already enumerated by the mpo_advertisers stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/ad-preview",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns a rendered ad-preview image/markup for a specific advertiser+campaign+seller combination, not structured catalog data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/adsets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-MPO-advertiser ad-set list, keyed by a single advertiserId; would need a fan_out over mpo_advertisers' own ids to cover every advertiser, not implemented this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/budgets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-MPO-advertiser budget list, keyed by a single advertiserId; the mpo_budgets stream already covers the full unfiltered budget collection across every advertiser the credentials can access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/campaigns",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-MPO-advertiser campaign list, keyed by a single advertiserId"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/seller-campaigns",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-MPO-advertiser seller-campaign list, keyed by a single advertiserId; the mpo_seller_campaigns stream already covers the full unfiltered collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers/{advertiserId}/sellers",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new seller record under a specific advertiser; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH of seller budgets; requires MarketingSolutions_Campaign_Manage write scope beyond this connector's read-only grant"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new seller budget; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets/{budgetId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-budget detail, keyed by a single budgetId already enumerated by the mpo_budgets stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/budgets/{budgetId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific seller budget; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "bulk PATCH of seller-campaign CPC bids; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns/{sellerCampaignId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-seller-campaign detail, keyed by a single sellerCampaignId already enumerated by the mpo_seller_campaigns stream"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns/{sellerCampaignId}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific seller-campaign's CPC bid; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/seller-campaigns/{sellerCampaignId}/budgets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-seller-campaign budget list, keyed by a single sellerCampaignId; the mpo_budgets stream already covers the full unfiltered collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers/{sellerId}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-seller detail, keyed by a single sellerId already enumerated by the mpo_sellers stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers/{sellerId}/budgets",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-seller budget list, keyed by a single sellerId; the mpo_budgets stream already covers the full unfiltered collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers/{sellerId}/seller-campaigns",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-seller seller-campaign list, keyed by a single sellerId; the mpo_seller_campaigns stream already covers the full unfiltered collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/sellers/{sellerId}/seller-campaigns",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new seller-campaign link for a specific seller; requires MarketingSolutions_Campaign_Manage write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/stats/campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "time-series performance statistics (campaigns) requiring interval/date-range query parameters -- a reporting/analytics surface distinct from the mpo_campaigns entity-catalog streams already covered; out of scope for this pass, candidate for a future statistics-style stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/stats/seller-campaigns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "time-series performance statistics (seller-campaigns) requiring interval/date-range query parameters -- a reporting/analytics surface distinct from the mpo_seller_campaigns entity-catalog streams already covered; out of scope for this pass, candidate for a future statistics-style stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/stats/sellers",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "time-series performance statistics (sellers) requiring interval/date-range query parameters -- a reporting/analytics surface distinct from the mpo_sellers entity-catalog streams already covered; out of scope for this pass, candidate for a future statistics-style stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "returns the authenticated API user/organization identity (a whoami-style endpoint), not a syncable business-data object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/product-sets",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "creates a new product-set (catalog/feed targeting rule); requires elevated catalog-management write scope, a distinct product surface (product feed configuration) from this connector's advertiser/campaign/audience/statistics scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/product-sets/dataset/{dataset-id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "lists product-sets for a specific product-feed dataset-id -- product-feed/catalog configuration, a distinct product surface from this connector's scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2026-01/marketing-solutions/product-sets/{product-set-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "deletes a specific product-set; requires elevated catalog-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/product-sets/{product-set-id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-product-set detail, keyed by a single product-set-id, under the already-excluded product-feed/catalog surface"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/2026-01/marketing-solutions/product-sets/{product-set-id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "updates a specific product-set's rules; requires elevated catalog-management write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/marketing-solutions/product-sets/{product-set-id}/product-filters",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "per-product-set filter list, keyed by a single product-set-id, under the already-excluded product-feed/catalog surface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/placements/report",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ad-placement performance report (POST body carries dimensions/metrics/date range) -- same POST-with-body ENGINE_GAP class as statistics/report, and a lower-priority, narrower-audience report than the already-covered statistics stream; not implemented this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/transactions/report",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "attributed sales-transaction report (POST body carries dimensions/metrics/date range) -- same POST-with-body ENGINE_GAP class as statistics/report; not implemented this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/ad-sets/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: this is the REAL, documented method for this endpoint (POST with a JSON filter body; an empty/omitted filters object returns every accessible ad set) -- the ad_sets stream above instead issues a GET against this same path (matching a pre-existing wave2-migration defect, not introduced by this Pass B review: the engine's declarative read path hard-codes a nil request body on every stream request regardless of method, and streams.json's StreamSpec.Body field is declared but never read by read.go, so a POST-with-body list read cannot be expressed in this dialect today). Flagged separately for a dedicated fix (engine addition or documented blocker); see docs.md Known limits."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2026-01/advertisers/me",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "ENGINE_GAP-adjacent bundle defect: the advertisers stream issues GET against /2024-01/marketing-solutions/advertisers, a plain advertiser-list path that does not exist in ANY reviewed spec version (2024-01 through 2026-01) -- there is no bulk advertiser-list endpoint in the Marketing Solutions API at all. The closest real single-advertiser-context endpoint is GET /advertisers/me (singular, returns the CURRENT credential's own advertiser identity, not a list); the closest real bulk list is the covered mpo_advertisers stream (a DIFFERENT, Marketplace-Performance-Outcomes-scoped resource with a different shape: {advertiserName, currencyName, id, timeZoneId} vs the existing stream's JSONAPI-flattened {name, country, currency, timezone}). Flagged separately for a dedicated fix; see docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/campaigns/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same POST-with-body real method / GET-instead-issued bundle defect as ad_sets above -- see that entry and docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/marketing-solutions/audiences/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: same POST-with-body real method / GET-instead-issued bundle defect as ad_sets above -- the audiences stream issues GET against /2024-01/marketing-solutions/audiences (a path with no GET operation in ANY spec version reviewed), while the real, only documented way to list audiences is this POST .../audiences/search endpoint. See docs.md Known limits."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2026-01/statistics/report",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "ENGINE_GAP: this is the REAL, documented method for this endpoint (POST with a JSON body carrying report dimensions/metrics/date range) -- the statistics stream instead issues a GET with startDate/endDate/currency as plain query params against this same path (matching the identical pre-existing wave2-migration defect as ad_sets/campaigns/audiences above). Flagged separately for a dedicated fix; see docs.md Known limits."
+      }
+    }
+  ]
+}

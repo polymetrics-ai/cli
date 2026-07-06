@@ -1,0 +1,17 @@
+{
+  "record": {
+    "page_id": "page_id_fixture",
+    "repositoryId": "repository_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/docs/pages/page_id_fixture/publish",
+    "body": {
+      "repositoryId": "repository_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

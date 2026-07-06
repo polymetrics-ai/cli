@@ -1,0 +1,24 @@
+{
+  "name": "statsig",
+  "display_name": "Statsig",
+  "description": "Reads and manages Statsig feature gates, dynamic configs, experiments, segments, target apps, tags, keys, holdouts, layers, users, audit logs, and environments through the Statsig Console API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.statsig.com/console-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Statsig Console API read of feature gates, dynamic configs, experiments, segments, target apps, tags, keys, holdouts, layers, users, audit logs, and environments",
+    "write": "external mutation of Statsig feature gates, dynamic configs, segments, tags, target apps, holdouts, layers, and API keys, including irreversible deletes and live-credential creation/deletion",
+    "approval": "read: none; write: required for all mutation actions"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "X-Mc-Auth", "value": "{{ secrets.user_token }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": {
+      "method": "GET",
+      "path": "/admin/simpleProfiles",
+      "query": { "userId": "{{ config.user_id }}" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "metricool user_token is missing or invalid; re-run pm credentials add metricool" },
+      { "status": 403, "hint": "metricool user_token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "metricool rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "brands",
+      "path": "/admin/simpleProfiles",
+      "query": { "userId": "{{ config.user_id }}" },
+      "records": { "path": "." },
+      "schema": "schemas/brands.json"
+    },
+    {
+      "name": "instagram_posts",
+      "path": "/stats/instagram/posts",
+      "query": {
+        "userId": "{{ config.user_id }}",
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "blog_ids" },
+        "into": { "query_param": "blogId" },
+        "stamp_field": "blogId"
+      },
+      "schema": "schemas/instagram_posts.json"
+    },
+    {
+      "name": "facebook_posts",
+      "path": "/stats/facebook/posts",
+      "query": {
+        "userId": "{{ config.user_id }}",
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "blog_ids" },
+        "into": { "query_param": "blogId" },
+        "stamp_field": "blogId"
+      },
+      "schema": "schemas/facebook_posts.json"
+    },
+    {
+      "name": "linkedin_posts",
+      "path": "/stats/linkedin/posts",
+      "query": {
+        "userId": "{{ config.user_id }}",
+        "start": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "end": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "fan_out": {
+        "ids_from": { "config_key": "blog_ids" },
+        "into": { "query_param": "blogId" },
+        "stamp_field": "blogId"
+      },
+      "schema": "schemas/linkedin_posts.json"
+    },
+    {
+      "name": "tiktok_posts",
+      "path": "/v2/analytics/posts/tiktok",
+      "query": {
+        "userId": "{{ config.user_id }}",
+        "from": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "to": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "config_key": "blog_ids" },
+        "into": { "query_param": "blogId" },
+        "stamp_field": "blogId"
+      },
+      "schema": "schemas/tiktok_posts.json"
+    }
+  ]
+}

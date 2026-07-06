@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1000001,
+    "name": "Fixture Template (Clone)"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates/1000001/clone"
+  }
+}

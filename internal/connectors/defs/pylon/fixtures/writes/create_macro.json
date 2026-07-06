@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "text_html": "synthetic-conformance-value",
+    "macro_group_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/macros",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "text_html": "synthetic-conformance-value",
+      "macro_group_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

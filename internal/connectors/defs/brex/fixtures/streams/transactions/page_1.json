@@ -1,0 +1,29 @@
+{
+  "request": { "method": "GET", "path": "/v2/transactions/card/primary", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "trx_fixture_1",
+          "card_id": "card_fixture_1",
+          "description": "Fixture Coffee Shop",
+          "amount": { "amount": 450, "currency": "USD" },
+          "initiated_at_date": "2026-01-01",
+          "posted_at_date": "2026-01-01",
+          "type": "CARD"
+        },
+        {
+          "id": "trx_fixture_2",
+          "card_id": "card_fixture_1",
+          "description": "Fixture Office Supplies",
+          "amount": { "amount": 2200, "currency": "USD" },
+          "initiated_at_date": "2026-01-02",
+          "posted_at_date": "2026-01-02",
+          "type": "CARD"
+        }
+      ],
+      "next_cursor": "cur_fixture_2"
+    }
+  }
+}

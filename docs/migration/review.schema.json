@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://polymetrics.ai/schemas/migration/review.schema.json",
+  "title": "Adversarial reviewer verdict",
+  "description": "Structured verdict an adversarial reviewer reports per docs/migration/orchestration-plan.md 'Verification pyramid' layer 3 (adversarial review: 20% sample + 100% of XL). One verdict per reviewed connector.",
+  "type": "object",
+  "required": ["connector", "verdict", "findings", "checked"],
+  "additionalProperties": false,
+  "properties": {
+    "connector": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Connector name under review; matches the defs/ directory name."
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "fail"],
+      "description": "pass iff there are zero blocker-severity findings. A connector may pass with major/minor findings recorded for follow-up; a single blocker forces fail."
+    },
+    "findings": {
+      "type": "array",
+      "description": "Every defect found, regardless of verdict (a passing review with only minor findings should still list them).",
+      "items": {
+        "type": "object",
+        "required": ["severity", "file", "issue"],
+        "additionalProperties": false,
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["blocker", "major", "minor"],
+            "description": "blocker: forces verdict=fail (e.g. schema fidelity mismatch vs live API, secret leaked into a fixture, unjustified escape hatch, undocumented parity deviation). major: should be fixed before merge but doesn't by itself force fail (e.g. a fixture that's technically valid but unrealistic). minor: style/polish, non-blocking."
+          },
+          "file": {
+            "type": "string",
+            "description": "Repo-relative path the finding is about."
+          },
+          "issue": {
+            "type": "string",
+            "description": "What's wrong and why, grounded in conventions.md or the API's documentation_url."
+          }
+        }
+      }
+    },
+    "checked": {
+      "type": "object",
+      "description": "The verification-pyramid layer 3 checklist (orchestration-plan.md 'Verification pyramid' item 3): schema fidelity vs live API docs, fixture realism, escape-hatch justification, secret redaction, conventions adherence.",
+      "required": [
+        "schema_fidelity_spot_checks",
+        "write_actions_verified",
+        "fixtures_realistic",
+        "escape_hatches_justified",
+        "secret_scan_clean",
+        "conventions_adherent"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_fidelity_spot_checks": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of stream schemas spot-checked against the vendor's own documentation_url (orchestration-plan.md mandates at least 3 streams when the connector has 3 or more)."
+        },
+        "write_actions_verified": {
+          "type": "boolean",
+          "description": "True iff every write action's method/path/required fields were checked against documentation_url (orchestration-plan.md: 'every write action', not a sample)."
+        },
+        "fixtures_realistic": {
+          "type": "boolean",
+          "description": "True iff fixtures reflect the real API's recorded response shape (field names, nesting, null-vs-absent behavior) rather than a synthetic-trivial stand-in, per conventions.md section 4."
+        },
+        "escape_hatches_justified": {
+          "type": "boolean",
+          "description": "True iff every hook/Tier-3 escalation reported in the migration result's escape_hatches[] maps to a legitimate trigger per conventions.md sections 1 and 6 (not a workaround for something Tier 1 could express)."
+        },
+        "secret_scan_clean": {
+          "type": "boolean",
+          "description": "True iff no secret-shaped literal was found in fixtures or docs.md beyond what connectorgen validate's secret_literal rule / conformance's secret_redaction check already catch (an independent human/reviewer re-check, not merely trusting the automated scan passed)."
+        },
+        "conventions_adherent": {
+          "type": "boolean",
+          "description": "True iff naming, x-secret discipline, schema-as-projection, sync-mode derivation, api_surface depth, and docs.md headings all match docs/migration/conventions.md."
+        }
+      }
+    }
+  }
+}

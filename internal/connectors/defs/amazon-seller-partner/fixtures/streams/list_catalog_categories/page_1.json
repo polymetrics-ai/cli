@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/v0/categories",
+    "query": {
+      "MarketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": [
+        {
+          "ProductCategoryId": "ProductCategoryId-fixture-1",
+          "ProductCategoryName": "ProductCategoryName-fixture-1",
+          "parent": {}
+        }
+      ]
+    }
+  }
+}

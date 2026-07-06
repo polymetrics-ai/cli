@@ -1,0 +1,75 @@
+{
+  "api": "Missive REST API (https://missiveapp.com/help/api-documentation)",
+  "docs": "https://missiveapp.com/help/api-documentation",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, contact_groups, users, teams, shared_labels). Missive's write endpoints (message send, conversation/comment creation) are out of scope for this migration (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contact_groups",
+      "covered_by": {
+        "stream": "contact_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shared_labels",
+      "covered_by": {
+        "stream": "shared_labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented message send; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/posts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "post/comment creation not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/conversations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "conversation listing not modeled by legacy; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/hooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook management not modeled by legacy; not implemented in this bundle"
+      }
+    }
+  ]
+}

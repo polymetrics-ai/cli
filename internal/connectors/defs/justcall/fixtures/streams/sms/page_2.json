@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2.1/texts",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sms_fixture_101",
+          "sms_date": "2026-01-01",
+          "sms_time": "10:00:00",
+          "direction": "Outgoing",
+          "delivery_status": "delivered",
+          "agent_id": "agent_fixture_1",
+          "agent_name": "Fixture Agent",
+          "agent_email": "agent@example.com",
+          "contact_name": "Contact 101",
+          "contact_number": "+15555550000",
+          "justcall_number": "+15555551111",
+          "justcall_line_name": "Fixture Line",
+          "cost_incurred": "0"
+        }
+      ]
+    }
+  }
+}

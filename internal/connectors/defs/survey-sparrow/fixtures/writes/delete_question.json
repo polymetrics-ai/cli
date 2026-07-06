@@ -1,0 +1,4 @@
+{
+  "record": { "question_id": 1 },
+  "expect": { "method": "DELETE", "path": "/questions/1" }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "alias": {
+      "type": "string",
+      "description": "Human-readable name for your SMTP server"
+    },
+    "authType": {
+      "type": "string",
+      "description": "<x-lifecycle-container><x-lifecycle class=\"ea\"></x-lifecycle> <x-lifecycle class=\"oie\"></x-lifecycle></x-lifecycle-container>The authentication type that's used by your SMTP server",
+      "enum": [
+        "BASIC_SMTP_AUTH",
+        "OAUTH2_CLIENT_CREDENTIALS",
+        "OAUTH2_JWT_BEARER_GRANT"
+      ]
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "If `true`, all email traffic is routed through your SMTP server"
+    },
+    "host": {
+      "type": "string",
+      "description": "Hostname or IP address of your SMTP server"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of your SMTP server"
+    },
+    "port": {
+      "type": "integer",
+      "description": "Port number of your SMTP server"
+    },
+    "username": {
+      "type": "string",
+      "description": "Username that's used to access your SMTP server"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

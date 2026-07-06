@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/surveys",
+    "query": {
+      "page_size": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next": null,
+      "previous": null,
+      "count": 2,
+      "surveys": [
+        {
+          "id": 201,
+          "name": "Fixture Survey 1",
+          "metric": "csat",
+          "survey_token": "fixture-token-1",
+          "survey_type": "email",
+          "brand_name": "Fixture Brand"
+        },
+        {
+          "id": 202,
+          "name": "Fixture Survey 2",
+          "metric": "nps",
+          "survey_token": "fixture-token-2",
+          "survey_type": "email",
+          "brand_name": "Fixture Brand"
+        }
+      ]
+    }
+  }
+}

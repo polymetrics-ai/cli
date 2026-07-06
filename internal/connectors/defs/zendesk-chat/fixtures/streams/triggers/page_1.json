@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/triggers" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "name": "Offline trigger", "description": "Sends offline message", "enabled": true, "definition": { "actions": [] } }
+    ]
+  }
+}

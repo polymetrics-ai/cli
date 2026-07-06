@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_shipment_inbound_fba_2024_03_20_inbound_plans_inbound_plan_id_shipments_shipment_id",
+  "type": "object",
+  "properties": {
+    "amazonReferenceId": {
+      "type": "string"
+    },
+    "contactInformation": {
+      "type": "object"
+    },
+    "dates": {
+      "type": "object"
+    },
+    "destination": {
+      "type": "object"
+    },
+    "freightInformation": {
+      "type": "object"
+    },
+    "name": {
+      "type": "string"
+    },
+    "placementOptionId": {
+      "type": "string"
+    },
+    "selectedDeliveryWindow": {
+      "type": "object"
+    },
+    "selectedTransportationOptionId": {
+      "type": "string"
+    },
+    "selfShipAppointmentDetails": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shipmentConfirmationId": {
+      "type": "string"
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object"
+    },
+    "status": {
+      "type": "string"
+    },
+    "trackingDetails": {
+      "type": "object"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipmentId"
+  ]
+}

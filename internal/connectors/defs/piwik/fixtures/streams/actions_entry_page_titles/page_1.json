@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/index.php",
+    "query": {
+      "module": "API",
+      "format": "JSON",
+      "method": "Actions.getEntryPageTitles",
+      "idSite": "synthetic-conformance-value",
+      "period": "synthetic-conformance-value",
+      "date": "synthetic-conformance-value",
+      "filter_limit": "100",
+      "filter_offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "label": "Fixture row 1",
+        "entry_nb_visits": 1,
+        "entry_bounce_count": 2,
+        "bounce_rate": 3,
+        "avg_time_generation": 4,
+        "nb_conversions": 5,
+        "nb_conversions_entry": 6,
+        "revenue_entry": 7,
+        "revenue_per_visit": 8,
+        "revenue_per_entry": 9,
+        "nb_conversions_entry_rate": 10
+      },
+      {
+        "label": "Fixture row 2",
+        "entry_nb_visits": 1,
+        "entry_bounce_count": 2,
+        "bounce_rate": 3,
+        "avg_time_generation": 4,
+        "nb_conversions": 5,
+        "nb_conversions_entry": 6,
+        "revenue_entry": 7,
+        "revenue_per_visit": 8,
+        "revenue_per_entry": 9,
+        "nb_conversions_entry_rate": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/flows/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "flow": {
+        "id": "id_fixture",
+        "name": "fixture",
+        "status": "draft",
+        "allowRepeatRuns": true,
+        "blockRepeatsTimeValue": 1,
+        "blockRepeatsTimeUnit": "minutes",
+        "stepsCount": 1,
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z",
+        "firstStepId": "first_step_id_fixture",
+        "steps": [
+          {
+            "id": "id_fixture",
+            "flowId": "flow_id_fixture",
+            "trigger": {
+              "id": "trigger_fixture_id"
+            },
+            "conditions": {
+              "id": "conditions_fixture_id"
+            },
+            "actions": [
+              {
+                "id": "action_fixture_id"
+              }
+            ],
+            "nextSteps": [
+              {
+                "id": "next_step_fixture_id"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

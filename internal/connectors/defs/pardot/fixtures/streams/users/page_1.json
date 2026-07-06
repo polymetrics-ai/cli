@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/users",
+    "query": {
+      "limit": "200",
+      "fields": "id,email,firstName,lastName,username,jobTitle,role,roleName,salesforceId,isDeleted,createdAt,updatedAt,createdById,updatedById,tagReplacementLanguage"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "values": [
+        {
+          "id": 101,
+          "email": "email_fixture",
+          "firstName": "firstName_fixture",
+          "lastName": "lastName_fixture",
+          "username": "username_fixture",
+          "jobTitle": "jobTitle_fixture",
+          "role": "role_fixture",
+          "roleName": "roleName_fixture",
+          "salesforceId": 1,
+          "isDeleted": false,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdById": 1,
+          "updatedById": 1,
+          "tagReplacementLanguage": "tagReplacementLanguage_fixture"
+        }
+      ],
+      "nextPageUrl": ""
+    }
+  }
+}

@@ -1,0 +1,1360 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/v3/users/me"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "surveymonkey access_token is missing or invalid; re-run pm credentials add surveymonkey"
+      },
+      {
+        "status": 403,
+        "hint": "surveymonkey credentials lack access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "surveymonkey rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "/v3/surveys",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "survey_search",
+      "path": "/v3/surveys/search",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_search.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey",
+      "path": "/v3/surveys/{{ config.survey_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_details",
+      "path": "/v3/surveys/{{ config.survey_id }}/details",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_details.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_share_list",
+      "path": "/v3/surveys/{{ config.survey_id }}/share_list",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_share_list.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_categories",
+      "path": "/v3/survey_categories",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_categories.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_templates",
+      "path": "/v3/survey_templates",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "team_survey_templates",
+      "path": "/v3/team_survey_templates",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/team_survey_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_languages_catalog",
+      "path": "/v3/survey_languages",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_languages_catalog.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collectors",
+      "path": "/v3/surveys/{{ config.survey_id }}/collectors",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collectors.json"
+    },
+    {
+      "name": "survey_pages",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_pages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_page",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_page.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.page_id }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_questions",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/questions",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_questions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_question",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/questions/{{ config.question_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_question.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.question_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "page_id": "{{ config.page_id }}"
+      }
+    },
+    {
+      "name": "question_benchmark",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/questions/{{ config.question_id }}/benchmark",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/question_benchmark.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.question_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "page_id": "{{ config.page_id }}"
+      }
+    },
+    {
+      "name": "question_rollups",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/questions/{{ config.question_id }}/rollups",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/question_rollups.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.question_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "page_id": "{{ config.page_id }}"
+      }
+    },
+    {
+      "name": "question_trends",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/questions/{{ config.question_id }}/trends",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/question_trends.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.question_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "page_id": "{{ config.page_id }}"
+      }
+    },
+    {
+      "name": "page_rollups",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/rollups",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/page_rollups.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.page_id }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "page_trends",
+      "path": "/v3/surveys/{{ config.survey_id }}/pages/{{ config.page_id }}/trends",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/page_trends.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.page_id }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_response_summaries",
+      "path": "/v3/surveys/{{ config.survey_id }}/responses",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_response_summaries.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_response",
+      "path": "/v3/surveys/{{ config.survey_id }}/responses/{{ config.response_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_response.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.response_id }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_response_details",
+      "path": "/v3/surveys/{{ config.survey_id }}/responses/{{ config.response_id }}/details",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_response_details.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.response_id }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_responses",
+      "path": "/v3/surveys/{{ config.survey_id }}/responses/bulk",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_responses.json"
+    },
+    {
+      "name": "survey_rollups",
+      "path": "/v3/surveys/{{ config.survey_id }}/rollups",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_rollups.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_trends",
+      "path": "/v3/surveys/{{ config.survey_id }}/trends",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_trends.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "survey_languages",
+      "path": "/v3/surveys/{{ config.survey_id }}/languages",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_languages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_language",
+      "path": "/v3/surveys/{{ config.survey_id }}/languages/{{ config.language_code }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_language.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.language_code }}",
+        "survey_id": "{{ config.survey_id }}"
+      }
+    },
+    {
+      "name": "question_bank_questions",
+      "path": "/v3/question_bank/questions",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/question_bank_questions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_folders",
+      "path": "/v3/survey_folders",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/survey_folders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "users_me",
+      "path": "/v3/users/me",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/users_me.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_workgroups",
+      "path": "/v3/users/{{ config.user_id }}/workgroups",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/user_workgroups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_shared",
+      "path": "/v3/users/{{ config.user_id }}/shared",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/user_shared.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "groups",
+      "path": "/v3/groups",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group",
+      "path": "/v3/groups/{{ config.group_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/group.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.group_id }}"
+      }
+    },
+    {
+      "name": "group_activities",
+      "path": "/v3/groups/{{ config.group_id }}/activities",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/group_activities.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group_activities_by_action",
+      "path": "/v3/groups/{{ config.group_id }}/activities/{{ config.action_type }}",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/group_activities_by_action.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group_members",
+      "path": "/v3/groups/{{ config.group_id }}/members",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/group_members.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group_member",
+      "path": "/v3/groups/{{ config.group_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/group_member.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.member_id }}",
+        "group_id": "{{ config.group_id }}"
+      }
+    },
+    {
+      "name": "workgroups",
+      "path": "/v3/workgroups",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/workgroups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workgroup",
+      "path": "/v3/workgroups/{{ config.workgroup_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/workgroup.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.workgroup_id }}"
+      }
+    },
+    {
+      "name": "workgroup_shares",
+      "path": "/v3/workgroups/{{ config.workgroup_id }}/shares",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/workgroup_shares.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workgroup_share",
+      "path": "/v3/workgroups/{{ config.workgroup_id }}/shares/{{ config.share_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/workgroup_share.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.share_id }}",
+        "workgroup_id": "{{ config.workgroup_id }}"
+      }
+    },
+    {
+      "name": "workgroup_members",
+      "path": "/v3/workgroups/{{ config.workgroup_id }}/members",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/workgroup_members.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workgroup_member",
+      "path": "/v3/workgroups/{{ config.workgroup_id }}/members/{{ config.member_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/workgroup_member.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.member_id }}",
+        "workgroup_id": "{{ config.workgroup_id }}"
+      }
+    },
+    {
+      "name": "contact_lists",
+      "path": "/v3/contact_lists",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contact_lists.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_list",
+      "path": "/v3/contact_lists/{{ config.contact_list_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_list.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.contact_list_id }}"
+      }
+    },
+    {
+      "name": "contact_list_contacts",
+      "path": "/v3/contact_lists/{{ config.contact_list_id }}/contacts",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contact_list_contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_list_contacts_bulk",
+      "path": "/v3/contact_lists/{{ config.contact_list_id }}/contacts/bulk",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contact_list_contacts_bulk.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contacts",
+      "path": "/v3/contacts",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contacts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact",
+      "path": "/v3/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.contact_id }}"
+      }
+    },
+    {
+      "name": "contacts_bulk",
+      "path": "/v3/contacts/bulk",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contacts_bulk.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_fields",
+      "path": "/v3/contact_fields",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/contact_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "contact_field",
+      "path": "/v3/contact_fields/{{ config.contact_field_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/contact_field.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.contact_field_id }}"
+      }
+    },
+    {
+      "name": "collector",
+      "path": "/v3/collectors/{{ config.collector_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/collector.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "collector_messages",
+      "path": "/v3/collectors/{{ config.collector_id }}/messages",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collector_messages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collector_message",
+      "path": "/v3/collectors/{{ config.collector_id }}/messages/{{ config.message_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/collector_message.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.message_id }}",
+        "collector_id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "collector_message_recipients",
+      "path": "/v3/collectors/{{ config.collector_id }}/messages/{{ config.message_id }}/recipients",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collector_message_recipients.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collector_recipients",
+      "path": "/v3/collectors/{{ config.collector_id }}/recipients",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collector_recipients.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "survey_collector_recipient",
+      "path": "/v3/surveys/{{ config.survey_id }}/collectors/{{ config.collector_id }}/recipients/{{ config.recipient_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_collector_recipient.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.recipient_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "collector_id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "survey_collector_message_stats",
+      "path": "/v3/surveys/{{ config.survey_id }}/collectors/{{ config.collector_id }}/messages/{{ config.message_id }}/stats",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/survey_collector_message_stats.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.message_id }}",
+        "survey_id": "{{ config.survey_id }}",
+        "collector_id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "collector_responses",
+      "path": "/v3/collectors/{{ config.collector_id }}/responses",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collector_responses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collector_response",
+      "path": "/v3/collectors/{{ config.collector_id }}/responses/{{ config.response_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/collector_response.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.response_id }}",
+        "collector_id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "collector_response_details",
+      "path": "/v3/collectors/{{ config.collector_id }}/responses/{{ config.response_id }}/details",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/collector_response_details.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.response_id }}",
+        "collector_id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "collector_bulk_responses",
+      "path": "/v3/collectors/{{ config.collector_id }}/responses/bulk",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/collector_bulk_responses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collector_stats",
+      "path": "/v3/collectors/{{ config.collector_id }}/stats",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/collector_stats.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.collector_id }}"
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/v3/webhooks",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook",
+      "path": "/v3/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/webhook.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.webhook_id }}"
+      }
+    },
+    {
+      "name": "benchmark_bundles",
+      "path": "/v3/benchmark_bundles",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/benchmark_bundles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "benchmark_bundle",
+      "path": "/v3/benchmark_bundles/{{ config.benchmark_bundle_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/benchmark_bundle.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.benchmark_bundle_id }}"
+      }
+    },
+    {
+      "name": "benchmark_bundle_analysis",
+      "path": "/v3/benchmark_bundles/{{ config.benchmark_bundle_id }}/analyze",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/benchmark_bundle_analysis.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.benchmark_bundle_id }}"
+      }
+    },
+    {
+      "name": "organizations",
+      "path": "/v3/organizations",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "organization",
+      "path": "/v3/organization/{{ config.organization_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/organization.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.organization_id }}"
+      }
+    },
+    {
+      "name": "roles",
+      "path": "/v3/roles",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/roles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "errors",
+      "path": "/v3/errors",
+      "query": {
+        "per_page": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/errors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "error",
+      "path": "/v3/errors/{{ config.error_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/error.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.error_id }}"
+      }
+    },
+    {
+      "name": "scim_users",
+      "path": "/scim/v2/Users",
+      "query": {
+        "count": "1000"
+      },
+      "records": {
+        "path": "Resources"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "scim_user",
+      "path": "/scim/v2/Users/{{ config.scim_user_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_user.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.scim_user_id }}"
+      }
+    },
+    {
+      "name": "scim_schemas",
+      "path": "/scim/v2/Schemas",
+      "query": {
+        "count": "1000"
+      },
+      "records": {
+        "path": "Resources"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_schemas.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "scim_schema",
+      "path": "/scim/v2/Schemas/{{ config.scim_schema_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_schema.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.scim_schema_id }}"
+      }
+    },
+    {
+      "name": "scim_resource_types",
+      "path": "/scim/v2/ResourceTypes",
+      "query": {
+        "count": "1000"
+      },
+      "records": {
+        "path": "Resources"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_resource_types.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "scim_resource_type",
+      "path": "/scim/v2/ResourceTypes/{{ config.scim_resource_type_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_resource_type.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ config.scim_resource_type_id }}"
+      }
+    },
+    {
+      "name": "scim_service_provider_config",
+      "path": "/scim/v2/ServiceProviderConfig",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/scim_service_provider_config.json",
+      "projection": "passthrough",
+      "computed_fields": {
+        "id": "service_provider_config"
+      }
+    }
+  ]
+}

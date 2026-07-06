@@ -1,0 +1,7 @@
+{
+  "record": { "sendAsEmail": "fixture-alias@example.com" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/settings/sendAs/fixture-alias@example.com"
+  }
+}

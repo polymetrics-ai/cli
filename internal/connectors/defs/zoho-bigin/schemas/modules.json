@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "modules",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "api_name": { "type": ["string", "null"] },
+    "module_name": { "type": ["string", "null"] },
+    "singular_label": { "type": ["string", "null"] },
+    "plural_label": { "type": ["string", "null"] },
+    "creatable": { "type": ["boolean", "null"] },
+    "editable": { "type": ["boolean", "null"] },
+    "deletable": { "type": ["boolean", "null"] },
+    "viewable": { "type": ["boolean", "null"] },
+    "api_supported": { "type": ["boolean", "null"] }
+  }
+}

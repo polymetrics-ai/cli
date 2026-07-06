@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bugsnag Connection Specification",
+  "type": "object",
+  "required": ["auth_token"],
+  "properties": {
+    "auth_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Bugsnag personal auth token, sent as 'Authorization: token <auth_token>'. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.bugsnag.com",
+      "description": "Bugsnag Data Access API base URL override for tests or proxies."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Comma-separated list of Bugsnag organization ids to fan out over for the projects/collaborators streams (one GET per id). Required for those streams; legacy's auto-discovery fallback (listing /user/organizations when unset) is not modeled here — see docs.md Known limits."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Comma-separated list of Bugsnag project ids to fan out over for the errors/events/releases streams (one GET per id). Required for those streams; legacy's auto-discovery fallback (listing projects per organization when unset) is not modeled here — see docs.md Known limits."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page (1-100, per_page)."
+    }
+  }
+}

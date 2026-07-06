@@ -1,0 +1,14 @@
+{
+  "record": {
+    "user_id_or_login": "synthetic-conformance-value",
+    "relationship_name": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/users/synthetic-conformance-value/linkedObjects/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

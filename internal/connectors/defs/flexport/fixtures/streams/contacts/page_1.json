@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/network/contacts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/network/contacts",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/network/contact",
+            "id": "contact_fixture_1",
+            "name": "Fixture Contact",
+            "email": "fixture.contact@example.com",
+            "phone_number": "415-555-0100",
+            "locations": {
+              "_object": "/api/refs/collection",
+              "ref_type": "/network/location",
+              "link": "https://api.flexport.com/network/locations?f.contact.id=contact_fixture_1"
+            },
+            "company": {
+              "_object": "/api/refs/object",
+              "ref_type": "/company",
+              "link": "https://api.flexport.com/network/companies/company_fixture_1",
+              "id": "company_fixture_1"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

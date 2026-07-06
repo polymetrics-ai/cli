@@ -1,0 +1,9 @@
+{
+  "record": { "username": "fixture-collaborator", "permission": "push" },
+  "expect": {
+    "method": "PUT",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/collaborators/fixture-collaborator",
+    "body": { "permission": "push" }
+  },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

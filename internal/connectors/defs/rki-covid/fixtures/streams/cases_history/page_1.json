@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/germany/history/cases",
+    "query": {
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "date": "2021-01-01T00:00:00.000Z",
+          "cases": 10
+        }
+      ]
+    }
+  }
+}

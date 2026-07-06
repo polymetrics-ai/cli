@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tasks/synthetic-conformance-value/documents/synthetic-conformance-value",
+    "query": {
+      "page": "1",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success",
+      "documents": {
+        "document_id": "get_task_document_fixture_1",
+        "file_name": "get_task_document fixture 1",
+        "updated_at": "2026-01-01T00:00:01Z",
+        "status": "active",
+        "id": "get_task_document_fixture_1",
+        "name": "get_task_document fixture 1"
+      }
+    }
+  }
+}

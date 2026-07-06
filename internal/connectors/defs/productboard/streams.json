@@ -1,0 +1,77 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/features", "query": { "page": "1", "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "productboard access_token is missing or invalid; re-run pm credentials add productboard" },
+      { "status": 403, "hint": "productboard account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "productboard rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "features",
+      "path": "/features",
+      "query": {
+        "limit": "100",
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/features.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "notes",
+      "path": "/notes",
+      "query": {
+        "limit": "100",
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/notes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "components",
+      "path": "/components",
+      "query": {
+        "limit": "100",
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/components.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "query": {
+        "limit": "100",
+        "updated_since": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "links.next"
+      },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    }
+  ]
+}

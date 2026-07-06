@@ -1,0 +1,15 @@
+{
+  "record": {
+    "escalation_policy_id": "escalation_policy_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/escalation-policies/escalation_policy_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_escalation_policy_fixture_response"
+    }
+  }
+}

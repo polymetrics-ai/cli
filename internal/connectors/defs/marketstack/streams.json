@@ -1,0 +1,102 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "access_key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/exchanges" },
+    "error_map": [
+      { "status": 401, "hint": "marketstack api key is missing or invalid; re-run pm credentials add marketstack" },
+      { "status": 429, "class": "rate_limited", "hint": "marketstack rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "exchanges",
+      "path": "/exchanges",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "currency_code": "{{ record.currency.code }}",
+        "currency_name": "{{ record.currency.name }}",
+        "currency_symbol": "{{ record.currency.symbol }}",
+        "timezone": "{{ record.timezone.timezone }}",
+        "timezone_abbr": "{{ record.timezone.abbr }}"
+      },
+      "schema": "schemas/exchanges.json"
+    },
+    {
+      "name": "tickers",
+      "path": "/tickers",
+      "records": { "path": "data" },
+      "computed_fields": {
+        "stock_exchange_mic": "{{ record.stock_exchange.mic }}",
+        "stock_exchange_name": "{{ record.stock_exchange.name }}"
+      },
+      "schema": "schemas/tickers.json"
+    },
+    {
+      "name": "eod",
+      "path": "/eod",
+      "query": {
+        "symbols": { "template": "{{ config.symbols }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date",
+        "request_param": "date_from",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/eod.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "ENGINE_GAP (see docs.md Known limits): Marketstack's real date wire shape is a no-colon numeric UTC offset (e.g. 2026-01-02T00:00:00+0000, matching legacy marketstack.go's readFixture stub exactly). cursor_advances re-reads seeded with the max cursor OBSERVED IN FIXTURE RECORDS and formats it via engine/read.go's formatParam->parseLowerBoundTime, which only accepts strict time.RFC3339 (colon-delimited offset) or all-digits Unix-seconds; it hard-errors on +0000. This is a genuine engine limitation, not a fixture-authoring gap -- a colon-offset fixture value would misrepresent Marketstack's actual API response shape. No paritytest/marketstack live substitute exists (this is a hookless Tier-1 bundle); first-sync reads seeded from the RFC3339 start_date config are unaffected, only a repeat-sync re-read seeded with this stream's own emitted cursor value hits the gap."
+      }
+    },
+    {
+      "name": "splits",
+      "path": "/splits",
+      "query": {
+        "symbols": { "template": "{{ config.symbols }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date",
+        "request_param": "date_from",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/splits.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "ENGINE_GAP (see docs.md Known limits): identical to the eod stream's marker -- Marketstack's real date wire shape (no-colon numeric UTC offset, e.g. 2026-08-31T00:00:00+0000) cannot be parsed by engine/read.go's parseLowerBoundTime (strict time.RFC3339 or all-digits Unix-seconds only), which cursor_advances' re-read step requires when formatting the max cursor OBSERVED IN FIXTURE RECORDS. Not a fixture-authoring gap -- a colon-offset value would misrepresent the real API shape. No paritytest/marketstack live substitute exists (hookless Tier-1 bundle); first-sync reads are unaffected."
+      }
+    },
+    {
+      "name": "dividends",
+      "path": "/dividends",
+      "query": {
+        "symbols": { "template": "{{ config.symbols }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "date",
+        "request_param": "date_from",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/dividends.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "ENGINE_GAP (see docs.md Known limits): identical to the eod stream's marker -- Marketstack's real date wire shape (no-colon numeric UTC offset, e.g. 2026-02-13T00:00:00+0000) cannot be parsed by engine/read.go's parseLowerBoundTime (strict time.RFC3339 or all-digits Unix-seconds only), which cursor_advances' re-read step requires when formatting the max cursor OBSERVED IN FIXTURE RECORDS. Not a fixture-authoring gap -- a colon-offset value would misrepresent the real API shape. No paritytest/marketstack live substitute exists (hookless Tier-1 bundle); first-sync reads are unaffected."
+      }
+    }
+  ]
+}

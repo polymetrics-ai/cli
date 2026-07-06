@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (ID) of the user."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the user."
+    },
+    "role": {
+      "type": "string",
+      "description": "Role of the board member.",
+      "enum": [
+        "viewer",
+        "commenter",
+        "editor",
+        "coowner",
+        "owner"
+      ]
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains applicable links for the current object.",
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Link to obtain more information about the current object."
+        }
+      },
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of the object that is returned. In this case, `type` returns `board_member`."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

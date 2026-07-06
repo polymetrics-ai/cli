@@ -1,0 +1,24 @@
+{
+  "name": "sage-hr",
+  "display_name": "Sage HR",
+  "description": "Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboarding data, and writes employee/leave/task lifecycle mutations, through the Sage HR API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.sage.hr/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Sage HR API read of employee, team, time off, recruitment, and onboarding/offboarding data",
+    "write": "external Sage HR mutations: employee create/update/termination, custom-field update, time off/KIT-day requests and approvals, leave policy KIT-day configuration, onboarding/offboarding task creation",
+    "approval": "required for all write actions; terminate_employee is destructive/irreversible"
+  }
+}

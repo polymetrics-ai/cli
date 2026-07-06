@@ -1,0 +1,9 @@
+{
+  "record": { "batch": { "shipments": [ { "id": "shp_fixture_1" }, { "id": "shp_fixture_2" } ] } },
+  "expect": {
+    "method": "POST",
+    "path": "/batches",
+    "body": { "batch": { "shipments": [ { "id": "shp_fixture_1" }, { "id": "shp_fixture_2" } ] } }
+  },
+  "response": { "status": 201, "body": { "id": "batch_fixture_new", "object": "Batch" } }
+}

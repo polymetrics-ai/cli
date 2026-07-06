@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "webhook_subscriptions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "websiteId": { "type": ["string", "null"] },
+    "clientId": { "type": ["string", "null"] },
+    "endpointUrl": { "type": ["string", "null"] },
+    "topics": { "type": ["array", "null"], "items": { "type": "string" } },
+    "createdOn": { "type": ["string", "null"] },
+    "updatedOn": { "type": ["string", "null"] }
+  }
+}

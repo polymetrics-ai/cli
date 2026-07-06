@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "historical_chain_tvl",
+  "type": "object",
+  "x-primary-key": ["date"],
+  "required": ["date"],
+  "properties": {
+    "date": { "type": "integer", "description": "Unix seconds, start of day." },
+    "tvl": { "type": ["number", "null"] }
+  }
+}

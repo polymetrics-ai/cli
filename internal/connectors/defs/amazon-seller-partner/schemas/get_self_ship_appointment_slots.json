@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_self_ship_appointment_slots",
+  "type": "object",
+  "properties": {
+    "slotId": {
+      "type": "string"
+    },
+    "slotTime": {
+      "type": "object"
+    },
+    "inbound_plan_id": {
+      "type": "string"
+    },
+    "shipment_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "shipment_id"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "bing-ads",
+  "display_name": "Bing Ads",
+  "description": "Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-rest-api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 0
+  },
+  "risk": {
+    "read": "external Microsoft Advertising REST API read of account/user/campaign/ad-group/ad metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Tier-3 native package (internal/connectors/native/bing-ads): Check/Catalog/Read are hand-written Go, never routed through engine.Check/engine.Read, so this bundle's streams.json/spec.json exist only to keep identity/spec/docs/schema uniform with every other connector -- conformance's dynamic (fixture-replay) checks exercise the DECLARATIVE engine read path, which this connector never uses. Proven live by internal/connectors/native/bing-ads's own unit tests and archived parity evidence for bing-ads."
+  }
+}

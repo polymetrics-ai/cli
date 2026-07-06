@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pexels API Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Pexels API key, sent as the raw Authorization header value (no Bearer prefix). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.pexels.com",
+      "description": "Pexels API base URL override for tests or proxies."
+    },
+    "query": {
+      "type": "string",
+      "default": "people",
+      "description": "Search terms for the 'photos' and 'videos' streams (legacy defaults to 'people' when unset)."
+    },
+    "orientation": {
+      "type": "string",
+      "description": "Optional photo/video orientation filter (landscape, portrait, square)."
+    },
+    "size": {
+      "type": "string",
+      "description": "Optional minimum photo/video size filter (large, medium, small)."
+    },
+    "color": {
+      "type": "string",
+      "description": "Optional photo color filter."
+    },
+    "locale": {
+      "type": "string",
+      "description": "Optional locale for search results."
+    },
+    "collection_media_type": {
+      "type": "string",
+      "description": "Optional filter for the 'collection_media' stream: 'photos' or 'videos' (omitted = both)."
+    },
+    "collection_media_sort": {
+      "type": "string",
+      "description": "Optional sort order for the 'collection_media' stream: 'asc' or 'desc'."
+    }
+  }
+}

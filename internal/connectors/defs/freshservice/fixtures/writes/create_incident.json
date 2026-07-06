@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "status_page_id": 123,
+    "name": "Fixture create_incident",
+    "description": "Fixture create_incident record"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/status/pages/123/incidents",
+    "body": {
+      "name": "Fixture create_incident",
+      "description": "Fixture create_incident record"
+    }
+  }
+}

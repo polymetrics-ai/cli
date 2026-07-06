@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tags",
+  "type": "object",
+  "x-primary-key": [
+    "name"
+  ],
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
+    "name": {
+      "type": "string"
+    },
+    "zipball_url": {
+      "type": "string"
+    },
+    "tarball_url": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    }
+  }
+}

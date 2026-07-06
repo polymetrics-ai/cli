@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversation_fields",
+  "type": "object",
+  "x-primary-key": ["name"],
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string" },
+    "label": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "required": { "type": ["boolean", "null"] },
+    "choices": { "type": ["array", "null"] }
+  },
+  "additionalProperties": true
+}

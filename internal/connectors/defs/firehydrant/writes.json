@@ -1,0 +1,6095 @@
+{
+  "actions": [
+    {
+      "name": "archive_audience",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/audiences/{{ record.audience_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "audience_id"
+        ],
+        "properties": {
+          "audience_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive audience; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "audience_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "bulk_update_incident_milestones",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/milestones/bulk_update",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update milestone times through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "close_incident",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/close",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Close an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "convert_incident_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}/convert",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "incident_id"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Convert a task to a follow-up through the FireHydrant API.",
+      "path_fields": [
+        "task_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "copy_on_call_schedule_rotation",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}/copy",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "rotation_id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "rotation_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Copy an on-call schedule's rotation through the FireHydrant API.",
+      "path_fields": [
+        "rotation_id",
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "create_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/audiences",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create audience through the FireHydrant API."
+    },
+    {
+      "name": "create_change",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a new change entry through the FireHydrant API."
+    },
+    {
+      "name": "create_change_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/events",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a change event through the FireHydrant API."
+    },
+    {
+      "name": "create_change_identity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/changes/{{ record.change_id }}/identities",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "change_id"
+        ],
+        "properties": {
+          "change_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create an identity for a change entry through the FireHydrant API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "create_checklist_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/checklist_templates",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a checklist template through the FireHydrant API."
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/comments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a conversation comment through the FireHydrant API.",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_comment_reaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}/reactions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "comment_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Create a reaction for a conversation comment through the FireHydrant API.",
+      "path_fields": [
+        "conversation_id",
+        "comment_id"
+      ]
+    },
+    {
+      "name": "create_connection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/connections/{{ record.slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "slug"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a new integration connection through the FireHydrant API.",
+      "path_fields": [
+        "slug"
+      ]
+    },
+    {
+      "name": "create_custom_field_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom_fields/definitions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a custom field definition through the FireHydrant API."
+    },
+    {
+      "name": "create_email_subscriber",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/subscribers",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add subscribers to a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ]
+    },
+    {
+      "name": "create_environment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/environments",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an environment through the FireHydrant API."
+    },
+    {
+      "name": "create_functionality",
+      "kind": "create",
+      "method": "POST",
+      "path": "/functionalities",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a functionality through the FireHydrant API."
+    },
+    {
+      "name": "create_inbound_field_map",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create inbound field map for a ticketing project through the FireHydrant API.",
+      "path_fields": [
+        "ticketing_project_id"
+      ]
+    },
+    {
+      "name": "create_incident",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an incident through the FireHydrant API."
+    },
+    {
+      "name": "create_incident_alert",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/alerts",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Attach an alert to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_change_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/related_change_events",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add a related change to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_chat_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/generic_chat_messages",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add a chat message to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_impact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/impact/{{ record.type }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "type"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Add impacted infrastructure to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id",
+        "type"
+      ]
+    },
+    {
+      "name": "create_incident_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/links",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add a link to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/notes",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add a note to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_retrospective",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a new retrospective on the incident using the template through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_retrospective_dynamic_input",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields/{{ record.field_id }}/inputs",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_id",
+          "field_id",
+          "incident_id"
+        ],
+        "properties": {
+          "retrospective_id": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Add a new dynamic input field to a retrospective's dynamic input group field through the FireHydrant API.",
+      "path_fields": [
+        "retrospective_id",
+        "field_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_retrospective_field",
+      "kind": "create",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_id",
+          "incident_id"
+        ],
+        "properties": {
+          "retrospective_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Appends a new incident retrospective field to an incident retrospective through the FireHydrant API.",
+      "path_fields": [
+        "retrospective_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incident_roles",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an incident role through the FireHydrant API."
+    },
+    {
+      "name": "create_incident_role_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/role_assignments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Assign a user to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_status_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/status_pages",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add a status page to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_incident_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/tasks",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create an incident task through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_task_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/task_lists",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add tasks from a task list to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_team_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/team_assignments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Assign a team to an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "create_incident_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incident_types",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an incident type through the FireHydrant API."
+    },
+    {
+      "name": "create_lifecycle_measurement_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lifecycles/measurement_definitions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a measurement definition through the FireHydrant API."
+    },
+    {
+      "name": "create_lifecycle_milestone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lifecycles/milestones",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a milestone through the FireHydrant API."
+    },
+    {
+      "name": "create_notification_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signals/notification_policy_items",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a notification policy through the FireHydrant API."
+    },
+    {
+      "name": "create_nunc_component_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/component_groups",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a component group for a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ]
+    },
+    {
+      "name": "create_nunc_connection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nunc_connections",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a status page through the FireHydrant API."
+    },
+    {
+      "name": "create_nunc_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/links",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Add link to a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ]
+    },
+    {
+      "name": "create_nunc_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nunc/subscriptions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a status page subscription through the FireHydrant API."
+    },
+    {
+      "name": "create_on_call_schedule_rotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Create a new on-call rotation through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "create_on_call_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Create a shift for an on-call schedule through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "create_post_mortem_reason",
+      "kind": "create",
+      "method": "POST",
+      "path": "/post_mortems/reports/{{ record.report_id }}/reasons",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a contributing factor for a retrospective report through the FireHydrant API.",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "create_post_mortem_report",
+      "kind": "create",
+      "method": "POST",
+      "path": "/post_mortems/reports",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a retrospective report through the FireHydrant API."
+    },
+    {
+      "name": "create_priority",
+      "kind": "create",
+      "method": "POST",
+      "path": "/priorities",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a priority through the FireHydrant API."
+    },
+    {
+      "name": "create_retrospective_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/retrospective_templates",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a retrospective template through the FireHydrant API."
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/roles",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a role through the FireHydrant API."
+    },
+    {
+      "name": "create_runbook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/runbooks",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a runbook through the FireHydrant API."
+    },
+    {
+      "name": "create_runbook_execution",
+      "kind": "create",
+      "method": "POST",
+      "path": "/runbooks/executions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a runbook execution through the FireHydrant API."
+    },
+    {
+      "name": "create_saved_search",
+      "kind": "create",
+      "method": "POST",
+      "path": "/saved_searches/{{ record.resource_type }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_type"
+        ],
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a saved search through the FireHydrant API.",
+      "path_fields": [
+        "resource_type"
+      ]
+    },
+    {
+      "name": "create_scheduled_maintenance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scheduled_maintenances",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a scheduled maintenance event through the FireHydrant API."
+    },
+    {
+      "name": "create_service",
+      "kind": "create",
+      "method": "POST",
+      "path": "/services",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a service through the FireHydrant API."
+    },
+    {
+      "name": "create_service_checklist_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/services/{{ record.service_id }}/checklist_response/{{ record.checklist_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_id",
+          "checklist_id"
+        ],
+        "properties": {
+          "service_id": {
+            "type": "string"
+          },
+          "checklist_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Record a response for a checklist item through the FireHydrant API.",
+      "path_fields": [
+        "service_id",
+        "checklist_id"
+      ]
+    },
+    {
+      "name": "create_service_dependency",
+      "kind": "create",
+      "method": "POST",
+      "path": "/service_dependencies",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a service dependency through the FireHydrant API."
+    },
+    {
+      "name": "create_service_links",
+      "kind": "create",
+      "method": "POST",
+      "path": "/services/service_links",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create multiple services linked to external services through the FireHydrant API."
+    },
+    {
+      "name": "create_severity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/severities",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a severity through the FireHydrant API."
+    },
+    {
+      "name": "create_severity_matrix_condition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/severity_matrix/conditions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a severity matrix condition through the FireHydrant API."
+    },
+    {
+      "name": "create_severity_matrix_impact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/severity_matrix/impacts",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a severity matrix impact through the FireHydrant API."
+    },
+    {
+      "name": "create_signals_alert_grouping_configuration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signals/grouping",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an alert grouping configuration. through the FireHydrant API."
+    },
+    {
+      "name": "create_signals_email_target",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signals/email_targets",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an email target for signals through the FireHydrant API."
+    },
+    {
+      "name": "create_signals_event_source",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/signals/event_sources",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create an event source for Signals through the FireHydrant API."
+    },
+    {
+      "name": "create_signals_heartbeat_endpoint_configuration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signals/heartbeat_endpoints",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a heartbeat endpoint configuration through the FireHydrant API."
+    },
+    {
+      "name": "create_signals_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/page/signals",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Page a user, team, on-call schedule, or escalation policy through the FireHydrant API.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_signals_webhook_target",
+      "kind": "create",
+      "method": "POST",
+      "path": "/signals/webhook_targets",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a webhook target through the FireHydrant API."
+    },
+    {
+      "name": "create_slack_emoji_action",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations/slack/connections/{{ record.connection_id }}/emoji_actions",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "connection_id"
+        ],
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a new Slack emoji action through the FireHydrant API.",
+      "path_fields": [
+        "connection_id"
+      ]
+    },
+    {
+      "name": "create_status_update_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/status_update_templates",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a status update template through the FireHydrant API."
+    },
+    {
+      "name": "create_task_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/task_lists",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a task list through the FireHydrant API."
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a team through the FireHydrant API."
+    },
+    {
+      "name": "create_team_call_route",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/call_routes",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a call route for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "create_team_escalation_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/escalation_policies",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create an escalation policy for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "create_team_on_call_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create an on-call schedule for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "create_team_signal_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/signal_rules",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a Signals rule through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/tickets",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a ticket through the FireHydrant API."
+    },
+    {
+      "name": "create_ticketing_custom_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/custom_fields/definitions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a ticketing custom field through the FireHydrant API."
+    },
+    {
+      "name": "create_ticketing_field_map",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/field_maps",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a field mapping for a ticketing project through the FireHydrant API.",
+      "path_fields": [
+        "ticketing_project_id"
+      ]
+    },
+    {
+      "name": "create_ticketing_priority",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/priorities",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a ticketing priority through the FireHydrant API."
+    },
+    {
+      "name": "create_ticketing_project_config",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Create a ticketing project configuration through the FireHydrant API.",
+      "path_fields": [
+        "ticketing_project_id"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Create a webhook through the FireHydrant API."
+    },
+    {
+      "name": "debug_signals_expression",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/signals/debugger",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Debug Signals expressions through the FireHydrant API."
+    },
+    {
+      "name": "delete_call_route",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/call_routes/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a call route; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "change_id"
+        ],
+        "properties": {
+          "change_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a change entry; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "change_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_change_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/events/{{ record.change_event_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "change_event_id"
+        ],
+        "properties": {
+          "change_event_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a change event; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "change_event_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_change_identity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/changes/{{ record.change_id }}/identities/{{ record.identity_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "identity_id",
+          "change_id"
+        ],
+        "properties": {
+          "identity_id": {
+            "type": "string"
+          },
+          "change_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an identity from a change entry; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "identity_id",
+        "change_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_checklist_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/checklist_templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a checklist template; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "comment_id",
+          "conversation_id"
+        ],
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a conversation comment; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "comment_id",
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_comment_reaction",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "reaction_id",
+          "conversation_id",
+          "comment_id"
+        ],
+        "properties": {
+          "reaction_id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a reaction from a conversation comment; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "reaction_id",
+        "conversation_id",
+        "comment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_field_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_fields/definitions/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_id"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a custom field definition; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "field_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_environment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/environments/{{ record.environment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "environment_id"
+        ],
+        "properties": {
+          "environment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive an environment; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "environment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_functionality",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/functionalities/{{ record.functionality_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "functionality_id"
+        ],
+        "properties": {
+          "functionality_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a functionality; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "functionality_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_inbound_field_map",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps/{{ record.map_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "map_id",
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "map_id": {
+            "type": "string"
+          },
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive inbound field map for a ticketing project; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "map_id",
+        "ticketing_project_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_alert",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/alerts/{{ record.incident_alert_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_alert_id",
+          "incident_id"
+        ],
+        "properties": {
+          "incident_alert_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Remove an alert from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_alert_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_chat_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/generic_chat_messages/{{ record.message_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "message_id",
+          "incident_id"
+        ],
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a chat message from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "message_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/events/{{ record.event_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "event_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an incident event; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_id",
+        "event_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_impact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/impact/{{ record.type }}/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "type",
+          "id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Remove impacted infrastructure from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_id",
+        "type",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_link",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/links/{{ record.link_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "link_id",
+          "incident_id"
+        ],
+        "properties": {
+          "link_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Remove a link from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "link_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incident_roles/{{ record.incident_role_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_role_id"
+        ],
+        "properties": {
+          "incident_role_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive an incident role; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_role_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_role_assignment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/role_assignments/{{ record.role_assignment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "role_assignment_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "role_assignment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Unassign a user from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "incident_id",
+        "role_assignment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_status_page",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/status_pages/{{ record.status_page_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "status_page_id",
+          "incident_id"
+        ],
+        "properties": {
+          "status_page_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Remove a status page from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "status_page_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "incident_id"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an incident task; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "task_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_incident_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incident_types/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive an incident type; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_lifecycle_measurement_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lifecycles/measurement_definitions/{{ record.measurement_definition_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "measurement_definition_id"
+        ],
+        "properties": {
+          "measurement_definition_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a measurement definition; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "measurement_definition_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_lifecycle_milestone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lifecycles/milestones/{{ record.milestone_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "milestone_id"
+        ],
+        "properties": {
+          "milestone_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a milestone; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "milestone_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_notification_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/notification_policy_items/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a notification policy; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_nunc_component_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/component_groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id",
+          "group_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a status page component group; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "nunc_connection_id",
+        "group_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_nunc_connection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a status page; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "nunc_connection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_nunc_image",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/images/{{ record.type }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id",
+          "type"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an image from a status page; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "nunc_connection_id",
+        "type"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_nunc_link",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/links/{{ record.link_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id",
+          "link_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          },
+          "link_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a status page link; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "nunc_connection_id",
+        "link_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_nunc_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/nunc/subscriptions/{{ record.unsubscribe_token }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "unsubscribe_token"
+        ],
+        "properties": {
+          "unsubscribe_token": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Unsubscribe from status page notifications; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "unsubscribe_token"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_on_call_schedule_rotation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "rotation_id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "rotation_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an on-call schedule's rotation; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "rotation_id",
+        "team_id",
+        "schedule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_on_call_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an on-call shift from a team schedule; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id",
+        "team_id",
+        "schedule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_post_mortem_reason",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/post_mortems/reports/{{ record.report_id }}/reasons/{{ record.reason_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id",
+          "reason_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          },
+          "reason_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a contributing factor from a retrospective report; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "report_id",
+        "reason_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_priority",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/priorities/{{ record.priority_slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "priority_slug"
+        ],
+        "properties": {
+          "priority_slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a priority; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "priority_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_retrospective_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/retrospective_templates/{{ record.retrospective_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_template_id"
+        ],
+        "properties": {
+          "retrospective_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a retrospective template; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "retrospective_template_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/roles/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a role; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_runbook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/runbooks/{{ record.runbook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "runbook_id"
+        ],
+        "properties": {
+          "runbook_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a runbook; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "runbook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_saved_search",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/saved_searches/{{ record.resource_type }}/{{ record.saved_search_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_type",
+          "saved_search_id"
+        ],
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          },
+          "saved_search_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a saved search; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "resource_type",
+        "saved_search_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_scheduled_maintenance",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/scheduled_maintenances/{{ record.scheduled_maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "scheduled_maintenance_id"
+        ],
+        "properties": {
+          "scheduled_maintenance_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a scheduled maintenance event; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "scheduled_maintenance_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_service",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/services/{{ record.service_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_id"
+        ],
+        "properties": {
+          "service_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a service; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "service_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_service_dependency",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/service_dependencies/{{ record.service_dependency_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_dependency_id"
+        ],
+        "properties": {
+          "service_dependency_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a service dependency; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "service_dependency_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_service_link",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/services/{{ record.service_id }}/service_links/{{ record.remote_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_id",
+          "remote_id"
+        ],
+        "properties": {
+          "service_id": {
+            "type": "string"
+          },
+          "remote_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a service link; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "service_id",
+        "remote_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_severity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/severities/{{ record.severity_slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "severity_slug"
+        ],
+        "properties": {
+          "severity_slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a severity; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "severity_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_severity_matrix_condition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/severity_matrix/conditions/{{ record.condition_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "condition_id"
+        ],
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a severity matrix condition; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "condition_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_severity_matrix_impact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/severity_matrix/impacts/{{ record.impact_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "impact_id"
+        ],
+        "properties": {
+          "impact_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a severity matrix impact; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "impact_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signals_alert_grouping_configuration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/grouping/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an alert grouping configuration.; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signals_email_target",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/email_targets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a signal email target; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signals_event_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/event_sources/{{ record.transposer_slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "transposer_slug"
+        ],
+        "properties": {
+          "transposer_slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an event source for Signals; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "transposer_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signals_heartbeat_endpoint_configuration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/heartbeat_endpoints/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a heartbeat endpoint configuration; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signals_webhook_target",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signals/webhook_targets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a webhook target; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_slack_emoji_action",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/slack/connections/{{ record.connection_id }}/emoji_actions/{{ record.emoji_action_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "connection_id",
+          "emoji_action_id"
+        ],
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          },
+          "emoji_action_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a Slack emoji action; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "connection_id",
+        "emoji_action_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_status_update_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/status_update_templates/{{ record.status_update_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "status_update_template_id"
+        ],
+        "properties": {
+          "status_update_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a status update template; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "status_update_template_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_statuspage_connection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/statuspage/connections/{{ record.connection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "connection_id"
+        ],
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a Statuspage connection; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "connection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_support_hours_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/support_hours_schedule",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a specific support hours schedule; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_task_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/task_lists/{{ record.task_list_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "task_list_id"
+        ],
+        "properties": {
+          "task_list_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a task list; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "task_list_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a team; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team_escalation_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/escalation_policies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an escalation policy for a team; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "team_id",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team_on_call_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete an on-call schedule for a team; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "team_id",
+        "schedule_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team_signal_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/signal_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a Signals rule; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "team_id",
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticket_id"
+        ],
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a ticket; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticketing_custom_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/custom_fields/definitions/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_id"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a ticketing custom field; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "field_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticketing_field_map",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/field_maps/{{ record.map_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "map_id",
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "map_id": {
+            "type": "string"
+          },
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a field map for a ticketing project; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "map_id",
+        "ticketing_project_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticketing_priority",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/priorities/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a ticketing priority; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticketing_project_config",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations/{{ record.config_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticketing_project_id",
+          "config_id"
+        ],
+        "properties": {
+          "ticketing_project_id": {
+            "type": "string"
+          },
+          "config_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Archive a ticketing project configuration; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "ticketing_project_id",
+        "config_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_transcript_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/incidents/{{ record.incident_id }}/transcript/{{ record.transcript_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "transcript_id",
+          "incident_id"
+        ],
+        "properties": {
+          "transcript_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a transcript from an incident; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "transcript_id",
+        "incident_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "Delete a webhook; this may remove or archive FireHydrant data.",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_audience_summary",
+      "kind": "create",
+      "method": "POST",
+      "path": "/audiences/{{ record.audience_id }}/summaries/{{ record.incident_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "audience_id",
+          "incident_id"
+        ],
+        "properties": {
+          "audience_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Generate summary (async) through the FireHydrant API.",
+      "path_fields": [
+        "audience_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "ingest_catalog_data",
+      "kind": "create",
+      "method": "POST",
+      "path": "/catalogs/{{ record.catalog_id }}/ingest",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "catalog_id"
+        ],
+        "properties": {
+          "catalog_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Ingest service catalog data through the FireHydrant API.",
+      "path_fields": [
+        "catalog_id"
+      ]
+    },
+    {
+      "name": "override_on_call_schedule_rotation_shifts",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}/overrides",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "rotation_id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "rotation_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Override one or more shifts in an on-call rotation through the FireHydrant API.",
+      "path_fields": [
+        "rotation_id",
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "preview_on_call_schedule_rotation",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/preview",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Preview an on-call rotation through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "preview_team_on_call_schedule",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/preview",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Preview a new on-call schedule for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "publish_nunc_connection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Publish a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "publish_post_mortem_report",
+      "kind": "update",
+      "method": "POST",
+      "path": "/post_mortems/reports/{{ record.report_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Publish a retrospective report through the FireHydrant API.",
+      "path_fields": [
+        "report_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "refresh_connection",
+      "kind": "custom",
+      "method": "PATCH",
+      "path": "/integrations/connections/{{ record.slug }}/{{ record.connection_id }}/refresh",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "slug",
+          "connection_id"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Refresh an integration connection's incident role schedules through the FireHydrant API.",
+      "path_fields": [
+        "slug",
+        "connection_id"
+      ]
+    },
+    {
+      "name": "reorder_post_mortem_reasons",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/post_mortems/reports/{{ record.report_id }}/reasons/order",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Reorder a contributing factor for a retrospective report through the FireHydrant API.",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "resolve_incident",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/resolve",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Resolve an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "restore_audience",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/audiences/{{ record.audience_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "audience_id"
+        ],
+        "properties": {
+          "audience_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Restore audience through the FireHydrant API.",
+      "path_fields": [
+        "audience_id"
+      ]
+    },
+    {
+      "name": "set_member_default_audience",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/audiences/member/{{ record.member_id }}/default",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "member_id"
+        ],
+        "properties": {
+          "member_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Set default audience through the FireHydrant API.",
+      "path_fields": [
+        "member_id"
+      ]
+    },
+    {
+      "name": "share_incident_retrospectives",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives/share",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Share an incident's retrospective through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "test_slack_channel",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/integrations/slack/channels/{{ record.id }}/test",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Test a Slack channel through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "unarchive_incident",
+      "kind": "update",
+      "method": "POST",
+      "path": "/incidents/{{ record.incident_id }}/unarchive",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Unarchive an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "unpublish_nunc_connection",
+      "kind": "update",
+      "method": "POST",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/unpublish",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Unpublish a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_ai_preferences",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ai/preferences",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Update AI preferences through the FireHydrant API."
+    },
+    {
+      "name": "update_audience",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/audiences/{{ record.audience_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "audience_id"
+        ],
+        "properties": {
+          "audience_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update audience through the FireHydrant API.",
+      "path_fields": [
+        "audience_id"
+      ]
+    },
+    {
+      "name": "update_authed_provider",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/authed_providers/{{ record.integration_slug }}/{{ record.connection_id }}/{{ record.authed_provider_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "integration_slug",
+          "connection_id",
+          "authed_provider_id"
+        ],
+        "properties": {
+          "integration_slug": {
+            "type": "string"
+          },
+          "connection_id": {
+            "type": "string"
+          },
+          "authed_provider_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Get an authed provider through the FireHydrant API.",
+      "path_fields": [
+        "integration_slug",
+        "connection_id",
+        "authed_provider_id"
+      ]
+    },
+    {
+      "name": "update_aws_cloudtrail_batch",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/aws/cloudtrail_batches/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a CloudTrail batch through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_aws_connection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/aws/connections/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an AWS connection through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_call_route",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/call_routes/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a call route through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_change",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/changes/{{ record.change_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "change_id"
+        ],
+        "properties": {
+          "change_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a change entry through the FireHydrant API.",
+      "path_fields": [
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_change_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/changes/events/{{ record.change_event_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "change_event_id"
+        ],
+        "properties": {
+          "change_event_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a change event through the FireHydrant API.",
+      "path_fields": [
+        "change_event_id"
+      ]
+    },
+    {
+      "name": "update_change_identity",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/changes/{{ record.change_id }}/identities/{{ record.identity_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "identity_id",
+          "change_id"
+        ],
+        "properties": {
+          "identity_id": {
+            "type": "string"
+          },
+          "change_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an identity for a change entry through the FireHydrant API.",
+      "path_fields": [
+        "identity_id",
+        "change_id"
+      ]
+    },
+    {
+      "name": "update_checklist_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/checklist_templates/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a checklist template through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "comment_id",
+          "conversation_id"
+        ],
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a conversation comment through the FireHydrant API.",
+      "path_fields": [
+        "comment_id",
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "update_connection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/connections/{{ record.slug }}/{{ record.connection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "slug",
+          "connection_id"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an integration connection through the FireHydrant API.",
+      "path_fields": [
+        "slug",
+        "connection_id"
+      ]
+    },
+    {
+      "name": "update_custom_field_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/custom_fields/definitions/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_id"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a custom field definition through the FireHydrant API.",
+      "path_fields": [
+        "field_id"
+      ]
+    },
+    {
+      "name": "update_environment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/environments/{{ record.environment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "environment_id"
+        ],
+        "properties": {
+          "environment_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an environment through the FireHydrant API.",
+      "path_fields": [
+        "environment_id"
+      ]
+    },
+    {
+      "name": "update_field_map",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/field_maps/{{ record.field_map_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_map_id"
+        ],
+        "properties": {
+          "field_map_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update field mapping through the FireHydrant API.",
+      "path_fields": [
+        "field_map_id"
+      ]
+    },
+    {
+      "name": "update_functionality",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/functionalities/{{ record.functionality_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "functionality_id"
+        ],
+        "properties": {
+          "functionality_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a functionality through the FireHydrant API.",
+      "path_fields": [
+        "functionality_id"
+      ]
+    },
+    {
+      "name": "update_inbound_field_map",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/inbound_field_maps/{{ record.map_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "map_id",
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "map_id": {
+            "type": "string"
+          },
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update inbound field map for a ticketing project through the FireHydrant API.",
+      "path_fields": [
+        "map_id",
+        "ticketing_project_id"
+      ]
+    },
+    {
+      "name": "update_incident",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_alert_primary",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/alerts/{{ record.incident_alert_id }}/primary",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_alert_id",
+          "incident_id"
+        ],
+        "properties": {
+          "incident_alert_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Set an alert as primary for an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_alert_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_change_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/related_change_events/{{ record.related_change_event_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "related_change_event_id",
+          "incident_id"
+        ],
+        "properties": {
+          "related_change_event_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a change attached to an incident through the FireHydrant API.",
+      "path_fields": [
+        "related_change_event_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_chat_message",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/generic_chat_messages/{{ record.message_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "message_id",
+          "incident_id"
+        ],
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a chat message on an incident through the FireHydrant API.",
+      "path_fields": [
+        "message_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/events/{{ record.event_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "event_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an incident event through the FireHydrant API.",
+      "path_fields": [
+        "incident_id",
+        "event_id"
+      ]
+    },
+    {
+      "name": "update_incident_impact_patch",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/impact",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update impacts for an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_impact_put",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/impact",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update impacts for an incident through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_link",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/links/{{ record.link_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "link_id",
+          "incident_id"
+        ],
+        "properties": {
+          "link_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update the external incident link through the FireHydrant API.",
+      "path_fields": [
+        "link_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/notes/{{ record.note_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "note_id",
+          "incident_id"
+        ],
+        "properties": {
+          "note_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a note through the FireHydrant API.",
+      "path_fields": [
+        "note_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_retrospective",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_id",
+          "incident_id"
+        ],
+        "properties": {
+          "retrospective_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a retrospective on the incident through the FireHydrant API.",
+      "path_fields": [
+        "retrospective_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_retrospective_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/retrospectives/{{ record.retrospective_id }}/fields/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_id",
+          "field_id",
+          "incident_id"
+        ],
+        "properties": {
+          "retrospective_id": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Update the value on a retrospective field through the FireHydrant API.",
+      "path_fields": [
+        "retrospective_id",
+        "field_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incident_roles/{{ record.incident_role_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_role_id"
+        ],
+        "properties": {
+          "incident_role_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an incident role through the FireHydrant API.",
+      "path_fields": [
+        "incident_role_id"
+      ]
+    },
+    {
+      "name": "update_incident_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/tasks/{{ record.task_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "incident_id"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an incident task through the FireHydrant API.",
+      "path_fields": [
+        "task_id",
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_incident_type",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incident_types/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an incident type through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_lifecycle_measurement_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/lifecycles/measurement_definitions/{{ record.measurement_definition_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "measurement_definition_id"
+        ],
+        "properties": {
+          "measurement_definition_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a measurement definition through the FireHydrant API.",
+      "path_fields": [
+        "measurement_definition_id"
+      ]
+    },
+    {
+      "name": "update_lifecycle_milestone",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/lifecycles/milestones/{{ record.milestone_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "milestone_id"
+        ],
+        "properties": {
+          "milestone_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a milestone through the FireHydrant API.",
+      "path_fields": [
+        "milestone_id"
+      ]
+    },
+    {
+      "name": "update_notification_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/notification_policy_items/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a notification policy through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_nunc_component_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/component_groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id",
+          "group_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a status page component group through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id",
+        "group_id"
+      ]
+    },
+    {
+      "name": "update_nunc_connection",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a status page through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id"
+      ]
+    },
+    {
+      "name": "update_nunc_link",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/nunc_connections/{{ record.nunc_connection_id }}/links/{{ record.link_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "nunc_connection_id",
+          "link_id"
+        ],
+        "properties": {
+          "nunc_connection_id": {
+            "type": "string"
+          },
+          "link_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a status page link through the FireHydrant API.",
+      "path_fields": [
+        "nunc_connection_id",
+        "link_id"
+      ]
+    },
+    {
+      "name": "update_on_call_schedule_rotation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/rotations/{{ record.rotation_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "rotation_id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "rotation_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Update an on-call schedule's rotation through the FireHydrant API.",
+      "path_fields": [
+        "rotation_id",
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "update_on_call_shift",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}/shifts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Update an on-call shift for a team schedule through the FireHydrant API.",
+      "path_fields": [
+        "id",
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "update_post_mortem_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/post_mortems/reports/{{ record.report_id }}/fields/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_id",
+          "report_id"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          },
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a retrospective field through the FireHydrant API.",
+      "path_fields": [
+        "field_id",
+        "report_id"
+      ]
+    },
+    {
+      "name": "update_post_mortem_questions",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/post_mortems/questions",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Update retrospective questions through the FireHydrant API."
+    },
+    {
+      "name": "update_post_mortem_reason",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/post_mortems/reports/{{ record.report_id }}/reasons/{{ record.reason_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id",
+          "reason_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          },
+          "reason_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a contributing factor in a retrospective report through the FireHydrant API.",
+      "path_fields": [
+        "report_id",
+        "reason_id"
+      ]
+    },
+    {
+      "name": "update_post_mortem_report",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/post_mortems/reports/{{ record.report_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "report_id"
+        ],
+        "properties": {
+          "report_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a retrospective report through the FireHydrant API.",
+      "path_fields": [
+        "report_id"
+      ]
+    },
+    {
+      "name": "update_priority",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/priorities/{{ record.priority_slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "priority_slug"
+        ],
+        "properties": {
+          "priority_slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a priority through the FireHydrant API.",
+      "path_fields": [
+        "priority_slug"
+      ]
+    },
+    {
+      "name": "update_retrospective_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/retrospective_templates/{{ record.retrospective_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "retrospective_template_id"
+        ],
+        "properties": {
+          "retrospective_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a retrospective template through the FireHydrant API.",
+      "path_fields": [
+        "retrospective_template_id"
+      ]
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/roles/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a role through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_runbook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/runbooks/{{ record.runbook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "runbook_id"
+        ],
+        "properties": {
+          "runbook_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a runbook through the FireHydrant API.",
+      "path_fields": [
+        "runbook_id"
+      ]
+    },
+    {
+      "name": "update_runbook_execution_step",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/runbooks/executions/{{ record.execution_id }}/steps/{{ record.step_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "execution_id",
+          "step_id"
+        ],
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          },
+          "step_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a runbook step execution through the FireHydrant API.",
+      "path_fields": [
+        "execution_id",
+        "step_id"
+      ]
+    },
+    {
+      "name": "update_runbook_execution_step_script",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/runbooks/executions/{{ record.execution_id }}/steps/{{ record.step_id }}/script/{{ record.state }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "execution_id",
+          "step_id",
+          "state"
+        ],
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          },
+          "step_id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 4
+      },
+      "risk": "Update a script step's execution status through the FireHydrant API.",
+      "path_fields": [
+        "execution_id",
+        "step_id",
+        "state"
+      ]
+    },
+    {
+      "name": "update_saved_search",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/saved_searches/{{ record.resource_type }}/{{ record.saved_search_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_type",
+          "saved_search_id"
+        ],
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          },
+          "saved_search_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a saved search through the FireHydrant API.",
+      "path_fields": [
+        "resource_type",
+        "saved_search_id"
+      ]
+    },
+    {
+      "name": "update_scheduled_maintenance",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/scheduled_maintenances/{{ record.scheduled_maintenance_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "scheduled_maintenance_id"
+        ],
+        "properties": {
+          "scheduled_maintenance_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a scheduled maintenance event through the FireHydrant API.",
+      "path_fields": [
+        "scheduled_maintenance_id"
+      ]
+    },
+    {
+      "name": "update_service",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/services/{{ record.service_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_id"
+        ],
+        "properties": {
+          "service_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a service through the FireHydrant API.",
+      "path_fields": [
+        "service_id"
+      ]
+    },
+    {
+      "name": "update_service_dependency",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/service_dependencies/{{ record.service_dependency_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "service_dependency_id"
+        ],
+        "properties": {
+          "service_dependency_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a service dependency through the FireHydrant API.",
+      "path_fields": [
+        "service_dependency_id"
+      ]
+    },
+    {
+      "name": "update_severity",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/severities/{{ record.severity_slug }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "severity_slug"
+        ],
+        "properties": {
+          "severity_slug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a severity through the FireHydrant API.",
+      "path_fields": [
+        "severity_slug"
+      ]
+    },
+    {
+      "name": "update_severity_matrix",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/severity_matrix",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Update severity matrix through the FireHydrant API."
+    },
+    {
+      "name": "update_severity_matrix_condition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/severity_matrix/conditions/{{ record.condition_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "condition_id"
+        ],
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a severity matrix condition through the FireHydrant API.",
+      "path_fields": [
+        "condition_id"
+      ]
+    },
+    {
+      "name": "update_severity_matrix_impact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/severity_matrix/impacts/{{ record.impact_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "impact_id"
+        ],
+        "properties": {
+          "impact_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a severity matrix impact through the FireHydrant API.",
+      "path_fields": [
+        "impact_id"
+      ]
+    },
+    {
+      "name": "update_signals_alert",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/alerts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a Signal alert through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_signals_alert_grouping_configuration",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/grouping/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an alert grouping configuration. through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_signals_email_target",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/email_targets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update an email target through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_signals_heartbeat_endpoint_configuration",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/heartbeat_endpoints/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a heartbeat endpoint configuration through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_signals_webhook_target",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signals/webhook_targets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a webhook target through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_slack_emoji_action",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/slack/connections/{{ record.connection_id }}/emoji_actions/{{ record.emoji_action_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "connection_id",
+          "emoji_action_id"
+        ],
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          },
+          "emoji_action_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a Slack emoji action through the FireHydrant API.",
+      "path_fields": [
+        "connection_id",
+        "emoji_action_id"
+      ]
+    },
+    {
+      "name": "update_status_update_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/status_update_templates/{{ record.status_update_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "status_update_template_id"
+        ],
+        "properties": {
+          "status_update_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a status update template through the FireHydrant API.",
+      "path_fields": [
+        "status_update_template_id"
+      ]
+    },
+    {
+      "name": "update_statuspage_connection",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/integrations/statuspage/connections/{{ record.connection_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "connection_id"
+        ],
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a Statuspage connection through the FireHydrant API.",
+      "path_fields": [
+        "connection_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_support_hours_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/support_hours_schedule",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update support hours schedule through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "update_task_list",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/task_lists/{{ record.task_list_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "task_list_id"
+        ],
+        "properties": {
+          "task_list_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a task list through the FireHydrant API.",
+      "path_fields": [
+        "task_list_id"
+      ]
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "update_team_escalation_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/escalation_policies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an escalation policy for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "id"
+      ]
+    },
+    {
+      "name": "update_team_on_call_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/on_call_schedules/{{ record.schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "schedule_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "schedule_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update an on-call schedule for a team through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "schedule_id"
+      ]
+    },
+    {
+      "name": "update_team_signal_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teams/{{ record.team_id }}/signal_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a Signals rule through the FireHydrant API.",
+      "path_fields": [
+        "team_id",
+        "id"
+      ]
+    },
+    {
+      "name": "update_ticket",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ticketing/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticket_id"
+        ],
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a ticket through the FireHydrant API.",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_ticketing_custom_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ticketing/custom_fields/definitions/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "field_id"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a ticketing custom field through the FireHydrant API.",
+      "path_fields": [
+        "field_id"
+      ]
+    },
+    {
+      "name": "update_ticketing_field_map",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/field_maps/{{ record.map_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "map_id",
+          "ticketing_project_id"
+        ],
+        "properties": {
+          "map_id": {
+            "type": "string"
+          },
+          "ticketing_project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update a field map for a ticketing project through the FireHydrant API.",
+      "path_fields": [
+        "map_id",
+        "ticketing_project_id"
+      ]
+    },
+    {
+      "name": "update_ticketing_priority",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ticketing/priorities/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a ticketing priority through the FireHydrant API.",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_ticketing_project_config",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/ticketing/projects/{{ record.ticketing_project_id }}/provider_project_configurations/{{ record.config_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ticketing_project_id",
+          "config_id"
+        ],
+        "properties": {
+          "ticketing_project_id": {
+            "type": "string"
+          },
+          "config_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update configuration for a ticketing project through the FireHydrant API.",
+      "path_fields": [
+        "ticketing_project_id",
+        "config_id"
+      ]
+    },
+    {
+      "name": "update_transcript_attribution",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/incidents/{{ record.incident_id }}/transcript/attribution",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update the attribution of a transcript through the FireHydrant API.",
+      "path_fields": [
+        "incident_id"
+      ]
+    },
+    {
+      "name": "update_vote",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/incidents/{{ record.incident_id }}/events/{{ record.event_id }}/votes",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "event_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "event_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Update votes through the FireHydrant API.",
+      "path_fields": [
+        "incident_id",
+        "event_id"
+      ]
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 2
+      },
+      "risk": "Update a webhook through the FireHydrant API.",
+      "path_fields": [
+        "webhook_id"
+      ]
+    },
+    {
+      "name": "validate_incident_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/incident_tags/validate",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": true,
+        "minProperties": 1
+      },
+      "risk": "Validate incident tags through the FireHydrant API."
+    },
+    {
+      "name": "vote_ai_incident_summary",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/ai/summarize_incident/{{ record.incident_id }}/{{ record.generated_summary_id }}/vote",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "incident_id",
+          "generated_summary_id"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string"
+          },
+          "generated_summary_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "minProperties": 3
+      },
+      "risk": "Vote on an AI-generated incident summary through the FireHydrant API.",
+      "path_fields": [
+        "incident_id",
+        "generated_summary_id"
+      ]
+    }
+  ]
+}

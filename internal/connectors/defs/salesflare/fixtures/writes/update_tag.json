@@ -1,0 +1,5 @@
+{
+  "record": { "id": 41, "name": "Fixture Tag Renamed" },
+  "expect": { "method": "PUT", "path": "/tags/41" },
+  "response": { "status": 200, "body": { "id": 41 } }
+}

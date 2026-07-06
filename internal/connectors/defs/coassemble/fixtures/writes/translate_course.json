@@ -1,0 +1,9 @@
+{
+  "record": { "course_id": 1001, "language": "es" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/headless/translation/translate/1001",
+    "body": { "language": "es" }
+  },
+  "response": { "status": 200, "body": { "id": 1001, "language": "es" } }
+}

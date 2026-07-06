@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orders/v0/orders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "AmazonOrderId": "AmazonOrderId-fixture-1",
+        "SellerOrderId": "SellerOrderId-fixture-1",
+        "PurchaseDate": "PurchaseDate-fixture-1",
+        "LastUpdateDate": "LastUpdateDate-fixture-1",
+        "OrderStatus": "OrderStatus-fixture-1",
+        "FulfillmentChannel": "FulfillmentChannel-fixture-1",
+        "SalesChannel": "SalesChannel-fixture-1",
+        "OrderChannel": "OrderChannel-fixture-1",
+        "ShipServiceLevel": "ShipServiceLevel-fixture-1",
+        "OrderTotal": {},
+        "NumberOfItemsShipped": 1,
+        "NumberOfItemsUnshipped": 1,
+        "PaymentExecutionDetail": [],
+        "PaymentMethod": "PaymentMethod-fixture-1",
+        "PaymentMethodDetails": [],
+        "MarketplaceId": "MarketplaceId-fixture-1",
+        "ShipmentServiceLevelCategory": "ShipmentServiceLevelCategory-fixture-1",
+        "EasyShipShipmentStatus": "EasyShipShipmentStatus-fixture-1",
+        "CbaDisplayableShippingLabel": "CbaDisplayableShippingLabel-fixture-1",
+        "OrderType": "OrderType-fixture-1",
+        "EarliestShipDate": "EarliestShipDate-fixture-1",
+        "LatestShipDate": "LatestShipDate-fixture-1",
+        "EarliestDeliveryDate": "EarliestDeliveryDate-fixture-1",
+        "LatestDeliveryDate": "LatestDeliveryDate-fixture-1",
+        "IsBusinessOrder": false,
+        "IsPrime": false,
+        "IsPremiumOrder": false,
+        "IsGlobalExpressEnabled": false,
+        "ReplacedOrderId": "ReplacedOrderId-fixture-1",
+        "IsReplacementOrder": false,
+        "PromiseResponseDueDate": "PromiseResponseDueDate-fixture-1",
+        "IsEstimatedShipDateSet": false,
+        "IsSoldByAB": false,
+        "IsIBA": false,
+        "DefaultShipFromLocationAddress": {},
+        "BuyerInvoicePreference": "BuyerInvoicePreference-fixture-1",
+        "BuyerTaxInformation": {},
+        "FulfillmentInstruction": {},
+        "IsISPU": false,
+        "IsAccessPointOrder": false,
+        "MarketplaceTaxInfo": {},
+        "SellerDisplayName": "SellerDisplayName-fixture-1",
+        "ShippingAddress": {},
+        "BuyerInfo": {},
+        "AutomatedShippingSettings": {},
+        "HasRegulatedItems": false,
+        "ElectronicInvoiceStatus": "ElectronicInvoiceStatus-fixture-1",
+        "order_id": "order_id-fixture-1"
+      }
+    }
+  }
+}

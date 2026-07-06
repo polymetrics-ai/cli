@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "financial_ratios",
+  "type": "object",
+  "x-primary-key": ["symbol", "date", "period"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "period": { "type": ["string", "null"] },
+    "calendar_year": { "type": ["string", "null"] },
+    "current_ratio": { "type": ["number", "null"] },
+    "quick_ratio": { "type": ["number", "null"] },
+    "gross_profit_margin": { "type": ["number", "null"] },
+    "net_profit_margin": { "type": ["number", "null"] },
+    "return_on_equity": { "type": ["number", "null"] },
+    "return_on_assets": { "type": ["number", "null"] },
+    "debt_ratio": { "type": ["number", "null"] },
+    "price_earnings_ratio": { "type": ["number", "null"] },
+    "dividend_yield": { "type": ["number", "null"] }
+  }
+}

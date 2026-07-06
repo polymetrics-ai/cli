@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "deals",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "update_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "value": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "person_id": { "type": ["integer", "object", "null"] },
+    "org_id": { "type": ["integer", "object", "null"] },
+    "stage_id": { "type": ["integer", "null"] },
+    "add_time": { "type": ["string", "null"] },
+    "update_time": { "type": ["string", "null"] }
+  }
+}

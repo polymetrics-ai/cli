@@ -1,0 +1,17 @@
+{
+  "record": {
+    "image_collection_id": "image-collection-id-fixture-1",
+    "name": "Fixture rename image collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/images/collections/image-collection-id-fixture-1",
+    "body": {
+      "name": "Fixture rename image collection"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

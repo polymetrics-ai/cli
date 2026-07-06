@@ -1,0 +1,41 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "note": "fixture_value",
+    "clockInLocation": {
+      "accuracy": 1001,
+      "address": "fixture_value",
+      "latitude": 12.34,
+      "longitude": 12.34
+    },
+    "clockOutLocation": {
+      "accuracy": 1001,
+      "address": "fixture_value",
+      "latitude": 12.34,
+      "longitude": 12.34
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/employee/fixture_id/clock_in/data",
+    "body": {
+      "note": "fixture_value",
+      "clockInLocation": {
+        "accuracy": 1001,
+        "address": "fixture_value",
+        "latitude": 12.34,
+        "longitude": 12.34
+      },
+      "clockOutLocation": {
+        "accuracy": 1001,
+        "address": "fixture_value",
+        "latitude": 12.34,
+        "longitude": 12.34
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

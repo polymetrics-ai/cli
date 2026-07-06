@@ -1,0 +1,36 @@
+{
+  "record": {
+    "company_id": "synthetic-conformance-value",
+    "contractId": "contractId_fixture",
+    "type": "fr_conges_payes",
+    "startDate": {
+      "date": "2026-07-01",
+      "moment": "beginning-of-day"
+    },
+    "endDate": {
+      "date": "2026-07-02",
+      "moment": "end-of-day"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/synthetic-conformance-value/absences",
+    "body": {
+      "contractId": "contractId_fixture",
+      "type": "fr_conges_payes",
+      "startDate": {
+        "date": "2026-07-01",
+        "moment": "beginning-of-day"
+      },
+      "endDate": {
+        "date": "2026-07-02",
+        "moment": "end-of-day"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

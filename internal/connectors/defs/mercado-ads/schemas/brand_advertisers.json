@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "brand_advertisers",
+  "type": "object",
+  "properties": {
+    "advertiser_id": {
+      "type": "integer"
+    },
+    "advertiser_name": {
+      "type": "string"
+    },
+    "account_name": {
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "advertiser_id"
+  ]
+}

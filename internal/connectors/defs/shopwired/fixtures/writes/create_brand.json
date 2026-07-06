@@ -1,0 +1,17 @@
+{
+  "record": {
+    "title": "title_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands",
+    "body": {
+      "title": "title_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

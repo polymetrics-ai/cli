@@ -1,0 +1,10 @@
+{
+  "record": {
+    "canvas_token": "cnvs_fixture_1",
+    "title": "Updated Canvas"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/canvases/cnvs_fixture_1"
+  }
+}

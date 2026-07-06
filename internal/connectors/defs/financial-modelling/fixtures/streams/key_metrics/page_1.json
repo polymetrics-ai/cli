@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/key-metrics/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "date": "2025-12-31",
+        "period": "FY",
+        "calendarYear": "2025",
+        "marketCap": 1000000000,
+        "enterpriseValue": 1100000000,
+        "peRatio": 20.2,
+        "pbRatio": 3.5,
+        "currentRatio": 1.6,
+        "debtToEquity": 0.4,
+        "roe": 0.18,
+        "freeCashFlowYield": 0.05,
+        "revenuePerShare": 15.0
+      }
+    ]
+  }
+}

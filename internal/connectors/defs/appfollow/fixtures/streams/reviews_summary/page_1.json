@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviews/summary",
+    "query": {
+      "ext_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ext_id": "ios:1001",
+        "date": "2026-01-01",
+        "country": "us",
+        "version": "1.0.0",
+        "total": 42,
+        "avg_rating": 4.3,
+        "stars1": 1,
+        "stars2": 2,
+        "stars3": 5,
+        "stars4": 12,
+        "stars5": 22
+      },
+      {
+        "ext_id": "ios:1001",
+        "date": "2026-01-02",
+        "country": "gb",
+        "version": "1.0.1",
+        "total": 15,
+        "avg_rating": 4.0,
+        "stars1": 0,
+        "stars2": 1,
+        "stars3": 2,
+        "stars4": 5,
+        "stars5": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events",
+    "query": {
+      "maxCount": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "moreAvailable": false,
+      "data": [
+        {
+          "id": "event_fixture_1",
+          "eventType": "SHEET_UPDATE",
+          "objectType": "sheet",
+          "action": "update"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "team",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "default": { "type": ["boolean", "null"] },
+    "employees": { "type": ["array", "null"] },
+    "projects": { "type": ["array", "null"] },
+    "modelName": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "recording_add_on_result_payload",
+  "type": "object",
+  "x-primary-key": [
+    "sid"
+  ],
+  "properties": {
+    "sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "add_on_result_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "account_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "add_on_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "add_on_configuration_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_created": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_updated": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_sid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subresource_uris": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -92,7 +92,7 @@ func TestBareCommandShowsManualInsteadOfUsageError(t *testing.T) {
 		args []string
 		want string
 	}{
-		{args: []string{"connectors"}, want: "pm connectors - inspect built-in connector capabilities"},
+		{args: []string{"connectors"}, want: "pm connectors - inspect connector definitions, streams, and write actions"},
 		{args: []string{"etl"}, want: "SYNC MODES"},
 		{args: []string{"credentials"}, want: "pm credentials - manage encrypted connector credentials"},
 		{args: []string{"connections"}, want: "pm connections - configure source-to-destination sync connections"},
@@ -135,7 +135,7 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 	}
 }
 
-func TestConnectorsManualDocumentsGithubAuthStreamsAndActions(t *testing.T) {
+func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
 	if code != 0 {
@@ -143,6 +143,10 @@ func TestConnectorsManualDocumentsGithubAuthStreamsAndActions(t *testing.T) {
 	}
 	out := stdout.String()
 	for _, want := range []string{
+		"declarative JSON bundles",
+		"write=true/false",
+		"REVERSE ETL WRITE ACTIONS",
+		"pm connectors catalog --capability write --json",
 		"GITHUB AUTHENTICATION",
 		"public",
 		"token",
@@ -200,9 +204,14 @@ func TestConnectorListJSON(t *testing.T) {
 		t.Fatalf("Run(connectors list) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"kind": "ConnectorList"`, `"name": "sample"`, `"name": "warehouse"`} {
+	for _, want := range []string{`"kind": "ConnectorList"`, `"name": "sample"`, `"name": "warehouse"`, `"name": "akeneo"`, `"name": "github"`, `"name": "postgres"`} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("json output missing %q:\n%s", want, out)
+		}
+	}
+	for _, forbidden := range []string{`"name": "source-github"`, `"name": "destination-postgres"`} {
+		if strings.Contains(out, forbidden) {
+			t.Fatalf("json output contains legacy slug %q:\n%s", forbidden, out)
 		}
 	}
 }
@@ -255,7 +264,7 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 	}
 }
 
-func TestETLRejectsPlannedCatalogConnectorCommands(t *testing.T) {
+func TestETLRejectsLegacyPrefixedConnectorCommands(t *testing.T) {
 	root := t.TempDir()
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr)
@@ -276,8 +285,8 @@ func TestETLRejectsPlannedCatalogConnectorCommands(t *testing.T) {
 			if code == 0 {
 				t.Fatalf("Run(%v) code = 0, want planned connector rejection; stdout = %s", args, stdout.String())
 			}
-			if !strings.Contains(stderr.String()+stdout.String(), `connector "source-strava" not found`) {
-				t.Fatalf("Run(%v) did not explain planned connector is unavailable; stdout=%s stderr=%s", args, stdout.String(), stderr.String())
+			if !strings.Contains(stderr.String()+stdout.String(), `connector "source-strava" uses a legacy source-/destination- prefix; use bare connector name "strava"`) {
+				t.Fatalf("Run(%v) did not explain legacy prefix migration; stdout=%s stderr=%s", args, stdout.String(), stderr.String())
 			}
 		})
 	}

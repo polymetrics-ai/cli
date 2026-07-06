@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "priority": { "type": ["string", "null"] },
+    "productId": { "type": ["string", "null"] },
+    "productName": { "type": ["string", "null"] },
+    "createdBy": { "type": ["string", "null"] },
+    "createdDate": { "type": ["string", "null"] },
+    "modifiedBy": { "type": ["string", "null"] },
+    "modifiedDate": { "type": ["string", "null"] }
+  }
+}

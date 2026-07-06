@@ -1,0 +1,33 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "email": "fixture@example.com",
+    "firstName": "fixture_firstName",
+    "lastName": "fixture_lastName",
+    "phone": "fixture_phone",
+    "phone2": "fixture_phone2",
+    "title": "fixture_title",
+    "company": "fixture_company",
+    "companySize": "fixture_companySize"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v3/contacts/synthetic-conformance-value",
+    "body": {
+      "email": "fixture@example.com",
+      "firstName": "fixture_firstName",
+      "lastName": "fixture_lastName",
+      "phone": "fixture_phone",
+      "phone2": "fixture_phone2",
+      "title": "fixture_title",
+      "company": "fixture_company",
+      "companySize": "fixture_companySize"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

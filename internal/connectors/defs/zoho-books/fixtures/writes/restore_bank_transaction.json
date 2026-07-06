@@ -1,0 +1,16 @@
+{
+  "record": {
+    "transaction_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/banktransactions/uncategorized/synthetic-conformance-value/restore"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

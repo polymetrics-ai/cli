@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "refunds",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "tracking_code": { "type": ["string", "null"] },
+    "confirmation_number": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "carrier": { "type": ["string", "null"] },
+    "shipment_id": { "type": ["string", "null"] }
+  }
+}

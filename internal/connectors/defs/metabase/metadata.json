@@ -1,0 +1,25 @@
+{
+  "name": "metabase",
+  "display_name": "Metabase",
+  "description": "Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+  "integration_type": "api",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Metabase API reads performed by the legacy connector via a Tier-2 hook",
+    "write": "unsupported",
+    "approval": "none; read-only"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Tier-2 hook-owned quarantine migration: internal/connectors/hooks/metabase delegates Check/Read to legacy internal/connectors/metabase, so conformance dynamic replay of the declarative shadow path is intentionally skipped. Static schema/docs/surface checks still run; behavior is covered by the hook unit tests and the existing legacy connector tests during the pre-cutover period."
+  },
+  "docs_url": "https://www.metabase.com/docs/latest/api-documentation"
+}

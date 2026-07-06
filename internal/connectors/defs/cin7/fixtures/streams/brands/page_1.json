@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/ref/brand", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Total": 2,
+      "Page": 1,
+      "BrandList": [
+        { "ID": "brand_fixture_1", "Name": "Acme" },
+        { "ID": "brand_fixture_2", "Name": "Fixture Brand" }
+      ]
+    }
+  }
+}

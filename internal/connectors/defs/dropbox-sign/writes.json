@@ -1,0 +1,243 @@
+{
+  "actions": [
+    {
+      "name": "update_signature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signature_request/update/{{ record.signature_request_id }}",
+      "path_fields": ["signature_request_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["signature_request_id", "signature_id"],
+        "properties": {
+          "signature_request_id": { "type": "string" },
+          "signature_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; changes a signer's email address or name on an in-progress signature request, redirecting where the next request/reminder is delivered; approval required"
+    },
+    {
+      "name": "cancel_signature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signature_request/cancel/{{ record.signature_request_id }}",
+      "path_fields": ["signature_request_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["signature_request_id"],
+        "properties": {
+          "signature_request_id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; cancels an incomplete signature request, this action is not reversible; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remind_signature_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/signature_request/remind/{{ record.signature_request_id }}",
+      "path_fields": ["signature_request_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["signature_request_id", "email_address"],
+        "properties": {
+          "signature_request_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; sends an email reminder to a signer; cannot be sent again within 1 hour of the last reminder (manual or automatic)"
+    },
+    {
+      "name": "release_hold_signature_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/signature_request/release_hold/{{ record.signature_request_id }}",
+      "path_fields": ["signature_request_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["signature_request_id"],
+        "properties": {
+          "signature_request_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; releases a held signature request created from an UnclaimedDraft, immediately sending requests to all signers; approval required"
+    },
+    {
+      "name": "remove_signature_request",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/signature_request/remove/{{ record.signature_request_id }}",
+      "path_fields": ["signature_request_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["signature_request_id"],
+        "properties": {
+          "signature_request_id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; removes the caller's access to a completed signature request from the account's list view, this action is not reversible; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_template",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/template/delete/{{ record.template_id }}",
+      "path_fields": ["template_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id"],
+        "properties": {
+          "template_id": { "type": "string" }
+        }
+      },
+      "risk": "destructive external mutation; completely deletes a template from the account, this action is not reversible; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_template_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/template/add_user/{{ record.template_id }}",
+      "path_fields": ["template_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id"],
+        "minProperties": 2,
+        "properties": {
+          "template_id": { "type": "string" },
+          "account_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "skip_notification": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; grants the specified account (which must already be a Team member) access to a template"
+    },
+    {
+      "name": "remove_template_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/template/remove_user/{{ record.template_id }}",
+      "path_fields": ["template_id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["template_id"],
+        "minProperties": 2,
+        "properties": {
+          "template_id": { "type": "string" },
+          "account_id": { "type": "string" },
+          "email_address": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; revokes the specified account's access to a template"
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/team/create",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a new Team and makes the calling account its member; fails if the caller already belongs to a Team"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/team",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; renames the caller's own Team"
+    },
+    {
+      "name": "add_team_member",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/team/add_member",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "account_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "role": { "type": "string", "enum": ["Member", "Developer", "Team Manager", "Admin"] }
+        }
+      },
+      "risk": "external mutation; invites or moves a user onto the caller's Team, creating a new Dropbox Sign account for the invited email if one does not already exist"
+    },
+    {
+      "name": "remove_team_member",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/team/remove_member",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "account_id": { "type": "string" },
+          "email_address": { "type": "string" },
+          "new_owner_email_address": { "type": "string" },
+          "new_team_id": { "type": "string" },
+          "new_role": { "type": "string", "enum": ["Member", "Developer", "Team Manager", "Admin"] }
+        }
+      },
+      "risk": "destructive external mutation; removes a user from the caller's Team; optionally transfers the removed account's documents to another account (Enterprise plans only), which is not reversible; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/account",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "account_id": { "type": "string" },
+          "callback_url": { "type": "string" },
+          "locale": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; updates the caller's account settings (currently limited to the event callback URL and locale)"
+    }
+  ]
+}

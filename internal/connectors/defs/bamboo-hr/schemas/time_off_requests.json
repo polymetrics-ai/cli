@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_off_requests",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "type": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "actions": {
+      "type": "object",
+      "properties": {
+        "approve": {
+          "type": "boolean"
+        },
+        "bypass": {
+          "type": "boolean"
+        },
+        "cancel": {
+          "type": "boolean"
+        },
+        "deny": {
+          "type": "boolean"
+        },
+        "edit": {
+          "type": "boolean"
+        },
+        "view": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "amount": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "hours",
+            "days"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string"
+    },
+    "dates": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "employeeId": {
+      "type": "string"
+    },
+    "end": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "object",
+      "properties": {
+        "employee": {
+          "type": "string"
+        },
+        "manager": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "start": {
+      "type": "string"
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "lastChanged": {
+          "type": "string"
+        },
+        "lastChangedByUserId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

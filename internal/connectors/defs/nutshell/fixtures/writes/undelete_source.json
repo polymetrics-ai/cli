@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "1-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sources/1-fixture/undelete"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

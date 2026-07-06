@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "id": "fixture",
+      "title": "fixture",
+      "type": "fixture",
+      "source": "fixture",
+      "year": 1,
+      "abstract": "fixture",
+      "profile_id": "fixture",
+      "group_id": "fixture",
+      "created": "fixture",
+      "last_modified": "fixture"
+    }
+  ]
+}

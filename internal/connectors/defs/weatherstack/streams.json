@@ -1,0 +1,89 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "access_key", "value": "{{ secrets.access_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/current" },
+    "error_map": [
+      { "status": 401, "hint": "weatherstack access_key is missing or invalid; re-run pm credentials add weatherstack" },
+      { "status": 429, "class": "rate_limited", "hint": "weatherstack rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "current",
+      "path": "/current",
+      "query": {
+        "query": "{{ config.query }}",
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "current:{{ config.query }}"
+      },
+      "schema": "schemas/current.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "historical",
+      "path": "/historical",
+      "query": {
+        "query": "{{ config.query }}",
+        "historical_date": { "template": "{{ config.historical_date }}", "omit_when_absent": true },
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "historical:{{ config.query }}"
+      },
+      "schema": "schemas/historical.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "forecast",
+      "path": "/forecast",
+      "query": {
+        "query": "{{ config.query }}",
+        "forecast_days": { "template": "{{ config.forecast_days }}", "omit_when_absent": true },
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "forecast:{{ config.query }}"
+      },
+      "schema": "schemas/forecast.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "marine",
+      "path": "/marine",
+      "query": {
+        "latitude": "{{ config.latitude }}",
+        "longitude": "{{ config.longitude }}",
+        "units": { "template": "{{ config.units }}", "omit_when_absent": true },
+        "language": { "template": "{{ config.language }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "computed_fields": {
+        "id": "marine:{{ config.latitude }},{{ config.longitude }}"
+      },
+      "schema": "schemas/marine.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "autocomplete",
+      "path": "/autocomplete",
+      "query": {
+        "query": "{{ config.autocomplete_query }}"
+      },
+      "records": { "path": "results" },
+      "schema": "schemas/autocomplete.json",
+      "projection": "passthrough"
+    }
+  ]
+}

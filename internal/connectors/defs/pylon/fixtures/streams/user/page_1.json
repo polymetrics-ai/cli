@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "fixture-user",
+        "email": "fixture-user",
+        "status": "fixture-user"
+      },
+      "request_id": "req_fixture"
+    }
+  }
+}

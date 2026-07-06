@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/2026-01/marketing-solutions/marketplace-performance-outcomes/advertisers" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 9703, "advertiserName": "Fixture MPO Advertiser 1", "currencyName": "USD", "timeZoneId": "UTC" },
+      { "id": 9704, "advertiserName": "Fixture MPO Advertiser 2", "currencyName": "EUR", "timeZoneId": "Europe/Paris" }
+    ]
+  }
+}

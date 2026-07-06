@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/tables" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "tableId": "table_fixture_1", "tableName": "orders" },
+        { "tableId": "table_fixture_2", "tableName": "customers" }
+      ]
+    }
+  }
+}

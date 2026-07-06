@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the legal hold."
+    },
+    "organizationId": {
+      "type": "string",
+      "description": "Unique identifier of the organization."
+    },
+    "caseId": {
+      "type": "string",
+      "description": "Unique identifier of the case."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the legal hold."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the legal hold."
+    },
+    "state": {
+      "type": "string",
+      "description": "The state of the legal hold. Legal holds could take up to 24 hours to be processed and the state could be one of the following:\n- `PROCESSING`: the legal hold is being created and content items are being processed.\n- `ACTIVE`: the legal hold has been created and all content items have been processed.\n- `DELETING`: the legal hold is being deleted and content items are being processed.\n",
+      "enum": [
+        "PROCESSING",
+        "ACTIVE",
+        "DELETING"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "description": "List of users under legal hold.",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "User information.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the user."
+              },
+              "email": {
+                "type": "string",
+                "description": "User email."
+              },
+              "firstName": {
+                "type": "string",
+                "description": "First name of the user."
+              },
+              "lastName": {
+                "type": "string",
+                "description": "Last name of the user."
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "User information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User email."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        }
+      },
+      "additionalProperties": true
+    },
+    "lastModifiedBy": {
+      "type": "object",
+      "description": "User information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User email."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastModifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "request": { "method": "POST", "path": "/wa-api/searchBooking", "query": { "restid": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "OK",
+      "bookings": [
+        {
+          "id": "res_fixture_1",
+          "amount": "2",
+          "children_amount": "0",
+          "start": "1767261600",
+          "end": "1767270600",
+          "length": "150",
+          "status": "1",
+          "arrived": "0",
+          "placed": "0",
+          "all_seated": "0",
+          "comment": "fixture booking comment",
+          "waitinbar": "",
+          "waitinlist": "",
+          "meal": "Middag",
+          "tables": "1, 7",
+          "table_ids": ["145403", "1454032"],
+          "date": "2026-01-01",
+          "time": "10:00",
+          "guest": {
+            "id": "2409697",
+            "firstname": "Fixture",
+            "lastname": "Guest One",
+            "name": "Fixture Guest One",
+            "address": null,
+            "postalcode": null,
+            "city": null,
+            "company": "",
+            "telephone": null,
+            "mobile": "",
+            "email": "",
+            "comment": "",
+            "other_contact": "",
+            "restaurant_newsletter": true
+          }
+        },
+        {
+          "id": "res_fixture_2",
+          "amount": "4",
+          "children_amount": "1",
+          "start": "1767348000",
+          "end": "1767357000",
+          "length": "150",
+          "status": "0",
+          "arrived": "0",
+          "placed": "0",
+          "all_seated": "0",
+          "comment": "",
+          "waitinbar": "",
+          "waitinlist": "",
+          "meal": "Lunch",
+          "tables": "3",
+          "table_ids": ["145405"],
+          "date": "2026-01-02",
+          "time": "12:30",
+          "guest": {
+            "id": "2409698",
+            "firstname": "Fixture",
+            "lastname": "Guest Two",
+            "name": "Fixture Guest Two",
+            "address": null,
+            "postalcode": null,
+            "city": null,
+            "company": "",
+            "telephone": null,
+            "mobile": "",
+            "email": "fixture2@example.com",
+            "comment": "",
+            "other_contact": "",
+            "restaurant_newsletter": false
+          }
+        }
+      ]
+    }
+  }
+}

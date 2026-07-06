@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chatwoot Connection Specification",
+  "type": "object",
+  "required": ["base_url", "account_id"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Your Chatwoot instance root, e.g. https://app.chatwoot.com for the hosted SaaS or your self-hosted install's origin. The engine appends /api/v1/accounts/{account_id} (and, for messages, the conversation-scoped sub-path) to every request; do not include /api/v1 yourself. Also usable as a base URL override for tests/proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "The numeric Chatwoot account ID to scope every request to (visible in the dashboard URL, e.g. app.chatwoot.com/app/accounts/1/...)."
+    },
+    "api_access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Chatwoot API access token (Profile Settings > Access Token for a user token, or an Agent Bot token). Sent as the api_access_token request header on every request."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for the first incremental sync of conversations, contacts, and messages (e.g. 2026-01-01T00:00:00Z). Ignored once a cursor has been persisted."
+    }
+  }
+}

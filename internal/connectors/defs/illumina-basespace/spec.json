@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Illumina BaseSpace Connection Specification",
+  "type": "object",
+  "required": [
+    "base_url",
+    "access_token"
+  ],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Illumina BaseSpace access token, sent as the x-access-token header. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "BaseSpace API domain, e.g. https://api.basespace.illumina.com or a regional domain such as https://euw2.sh.basespace.illumina.com. BaseSpace is domain-scoped with no single fixed default, so this is required."
+    },
+    "user": {
+      "type": "string",
+      "default": "current",
+      "description": "BaseSpace user id or 'current' used by the legacy user-scoped streams and check request."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "Documented legacy page size. The declarative pagination block uses the fixed bundle page size of 100."
+    },
+    "application_id": {
+      "type": "string",
+      "description": "Application Id used by BaseSpace stream paths."
+    },
+    "appsession_id": {
+      "type": "string",
+      "description": "Appsession Id used by BaseSpace stream paths."
+    },
+    "biosample_id": {
+      "type": "string",
+      "description": "Biosample Id used by BaseSpace stream paths."
+    },
+    "dataset_id": {
+      "type": "string",
+      "description": "Dataset Id used by BaseSpace stream paths."
+    },
+    "datasettype_id": {
+      "type": "string",
+      "description": "Datasettype Id used by BaseSpace stream paths."
+    },
+    "labrequeue_id": {
+      "type": "string",
+      "description": "Labrequeue Id used by BaseSpace stream paths."
+    },
+    "lane_id": {
+      "type": "string",
+      "description": "Lane Id used by BaseSpace stream paths."
+    },
+    "librarypool_id": {
+      "type": "string",
+      "description": "Librarypool Id used by BaseSpace stream paths."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name used by BaseSpace stream paths."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Project Id used by BaseSpace stream paths."
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Run Id used by BaseSpace stream paths."
+    },
+    "trash_id": {
+      "type": "string",
+      "description": "Trash Id used by BaseSpace stream paths."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User Id used by BaseSpace stream paths."
+    },
+    "workgroup_id": {
+      "type": "string",
+      "description": "Workgroup Id used by BaseSpace stream paths."
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/report-instance",
+    "query": {
+      "page": "1",
+      "page_size": "100",
+      "archived": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "reportInstances": [
+          {
+            "id": "ri_fixture_1",
+            "record_id": "rec_fixture_1",
+            "report_id": "report_fixture_1",
+            "name": "Adverse Event",
+            "name_custom": null,
+            "parent_id": null,
+            "archived": false,
+            "created_on": "2026-01-01T00:00:00Z",
+            "updated_on": "2026-01-01T00:00:00Z"
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1,
+      "total_items": 1
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/realm-assignments/operations",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "assignmentOperation": {
+          "configuration": {
+            "actions": {
+              "assignUserToRealm": {
+                "realmId": "realm_id_fixture"
+              }
+            },
+            "conditions": {
+              "expression": {
+                "value": "value_fixture"
+              },
+              "profileSourceId": "profile_source_id_fixture"
+            },
+            "id": "id_fixture",
+            "name": "name_fixture"
+          }
+        },
+        "numUserMoved": 1.25,
+        "realmId": "realm_id_fixture",
+        "realmName": "realm_name_fixture",
+        "_links": {
+          "self": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

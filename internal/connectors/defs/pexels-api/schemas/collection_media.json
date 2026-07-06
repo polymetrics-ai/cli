@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "collection_media",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "string"] },
+    "type": { "type": ["string", "null"], "description": "'Photo' or 'Video', as stamped by the Pexels API on each collection media item." },
+    "collection_id": { "type": ["string", "null"], "description": "Fan-out-stamped id of the collection this media item belongs to." },
+    "url": { "type": ["string", "null"] },
+    "width": { "type": ["integer", "null"] },
+    "height": { "type": ["integer", "null"] },
+    "photographer": { "type": ["string", "null"] },
+    "photographer_url": { "type": ["string", "null"] },
+    "src": { "type": ["object", "null"] },
+    "alt": { "type": ["string", "null"] },
+    "image": { "type": ["string", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "user": { "type": ["object", "null"] },
+    "video_files": { "type": ["array", "null"] },
+    "video_pictures": { "type": ["array", "null"] }
+  }
+}

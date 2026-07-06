@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "path": "/v1/files", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": true,
+      "data": [
+        { "id": "file-fixture-1", "object": "file", "created_at": 1767225601, "filename": "fixture-1.jsonl", "bytes": 1024, "purpose": "batch", "status": "processed" },
+        { "id": "file-fixture-2", "object": "file", "created_at": 1767225602, "filename": "fixture-2.jsonl", "bytes": 2048, "purpose": "batch", "status": "processed" }
+      ]
+    }
+  }
+}

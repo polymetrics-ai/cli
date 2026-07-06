@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/payment_methods"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_methods": [
+        { "token": "payment_method_fixture_1", "customer_id": "customer_fixture_1", "payment_instrument_type": "credit_card", "default": true }
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "partnerize",
+  "display_name": "Partnerize",
+  "description": "Reads Partnerize conversions, campaigns, and publishers through the REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api-documentation.partnerize.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Partnerize API read of conversion, campaign, and publisher data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

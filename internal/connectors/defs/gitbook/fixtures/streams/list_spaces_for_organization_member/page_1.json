@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/orgs/synthetic-conformance-value/members/synthetic-conformance-value/spaces",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "list_spaces_for_organization_member_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture list_spaces_for_organization_member",
+          "name": "Fixture list_spaces_for_organization_member",
+          "status": "active",
+          "operation_id": "listSpacesForOrganizationMember"
+        }
+      ]
+    }
+  }
+}

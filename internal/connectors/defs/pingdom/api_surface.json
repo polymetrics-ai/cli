@@ -1,0 +1,68 @@
+{
+  "api": "Pingdom API 3.1 (https://api.pingdom.com/api/3.1)",
+  "docs": "https://docs.pingdom.com/api/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Pass B full-surface expansion. Source of truth: the official Pingdom API 3.1 OpenAPI document (fetched from https://docs.pingdom.com/API_3.1.yaml, the exact spec docs.pingdom.com's own Redoc UI renders — docs.pingdom.com itself is a JS-rendered SPA with no static HTML export), which enumerates the complete documented 29-path/47-operation Pingdom API 3.1 surface. Every endpoint below is covered_by a stream/write action XOR excluded with a real category and reason: 10 GET list/detail endpoints are implemented as streams (the original 5 legacy-parity streams plus 5 new resources: alerting_contacts, alerting_teams, maintenance_occurrences, credits, tms_checks), and 11 practical mutations as write actions (check/contact/team/maintenance create/update/delete). Excluded: single-object detail GETs whose record shape is already covered by the identically-shaped list stream (duplicate_of); bulk/batch check-mutation endpoints operating on an id-list request body rather than a single record (out_of_scope, narrower than the per-id equivalent already covered); read-only diagnostic/reporting/analytics endpoints with no independent business-object identity of their own (non_data_endpoint); on-demand network-probe actions that trigger a live test rather than reading a syncable record set (non_data_endpoint); and maintenance-occurrence per-item mutation endpoints that only exist to adjust one already-materialized occurrence of a maintenance window already covered by create_maintenance/delete_maintenance (out_of_scope).",
+  "endpoints": [
+    { "method": "GET", "path": "/checks", "covered_by": { "stream": "checks" } },
+    { "method": "POST", "path": "/checks", "covered_by": { "write": "create_check" } },
+    { "method": "PUT", "path": "/checks", "excluded": { "category": "out_of_scope", "reason": "bulk pause/change-resolution for multiple checks by an id-list request body, not a single-record mutation; update_check already covers the per-check equivalent" } },
+    { "method": "DELETE", "path": "/checks", "excluded": { "category": "destructive_admin", "reason": "bulk delete of multiple checks by an id-list request body; delete_check already covers the safer per-check equivalent, no bulk-destructive action added" } },
+    { "method": "GET", "path": "/checks/{checkid}", "excluded": { "category": "duplicate_of", "reason": "single-check detail; identical record shape to the checks list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/checks/{checkid}", "covered_by": { "write": "update_check" } },
+    { "method": "DELETE", "path": "/checks/{checkid}", "covered_by": { "write": "delete_check" } },
+
+    { "method": "GET", "path": "/probes", "covered_by": { "stream": "probes" } },
+
+    { "method": "GET", "path": "/actions", "covered_by": { "stream": "actions" } },
+
+    { "method": "GET", "path": "/maintenance", "covered_by": { "stream": "maintenance" } },
+    { "method": "POST", "path": "/maintenance", "covered_by": { "write": "create_maintenance" } },
+    { "method": "DELETE", "path": "/maintenance", "excluded": { "category": "destructive_admin", "reason": "bulk delete of multiple maintenance windows by an id-list request body; delete_maintenance already covers the safer per-window equivalent" } },
+    { "method": "GET", "path": "/maintenance/{id}", "excluded": { "category": "duplicate_of", "reason": "single-maintenance-window detail; identical record shape to the maintenance list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/maintenance/{id}", "excluded": { "category": "out_of_scope", "reason": "modifies an existing maintenance window's schedule/assigned-checks in place; create_maintenance/delete_maintenance cover the practical create-and-replace lifecycle, an in-place partial-update action was deprioritized for this pass" } },
+    { "method": "DELETE", "path": "/maintenance/{id}", "covered_by": { "write": "delete_maintenance" } },
+
+    { "method": "GET", "path": "/maintenance.occurrences", "covered_by": { "stream": "maintenance_occurrences" } },
+    { "method": "DELETE", "path": "/maintenance.occurrences", "excluded": { "category": "out_of_scope", "reason": "bulk delete of multiple already-materialized occurrences of a recurring maintenance window by an id-list body; deleting the parent window via delete_maintenance is the practical lifecycle action" } },
+    { "method": "GET", "path": "/maintenance.occurrences/{id}", "excluded": { "category": "duplicate_of", "reason": "single-occurrence detail; identical record shape to the maintenance_occurrences list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/maintenance.occurrences/{id}", "excluded": { "category": "out_of_scope", "reason": "adjusts the from/to window of one already-materialized recurring-maintenance occurrence; a narrow per-occurrence edit of a business object already covered at the parent-window level by create_maintenance/delete_maintenance" } },
+    { "method": "DELETE", "path": "/maintenance.occurrences/{id}", "excluded": { "category": "out_of_scope", "reason": "deletes one already-materialized occurrence of a recurring maintenance window; deleting the parent window via delete_maintenance is the practical lifecycle action, not a per-occurrence exception carve-out" } },
+
+    { "method": "GET", "path": "/reference", "covered_by": { "stream": "reference" } },
+
+    { "method": "GET", "path": "/alerting/contacts", "covered_by": { "stream": "alerting_contacts" } },
+    { "method": "POST", "path": "/alerting/contacts", "covered_by": { "write": "create_contact" } },
+    { "method": "GET", "path": "/alerting/contacts/{contactid}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; identical record shape to the alerting_contacts list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/alerting/contacts/{contactid}", "covered_by": { "write": "update_contact" } },
+    { "method": "DELETE", "path": "/alerting/contacts/{contactid}", "covered_by": { "write": "delete_contact" } },
+
+    { "method": "GET", "path": "/alerting/teams", "covered_by": { "stream": "alerting_teams" } },
+    { "method": "POST", "path": "/alerting/teams", "covered_by": { "write": "create_team" } },
+    { "method": "GET", "path": "/alerting/teams/{teamid}", "excluded": { "category": "duplicate_of", "reason": "single-team detail; identical record shape to the alerting_teams list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/alerting/teams/{teamid}", "covered_by": { "write": "update_team" } },
+    { "method": "DELETE", "path": "/alerting/teams/{teamid}", "covered_by": { "write": "delete_team" } },
+
+    { "method": "GET", "path": "/credits", "covered_by": { "stream": "credits" } },
+
+    { "method": "GET", "path": "/analysis/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "root-cause-analysis report list for one check, a read-only diagnostic report rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/analysis/{checkid}/{analysisid}", "excluded": { "category": "non_data_endpoint", "reason": "raw root-cause-analysis result for one analysis id, a read-only diagnostic report rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/results/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "raw per-probe test-result history for one check, a high-volume diagnostic report rather than a stable business object; Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/single", "excluded": { "category": "non_data_endpoint", "reason": "performs a single ad-hoc network test on demand and returns its result inline; an on-demand action, not a syncable record read" } },
+    { "method": "GET", "path": "/traceroute", "excluded": { "category": "non_data_endpoint", "reason": "performs an ad-hoc traceroute on demand and returns its result inline; an on-demand action, not a syncable record read" } },
+    { "method": "GET", "path": "/summary.average/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "aggregated average-response-time/uptime report for one check over a time range, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/summary.hoursofday/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "aggregated average-response-time-per-hour-of-day report for one check, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/summary.outage/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "status-change/outage history report for one check, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/summary.performance/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "sub-interval performance report for one check over a time range, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/summary.probes/{checkid}", "excluded": { "category": "non_data_endpoint", "reason": "list of probes that performed tests for one check over a time range, a computed reporting rollup rather than an independently syncable business object" } },
+
+    { "method": "GET", "path": "/tms/check", "covered_by": { "stream": "tms_checks" } },
+    { "method": "POST", "path": "/tms/check", "excluded": { "category": "out_of_scope", "reason": "creates a new transaction (browser-script) check from a multi-step script definition; the script-authoring payload shape is out of scope for this pass, unlike the simpler single-host uptime check create_check already covers" } },
+    { "method": "GET", "path": "/tms/check/{cid}", "excluded": { "category": "duplicate_of", "reason": "single-transaction-check detail; identical record shape to the tms_checks list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/tms/check/{cid}", "excluded": { "category": "out_of_scope", "reason": "modifies an existing transaction check's script/settings; out of scope for the same reason its create counterpart (POST /tms/check) is" } },
+    { "method": "DELETE", "path": "/tms/check/{cid}", "excluded": { "category": "destructive_admin", "reason": "irreversible transaction-check deletion; Pass B breadth-vs-cost triage, no safer covered alternative for this resource in this pass" } },
+    { "method": "GET", "path": "/tms/check/report/status", "excluded": { "category": "non_data_endpoint", "reason": "organization-wide status-change report across all transaction checks, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/tms/check/{check_id}/report/status", "excluded": { "category": "non_data_endpoint", "reason": "status-change report for one transaction check, a computed reporting rollup rather than an independently syncable business object" } },
+    { "method": "GET", "path": "/tms/check/{check_id}/report/performance", "excluded": { "category": "non_data_endpoint", "reason": "performance report for one transaction check, a computed reporting rollup rather than an independently syncable business object" } }
+  ]
+}

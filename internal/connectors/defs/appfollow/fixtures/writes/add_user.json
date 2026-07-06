@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Fixture User",
+    "role": "member",
+    "email": "fixture-new-user@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/account/users",
+    "body": {
+      "name": "Fixture User",
+      "role": "member",
+      "email": "fixture-new-user@example.com"
+    }
+  }
+}

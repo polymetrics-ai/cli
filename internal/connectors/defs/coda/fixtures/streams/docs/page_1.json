@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/docs" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "AbCdEfGh",
+          "type": "doc",
+          "name": "Product Roadmap",
+          "href": "https://coda.io/apis/v1/docs/AbCdEfGh",
+          "browserLink": "https://coda.io/d/Product-Roadmap_dAbCdEfGh",
+          "owner": "fixture1@example.com",
+          "ownerName": "Fixture Owner One",
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-02T00:00:00.000Z",
+          "workspaceId": "ws-fixture-1",
+          "folderId": "fl-fixture-1"
+        }
+      ],
+      "href": "https://coda.io/apis/v1/docs?limit=25",
+      "nextPageToken": "fixture_cursor_2"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "api": "Easypromos REST API (https://developers.easypromos.com/)",
+  "docs": "https://developers.easypromos.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (promotions, organizing_brands, stages, users, participations, prizes). Easypromos is read-only in legacy (no reverse-ETL writes); capabilities.write is false.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/promotions",
+      "covered_by": {
+        "stream": "promotions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizing_brands",
+      "covered_by": {
+        "stream": "organizing_brands"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stages/{promotion_id}",
+      "covered_by": {
+        "stream": "stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{promotion_id}",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/participations/{promotion_id}",
+      "covered_by": {
+        "stream": "participations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prizes/{promotion_id}",
+      "covered_by": {
+        "stream": "prizes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/participations/{promotion_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "legacy connector never implemented participation creation; not implemented in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions/{promotion_id}/registration_fields",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not modeled by legacy; not implemented in this bundle"
+      }
+    }
+  ]
+}

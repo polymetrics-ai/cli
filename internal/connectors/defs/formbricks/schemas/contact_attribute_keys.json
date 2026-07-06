@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contact_attribute_keys",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "key": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "is_unique": { "type": ["boolean", "null"], "description": "Mapped from the raw API's isUnique field." },
+    "workspace_id": { "type": ["string", "null"], "description": "Mapped from the raw API's workspaceId field." },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

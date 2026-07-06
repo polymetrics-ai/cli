@@ -1,0 +1,16 @@
+{
+  "record": {
+    "estimate_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/estimates/synthetic-conformance-value/status/sent"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/tickets", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 1, "subject": "Fixture Ticket One", "description": "fixture record" }
+      ]
+    }
+  }
+}

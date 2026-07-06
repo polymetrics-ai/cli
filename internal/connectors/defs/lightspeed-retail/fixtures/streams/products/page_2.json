@@ -1,0 +1,30 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/products", "query": { "page_size": "100", "after": "1001" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "product_fixture_3",
+          "version": 1002,
+          "name": "Fixture Three",
+          "handle": "fixture-3",
+          "sku": "SKU-3",
+          "description": "Fixture record",
+          "brand_id": "brand_fixture_1",
+          "supplier_id": "supplier_fixture_1",
+          "product_category": "General",
+          "price_including_tax": 30,
+          "price_excluding_tax": 27,
+          "supply_price": 15,
+          "has_variants": false,
+          "is_active": true,
+          "is_composite": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "version": { "min": 1002, "max": null }
+    }
+  }
+}

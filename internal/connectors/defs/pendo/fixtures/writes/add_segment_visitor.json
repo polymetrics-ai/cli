@@ -1,0 +1,10 @@
+{
+  "record": {
+    "segmentId": "segmentId_fixture",
+    "visitorId": "visitorId_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/segment/segmentId_fixture/visitor/visitorId_fixture"
+  }
+}

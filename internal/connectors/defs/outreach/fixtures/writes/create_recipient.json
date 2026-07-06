@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "recipient",
+      "attributes": {
+        "name": "Fixture Create Recipient"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recipients",
+    "body": {
+      "data": {
+        "type": "recipient",
+        "attributes": {
+          "name": "Fixture Create Recipient"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

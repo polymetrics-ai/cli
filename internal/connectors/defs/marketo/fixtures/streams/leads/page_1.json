@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        { "id": 101, "email": "fixture1@example.com", "updatedAt": "2026-01-01T00:00:00Z", "createdAt": "2026-01-01T00:00:00Z" },
+        { "id": 102, "email": "fixture2@example.com", "updatedAt": "2026-01-01T00:00:00Z", "createdAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPageToken": "fixture-token-1",
+      "moreResult": true
+    }
+  }
+}

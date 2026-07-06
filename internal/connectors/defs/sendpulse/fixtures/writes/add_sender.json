@@ -1,0 +1,10 @@
+{
+  "record": {
+    "email": "new-sender@example.com",
+    "name": "Fixture Sender"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/senders"
+  }
+}

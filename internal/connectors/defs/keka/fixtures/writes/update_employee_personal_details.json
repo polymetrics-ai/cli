@@ -1,0 +1,87 @@
+{
+  "record": {
+    "currentAddress": {
+      "addressLine1": "fixture_address_line1_1",
+      "addressLine2": "fixture_address_line2_1",
+      "countryCode": "fixture_country_code_1",
+      "city": "fixture_city_1",
+      "state": "fixture_state_1",
+      "zip": "fixture_zip_1"
+    },
+    "displayName": "Fixture displayName",
+    "firstName": "Fixture firstName",
+    "lastName": "Fixture lastName",
+    "gender": 0,
+    "dateOfBirth": "2026-01-01T00:00:00Z",
+    "middleName": "Fixture middleName",
+    "workPhone": "+15550100",
+    "personalEmail": "fixture1@example.invalid",
+    "maritalStatus": 0,
+    "marriageDate": "2026-01-01T00:00:00Z",
+    "relations": [
+      {
+        "relationType": 2,
+        "gender": 1,
+        "firstName": "Fixture firstName",
+        "lastName": "Fixture lastName",
+        "displayName": "Fixture displayName",
+        "email": "fixture1@example.invalid",
+        "dateOfBirth": "2026-01-01T00:00:00Z",
+        "profession": "fixture_profession_1",
+        "mobile": "+15550100"
+      }
+    ],
+    "bloodGroup": 8,
+    "employee_id": "fixture_employee_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/hris/employees/fixture_employee_id/personaldetails",
+    "body": {
+      "currentAddress": {
+        "addressLine1": "fixture_address_line1_1",
+        "addressLine2": "fixture_address_line2_1",
+        "countryCode": "fixture_country_code_1",
+        "city": "fixture_city_1",
+        "state": "fixture_state_1",
+        "zip": "fixture_zip_1"
+      },
+      "displayName": "Fixture displayName",
+      "firstName": "Fixture firstName",
+      "lastName": "Fixture lastName",
+      "gender": 0,
+      "dateOfBirth": "2026-01-01T00:00:00Z",
+      "middleName": "Fixture middleName",
+      "workPhone": "+15550100",
+      "personalEmail": "fixture1@example.invalid",
+      "maritalStatus": 0,
+      "marriageDate": "2026-01-01T00:00:00Z",
+      "relations": [
+        {
+          "relationType": 2,
+          "gender": 1,
+          "firstName": "Fixture firstName",
+          "lastName": "Fixture lastName",
+          "displayName": "Fixture displayName",
+          "email": "fixture1@example.invalid",
+          "dateOfBirth": "2026-01-01T00:00:00Z",
+          "profession": "fixture_profession_1",
+          "mobile": "+15550100"
+        }
+      ],
+      "bloodGroup": 8
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_employee_personal_details_fixture_1",
+        "name": "Fixture update employee personal details"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

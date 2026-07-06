@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/edit/segments" },
+  "response": {
+    "status": 200,
+    "body": { "segments": [] }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tax/invoices/2024-06-19/exports",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value",
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "exports": [
+        {
+          "errorMessage": "errorMessage-fixture-1",
+          "exportId": "exportId-fixture-1",
+          "generateExportFinishedAt": "generateExportFinishedAt-fixture-1",
+          "generateExportStartedAt": "generateExportStartedAt-fixture-1",
+          "invoicesDocumentIds": [],
+          "status": "status-fixture-1"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pipelines",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "number": { "type": ["integer", "null"] },
+    "project_slug": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

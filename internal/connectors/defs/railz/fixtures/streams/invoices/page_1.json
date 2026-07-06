@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/invoices", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "invoiceUuid": "inv_fixture_1",
+          "businessUuid": "biz_fixture_1",
+          "customerUuid": "cust_fixture_1",
+          "totalAmount": 100.5,
+          "status": "open"
+        },
+        {
+          "invoiceUuid": "inv_fixture_2",
+          "businessUuid": "biz_fixture_1",
+          "customerUuid": "cust_fixture_2",
+          "totalAmount": 250,
+          "status": "paid"
+        }
+      ]
+    }
+  }
+}

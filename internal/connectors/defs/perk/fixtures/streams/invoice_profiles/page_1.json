@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/profiles",
+    "query": {
+      "limit": "50",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "profiles": [
+        {
+          "id": "profile_fixture_1",
+          "name": "Fixture Company Ltd",
+          "payment_method_type": "automatic",
+          "billing_period": "instant",
+          "currency": "GBP",
+          "billing_information": {
+            "legal_name": "Fixture Company Ltd",
+            "vat_number": "GB000000000",
+            "address_line_1": "1 Fixture Street",
+            "city": "London",
+            "postal_code": "EC1A 1AA",
+            "country_name": "United Kingdom"
+          }
+        }
+      ],
+      "offset": 0,
+      "limit": 50,
+      "total": 1
+    }
+  }
+}

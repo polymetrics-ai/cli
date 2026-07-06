@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "payments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "object": { "type": ["string", "null"] },
+    "customer": { "type": ["integer", "null"] },
+    "invoice": { "type": ["integer", "null"] },
+    "amount": { "type": ["number", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "method": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "date": { "type": ["integer", "null"] },
+    "created_at": { "type": "integer" },
+    "updated_at": { "type": "integer" }
+  }
+}

@@ -1,0 +1,15 @@
+You are executing Wave 6 sub-phase 4 of the Polymetrics connector-architecture-v2 program: regenerate the docs WEBSITE from the new connector bundles while KEEPING THE EXISTING (deployed) DESIGN. cwd = repo root (connector-architecture-rewrite). Work ONLY under website/ (read internal/connectors/defs/* as data). Do NOT push, do NOT touch internal/.
+
+DESIGN DIRECTIVE (from the user): the site must look like the CURRENT deployed design at https://cli.polymetrics.ai — the design already present in this repo's website/ directory. Do NOT redesign it. An earlier experimental redesign exists on branch `website-regen` (shadcn cards/catalog rework); the user REJECTED that direction. From that branch you may cherry-pick ONLY the data-generation logic, not the look:
+  git show website-regen -- website/scripts/  (and its gen-connectors data step)
+Reuse its bundle-reading logic: for every internal/connectors/defs/<name>/ read metadata.json (name, display_name, description, docs_url, capabilities), streams.json (stream names, primary key, cursor, incremental), writes.json (action names, method, kind), docs.md → emit website/data/connectors.generated.json as [{slug, name, description, capabilities, streams[{name,primary_key,cursor,incremental}], write_actions[{name,method,kind}], docs_md, icon}]. Bare names only. Keep the existing icon pipeline (icon_data.json + website/public/connectors/icons/*).
+
+WHAT TO CHANGE:
+1. Wire the existing website's connector pages/catalog to consume connectors.generated.json (bundle-driven) instead of any legacy catalog source (catalog_data.json is deleted from the architecture). Keep the current page layouts, typography, colors, nav, and components — same look as cli.polymetrics.ai.
+2. Per-connector page, inside the EXISTING design language: capabilities, an ETL Streams table (stream, primary key, cursor, incremental), a Reverse-ETL Write Actions table (action, method, kind) when writes exist, and the docs.md content (which has been sanitized — if you still see migration/fidelity/legacy vocabulary in a docs_md, that is upstream dirt: report the connector, do not display-fix it).
+3. Remove any website copy that mentions source-/destination- prefixed connectors or directions; capabilities replace directions.
+4. llms.txt / llms-full.txt and any generated indexes must regenerate from the new data.
+
+VERIFY: cd website && npm install && npm run build succeeds (all ~547 connector pages). Spot-check stripe (streams + writes), github (write-heavy), and one read-only connector render correctly in the existing design. Search/filter still works. Commit "feat(website): regenerate connector docs from bundles, keep deployed design (wave6)".
+
+Report: data pipeline changes, pages affected, build result, any connectors with dirty docs_md still leaking internal vocabulary.

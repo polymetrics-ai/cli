@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/customers", "query": { "limit": "250" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "customers": [
+        {
+          "id": 1001,
+          "email": "fixture1@example.com",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": 1002,
+          "email": "fixture2@example.com",
+          "status": "active",
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next_cursor": "cursor_fixture_2"
+    }
+  }
+}

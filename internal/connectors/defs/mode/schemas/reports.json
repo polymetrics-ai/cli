@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "space_token": {
+      "type": "string"
+    },
+    "account_username": {
+      "type": "string"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "public": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "last_run_at": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "token"
+  ],
+  "x-cursor-field": "updated_at"
+}

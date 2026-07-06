@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/adCampaignGroups",
+    "query": { "q": "search", "count": "100", "start": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "id": 520001,
+          "name": "Fixture Campaign Group One",
+          "account": "urn:li:sponsoredAccount:510001",
+          "status": "ACTIVE",
+          "totalBudget": { "currencyCode": "USD", "amount": "1000" },
+          "runSchedule": { "start": 1767225600000 },
+          "changeAuditStamps": {
+            "created": { "time": 1767225600000 },
+            "lastModified": { "time": 1767225660000 }
+          }
+        }
+      ]
+    }
+  }
+}

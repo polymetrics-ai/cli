@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/v2/bookings", "query": { "take": "100", "skip": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "uid": "booking_fixture_1",
+          "title": "Fixture Booking 1",
+          "description": "conformance fixture booking",
+          "status": "accepted",
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T00:30:00Z",
+          "eventTypeId": 101,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

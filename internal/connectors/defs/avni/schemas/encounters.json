@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "encounters",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "subject_id": { "type": ["string", "null"] },
+    "encounter_type": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

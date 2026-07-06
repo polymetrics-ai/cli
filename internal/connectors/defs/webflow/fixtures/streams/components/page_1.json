@@ -1,0 +1,722 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/sites/synthetic-conformance-value/components",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "components": [
+        {
+          "id": "component_fixture_1",
+          "name": "Fixture Component 1",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_2",
+          "name": "Fixture Component 2",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_3",
+          "name": "Fixture Component 3",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_4",
+          "name": "Fixture Component 4",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_5",
+          "name": "Fixture Component 5",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_6",
+          "name": "Fixture Component 6",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_7",
+          "name": "Fixture Component 7",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_8",
+          "name": "Fixture Component 8",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_9",
+          "name": "Fixture Component 9",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_10",
+          "name": "Fixture Component 10",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_11",
+          "name": "Fixture Component 11",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_12",
+          "name": "Fixture Component 12",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_13",
+          "name": "Fixture Component 13",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_14",
+          "name": "Fixture Component 14",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_15",
+          "name": "Fixture Component 15",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_16",
+          "name": "Fixture Component 16",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_17",
+          "name": "Fixture Component 17",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_18",
+          "name": "Fixture Component 18",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_19",
+          "name": "Fixture Component 19",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_20",
+          "name": "Fixture Component 20",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_21",
+          "name": "Fixture Component 21",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_22",
+          "name": "Fixture Component 22",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_23",
+          "name": "Fixture Component 23",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_24",
+          "name": "Fixture Component 24",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_25",
+          "name": "Fixture Component 25",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_26",
+          "name": "Fixture Component 26",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_27",
+          "name": "Fixture Component 27",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_28",
+          "name": "Fixture Component 28",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_29",
+          "name": "Fixture Component 29",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_30",
+          "name": "Fixture Component 30",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_31",
+          "name": "Fixture Component 31",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_32",
+          "name": "Fixture Component 32",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_33",
+          "name": "Fixture Component 33",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_34",
+          "name": "Fixture Component 34",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_35",
+          "name": "Fixture Component 35",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_36",
+          "name": "Fixture Component 36",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_37",
+          "name": "Fixture Component 37",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_38",
+          "name": "Fixture Component 38",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_39",
+          "name": "Fixture Component 39",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_40",
+          "name": "Fixture Component 40",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_41",
+          "name": "Fixture Component 41",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_42",
+          "name": "Fixture Component 42",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_43",
+          "name": "Fixture Component 43",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_44",
+          "name": "Fixture Component 44",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_45",
+          "name": "Fixture Component 45",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_46",
+          "name": "Fixture Component 46",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_47",
+          "name": "Fixture Component 47",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_48",
+          "name": "Fixture Component 48",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_49",
+          "name": "Fixture Component 49",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_50",
+          "name": "Fixture Component 50",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_51",
+          "name": "Fixture Component 51",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_52",
+          "name": "Fixture Component 52",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_53",
+          "name": "Fixture Component 53",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_54",
+          "name": "Fixture Component 54",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_55",
+          "name": "Fixture Component 55",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_56",
+          "name": "Fixture Component 56",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_57",
+          "name": "Fixture Component 57",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_58",
+          "name": "Fixture Component 58",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_59",
+          "name": "Fixture Component 59",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_60",
+          "name": "Fixture Component 60",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_61",
+          "name": "Fixture Component 61",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_62",
+          "name": "Fixture Component 62",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_63",
+          "name": "Fixture Component 63",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_64",
+          "name": "Fixture Component 64",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_65",
+          "name": "Fixture Component 65",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_66",
+          "name": "Fixture Component 66",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_67",
+          "name": "Fixture Component 67",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_68",
+          "name": "Fixture Component 68",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_69",
+          "name": "Fixture Component 69",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_70",
+          "name": "Fixture Component 70",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_71",
+          "name": "Fixture Component 71",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_72",
+          "name": "Fixture Component 72",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_73",
+          "name": "Fixture Component 73",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_74",
+          "name": "Fixture Component 74",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_75",
+          "name": "Fixture Component 75",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_76",
+          "name": "Fixture Component 76",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_77",
+          "name": "Fixture Component 77",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_78",
+          "name": "Fixture Component 78",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_79",
+          "name": "Fixture Component 79",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_80",
+          "name": "Fixture Component 80",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_81",
+          "name": "Fixture Component 81",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_82",
+          "name": "Fixture Component 82",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_83",
+          "name": "Fixture Component 83",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_84",
+          "name": "Fixture Component 84",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_85",
+          "name": "Fixture Component 85",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_86",
+          "name": "Fixture Component 86",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_87",
+          "name": "Fixture Component 87",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_88",
+          "name": "Fixture Component 88",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_89",
+          "name": "Fixture Component 89",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_90",
+          "name": "Fixture Component 90",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_91",
+          "name": "Fixture Component 91",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_92",
+          "name": "Fixture Component 92",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_93",
+          "name": "Fixture Component 93",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_94",
+          "name": "Fixture Component 94",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_95",
+          "name": "Fixture Component 95",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_96",
+          "name": "Fixture Component 96",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_97",
+          "name": "Fixture Component 97",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_98",
+          "name": "Fixture Component 98",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_99",
+          "name": "Fixture Component 99",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        },
+        {
+          "id": "component_fixture_100",
+          "name": "Fixture Component 100",
+          "group": "fixture-group",
+          "description": "A fixture component description",
+          "readonly": false
+        }
+      ],
+      "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "total": 101
+      }
+    }
+  }
+}

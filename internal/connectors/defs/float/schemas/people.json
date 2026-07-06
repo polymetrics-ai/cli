@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "people",
+  "type": "object",
+  "x-primary-key": ["people_id"],
+  "required": ["people_id"],
+  "properties": {
+    "people_id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "job_title": { "type": ["string", "null"] },
+    "role_id": { "type": ["integer", "null"] },
+    "department_id": { "type": ["integer", "null"] },
+    "people_type_id": { "type": ["integer", "null"] },
+    "active": { "type": ["integer", "null"] },
+    "employee_type": { "type": ["integer", "null"] },
+    "start_date": { "type": ["string", "null"] },
+    "created": { "type": ["string", "null"] },
+    "modified": { "type": ["string", "null"] }
+  }
+}

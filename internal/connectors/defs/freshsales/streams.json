@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "https://{{ config.domain_name }}/crm/sales/api",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "prefix": "Token token=", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/contacts/view/{{ config.view_id }}" },
+    "error_map": [
+      { "status": 401, "hint": "freshsales api key is missing or invalid; re-run pm credentials add freshsales" },
+      { "status": 403, "hint": "freshsales account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "freshsales rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts/view/{{ config.view_id }}",
+      "records": { "path": "contacts" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "sales_accounts",
+      "path": "/sales_accounts/view/{{ config.view_id }}",
+      "records": { "path": "sales_accounts" },
+      "schema": "schemas/sales_accounts.json"
+    },
+    {
+      "name": "deals",
+      "path": "/deals/view/{{ config.view_id }}",
+      "records": { "path": "deals" },
+      "schema": "schemas/deals.json"
+    },
+    {
+      "name": "leads",
+      "path": "/leads/view/{{ config.view_id }}",
+      "records": { "path": "leads" },
+      "schema": "schemas/leads.json"
+    }
+  ]
+}

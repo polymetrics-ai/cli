@@ -1,0 +1,11 @@
+{
+  "record": {
+    "form_id": 101,
+    "user_id": 55,
+    "date": "01/01/2026"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/assign_task"
+  }
+}

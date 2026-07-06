@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "When I Work Connection Specification",
+  "type": "object",
+  "required": ["email", "password"],
+  "properties": {
+    "email": {
+      "type": "string",
+      "x-secret": true,
+      "description": "When I Work account email, sent as the Basic auth username on every request; never logged."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "When I Work account password, sent as the Basic auth password on every request; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.wheniwork.com",
+      "description": "When I Work API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/collections", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "collections_fixture_1",
+          "type": "collection",
+          "name": "Favorites",
+          "collection_type": "favorites"
+        }
+      ],
+      "offset": 0,
+      "limit": 100,
+      "total_count": 1
+    }
+  }
+}

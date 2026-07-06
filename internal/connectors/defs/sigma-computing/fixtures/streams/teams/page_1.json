@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v2/teams" },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        { "id": "team_fixture_1", "name": "Fixture team", "updatedAt": "2026-01-01T00:00:00Z" }
+      ],
+      "nextPage": null
+    }
+  }
+}

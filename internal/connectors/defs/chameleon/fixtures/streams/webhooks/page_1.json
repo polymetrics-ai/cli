@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/edit/webhooks", "query": { "kind": "webhook" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "webhooks": [
+        {
+          "id": "wh_fixture_1",
+          "uid": "https://hooks.example.com/fixture",
+          "name": "Fixture webhook",
+          "last_item_at": "2026-01-02T00:00:00Z",
+          "last_item_state": "valid",
+          "last_item_error": null
+        }
+      ]
+    }
+  }
+}

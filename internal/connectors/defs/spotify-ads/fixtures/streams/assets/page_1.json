@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ad_accounts/synthetic-conformance-value/assets", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "assets": [
+        { "id": "asset_fixture_1", "name": "Fixture Asset One", "asset_type": "IMAGE", "status": "READY", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" }
+      ],
+      "paging": { "page_size": 100, "total_results": 2, "offset": 0, "current_page": 1 }
+    }
+  }
+}

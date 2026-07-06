@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "domains",
+  "type": "object",
+  "x-primary-key": ["Domain"],
+  "required": ["Domain"],
+  "properties": {
+    "Domain": { "type": "string" },
+    "DefaultDomain": { "type": ["boolean", "null"] },
+    "Spf": { "type": ["boolean", "null"] },
+    "Dkim": { "type": ["boolean", "null"] },
+    "MX": { "type": ["boolean", "null"] },
+    "DMARC": { "type": ["boolean", "null"] },
+    "Verify": { "type": ["boolean", "null"] },
+    "TrackingStatus": { "type": ["string", "null"] },
+    "CertificateStatus": { "type": ["string", "null"] },
+    "VERP": { "type": ["boolean", "null"] },
+    "CustomBouncesDomain": { "type": ["string", "null"] },
+    "IsMarkedForDeletion": { "type": ["boolean", "null"] }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "api": "Merge unified API, ATS Common Model v1 (https://api.merge.dev/api/ats/v1)",
+  "docs": "https://docs.merge.dev/api-reference/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 6 legacy-parity ATS Common Model read streams only; Merge's other categories (HRIS, Accounting, CRM, Ticketing, File Storage) and write actions are out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/candidates",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers",
+      "covered_by": {
+        "stream": "offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scorecards",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/interviews",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/eeocs",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linked-accounts",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "linked-account metadata, not a syncable ATS object stream"
+      }
+    }
+  ]
+}

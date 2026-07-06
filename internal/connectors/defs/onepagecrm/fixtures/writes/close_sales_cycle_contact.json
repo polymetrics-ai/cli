@@ -1,0 +1,13 @@
+{
+  "record": {
+    "contact_id": "fixture_id",
+    "comment": "Fixture text"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture_id/close_sales_cycle",
+    "body": {
+      "comment": "Fixture text"
+    }
+  }
+}

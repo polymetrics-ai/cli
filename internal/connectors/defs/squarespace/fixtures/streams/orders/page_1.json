@@ -1,0 +1,23 @@
+{
+  "request": { "method": "GET", "path": "/commerce/orders", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "result": [
+        {
+          "id": "order_fixture_1",
+          "orderNumber": "1001",
+          "createdOn": "2026-01-01T00:00:00Z",
+          "modifiedOn": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "order_fixture_2",
+          "orderNumber": "1002",
+          "createdOn": "2026-01-01T00:00:01Z",
+          "modifiedOn": "2026-01-01T00:00:01Z"
+        }
+      ],
+      "pagination": { "nextPageCursor": "fixture-cursor-2", "hasNextPage": true }
+    }
+  }
+}

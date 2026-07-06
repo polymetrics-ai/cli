@@ -1,0 +1,9 @@
+{
+  "record": {
+    "team_token": "team_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/teams/team_fixture_1"
+  }
+}

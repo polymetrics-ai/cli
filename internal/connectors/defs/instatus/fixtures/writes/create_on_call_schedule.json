@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture create on call schedule"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/on-call-schedules",
+    "body": {
+      "name": "Fixture create on call schedule"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "create_on_call_schedule_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/statistics/channels", "query": { "limit": "100", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "ChannelName": "fixture-channel-1", "Recipients": 200, "EmailTotal": 200, "SmsTotal": 0, "Delivered": 190, "Bounced": 10, "InProgress": 0, "Opened": 120, "Clicked": 40, "Unsubscribed": 2, "Complaints": 1, "Inbound": 0, "ManualCancel": 0, "NotDelivered": 10 }
+    ]
+  }
+}

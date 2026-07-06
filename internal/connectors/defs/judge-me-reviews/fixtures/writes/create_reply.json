@@ -1,0 +1,20 @@
+{
+  "record": {
+    "review_id": 123,
+    "send_reply_email": false,
+    "reply": {
+      "content": "Thanks for the review."
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/replies",
+    "body": {
+      "review_id": 123,
+      "send_reply_email": false,
+      "reply": {
+        "content": "Thanks for the review."
+      }
+    }
+  }
+}

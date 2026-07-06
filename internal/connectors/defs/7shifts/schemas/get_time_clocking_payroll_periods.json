@@ -1,0 +1,129 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The id of the pay period state"
+    },
+    "company_id": {
+      "type": "integer",
+      "description": "The id of the company that the pay period belongs to"
+    },
+    "start": {
+      "type": "string",
+      "description": "It is one representation of ISO8601 date extended format"
+    },
+    "end": {
+      "type": "string",
+      "description": "It is one representation of ISO8601 date extended format"
+    },
+    "closed": {
+      "type": "boolean",
+      "description": "Whether or not the pay period is closed"
+    },
+    "finalized": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether or not the pay period is finalized (all location states are closed)"
+    },
+    "states": {
+      "type": "array",
+      "description": "Whether or not the location pay period is closed/processed",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The id of the pay period state."
+          },
+          "location_id": {
+            "type": "integer",
+            "description": "The location id of the company."
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Whether or not the pay period is closed"
+          },
+          "processed": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The date the pay period was processed for an export.",
+            "format": "date"
+          },
+          "modified_by_user_id": {
+            "type": "integer",
+            "description": "The user id of the user who modified the pay period. This may indicate an employee or a server process. Server processes will have a negative user id."
+          },
+          "closed_or_reopened_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "It is one representation of ISO8601/RFC3339 date time format"
+          }
+        },
+        "required": [
+          "id",
+          "location_id",
+          "closed",
+          "processed",
+          "modified_by_user_id",
+          "closed_or_reopened_at"
+        ]
+      }
+    },
+    "all_punches_approved": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Whether all the punches in the payroll period that the user can see have been approved. Query parameter include_punches_status must be true."
+    },
+    "employee_punch_approvals": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Identify if all punches were reviewed by the employee. Query parameter include_punches_status must be true.\nIf Compliance is not available or the feature is disabled the property will be null."
+    },
+    "created": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "It is one representation of ISO8601/RFC3339 date time format"
+    },
+    "modified": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "It is one representation of ISO8601/RFC3339 date time format"
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "start",
+    "end",
+    "closed",
+    "finalized",
+    "states",
+    "all_punches_approved",
+    "employee_punch_approvals",
+    "created",
+    "modified"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_time_clocking_payroll_periods",
+  "x-primary-key": [
+    "id"
+  ]
+}

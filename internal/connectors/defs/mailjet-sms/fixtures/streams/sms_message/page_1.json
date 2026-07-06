@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sms/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Data": [
+        {
+          "From": "MAILJETSMS",
+          "To": "+15550001001",
+          "MessageID": "msg_fixture_detail_1",
+          "SMSCount": 1,
+          "CreationTS": 1767225801,
+          "SentTS": 1767225802,
+          "Status": {
+            "Code": 2,
+            "Name": "sent",
+            "Description": "Message sent"
+          },
+          "Cost": {
+            "Value": 0.05,
+            "Currency": "EUR"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "actions": [
+    {
+      "name": "publish_survey",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/edit/surveys/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "published_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "published_at": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "external mutation publishing/unpublishing a live in-product Microsurvey to end-users; approval required"
+    },
+    {
+      "name": "publish_tour",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/edit/tours/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "published_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "published_at": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "external mutation publishing/unpublishing a live in-product Tour to end-users; approval required"
+    },
+    {
+      "name": "publish_launcher",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/edit/launchers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "published_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "published_at": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "external mutation publishing/unpublishing a live in-product Launcher to end-users; approval required"
+    },
+    {
+      "name": "publish_tooltip",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/edit/tooltips/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "published_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "published_at": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "external mutation publishing/unpublishing a live in-product Tooltip to end-users; approval required"
+    },
+    {
+      "name": "publish_embed",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/edit/embeds/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "published_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "published_at": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "external mutation publishing/unpublishing a live in-product Embeddable to end-users; approval required"
+    },
+    {
+      "name": "create_delivery",
+      "kind": "create",
+      "method": "POST",
+      "path": "/edit/deliveries",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["model_kind", "model_id"],
+        "properties": {
+          "model_kind": { "type": "string" },
+          "model_id": { "type": "string" },
+          "profile_id": { "type": "string" },
+          "uid": { "type": "string" },
+          "email": { "type": "string" },
+          "idempotency_key": { "type": "string" },
+          "options": { "type": "object" },
+          "from": { "type": "string" },
+          "until": { "type": "string" },
+          "use_segmentation": { "type": "boolean" },
+          "once": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation directly triggering a Tour or Microsurvey experience for one specific end-user; approval required"
+    },
+    {
+      "name": "delete_delivery",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/edit/deliveries/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "cancels a not-yet-triggered Delivery; irreversible once the target has already been shown, approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/edit/webhooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "topics"],
+        "properties": {
+          "kind": { "type": "string" },
+          "url": { "type": "string" },
+          "topics": { "type": "string" },
+          "experience_id": { "type": "string" },
+          "experience_ids": { "type": "array" }
+        }
+      },
+      "risk": "external mutation creating a new outbound webhook subscription that will POST Chameleon event data to a third-party URL; approval required"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/edit/webhooks/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "delete": { "missing_ok_status": [404] },
+      "risk": "irreversible removal of an outbound webhook subscription; approval required"
+    }
+  ]
+}

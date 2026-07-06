@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "cus_fixture_1",
+    "id": "sub_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/cus_fixture_1/subscription_for_items"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "chargebee",
+  "display_name": "Chargebee",
+  "description": "Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://apidocs.chargebee.com/docs/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Chargebee API read of customer and billing data",
+    "write": "external mutation of Chargebee billing data (customers, subscriptions, invoices, credit notes, orders, coupons, payment sources); several actions have direct financial/billing side effects and require approval"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "record": { "propertyID": "prop_fixture_1", "guestID": "guest_fixture_1", "guestNote": "Fixture note" },
+  "expect": { "method": "POST", "path": "/postGuestNote" },
+  "response": { "status": 200, "body": { "success": true, "noteID": "note_fixture_new" } }
+}

@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "description": "Contains the result data.",
+      "items": {
+        "type": "object",
+        "description": "Contains the result data.",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Date and time when the item was created. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "object",
+            "description": "Contains information about the user who created the item.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier (ID) of the user."
+              },
+              "type": {
+                "type": "string",
+                "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+              }
+            },
+            "additionalProperties": true
+          },
+          "data": {
+            "type": "object",
+            "description": "Contains text item data, such as the title, content, or description. For more information on the JSON properties, see [Data](https://developers.miro.com/reference/data).",
+            "properties": {
+              "content": {
+                "type": "string",
+                "description": "The actual text (content) that appears in the text item."
+              }
+            },
+            "additionalProperties": true
+          },
+          "geometry": {
+            "type": "object",
+            "description": "Contains geometrical information about the item, such as its width or height.",
+            "properties": {
+              "height": {
+                "type": "number",
+                "description": "Height of the item, in pixels."
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Rotation angle of an item, in degrees, relative to the board. You can rotate items clockwise (right) and counterclockwise (left) by specifying positive and negative values, respectively."
+              },
+              "width": {
+                "type": "number",
+                "description": "Width of the item, in pixels."
+              }
+            },
+            "additionalProperties": true
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier (ID) of an item."
+          },
+          "modifiedAt": {
+            "type": "string",
+            "description": "Date and time when the item was last modified. <br>Format: UTC, adheres to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601), includes a [trailing Z offset](https://en.wikipedia.org/wiki/ISO_8601#Coordinated_Universal_Time_(UTC)).",
+            "format": "date-time"
+          },
+          "modifiedBy": {
+            "type": "object",
+            "description": "Contains information about the user who last modified the item.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier (ID) of the user."
+              },
+              "type": {
+                "type": "string",
+                "description": "Indicates the type of object returned. In this case, `type` returns `user`."
+              }
+            },
+            "additionalProperties": true
+          },
+          "parent": {
+            "type": "object",
+            "description": "Contains information about the parent frame for the item.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier (ID) of the parent frame for the item."
+              }
+            },
+            "additionalProperties": true
+          },
+          "position": {
+            "type": "object",
+            "description": "Contains location information about the item, such as its x coordinate, y coordinate, and the origin of the x and y coordinates.",
+            "properties": {
+              "origin": {
+                "type": "string",
+                "description": "Area of the item that is referenced by its x and y coordinates. For example, an item with a center origin will have its x and y coordinates point to its center. The center point of the board has x: 0 and y: 0 coordinates.\nCurrently, only one option is supported.",
+                "enum": [
+                  "center"
+                ]
+              },
+              "relativeTo": {
+                "type": "string",
+                "enum": [
+                  "canvas_center",
+                  "parent_top_left"
+                ]
+              },
+              "x": {
+                "type": "number",
+                "description": "X-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+              },
+              "y": {
+                "type": "number",
+                "description": "Y-axis coordinate of the location of the item on the board.\nBy default, all items have absolute positioning to the board, not the current viewport. Default: 0.\nThe center point of the board has `x: 0` and `y: 0` coordinates."
+              }
+            },
+            "additionalProperties": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of item that is returned."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "limit": {
+      "type": "integer",
+      "description": "Maximum number of results returned based on the `limit` specified in the request. For example, if there are `30` results, and the request has the offset set to `0` and the `limit` set to `20`, the `size` of the results will be `20`. The rest of the results will not be returned. To retrieve the rest of the results, you must make another request and set the appropriate value for the offset parameter. In this example, you will set the offset parameter to 20 as the offset is zero-based.\n"
+    },
+    "links": {
+      "type": "object",
+      "description": "Contains pagination links for the collection.",
+      "properties": {
+        "first": {
+          "type": "string",
+          "description": "Link to retrieve information in the first page of the collection."
+        },
+        "last": {
+          "type": "string",
+          "description": "Link to the retrieve information in the last page of the collection."
+        },
+        "next": {
+          "type": "string",
+          "description": "Link to retrieve information in the next page of the collection."
+        },
+        "prev": {
+          "type": "string",
+          "description": "Link to retrieve information in the previous page of the collection."
+        },
+        "self": {
+          "type": "string",
+          "description": "Link to retrieve information in the current page of the collection."
+        }
+      },
+      "additionalProperties": true
+    },
+    "offset": {
+      "type": "integer",
+      "description": "Zero-based index of the first item in the collection. For example, If there are `30` results, and the request has the offset set to `28`, the response will return `2` results."
+    },
+    "size": {
+      "type": "integer",
+      "description": "Number of results returned in the response. The `size` is the number of results returned considering the `offset` and the `limit` values sent in the request. For example, if there are `30` results, and the request has the offset set to `0` and the `limit` set to `20`, the `size` of the results will be `20`.<br>If there are `10` results, and the request has the offset set to `0` and the `limit` set to `20`, the `size` of the results will be `10`.<br>If there are `30` results, and the request has "
+    },
+    "total": {
+      "type": "integer",
+      "description": "Total number of results available. If the value of the `total` parameter is higher than the value of the `size` parameter, this means that there are more results that you can retrieve. To retrieve more results, you can make another request and set the `offset` value accordingly. For example, if there are `30` results, and the request has the `offset` set to `0` and the `limit` set to `20`, the `size` parameter will return `20` and the `total` parameter will return `30`. This means that there are"
+    },
+    "type": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

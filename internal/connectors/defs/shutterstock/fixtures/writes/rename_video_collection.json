@@ -1,0 +1,17 @@
+{
+  "record": {
+    "video_collection_id": "video-collection-id-fixture-1",
+    "name": "Fixture rename video collection"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/videos/collections/video-collection-id-fixture-1",
+    "body": {
+      "name": "Fixture rename video collection"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

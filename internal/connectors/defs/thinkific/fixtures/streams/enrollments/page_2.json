@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/public/v1/enrollments",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": 101,
+          "user_id": 101,
+          "user_name": "Fixture101 User",
+          "user_email": "fixture101@example.com",
+          "course_id": 101,
+          "course_name": "Fixture Course 101",
+          "percentage_completed": 50,
+          "expired": false,
+          "is_free_trial": false,
+          "completed": false,
+          "started_at": "2026-01-02T00:00:00Z",
+          "activated_at": "2026-01-02T00:00:00Z",
+          "completed_at": null,
+          "updated_at": "2026-01-02T00:00:00Z",
+          "expiry_date": null
+        }
+      ]
+    }
+  }
+}

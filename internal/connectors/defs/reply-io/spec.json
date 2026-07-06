@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reply.io Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Reply.io legacy API key, sent as the X-Api-Key header for v1 streams. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.reply.io",
+      "description": "Reply.io API base URL override for tests or proxies. Defaults to the current v3 API host; legacy v1 streams include /v1 in their paths."
+    },
+    "updated_after": {
+      "type": "string",
+      "description": "Optional updated-after filter applied to every stream's request, matching legacy's config-driven query filter."
+    },
+    "created_after": {
+      "type": "string",
+      "description": "Optional created-after filter applied to every stream's request."
+    },
+    "email": {
+      "type": "string",
+      "description": "Optional email filter applied to every stream's request."
+    },
+    "status": {
+      "type": "string",
+      "description": "Optional status filter applied to every stream's request."
+    },
+    "bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional Reply.io v3 bearer token/API key. When provided, v3 streams and writes use Authorization: Bearer."
+    },
+    "calendarId": {
+      "type": "string",
+      "description": "Path parameter calendarId for documented Reply.io v3 endpoints."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Path parameter contact_id for documented Reply.io v3 endpoints."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Path parameter document_id for documented Reply.io v3 endpoints."
+    },
+    "email_account_id": {
+      "type": "string",
+      "description": "Path parameter email_account_id for documented Reply.io v3 endpoints."
+    },
+    "id": {
+      "type": "string",
+      "description": "Path parameter id for documented Reply.io v3 endpoints."
+    },
+    "jobId": {
+      "type": "string",
+      "description": "Path parameter jobId for documented Reply.io v3 endpoints."
+    },
+    "knowledge_base_id": {
+      "type": "string",
+      "description": "Path parameter knowledge_base_id for documented Reply.io v3 endpoints."
+    },
+    "link_id": {
+      "type": "string",
+      "description": "Path parameter link_id for documented Reply.io v3 endpoints."
+    },
+    "linkedInAccountId": {
+      "type": "string",
+      "description": "Path parameter linkedInAccountId for documented Reply.io v3 endpoints."
+    },
+    "media_id": {
+      "type": "string",
+      "description": "Path parameter media_id for documented Reply.io v3 endpoints."
+    },
+    "playbook_id": {
+      "type": "string",
+      "description": "Path parameter playbook_id for documented Reply.io v3 endpoints."
+    },
+    "reengagement_card_id": {
+      "type": "string",
+      "description": "Path parameter reengagement_card_id for documented Reply.io v3 endpoints."
+    },
+    "reply_handler_id": {
+      "type": "string",
+      "description": "Path parameter reply_handler_id for documented Reply.io v3 endpoints."
+    },
+    "sequence_id": {
+      "type": "string",
+      "description": "Path parameter sequence_id for documented Reply.io v3 endpoints."
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Path parameter step_id for documented Reply.io v3 endpoints."
+    },
+    "style_file_id": {
+      "type": "string",
+      "description": "Path parameter style_file_id for documented Reply.io v3 endpoints."
+    },
+    "tagId": {
+      "type": "string",
+      "description": "Path parameter tagId for documented Reply.io v3 endpoints."
+    },
+    "variant_id": {
+      "type": "string",
+      "description": "Path parameter variant_id for documented Reply.io v3 endpoints."
+    }
+  }
+}

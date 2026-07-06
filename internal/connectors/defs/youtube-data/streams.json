@@ -1,0 +1,167 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "key", "value": "{{ secrets.api_key }}" }
+    ],
+    "error_map": [
+      { "status": 401, "hint": "youtube-data api_key is missing or invalid; re-run pm credentials add youtube-data" },
+      { "status": 403, "hint": "youtube-data api key lacks access or quota is exhausted for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "youtube-data rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "channels",
+      "path": "/channels",
+      "query": {
+        "part": "snippet,statistics",
+        "id": { "template": "{{ config.channel_ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}",
+        "view_count": "{{ record.statistics.viewCount }}"
+      },
+      "schema": "schemas/channels.json"
+    },
+    {
+      "name": "videos",
+      "path": "/videos",
+      "query": {
+        "part": "snippet,statistics",
+        "id": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}",
+        "published_at": "{{ record.snippet.publishedAt }}"
+      },
+      "schema": "schemas/videos.json"
+    },
+    {
+      "name": "playlists",
+      "path": "/playlists",
+      "query": {
+        "part": "snippet,statistics",
+        "id": { "template": "{{ config.ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}",
+        "published_at": "{{ record.snippet.publishedAt }}"
+      },
+      "schema": "schemas/playlists.json"
+    },
+    {
+      "name": "playlist_items",
+      "path": "/playlistItems",
+      "query": {
+        "part": "snippet,contentDetails",
+        "maxResults": "50"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "playlist_ids" },
+        "into": { "query_param": "playlistId" },
+        "stamp_field": "playlist_id"
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}",
+        "published_at": "{{ record.snippet.publishedAt }}",
+        "video_id": "{{ record.contentDetails.videoId }}"
+      },
+      "schema": "schemas/playlist_items.json"
+    },
+    {
+      "name": "comment_threads",
+      "path": "/commentThreads",
+      "query": {
+        "part": "snippet",
+        "maxResults": "100"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "fan_out": {
+        "ids_from": { "config_key": "video_ids" },
+        "into": { "query_param": "videoId" },
+        "stamp_field": "video_id"
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "published_at": "{{ record.snippet.topLevelComment.snippet.publishedAt }}",
+        "text": "{{ record.snippet.topLevelComment.snippet.textDisplay }}"
+      },
+      "schema": "schemas/comment_threads.json"
+    },
+    {
+      "name": "search",
+      "path": "/search",
+      "query": {
+        "part": "snippet",
+        "maxResults": "50",
+        "type": "video",
+        "q": { "template": "{{ config.search_query }}", "omit_when_absent": true },
+        "channelId": { "template": "{{ config.channel_ids }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "id": "{{ record.id.videoId }}",
+        "title": "{{ record.snippet.title }}",
+        "published_at": "{{ record.snippet.publishedAt }}"
+      },
+      "schema": "schemas/search.json"
+    },
+    {
+      "name": "video_categories",
+      "path": "/videoCategories",
+      "query": {
+        "part": "snippet",
+        "regionCode": { "template": "{{ config.region_code }}", "default": "US" }
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "title": "{{ record.snippet.title }}"
+      },
+      "schema": "schemas/video_categories.json"
+    },
+    {
+      "name": "i18n_regions",
+      "path": "/i18nRegions",
+      "query": {
+        "part": "snippet"
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "name": "{{ record.snippet.name }}"
+      },
+      "schema": "schemas/i18n_regions.json"
+    },
+    {
+      "name": "i18n_languages",
+      "path": "/i18nLanguages",
+      "query": {
+        "part": "snippet"
+      },
+      "records": { "path": "items" },
+      "computed_fields": {
+        "name": "{{ record.snippet.name }}"
+      },
+      "schema": "schemas/i18n_languages.json"
+    }
+  ]
+}

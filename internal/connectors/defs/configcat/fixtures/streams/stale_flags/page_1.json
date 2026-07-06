@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/v1/products/synthetic-conformance-value/staleflags" },
+  "response": {
+    "status": 200,
+    "body": {
+      "productId": "prod_fixture_1",
+      "name": "Fixture Product 1",
+      "configs": [],
+      "environments": []
+    }
+  }
+}

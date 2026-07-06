@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hris/departments",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "departments_fixture_1",
+          "parentId": null,
+          "name": "Fixture departments 1",
+          "description": "fixture_departments_1",
+          "isArchived": false,
+          "departmentHeads": []
+        },
+        {
+          "id": "departments_fixture_2",
+          "parentId": null,
+          "name": "Fixture departments 2",
+          "description": "fixture_departments_2",
+          "isArchived": false,
+          "departmentHeads": []
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/departments",
+      "lastPage": "https://example.invalid/keka/departments",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "external_id_renames": [
+      { "current_external_id": "user_fixture_old", "new_external_id": "user_fixture_new" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/external_ids/rename",
+    "body": {
+      "external_id_renames": [
+        { "current_external_id": "user_fixture_old", "new_external_id": "user_fixture_new" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

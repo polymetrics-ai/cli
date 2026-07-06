@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/surveys",
+    "query": {
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "survey_fixture_1",
+          "title": "Fixture Survey 1",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "survey_fixture_2",
+          "title": "Fixture Survey 2",
+          "date_created": "2026-01-03T00:00:00Z",
+          "date_modified": "2026-01-04T00:00:00Z"
+        }
+      ],
+      "links": {
+        "next": ""
+      }
+    }
+  }
+}

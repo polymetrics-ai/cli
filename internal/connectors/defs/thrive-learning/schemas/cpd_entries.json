@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cpd_entries",
+  "type": "object",
+  "x-primary-key": ["logEntryId"],
+  "required": ["logEntryId"],
+  "properties": {
+    "logEntryId": { "type": "string" },
+    "userId": { "type": ["string", "null"] },
+    "activity": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "entryDate": { "type": ["string", "null"] },
+    "durationMinutes": { "type": ["number", "null"] },
+    "description": { "type": ["string", "null"] },
+    "isVerified": { "type": ["boolean", "null"] }
+  }
+}

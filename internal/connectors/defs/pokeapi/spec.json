@@ -1,0 +1,209 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PokeAPI Connection Specification",
+  "type": "object",
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://pokeapi.co/api/v2",
+      "description": "PokeAPI base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "pokemon_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_detail stream."
+    },
+    "type_id": {
+      "type": "string",
+      "description": "ID or name used by the types_detail stream."
+    },
+    "ability_id": {
+      "type": "string",
+      "description": "ID or name used by the abilities_detail stream."
+    },
+    "move_id": {
+      "type": "string",
+      "description": "ID or name used by the moves_detail stream."
+    },
+    "berry_id": {
+      "type": "string",
+      "description": "ID or name used by the berries_detail stream."
+    },
+    "berry_firmness_id": {
+      "type": "string",
+      "description": "ID or name used by the berry_firmnesses_detail stream."
+    },
+    "berry_flavor_id": {
+      "type": "string",
+      "description": "ID or name used by the berry_flavors_detail stream."
+    },
+    "contest_type_id": {
+      "type": "string",
+      "description": "ID or name used by the contest_types_detail stream."
+    },
+    "contest_effect_id": {
+      "type": "string",
+      "description": "ID or name used by the contest_effects_detail stream."
+    },
+    "super_contest_effect_id": {
+      "type": "string",
+      "description": "ID or name used by the super_contest_effects_detail stream."
+    },
+    "encounter_method_id": {
+      "type": "string",
+      "description": "ID or name used by the encounter_methods_detail stream."
+    },
+    "encounter_condition_id": {
+      "type": "string",
+      "description": "ID or name used by the encounter_conditions_detail stream."
+    },
+    "encounter_condition_value_id": {
+      "type": "string",
+      "description": "ID or name used by the encounter_condition_values_detail stream."
+    },
+    "evolution_chain_id": {
+      "type": "string",
+      "description": "ID or name used by the evolution_chains_detail stream."
+    },
+    "evolution_trigger_id": {
+      "type": "string",
+      "description": "ID or name used by the evolution_triggers_detail stream."
+    },
+    "generation_id": {
+      "type": "string",
+      "description": "ID or name used by the generations_detail stream."
+    },
+    "pokedex_id": {
+      "type": "string",
+      "description": "ID or name used by the pokedexes_detail stream."
+    },
+    "version_id": {
+      "type": "string",
+      "description": "ID or name used by the versions_detail stream."
+    },
+    "version_group_id": {
+      "type": "string",
+      "description": "ID or name used by the version_groups_detail stream."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "ID or name used by the items_detail stream."
+    },
+    "item_attribute_id": {
+      "type": "string",
+      "description": "ID or name used by the item_attributes_detail stream."
+    },
+    "item_category_id": {
+      "type": "string",
+      "description": "ID or name used by the item_categories_detail stream."
+    },
+    "item_fling_effect_id": {
+      "type": "string",
+      "description": "ID or name used by the item_fling_effects_detail stream."
+    },
+    "item_pocket_id": {
+      "type": "string",
+      "description": "ID or name used by the item_pockets_detail stream."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID or name used by the locations_detail stream."
+    },
+    "location_area_id": {
+      "type": "string",
+      "description": "ID or name used by the location_areas_detail stream."
+    },
+    "pal_park_area_id": {
+      "type": "string",
+      "description": "ID or name used by the pal_park_areas_detail stream."
+    },
+    "region_id": {
+      "type": "string",
+      "description": "ID or name used by the regions_detail stream."
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "ID or name used by the machines_detail stream."
+    },
+    "move_ailment_id": {
+      "type": "string",
+      "description": "ID or name used by the move_ailments_detail stream."
+    },
+    "move_battle_style_id": {
+      "type": "string",
+      "description": "ID or name used by the move_battle_styles_detail stream."
+    },
+    "move_category_id": {
+      "type": "string",
+      "description": "ID or name used by the move_categories_detail stream."
+    },
+    "move_damage_class_id": {
+      "type": "string",
+      "description": "ID or name used by the move_damage_classes_detail stream."
+    },
+    "move_learn_method_id": {
+      "type": "string",
+      "description": "ID or name used by the move_learn_methods_detail stream."
+    },
+    "move_target_id": {
+      "type": "string",
+      "description": "ID or name used by the move_targets_detail stream."
+    },
+    "characteristic_id": {
+      "type": "string",
+      "description": "ID or name used by the characteristics_detail stream."
+    },
+    "egg_group_id": {
+      "type": "string",
+      "description": "ID or name used by the egg_groups_detail stream."
+    },
+    "gender_id": {
+      "type": "string",
+      "description": "ID or name used by the genders_detail stream."
+    },
+    "growth_rate_id": {
+      "type": "string",
+      "description": "ID or name used by the growth_rates_detail stream."
+    },
+    "nature_id": {
+      "type": "string",
+      "description": "ID or name used by the natures_detail stream."
+    },
+    "pokeathlon_stat_id": {
+      "type": "string",
+      "description": "ID or name used by the pokeathlon_stats_detail stream."
+    },
+    "pokemon_color_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_colors_detail stream."
+    },
+    "pokemon_form_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_forms_detail stream."
+    },
+    "pokemon_habitat_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_habitats_detail stream."
+    },
+    "pokemon_shape_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_shapes_detail stream."
+    },
+    "pokemon_species_id": {
+      "type": "string",
+      "description": "ID or name used by the pokemon_species_detail stream."
+    },
+    "stat_id": {
+      "type": "string",
+      "description": "ID or name used by the stats_detail stream."
+    },
+    "language_id": {
+      "type": "string",
+      "description": "ID or name used by the languages_detail stream."
+    }
+  }
+}

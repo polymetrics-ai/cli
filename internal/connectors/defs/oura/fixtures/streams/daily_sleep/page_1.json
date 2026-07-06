@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_sleep"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sleep_fixture_1",
+          "day": "2026-01-01",
+          "score": 88,
+          "timestamp": "2026-01-01T00:00:00+00:00"
+        },
+        {
+          "id": "sleep_fixture_2",
+          "day": "2026-01-02",
+          "score": 91,
+          "timestamp": "2026-01-02T00:00:00+00:00"
+        }
+      ],
+      "next_token": "fixture-cursor-token-2"
+    }
+  }
+}

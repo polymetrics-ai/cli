@@ -1,0 +1,15 @@
+{
+  "name": "oauth2-extra-params-valid",
+  "display_name": "OAuth2 Extra Params Valid",
+  "description": "a control connector proving a well-formed oauth2_client_credentials auth.extra_params block passes connectorgen validate cleanly (S4 engine mini-wave item 4)",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  }
+}

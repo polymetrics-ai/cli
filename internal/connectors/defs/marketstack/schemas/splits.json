@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "splits",
+  "type": "object",
+  "x-primary-key": ["symbol", "date"],
+  "x-cursor-field": "date",
+  "required": ["symbol", "date"],
+  "properties": {
+    "symbol": { "type": "string" },
+    "date": { "type": "string" },
+    "split_factor": { "type": ["number", "null"] }
+  }
+}

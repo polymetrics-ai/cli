@@ -1,0 +1,10 @@
+{
+  "record": {
+    "record_id": "rec_fixture_1",
+    "id": "comFixture1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments/comFixture1"
+  }
+}

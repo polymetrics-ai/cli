@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "jobs",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "started_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "job_number": { "type": ["integer", "null"] },
+    "project_slug": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "started_at": { "type": "string" },
+    "stopped_at": { "type": ["string", "null"] }
+  }
+}

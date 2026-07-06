@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/requisitions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requisitions": [
+        {
+          "id": "requisition_fixture_1",
+          "code": "REQ-FIXTURE-1",
+          "state": "pending"
+        }
+      ],
+      "paging": {}
+    }
+  }
+}

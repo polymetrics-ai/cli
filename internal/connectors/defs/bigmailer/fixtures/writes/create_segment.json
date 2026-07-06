@@ -1,0 +1,17 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "name": "Fixture Segment",
+    "operator": "all",
+    "conditions": [{ "type": "campaign_activity", "operator": "clicked" }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/segments",
+    "body": {
+      "name": "Fixture Segment",
+      "operator": "all",
+      "conditions": [{ "type": "campaign_activity", "operator": "clicked" }]
+    }
+  }
+}

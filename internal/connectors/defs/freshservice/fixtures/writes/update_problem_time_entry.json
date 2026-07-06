@@ -1,0 +1,16 @@
+{
+  "record": {
+    "problem_id": 123,
+    "time_entry_id": 123,
+    "name": "Fixture update_problem_time_entry",
+    "description": "Fixture update_problem_time_entry record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/problems/123/time_entries/123",
+    "body": {
+      "name": "Fixture update_problem_time_entry",
+      "description": "Fixture update_problem_time_entry record"
+    }
+  }
+}

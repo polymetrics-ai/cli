@@ -1,0 +1,463 @@
+{
+  "api": "Luma public API",
+  "docs": "https://public-api.luma.com/openapi.json",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion from the official Luma OpenAPI 3.1 specification. Every documented GET endpoint is exposed as a stream; all documented POST endpoints with JSON object bodies are exposed as write actions. The legacy event_hosts stream is retained by extracting the documented hosts array from GET /v1/events/get.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/events/get",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/get",
+      "covered_by": {
+        "stream": "calendar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/events/list",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/guests/get",
+      "covered_by": {
+        "stream": "guest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/guests/list",
+      "covered_by": {
+        "stream": "event_guests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/get-self",
+      "covered_by": {
+        "stream": "self_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/contact-tags/list",
+      "covered_by": {
+        "stream": "contact_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/event-tags/list",
+      "covered_by": {
+        "stream": "event_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/admins/list",
+      "covered_by": {
+        "stream": "calendar_admins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/entities/lookup",
+      "covered_by": {
+        "stream": "entity_lookup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/events/lookup",
+      "covered_by": {
+        "stream": "event_lookup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/contacts/list",
+      "covered_by": {
+        "stream": "calendar_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/coupons/list",
+      "covered_by": {
+        "stream": "event_coupons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/coupons/list",
+      "covered_by": {
+        "stream": "calendar_coupons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/ticket-types/list",
+      "covered_by": {
+        "stream": "event_ticket_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/ticket-types/get",
+      "covered_by": {
+        "stream": "event_ticket_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/memberships/tiers/list",
+      "covered_by": {
+        "stream": "membership_tiers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/webhooks/list",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/get",
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/admins/list",
+      "covered_by": {
+        "stream": "organization_admins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/calendars/list",
+      "covered_by": {
+        "stream": "organization_calendars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organizations/events/list",
+      "covered_by": {
+        "stream": "organization_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/create",
+      "covered_by": {
+        "write": "create_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/update",
+      "covered_by": {
+        "write": "update_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/guests/update-status",
+      "covered_by": {
+        "write": "update_guest_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/guests/send-invites",
+      "covered_by": {
+        "write": "send_event_invites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/guests/add",
+      "covered_by": {
+        "write": "add_event_guests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/hosts/add",
+      "covered_by": {
+        "write": "add_event_host"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/hosts/update",
+      "covered_by": {
+        "write": "update_event_host"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/hosts/remove",
+      "covered_by": {
+        "write": "remove_event_host"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/coupons/create",
+      "covered_by": {
+        "write": "create_event_coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/coupons/update",
+      "covered_by": {
+        "write": "update_event_coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/coupons/create",
+      "covered_by": {
+        "write": "create_calendar_coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/coupons/update",
+      "covered_by": {
+        "write": "update_calendar_coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contacts/import",
+      "covered_by": {
+        "write": "import_calendar_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/create",
+      "covered_by": {
+        "write": "create_contact_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/update",
+      "covered_by": {
+        "write": "update_contact_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/delete",
+      "covered_by": {
+        "write": "delete_contact_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/apply",
+      "covered_by": {
+        "write": "apply_contact_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/contact-tags/unapply",
+      "covered_by": {
+        "write": "unapply_contact_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/create",
+      "covered_by": {
+        "write": "create_event_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/update",
+      "covered_by": {
+        "write": "update_event_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/delete",
+      "covered_by": {
+        "write": "delete_event_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/apply",
+      "covered_by": {
+        "write": "apply_event_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/event-tags/unapply",
+      "covered_by": {
+        "write": "unapply_event_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/events/add",
+      "covered_by": {
+        "write": "add_calendar_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/events/approve",
+      "covered_by": {
+        "write": "approve_calendar_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/events/reject",
+      "covered_by": {
+        "write": "reject_calendar_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/images/create-upload-url",
+      "covered_by": {
+        "write": "create_image_upload_url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/ticket-types/create",
+      "covered_by": {
+        "write": "create_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/ticket-types/update",
+      "covered_by": {
+        "write": "update_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/ticket-types/delete",
+      "covered_by": {
+        "write": "delete_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/memberships/members/add",
+      "covered_by": {
+        "write": "add_membership_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/memberships/members/update-status",
+      "covered_by": {
+        "write": "update_membership_member_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/create",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/update",
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks/delete",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/cancel/request",
+      "covered_by": {
+        "write": "request_event_cancellation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/events/cancel",
+      "covered_by": {
+        "write": "cancel_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calendars/update",
+      "covered_by": {
+        "write": "update_calendar"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/organizations/calendars/create",
+      "covered_by": {
+        "write": "create_organization_calendar"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organizations/events/transfer-calendar",
+      "covered_by": {
+        "write": "transfer_event_calendar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/get",
+      "covered_by": {
+        "stream": "event_hosts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/calendars/events/list",
+      "covered_by": {
+        "stream": "calendar_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/events/guests/list",
+      "covered_by": {
+        "stream": "guests"
+      }
+    }
+  ]
+}

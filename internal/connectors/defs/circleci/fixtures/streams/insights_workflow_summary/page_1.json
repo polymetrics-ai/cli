@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/insights/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/workflows"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "name": "build-and-test",
+          "metrics": {
+            "total_runs": 10,
+            "successful_runs": 9,
+            "failed_runs": 1,
+            "success_rate": 0.9,
+            "mttr": 120,
+            "total_credits_used": 500,
+            "total_recoveries": 1,
+            "throughput": 1.5,
+            "duration_metrics": {
+              "min": 60,
+              "mean": 90,
+              "median": 85,
+              "p95": 150,
+              "max": 200,
+              "standard_deviation": 15.2
+            }
+          },
+          "window_start": "2026-01-01T00:00:00Z",
+          "window_end": "2026-01-08T00:00:00Z",
+          "project_id": "proj_fixture_1"
+        }
+      ],
+      "next_page_token": null
+    }
+  }
+}

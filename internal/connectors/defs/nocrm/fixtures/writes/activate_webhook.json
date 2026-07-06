@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "123"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/webhooks/123/activate"
+  }
+}

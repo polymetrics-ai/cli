@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 123456,
+    "name": "Updated Delivery Method"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/delivery_methods/123456"
+  }
+}

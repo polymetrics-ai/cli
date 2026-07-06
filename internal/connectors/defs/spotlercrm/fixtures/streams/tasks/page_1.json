@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/tasks", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "task_fixture_1", "name": "Fixture Task One", "status": "open" }
+      ]
+    }
+  }
+}

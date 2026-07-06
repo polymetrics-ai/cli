@@ -1,0 +1,100 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "paging.next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/me/adaccounts",
+      "query": { "limit": "1", "fields": "id,account_id,name" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "facebook-marketing access token is missing or invalid; re-run pm credentials add facebook-marketing" },
+      { "status": 403, "hint": "facebook-marketing token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "facebook-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "ad_accounts",
+      "path": "/me/adaccounts",
+      "query": {
+        "limit": "100",
+        "fields": "id,account_id,name,account_status,currency,timezone_name"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_accounts.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/{{ config.ad_account_id }}/campaigns",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,status,effective_status,objective,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "ads",
+      "path": "/{{ config.ad_account_id }}/ads",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,status,effective_status,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ads.json"
+    },
+    {
+      "name": "ad_sets",
+      "path": "/{{ config.ad_account_id }}/adsets",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,campaign_id,status,effective_status,daily_budget,lifetime_budget,billing_event,optimization_goal,bid_amount,start_time,end_time,created_time,updated_time"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_sets.json"
+    },
+    {
+      "name": "ad_creatives",
+      "path": "/{{ config.ad_account_id }}/adcreatives",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,object_story_id,object_type,thumbnail_url,status"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/ad_creatives.json"
+    },
+    {
+      "name": "custom_audiences",
+      "path": "/{{ config.ad_account_id }}/customaudiences",
+      "query": {
+        "limit": "100",
+        "fields": "id,name,subtype,description,approximate_count_lower_bound,approximate_count_upper_bound,operation_status,time_created,time_updated"
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/custom_audiences.json"
+    },
+    {
+      "name": "insights",
+      "path": "/{{ config.ad_account_id }}/insights",
+      "query": {
+        "limit": "100",
+        "level": "ad",
+        "fields": "campaign_id,campaign_name,adset_id,adset_name,ad_id,ad_name,impressions,clicks,spend,reach,frequency,cpc,cpm,ctr,date_start,date_stop",
+        "date_preset": "last_30d"
+      },
+      "records": { "path": "data" },
+      "computed_fields": {
+        "id": "{{ record.ad_id }}{{ record.date_start }}"
+      },
+      "schema": "schemas/insights.json"
+    }
+  ]
+}

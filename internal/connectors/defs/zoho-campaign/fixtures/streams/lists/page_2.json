@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists",
+    "query": {
+      "page": "2",
+      "per_page": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "lists": [
+        {
+          "listkey": "list_fixture_201",
+          "listname": "Fixture List 201",
+          "createdtime": "2026-01-01 00:00:00",
+          "listtype": "1",
+          "tag": "fixture",
+          "modified_time": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "status": "success"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/clients/",
+    "query": { "page_size": "1", "fields[Client]": "id,created,updated,ref,name,is_active,contact_name,contact_email,contact_phone_bh,address,notes" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "ref": "CLI-1",
+          "name": "Fixture Client 1",
+          "is_active": true,
+          "contact_name": "Fixture Contact 1",
+          "contact_email": "fixture1@example.com",
+          "contact_phone_bh": "+61000000001",
+          "address": "1 Example St",
+          "notes": "fixture"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

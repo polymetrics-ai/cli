@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Warehouse",
+    "city": "Swansea",
+    "country": "GB"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/warehouses"
+  }
+}

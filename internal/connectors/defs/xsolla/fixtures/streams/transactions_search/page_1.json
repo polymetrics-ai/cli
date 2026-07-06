@@ -1,0 +1,5415 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/reports/transactions/search.json",
+    "query": {
+      "limit": "100",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "transaction": {
+          "id": 100001,
+          "external_id": "fixture-ext-1",
+          "order_id": 5001,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_1",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100002,
+          "external_id": "fixture-ext-2",
+          "order_id": 5002,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_2",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100003,
+          "external_id": "fixture-ext-3",
+          "order_id": 5003,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_3",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100004,
+          "external_id": "fixture-ext-4",
+          "order_id": 5004,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_4",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100005,
+          "external_id": "fixture-ext-5",
+          "order_id": 5005,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_5",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100006,
+          "external_id": "fixture-ext-6",
+          "order_id": 5006,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_6",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100007,
+          "external_id": "fixture-ext-7",
+          "order_id": 5007,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_7",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100008,
+          "external_id": "fixture-ext-8",
+          "order_id": 5008,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_8",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100009,
+          "external_id": "fixture-ext-9",
+          "order_id": 5009,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_9",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100010,
+          "external_id": "fixture-ext-10",
+          "order_id": 5010,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_10",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100011,
+          "external_id": "fixture-ext-11",
+          "order_id": 5011,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_11",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100012,
+          "external_id": "fixture-ext-12",
+          "order_id": 5012,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_12",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100013,
+          "external_id": "fixture-ext-13",
+          "order_id": 5013,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_13",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100014,
+          "external_id": "fixture-ext-14",
+          "order_id": 5014,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_14",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100015,
+          "external_id": "fixture-ext-15",
+          "order_id": 5015,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_15",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100016,
+          "external_id": "fixture-ext-16",
+          "order_id": 5016,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_16",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100017,
+          "external_id": "fixture-ext-17",
+          "order_id": 5017,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_17",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100018,
+          "external_id": "fixture-ext-18",
+          "order_id": 5018,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_18",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100019,
+          "external_id": "fixture-ext-19",
+          "order_id": 5019,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_19",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100020,
+          "external_id": "fixture-ext-20",
+          "order_id": 5020,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_20",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100021,
+          "external_id": "fixture-ext-21",
+          "order_id": 5021,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_21",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100022,
+          "external_id": "fixture-ext-22",
+          "order_id": 5022,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_22",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100023,
+          "external_id": "fixture-ext-23",
+          "order_id": 5023,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_23",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100024,
+          "external_id": "fixture-ext-24",
+          "order_id": 5024,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_24",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100025,
+          "external_id": "fixture-ext-25",
+          "order_id": 5025,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_25",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100026,
+          "external_id": "fixture-ext-26",
+          "order_id": 5026,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_26",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100027,
+          "external_id": "fixture-ext-27",
+          "order_id": 5027,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_27",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100028,
+          "external_id": "fixture-ext-28",
+          "order_id": 5028,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_28",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100029,
+          "external_id": "fixture-ext-29",
+          "order_id": 5029,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_29",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100030,
+          "external_id": "fixture-ext-30",
+          "order_id": 5030,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_30",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100031,
+          "external_id": "fixture-ext-31",
+          "order_id": 5031,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_31",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100032,
+          "external_id": "fixture-ext-32",
+          "order_id": 5032,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_32",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100033,
+          "external_id": "fixture-ext-33",
+          "order_id": 5033,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_33",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100034,
+          "external_id": "fixture-ext-34",
+          "order_id": 5034,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_34",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100035,
+          "external_id": "fixture-ext-35",
+          "order_id": 5035,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_35",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100036,
+          "external_id": "fixture-ext-36",
+          "order_id": 5036,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_36",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100037,
+          "external_id": "fixture-ext-37",
+          "order_id": 5037,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_37",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100038,
+          "external_id": "fixture-ext-38",
+          "order_id": 5038,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_38",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100039,
+          "external_id": "fixture-ext-39",
+          "order_id": 5039,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_39",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100040,
+          "external_id": "fixture-ext-40",
+          "order_id": 5040,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_40",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100041,
+          "external_id": "fixture-ext-41",
+          "order_id": 5041,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_41",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100042,
+          "external_id": "fixture-ext-42",
+          "order_id": 5042,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_42",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100043,
+          "external_id": "fixture-ext-43",
+          "order_id": 5043,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_43",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100044,
+          "external_id": "fixture-ext-44",
+          "order_id": 5044,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_44",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100045,
+          "external_id": "fixture-ext-45",
+          "order_id": 5045,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_45",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100046,
+          "external_id": "fixture-ext-46",
+          "order_id": 5046,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_46",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100047,
+          "external_id": "fixture-ext-47",
+          "order_id": 5047,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_47",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100048,
+          "external_id": "fixture-ext-48",
+          "order_id": 5048,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_48",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100049,
+          "external_id": "fixture-ext-49",
+          "order_id": 5049,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_49",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100050,
+          "external_id": "fixture-ext-50",
+          "order_id": 5050,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_50",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100051,
+          "external_id": "fixture-ext-51",
+          "order_id": 5051,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_51",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100052,
+          "external_id": "fixture-ext-52",
+          "order_id": 5052,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_52",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100053,
+          "external_id": "fixture-ext-53",
+          "order_id": 5053,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_53",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100054,
+          "external_id": "fixture-ext-54",
+          "order_id": 5054,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_54",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100055,
+          "external_id": "fixture-ext-55",
+          "order_id": 5055,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_55",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100056,
+          "external_id": "fixture-ext-56",
+          "order_id": 5056,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_56",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100057,
+          "external_id": "fixture-ext-57",
+          "order_id": 5057,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_57",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100058,
+          "external_id": "fixture-ext-58",
+          "order_id": 5058,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_58",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100059,
+          "external_id": "fixture-ext-59",
+          "order_id": 5059,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_59",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100060,
+          "external_id": "fixture-ext-60",
+          "order_id": 5060,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_60",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100061,
+          "external_id": "fixture-ext-61",
+          "order_id": 5061,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_61",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100062,
+          "external_id": "fixture-ext-62",
+          "order_id": 5062,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_62",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100063,
+          "external_id": "fixture-ext-63",
+          "order_id": 5063,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_63",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100064,
+          "external_id": "fixture-ext-64",
+          "order_id": 5064,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_64",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100065,
+          "external_id": "fixture-ext-65",
+          "order_id": 5065,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_65",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100066,
+          "external_id": "fixture-ext-66",
+          "order_id": 5066,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_66",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100067,
+          "external_id": "fixture-ext-67",
+          "order_id": 5067,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_67",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100068,
+          "external_id": "fixture-ext-68",
+          "order_id": 5068,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_68",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100069,
+          "external_id": "fixture-ext-69",
+          "order_id": 5069,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_69",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100070,
+          "external_id": "fixture-ext-70",
+          "order_id": 5070,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_70",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100071,
+          "external_id": "fixture-ext-71",
+          "order_id": 5071,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_71",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100072,
+          "external_id": "fixture-ext-72",
+          "order_id": 5072,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_72",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100073,
+          "external_id": "fixture-ext-73",
+          "order_id": 5073,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_73",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100074,
+          "external_id": "fixture-ext-74",
+          "order_id": 5074,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_74",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100075,
+          "external_id": "fixture-ext-75",
+          "order_id": 5075,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_75",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100076,
+          "external_id": "fixture-ext-76",
+          "order_id": 5076,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_76",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100077,
+          "external_id": "fixture-ext-77",
+          "order_id": 5077,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_77",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100078,
+          "external_id": "fixture-ext-78",
+          "order_id": 5078,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_78",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100079,
+          "external_id": "fixture-ext-79",
+          "order_id": 5079,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_79",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100080,
+          "external_id": "fixture-ext-80",
+          "order_id": 5080,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_80",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100081,
+          "external_id": "fixture-ext-81",
+          "order_id": 5081,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_81",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100082,
+          "external_id": "fixture-ext-82",
+          "order_id": 5082,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_82",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100083,
+          "external_id": "fixture-ext-83",
+          "order_id": 5083,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_83",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100084,
+          "external_id": "fixture-ext-84",
+          "order_id": 5084,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_84",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100085,
+          "external_id": "fixture-ext-85",
+          "order_id": 5085,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_85",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100086,
+          "external_id": "fixture-ext-86",
+          "order_id": 5086,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_86",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100087,
+          "external_id": "fixture-ext-87",
+          "order_id": 5087,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_87",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100088,
+          "external_id": "fixture-ext-88",
+          "order_id": 5088,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_88",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100089,
+          "external_id": "fixture-ext-89",
+          "order_id": 5089,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_89",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100090,
+          "external_id": "fixture-ext-90",
+          "order_id": 5090,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_90",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100091,
+          "external_id": "fixture-ext-91",
+          "order_id": 5091,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_91",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100092,
+          "external_id": "fixture-ext-92",
+          "order_id": 5092,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_92",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100093,
+          "external_id": "fixture-ext-93",
+          "order_id": 5093,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_93",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100094,
+          "external_id": "fixture-ext-94",
+          "order_id": 5094,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_94",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100095,
+          "external_id": "fixture-ext-95",
+          "order_id": 5095,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_95",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100096,
+          "external_id": "fixture-ext-96",
+          "order_id": 5096,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_96",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100097,
+          "external_id": "fixture-ext-97",
+          "order_id": 5097,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_97",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100098,
+          "external_id": "fixture-ext-98",
+          "order_id": 5098,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_98",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100099,
+          "external_id": "fixture-ext-99",
+          "order_id": 5099,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_99",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      },
+      {
+        "transaction": {
+          "id": 100100,
+          "external_id": "fixture-ext-100",
+          "order_id": 5100,
+          "status": "done",
+          "create_date": "2026-01-01T00:00:00Z",
+          "transfer_date": "2026-01-02T00:00:00Z",
+          "refund_reason": null,
+          "dry_run": 0,
+          "is_refund_allowed": 1,
+          "project": {
+            "id": 123456,
+            "name": "Fixture Project"
+          },
+          "payment_method": {
+            "id": 1,
+            "name": "PayPal"
+          }
+        },
+        "user": {
+          "id": "user_fixture_100",
+          "name": "Fixture User",
+          "email": "fixture1@example.com",
+          "phone": null,
+          "country": "US",
+          "custom": null
+        },
+        "payment_details": {
+          "payment": {
+            "currency": "USD",
+            "amount": 9.99,
+            "amount_from_ps": 9.99
+          },
+          "sales_tax": {
+            "percent": 0,
+            "amount": 0
+          }
+        },
+        "purchase": {
+          "virtual_currency": {
+            "amount": 0,
+            "name": null
+          },
+          "virtual_items": null,
+          "simple_checkout": {
+            "amount": 9.99,
+            "currency": "USD"
+          }
+        },
+        "payment_system": {
+          "decline_reason": null
+        }
+      }
+    ]
+  }
+}

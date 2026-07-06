@@ -1,0 +1,14 @@
+{
+  "record": {
+    "event_id": "fixture_event_id",
+    "email": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/events/hosts/update",
+    "body": {
+      "event_id": "fixture_event_id",
+      "email": "fixture@example.invalid"
+    }
+  }
+}

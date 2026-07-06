@@ -1,0 +1,23 @@
+{
+  "name": "google-directory",
+  "display_name": "Google Directory",
+  "description": "Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/admin-sdk/directory/reference/rest",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Google Admin SDK Directory API read of user/group/org-unit/device metadata",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  }
+}

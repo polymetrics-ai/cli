@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/transactions", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "transactions": [
+        { "transaction_id": "txn_fixture_1", "amount": "10.00", "side": "credit", "settled_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z" },
+        { "transaction_id": "txn_fixture_2", "amount": "20.00", "side": "debit", "settled_at": "2026-01-02T00:00:00Z", "updated_at": "2026-01-02T00:00:00Z" }
+      ],
+      "meta": { "current_page": 1, "next_page": 2 }
+    }
+  }
+}

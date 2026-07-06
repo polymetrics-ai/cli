@@ -1,0 +1,20 @@
+{
+  "record": {
+    "tax_rate_id": 123,
+    "name": "Fixture record"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/tax_rates/123",
+    "body": {
+      "name": "Fixture record"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 9001,
+      "object": "fixture"
+    }
+  }
+}

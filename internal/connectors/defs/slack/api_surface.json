@@ -1,0 +1,84 @@
+{
+  "api": "Slack Web API (https://slack.com/api)",
+  "docs": "https://api.slack.com/specs/openapi/v2/slack_web.json",
+  "reviewed_at": "2026-07-03",
+  "scope": "Tier-2 migration: the 3 legacy-parity read streams only (users, channels, channel_messages); legacy slack is read-only (Write always returns ErrUnsupportedOperation) and the full Slack Web API surface (threads, channel_members, files, reactions, admin.*, apps.*, oauth.v2.access itself) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/auth.test",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users.list",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations.list",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations.history",
+      "covered_by": {
+        "stream": "channel_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations.replies",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/conversations.replies is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations.members",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/conversations.members is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files.list",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/files.list is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/chat.postMessage",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "(reverse-ETL not implemented; legacy is read-only)"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth.v2.access",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "one-time authorization-code exchange performed by the credentials/install layer, not a repeatable connector auth grant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin.*",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Enterprise Grid admin API, not exposed by this connector"
+      }
+    }
+  ]
+}

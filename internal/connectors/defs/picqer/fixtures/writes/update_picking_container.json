@@ -1,0 +1,9 @@
+{
+  "record": { "idpicking_container": 1401, "name": "Fixture Container Updated" },
+  "expect": {
+    "method": "PUT",
+    "path": "/picking-containers/1401",
+    "body": { "name": "Fixture Container Updated" }
+  },
+  "response": { "status": 200, "body": { "idpicking_container": 1401, "name": "Fixture Container Updated" } }
+}

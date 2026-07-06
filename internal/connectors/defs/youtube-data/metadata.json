@@ -1,0 +1,23 @@
+{
+  "name": "youtube-data",
+  "display_name": "YouTube Data",
+  "description": "Reads channels, videos, playlists, playlist items, comment threads, search results, video categories, and i18n region/language reference data through the YouTube Data API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/youtube/v3",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external YouTube Data API read of public channel, video, playlist, playlist item, comment, search result, and reference data",
+    "approval": "none; read-only"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/c/synthetic-conformance-value/departments", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "departments": [
+        { "id": 1, "name": "Engineering" },
+        { "id": 2, "name": "Sales" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/Invoices" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "invoiceId": "inv_fixture_1",
+          "invoiceNumber": "INV-0001",
+          "accountId": "acc_fixture_1",
+          "updated": "2026-01-01T00:00:00Z"
+        },
+        {
+          "invoiceId": "inv_fixture_2",
+          "invoiceNumber": "INV-0002",
+          "accountId": "acc_fixture_2",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

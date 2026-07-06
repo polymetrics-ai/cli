@@ -1,0 +1,54 @@
+{
+  "api": "Drift REST API (https://driftapi.com)",
+  "docs": "https://devdocs.drift.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-researched via the live devdocs.drift.com/llms.txt AI-agent index (100+ page docs tree) and each linked endpoint's own page. 5 read streams (the 4 pre-existing plus teams) and 11 write actions covering contact/account/message/conversation/timeline-event/GDPR lifecycle mutation. Excluded: SCIM provisioning (a separate identity-management sub-product with its own auth model), the App Admin API (app_uninstall/token_info — OAuth-app integration lifecycle, not customer data), playbooks/meetings (list-only detail resources with no create/update/delete counterpart and, for playbooks, no incremental value beyond what conversations/contacts already sync), custom-attribute-definition listing (schema introspection, not itself object data), and the emails/unsubscribe endpoint (a genuine dialect gap: its wire body is a bare JSON array of email strings, not an object, and this engine's write dialect only ever constructs an object body from record fields).",
+  "endpoints": [
+    { "method": "GET", "path": "/users/list", "covered_by": { "stream": "users" } },
+    { "method": "GET", "path": "/users/{userId}", "excluded": { "category": "duplicate_of", "reason": "single/multi-user detail by id; identical record shape to the users list stream's per-item object, already covered by that stream" } },
+    { "method": "PATCH", "path": "/users/update", "excluded": { "category": "requires_elevated_scope", "reason": "updates an internal Drift agent/user's own profile (name/availability/role); a workspace-admin identity action, not a customer-data mutation this reverse-ETL surface targets" } },
+    { "method": "GET", "path": "/users/meetings/org", "excluded": { "category": "out_of_scope", "reason": "booked-meetings list scoped to the whole org; a scheduling/calendar-integration byproduct, not a core CRM-shaped object this pass prioritizes" } },
+
+    { "method": "GET", "path": "/accounts", "covered_by": { "stream": "accounts" } },
+    { "method": "GET", "path": "/accounts/{accountId}", "excluded": { "category": "duplicate_of", "reason": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/accounts/create", "covered_by": { "write": "create_account" } },
+    { "method": "PATCH", "path": "/accounts/update", "covered_by": { "write": "update_account" } },
+    { "method": "DELETE", "path": "/accounts/{accountId}", "covered_by": { "write": "delete_account" } },
+
+    { "method": "GET", "path": "/conversations/list", "covered_by": { "stream": "conversations" } },
+    { "method": "GET", "path": "/conversations/{conversationId}", "excluded": { "category": "duplicate_of", "reason": "single-conversation detail; identical record shape to the conversations list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/conversations/{conversationId}/messages", "excluded": { "category": "out_of_scope", "reason": "per-conversation message list requires a conversation-id fan-out with no natural top-level incremental stream shape; conversations themselves are already synced, and messages are reachable on demand rather than as a bulk warehouse-destined stream in this pass" } },
+    { "method": "GET", "path": "/conversations/{conversationId}/transcript", "excluded": { "category": "duplicate_of", "reason": "formatted rendering of the same message data as the messages sub-resource; not a distinct record shape" } },
+    { "method": "GET", "path": "/attachments/{docId}/data", "excluded": { "category": "binary_payload", "reason": "returns raw attachment file bytes, not a JSON record" } },
+    { "method": "POST", "path": "/conversations/new", "covered_by": { "write": "create_conversation" } },
+    { "method": "POST", "path": "/conversations/{conversationId}/messages", "covered_by": { "write": "create_message" } },
+    { "method": "GET", "path": "/conversations/stats", "excluded": { "category": "non_data_endpoint", "reason": "aggregate open/closed/pending conversation counts, not a syncable object stream" } },
+
+    { "method": "GET", "path": "/contacts", "covered_by": { "stream": "contacts" } },
+    { "method": "GET", "path": "/contacts/{contactId}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; identical record shape to the contacts stream's per-item object, already covered by that stream" } },
+    { "method": "POST", "path": "/contacts", "covered_by": { "write": "create_contact" } },
+    { "method": "PATCH", "path": "/contacts/{contactId}", "covered_by": { "write": "update_contact" } },
+    { "method": "PATCH", "path": "/contacts/normalize", "excluded": { "category": "duplicate_of", "reason": "same contact-update mutation as update_contact, addressed by an alternate identifier (external/anonymous id) instead of the Drift contact id; not a distinct record shape" } },
+    { "method": "DELETE", "path": "/contacts/{contactId}", "covered_by": { "write": "delete_contact" } },
+    { "method": "POST", "path": "/contacts/timeline", "covered_by": { "write": "post_timeline_event" } },
+    { "method": "GET", "path": "/contacts/attributes", "excluded": { "category": "non_data_endpoint", "reason": "describes the organization's enabled custom contact field definitions (schema introspection), not contact object data itself" } },
+    { "method": "POST", "path": "/emails/unsubscribe", "excluded": { "category": "out_of_scope", "reason": "genuine dialect gap: the real wire body is a bare JSON array of email strings (not an object of record fields), and this engine's write dialect only ever builds an object body from a record's fields — no bare-array body shape is expressible today" } },
+
+    { "method": "GET", "path": "/playbooks/list", "excluded": { "category": "out_of_scope", "reason": "bot playbook configuration list; automation/workflow config, not CRM-shaped customer data, and read-only with no create/update/delete counterpart to pair a write action against" } },
+    { "method": "GET", "path": "/playbooks/clp", "excluded": { "category": "out_of_scope", "reason": "conversational landing page configuration list; same automation/workflow-config scope narrowing as playbooks/list" } },
+
+    { "method": "GET", "path": "/teams/org", "covered_by": { "stream": "teams" } },
+    { "method": "GET", "path": "/teams/users/{userId}", "excluded": { "category": "duplicate_of", "reason": "per-user filtered view of the same team records the teams stream already reads in full for the org" } },
+
+    { "method": "POST", "path": "/app/uninstall", "excluded": { "category": "destructive_admin", "reason": "uninstalls the entire OAuth app integration from the customer's Drift org, severing all API access; an integration-lifecycle action requiring client_id/client_secret query params, not a customer-data mutation" } },
+    { "method": "POST", "path": "/app/token_info", "excluded": { "category": "requires_elevated_scope", "reason": "introspects OAuth token/scope/org metadata for the calling app; app-credential introspection, not syncable customer data" } },
+
+    { "method": "POST", "path": "/gdpr/retrieve", "covered_by": { "write": "gdpr_retrieve" } },
+    { "method": "POST", "path": "/gdpr/delete", "covered_by": { "write": "gdpr_delete" } },
+
+    { "method": "GET", "path": "/scim/v2/Users", "excluded": { "category": "requires_elevated_scope", "reason": "SCIM user provisioning search; a separate identity-management sub-product with its own SCIM bearer-token auth model, distinct from this connector's OAuth access_token scope" } },
+    { "method": "POST", "path": "/scim/v2/Users", "excluded": { "category": "requires_elevated_scope", "reason": "SCIM user provisioning create; separate identity-management auth model, out of scope for this connector" } },
+    { "method": "PUT", "path": "/scim/v2/Users/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "SCIM user provisioning update; separate identity-management auth model, out of scope for this connector" } },
+    { "method": "DELETE", "path": "/scim/v2/Users/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "SCIM user deprovisioning; separate identity-management auth model, out of scope for this connector" } }
+  ]
+}

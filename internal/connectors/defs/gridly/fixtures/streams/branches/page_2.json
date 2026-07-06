@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/synthetic-conformance-value/branches",
+    "query": {
+      "page": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "b101",
+        "name": "Fixture Branch 101"
+      }
+    ]
+  }
+}

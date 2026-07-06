@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/synthetic-conformance-value/components",
+    "query": { "page": "1", "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "component_fixture_1",
+        "name": "API",
+        "status": "OPERATIONAL",
+        "description": "fixture component",
+        "uniqueEmail": "cmp+1@example.com",
+        "showUptime": true,
+        "order": 1,
+        "group": null
+      }
+    ]
+  }
+}

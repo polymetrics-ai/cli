@@ -1,0 +1,256 @@
+{
+  "actions": [
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wiki/api/v2/pages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spaceId",
+          "title",
+          "body"
+        ],
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "body": {
+            "type": "object",
+            "required": [
+              "representation",
+              "value"
+            ],
+            "properties": {
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new published or draft page in the target space; external mutation, no approval required"
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/wiki/api/v2/pages/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "title",
+          "spaceId",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "spaceId": {
+            "type": "string"
+          },
+          "body": {
+            "type": "object",
+            "properties": {
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "version": {
+            "type": "object",
+            "required": [
+              "number"
+            ],
+            "properties": {
+              "number": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "mutates an existing page's content/status; requires the caller to supply the next version.number (Confluence rejects a stale version number), external mutation, no approval required"
+    },
+    {
+      "name": "create_blogpost",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wiki/api/v2/blogposts",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "spaceId",
+          "title",
+          "body"
+        ],
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "object",
+            "required": [
+              "representation",
+              "value"
+            ],
+            "properties": {
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new published or draft blog post in the target space; external mutation, no approval required"
+    },
+    {
+      "name": "create_footer_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wiki/api/v2/footer-comments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pageId",
+          "body"
+        ],
+        "properties": {
+          "pageId": {
+            "type": "string"
+          },
+          "blogPostId": {
+            "type": "string"
+          },
+          "parentCommentId": {
+            "type": "string"
+          },
+          "body": {
+            "type": "object",
+            "required": [
+              "representation",
+              "value"
+            ],
+            "properties": {
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new footer comment (or reply) on a page/blogpost; external mutation, no approval required"
+    },
+    {
+      "name": "create_inline_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/wiki/api/v2/inline-comments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pageId",
+          "body",
+          "inlineCommentProperties"
+        ],
+        "properties": {
+          "pageId": {
+            "type": "string"
+          },
+          "blogPostId": {
+            "type": "string"
+          },
+          "parentCommentId": {
+            "type": "string"
+          },
+          "body": {
+            "type": "object",
+            "required": [
+              "representation",
+              "value"
+            ],
+            "properties": {
+              "representation": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "inlineCommentProperties": {
+            "type": "object",
+            "required": [
+              "textSelection"
+            ],
+            "properties": {
+              "textSelection": {
+                "type": "string"
+              },
+              "textSelectionMatchCount": {
+                "type": "integer"
+              },
+              "textSelectionMatchIndex": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates a new inline comment (or reply) anchored to a text selection on a page/blogpost; external mutation, no approval required"
+    }
+  ]
+}

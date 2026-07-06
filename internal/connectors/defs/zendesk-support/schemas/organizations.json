@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "organizations",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": ["string", "null"] },
+    "details": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] },
+    "group_id": { "type": ["integer", "null"] },
+    "shared_tickets": { "type": ["boolean", "null"] },
+    "shared_comments": { "type": ["boolean", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "title": "synthetic-conformance-value",
+    "author_user_id": "synthetic-conformance-value",
+    "body_html": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/knowledge-bases/synthetic-conformance-value/articles",
+    "body": {
+      "title": "synthetic-conformance-value",
+      "author_user_id": "synthetic-conformance-value",
+      "body_html": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

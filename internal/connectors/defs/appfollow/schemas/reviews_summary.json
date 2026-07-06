@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reviews_summary",
+  "type": "object",
+  "x-primary-key": ["ext_id", "date", "country"],
+  "required": ["ext_id"],
+  "properties": {
+    "ext_id": { "type": ["string", "null"] },
+    "date": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "version": { "type": ["string", "null"] },
+    "total": { "type": ["integer", "null"] },
+    "avg_rating": { "type": ["number", "null"] },
+    "stars1": { "type": ["integer", "null"] },
+    "stars2": { "type": ["integer", "null"] },
+    "stars3": { "type": ["integer", "null"] },
+    "stars4": { "type": ["integer", "null"] },
+    "stars5": { "type": ["integer", "null"] }
+  }
+}

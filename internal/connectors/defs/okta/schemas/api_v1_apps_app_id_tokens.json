@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "clientId": {
+      "type": "string",
+      "description": "Client ID"
+    },
+    "created": {
+      "type": "string",
+      "description": "Timestamp when the object was created",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "description": "Expiration time of the OAuth 2.0 Token",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the Token object"
+    },
+    "issuer": {
+      "type": "string",
+      "description": "The complete URL of the authorization server that issued the Token"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Timestamp when the object was last updated",
+      "format": "date-time"
+    },
+    "scopes": {
+      "type": "array",
+      "description": "The scope names attached to the Token",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "description": "Status",
+      "enum": [
+        "ACTIVE",
+        "REVOKED"
+      ]
+    },
+    "userId": {
+      "type": "string",
+      "description": "The ID of the user associated with the Token"
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "The embedded resources related to the object if the `expand` query parameter is specified",
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "description": "The scope objects attached to the Token",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "Description of the Scope"
+              },
+              "displayName": {
+                "type": "string",
+                "description": "Name of the end user displayed in a consent dialog"
+              },
+              "id": {
+                "type": "string",
+                "description": "Scope object ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Scope name"
+              },
+              "_links": {
+                "type": "object",
+                "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+                "properties": {
+                  "scope": {
+                    "type": "object",
+                    "properties": {
+                      "href": {
+                        "type": "string",
+                        "description": "Link URI"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "Link name"
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "_links": {
+      "type": "object",
+      "description": "Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.",
+      "properties": {
+        "app": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "title": {
+              "type": "string",
+              "description": "Link name"
+            }
+          },
+          "additionalProperties": true
+        },
+        "revoke": {
+          "type": "object",
+          "properties": {
+            "hints": {
+              "type": "object",
+              "properties": {
+                "allow": {
+                  "type": "array",
+                  "items": {
+                    "type": [
+                      "object",
+                      "string",
+                      "number",
+                      "boolean",
+                      "array",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "client": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "title": {
+              "type": "string",
+              "description": "Link name"
+            }
+          },
+          "additionalProperties": true
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "title": {
+              "type": "string",
+              "description": "Link name"
+            }
+          },
+          "additionalProperties": true
+        },
+        "authorizationServer": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string",
+              "description": "Link URI"
+            },
+            "title": {
+              "type": "string",
+              "description": "Link name"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

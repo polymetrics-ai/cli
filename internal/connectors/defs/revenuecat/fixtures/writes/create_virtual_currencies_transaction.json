@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer_id": "cust_fixture_1",
+    "currency_code": "currency_code_fixture_1",
+    "amount": 100
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/synthetic-conformance-value/customers/cust_fixture_1/virtual_currencies/transactions",
+    "body": {
+      "currency_code": "currency_code_fixture_1",
+      "amount": 100
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

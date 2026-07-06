@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/pipeline/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "pipe_1", "name": "Fixture Pipeline", "organization_id": "orga_fixture", "statuses": [] }
+      ]
+    }
+  }
+}

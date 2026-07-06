@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "event_expenses",
+  "type": "object",
+  "x-primary-key": ["event_id", "id"],
+  "required": ["id", "event_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "event_id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "note": { "type": ["string", "null"] },
+    "actual_amount": { "type": ["number", "null"] },
+    "paid_amount": { "type": ["number", "null"] },
+    "budget_category": { "type": ["string", "null"] },
+    "team_allocations": { "type": ["array", "null"] }
+  }
+}

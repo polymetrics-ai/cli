@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ config.account_id }}", "password": "{{ secrets.personal_access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/contacts", "query": { "limit": "1", "offset": "0" } },
+    "error_map": [
+      { "status": 401, "hint": "flexmail account_id/personal_access_token is missing or invalid; re-run pm credentials add flexmail" },
+      { "status": 429, "class": "rate_limited", "hint": "flexmail rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "_embedded.item" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 500
+      },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom-fields",
+      "records": { "path": "_embedded.item" },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "interests",
+      "path": "/interests",
+      "records": { "path": "_embedded.item" },
+      "schema": "schemas/interests.json"
+    },
+    {
+      "name": "segments",
+      "path": "/segments",
+      "records": { "path": "_embedded.item" },
+      "schema": "schemas/segments.json"
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "records": { "path": "_embedded.item" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 500
+      },
+      "schema": "schemas/sources.json"
+    }
+  ]
+}

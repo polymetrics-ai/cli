@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "fixture-context"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contexts/fixture-context"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

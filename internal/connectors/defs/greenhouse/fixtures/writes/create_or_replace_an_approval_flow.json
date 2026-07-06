@@ -1,0 +1,13 @@
+{
+  "record": {
+    "job_id": "job_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/jobs/job_id_fixture/approval_flows"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

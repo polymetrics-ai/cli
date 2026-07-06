@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/offerings/synthetic-conformance-value/packages",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "items": [
+        {
+          "id": "pkg_fixture_1",
+          "object": "package",
+          "lookup_key": "monthly",
+          "display_name": "Monthly",
+          "position": 1,
+          "created_at": 1735689600000
+        }
+      ],
+      "next_page": null,
+      "url": "/projects/synthetic-conformance-value/offerings/synthetic-conformance-value/packages"
+    }
+  }
+}

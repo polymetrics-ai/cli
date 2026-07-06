@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/change-requests/synthetic-conformance-value/changes",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "changes": [
+        {
+          "id": "get_change_request_changes_fixture_1",
+          "object": "gitbook-fixture",
+          "title": "Fixture get_change_request_changes",
+          "name": "Fixture get_change_request_changes",
+          "status": "active",
+          "operation_id": "getChangeRequestChanges"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time/leavetypes",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "identifier": "leave_types_fixture_1",
+          "name": "Fixture leave types 1",
+          "description": "fixture_leave_types_1",
+          "isPaid": true
+        },
+        {
+          "identifier": "leave_types_fixture_2",
+          "name": "Fixture leave types 2",
+          "description": "fixture_leave_types_2",
+          "isPaid": true
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/leave_types",
+      "lastPage": "https://example.invalid/keka/leave_types",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

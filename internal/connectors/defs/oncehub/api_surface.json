@@ -1,0 +1,75 @@
+{
+  "api": "OnceHub API v2 (https://api.oncehub.com)",
+  "docs": "https://developers.oncehub.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full OnceHub surface (booking mutations, availability, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/bookings",
+      "covered_by": {
+        "stream": "bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/booking-pages",
+      "covered_by": {
+        "stream": "booking_pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/event-types",
+      "covered_by": {
+        "stream": "event_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/bookings is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/bookings/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/bookings/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/availability",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/availability is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v2/webhooks is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    }
+  ]
+}

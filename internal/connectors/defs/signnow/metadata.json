@@ -1,0 +1,23 @@
+{
+  "name": "signnow",
+  "display_name": "signNow",
+  "description": "Reads signNow documents, templates, and users through the signNow REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.signnow.com/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external signNow API read of document, template, and user data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

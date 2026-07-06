@@ -1,0 +1,59 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/deals/synthetic-conformance-value/events",
+    "query": {
+      "take": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": {
+        "id": "id_fixture",
+        "type": "fixture",
+        "notes": "fixture",
+        "occurredAt": "2026-01-01T00:00:00Z",
+        "previousDealStage": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "stage": "fixture",
+          "weight": 1.23
+        },
+        "dealStage": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "stage": "fixture",
+          "weight": 1.23
+        },
+        "dealActivity": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "description": "fixture",
+          "icon": "fixture",
+          "timelineTitleTemplate": "fixture",
+          "timelineDescriptionTemplate": "fixture",
+          "defaultWeight": 1.23,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "task": {
+          "id": "id_fixture",
+          "title": "fixture",
+          "status": "fixture",
+          "completedAt": "2026-01-01T00:00:00Z"
+        },
+        "user": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "timelineComment": "fixture",
+        "createdAt": "2026-01-01T00:00:00Z"
+      },
+      "total": 1,
+      "hasNextPage": true,
+      "hasPreviousPage": true
+    }
+  }
+}

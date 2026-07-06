@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usercollection/daily_stress"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "daily_stress_fixture_1",
+          "day": "2026-01-01",
+          "day_summary": "fixture_day_summary",
+          "recovery_high": 80,
+          "stress_high": 80
+        }
+      ],
+      "next_token": null
+    }
+  }
+}

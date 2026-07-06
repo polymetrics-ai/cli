@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "exports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "user_id": { "type": ["integer", "null"] },
+    "user_email": { "type": ["string", "null"] },
+    "total": { "type": ["integer", "null"] },
+    "type": { "type": ["string", "null"] },
+    "failed": { "type": ["boolean", "null"] },
+    "description": { "type": ["string", "null"] },
+    "downloads": { "type": ["integer", "null"] },
+    "created_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "updated_at": { "type": ["integer", "null"], "description": "Unix seconds." },
+    "status": { "type": ["string", "null"] }
+  }
+}

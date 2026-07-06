@@ -1,0 +1,37 @@
+{
+  "request": { "method": "GET", "path": "/messages", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 301,
+          "ticket_id": 1,
+          "channel": "email",
+          "via": "email",
+          "from_agent": false,
+          "subject": "Fixture message 1",
+          "body_text": "fixture message body 1",
+          "stripped_text": "fixture message body 1",
+          "public": true,
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "sent_datetime": "2026-01-01T00:00:01Z"
+        },
+        {
+          "id": 302,
+          "ticket_id": 1,
+          "channel": "email",
+          "via": "email",
+          "from_agent": true,
+          "subject": "Fixture message 2",
+          "body_text": "fixture message body 2",
+          "stripped_text": "fixture message body 2",
+          "public": true,
+          "created_datetime": "2026-01-01T00:00:02Z",
+          "sent_datetime": "2026-01-01T00:00:02Z"
+        }
+      ],
+      "meta": { "next_cursor": null }
+    }
+  }
+}

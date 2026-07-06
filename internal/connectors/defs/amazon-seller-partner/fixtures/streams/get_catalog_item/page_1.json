@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/2020-12-01/items/synthetic-conformance-value",
+    "query": {
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "asin": "asin-fixture-1",
+      "attributes": {},
+      "identifiers": [],
+      "images": [],
+      "productTypes": [],
+      "salesRanks": [],
+      "summaries": [],
+      "variations": [],
+      "vendorDetails": []
+    }
+  }
+}

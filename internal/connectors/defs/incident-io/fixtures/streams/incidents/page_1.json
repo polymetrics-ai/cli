@@ -1,0 +1,35 @@
+{
+  "request": { "method": "GET", "path": "/v2/incidents" },
+  "response": {
+    "status": 200,
+    "body": {
+      "incidents": [
+        {
+          "id": "01ABC_fixture_1",
+          "reference": "INC-1",
+          "name": "Fixture incident 1",
+          "summary": "deterministic fixture record",
+          "mode": "standard",
+          "visibility": "public",
+          "severity": { "id": "sev_fixture_1", "name": "Major" },
+          "incident_status": { "id": "status_fixture_1", "name": "Triage", "category": "active" },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "01ABD_fixture_2",
+          "reference": "INC-2",
+          "name": "Fixture incident 2",
+          "summary": "deterministic fixture record",
+          "mode": "standard",
+          "visibility": "public",
+          "severity": { "id": "sev_fixture_1", "name": "Major" },
+          "incident_status": { "id": "status_fixture_1", "name": "Triage", "category": "active" },
+          "created_at": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "pagination_meta": { "after": "01ABD_fixture_2", "page_size": 2, "total_record_count": 3 }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Audit event id"
+    },
+    "context": {
+      "type": "object",
+      "description": "Audit context",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "description": "Ip address associated with the audit context"
+        },
+        "team": {
+          "type": "object",
+          "description": "Team associated with the audit context",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Id of the team"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the team"
+            }
+          },
+          "additionalProperties": true
+        },
+        "organization": {
+          "type": "object",
+          "description": "Organization associated with the audit context",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Id of the organization"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the organization"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "object": {
+      "type": "object",
+      "description": "The object related with the audit event",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id of the object"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Time when the audit event has been created",
+      "format": "date-time"
+    },
+    "details": {
+      "type": "object",
+      "description": "Details json related to the audit event",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "createdBy": {
+      "type": "object",
+      "description": "The details regarding the creator of the audit event",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of the creator",
+          "enum": [
+            "user",
+            "application",
+            "scim_provisioner",
+            "miro_automation"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Id of the creator"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the creator"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email of the creator"
+        }
+      },
+      "additionalProperties": true
+    },
+    "event": {
+      "type": "string",
+      "description": "Event type of the audit event"
+    },
+    "category": {
+      "type": "string",
+      "description": "Event category of the audit event."
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

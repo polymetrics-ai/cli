@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/calendars/event-tags/list"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "fixture_id",
+          "name": "Fixture Name",
+          "color": "blue"
+        },
+        {
+          "id": "event_tags_fixture_2",
+          "name": "Fixture Name",
+          "color": "blue"
+        }
+      ],
+      "has_more": false,
+      "next_cursor": null
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "record": {
+    "objects": [
+      {
+        "name": "Fixture Bulk Town",
+        "location_type_code": "city",
+        "latitude": "31.41",
+        "location_data": { "pop": "1001" }
+      },
+      {
+        "location_id": "location_v2_fixture_1",
+        "name": "Fixture Existing Town",
+        "location_data": { "pop": "1004" }
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/a/synthetic-conformance-value/api/location/v2/",
+    "body": {
+      "objects": [
+        {
+          "name": "Fixture Bulk Town",
+          "location_type_code": "city",
+          "latitude": "31.41",
+          "location_data": { "pop": "1001" }
+        },
+        {
+          "location_id": "location_v2_fixture_1",
+          "name": "Fixture Existing Town",
+          "location_data": { "pop": "1004" }
+        }
+      ]
+    }
+  }
+}

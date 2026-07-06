@@ -1,0 +1,19 @@
+{
+  "record": {
+    "predefined_item_id": "fixture_id",
+    "name": "Fixture Name",
+    "description": "Fixture text",
+    "cost": 1,
+    "price": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/predefined_items/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "description": "Fixture text",
+      "cost": 1,
+      "price": "fixture_value"
+    }
+  }
+}

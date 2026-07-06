@@ -1,0 +1,16 @@
+{
+  "record": {
+    "expense_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/expenses/synthetic-conformance-value/receipt"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

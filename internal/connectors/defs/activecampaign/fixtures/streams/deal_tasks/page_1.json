@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/dealTasks", "query": { "limit": "20", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "dealTasks": [
+        {
+          "id": "1",
+          "title": "Fixture Task",
+          "note": "Fixture task note",
+          "duedate": "2026-01-02T12:00:00-05:00",
+          "status": 0,
+          "relid": "1",
+          "reltype": "Deal",
+          "cdate": "2026-01-01T00:00:00-05:00",
+          "udate": "2026-01-01T00:00:00-05:00"
+        }
+      ],
+      "meta": { "total": "1" }
+    }
+  }
+}

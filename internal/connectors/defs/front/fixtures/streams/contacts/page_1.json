@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "_results": [
+        {
+          "id": "contacts_fixture_1",
+          "name": "Fixture Contact 1",
+          "description": "front fixture record",
+          "is_spammer": false,
+          "is_private": false,
+          "created_at": 1767225601,
+          "updated_at": 1767225601
+        }
+      ],
+      "_pagination": { "next": null }
+    }
+  }
+}

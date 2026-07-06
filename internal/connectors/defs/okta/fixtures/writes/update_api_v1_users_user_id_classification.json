@@ -1,0 +1,17 @@
+{
+  "record": {
+    "user_id": "synthetic-conformance-value",
+    "type": "LITE"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/users/synthetic-conformance-value/classification",
+    "body": {
+      "type": "LITE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

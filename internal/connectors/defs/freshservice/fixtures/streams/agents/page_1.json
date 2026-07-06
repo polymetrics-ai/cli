@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/agents", "query": { "page": "1", "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "agents": [
+        {
+          "id": 2001,
+          "first_name": "Fixture1",
+          "last_name": "Agent",
+          "email": "fixture-agent1@example.com",
+          "active": true,
+          "occasional": false,
+          "job_title": "Engineer",
+          "department_ids": [4000],
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T12:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "collection_id": 1,
+    "product_ids": [
+      10,
+      20
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/public/v1/collection_memberships/1",
+    "body": {
+      "product_ids": [
+        10,
+        20
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_feature_inventory",
+  "type": "object",
+  "properties": {
+    "marketplaceId": {
+      "type": "string"
+    },
+    "featureName": {
+      "type": "string"
+    },
+    "nextToken": {
+      "type": "string"
+    },
+    "featureSkus": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "feature_name": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "feature_name"
+  ]
+}

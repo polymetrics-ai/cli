@@ -1,0 +1,9 @@
+{
+  "record": {
+    "cost_report_token": "cr_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/cost_reports/cr_fixture_1"
+  }
+}

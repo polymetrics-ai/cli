@@ -1,0 +1,12 @@
+{
+  "record": { "name": "Fixture Label", "color": "charcoal" },
+  "expect": {
+    "method": "POST",
+    "path": "/labels",
+    "body": { "name": "Fixture Label", "color": "charcoal" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "label_fixture_created", "name": "Fixture Label", "color": "charcoal", "order": 1, "is_favorite": false }
+  }
+}

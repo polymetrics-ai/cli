@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "campaign_performance",
+  "type": "object",
+  "x-primary-key": ["publisherId"],
+  "required": ["publisherId"],
+  "properties": {
+    "advertiserId": { "type": ["integer", "null"] },
+    "publisherId": { "type": "integer" },
+    "publisherName": { "type": ["string", "null"] },
+    "region": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "impressions": { "type": ["integer", "null"] },
+    "clicks": { "type": ["integer", "null"] },
+    "pendingNo": { "type": ["integer", "null"] },
+    "confirmedNo": { "type": ["integer", "null"] },
+    "declinedNo": { "type": ["integer", "null"] },
+    "totalNo": { "type": ["integer", "null"] },
+    "totalSaleAmount": { "type": ["object", "null"] },
+    "totalComm": { "type": ["number", "null"] }
+  }
+}

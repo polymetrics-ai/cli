@@ -1,0 +1,18 @@
+{
+  "request": { "method": "GET", "path": "/sending-ips" },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "external_ip": "203.0.113.10",
+          "hostname": "fixture.sparkpostmail.com",
+          "ip_pool": "fixture_ip_pool",
+          "customer_provided": false,
+          "auto_warmup_enabled": false,
+          "auto_warmup_stage": null
+        }
+      ]
+    }
+  }
+}

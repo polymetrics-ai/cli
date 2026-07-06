@@ -1,0 +1,4 @@
+{
+  "record": { "name": "Fixture Folder" },
+  "expect": { "method": "POST", "path": "/survey_folders" }
+}

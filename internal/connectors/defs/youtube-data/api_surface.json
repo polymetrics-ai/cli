@@ -1,0 +1,68 @@
+{
+  "api": "YouTube Data API v3 (https://developers.google.com/youtube/v3)",
+  "docs": "https://developers.google.com/youtube/v3",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, researched directly against the live YouTube Data API v3 reference (developers.google.com/youtube/v3/docs/*). The API publishes 19 resource types (Activities, Captions, ChannelBanners, ChannelSections, Channels, Comments, CommentThreads, I18nLanguages, I18nRegions, Members, MembershipsLevels, PlaylistItems, Playlists, Search, Subscriptions, Thumbnails, VideoAbuseReportReasons, VideoCategories, Videos, Watermarks) across list/insert/update/delete methods. This pass keeps the 3 legacy-parity streams unchanged (channels, videos, playlists) and adds 6 new read streams reachable with API-key-only auth (playlist_items via fan_out over config.playlist_ids, comment_threads via fan_out over config.video_ids, search scoped to type=video, video_categories, i18n_regions, i18n_languages). Every insert/update/delete method across every resource (videos.insert/update/delete, playlists.insert/update/delete, playlistItems.insert/update/delete, comments.insert/update/delete, commentThreads.insert, channels.update, subscriptions.insert/delete, captions.insert/update/delete, channelSections.insert/update/delete, thumbnails.set, channelBanners.insert, watermarks.set/unset) requires OAuth2 user authorization against the target YouTube channel's own data — this connector's spec.json declares only an api_key (no oauth2 client_id/client_secret/refresh_token), so no write action is expressible with the auth this bundle actually has; adding OAuth2 would be a real scope change to the connector's credential model, not a Pass B declarative addition (see docs.md's Known limits — this is an AUTH_COMPLEX-class blocker, not a silent omission). Activities, Members, MembershipsLevels, and Subscriptions are further scoped out as requiring OAuth2 even to LIST (they enumerate the authenticated user's own channel activity/membership/subscription data, not public content).",
+  "endpoints": [
+    { "method": "GET", "path": "/channels", "covered_by": { "stream": "channels" } },
+    { "method": "PUT", "path": "/channels", "excluded": { "category": "requires_elevated_scope", "reason": "channels.update requires OAuth2 authorization against the target channel owner's account; this bundle has only api_key auth, no OAuth2 credential surface" } },
+
+    { "method": "GET", "path": "/videos", "covered_by": { "stream": "videos" } },
+    { "method": "POST", "path": "/videos", "excluded": { "category": "requires_elevated_scope", "reason": "videos.insert uploads a video file and requires OAuth2 authorization against the uploading channel; also a multipart/resumable-upload body, not a plain JSON create" } },
+    { "method": "PUT", "path": "/videos", "excluded": { "category": "requires_elevated_scope", "reason": "videos.update requires OAuth2 authorization against the video owner's channel; this bundle has only api_key auth" } },
+    { "method": "DELETE", "path": "/videos", "excluded": { "category": "requires_elevated_scope", "reason": "videos.delete requires OAuth2 authorization against the video owner's channel; this bundle has only api_key auth" } },
+    { "method": "POST", "path": "/videos/rate", "excluded": { "category": "requires_elevated_scope", "reason": "rates a video (like/dislike/none) on behalf of the authenticated user; requires OAuth2" } },
+    { "method": "GET", "path": "/videos/getRating", "excluded": { "category": "requires_elevated_scope", "reason": "retrieves the authenticated user's own rating for a video; requires OAuth2, not public data" } },
+    { "method": "POST", "path": "/videos/reportAbuse", "excluded": { "category": "requires_elevated_scope", "reason": "reports a video for abuse on behalf of the authenticated user; requires OAuth2" } },
+
+    { "method": "GET", "path": "/playlists", "covered_by": { "stream": "playlists" } },
+    { "method": "POST", "path": "/playlists", "excluded": { "category": "requires_elevated_scope", "reason": "playlists.insert requires OAuth2 authorization against the creating channel; this bundle has only api_key auth" } },
+    { "method": "PUT", "path": "/playlists", "excluded": { "category": "requires_elevated_scope", "reason": "playlists.update requires OAuth2 authorization against the playlist owner's channel" } },
+    { "method": "DELETE", "path": "/playlists", "excluded": { "category": "requires_elevated_scope", "reason": "playlists.delete requires OAuth2 authorization against the playlist owner's channel" } },
+
+    { "method": "GET", "path": "/playlistItems", "covered_by": { "stream": "playlist_items" } },
+    { "method": "POST", "path": "/playlistItems", "excluded": { "category": "requires_elevated_scope", "reason": "playlistItems.insert (adds a video to a playlist) requires OAuth2 authorization against the playlist owner's channel" } },
+    { "method": "PUT", "path": "/playlistItems", "excluded": { "category": "requires_elevated_scope", "reason": "playlistItems.update requires OAuth2 authorization against the playlist owner's channel" } },
+    { "method": "DELETE", "path": "/playlistItems", "excluded": { "category": "requires_elevated_scope", "reason": "playlistItems.delete requires OAuth2 authorization against the playlist owner's channel" } },
+
+    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
+
+    { "method": "GET", "path": "/commentThreads", "covered_by": { "stream": "comment_threads" } },
+    { "method": "POST", "path": "/commentThreads", "excluded": { "category": "requires_elevated_scope", "reason": "commentThreads.insert (posts a new top-level comment) requires OAuth2 authorization against the commenting user's account" } },
+
+    { "method": "GET", "path": "/comments", "excluded": { "category": "out_of_scope", "reason": "individual comment/reply list, a narrower cut below the comment_threads level (each thread already embeds its top-level comment); Pass B breadth-vs-cost triage on the reply-fan-out sub-resource" } },
+    { "method": "POST", "path": "/comments", "excluded": { "category": "requires_elevated_scope", "reason": "comments.insert (posts a reply) requires OAuth2 authorization against the commenting user's account" } },
+    { "method": "PUT", "path": "/comments", "excluded": { "category": "requires_elevated_scope", "reason": "comments.update requires OAuth2 authorization against the comment author's account" } },
+    { "method": "DELETE", "path": "/comments", "excluded": { "category": "requires_elevated_scope", "reason": "comments.delete requires OAuth2 authorization against the comment author's account or channel owner" } },
+    { "method": "POST", "path": "/comments/markAsSpam", "excluded": { "category": "requires_elevated_scope", "reason": "flags a comment as spam on behalf of the channel owner; requires OAuth2" } },
+    { "method": "POST", "path": "/comments/setModerationStatus", "excluded": { "category": "requires_elevated_scope", "reason": "sets a comment's moderation status; requires OAuth2 authorization as the channel owner/moderator" } },
+
+    { "method": "GET", "path": "/videoCategories", "covered_by": { "stream": "video_categories" } },
+    { "method": "GET", "path": "/i18nRegions", "covered_by": { "stream": "i18n_regions" } },
+    { "method": "GET", "path": "/i18nLanguages", "covered_by": { "stream": "i18n_languages" } },
+    { "method": "GET", "path": "/videoAbuseReportReasons", "excluded": { "category": "out_of_scope", "reason": "static enum-value reference list (abuse report reason codes) consumed only by the videos.reportAbuse write, itself excluded as requiring OAuth2; low standalone value, Pass B breadth-vs-cost triage" } },
+
+    { "method": "GET", "path": "/activities", "excluded": { "category": "requires_elevated_scope", "reason": "activities.list, when scoped to \"mine\", requires OAuth2; the channelId-scoped public variant returns a real feed but is a narrower, lower-value cut of data already reachable via videos/playlistItems/search, Pass B breadth-vs-cost triage" } },
+    { "method": "GET", "path": "/members", "excluded": { "category": "requires_elevated_scope", "reason": "members.list enumerates a channel's paying members and requires OAuth2 authorization as the channel owner; not public data" } },
+    { "method": "GET", "path": "/membershipsLevels", "excluded": { "category": "requires_elevated_scope", "reason": "membershipsLevels.list enumerates a channel's membership pricing tiers and requires OAuth2 authorization as the channel owner; not public data" } },
+    { "method": "GET", "path": "/subscriptions", "excluded": { "category": "requires_elevated_scope", "reason": "subscriptions.list (a user's own channel subscriptions), when scoped to \"mine\", requires OAuth2; the channelId-scoped public variant is a narrower, lower-value cut of channel relationship data, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/subscriptions", "excluded": { "category": "requires_elevated_scope", "reason": "subscriptions.insert subscribes the authenticated user to a channel; requires OAuth2" } },
+    { "method": "DELETE", "path": "/subscriptions", "excluded": { "category": "requires_elevated_scope", "reason": "subscriptions.delete unsubscribes the authenticated user from a channel; requires OAuth2" } },
+
+    { "method": "GET", "path": "/captions", "excluded": { "category": "requires_elevated_scope", "reason": "captions.list requires OAuth2 authorization against the video owner's channel (caption tracks are not public metadata even for public videos)" } },
+    { "method": "POST", "path": "/captions", "excluded": { "category": "binary_payload", "reason": "captions.insert uploads a caption track file; also requires OAuth2 authorization against the video owner's channel" } },
+    { "method": "PUT", "path": "/captions", "excluded": { "category": "binary_payload", "reason": "captions.update replaces a caption track file; also requires OAuth2" } },
+    { "method": "DELETE", "path": "/captions", "excluded": { "category": "requires_elevated_scope", "reason": "captions.delete requires OAuth2 authorization against the video owner's channel" } },
+    { "method": "GET", "path": "/captions/{id}", "excluded": { "category": "binary_payload", "reason": "captions.download retrieves the actual caption track file, not a JSON record; also requires OAuth2" } },
+
+    { "method": "GET", "path": "/channelSections", "excluded": { "category": "requires_elevated_scope", "reason": "channelSections.list (a channel's own curated homepage sections), when scoped to \"mine\", requires OAuth2; the channelId-scoped public variant is a narrow presentation-layer resource, Pass B breadth-vs-cost triage" } },
+    { "method": "POST", "path": "/channelSections", "excluded": { "category": "requires_elevated_scope", "reason": "channelSections.insert requires OAuth2 authorization against the channel owner" } },
+    { "method": "PUT", "path": "/channelSections", "excluded": { "category": "requires_elevated_scope", "reason": "channelSections.update requires OAuth2 authorization against the channel owner" } },
+    { "method": "DELETE", "path": "/channelSections", "excluded": { "category": "requires_elevated_scope", "reason": "channelSections.delete requires OAuth2 authorization against the channel owner" } },
+
+    { "method": "POST", "path": "/channelBanners/insert", "excluded": { "category": "binary_payload", "reason": "uploads a channel banner image file; also requires OAuth2 authorization against the channel owner" } },
+    { "method": "POST", "path": "/thumbnails/set", "excluded": { "category": "binary_payload", "reason": "uploads a custom video thumbnail image file; also requires OAuth2 authorization against the video owner" } },
+    { "method": "POST", "path": "/watermarks/set", "excluded": { "category": "binary_payload", "reason": "sets a channel's video watermark image; also requires OAuth2 authorization against the channel owner" } },
+    { "method": "POST", "path": "/watermarks/unset", "excluded": { "category": "requires_elevated_scope", "reason": "removes a channel's video watermark; requires OAuth2 authorization against the channel owner" } }
+  ]
+}

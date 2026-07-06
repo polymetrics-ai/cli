@@ -1,0 +1,53 @@
+{
+  "api": "PaperSign API v1 (https://api.papersign.com/v1)",
+  "docs": "https://papersign.com/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full PaperSign surface (document creation/sending, template editing, webhooks) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/documents",
+      "covered_by": {
+        "stream": "documents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/templates",
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/recipients",
+      "covered_by": {
+        "stream": "recipients"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/documents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/documents is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/documents/{id}/send",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/v1/documents/{id}/send is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/documents/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "delete mutation, not a read stream"
+      }
+    }
+  ]
+}

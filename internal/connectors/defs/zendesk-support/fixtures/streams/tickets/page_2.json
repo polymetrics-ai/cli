@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/tickets", "query": { "page[size]": "100", "page[after]": "fixture_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "tickets": [
+        {
+          "id": 3,
+          "subject": "Feature request",
+          "description": "Requesting dark mode",
+          "status": "solved",
+          "priority": "low",
+          "type": "task",
+          "requester_id": 102,
+          "assignee_id": 202,
+          "organization_id": 300,
+          "group_id": 400,
+          "brand_id": 500,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-03T00:00:00Z"
+        }
+      ],
+      "meta": { "has_more": false, "after_cursor": null }
+    }
+  }
+}

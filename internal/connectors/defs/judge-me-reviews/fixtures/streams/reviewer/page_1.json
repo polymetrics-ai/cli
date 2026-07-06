@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reviewers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reviewer": {
+        "id": 77,
+        "external_id": 9001,
+        "email": "fixture-reviewer@example.com",
+        "name": "Fixture Reviewer",
+        "phone": "+15555550100",
+        "tags": [
+          "vip"
+        ],
+        "accepts_marketing": true,
+        "unsubscribed_at": null
+      }
+    }
+  }
+}

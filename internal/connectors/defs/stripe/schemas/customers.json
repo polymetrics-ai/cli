@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string" },
+    "created": { "type": "integer", "description": "Unix seconds (Stripe's real wire shape for this field)." },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "balance": { "type": ["integer", "null"] },
+    "delinquent": { "type": ["boolean", "null"] },
+    "livemode": { "type": "boolean" }
+  }
+}

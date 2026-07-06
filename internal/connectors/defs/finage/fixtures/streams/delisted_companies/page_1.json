@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/fnd/delisted-companies/", "query": { "limit": "1000", "period": "annual" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "symbol": "OLDX", "company_name": "Fixture Delisted Co.", "exchange": "NASDAQ", "ipo_date": "2000-01-01", "delisted_date": "2015-06-01" }
+    ]
+  }
+}

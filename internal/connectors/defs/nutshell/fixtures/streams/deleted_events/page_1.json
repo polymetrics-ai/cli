@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/deleted"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "id": "1",
+          "name": "Fixture deleted_events",
+          "href": "https://app.nutshell.com/rest/deleted_events/1",
+          "htmlUrl": "https://app.nutshell.com/deleted_events/1",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        },
+        {
+          "id": "2",
+          "name": "Fixture deleted_events",
+          "href": "https://app.nutshell.com/rest/deleted_events/2",
+          "htmlUrl": "https://app.nutshell.com/deleted_events/2",
+          "createdTime": "2026-01-01T00:00:00+0000",
+          "modifiedTime": "2026-01-01T00:00:01+0000"
+        }
+      ]
+    }
+  }
+}

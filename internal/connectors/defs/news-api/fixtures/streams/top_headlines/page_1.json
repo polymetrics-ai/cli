@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/top-headlines", "query": { "page": "1", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "totalResults": 1,
+      "articles": [
+        {
+          "source": { "id": "fixture-source-1", "name": "Fixture Source 1" },
+          "author": "Fixture Author 1",
+          "title": "Fixture Top Headline 1",
+          "description": "conformance fixture top headline",
+          "url": "https://example.com/top-headline/1",
+          "urlToImage": "https://example.com/top-headline/1.jpg",
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "content": "Fixture top headline content 1."
+        }
+      ]
+    }
+  }
+}

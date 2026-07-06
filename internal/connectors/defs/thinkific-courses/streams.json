@@ -1,0 +1,481 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Auth-Subdomain": "{{ config.subdomain }}"
+    },
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "X-Auth-API-Key",
+        "value": "{{ secrets.api_key }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "limit",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/courses",
+      "query": {
+        "page": "1",
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "thinkific api_key is missing or invalid; re-run pm credentials add thinkific-courses"
+      },
+      {
+        "status": 403,
+        "hint": "thinkific account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "thinkific rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "courses",
+      "path": "/courses",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/courses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "chapters",
+      "path": "/chapters",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/chapters.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "lessons",
+      "path": "/lessons",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/lessons.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enrollments",
+      "path": "/enrollments",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/enrollments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bundle",
+      "path": "/bundles/{{ config.bundle_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/bundle.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "bundle_courses",
+      "path": "/bundles/{{ config.bundle_id }}/courses",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/bundle_courses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "bundle_enrollments",
+      "path": "/bundles/{{ config.bundle_id }}/enrollments",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/bundle_enrollments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "chapter",
+      "path": "/chapters/{{ config.chapter_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/chapter.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "chapter_contents",
+      "path": "/chapters/{{ config.chapter_id }}/contents",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/chapter_contents.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collections",
+      "path": "/collections",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/collections.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "collection",
+      "path": "/collections/{{ config.collection_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/collection.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "collection_products",
+      "path": "/collections/{{ config.collection_id }}/products",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/collection_products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "coupons",
+      "path": "/coupons",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/coupons.json",
+      "projection": "passthrough",
+      "query": {
+        "promotion_id": "{{ config.promotion_id }}"
+      }
+    },
+    {
+      "name": "coupon",
+      "path": "/coupons/{{ config.coupon_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/coupon.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "content",
+      "path": "/contents/{{ config.content_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/content.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "course",
+      "path": "/courses/{{ config.course_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/course.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "course_chapters",
+      "path": "/courses/{{ config.course_id }}/chapters",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/course_chapters.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_profile_field_definitions",
+      "path": "/custom_profile_field_definitions",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/custom_profile_field_definitions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enrollment",
+      "path": "/enrollments/{{ config.enrollment_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/enrollment.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/groups.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "group",
+      "path": "/groups/{{ config.group_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/group.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "group_analysts",
+      "path": "/groups/{{ config.group_id }}/analysts",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/group_analysts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "instructors",
+      "path": "/instructors",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/instructors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "instructor",
+      "path": "/instructors/{{ config.instructor_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/instructor.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "orders",
+      "path": "/orders",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/orders.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "order",
+      "path": "/orders/{{ config.order_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/order.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "product_publish_requests",
+      "path": "/product_publish_requests",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/product_publish_requests.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "product_publish_request",
+      "path": "/product_publish_requests/{{ config.product_publish_request_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/product_publish_request.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "products",
+      "path": "/products",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "product",
+      "path": "/products/{{ config.product_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/product.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "related_products",
+      "path": "/products/{{ config.product_id }}/related",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/related_products.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "promotions",
+      "path": "/promotions",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/promotions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "promotion",
+      "path": "/promotions/{{ config.promotion_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/promotion.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "promotion_by_coupon",
+      "path": "/promotions/by_coupon",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/promotion_by_coupon.json",
+      "projection": "passthrough",
+      "query": {
+        "product_id": "{{ config.product_id }}",
+        "coupon_code": "{{ config.coupon_code }}"
+      },
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "course_reviews",
+      "path": "/course_reviews",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/course_reviews.json",
+      "projection": "passthrough",
+      "query": {
+        "course_id": "{{ config.course_id }}"
+      }
+    },
+    {
+      "name": "course_review",
+      "path": "/course_reviews/{{ config.course_review_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/course_review.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/user.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "user_authentication",
+      "path": "/users/{{ config.user_id }}/authentications/{{ config.provider }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/user_authentication.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "site_scripts",
+      "path": "/site_scripts",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/site_scripts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "site_script",
+      "path": "/site_scripts/{{ config.site_script_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/site_script.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

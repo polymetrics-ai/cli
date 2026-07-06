@@ -1,0 +1,25 @@
+{
+  "name": "invoiced",
+  "display_name": "Invoiced",
+  "description": "Reads and writes the documented Invoiced REST API surface for billing, payments, subscriptions, events, and related resources.",
+  "integration_type": "api",
+  "docs_url": "https://developer.invoiced.com/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external Invoiced API read of billing, customer, payment, subscription, and event data",
+    "write": "live Invoiced API mutations can create, update, send, charge, refund, void, cancel, or delete billing records",
+    "approval": "reverse ETL writes require plan, preview, approval token, and destructive confirmation for delete/void/cancel/payment operations"
+  }
+}

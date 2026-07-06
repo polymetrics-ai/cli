@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "fixture-template-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates",
+    "body": {
+      "name": "fixture-template-1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "id": "template_fixture_1", "name": "fixture-template-1" }
+  }
+}

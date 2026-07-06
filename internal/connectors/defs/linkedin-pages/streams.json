@@ -1,0 +1,83 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "LinkedIn-Version": "{{ config.linkedin_version }}",
+      "X-Restli-Protocol-Version": "2.0.0"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "count",
+      "offset_param": "start",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/organizations/{{ config.org_id }}" },
+    "error_map": [
+      { "status": 401, "hint": "linkedin-pages access_token is missing, expired, or invalid; re-run pm credentials add linkedin-pages" },
+      { "status": 403, "hint": "linkedin-pages access_token lacks the required Community Management API scope for this organization" },
+      { "status": 429, "class": "rate_limited", "hint": "linkedin-pages rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "follower_statistics",
+      "path": "/organizationalEntityFollowerStatistics",
+      "query": {
+        "q": "organizationalEntity",
+        "organizationalEntity": "urn:li:organization:{{ config.org_id }}"
+      },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "org_id": "{{ config.org_id }}"
+      },
+      "schema": "schemas/follower_statistics.json"
+    },
+    {
+      "name": "share_statistics",
+      "path": "/organizationalEntityShareStatistics",
+      "query": {
+        "q": "organizationalEntity",
+        "organizationalEntity": "urn:li:organization:{{ config.org_id }}"
+      },
+      "records": { "path": "elements" },
+      "computed_fields": {
+        "org_id": "{{ config.org_id }}"
+      },
+      "schema": "schemas/share_statistics.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/organizations/{{ config.org_id }}",
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "org_id": "{{ config.org_id }}",
+        "urn": "{{ record.$URN }}",
+        "vanity_name": "{{ record.vanityName }}",
+        "localized_name": "{{ record.localizedName }}",
+        "localized_website": "{{ record.localizedWebsite }}",
+        "primary_organization_type": "{{ record.primaryOrganizationType }}",
+        "organization_type": "{{ record.organizationType }}",
+        "version_tag": "{{ record.versionTag }}",
+        "staff_count_range": "{{ record.staffCountRange }}"
+      },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "total_follower_count",
+      "path": "/networkSizes/urn:li:organization:{{ config.org_id }}",
+      "query": { "edgeType": "COMPANY_FOLLOWED_BY_MEMBER" },
+      "records": { "path": "." },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "org_id": "{{ config.org_id }}",
+        "first_degree_size": "{{ record.firstDegreeSize }}"
+      },
+      "schema": "schemas/total_follower_count.json"
+    }
+  ]
+}

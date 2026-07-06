@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment-links",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "paylink_fixture_1",
+        "state": "active",
+        "amount": 1500,
+        "currency": "USD",
+        "created_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "paylink_fixture_2",
+        "state": "active",
+        "amount": 2500,
+        "currency": "USD",
+        "created_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

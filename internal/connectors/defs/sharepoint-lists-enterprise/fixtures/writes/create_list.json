@@ -1,0 +1,18 @@
+{
+  "record": {
+    "displayName": "Fixture List",
+    "description": "Created by fixture write test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sites/fixture-site/lists",
+    "body": {
+      "displayName": "Fixture List",
+      "description": "Created by fixture write test"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "id": "list_fixture_1", "displayName": "Fixture List" }
+  }
+}

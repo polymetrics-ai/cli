@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "taxonomy_event_properties",
+  "type": "object",
+  "x-primary-key": ["event_property", "event_type"],
+  "required": ["event_property"],
+  "properties": {
+    "event_property": { "type": "string" },
+    "event_type": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "regex": { "type": ["string", "null"] },
+    "enum_values": { "type": ["array", "null"] },
+    "is_array_type": { "type": ["boolean", "null"] },
+    "is_required": { "type": ["boolean", "null"] },
+    "is_hidden": { "type": ["boolean", "null"] },
+    "classifications": { "type": ["array", "null"] }
+  }
+}

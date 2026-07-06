@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": 84291,
+    "name": "Fixture Widget Updated",
+    "description": "Updated sanitized fixture product"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/products/84291",
+    "body": {
+      "name": "Fixture Widget Updated",
+      "description": "Updated sanitized fixture product"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "data": {
+        "_object": "/product",
+        "id": 84291
+      }
+    }
+  }
+}

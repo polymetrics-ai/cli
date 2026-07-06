@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture Membership",
+    "valid_from_type": "issue_date",
+    "valid_to_type": "relative"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/membership_types"
+  }
+}

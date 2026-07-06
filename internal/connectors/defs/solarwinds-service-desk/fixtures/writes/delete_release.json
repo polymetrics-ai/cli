@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/releases/1.json"
+  }
+}

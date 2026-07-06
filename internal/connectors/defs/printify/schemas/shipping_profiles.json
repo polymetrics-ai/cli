@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "shipping_profiles",
+  "type": "object",
+  "x-primary-key": [
+    "variant_ids"
+  ],
+  "required": [
+    "variant_ids"
+  ],
+  "properties": {
+    "variant_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer"
+      }
+    },
+    "first_item": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "additional_items": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "countries": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "handling_time": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "blueprint_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "print_provider_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

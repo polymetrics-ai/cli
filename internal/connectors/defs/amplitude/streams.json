@@ -1,0 +1,88 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "{{ secrets.secret_key }}" }
+    ],
+    "check": { "method": "GET", "path": "/api/3/cohorts" },
+    "error_map": [
+      { "status": 401, "hint": "amplitude api_key/secret_key is missing or invalid; re-run pm credentials add amplitude" },
+      { "status": 403, "hint": "amplitude project lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "amplitude rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "cohorts",
+      "path": "/api/3/cohorts",
+      "records": { "path": "cohorts" },
+      "schema": "schemas/cohorts.json"
+    },
+    {
+      "name": "cohorts_usage",
+      "path": "/api/3/cohorts/usage",
+      "records": { "path": "" },
+      "computed_fields": {
+        "limit": "{{ record.rest_download.limit }}",
+        "usage": "{{ record.rest_download.usage }}",
+        "resets_at": "{{ record.rest_download.resets_at }}"
+      },
+      "schema": "schemas/cohorts_usage.json"
+    },
+    {
+      "name": "annotations",
+      "path": "/api/3/annotations",
+      "records": { "path": "data" },
+      "schema": "schemas/annotations.json"
+    },
+    {
+      "name": "annotation_categories",
+      "path": "/api/3/annotation-categories",
+      "records": { "path": "data" },
+      "schema": "schemas/annotation_categories.json"
+    },
+    {
+      "name": "events_list",
+      "path": "/api/2/events/list",
+      "records": { "path": "data" },
+      "schema": "schemas/events_list.json"
+    },
+    {
+      "name": "taxonomy_categories",
+      "path": "/api/2/taxonomy/category",
+      "records": { "path": "data" },
+      "schema": "schemas/taxonomy_categories.json"
+    },
+    {
+      "name": "taxonomy_events",
+      "path": "/api/2/taxonomy/event",
+      "query": {
+        "showDeleted": { "template": "{{ config.taxonomy_show_deleted }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/taxonomy_events.json"
+    },
+    {
+      "name": "taxonomy_event_properties",
+      "path": "/api/2/taxonomy/event-property",
+      "records": { "path": "data" },
+      "schema": "schemas/taxonomy_event_properties.json"
+    },
+    {
+      "name": "taxonomy_user_properties",
+      "path": "/api/2/taxonomy/user-property",
+      "query": {
+        "showDeleted": { "template": "{{ config.taxonomy_show_deleted }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data" },
+      "schema": "schemas/taxonomy_user_properties.json"
+    },
+    {
+      "name": "taxonomy_group_properties",
+      "path": "/api/2/taxonomy/group-property",
+      "records": { "path": "data" },
+      "schema": "schemas/taxonomy_group_properties.json"
+    }
+  ]
+}

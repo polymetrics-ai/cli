@@ -1,0 +1,20 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "goodconn/1.0",
+    "headers": {},
+    "auth": [ { "mode": "bearer", "token": "{{ secrets.token }}", "when": "{{ config.base_url }}" } ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/ping" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "widgets",
+      "path": "/widgets/{{ config.nope }}",
+      "records": { "path": "data" },
+      "incremental": { "cursor_field": "updated_at" },
+      "schema": "schemas/widgets.json"
+    }
+  ]
+}

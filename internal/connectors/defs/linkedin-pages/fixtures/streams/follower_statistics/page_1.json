@@ -1,0 +1,1219 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizationalEntityFollowerStatistics",
+    "query": {
+      "q": "organizationalEntity",
+      "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+      "count": "100",
+      "start": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 1,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 2,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 3,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 4,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 5,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 6,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 7,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 8,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 9,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 10,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 11,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 12,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 13,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 14,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 15,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 16,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 17,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 18,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 19,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 20,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 21,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 22,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 23,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 24,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 25,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 26,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 27,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 28,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 29,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 30,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 31,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 32,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 33,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 34,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 35,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 36,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 37,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 38,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 39,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 40,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 41,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 42,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 43,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 44,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 45,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 46,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 47,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 48,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 49,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 50,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 51,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 52,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 53,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 54,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 55,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 56,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 57,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 58,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 59,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 60,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 61,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 62,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 63,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 64,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 65,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 66,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 67,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 68,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 69,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 70,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 71,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 72,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 73,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 74,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 75,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 76,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 77,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 78,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 79,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 80,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 81,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 82,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 83,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 84,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 85,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 86,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 87,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 88,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 89,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 90,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 91,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 92,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 93,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 94,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 95,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 96,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 97,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 98,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 99,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        },
+        {
+          "organizationalEntity": "urn:li:organization:synthetic-conformance-value",
+          "followerCountsByAssociationType": [
+            {
+              "associationType": "SPONSORED",
+              "followerCounts": {
+                "organicFollowerGain": 100,
+                "paidFollowerGain": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

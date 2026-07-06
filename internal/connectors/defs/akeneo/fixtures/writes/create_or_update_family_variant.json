@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "shoes_by_size",
+    "labels": { "en_US": "Shoes by size" },
+    "variant_attribute_sets": [{ "level": 1, "axes": ["size"], "attributes": ["size"] }]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/rest/v1/family-variants/shoes_by_size",
+    "body": {
+      "labels": { "en_US": "Shoes by size" },
+      "variant_attribute_sets": [{ "level": 1, "axes": ["size"], "attributes": ["size"] }]
+    }
+  },
+  "response": { "status": 204, "body": {} }
+}

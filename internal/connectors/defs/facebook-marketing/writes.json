@@ -1,0 +1,70 @@
+{
+  "actions": [
+    {
+      "name": "create_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.ad_account_id }}/campaigns",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "objective", "status", "special_ad_categories"],
+        "properties": {
+          "name": { "type": "string" },
+          "objective": { "type": "string" },
+          "status": { "type": "string" },
+          "special_ad_categories": { "type": "array", "items": { "type": "string" } },
+          "daily_budget": { "type": "string" },
+          "lifetime_budget": { "type": "string" }
+        }
+      },
+      "risk": "external mutation on a live Facebook ad account; creates a campaign that can incur ad spend once ads are attached; approval required"
+    },
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "type": "string" },
+          "daily_budget": { "type": "string" },
+          "lifetime_budget": { "type": "string" }
+        }
+      },
+      "risk": "external mutation on a live Facebook ad account (e.g. pausing/resuming spend); approval required"
+    },
+    {
+      "name": "create_ad_set",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.ad_account_id }}/adsets",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "campaign_id", "billing_event", "optimization_goal", "targeting", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "campaign_id": { "type": "string" },
+          "billing_event": { "type": "string" },
+          "optimization_goal": { "type": "string" },
+          "bid_amount": { "type": "integer" },
+          "daily_budget": { "type": "string" },
+          "lifetime_budget": { "type": "string" },
+          "targeting": { "type": "object" },
+          "status": { "type": "string" }
+        }
+      },
+      "risk": "external mutation on a live Facebook ad account; creates an ad set that can incur ad spend once ads are attached; approval required"
+    }
+  ]
+}

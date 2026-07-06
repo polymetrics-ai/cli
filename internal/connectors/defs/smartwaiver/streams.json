@@ -1,0 +1,89 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "/v4/me" },
+    "error_map": [
+      { "status": 401, "hint": "smartwaiver api_key is missing or invalid; re-run pm credentials add smartwaiver" },
+      { "status": 429, "class": "rate_limited", "hint": "smartwaiver rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "waivers",
+      "path": "/v4/waivers",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "offset": "0",
+        "fromDts": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "waivers.waivers" },
+      "schema": "schemas/waivers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "checkins",
+      "path": "/v4/checkins",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "offset": "0",
+        "fromDts": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "checkins.checkins" },
+      "schema": "schemas/checkins.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "templates",
+      "path": "/v4/templates",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "offset": "0",
+        "fromDts": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "templates.templates" },
+      "schema": "schemas/templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "published_keys",
+      "path": "/v4/keys/published",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "offset": "0",
+        "fromDts": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "published_keys.keys" },
+      "schema": "schemas/published_keys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_info",
+      "path": "/v4/info",
+      "query": {
+        "limit": { "template": "{{ config.page_size }}", "default": "100" },
+        "offset": "0",
+        "fromDts": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "toDts": { "template": "{{ config.end_date }}", "omit_when_absent": true }
+      },
+      "records": { "path": "." },
+      "schema": "schemas/user_info.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "settings",
+      "path": "/v4/settings",
+      "records": { "path": "." },
+      "schema": "schemas/settings.json",
+      "projection": "passthrough"
+    }
+  ]
+}

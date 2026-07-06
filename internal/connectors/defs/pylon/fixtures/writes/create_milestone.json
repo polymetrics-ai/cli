@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "synthetic-conformance-value",
+    "project_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/milestones",
+    "body": {
+      "name": "synthetic-conformance-value",
+      "project_id": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

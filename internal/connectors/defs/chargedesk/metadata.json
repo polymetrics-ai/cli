@@ -1,0 +1,24 @@
+{
+  "name": "chargedesk",
+  "display_name": "ChargeDesk",
+  "description": "Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.",
+  "integration_type": "api",
+  "docs_url": "https://chargedesk.com/api-docs",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external ChargeDesk API read of billing/charge, customer, subscription, product, activity-log, and cancellation-log data",
+    "write": "external mutations creating/updating/deleting customers, charges, webhooks, and agents, plus live gateway methods (refund/capture/void a charge, cancel a subscription) that mutate the connected payment gateway; every write action requires approval",
+    "approval": "read: none; write: required for every action"
+  }
+}

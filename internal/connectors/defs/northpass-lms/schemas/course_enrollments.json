@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "course_enrollments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "percentage": { "type": ["integer", "null"] },
+    "learner_id": { "type": ["string", "null"] },
+    "course_id": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] },
+    "completed_at": { "type": ["string", "null"] }
+  }
+}

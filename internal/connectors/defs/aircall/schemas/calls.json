@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aircall Call",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "started_at",
+  "properties": {
+    "id": { "type": "integer" },
+    "sid": { "type": "string" },
+    "direction": { "type": "string" },
+    "status": { "type": "string" },
+    "started_at": { "type": "integer" },
+    "answered_at": { "type": ["integer", "null"] },
+    "ended_at": { "type": ["integer", "null"] },
+    "duration": { "type": ["integer", "null"] },
+    "raw_digits": { "type": ["string", "null"] },
+    "missed_call_reason": { "type": ["string", "null"] },
+    "recording": { "type": ["string", "null"] },
+    "voicemail": { "type": ["string", "null"] },
+    "archived": { "type": "boolean" }
+  }
+}

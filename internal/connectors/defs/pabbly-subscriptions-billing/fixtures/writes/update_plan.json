@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "plan_fixture_1",
+    "product_id": "product_fixture_1",
+    "currency_code": "USD",
+    "plan_name": "Updated Fixture Plan"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/plan/update/plan_fixture_1"
+  }
+}

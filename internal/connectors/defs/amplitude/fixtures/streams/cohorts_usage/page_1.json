@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/3/cohorts/usage" },
+  "response": {
+    "status": 200,
+    "body": {
+      "rest_download": {
+        "limit": 50,
+        "usage": 3,
+        "resets_at": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

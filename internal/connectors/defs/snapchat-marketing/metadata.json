@@ -1,0 +1,27 @@
+{
+  "name": "snapchat-marketing",
+  "display_name": "Snapchat Marketing",
+  "description": "Reads Snapchat Marketing (Ads API) organizations, ad accounts, campaigns, ad squads, and ads via the OAuth2 refresh-token grant.",
+  "integration_type": "api",
+  "docs_url": "https://marketingapi.snapchat.com/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Snapchat Ads API read of organizations, ad accounts, campaigns, ad squads, and ads under the configured organization/ad-account ids",
+    "approval": "none; read-only, no reverse-ETL write surface"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for snapchat-marketing (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real token_url/refresh_token round-trip and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "unleash",
+  "display_name": "Unleash",
+  "description": "Reads Unleash projects, feature toggles, environments, and segments through admin API list endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://docs.getunleash.io/reference/api/unleash",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Unleash admin API read of project, feature toggle, environment, and segment data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

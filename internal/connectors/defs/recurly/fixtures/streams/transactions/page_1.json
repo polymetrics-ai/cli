@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/transactions", "query": { "limit": "200" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "has_more": false,
+      "data": [
+        {
+          "id": "txn_fixture_1",
+          "status": "success",
+          "account": { "id": "acct_fixture_1", "code": "fixture_1", "object": "account_mini" },
+          "amount": 100.0,
+          "created_at": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "txn_fixture_2",
+          "status": "declined",
+          "account": { "id": "acct_fixture_2", "code": "fixture_2", "object": "account_mini" },
+          "amount": 50.25,
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,3217 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coins/synthetic-conformance-value/tickers",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "Bitcoin",
+      "tickers": [
+        {
+          "base": "BTC",
+          "target": "USDT",
+          "market": {
+            "name": "Fixture Exchange 0",
+            "identifier": "fixture_exchange_0",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42000.5,
+          "volume": 1234.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42000.5
+          },
+          "converted_volume": {
+            "btc": 1234.5,
+            "eth": 18764.4,
+            "usd": 51849021.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT1",
+          "market": {
+            "name": "Fixture Exchange 1",
+            "identifier": "fixture_exchange_1",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42001.5,
+          "volume": 1235.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42001.5
+          },
+          "converted_volume": {
+            "btc": 1235.5,
+            "eth": 18765.4,
+            "usd": 51849022.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT2",
+          "market": {
+            "name": "Fixture Exchange 2",
+            "identifier": "fixture_exchange_2",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42002.5,
+          "volume": 1236.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42002.5
+          },
+          "converted_volume": {
+            "btc": 1236.5,
+            "eth": 18766.4,
+            "usd": 51849023.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT3",
+          "market": {
+            "name": "Fixture Exchange 3",
+            "identifier": "fixture_exchange_3",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42003.5,
+          "volume": 1237.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42003.5
+          },
+          "converted_volume": {
+            "btc": 1237.5,
+            "eth": 18767.4,
+            "usd": 51849024.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT4",
+          "market": {
+            "name": "Fixture Exchange 4",
+            "identifier": "fixture_exchange_4",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42004.5,
+          "volume": 1238.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42004.5
+          },
+          "converted_volume": {
+            "btc": 1238.5,
+            "eth": 18768.4,
+            "usd": 51849025.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT5",
+          "market": {
+            "name": "Fixture Exchange 5",
+            "identifier": "fixture_exchange_5",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42005.5,
+          "volume": 1239.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42005.5
+          },
+          "converted_volume": {
+            "btc": 1239.5,
+            "eth": 18769.4,
+            "usd": 51849026.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT6",
+          "market": {
+            "name": "Fixture Exchange 6",
+            "identifier": "fixture_exchange_6",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42006.5,
+          "volume": 1240.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42006.5
+          },
+          "converted_volume": {
+            "btc": 1240.5,
+            "eth": 18770.4,
+            "usd": 51849027.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT7",
+          "market": {
+            "name": "Fixture Exchange 7",
+            "identifier": "fixture_exchange_7",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42007.5,
+          "volume": 1241.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42007.5
+          },
+          "converted_volume": {
+            "btc": 1241.5,
+            "eth": 18771.4,
+            "usd": 51849028.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT8",
+          "market": {
+            "name": "Fixture Exchange 8",
+            "identifier": "fixture_exchange_8",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42008.5,
+          "volume": 1242.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42008.5
+          },
+          "converted_volume": {
+            "btc": 1242.5,
+            "eth": 18772.4,
+            "usd": 51849029.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT9",
+          "market": {
+            "name": "Fixture Exchange 9",
+            "identifier": "fixture_exchange_9",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42009.5,
+          "volume": 1243.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42009.5
+          },
+          "converted_volume": {
+            "btc": 1243.5,
+            "eth": 18773.4,
+            "usd": 51849030.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT10",
+          "market": {
+            "name": "Fixture Exchange 10",
+            "identifier": "fixture_exchange_10",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42010.5,
+          "volume": 1244.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42010.5
+          },
+          "converted_volume": {
+            "btc": 1244.5,
+            "eth": 18774.4,
+            "usd": 51849031.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT11",
+          "market": {
+            "name": "Fixture Exchange 11",
+            "identifier": "fixture_exchange_11",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42011.5,
+          "volume": 1245.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42011.5
+          },
+          "converted_volume": {
+            "btc": 1245.5,
+            "eth": 18775.4,
+            "usd": 51849032.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT12",
+          "market": {
+            "name": "Fixture Exchange 12",
+            "identifier": "fixture_exchange_12",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42012.5,
+          "volume": 1246.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42012.5
+          },
+          "converted_volume": {
+            "btc": 1246.5,
+            "eth": 18776.4,
+            "usd": 51849033.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT13",
+          "market": {
+            "name": "Fixture Exchange 13",
+            "identifier": "fixture_exchange_13",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42013.5,
+          "volume": 1247.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42013.5
+          },
+          "converted_volume": {
+            "btc": 1247.5,
+            "eth": 18777.4,
+            "usd": 51849034.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT14",
+          "market": {
+            "name": "Fixture Exchange 14",
+            "identifier": "fixture_exchange_14",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42014.5,
+          "volume": 1248.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42014.5
+          },
+          "converted_volume": {
+            "btc": 1248.5,
+            "eth": 18778.4,
+            "usd": 51849035.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT15",
+          "market": {
+            "name": "Fixture Exchange 15",
+            "identifier": "fixture_exchange_15",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42015.5,
+          "volume": 1249.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42015.5
+          },
+          "converted_volume": {
+            "btc": 1249.5,
+            "eth": 18779.4,
+            "usd": 51849036.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT16",
+          "market": {
+            "name": "Fixture Exchange 16",
+            "identifier": "fixture_exchange_16",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42016.5,
+          "volume": 1250.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42016.5
+          },
+          "converted_volume": {
+            "btc": 1250.5,
+            "eth": 18780.4,
+            "usd": 51849037.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT17",
+          "market": {
+            "name": "Fixture Exchange 17",
+            "identifier": "fixture_exchange_17",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42017.5,
+          "volume": 1251.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42017.5
+          },
+          "converted_volume": {
+            "btc": 1251.5,
+            "eth": 18781.4,
+            "usd": 51849038.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT18",
+          "market": {
+            "name": "Fixture Exchange 18",
+            "identifier": "fixture_exchange_18",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42018.5,
+          "volume": 1252.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42018.5
+          },
+          "converted_volume": {
+            "btc": 1252.5,
+            "eth": 18782.4,
+            "usd": 51849039.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT19",
+          "market": {
+            "name": "Fixture Exchange 19",
+            "identifier": "fixture_exchange_19",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42019.5,
+          "volume": 1253.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42019.5
+          },
+          "converted_volume": {
+            "btc": 1253.5,
+            "eth": 18783.4,
+            "usd": 51849040.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT20",
+          "market": {
+            "name": "Fixture Exchange 20",
+            "identifier": "fixture_exchange_20",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42020.5,
+          "volume": 1254.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42020.5
+          },
+          "converted_volume": {
+            "btc": 1254.5,
+            "eth": 18784.4,
+            "usd": 51849041.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT21",
+          "market": {
+            "name": "Fixture Exchange 21",
+            "identifier": "fixture_exchange_21",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42021.5,
+          "volume": 1255.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42021.5
+          },
+          "converted_volume": {
+            "btc": 1255.5,
+            "eth": 18785.4,
+            "usd": 51849042.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT22",
+          "market": {
+            "name": "Fixture Exchange 22",
+            "identifier": "fixture_exchange_22",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42022.5,
+          "volume": 1256.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42022.5
+          },
+          "converted_volume": {
+            "btc": 1256.5,
+            "eth": 18786.4,
+            "usd": 51849043.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT23",
+          "market": {
+            "name": "Fixture Exchange 23",
+            "identifier": "fixture_exchange_23",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42023.5,
+          "volume": 1257.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42023.5
+          },
+          "converted_volume": {
+            "btc": 1257.5,
+            "eth": 18787.4,
+            "usd": 51849044.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT24",
+          "market": {
+            "name": "Fixture Exchange 24",
+            "identifier": "fixture_exchange_24",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42024.5,
+          "volume": 1258.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42024.5
+          },
+          "converted_volume": {
+            "btc": 1258.5,
+            "eth": 18788.4,
+            "usd": 51849045.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT25",
+          "market": {
+            "name": "Fixture Exchange 25",
+            "identifier": "fixture_exchange_25",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42025.5,
+          "volume": 1259.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42025.5
+          },
+          "converted_volume": {
+            "btc": 1259.5,
+            "eth": 18789.4,
+            "usd": 51849046.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT26",
+          "market": {
+            "name": "Fixture Exchange 26",
+            "identifier": "fixture_exchange_26",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42026.5,
+          "volume": 1260.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42026.5
+          },
+          "converted_volume": {
+            "btc": 1260.5,
+            "eth": 18790.4,
+            "usd": 51849047.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT27",
+          "market": {
+            "name": "Fixture Exchange 27",
+            "identifier": "fixture_exchange_27",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42027.5,
+          "volume": 1261.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42027.5
+          },
+          "converted_volume": {
+            "btc": 1261.5,
+            "eth": 18791.4,
+            "usd": 51849048.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT28",
+          "market": {
+            "name": "Fixture Exchange 28",
+            "identifier": "fixture_exchange_28",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42028.5,
+          "volume": 1262.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42028.5
+          },
+          "converted_volume": {
+            "btc": 1262.5,
+            "eth": 18792.4,
+            "usd": 51849049.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT29",
+          "market": {
+            "name": "Fixture Exchange 29",
+            "identifier": "fixture_exchange_29",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42029.5,
+          "volume": 1263.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42029.5
+          },
+          "converted_volume": {
+            "btc": 1263.5,
+            "eth": 18793.4,
+            "usd": 51849050.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT30",
+          "market": {
+            "name": "Fixture Exchange 30",
+            "identifier": "fixture_exchange_30",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42030.5,
+          "volume": 1264.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42030.5
+          },
+          "converted_volume": {
+            "btc": 1264.5,
+            "eth": 18794.4,
+            "usd": 51849051.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT31",
+          "market": {
+            "name": "Fixture Exchange 31",
+            "identifier": "fixture_exchange_31",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42031.5,
+          "volume": 1265.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42031.5
+          },
+          "converted_volume": {
+            "btc": 1265.5,
+            "eth": 18795.4,
+            "usd": 51849052.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT32",
+          "market": {
+            "name": "Fixture Exchange 32",
+            "identifier": "fixture_exchange_32",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42032.5,
+          "volume": 1266.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42032.5
+          },
+          "converted_volume": {
+            "btc": 1266.5,
+            "eth": 18796.4,
+            "usd": 51849053.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT33",
+          "market": {
+            "name": "Fixture Exchange 33",
+            "identifier": "fixture_exchange_33",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42033.5,
+          "volume": 1267.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42033.5
+          },
+          "converted_volume": {
+            "btc": 1267.5,
+            "eth": 18797.4,
+            "usd": 51849054.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT34",
+          "market": {
+            "name": "Fixture Exchange 34",
+            "identifier": "fixture_exchange_34",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42034.5,
+          "volume": 1268.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42034.5
+          },
+          "converted_volume": {
+            "btc": 1268.5,
+            "eth": 18798.4,
+            "usd": 51849055.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT35",
+          "market": {
+            "name": "Fixture Exchange 35",
+            "identifier": "fixture_exchange_35",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42035.5,
+          "volume": 1269.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42035.5
+          },
+          "converted_volume": {
+            "btc": 1269.5,
+            "eth": 18799.4,
+            "usd": 51849056.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT36",
+          "market": {
+            "name": "Fixture Exchange 36",
+            "identifier": "fixture_exchange_36",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42036.5,
+          "volume": 1270.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42036.5
+          },
+          "converted_volume": {
+            "btc": 1270.5,
+            "eth": 18800.4,
+            "usd": 51849057.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT37",
+          "market": {
+            "name": "Fixture Exchange 37",
+            "identifier": "fixture_exchange_37",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42037.5,
+          "volume": 1271.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42037.5
+          },
+          "converted_volume": {
+            "btc": 1271.5,
+            "eth": 18801.4,
+            "usd": 51849058.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT38",
+          "market": {
+            "name": "Fixture Exchange 38",
+            "identifier": "fixture_exchange_38",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42038.5,
+          "volume": 1272.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42038.5
+          },
+          "converted_volume": {
+            "btc": 1272.5,
+            "eth": 18802.4,
+            "usd": 51849059.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT39",
+          "market": {
+            "name": "Fixture Exchange 39",
+            "identifier": "fixture_exchange_39",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42039.5,
+          "volume": 1273.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42039.5
+          },
+          "converted_volume": {
+            "btc": 1273.5,
+            "eth": 18803.4,
+            "usd": 51849060.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT40",
+          "market": {
+            "name": "Fixture Exchange 40",
+            "identifier": "fixture_exchange_40",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42040.5,
+          "volume": 1274.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42040.5
+          },
+          "converted_volume": {
+            "btc": 1274.5,
+            "eth": 18804.4,
+            "usd": 51849061.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT41",
+          "market": {
+            "name": "Fixture Exchange 41",
+            "identifier": "fixture_exchange_41",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42041.5,
+          "volume": 1275.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42041.5
+          },
+          "converted_volume": {
+            "btc": 1275.5,
+            "eth": 18805.4,
+            "usd": 51849062.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT42",
+          "market": {
+            "name": "Fixture Exchange 42",
+            "identifier": "fixture_exchange_42",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42042.5,
+          "volume": 1276.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42042.5
+          },
+          "converted_volume": {
+            "btc": 1276.5,
+            "eth": 18806.4,
+            "usd": 51849063.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT43",
+          "market": {
+            "name": "Fixture Exchange 43",
+            "identifier": "fixture_exchange_43",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42043.5,
+          "volume": 1277.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42043.5
+          },
+          "converted_volume": {
+            "btc": 1277.5,
+            "eth": 18807.4,
+            "usd": 51849064.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT44",
+          "market": {
+            "name": "Fixture Exchange 44",
+            "identifier": "fixture_exchange_44",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42044.5,
+          "volume": 1278.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42044.5
+          },
+          "converted_volume": {
+            "btc": 1278.5,
+            "eth": 18808.4,
+            "usd": 51849065.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT45",
+          "market": {
+            "name": "Fixture Exchange 45",
+            "identifier": "fixture_exchange_45",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42045.5,
+          "volume": 1279.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42045.5
+          },
+          "converted_volume": {
+            "btc": 1279.5,
+            "eth": 18809.4,
+            "usd": 51849066.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT46",
+          "market": {
+            "name": "Fixture Exchange 46",
+            "identifier": "fixture_exchange_46",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42046.5,
+          "volume": 1280.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42046.5
+          },
+          "converted_volume": {
+            "btc": 1280.5,
+            "eth": 18810.4,
+            "usd": 51849067.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT47",
+          "market": {
+            "name": "Fixture Exchange 47",
+            "identifier": "fixture_exchange_47",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42047.5,
+          "volume": 1281.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42047.5
+          },
+          "converted_volume": {
+            "btc": 1281.5,
+            "eth": 18811.4,
+            "usd": 51849068.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT48",
+          "market": {
+            "name": "Fixture Exchange 48",
+            "identifier": "fixture_exchange_48",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42048.5,
+          "volume": 1282.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42048.5
+          },
+          "converted_volume": {
+            "btc": 1282.5,
+            "eth": 18812.4,
+            "usd": 51849069.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT49",
+          "market": {
+            "name": "Fixture Exchange 49",
+            "identifier": "fixture_exchange_49",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42049.5,
+          "volume": 1283.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42049.5
+          },
+          "converted_volume": {
+            "btc": 1283.5,
+            "eth": 18813.4,
+            "usd": 51849070.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT50",
+          "market": {
+            "name": "Fixture Exchange 50",
+            "identifier": "fixture_exchange_50",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42050.5,
+          "volume": 1284.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42050.5
+          },
+          "converted_volume": {
+            "btc": 1284.5,
+            "eth": 18814.4,
+            "usd": 51849071.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT51",
+          "market": {
+            "name": "Fixture Exchange 51",
+            "identifier": "fixture_exchange_51",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42051.5,
+          "volume": 1285.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42051.5
+          },
+          "converted_volume": {
+            "btc": 1285.5,
+            "eth": 18815.4,
+            "usd": 51849072.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT52",
+          "market": {
+            "name": "Fixture Exchange 52",
+            "identifier": "fixture_exchange_52",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42052.5,
+          "volume": 1286.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42052.5
+          },
+          "converted_volume": {
+            "btc": 1286.5,
+            "eth": 18816.4,
+            "usd": 51849073.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT53",
+          "market": {
+            "name": "Fixture Exchange 53",
+            "identifier": "fixture_exchange_53",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42053.5,
+          "volume": 1287.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42053.5
+          },
+          "converted_volume": {
+            "btc": 1287.5,
+            "eth": 18817.4,
+            "usd": 51849074.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT54",
+          "market": {
+            "name": "Fixture Exchange 54",
+            "identifier": "fixture_exchange_54",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42054.5,
+          "volume": 1288.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42054.5
+          },
+          "converted_volume": {
+            "btc": 1288.5,
+            "eth": 18818.4,
+            "usd": 51849075.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT55",
+          "market": {
+            "name": "Fixture Exchange 55",
+            "identifier": "fixture_exchange_55",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42055.5,
+          "volume": 1289.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42055.5
+          },
+          "converted_volume": {
+            "btc": 1289.5,
+            "eth": 18819.4,
+            "usd": 51849076.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT56",
+          "market": {
+            "name": "Fixture Exchange 56",
+            "identifier": "fixture_exchange_56",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42056.5,
+          "volume": 1290.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42056.5
+          },
+          "converted_volume": {
+            "btc": 1290.5,
+            "eth": 18820.4,
+            "usd": 51849077.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT57",
+          "market": {
+            "name": "Fixture Exchange 57",
+            "identifier": "fixture_exchange_57",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42057.5,
+          "volume": 1291.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42057.5
+          },
+          "converted_volume": {
+            "btc": 1291.5,
+            "eth": 18821.4,
+            "usd": 51849078.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT58",
+          "market": {
+            "name": "Fixture Exchange 58",
+            "identifier": "fixture_exchange_58",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42058.5,
+          "volume": 1292.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42058.5
+          },
+          "converted_volume": {
+            "btc": 1292.5,
+            "eth": 18822.4,
+            "usd": 51849079.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT59",
+          "market": {
+            "name": "Fixture Exchange 59",
+            "identifier": "fixture_exchange_59",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42059.5,
+          "volume": 1293.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42059.5
+          },
+          "converted_volume": {
+            "btc": 1293.5,
+            "eth": 18823.4,
+            "usd": 51849080.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT60",
+          "market": {
+            "name": "Fixture Exchange 60",
+            "identifier": "fixture_exchange_60",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42060.5,
+          "volume": 1294.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42060.5
+          },
+          "converted_volume": {
+            "btc": 1294.5,
+            "eth": 18824.4,
+            "usd": 51849081.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT61",
+          "market": {
+            "name": "Fixture Exchange 61",
+            "identifier": "fixture_exchange_61",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42061.5,
+          "volume": 1295.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42061.5
+          },
+          "converted_volume": {
+            "btc": 1295.5,
+            "eth": 18825.4,
+            "usd": 51849082.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT62",
+          "market": {
+            "name": "Fixture Exchange 62",
+            "identifier": "fixture_exchange_62",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42062.5,
+          "volume": 1296.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42062.5
+          },
+          "converted_volume": {
+            "btc": 1296.5,
+            "eth": 18826.4,
+            "usd": 51849083.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT63",
+          "market": {
+            "name": "Fixture Exchange 63",
+            "identifier": "fixture_exchange_63",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42063.5,
+          "volume": 1297.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42063.5
+          },
+          "converted_volume": {
+            "btc": 1297.5,
+            "eth": 18827.4,
+            "usd": 51849084.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT64",
+          "market": {
+            "name": "Fixture Exchange 64",
+            "identifier": "fixture_exchange_64",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42064.5,
+          "volume": 1298.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42064.5
+          },
+          "converted_volume": {
+            "btc": 1298.5,
+            "eth": 18828.4,
+            "usd": 51849085.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT65",
+          "market": {
+            "name": "Fixture Exchange 65",
+            "identifier": "fixture_exchange_65",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42065.5,
+          "volume": 1299.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42065.5
+          },
+          "converted_volume": {
+            "btc": 1299.5,
+            "eth": 18829.4,
+            "usd": 51849086.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT66",
+          "market": {
+            "name": "Fixture Exchange 66",
+            "identifier": "fixture_exchange_66",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42066.5,
+          "volume": 1300.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42066.5
+          },
+          "converted_volume": {
+            "btc": 1300.5,
+            "eth": 18830.4,
+            "usd": 51849087.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT67",
+          "market": {
+            "name": "Fixture Exchange 67",
+            "identifier": "fixture_exchange_67",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42067.5,
+          "volume": 1301.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42067.5
+          },
+          "converted_volume": {
+            "btc": 1301.5,
+            "eth": 18831.4,
+            "usd": 51849088.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT68",
+          "market": {
+            "name": "Fixture Exchange 68",
+            "identifier": "fixture_exchange_68",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42068.5,
+          "volume": 1302.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42068.5
+          },
+          "converted_volume": {
+            "btc": 1302.5,
+            "eth": 18832.4,
+            "usd": 51849089.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT69",
+          "market": {
+            "name": "Fixture Exchange 69",
+            "identifier": "fixture_exchange_69",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42069.5,
+          "volume": 1303.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42069.5
+          },
+          "converted_volume": {
+            "btc": 1303.5,
+            "eth": 18833.4,
+            "usd": 51849090.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT70",
+          "market": {
+            "name": "Fixture Exchange 70",
+            "identifier": "fixture_exchange_70",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42070.5,
+          "volume": 1304.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42070.5
+          },
+          "converted_volume": {
+            "btc": 1304.5,
+            "eth": 18834.4,
+            "usd": 51849091.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT71",
+          "market": {
+            "name": "Fixture Exchange 71",
+            "identifier": "fixture_exchange_71",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42071.5,
+          "volume": 1305.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42071.5
+          },
+          "converted_volume": {
+            "btc": 1305.5,
+            "eth": 18835.4,
+            "usd": 51849092.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT72",
+          "market": {
+            "name": "Fixture Exchange 72",
+            "identifier": "fixture_exchange_72",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42072.5,
+          "volume": 1306.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42072.5
+          },
+          "converted_volume": {
+            "btc": 1306.5,
+            "eth": 18836.4,
+            "usd": 51849093.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT73",
+          "market": {
+            "name": "Fixture Exchange 73",
+            "identifier": "fixture_exchange_73",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42073.5,
+          "volume": 1307.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42073.5
+          },
+          "converted_volume": {
+            "btc": 1307.5,
+            "eth": 18837.4,
+            "usd": 51849094.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT74",
+          "market": {
+            "name": "Fixture Exchange 74",
+            "identifier": "fixture_exchange_74",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42074.5,
+          "volume": 1308.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42074.5
+          },
+          "converted_volume": {
+            "btc": 1308.5,
+            "eth": 18838.4,
+            "usd": 51849095.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT75",
+          "market": {
+            "name": "Fixture Exchange 75",
+            "identifier": "fixture_exchange_75",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42075.5,
+          "volume": 1309.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42075.5
+          },
+          "converted_volume": {
+            "btc": 1309.5,
+            "eth": 18839.4,
+            "usd": 51849096.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT76",
+          "market": {
+            "name": "Fixture Exchange 76",
+            "identifier": "fixture_exchange_76",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42076.5,
+          "volume": 1310.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42076.5
+          },
+          "converted_volume": {
+            "btc": 1310.5,
+            "eth": 18840.4,
+            "usd": 51849097.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT77",
+          "market": {
+            "name": "Fixture Exchange 77",
+            "identifier": "fixture_exchange_77",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42077.5,
+          "volume": 1311.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42077.5
+          },
+          "converted_volume": {
+            "btc": 1311.5,
+            "eth": 18841.4,
+            "usd": 51849098.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT78",
+          "market": {
+            "name": "Fixture Exchange 78",
+            "identifier": "fixture_exchange_78",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42078.5,
+          "volume": 1312.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42078.5
+          },
+          "converted_volume": {
+            "btc": 1312.5,
+            "eth": 18842.4,
+            "usd": 51849099.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT79",
+          "market": {
+            "name": "Fixture Exchange 79",
+            "identifier": "fixture_exchange_79",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42079.5,
+          "volume": 1313.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42079.5
+          },
+          "converted_volume": {
+            "btc": 1313.5,
+            "eth": 18843.4,
+            "usd": 51849100.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT80",
+          "market": {
+            "name": "Fixture Exchange 80",
+            "identifier": "fixture_exchange_80",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42080.5,
+          "volume": 1314.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42080.5
+          },
+          "converted_volume": {
+            "btc": 1314.5,
+            "eth": 18844.4,
+            "usd": 51849101.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT81",
+          "market": {
+            "name": "Fixture Exchange 81",
+            "identifier": "fixture_exchange_81",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42081.5,
+          "volume": 1315.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42081.5
+          },
+          "converted_volume": {
+            "btc": 1315.5,
+            "eth": 18845.4,
+            "usd": 51849102.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT82",
+          "market": {
+            "name": "Fixture Exchange 82",
+            "identifier": "fixture_exchange_82",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42082.5,
+          "volume": 1316.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42082.5
+          },
+          "converted_volume": {
+            "btc": 1316.5,
+            "eth": 18846.4,
+            "usd": 51849103.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT83",
+          "market": {
+            "name": "Fixture Exchange 83",
+            "identifier": "fixture_exchange_83",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42083.5,
+          "volume": 1317.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42083.5
+          },
+          "converted_volume": {
+            "btc": 1317.5,
+            "eth": 18847.4,
+            "usd": 51849104.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT84",
+          "market": {
+            "name": "Fixture Exchange 84",
+            "identifier": "fixture_exchange_84",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42084.5,
+          "volume": 1318.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42084.5
+          },
+          "converted_volume": {
+            "btc": 1318.5,
+            "eth": 18848.4,
+            "usd": 51849105.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT85",
+          "market": {
+            "name": "Fixture Exchange 85",
+            "identifier": "fixture_exchange_85",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42085.5,
+          "volume": 1319.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42085.5
+          },
+          "converted_volume": {
+            "btc": 1319.5,
+            "eth": 18849.4,
+            "usd": 51849106.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT86",
+          "market": {
+            "name": "Fixture Exchange 86",
+            "identifier": "fixture_exchange_86",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42086.5,
+          "volume": 1320.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42086.5
+          },
+          "converted_volume": {
+            "btc": 1320.5,
+            "eth": 18850.4,
+            "usd": 51849107.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT87",
+          "market": {
+            "name": "Fixture Exchange 87",
+            "identifier": "fixture_exchange_87",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42087.5,
+          "volume": 1321.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42087.5
+          },
+          "converted_volume": {
+            "btc": 1321.5,
+            "eth": 18851.4,
+            "usd": 51849108.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT88",
+          "market": {
+            "name": "Fixture Exchange 88",
+            "identifier": "fixture_exchange_88",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42088.5,
+          "volume": 1322.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42088.5
+          },
+          "converted_volume": {
+            "btc": 1322.5,
+            "eth": 18852.4,
+            "usd": 51849109.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT89",
+          "market": {
+            "name": "Fixture Exchange 89",
+            "identifier": "fixture_exchange_89",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42089.5,
+          "volume": 1323.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42089.5
+          },
+          "converted_volume": {
+            "btc": 1323.5,
+            "eth": 18853.4,
+            "usd": 51849110.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT90",
+          "market": {
+            "name": "Fixture Exchange 90",
+            "identifier": "fixture_exchange_90",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42090.5,
+          "volume": 1324.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42090.5
+          },
+          "converted_volume": {
+            "btc": 1324.5,
+            "eth": 18854.4,
+            "usd": 51849111.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT91",
+          "market": {
+            "name": "Fixture Exchange 91",
+            "identifier": "fixture_exchange_91",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42091.5,
+          "volume": 1325.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42091.5
+          },
+          "converted_volume": {
+            "btc": 1325.5,
+            "eth": 18855.4,
+            "usd": 51849112.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT92",
+          "market": {
+            "name": "Fixture Exchange 92",
+            "identifier": "fixture_exchange_92",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42092.5,
+          "volume": 1326.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42092.5
+          },
+          "converted_volume": {
+            "btc": 1326.5,
+            "eth": 18856.4,
+            "usd": 51849113.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT93",
+          "market": {
+            "name": "Fixture Exchange 93",
+            "identifier": "fixture_exchange_93",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42093.5,
+          "volume": 1327.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42093.5
+          },
+          "converted_volume": {
+            "btc": 1327.5,
+            "eth": 18857.4,
+            "usd": 51849114.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT94",
+          "market": {
+            "name": "Fixture Exchange 94",
+            "identifier": "fixture_exchange_94",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42094.5,
+          "volume": 1328.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42094.5
+          },
+          "converted_volume": {
+            "btc": 1328.5,
+            "eth": 18858.4,
+            "usd": 51849115.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT95",
+          "market": {
+            "name": "Fixture Exchange 95",
+            "identifier": "fixture_exchange_95",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42095.5,
+          "volume": 1329.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42095.5
+          },
+          "converted_volume": {
+            "btc": 1329.5,
+            "eth": 18859.4,
+            "usd": 51849116.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT96",
+          "market": {
+            "name": "Fixture Exchange 96",
+            "identifier": "fixture_exchange_96",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42096.5,
+          "volume": 1330.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42096.5
+          },
+          "converted_volume": {
+            "btc": 1330.5,
+            "eth": 18860.4,
+            "usd": 51849117.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT97",
+          "market": {
+            "name": "Fixture Exchange 97",
+            "identifier": "fixture_exchange_97",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42097.5,
+          "volume": 1331.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42097.5
+          },
+          "converted_volume": {
+            "btc": 1331.5,
+            "eth": 18861.4,
+            "usd": 51849118.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT98",
+          "market": {
+            "name": "Fixture Exchange 98",
+            "identifier": "fixture_exchange_98",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42098.5,
+          "volume": 1332.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42098.5
+          },
+          "converted_volume": {
+            "btc": 1332.5,
+            "eth": 18862.4,
+            "usd": 51849119.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        },
+        {
+          "base": "BTC",
+          "target": "USDT99",
+          "market": {
+            "name": "Fixture Exchange 99",
+            "identifier": "fixture_exchange_99",
+            "has_trading_incentive": false,
+            "logo": "https://example.com/fixture-logo.png"
+          },
+          "last": 42099.5,
+          "volume": 1333.5,
+          "converted_last": {
+            "btc": 1.0,
+            "eth": 15.2,
+            "usd": 42099.5
+          },
+          "converted_volume": {
+            "btc": 1333.5,
+            "eth": 18863.4,
+            "usd": 51849120.25
+          },
+          "trust_score": "green",
+          "bid_ask_spread_percentage": 0.01,
+          "timestamp": "2026-01-01T00:00:00+00:00",
+          "last_traded_at": "2026-01-01T00:00:00+00:00",
+          "last_fetch_at": "2026-01-01T00:00:00+00:00",
+          "is_anomaly": false,
+          "is_stale": false,
+          "trade_url": "https://example.com/trade/BTC_USDT",
+          "coin_id": "bitcoin",
+          "target_coin_id": "tether"
+        }
+      ]
+    }
+  }
+}

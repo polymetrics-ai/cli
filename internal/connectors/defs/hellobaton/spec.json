@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hellobaton Connection Specification",
+  "type": "object",
+  "required": ["api_key", "base_url"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Hellobaton API key, sent as the api_key query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Hellobaton API base URL, e.g. https://<company>.hellobaton.com/api. Legacy derives this from a bare company subdomain; this bundle requires the full URL directly since the engine has no config-derivation mechanism for base URLs (see docs.md Known limits)."
+    }
+  }
+}

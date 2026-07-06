@@ -1,0 +1,53 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Basic " }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "pagination_data.next_url",
+      "allow_cross_host": true
+    },
+    "check": { "method": "GET", "path": "/surveys", "query": { "items_per_page": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "survicate api_key is missing or invalid; re-run pm credentials add survicate" },
+      { "status": 403, "hint": "survicate account is not subscribed to a plan with Data Export API access" },
+      { "status": 429, "class": "rate_limited", "hint": "survicate rate limit exceeded (1000 req/min per workspace, 5 concurrent); the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "surveys",
+      "path": "/surveys",
+      "query": { "items_per_page": "100" },
+      "records": { "path": "data" },
+      "schema": "schemas/surveys.json"
+    },
+    {
+      "name": "survey_questions",
+      "path": "/surveys/{{ fanout.id }}/questions",
+      "query": { "items_per_page": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/surveys", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "fanout.id" },
+        "stamp_field": "survey_id"
+      },
+      "schema": "schemas/survey_questions.json"
+    },
+    {
+      "name": "responses",
+      "path": "/surveys/{{ fanout.id }}/responses",
+      "query": { "items_per_page": "100" },
+      "records": { "path": "data" },
+      "fan_out": {
+        "ids_from": { "request": { "path": "/surveys", "records_path": "data", "id_field": "id" } },
+        "into": { "path_var": "fanout.id" },
+        "stamp_field": "survey_id"
+      },
+      "schema": "schemas/responses.json"
+    }
+  ]
+}

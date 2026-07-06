@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/public/v2/notary/notaries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "notary_notaries_fixture_1",
+          "name": "Fixture notary_notaries",
+          "status": "fixture",
+          "date_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null
+    }
+  }
+}

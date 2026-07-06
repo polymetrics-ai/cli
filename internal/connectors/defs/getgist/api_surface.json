@@ -1,0 +1,606 @@
+{
+  "api": "Gist REST API",
+  "docs": "https://developers.getgist.com/api/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion of the documented Gist API reference. Regular JSON list/detail GET endpoints are covered as streams and regular JSON POST/PATCH/DELETE endpoints are covered as write actions. Read-like POST search endpoints and webhook callback/configuration material are excluded with endpoint-specific reasons.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "covered_by": {
+        "stream": "contact_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/batch/{batch_id}",
+      "covered_by": {
+        "stream": "contact_batch_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "upsert_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/batch",
+      "covered_by": {
+        "write": "upsert_contacts_batch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "covered_by": {
+        "stream": "articles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{id}",
+      "covered_by": {
+        "stream": "article_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/search",
+      "covered_by": {
+        "stream": "article_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/search_articles",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "the docs text aliases this to /articles/search, covered by article_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/settings",
+      "covered_by": {
+        "stream": "article_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "covered_by": {
+        "write": "create_article"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/articles/{id}",
+      "covered_by": {
+        "write": "update_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{id}",
+      "covered_by": {
+        "write": "delete_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections",
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "stream": "collection_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections",
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "write": "update_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collections/{id}",
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events",
+      "covered_by": {
+        "write": "track_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "upsert_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "add_tag_to_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "remove_tag_from_contacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{id}",
+      "covered_by": {
+        "stream": "segment_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms?form_id={form_id}",
+      "covered_by": {
+        "stream": "form_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{form_id}/submissions",
+      "covered_by": {
+        "stream": "form_submissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/forms/{form_id}/subscribe",
+      "covered_by": {
+        "write": "subscribe_contact_to_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns?campaign_id={campaign_id}",
+      "covered_by": {
+        "stream": "campaign_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns",
+      "covered_by": {
+        "write": "subscribe_contact_to_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns",
+      "covered_by": {
+        "write": "unsubscribe_contact_from_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_types",
+      "covered_by": {
+        "stream": "subscription_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_types/{subscription_type_id}",
+      "covered_by": {
+        "stream": "subscription_type_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription_types/{subscription_type_id}",
+      "covered_by": {
+        "write": "attach_contact_to_subscription_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription_types/{subscription_type_id}",
+      "covered_by": {
+        "write": "detach_contact_from_subscription_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "stream": "conversation_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "stream": "conversation_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/count",
+      "covered_by": {
+        "stream": "conversation_global_counts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/count/teams",
+      "covered_by": {
+        "stream": "conversation_team_counts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/count/teammates",
+      "covered_by": {
+        "stream": "conversation_teammate_counts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/search",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "conversation search is a read-like POST endpoint with request-body criteria; the engine read path does not send stream.body payloads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "write": "reply_to_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "delete_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}/assign",
+      "covered_by": {
+        "write": "assign_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}/assign",
+      "covered_by": {
+        "write": "unassign_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "snooze_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "unsnooze_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "close_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}/priority",
+      "covered_by": {
+        "write": "prioritize_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "tag_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "untag_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "covered_by": {
+        "stream": "team_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates",
+      "covered_by": {
+        "stream": "teammates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}",
+      "covered_by": {
+        "stream": "teammate_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/token/info",
+      "covered_by": {
+        "stream": "token_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "webhook setup is documented as application configuration and webhook data sections are inbound callback payloads, not ETL records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores",
+      "covered_by": {
+        "stream": "ecommerce_stores"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}",
+      "covered_by": {
+        "stream": "ecommerce_store_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores",
+      "covered_by": {
+        "write": "create_store"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}",
+      "covered_by": {
+        "write": "update_store"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "stream": "ecommerce_customer_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "stream": "ecommerce_product_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}",
+      "covered_by": {
+        "stream": "ecommerce_product_variant_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants",
+      "covered_by": {
+        "write": "create_product_variant"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{product_variant_id}",
+      "covered_by": {
+        "write": "update_product_variant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ecommerce/stores/{store_id}/categories/{category_id}",
+      "covered_by": {
+        "stream": "ecommerce_product_category_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/categories",
+      "covered_by": {
+        "write": "create_product_category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/categories/{category_id}",
+      "covered_by": {
+        "write": "update_product_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}/cart",
+      "covered_by": {
+        "write": "upsert_cart"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ecommerce/stores/{store_id}/customers/{customer_id}/cart",
+      "covered_by": {
+        "write": "delete_cart"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ecommerce/stores/{store_id}/orders",
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ecommerce/stores/{store_id}/orders/{order_id}",
+      "covered_by": {
+        "write": "update_order"
+      }
+    }
+  ]
+}

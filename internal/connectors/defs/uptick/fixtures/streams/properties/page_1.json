@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v2.14/properties/",
+    "query": {
+      "ordering": "-updated",
+      "page_size": "synthetic-conformance-value",
+      "fields[Property]": "id,created,updated,name,ref,address,timezone,status,coords"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "created": "2025-12-31T00:00:00.000000Z",
+          "updated": "2026-01-01T00:00:00.000000Z",
+          "name": "Fixture Property 1",
+          "ref": "PROP-1",
+          "address": "1 Example St",
+          "timezone": "Australia/Sydney",
+          "status": "active",
+          "coords": "0,0"
+        }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

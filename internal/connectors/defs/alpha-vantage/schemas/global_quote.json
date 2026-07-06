@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "global_quote",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string"
+    },
+    "open": {
+      "type": "number"
+    },
+    "high": {
+      "type": "number"
+    },
+    "low": {
+      "type": "number"
+    },
+    "price": {
+      "type": "number"
+    },
+    "volume": {
+      "type": "integer"
+    },
+    "latest_trading_day": {
+      "type": "string"
+    },
+    "previous_close": {
+      "type": "number"
+    },
+    "change": {
+      "type": "number"
+    },
+    "change_percent": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "symbol",
+    "latest_trading_day"
+  ],
+  "x-cursor-field": "latest_trading_day"
+}

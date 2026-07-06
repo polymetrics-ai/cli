@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/athletes/synthetic-conformance-value/stats" },
+  "response": {
+    "status": 200,
+    "body": {
+      "biggest_ride_distance": 120000,
+      "biggest_climb_elevation_gain": 1500,
+      "recent_ride_totals": { "count": 4, "distance": 80000 },
+      "recent_run_totals": { "count": 6, "distance": 42195 },
+      "recent_swim_totals": { "count": 0, "distance": 0 },
+      "ytd_ride_totals": { "count": 40, "distance": 800000 },
+      "ytd_run_totals": { "count": 60, "distance": 421950 },
+      "ytd_swim_totals": { "count": 2, "distance": 4000 },
+      "all_ride_totals": { "count": 400, "distance": 8000000 },
+      "all_run_totals": { "count": 600, "distance": 4219500 },
+      "all_swim_totals": { "count": 20, "distance": 40000 }
+    }
+  }
+}

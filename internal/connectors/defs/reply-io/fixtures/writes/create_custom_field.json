@@ -1,0 +1,24 @@
+{
+  "record": {
+    "title": "fixture_title",
+    "fieldType": "fixture_fieldType",
+    "metadata": "fixture_metadata",
+    "orgWide": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/custom-fields",
+    "body": {
+      "title": "fixture_title",
+      "fieldType": "fixture_fieldType",
+      "metadata": "fixture_metadata",
+      "orgWide": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

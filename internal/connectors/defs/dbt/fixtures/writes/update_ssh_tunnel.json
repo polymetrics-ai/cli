@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": 1,
+    "port": 2222
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/synthetic-conformance-value/encryptions/1/"
+  }
+}

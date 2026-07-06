@@ -1,0 +1,18 @@
+{
+  "record": {
+    "type": "email",
+    "name": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/channels",
+    "body": {
+      "type": "email",
+      "name": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

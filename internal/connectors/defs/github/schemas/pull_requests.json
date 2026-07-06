@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pull_requests",
+  "type": "object",
+  "x-primary-key": [
+    "node_id"
+  ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "node_id"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "state": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Legacy emits this via nestedValue (raw JSON number). Sourced here via a bare computed_fields \"{{ record.<path>.id }}\" template, which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction, G0b RESOLVED) rather than stringifying it."
+    },
+    "author_association": {
+      "type": "string"
+    },
+    "comments": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "merged_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "draft": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "merge_commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "base_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "base_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "head_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "head_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

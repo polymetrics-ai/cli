@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/time_off/vacation_types" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "data": [
+          {
+            "id": "vacation_type_fixture_1",
+            "name": "Vacation",
+            "status": "active",
+            "counts_as": "VACATION",
+            "company": { "object": "/meta/ref/detail", "ref_object": "/core/companies", "url": "https://api.zenefits.com/core/companies/1" },
+            "vacation_requests": { "object": "/meta/ref/list", "ref_object": "/time_off/vacation_requests", "url": "https://api.zenefits.com/time_off/vacation_types/vacation_type_fixture_1/vacation_requests" }
+          }
+        ],
+        "next_url": null,
+        "object": "/meta/list",
+        "url": "https://api.zenefits.com/time_off/vacation_types"
+      },
+      "error": null,
+      "object": "/meta/response",
+      "status": 200
+    }
+  }
+}

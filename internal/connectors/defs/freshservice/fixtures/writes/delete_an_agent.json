@@ -1,0 +1,11 @@
+{
+  "record": {
+    "agent_id": 123,
+    "name": "Fixture delete_an_agent",
+    "description": "Fixture delete_an_agent record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/agents/123"
+  }
+}

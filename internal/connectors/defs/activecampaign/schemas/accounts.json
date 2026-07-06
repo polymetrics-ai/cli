@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign Account",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updatedTimestamp",
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "accountUrl": { "type": ["string", "null"] },
+    "contactCount": { "type": ["string", "null"] },
+    "dealCount": { "type": ["string", "null"] },
+    "createdTimestamp": { "type": ["string", "null"] },
+    "updatedTimestamp": { "type": ["string", "null"] }
+  }
+}

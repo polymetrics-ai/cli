@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/on-call-schedules/synthetic-conformance-value/members"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "on_call_member_fixture_1",
+        "name": "Fixture on_call_member_fixture_1",
+        "email": "oncall@example.test"
+      }
+    ]
+  }
+}

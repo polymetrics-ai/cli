@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": 101,
+    "name": "Updated layout_template"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v5/objects/layout-templates/101",
+    "body": {
+      "name": "Updated layout_template"
+    }
+  }
+}

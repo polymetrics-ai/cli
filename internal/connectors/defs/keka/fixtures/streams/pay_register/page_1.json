@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/paygroups/{{ config.pay_group_id }}/paycycles/{{ config.pay_cycle_id }}/payregister",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pay_register_fixture_1",
+          "name": "Fixture pay register"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalRecords": 1,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

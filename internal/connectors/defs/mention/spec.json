@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mention Connection Specification",
+  "type": "object",
+  "required": ["api_key", "account_id"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mention API key, sent as the raw Authorization header value (no Bearer prefix). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.mention.net/api",
+      "description": "Mention API base URL override for tests or proxies."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Mention account id. Legacy auto-discovers this from /accounts/me when unset; this bundle requires it explicitly since the engine has no pre-flight-lookup mechanism to derive a path segment from a prior response (see docs.md Known limits)."
+    },
+    "alert_id": {
+      "type": "string",
+      "description": "Mention alert id, required only by the 'mention' and 'alert_tag' streams (used to build their path: accounts/{account_id}/alerts/{alert_id}/mentions|tags)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

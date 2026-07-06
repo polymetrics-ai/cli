@@ -1,0 +1,415 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/synthetic-conformance-value/branches",
+    "query": {
+      "page": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "b1",
+        "name": "Fixture Branch 1"
+      },
+      {
+        "id": "b2",
+        "name": "Fixture Branch 2"
+      },
+      {
+        "id": "b3",
+        "name": "Fixture Branch 3"
+      },
+      {
+        "id": "b4",
+        "name": "Fixture Branch 4"
+      },
+      {
+        "id": "b5",
+        "name": "Fixture Branch 5"
+      },
+      {
+        "id": "b6",
+        "name": "Fixture Branch 6"
+      },
+      {
+        "id": "b7",
+        "name": "Fixture Branch 7"
+      },
+      {
+        "id": "b8",
+        "name": "Fixture Branch 8"
+      },
+      {
+        "id": "b9",
+        "name": "Fixture Branch 9"
+      },
+      {
+        "id": "b10",
+        "name": "Fixture Branch 10"
+      },
+      {
+        "id": "b11",
+        "name": "Fixture Branch 11"
+      },
+      {
+        "id": "b12",
+        "name": "Fixture Branch 12"
+      },
+      {
+        "id": "b13",
+        "name": "Fixture Branch 13"
+      },
+      {
+        "id": "b14",
+        "name": "Fixture Branch 14"
+      },
+      {
+        "id": "b15",
+        "name": "Fixture Branch 15"
+      },
+      {
+        "id": "b16",
+        "name": "Fixture Branch 16"
+      },
+      {
+        "id": "b17",
+        "name": "Fixture Branch 17"
+      },
+      {
+        "id": "b18",
+        "name": "Fixture Branch 18"
+      },
+      {
+        "id": "b19",
+        "name": "Fixture Branch 19"
+      },
+      {
+        "id": "b20",
+        "name": "Fixture Branch 20"
+      },
+      {
+        "id": "b21",
+        "name": "Fixture Branch 21"
+      },
+      {
+        "id": "b22",
+        "name": "Fixture Branch 22"
+      },
+      {
+        "id": "b23",
+        "name": "Fixture Branch 23"
+      },
+      {
+        "id": "b24",
+        "name": "Fixture Branch 24"
+      },
+      {
+        "id": "b25",
+        "name": "Fixture Branch 25"
+      },
+      {
+        "id": "b26",
+        "name": "Fixture Branch 26"
+      },
+      {
+        "id": "b27",
+        "name": "Fixture Branch 27"
+      },
+      {
+        "id": "b28",
+        "name": "Fixture Branch 28"
+      },
+      {
+        "id": "b29",
+        "name": "Fixture Branch 29"
+      },
+      {
+        "id": "b30",
+        "name": "Fixture Branch 30"
+      },
+      {
+        "id": "b31",
+        "name": "Fixture Branch 31"
+      },
+      {
+        "id": "b32",
+        "name": "Fixture Branch 32"
+      },
+      {
+        "id": "b33",
+        "name": "Fixture Branch 33"
+      },
+      {
+        "id": "b34",
+        "name": "Fixture Branch 34"
+      },
+      {
+        "id": "b35",
+        "name": "Fixture Branch 35"
+      },
+      {
+        "id": "b36",
+        "name": "Fixture Branch 36"
+      },
+      {
+        "id": "b37",
+        "name": "Fixture Branch 37"
+      },
+      {
+        "id": "b38",
+        "name": "Fixture Branch 38"
+      },
+      {
+        "id": "b39",
+        "name": "Fixture Branch 39"
+      },
+      {
+        "id": "b40",
+        "name": "Fixture Branch 40"
+      },
+      {
+        "id": "b41",
+        "name": "Fixture Branch 41"
+      },
+      {
+        "id": "b42",
+        "name": "Fixture Branch 42"
+      },
+      {
+        "id": "b43",
+        "name": "Fixture Branch 43"
+      },
+      {
+        "id": "b44",
+        "name": "Fixture Branch 44"
+      },
+      {
+        "id": "b45",
+        "name": "Fixture Branch 45"
+      },
+      {
+        "id": "b46",
+        "name": "Fixture Branch 46"
+      },
+      {
+        "id": "b47",
+        "name": "Fixture Branch 47"
+      },
+      {
+        "id": "b48",
+        "name": "Fixture Branch 48"
+      },
+      {
+        "id": "b49",
+        "name": "Fixture Branch 49"
+      },
+      {
+        "id": "b50",
+        "name": "Fixture Branch 50"
+      },
+      {
+        "id": "b51",
+        "name": "Fixture Branch 51"
+      },
+      {
+        "id": "b52",
+        "name": "Fixture Branch 52"
+      },
+      {
+        "id": "b53",
+        "name": "Fixture Branch 53"
+      },
+      {
+        "id": "b54",
+        "name": "Fixture Branch 54"
+      },
+      {
+        "id": "b55",
+        "name": "Fixture Branch 55"
+      },
+      {
+        "id": "b56",
+        "name": "Fixture Branch 56"
+      },
+      {
+        "id": "b57",
+        "name": "Fixture Branch 57"
+      },
+      {
+        "id": "b58",
+        "name": "Fixture Branch 58"
+      },
+      {
+        "id": "b59",
+        "name": "Fixture Branch 59"
+      },
+      {
+        "id": "b60",
+        "name": "Fixture Branch 60"
+      },
+      {
+        "id": "b61",
+        "name": "Fixture Branch 61"
+      },
+      {
+        "id": "b62",
+        "name": "Fixture Branch 62"
+      },
+      {
+        "id": "b63",
+        "name": "Fixture Branch 63"
+      },
+      {
+        "id": "b64",
+        "name": "Fixture Branch 64"
+      },
+      {
+        "id": "b65",
+        "name": "Fixture Branch 65"
+      },
+      {
+        "id": "b66",
+        "name": "Fixture Branch 66"
+      },
+      {
+        "id": "b67",
+        "name": "Fixture Branch 67"
+      },
+      {
+        "id": "b68",
+        "name": "Fixture Branch 68"
+      },
+      {
+        "id": "b69",
+        "name": "Fixture Branch 69"
+      },
+      {
+        "id": "b70",
+        "name": "Fixture Branch 70"
+      },
+      {
+        "id": "b71",
+        "name": "Fixture Branch 71"
+      },
+      {
+        "id": "b72",
+        "name": "Fixture Branch 72"
+      },
+      {
+        "id": "b73",
+        "name": "Fixture Branch 73"
+      },
+      {
+        "id": "b74",
+        "name": "Fixture Branch 74"
+      },
+      {
+        "id": "b75",
+        "name": "Fixture Branch 75"
+      },
+      {
+        "id": "b76",
+        "name": "Fixture Branch 76"
+      },
+      {
+        "id": "b77",
+        "name": "Fixture Branch 77"
+      },
+      {
+        "id": "b78",
+        "name": "Fixture Branch 78"
+      },
+      {
+        "id": "b79",
+        "name": "Fixture Branch 79"
+      },
+      {
+        "id": "b80",
+        "name": "Fixture Branch 80"
+      },
+      {
+        "id": "b81",
+        "name": "Fixture Branch 81"
+      },
+      {
+        "id": "b82",
+        "name": "Fixture Branch 82"
+      },
+      {
+        "id": "b83",
+        "name": "Fixture Branch 83"
+      },
+      {
+        "id": "b84",
+        "name": "Fixture Branch 84"
+      },
+      {
+        "id": "b85",
+        "name": "Fixture Branch 85"
+      },
+      {
+        "id": "b86",
+        "name": "Fixture Branch 86"
+      },
+      {
+        "id": "b87",
+        "name": "Fixture Branch 87"
+      },
+      {
+        "id": "b88",
+        "name": "Fixture Branch 88"
+      },
+      {
+        "id": "b89",
+        "name": "Fixture Branch 89"
+      },
+      {
+        "id": "b90",
+        "name": "Fixture Branch 90"
+      },
+      {
+        "id": "b91",
+        "name": "Fixture Branch 91"
+      },
+      {
+        "id": "b92",
+        "name": "Fixture Branch 92"
+      },
+      {
+        "id": "b93",
+        "name": "Fixture Branch 93"
+      },
+      {
+        "id": "b94",
+        "name": "Fixture Branch 94"
+      },
+      {
+        "id": "b95",
+        "name": "Fixture Branch 95"
+      },
+      {
+        "id": "b96",
+        "name": "Fixture Branch 96"
+      },
+      {
+        "id": "b97",
+        "name": "Fixture Branch 97"
+      },
+      {
+        "id": "b98",
+        "name": "Fixture Branch 98"
+      },
+      {
+        "id": "b99",
+        "name": "Fixture Branch 99"
+      },
+      {
+        "id": "b100",
+        "name": "Fixture Branch 100"
+      }
+    ]
+  }
+}

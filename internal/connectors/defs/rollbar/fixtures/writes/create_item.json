@@ -1,0 +1,33 @@
+{
+  "record": {
+    "data": {
+      "environment": "production",
+      "body": {
+        "message": {
+          "body": "Synthetic Rollbar fixture item"
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/1/item/",
+    "body": {
+      "data": {
+        "environment": "production",
+        "body": {
+          "message": {
+            "body": "Synthetic Rollbar fixture item"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {}
+    }
+  }
+}

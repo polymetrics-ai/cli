@@ -1,0 +1,12 @@
+{
+  "api": "Hugging Face dataset-viewer REST API (https://huggingface.co/docs/datasets/)",
+  "docs": "https://huggingface.co/docs/datasets/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: partial. The 2 legacy streams expressible in the Tier-1 declarative dialect (splits, sizes) are covered; the 3rd legacy stream (rows) is blocked (see excluded entry below) and stays on the legacy internal/connectors/hugging-face-datasets implementation for now. Hugging Face's write endpoints are out of scope entirely (the dataset-viewer API is read-only; legacy itself ships no writes).",
+  "endpoints": [
+    { "method": "GET", "path": "/splits", "covered_by": { "stream": "splits" } },
+    { "method": "GET", "path": "/size", "covered_by": { "stream": "sizes" } },
+    { "method": "GET", "path": "/rows", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP blocker: legacy's rowRecord (huggingfacedatasets/streams.go:114-130) hoists every key of each row's nested 'row' object to the top level of the emitted record (column names vary per dataset schema, so the set is not statically knowable), in addition to preserving the nested 'row' object itself. The declarative dialect's computed_fields is a fixed named map (one output key per template) with no 'spread an arbitrary-width record.<path> object into the top level' primitive, so this dynamic per-record flattening cannot be expressed without a RecordHook (a 3rd Tier-2 hook interface alongside AuthHook here would exceed the wave2 JSON+docs.md-only scope and would also push this bundle towards a 2-hook-interface Tier-2 package). This stream stays on the legacy Go implementation; see Known limits in docs.md." } },
+    { "method": "GET", "path": "/is-valid", "excluded": { "category": "non_data_endpoint", "reason": "connectivity/credential probe used only by Check, not a syncable object stream" } }
+  ]
+}

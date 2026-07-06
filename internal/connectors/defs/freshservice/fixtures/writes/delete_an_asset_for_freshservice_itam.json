@@ -1,0 +1,11 @@
+{
+  "record": {
+    "asset_id": 123,
+    "name": "Fixture delete_an_asset_for_freshservice_itam",
+    "description": "Fixture delete_an_asset_for_freshservice_itam record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/itam/assets/123"
+  }
+}

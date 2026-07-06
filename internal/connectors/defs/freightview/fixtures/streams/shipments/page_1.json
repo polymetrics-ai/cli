@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "shipmentId": "fixture",
+      "status": "fixture",
+      "direction": "fixture",
+      "bookedBy": "fixture",
+      "quotedBy": "fixture",
+      "bookedDate": "fixture",
+      "pickupDate": "fixture",
+      "createdDate": "fixture",
+      "isArchived": true,
+      "isLiveLoad": true,
+      "items": [
+        "fixture"
+      ],
+      "refNums": [
+        "fixture"
+      ],
+      "locations": [
+        "fixture"
+      ],
+      "documents": [
+        "fixture"
+      ],
+      "equipment": {
+        "fixture": "value"
+      },
+      "pickup": {
+        "fixture": "value"
+      },
+      "billTo": {
+        "fixture": "value"
+      },
+      "bol": {
+        "fixture": "value"
+      },
+      "tracking": {
+        "fixture": "value"
+      },
+      "selectedQuote": {
+        "fixture": "value"
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phyllo Connection Specification",
+  "type": "object",
+  "required": ["client_id", "client_secret"],
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Phyllo client ID, sent as the HTTP Basic auth username. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Phyllo client secret, sent as the HTTP Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.getphyllo.com",
+      "description": "Phyllo API base URL. Defaults to the production host; set explicitly to https://api.sandbox.getphyllo.com or https://api.staging.getphyllo.com to target a non-production environment."
+    },
+    "phyllo_account_id": {
+      "type": "string",
+      "description": "Optional Phyllo account id filter. When set, scopes the profiles/social_contents/audience/social_content_groups/social_comments/social_income_transactions/social_income_payouts/commerce_income_transactions/commerce_income_payouts/commerce_income_balances streams to that account; omitted from the request entirely when unset."
+    },
+    "phyllo_user_id": {
+      "type": "string",
+      "description": "Optional Phyllo user id filter, scoping the accounts and profiles streams to that user; omitted from the request entirely when unset."
+    },
+    "phyllo_work_platform_id": {
+      "type": "string",
+      "description": "Optional Phyllo work-platform id filter, scoping the accounts and profiles streams to that platform (e.g. YouTube, Instagram); omitted from the request entirely when unset."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

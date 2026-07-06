@@ -1,0 +1,32 @@
+{
+  "request": { "method": "GET", "path": "/findings/list", "query": { "limit": "200", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixtureFindingId1",
+        "code": 1,
+        "name": "Fixture finding",
+        "description": "Fixture finding description",
+        "type": "Safety",
+        "status": "closed",
+        "priority": "high",
+        "creation_date": "01/01/2026 08:00",
+        "expiration_date": "08/01/2026 08:00",
+        "closure_date": "05/01/2026 15:00",
+        "closure_message": "Addressed",
+        "location_id": 1,
+        "location_name": "Fixture Office",
+        "location_code": "LOC-FIXTURE-1",
+        "creator_id": 1,
+        "creator_email": "creator@example.com",
+        "creator_name": "Fixture Creator",
+        "last_updated_by": "Fixture Creator",
+        "form_answer_id": 1,
+        "form_answer_code": "FA-FIXTURE-1",
+        "task_form_title": "Fixture Daily Inspection",
+        "task_form_question": "What issues were found?"
+      }
+    ]
+  }
+}

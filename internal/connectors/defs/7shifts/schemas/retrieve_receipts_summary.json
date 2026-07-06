@@ -1,0 +1,117 @@
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "open": {
+      "type": "object",
+      "properties": {
+        "receipt_count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "net_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gross_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "tip_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "receipt_discounts": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "closed": {
+      "type": "object",
+      "properties": {
+        "receipt_count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "net_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gross_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "tip_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "receipt_discounts": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "voided": {
+      "type": "object",
+      "properties": {
+        "receipt_count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "net_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gross_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "tip_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "receipt_discounts": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "deleted": {
+      "type": "object",
+      "properties": {
+        "receipt_count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "net_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "gross_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "tip_total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "receipt_discounts": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retrieve_receipts_summary",
+  "x-primary-key": [
+    "date"
+  ],
+  "required": [
+    "date"
+  ]
+}

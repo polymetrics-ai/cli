@@ -1,0 +1,16 @@
+{
+  "record": {
+    "product_family": {
+      "name": "Fixture Family"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/product_families.json",
+    "body": {
+      "product_family": {
+        "name": "Fixture Family"
+      }
+    }
+  }
+}

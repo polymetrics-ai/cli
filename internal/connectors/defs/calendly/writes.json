@@ -1,0 +1,158 @@
+{
+  "actions": [
+    {
+      "name": "cancel_scheduled_event",
+      "kind": "update",
+      "method": "POST",
+      "path": "/scheduled_events/{{ record.uuid }}/cancellation",
+      "path_fields": ["uuid"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid"],
+        "properties": {
+          "uuid": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; cancels a real scheduled event and notifies invitees; approval required"
+    },
+    {
+      "name": "create_invitee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invitees",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_type", "start_time", "invitee"],
+        "properties": {
+          "event_type": { "type": "string" },
+          "start_time": { "type": "string" },
+          "invitee": {
+            "type": "object",
+            "required": ["name", "email"],
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "timezone": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; books a real meeting slot on the target event type and notifies the invitee; approval required"
+    },
+    {
+      "name": "create_webhook_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook_subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["url", "events", "organization", "scope"],
+        "properties": {
+          "url": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "organization": { "type": "string" },
+          "user": { "type": "string" },
+          "scope": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; registers a new webhook endpoint that will receive live invitee/routing-form event payloads; approval required"
+    },
+    {
+      "name": "delete_webhook_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhook_subscriptions/{{ record.uuid }}",
+      "path_fields": ["uuid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid"],
+        "properties": {
+          "uuid": { "type": "string" }
+        }
+      },
+      "risk": "destructive; permanently deletes a webhook subscription; approval required"
+    },
+    {
+      "name": "remove_organization_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organization_memberships/{{ record.uuid }}",
+      "path_fields": ["uuid"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["uuid"],
+        "properties": {
+          "uuid": { "type": "string" }
+        }
+      },
+      "risk": "destructive; permanently removes a user's membership from the organization, revoking their access; approval required"
+    },
+    {
+      "name": "invite_user_to_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organization_uuid }}/invitations",
+      "path_fields": ["organization_uuid"],
+      "body_type": "json",
+      "body_fields": ["email"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["organization_uuid", "email"],
+        "properties": {
+          "organization_uuid": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; sends a real organization-invitation email to the given address; approval required"
+    },
+    {
+      "name": "create_one_off_event_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/one_off_event_types",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "host", "duration", "date_setting"],
+        "properties": {
+          "name": { "type": "string" },
+          "host": { "type": "string" },
+          "duration": { "type": "integer" },
+          "date_setting": { "type": "object" },
+          "location": { "type": "object" }
+        }
+      },
+      "risk": "external mutation; publishes a new one-off publicly-bookable event type; approval required"
+    },
+    {
+      "name": "create_share",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shares",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["event_type"],
+        "properties": {
+          "event_type": { "type": "string" },
+          "max_spots": { "type": "integer" }
+        }
+      },
+      "risk": "external mutation; creates a new shareable booking link with its own spot limit for an event type; approval required"
+    }
+  ]
+}

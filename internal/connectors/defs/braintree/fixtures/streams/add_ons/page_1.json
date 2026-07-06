@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/merchants/synthetic-conformance-value/add_ons"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "add_ons": [
+        { "id": "addon_fixture_1", "name": "Fixture add-on", "amount": "5.00", "kind": "add_on" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intercom Admin",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "job_title": { "type": ["string", "null"] },
+    "away_mode_enabled": { "type": ["boolean", "null"] },
+    "away_mode_reassign": { "type": ["boolean", "null"] },
+    "has_inbox_seat": { "type": ["boolean", "null"] }
+  },
+  "required": ["id"]
+}

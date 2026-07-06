@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/application/v1/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "meta": { "limit": 100, "next": null, "offset": 0, "previous": null, "total_count": 1 },
+      "objects": [
+        {
+          "id": "app_fixture_1",
+          "build_on": null,
+          "build_comment": null,
+          "is_released": false,
+          "version": 16,
+          "built_from_app_id": null,
+          "name": "Fixture application",
+          "case_types": { "fixture_case": ["name", "status"] },
+          "modules": [
+            {
+              "case_type": "fixture_case",
+              "forms": [
+                {
+                  "name": { "en": "Fixture form" },
+                  "questions": [
+                    { "label": "Fixture question", "repeat": "", "tag": "input", "value": "/fixture/question" }
+                  ]
+                }
+              ],
+              "versions": [
+                {
+                  "id": "app_version_fixture_1",
+                  "build_on": "2026-03-01T00:00:00",
+                  "build_comment": "",
+                  "is_released": true,
+                  "version": 16
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

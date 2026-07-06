@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "Fixture SLO",
+    "type": "metric",
+    "thresholds": [{ "timeframe": "30d", "target": 99.9 }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/slo"
+  }
+}

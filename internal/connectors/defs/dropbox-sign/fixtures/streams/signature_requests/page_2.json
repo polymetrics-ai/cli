@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/signature_request/list",
+    "query": {
+      "page": "2",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "signature_requests": [
+        {
+          "signature_request_id": "sr_fixture_101",
+          "title": "Fixture Document 101",
+          "subject": "Please sign 101",
+          "message": "Fixture message",
+          "is_complete": false,
+          "is_declined": false,
+          "has_error": false,
+          "test_mode": true,
+          "requester_email_address": "fixture101@example.com",
+          "created_at": 1767225701
+        }
+      ],
+      "list_info": {
+        "page": 2,
+        "num_pages": 2,
+        "num_results": 101,
+        "page_size": 100
+      }
+    }
+  }
+}

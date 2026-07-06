@@ -1,0 +1,15 @@
+{
+  "record": {
+    "guid": "cmp_fixture_1",
+    "name": "Updated Fixture Campaign",
+    "description": "updated conformance fixture campaign"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/campaigns/cmp_fixture_1",
+    "body": {
+      "name": "Updated Fixture Campaign",
+      "description": "updated conformance fixture campaign"
+    }
+  }
+}

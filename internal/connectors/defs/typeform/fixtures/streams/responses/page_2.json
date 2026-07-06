@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/forms/synthetic-conformance-value/responses",
+    "query": {
+      "page": "2",
+      "page_size": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 201,
+      "page_count": 2,
+      "items": [
+        {
+          "response_id": "resp_fixture_201",
+          "form_id": "synthetic-conformance-value",
+          "token": "tok_fixture_201",
+          "landing_id": "landing_fixture_201",
+          "landed_at": "2026-01-01T00:00:00Z",
+          "submitted_at": "2026-01-06T00:00:00Z",
+          "answers": [
+            {
+              "field": {
+                "id": "field_1",
+                "type": "short_text"
+              },
+              "type": "text",
+              "text": "answer 201"
+            }
+          ],
+          "hidden": {
+            "user_id": "user_201"
+          },
+          "calculated": {
+            "score": 201
+          },
+          "metadata": {
+            "user_agent": "fixture-agent",
+            "platform": "other"
+          }
+        }
+      ]
+    }
+  }
+}

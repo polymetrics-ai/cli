@@ -1,0 +1,97 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "offset",
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/checks" },
+    "error_map": [
+      { "status": 401, "hint": "pingdom api key is missing or invalid; re-run pm credentials add pingdom" },
+      { "status": 403, "hint": "pingdom account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "pingdom rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "checks",
+      "path": "/checks",
+      "records": { "path": "checks" },
+      "schema": "schemas/checks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "probes",
+      "path": "/probes",
+      "records": { "path": "probes" },
+      "schema": "schemas/probes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "actions",
+      "path": "/actions",
+      "records": { "path": "actions" },
+      "schema": "schemas/actions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "maintenance",
+      "path": "/maintenance",
+      "records": { "path": "maintenance" },
+      "schema": "schemas/maintenance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "reference",
+      "path": "/reference",
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/reference.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "alerting_contacts",
+      "path": "/alerting/contacts",
+      "records": { "path": "contacts" },
+      "schema": "schemas/alerting_contacts.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "alerting_teams",
+      "path": "/alerting/teams",
+      "records": { "path": "teams" },
+      "schema": "schemas/alerting_teams.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "maintenance_occurrences",
+      "path": "/maintenance.occurrences",
+      "records": { "path": "occurrences" },
+      "schema": "schemas/maintenance_occurrences.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "credits",
+      "path": "/credits",
+      "records": { "path": "credits", "single_object": true },
+      "schema": "schemas/credits.json",
+      "projection": "passthrough",
+      "pagination": { "type": "none" }
+    },
+    {
+      "name": "tms_checks",
+      "path": "/tms/check",
+      "records": { "path": "checks" },
+      "schema": "schemas/tms_checks.json",
+      "projection": "passthrough"
+    }
+  ]
+}

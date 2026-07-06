@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "id": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "category": { "type": ["string", "null"] },
+    "brand": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "uom": { "type": ["string", "null"] },
+    "price_tier1": { "type": ["number", "null"] },
+    "cost": { "type": ["number", "null"] },
+    "last_modified": { "type": ["string", "null"] }
+  }
+}

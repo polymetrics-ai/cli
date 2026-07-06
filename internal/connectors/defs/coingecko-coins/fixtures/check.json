@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/ping" },
+  "response": {
+    "status": 200,
+    "body": { "gecko_says": "(V3) To the Moon!" }
+  }
+}

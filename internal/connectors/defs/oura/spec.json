@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Oura Connection Specification",
+  "type": "object",
+  "required": [
+    "api_key"
+  ],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Oura OAuth2 bearer access token, kept under the legacy api_key field name for compatibility. Sent as Authorization: Bearer <api_key>."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.ouraring.com/v2",
+      "description": "Oura API v2 root URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "description": "Optional YYYY-MM-DD lower-bound query value for date-based usercollection list streams."
+    },
+    "end_date": {
+      "type": "string",
+      "description": "Optional YYYY-MM-DD upper-bound query value for date-based usercollection list streams."
+    },
+    "start_datetime": {
+      "type": "string",
+      "description": "Optional RFC3339 lower-bound query value for time-series usercollection streams."
+    },
+    "end_datetime": {
+      "type": "string",
+      "description": "Optional RFC3339 upper-bound query value for time-series usercollection streams."
+    },
+    "latest": {
+      "type": "string",
+      "description": "Optional Oura latest query flag for time-series streams; use the API documented value."
+    },
+    "document_id": {
+      "type": "string",
+      "description": "Document id used only by *_detail streams."
+    }
+  }
+}

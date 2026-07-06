@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/flows",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "flow_fixture_1",
+        "name": "Fixture Flow",
+        "state": "PUBLISHED",
+        "published": true,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z",
+        "createdBy": "user_fixture",
+        "updatedBy": "user_fixture"
+      }
+    ]
+  }
+}

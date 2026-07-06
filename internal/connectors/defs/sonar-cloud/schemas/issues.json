@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "issues",
+  "type": "object",
+  "x-primary-key": ["key"],
+  "x-cursor-field": "createdAt",
+  "required": ["key"],
+  "properties": {
+    "key": { "type": "string" },
+    "rule": { "type": ["string", "null"] },
+    "severity": { "type": ["string", "null"] },
+    "component": { "type": ["string", "null"] },
+    "project": { "type": ["string", "null"] },
+    "line": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "message": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "organization": { "type": ["string", "null"] },
+    "author": { "type": ["string", "null"] },
+    "tags": { "type": ["array", "null"], "items": { "type": "string" } },
+    "createdAt": { "type": ["string", "null"] },
+    "creationDate": { "type": ["string", "null"] },
+    "updateDate": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "base_currency_adjustment_ids": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/basecurrencyadjustment/bulkdelete"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

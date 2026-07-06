@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Formbricks Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Formbricks management API base URL. Defaults to the hosted app.formbricks.com instance; override for a self-hosted Formbricks deployment.",
+      "default": "https://app.formbricks.com/api/v1"
+    },
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Formbricks management API key, sent as the X-API-Key request header."
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "Optional survey id used to filter the responses stream with Formbricks' surveyId query parameter."
+    },
+    "response_ids": {
+      "type": "string",
+      "description": "Optional comma-separated response ids used by the response_details stream."
+    }
+  }
+}

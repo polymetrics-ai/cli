@@ -1,0 +1,14 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "id": "contact_fixture_1",
+    "unsubscribe_all": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/contacts/contact_fixture_1",
+    "body": {
+      "unsubscribe_all": true
+    }
+  }
+}

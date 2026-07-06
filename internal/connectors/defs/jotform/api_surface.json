@@ -1,0 +1,67 @@
+{
+  "api": "Jotform REST API (https://api.jotform.com/docs/)",
+  "docs": "https://api.jotform.com/docs/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (forms, submissions, reports, folders, user); Jotform's write endpoints (form/submission create/update/delete) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/user/forms",
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/submissions",
+      "covered_by": {
+        "stream": "submissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/reports",
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/form/{id}/submissions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented submission creation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/form/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "form deletion; legacy is read-only and never implemented mutations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/form/{id}/questions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Form question schema introspection not modeled by legacy"
+      }
+    }
+  ]
+}

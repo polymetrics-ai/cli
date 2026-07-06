@@ -1,0 +1,13 @@
+{
+  "record": {
+    "event_hook_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/eventHooks/synthetic-conformance-value/lifecycle/verify"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "Name": "Fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/templates",
+    "body": {
+      "Name": "Fixture"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/account/users" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 1, "email": "fixture1@example.com", "name": "Fixture User 1", "role": "admin", "status": "active", "updated": "2026-01-01T00:00:00Z" }
+    ]
+  }
+}

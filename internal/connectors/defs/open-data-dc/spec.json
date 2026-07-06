@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Open Data DC Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Open Data DC (MAR 2) API key, sent as the apikey query parameter. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://datagate.dc.gov/mar/open/api/v2.2",
+      "description": "Open Data DC API base URL override for tests or proxies."
+    },
+    "location": {
+      "type": "string",
+      "description": "Address, place, or block search term for the 'locations' stream. Required for that stream only."
+    },
+    "marid": {
+      "type": "string",
+      "description": "MAR id for the 'units' stream (required for that stream) and an optional filter for the 'ssls' stream."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

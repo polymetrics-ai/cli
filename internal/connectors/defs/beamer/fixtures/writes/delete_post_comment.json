@@ -1,0 +1,10 @@
+{
+  "record": {
+    "post_id": "post_fixture_1",
+    "id": "comment_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/posts/post_fixture_1/comments/comment_fixture_1"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Serpstat Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Serpstat API token, sent as the 'token' query-string parameter on every JSON-RPC request (Serpstat's own auth convention -- never a header). Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.serpstat.com/v4",
+      "description": "Serpstat JSON-RPC-over-HTTP base URL override for tests or proxies."
+    },
+    "domain": {
+      "type": "string",
+      "default": "serpstat.com",
+      "description": "Domain to query for the domain_keywords/domain_competitors JSON-RPC procedures."
+    },
+    "region_id": {
+      "type": "string",
+      "default": "g_us",
+      "description": "Serpstat search-engine/region identifier ('se' JSON-RPC param)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "10",
+      "description": "Records per JSON-RPC page (1-1000, 'size' param). Pagination stops on the first page returning fewer records than this."
+    },
+    "pages_to_fetch": {
+      "type": "string",
+      "default": "1",
+      "description": "Number of JSON-RPC pages to fetch per read (hooks/serpstat/hooks.go's StreamHook, mirroring legacy's parsePages). 0 means unbounded (fetch until a short page)."
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "{{ secrets.basic_auth_header }}",
+        "prefix": ""
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "from",
+      "token_path": "next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/resources/accounts"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "class": "auth_failed",
+        "hint": "vitally basic_auth_header is missing or invalid"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "vitally rate limit exceeded (default 1000 requests/min); the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/resources/accounts",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "status": {
+          "template": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "users",
+      "path": "/resources/users",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "notes",
+      "path": "/resources/notes",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "account_id": "{{ record.accountId }}",
+        "organization_id": "{{ record.organizationId }}",
+        "category_id": "{{ record.categoryId }}",
+        "author_id": "{{ record.authorId }}",
+        "note_date": "{{ record.noteDate }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "external_id": "{{ record.externalId }}",
+        "archived_at": "{{ record.archivedAt }}"
+      },
+      "schema": "schemas/notes.json"
+    },
+    {
+      "name": "conversations",
+      "path": "/resources/conversations",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "external_id": "{{ record.externalId }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "tasks",
+      "path": "/resources/tasks",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "account_id": "{{ record.accountId }}",
+        "organization_id": "{{ record.organizationId }}",
+        "category_id": "{{ record.categoryId }}",
+        "assigned_to_id": "{{ record.assignedToId }}",
+        "completed_by_id": "{{ record.completedById }}",
+        "due_date": "{{ record.dueDate }}",
+        "completed_at": "{{ record.completedAt }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "external_id": "{{ record.externalId }}",
+        "archived_at": "{{ record.archivedAt }}"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "nps_responses",
+      "path": "/resources/npsResponses",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "computed_fields": {
+        "user_id": "{{ record.userId }}",
+        "responded_at": "{{ record.respondedAt }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "external_id": "{{ record.externalId }}"
+      },
+      "schema": "schemas/nps_responses.json"
+    }
+  ]
+}

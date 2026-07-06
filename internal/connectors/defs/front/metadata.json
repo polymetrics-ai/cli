@@ -1,0 +1,23 @@
+{
+  "name": "front",
+  "display_name": "Front",
+  "description": "Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.",
+  "integration_type": "api",
+  "docs_url": "https://dev.frontapp.com/reference/introduction",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Front API read of contact, conversation, inbox, tag, teammate, and channel data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

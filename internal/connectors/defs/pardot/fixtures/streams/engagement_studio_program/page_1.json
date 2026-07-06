@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/engagement-studio-programs/synthetic-conformance-value",
+    "query": {
+      "fields": "id,name,folderId,status,isDeleted,salesforceId,description,recipientListIds,suppressionListIds,createdAt,updatedAt,createdById,updatedById"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "name": "name_fixture",
+      "folderId": 1,
+      "status": "status_fixture",
+      "isDeleted": false,
+      "salesforceId": 1,
+      "description": "description_fixture",
+      "recipientListIds": [
+        1
+      ],
+      "suppressionListIds": [
+        1
+      ],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "createdById": 1,
+      "updatedById": 1
+    }
+  }
+}

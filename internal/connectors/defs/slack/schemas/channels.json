@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "channels",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "is_channel": { "type": ["boolean", "null"] },
+    "is_group": { "type": ["boolean", "null"] },
+    "is_private": { "type": ["boolean", "null"] },
+    "is_archived": { "type": ["boolean", "null"] },
+    "is_general": { "type": ["boolean", "null"] },
+    "created": { "type": ["integer", "null"] },
+    "creator": { "type": ["string", "null"] },
+    "num_members": { "type": ["integer", "null"] },
+    "topic": { "type": ["string", "null"] },
+    "purpose": { "type": ["string", "null"] }
+  }
+}

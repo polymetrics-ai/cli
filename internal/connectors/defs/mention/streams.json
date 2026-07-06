@@ -1,0 +1,83 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "" }
+    ],
+    "check": { "method": "GET", "path": "/accounts/me" },
+    "error_map": [
+      { "status": 401, "hint": "mention api_key is missing or invalid; re-run pm credentials add mention" },
+      { "status": 403, "hint": "mention account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mention rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "app_data",
+      "path": "/app/data",
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/app_data.json"
+    },
+    {
+      "name": "account_me",
+      "path": "/accounts/me",
+      "records": { "path": "account" },
+      "schema": "schemas/account_me.json"
+    },
+    {
+      "name": "account",
+      "path": "/accounts/{{ config.account_id }}",
+      "records": { "path": "account" },
+      "schema": "schemas/account.json"
+    },
+    {
+      "name": "alert",
+      "path": "/accounts/{{ config.account_id }}/alerts",
+      "query": { "limit": "100" },
+      "records": { "path": "alerts" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "_links.more.params.cursor"
+      },
+      "schema": "schemas/alert.json"
+    },
+    {
+      "name": "mention",
+      "path": "/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/mentions",
+      "query": { "limit": "100" },
+      "records": { "path": "mentions" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "_links.more.params.cursor"
+      },
+      "schema": "schemas/mention.json"
+    },
+    {
+      "name": "alert_tag",
+      "path": "/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/tags",
+      "records": { "path": "tags" },
+      "schema": "schemas/alert_tag.json"
+    },
+    {
+      "name": "alert_share",
+      "path": "/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/shares",
+      "records": { "path": "shares" },
+      "schema": "schemas/alert_share.json"
+    },
+    {
+      "name": "alert_preferences",
+      "path": "/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/preferences",
+      "records": { "path": "preferences", "single_object": true },
+      "schema": "schemas/alert_preferences.json"
+    },
+    {
+      "name": "alert_task",
+      "path": "/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/tasks",
+      "records": { "path": "tasks" },
+      "schema": "schemas/alert_task.json"
+    }
+  ]
+}

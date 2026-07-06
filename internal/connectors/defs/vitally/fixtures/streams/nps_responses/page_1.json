@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resources/npsResponses",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "nps_fixture_1",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "externalId": "nps-fixture-1",
+          "userId": "user_fixture_1",
+          "score": 9,
+          "feedback": "I think the product is great!",
+          "respondedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "nps_fixture_2",
+          "createdAt": "2026-01-02T00:00:00Z",
+          "updatedAt": "2026-01-02T00:00:00Z",
+          "externalId": "nps-fixture-2",
+          "userId": "user_fixture_2",
+          "score": 3,
+          "feedback": null,
+          "respondedAt": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "next": "fixture_cursor_nps_1"
+    }
+  }
+}

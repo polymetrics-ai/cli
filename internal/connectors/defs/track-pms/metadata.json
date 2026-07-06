@@ -1,0 +1,24 @@
+{
+  "name": "track-pms",
+  "display_name": "Track PMS",
+  "description": "Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, and unit types through the Track PMS API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.trackhs.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Track PMS API read of reservation, guest, unit, owner, CRM contact, and unit type data",
+    "write": "external mutation of Track PMS reservations, units, owners, and CRM contacts; no destructive-admin or elevated-scope actions modeled",
+    "approval": "create_reservation, create_unit, and create_owner require approval (each creates a billable/bookable real-world resource record); update_unit, update_owner, create_contact, update_contact, and delete_contact execute without approval"
+  }
+}

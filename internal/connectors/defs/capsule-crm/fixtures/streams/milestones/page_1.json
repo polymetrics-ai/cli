@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/milestones"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "milestones": [
+        {
+          "id": 100,
+          "name": "Fixture Milestone 1",
+          "probability": 40,
+          "pipeline": { "id": 100 }
+        }
+      ]
+    }
+  }
+}

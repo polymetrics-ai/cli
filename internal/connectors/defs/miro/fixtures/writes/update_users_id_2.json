@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "schemas": [
+      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+    ],
+    "Operations": [
+      {
+        "op": "Add",
+        "path": "path_fixture",
+        "value": "value_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/Users/synthetic-conformance-value",
+    "body": {
+      "schemas": [
+        "urn:ietf:params:scim:api:messages:2.0:PatchOp"
+      ],
+      "Operations": [
+        {
+          "op": "Add",
+          "path": "path_fixture",
+          "value": "value_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

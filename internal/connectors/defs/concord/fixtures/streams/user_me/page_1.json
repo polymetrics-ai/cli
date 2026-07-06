@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/user/me"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 7,
+      "email": "fixture@example.com",
+      "fullName": "Fixture User",
+      "timezone": "UTC",
+      "hasPassword": true,
+      "hasPicture": false,
+      "currentOrganizationId": 42,
+      "createdAt": 1735689600000,
+      "hasAcceptedTerms": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/deploy/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "id": 1,
+        "name": "Fixture deploy",
+        "title": "Fixture deploy",
+        "status": "active"
+      }
+    }
+  }
+}

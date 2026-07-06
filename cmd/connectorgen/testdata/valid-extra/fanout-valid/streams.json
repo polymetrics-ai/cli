@@ -1,0 +1,19 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "check": { "method": "GET", "path": "/ping" }
+  },
+  "streams": [
+    {
+      "name": "tasks",
+      "path": "/projects/{{ fanout.id }}/tasks",
+      "records": { "path": "data" },
+      "schema": "schemas/tasks.json",
+      "fan_out": {
+        "ids_from": { "config_key": "project_ids" },
+        "into": { "path_var": "parent_id" },
+        "stamp_field": "project_id"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/alerts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "alert": {
+            "id": "alert_fixture_1",
+            "type": "metered_entitlement_threshold",
+            "name": "Fixture Alert",
+            "description": "Fixture usage alert",
+            "metered_feature_id": "feature_fixture_1",
+            "subscription_id": "sub_fixture_1",
+            "status": "active",
+            "created_at": 1767225600,
+            "updated_at": 1767225601
+          }
+        }
+      ]
+    }
+  }
+}

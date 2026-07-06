@@ -1,0 +1,68 @@
+{
+  "record": {
+    "location_id": 1001,
+    "start": "2026-01-01T00:00:00Z",
+    "end": "2026-01-01T00:00:00Z",
+    "user_id": 1001,
+    "department_id": 1001,
+    "role_id": 1001,
+    "station_id": 1001,
+    "close": true,
+    "business_decline": true,
+    "notes": "fixture notes",
+    "draft": true,
+    "notified": true,
+    "open": true,
+    "open_offer_type": 1001,
+    "list_in_job_network": true,
+    "job_network_wage": 12.34,
+    "unassigned": true,
+    "unassigned_skill_level": 1,
+    "status": 0,
+    "late_minutes": 1001,
+    "breaks": [
+      {
+        "break_type_id": 1001,
+        "start": "2026-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/company/synthetic-conformance-value/shifts",
+    "body": {
+      "location_id": 1001,
+      "start": "2026-01-01T00:00:00Z",
+      "end": "2026-01-01T00:00:00Z",
+      "user_id": 1001,
+      "department_id": 1001,
+      "role_id": 1001,
+      "station_id": 1001,
+      "close": true,
+      "business_decline": true,
+      "notes": "fixture notes",
+      "draft": true,
+      "notified": true,
+      "open": true,
+      "open_offer_type": 1001,
+      "list_in_job_network": true,
+      "job_network_wage": 12.34,
+      "unassigned": true,
+      "unassigned_skill_level": 1,
+      "status": 0,
+      "late_minutes": 1001,
+      "breaks": [
+        {
+          "break_type_id": 1001,
+          "start": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true
+    }
+  }
+}

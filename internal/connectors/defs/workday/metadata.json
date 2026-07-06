@@ -1,0 +1,23 @@
+{
+  "name": "workday",
+  "display_name": "Workday",
+  "description": "Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Workday tenant API read of worker, organization, and position data (HR/PII-adjacent)",
+    "approval": "none; read-only, HTTP Basic auth"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": "201",
+    "name": "Fixture Subscription Updated",
+    "price": "24.99"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/subscriptions/201"
+  }
+}

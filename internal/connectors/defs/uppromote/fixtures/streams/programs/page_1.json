@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/api/v2/programs", "query": { "page": "1", "per_page": "10" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "message": "success",
+      "data": [
+        { "id": 46, "name": "Fixture Program", "is_default": "not_default", "status": "active", "rule": "advance", "description": "Fixture description", "commission_type": "Percent of sale", "commission_amount": "20", "exclude_product_tax": true, "exclude_shipping": false, "exclude_shipping_tax": false, "exclude_tip": true, "exclude_self_referral": false, "payment_methods": ["paypal", "bank"], "payment_default": "paypal", "created_at": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

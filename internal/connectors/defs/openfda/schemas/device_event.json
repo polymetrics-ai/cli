@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "device_event",
+  "type": "object",
+  "x-primary-key": ["mdr_report_key"],
+  "required": ["mdr_report_key"],
+  "properties": {
+    "mdr_report_key": { "type": "string" },
+    "report_number": { "type": ["string", "null"] },
+    "event_type": { "type": ["string", "null"] },
+    "date_received": { "type": ["string", "null"] },
+    "date_of_event": { "type": ["string", "null"] },
+    "report_source_code": { "type": ["string", "null"] },
+    "manufacturer_name": { "type": ["string", "null"] },
+    "product_problem_flag": { "type": ["string", "null"] },
+    "adverse_event_flag": { "type": ["string", "null"] }
+  }
+}

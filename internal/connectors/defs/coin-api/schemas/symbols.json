@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "symbols",
+  "type": "object",
+  "x-primary-key": ["symbol_id"],
+  "required": ["symbol_id"],
+  "properties": {
+    "symbol_id": { "type": "string" },
+    "exchange_id": { "type": ["string", "null"] },
+    "symbol_type": { "type": ["string", "null"] },
+    "asset_id_base": { "type": ["string", "null"] },
+    "asset_id_quote": { "type": ["string", "null"] },
+    "data_start": { "type": ["string", "null"] },
+    "data_end": { "type": ["string", "null"] }
+  }
+}

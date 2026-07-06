@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs",
+    "query": {
+      "per_page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture check job",
+        "status": "open"
+      }
+    ]
+  }
+}

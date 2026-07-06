@@ -1,0 +1,79 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.token }}" }
+    ],
+    "check": { "method": "GET", "path": "/sms/count" },
+    "error_map": [
+      { "status": 401, "hint": "mailjet-sms token is missing or invalid; re-run pm credentials add mailjet-sms" },
+      { "status": 403, "hint": "mailjet-sms account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "mailjet-sms rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "sms",
+      "path": "/sms",
+      "query": {
+        "FromTS": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "ToTS": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "StatusCode": { "template": "{{ config.status_code }}", "omit_when_absent": true },
+        "To": { "template": "{{ config.recipient }}", "omit_when_absent": true },
+        "IDs": { "template": "{{ config.sms_ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "Data" },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "Limit",
+        "offset_param": "Offset",
+        "page_size": 100
+      },
+      "computed_fields": {
+        "status_code": "{{ record.Status.Code }}",
+        "status_name": "{{ record.Status.Name }}",
+        "status_description": "{{ record.Status.Description }}",
+        "cost_value": "{{ record.Cost.Value }}",
+        "cost_currency": "{{ record.Cost.Currency }}"
+      },
+      "schema": "schemas/sms.json"
+    },
+    {
+      "name": "sms_count",
+      "path": "/sms/count",
+      "query": {
+        "FromTS": { "template": "{{ config.start_date }}", "omit_when_absent": true },
+        "ToTS": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "StatusCode": { "template": "{{ config.status_code }}", "omit_when_absent": true },
+        "To": { "template": "{{ config.recipient }}", "omit_when_absent": true }
+      },
+      "records": { "path": ".", "single_object": true },
+      "schema": "schemas/sms_count.json"
+    },
+    {
+      "name": "sms_message",
+      "path": "/sms/{{ config.sms_id }}",
+      "records": { "path": "Data" },
+      "computed_fields": {
+        "status_code": "{{ record.Status.Code }}",
+        "status_name": "{{ record.Status.Name }}",
+        "status_description": "{{ record.Status.Description }}",
+        "cost_value": "{{ record.Cost.Value }}",
+        "cost_currency": "{{ record.Cost.Currency }}"
+      },
+      "schema": "schemas/sms_message.json"
+    },
+    {
+      "name": "sms_export",
+      "path": "/sms/export/{{ config.export_job_id }}",
+      "records": { "path": ".", "single_object": true },
+      "computed_fields": {
+        "status_code": "{{ record.Status.Code }}",
+        "status_name": "{{ record.Status.Name }}",
+        "status_description": "{{ record.Status.Description }}"
+      },
+      "schema": "schemas/sms_export.json"
+    }
+  ]
+}

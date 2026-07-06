@@ -1,0 +1,17 @@
+{
+  "record": {
+    "document_id": "document_id_fixture",
+    "section_id": "section_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v1/documents/document_id_fixture/sections/section_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_documents_document_id_sections_section_id_response",
+      "status": "ok"
+    }
+  }
+}

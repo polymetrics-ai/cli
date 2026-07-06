@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customfields/list/"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "custom_fields-1",
+        "avatar_id": "avatar-1",
+        "name": "Fixture custom_fields 1"
+      },
+      {
+        "id": "custom_fields-2",
+        "avatar_id": "avatar-2",
+        "name": "Fixture custom_fields 2"
+      }
+    ]
+  }
+}

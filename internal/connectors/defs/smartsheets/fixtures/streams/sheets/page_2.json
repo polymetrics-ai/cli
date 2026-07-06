@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/sheets", "query": { "page": "2", "pageSize": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pageNumber": 2,
+      "pageSize": 100,
+      "totalPages": 2,
+      "totalCount": 101,
+      "data": [
+        { "id": 1001, "name": "Fixture Sheet 101", "permalink": "https://app.smartsheet.com/sheets/fixture101", "modifiedAt": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

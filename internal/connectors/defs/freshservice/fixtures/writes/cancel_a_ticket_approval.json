@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "approval_id": 123,
+    "name": "Fixture cancel_a_ticket_approval",
+    "description": "Fixture cancel_a_ticket_approval record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/approvals/123",
+    "body": {
+      "name": "Fixture cancel_a_ticket_approval",
+      "description": "Fixture cancel_a_ticket_approval record"
+    }
+  }
+}

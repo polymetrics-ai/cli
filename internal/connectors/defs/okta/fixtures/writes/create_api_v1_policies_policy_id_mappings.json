@@ -1,0 +1,19 @@
+{
+  "record": {
+    "policy_id": "synthetic-conformance-value",
+    "resourceId": "resource_id_fixture",
+    "resourceType": "ACCESS_POLICY"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/policies/synthetic-conformance-value/mappings",
+    "body": {
+      "resourceId": "resource_id_fixture",
+      "resourceType": "ACCESS_POLICY"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

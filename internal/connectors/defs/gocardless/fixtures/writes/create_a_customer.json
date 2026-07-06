@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customers": {
+      "description": "Synthetic create_a_customer fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "customers": {
+        "description": "Synthetic create_a_customer fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

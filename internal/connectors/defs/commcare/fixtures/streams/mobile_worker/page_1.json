@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/user/v1/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "user",
+      "id": "mobile_worker_detail_fixture_1",
+      "username": "worker-detail@example.test",
+      "first_name": "Worker",
+      "last_name": "Detail",
+      "default_phone_number": "+15550101",
+      "email": "worker-detail@example.test",
+      "phone_numbers": ["+15550101"],
+      "groups": [],
+      "locations": [],
+      "primary_location": null,
+      "user_data": {}
+    }
+  }
+}

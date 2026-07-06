@@ -1,0 +1,68 @@
+{
+  "api": "Help Scout Mailbox API v2 (https://developer.helpscout.com/)",
+  "docs": "https://developer.helpscout.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (conversations, customers, mailboxes, users); Help Scout's write endpoints (conversation reply/note, tag management, customer create/update) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/mailboxes",
+      "covered_by": {
+        "stream": "mailboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented conversation creation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversations/{id}/reply",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Legacy connector never implemented conversation replies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/*",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Reporting/analytics endpoints not modeled by legacy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users/me",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-user profile introspection, not a syncable object stream"
+      }
+    }
+  ]
+}

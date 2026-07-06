@@ -1,0 +1,25 @@
+{
+  "name": "linkedin-ads",
+  "display_name": "LinkedIn Ads",
+  "description": "Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through the LinkedIn Marketing REST API.",
+  "integration_type": "api",
+  "docs_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
+  },
+  "risk": {
+    "read": "external LinkedIn Marketing API read of ad account, campaign, and creative data"
+  }
+}

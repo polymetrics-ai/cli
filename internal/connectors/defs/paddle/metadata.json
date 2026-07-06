@@ -1,0 +1,23 @@
+{
+  "name": "paddle",
+  "display_name": "Paddle",
+  "description": "Reads Paddle customers, subscriptions, transactions, and products through the Paddle REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developer.paddle.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Paddle API read of customer, subscription, transaction, and product data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

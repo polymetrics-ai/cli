@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "categories",
+  "type": "object",
+  "x-primary-key": ["category_id"],
+  "required": ["category_id"],
+  "properties": {
+    "category_id": { "type": "string" },
+    "display_name": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "is_primary": { "type": ["boolean", "null"] },
+    "source": { "type": ["string", "null"] },
+    "relevance": { "type": ["number", "null"] }
+  }
+}

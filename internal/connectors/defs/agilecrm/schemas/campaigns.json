@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgileCRM Campaign",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "created_time",
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" },
+    "created_time": { "type": "integer" },
+    "updated_time": { "type": "integer" },
+    "rules": { "type": ["string", "null"] },
+    "domainUserId": { "type": ["integer", "null"] },
+    "creatorName": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "job_id": "synthetic-conformance-value",
+    "status": "CANCELLED"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/export/jobs/synthetic-conformance-value/status",
+    "body": {
+      "status": "CANCELLED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

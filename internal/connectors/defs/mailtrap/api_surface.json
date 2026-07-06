@@ -1,0 +1,68 @@
+{
+  "api": "Mailtrap account-management API (https://mailtrap.io/api)",
+  "docs": "https://api-docs.mailtrap.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; Mailtrap's email-sending/testing message APIs (messages, attachments, forwards) are out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/inboxes",
+      "covered_by": {
+        "stream": "inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/sending_domains",
+      "covered_by": {
+        "stream": "sending_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/inboxes/{inbox_id}/messages",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts/{account_id}/inboxes/{inbox_id}/messages is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/inboxes/{inbox_id}/messages/{message_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts/{account_id}/inboxes/{inbox_id}/messages/{message_id} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/inboxes/{inbox_id}/clean",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "mutates/clears inbox data; not a read stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/permissions/resources",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts/{account_id}/permissions/resources is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    }
+  ]
+}

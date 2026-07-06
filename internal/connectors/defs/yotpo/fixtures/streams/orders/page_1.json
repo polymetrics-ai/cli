@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/core/v3/stores/synthetic-conformance-value/orders",
+    "query": { "page": "1", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "orders": [
+        {
+          "yotpo_id": 300001,
+          "external_id": "order_ext_fixture_1",
+          "order_name": "#F1",
+          "order_date": "2026-01-01T00:00:00Z",
+          "payment_method": "visa",
+          "total_price": 500,
+          "subtotal_price": 400,
+          "currency": "USD",
+          "payment_status": "paid",
+          "customer": { "external_id": "customer_fixture_1", "email": "fixture1@example.com" },
+          "line_items": [ { "yotpo_product_id": 100001, "external_product_id": "ext-fixture-1", "quantity": 1 } ]
+        },
+        {
+          "yotpo_id": 300002,
+          "external_id": "order_ext_fixture_2",
+          "order_name": "#F2",
+          "order_date": "2026-01-02T00:00:00Z",
+          "payment_method": "paypal",
+          "total_price": 900,
+          "subtotal_price": 800,
+          "currency": "USD",
+          "payment_status": "pending",
+          "customer": { "external_id": "customer_fixture_2", "email": "fixture2@example.com" },
+          "line_items": [ { "yotpo_product_id": 100002, "external_product_id": "ext-fixture-2", "quantity": 2 } ]
+        }
+      ]
+    }
+  }
+}

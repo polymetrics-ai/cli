@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "templates",
+  "type": "object",
+  "x-primary-key": [
+    "id",
+    "project_id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Stamped by the fan_out dialect from the enclosing project id discovered via the projects listing; always a string regardless of TestRail's own numeric project_id wire type."
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_default": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  }
+}

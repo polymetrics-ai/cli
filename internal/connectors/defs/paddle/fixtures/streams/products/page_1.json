@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/products", "query": { "per_page": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pro_fixture_1",
+          "name": "Fixture Product",
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": { "pagination": { "next": "" } }
+    }
+  }
+}

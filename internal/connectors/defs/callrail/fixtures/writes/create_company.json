@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Company", "time_zone": "America/New_York" },
+  "expect": {
+    "method": "POST",
+    "path": "/a/synthetic-conformance-value/companies.json",
+    "body": { "name": "Fixture Company", "time_zone": "America/New_York" }
+  },
+  "response": { "status": 201, "body": { "id": "CMP_fixture_1", "name": "Fixture Company" } }
+}

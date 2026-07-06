@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "as:2001",
+    "name": "Fixture Project Renamed"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/projects/as:2001",
+    "body": {
+      "name": "Fixture Project Renamed"
+    }
+  }
+}

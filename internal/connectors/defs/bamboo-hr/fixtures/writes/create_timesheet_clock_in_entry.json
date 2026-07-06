@@ -1,0 +1,21 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "note": "fixture_value",
+    "breakId": "fixture_id",
+    "date": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/employees/fixture_id/clock_in",
+    "body": {
+      "note": "fixture_value",
+      "breakId": "fixture_id",
+      "date": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

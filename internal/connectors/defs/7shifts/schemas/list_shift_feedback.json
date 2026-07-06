@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "ID for the shift feedback"
+    },
+    "location_id": {
+      "type": "integer",
+      "description": "Location ID"
+    },
+    "department_id": {
+      "type": "integer",
+      "description": "Department ID"
+    },
+    "role_id": {
+      "type": "integer",
+      "description": "Role ID"
+    },
+    "start": {
+      "type": "string",
+      "description": "Shift start time",
+      "format": "date-time"
+    },
+    "end": {
+      "type": "string",
+      "description": "Shift end time",
+      "format": "date-time"
+    },
+    "shift_id": {
+      "type": "integer",
+      "description": "Shift ID"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "User ID"
+    },
+    "notified": {
+      "type": "boolean",
+      "description": "If the user was notified to provide shift feedback"
+    },
+    "rating": {
+      "type": "integer",
+      "description": "Rating of the shift"
+    },
+    "comments": {
+      "type": "string",
+      "description": "Comments about the shift"
+    },
+    "dismissed": {
+      "type": "boolean",
+      "description": "If the shift feedback request was dismissed"
+    },
+    "station_name": {
+      "type": "string",
+      "description": "Station name"
+    }
+  },
+  "required": [
+    "id",
+    "location_id",
+    "department_id",
+    "role_id",
+    "start",
+    "end",
+    "shift_id",
+    "user_id",
+    "notified",
+    "rating",
+    "comments",
+    "dismissed",
+    "station_name"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_shift_feedback",
+  "x-primary-key": [
+    "id"
+  ]
+}

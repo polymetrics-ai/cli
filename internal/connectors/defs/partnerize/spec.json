@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Partnerize Connection Specification",
+  "type": "object",
+  "required": ["application_key", "user_api_key"],
+  "properties": {
+    "application_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Partnerize application key, sent as the Basic auth username. Never logged."
+    },
+    "user_api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Partnerize user API key, sent as the Basic auth password. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.partnerize.com/v2",
+      "description": "Partnerize API base URL override for tests or proxies."
+    }
+  }
+}

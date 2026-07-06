@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Looker Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Looker API base URL, including the API version path (for example https://company.looker.com/api/4.0)."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Looker API access token. When set, used directly as a Bearer token; takes priority over client_id/client_secret when both are configured."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Looker API3 client ID. Used with client_secret to log in and obtain a Bearer token when access_token is not set."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Looker API3 client secret. Used with client_id to log in and obtain a Bearer token when access_token is not set."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Looker login endpoint override for tests or proxies. Defaults to <base_url>/login."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

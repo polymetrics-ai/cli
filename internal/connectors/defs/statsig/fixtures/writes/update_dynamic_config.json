@@ -1,0 +1,4 @@
+{
+  "record": { "id": "config_fixture_1", "description": "updated fixture record" },
+  "expect": { "method": "PATCH", "path": "/dynamic_configs/config_fixture_1" }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "attribute_classes",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "environment_id": { "type": ["string", "null"], "description": "Mapped from the raw API's environmentId field." },
+    "archived": { "type": ["boolean", "null"] },
+    "created_at": { "type": ["string", "null"], "description": "Mapped from the raw API's createdAt field." },
+    "updated_at": { "type": ["string", "null"], "description": "Mapped from the raw API's updatedAt field." }
+  }
+}

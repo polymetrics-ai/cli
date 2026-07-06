@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/reports-service/report", "query": { "page": "2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "rows": [
+        { "dimensions": { "date": "2026-01-02", "country": "FR", "app": "fixture-app" }, "metrics": { "installs": 7, "clicks": 60, "cost": 14.75 } }
+      ]
+    }
+  }
+}

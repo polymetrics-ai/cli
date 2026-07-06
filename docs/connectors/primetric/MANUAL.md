@@ -10,22 +10,47 @@ SYNOPSIS
   pm credentials add <name> --connector primetric [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints. Read-only.
+  Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints.
+
+ICON
+  asset: icons/primetric.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.primetric.com/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  token_url
+  client_id (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  employees:
+    primary key: id
+    fields: created_at(), email(), first_name(), id(), last_name(), name(), updated_at()
+  projects:
+    primary key: id
+    fields: created_at(), id(), name(), updated_at()
+  clients:
+    primary key: id
+    fields: created_at(), id(), name(), updated_at()
+  roles:
+    primary key: id
+    fields: created_at(), id(), name(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Primetric API read of employee, project, client, and role data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

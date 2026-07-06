@@ -1,0 +1,903 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "meta.cursor.next"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v2/companies",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "7shifts access_token is missing or invalid; re-run pm credentials add 7shifts"
+      },
+      {
+        "status": 403,
+        "hint": "7shifts account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "7shifts rate limit exceeded; retry after the API limit resets"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "companies",
+      "path": "/v2/companies",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "locations",
+      "path": "/v2/company/{{ config.company_id }}/locations",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "departments",
+      "path": "/v2/company/{{ config.company_id }}/departments",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "roles",
+      "path": "/v2/company/{{ config.company_id }}/roles",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "users",
+      "path": "/v2/company/{{ config.company_id }}/users",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "shifts",
+      "path": "/v2/company/{{ config.company_id }}/shifts",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/shifts.json"
+    },
+    {
+      "name": "time_punches",
+      "path": "/v2/company/{{ config.company_id }}/time_punches",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "incremental": {
+        "cursor_field": "modified",
+        "request_param": "modified_since",
+        "param_format": "date",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/time_punches.json"
+    },
+    {
+      "name": "fetch_tip_pool_manual_entry",
+      "path": "/v2/company/{{ config.company_id }}/tip_pool/{{ config.tip_pool_settings_uuid }}/manual_entry",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/fetch_tip_pool_manual_entry.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}"
+      }
+    },
+    {
+      "name": "find_by_id",
+      "path": "/v2/time_off/{{ config.time_off_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/find_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_assignments",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/assignments",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_assignments.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "stream_key": "get_assignments"
+      }
+    },
+    {
+      "name": "get_availability_by_id",
+      "path": "/v2/company/{{ config.company_id }}/availabilities/{{ config.availability_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_availability_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_daily_sales_and_labor",
+      "path": "/v2/reports/daily_sales_and_labor",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_daily_sales_and_labor.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}",
+        "location_id": "{{ config.location_id }}"
+      }
+    },
+    {
+      "name": "get_engage_overview_by_location_id",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ config.location_id }}/engage_overview",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_engage_overview_by_location_id.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "date": "{{ config.date }}"
+      },
+      "computed_fields": {
+        "stream_key": "get_engage_overview_by_location_id"
+      }
+    },
+    {
+      "name": "get_event",
+      "path": "/v2/company/{{ config.company_id }}/events/{{ config.event_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_event.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_events",
+      "path": "/v2/company/{{ config.company_id }}/events",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_events.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "limit": "100",
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}"
+      }
+    },
+    {
+      "name": "get_hours_and_wages",
+      "path": "/v2/reports/hours_and_wages",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_hours_and_wages.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "punches": "{{ config.punches }}",
+        "company_id": "{{ config.company_id }}",
+        "from": "{{ config.from }}",
+        "to": "{{ config.to }}"
+      },
+      "computed_fields": {
+        "stream_key": "get_hours_and_wages"
+      }
+    },
+    {
+      "name": "get_location_by_id",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ config.location_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_location_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_receipt",
+      "path": "/v2/company/{{ config.company_id }}/receipts/{{ config.receipt_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_receipt.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_role_assignments",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/role_assignments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_role_assignments.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_task_list",
+      "path": "/v2/company/{{ config.company_id }}/task_lists/{{ config.list_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_task_list.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_task_list_daily_summary",
+      "path": "/v2/company/{{ config.company_id }}/task_list_daily_summary",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_task_list_daily_summary.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "location_id": "{{ config.location_id }}",
+        "date": "{{ config.date }}"
+      }
+    },
+    {
+      "name": "get_task_list_template",
+      "path": "/v2/company/{{ config.company_id }}/task_list_templates/{{ config.uuid }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_task_list_template.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_task_list_templates",
+      "path": "/v2/company/{{ config.company_id }}/task_list_templates",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_task_list_templates.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_task_lists",
+      "path": "/v2/company/{{ config.company_id }}/task_lists",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_task_lists.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_task_management_settings",
+      "path": "/v2/company/{{ config.company_id }}/task_management_settings",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_task_management_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_time_clocking_payroll_period",
+      "path": "/v2/company/{{ config.company_id }}/payroll_periods/{{ config.payroll_period_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_time_clocking_payroll_period.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_time_clocking_payroll_periods",
+      "path": "/v2/time_clocking/payroll_periods",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_time_clocking_payroll_periods.json",
+      "query": {
+        "limit": "100",
+        "company_id": "{{ config.company_id }}"
+      }
+    },
+    {
+      "name": "get_time_off_list",
+      "path": "/v2/time_off",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_time_off_list.json",
+      "query": {
+        "limit": "100",
+        "company_id": "{{ config.company_id }}"
+      }
+    },
+    {
+      "name": "get_time_off_settings",
+      "path": "/v2/time_off_settings/{{ config.company_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_time_off_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_time_punch_by_id",
+      "path": "/v2/company/{{ config.company_id }}/time_punches/{{ config.time_punch_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_time_punch_by_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_tip_pool_settings",
+      "path": "/v2/company/{{ config.company_id }}/tip_pool_settings",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_tip_pool_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_total_hours",
+      "path": "/v2/time_off/total_hours",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_total_hours.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "company_id": "{{ config.company_id }}",
+        "employee_id": "{{ config.employee_id }}",
+        "date_start": "{{ config.date_start }}",
+        "date_end": "{{ config.date_end }}"
+      }
+    },
+    {
+      "name": "get_user",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.identifier }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_user.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_user_wages",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/wages",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_user_wages.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "stream_key": "get_user_wages"
+      }
+    },
+    {
+      "name": "list_availabilities",
+      "path": "/v2/company/{{ config.company_id }}/availabilities",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_availabilities.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_availability_reasons",
+      "path": "/v2/company/{{ config.company_id }}/availability_reasons",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_availability_reasons.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_company_webhooks",
+      "path": "/v2/company/{{ config.company_id }}/webhooks",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_company_webhooks.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_department_assignments",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/department_assignments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_department_assignments.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_employment_record",
+      "path": "/v2/company/{{ config.company_id }}/employment_records",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_employment_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_external_user_mappings",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_external_user_mappings.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_inactive_reasons",
+      "path": "/v2/company/{{ config.company_id }}/inactive_reasons",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_inactive_reasons.json",
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "stream_key": "list_inactive_reasons"
+      }
+    },
+    {
+      "name": "list_location_assignments",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/location_assignments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_location_assignments.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_log_book_categories",
+      "path": "/v2/company/{{ config.company_id }}/log_book_categories",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_log_book_categories.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_log_book_comments",
+      "path": "/v2/company/{{ config.company_id }}/log_book_comments",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_log_book_comments.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "log_book_ids": "{{ config.log_book_ids }}"
+      }
+    },
+    {
+      "name": "list_log_book_posts",
+      "path": "/v2/company/{{ config.company_id }}/log_book_posts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_log_book_posts.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_sales_receipts",
+      "path": "/v2/company/{{ config.company_id }}/receipts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_sales_receipts.json",
+      "query": {
+        "limit": "100",
+        "location_id": "{{ config.location_id }}"
+      }
+    },
+    {
+      "name": "list_scheduled_shifts",
+      "path": "/v2/company/{{ config.company_id }}/shifts_scheduled/{{ config.id }}",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_scheduled_shifts.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "location_id": "{{ config.location_id }}"
+      }
+    },
+    {
+      "name": "list_shift_feedback",
+      "path": "/v2/company/{{ config.company_id }}/shift_feedback",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_shift_feedback.json",
+      "query": {
+        "limit": "100",
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}"
+      }
+    },
+    {
+      "name": "list_user_contacts",
+      "path": "/v2/company/{{ config.company_id }}/contacts",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_user_contacts.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_users_authorized_locations",
+      "path": "/v2/company/{{ config.company_id }}/users/{{ config.user_id }}/authorized_locations",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_users_authorized_locations.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_company_labor_settings",
+      "path": "/v2/company/{{ config.company_id }}/labor_settings",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_company_labor_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_daily_stats",
+      "path": "/v2/company/{{ config.company_id }}/location/{{ config.location_id }}/daily_stats",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_daily_stats.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "date": "{{ config.date }}"
+      },
+      "computed_fields": {
+        "stream_key": "retrieve_daily_stats"
+      }
+    },
+    {
+      "name": "retrieve_day_part_settings",
+      "path": "/v2/company/{{ config.company_id }}/day_part/settings",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/retrieve_day_part_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_department",
+      "path": "/v2/company/{{ config.company_id }}/departments/{{ config.department_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_department.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_external_user_mapping",
+      "path": "/v2/company/{{ config.company_id }}/external_user_mappings/{{ config.identifier }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_external_user_mapping.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_log_book_comment",
+      "path": "/v2/company/{{ config.company_id }}/log_book_comments/{{ config.id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_log_book_comment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_log_book_post",
+      "path": "/v2/company/{{ config.company_id }}/log_book_posts/{{ config.id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_log_book_post.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_receipts_summary",
+      "path": "/v2/company/{{ config.company_id }}/receipts_summary",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/retrieve_receipts_summary.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "location_id": "{{ config.location_id }}"
+      }
+    },
+    {
+      "name": "retrieve_role",
+      "path": "/v2/company/{{ config.company_id }}/roles/{{ config.role_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_role.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_shift",
+      "path": "/v2/company/{{ config.company_id }}/shifts/{{ config.shift_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_shift.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_tip_pool_detailed_report",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ config.location_id }}/tip_pool_detailed_report",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_tip_pool_detailed_report.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}"
+      }
+    },
+    {
+      "name": "retrieve_tip_pool_summary_report",
+      "path": "/v2/company/{{ config.company_id }}/locations/{{ config.location_id }}/tip_pool_summary_report",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/retrieve_tip_pool_summary_report.json",
+      "pagination": {
+        "type": "none"
+      },
+      "query": {
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}"
+      }
+    },
+    {
+      "name": "retrieve_user_contact",
+      "path": "/v2/company/{{ config.company_id }}/contacts/{{ config.identifier }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_user_contact.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "view_company",
+      "path": "/v2/companies/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/view_company.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "who_am_i",
+      "path": "/v2/whoami",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/who_am_i.json",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

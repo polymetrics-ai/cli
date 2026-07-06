@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "nightly-build",
+    "timetable": { "per-hour": 1, "hours-of-day": [0], "days-of-week": ["MON"] },
+    "attribution-actor": "system",
+    "parameters": { "branch": "main" }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/schedule"
+  }
+}

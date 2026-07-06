@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/a/synthetic-conformance-value/api/v0.5/form/",
+    "query": { "limit": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "objects": [], "meta": { "limit": 1, "next": null, "offset": 0, "previous": null, "total_count": 0 } }
+  }
+}

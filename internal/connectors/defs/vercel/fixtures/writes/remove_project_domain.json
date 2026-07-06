@@ -1,0 +1,10 @@
+{
+  "record": {
+    "project_id": "prj_fixture_1",
+    "domain": "fixture.example.com"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v9/projects/prj_fixture_1/domains/fixture.example.com"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "visitor_activities",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaignId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "customRedirectId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "details": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emailId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "emailTemplateId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "fileId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "formHandlerId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "formId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "landingPageId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "listEmailId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "opportunityId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "prospectId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "typeName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "visitId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "visitorId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "visitorPageViewId": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/companies/synthetic-conformance-value/contracts",
+    "query": {
+      "maxResults": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "contracts": [
+        {
+          "contractId": "company_contracts_1",
+          "name": "Fixture company contracts"
+        }
+      ],
+      "meta": {
+        "nextPageToken": "",
+        "count": 1
+      }
+    }
+  }
+}

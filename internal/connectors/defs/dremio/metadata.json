@@ -1,0 +1,24 @@
+{
+  "name": "dremio",
+  "display_name": "Dremio",
+  "description": "Reads and writes Dremio catalog entries, reflections, sources, users, and roles through the Dremio REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.dremio.com/software/rest-api/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Dremio API read of catalog, reflection, source, user, and role data",
+    "write": "external Dremio API mutation of user/role/reflection/PAT lifecycle objects; several actions are destructive (delete_user, delete_role, delete_reflection, delete_personal_access_token) and require approval",
+    "approval": "required for create/update/delete user, role, and reflection actions and PAT lifecycle actions; refresh_reflection is low-risk and does not require approval"
+  }
+}

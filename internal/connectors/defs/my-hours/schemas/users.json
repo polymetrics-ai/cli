@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "users",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "account_owner": {
+      "type": "boolean"
+    },
+    "admin": {
+      "type": "boolean"
+    },
+    "rate": {
+      "type": "number"
+    },
+    "billable_rate": {
+      "type": "number"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

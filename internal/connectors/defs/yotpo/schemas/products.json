@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "products",
+  "type": "object",
+  "x-primary-key": ["yotpo_id"],
+  "x-cursor-field": "updated_at",
+  "properties": {
+    "yotpo_id": { "type": ["integer", "null"] },
+    "external_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "url": { "type": ["string", "null"] },
+    "is_valid_url": { "type": ["boolean", "null"] },
+    "image_url": { "type": ["string", "null"] },
+    "price": { "type": ["integer", "null"] },
+    "compare_at_price": { "type": ["integer", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "inventory_quantity": { "type": ["integer", "null"] },
+    "is_discontinued": { "type": ["boolean", "null"] },
+    "group_name": { "type": ["string", "null"] },
+    "brand": { "type": ["string", "null"] },
+    "sku": { "type": ["string", "null"] },
+    "mpn": { "type": ["string", "null"] },
+    "gtins": { "type": ["array", "null"] },
+    "custom_properties": { "type": ["object", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

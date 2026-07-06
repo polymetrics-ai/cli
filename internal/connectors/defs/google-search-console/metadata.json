@@ -1,0 +1,24 @@
+{
+  "name": "google-search-console",
+  "display_name": "Google Search Console",
+  "description": "Reads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date, query, page, country, and device) through the Search Console v3 REST API; submits/removes sites and sitemaps through explicit write actions.",
+  "integration_type": "api",
+  "docs_url": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 25000
+  },
+  "risk": {
+    "read": "external Google Search Console API read of site/sitemap metadata and search analytics performance data",
+    "write": "adds or removes Search Console site properties and submits or deletes sitemap resources",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

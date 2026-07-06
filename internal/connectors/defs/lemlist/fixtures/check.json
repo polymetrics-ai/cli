@@ -1,0 +1,17 @@
+{
+  "request": { "method": "GET", "path": "/team" },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "team_fixture_1",
+      "name": "Fixture Team",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "createdBy": "usr_fixture_1",
+      "_updatedAt": "2026-01-01T00:00:00.000Z",
+      "userIds": ["usr_fixture_1"],
+      "beta": [],
+      "billing": { "plan": "fixture" },
+      "revenueVisualization": { "enabled": false }
+    }
+  }
+}

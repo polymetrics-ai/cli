@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "call_log",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "start_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "direction": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "result": { "type": ["string", "null"] },
+    "start_time": { "type": ["string", "null"] },
+    "stream": { "type": "string" }
+  }
+}

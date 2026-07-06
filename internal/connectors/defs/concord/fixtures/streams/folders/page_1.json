@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/folders",
+    "query": {
+      "page": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "Fixture Folder 1",
+        "parentId": 0,
+        "organizationId": 42
+      },
+      {
+        "id": 2,
+        "name": "Fixture Folder 2",
+        "parentId": 1,
+        "organizationId": 42
+      }
+    ]
+  }
+}

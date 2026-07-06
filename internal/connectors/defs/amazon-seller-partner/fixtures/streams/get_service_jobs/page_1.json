@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/service/v1/serviceJobs",
+    "query": {
+      "pageSize": "synthetic-conformance-value",
+      "marketplaceIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "jobs": [
+          {
+            "createTime": "createTime-fixture-1",
+            "serviceJobId": "serviceJobId-fixture-1",
+            "serviceJobStatus": "serviceJobStatus-fixture-1",
+            "scopeOfWork": {},
+            "seller": {},
+            "serviceJobProvider": {},
+            "preferredAppointmentTimes": [],
+            "appointments": [],
+            "serviceOrderId": "serviceOrderId-fixture-1",
+            "productOrderIds": [],
+            "trackingIds": [],
+            "marketplaceId": "marketplaceId-fixture-1",
+            "storeId": "storeId-fixture-1",
+            "buyer": {},
+            "associatedItems": [],
+            "serviceLocation": {},
+            "payments": []
+          }
+        ]
+      }
+    }
+  }
+}

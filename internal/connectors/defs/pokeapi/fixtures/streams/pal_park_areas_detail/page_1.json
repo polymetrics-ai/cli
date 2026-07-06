@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pal-park-area/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "synthetic-conformance-value",
+      "name": "fixture-pal-park-area-detail",
+      "names": [
+
+      ]
+    }
+  }
+}

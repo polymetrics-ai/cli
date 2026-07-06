@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ext_id": "ios:1001",
+    "review_id": "rev_fixture_1",
+    "answer_text": "Thanks for the fixture feedback!"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reviews/reply",
+    "body": {
+      "ext_id": "ios:1001",
+      "review_id": "rev_fixture_1",
+      "answer_text": "Thanks for the fixture feedback!"
+    }
+  }
+}

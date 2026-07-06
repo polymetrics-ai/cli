@@ -1,0 +1,58 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "outlook",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.refresh_token }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": { "method": "GET", "path": "/me/messages" },
+    "error_map": [
+      { "status": 401, "hint": "outlook refresh-token exchange failed or access token expired; re-run pm credentials add outlook" },
+      { "status": 403, "hint": "outlook application lacks the Graph API permission/scope for this mailbox resource" },
+      { "status": 429, "class": "rate_limited", "hint": "microsoft graph rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "/me/messages",
+      "records": { "path": "value" },
+      "schema": "schemas/messages.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
+      }
+    },
+    {
+      "name": "mail_folders",
+      "path": "/me/mailFolders",
+      "records": { "path": "value" },
+      "schema": "schemas/mail_folders.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
+      }
+    },
+    {
+      "name": "events",
+      "path": "/me/events",
+      "records": { "path": "value" },
+      "schema": "schemas/events.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-hostnames/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_custom_hostname_fixture_1",
+      "object": "gitbook-fixture",
+      "title": "Fixture get_custom_hostname",
+      "name": "Fixture get_custom_hostname",
+      "status": "active",
+      "operation_id": "getCustomHostname"
+    }
+  }
+}

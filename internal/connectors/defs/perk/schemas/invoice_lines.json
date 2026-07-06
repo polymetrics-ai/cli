@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "invoice_lines",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "issuing_date",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "expense_date": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "quantity": { "type": ["integer", "null"] },
+    "unit_price": { "type": ["string", "null"] },
+    "tax_percentage": { "type": ["string", "null"] },
+    "tax_amount": { "type": ["string", "null"] },
+    "tax_regime": { "type": ["string", "null"] },
+    "total_amount": { "type": ["string", "null"] },
+    "invoice_serial_number": { "type": ["string", "null"] },
+    "profile_id": { "type": ["string", "null"] },
+    "profile_name": { "type": ["string", "null"] },
+    "invoice_mode": { "type": ["string", "null"] },
+    "invoice_status": { "type": ["string", "null"] },
+    "issuing_date": { "type": ["string", "null"] },
+    "due_date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "metadata": { "type": ["object", "null"] }
+  }
+}

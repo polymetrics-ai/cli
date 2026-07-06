@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/api/v1/tenants" },
+  "response": {
+    "status": 200,
+    "body": {
+      "tenants": [
+        { "tenant_id": 1, "tenant_name": "Fixture Tenant 1" },
+        { "tenant_id": 2, "tenant_name": "Fixture Tenant 2" }
+      ]
+    }
+  }
+}

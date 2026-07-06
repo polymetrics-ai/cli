@@ -1,0 +1,103 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Account-Token": "{{ secrets.account_token }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "cursor",
+      "token_path": "next"
+    },
+    "check": { "method": "GET", "path": "/candidates" },
+    "error_map": [
+      { "status": 401, "hint": "merge api_token or account_token is missing or invalid; re-run pm credentials add merge" },
+      { "status": 403, "hint": "merge linked account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "merge rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "candidates",
+      "path": "/candidates",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/candidates.json"
+    },
+    {
+      "name": "applications",
+      "path": "/applications",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "offers",
+      "path": "/offers",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/offers.json"
+    },
+    {
+      "name": "departments",
+      "path": "/departments",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/departments.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": { "page_size": "100" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "modified_at",
+        "request_param": "modified_after",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/users.json"
+    }
+  ]
+}

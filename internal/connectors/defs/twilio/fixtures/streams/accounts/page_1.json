@@ -1,0 +1,420 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts.json",
+    "query": {
+      "Page": "0",
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accounts": [
+        {
+          "sid": "AC_fixture_parent_001",
+          "friendly_name": "fixture account 1",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_002",
+          "friendly_name": "fixture account 2",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_003",
+          "friendly_name": "fixture account 3",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_004",
+          "friendly_name": "fixture account 4",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_005",
+          "friendly_name": "fixture account 5",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_006",
+          "friendly_name": "fixture account 6",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_007",
+          "friendly_name": "fixture account 7",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_008",
+          "friendly_name": "fixture account 8",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_009",
+          "friendly_name": "fixture account 9",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_010",
+          "friendly_name": "fixture account 10",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_011",
+          "friendly_name": "fixture account 11",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_012",
+          "friendly_name": "fixture account 12",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_013",
+          "friendly_name": "fixture account 13",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_014",
+          "friendly_name": "fixture account 14",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_015",
+          "friendly_name": "fixture account 15",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_016",
+          "friendly_name": "fixture account 16",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_017",
+          "friendly_name": "fixture account 17",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_018",
+          "friendly_name": "fixture account 18",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_019",
+          "friendly_name": "fixture account 19",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_020",
+          "friendly_name": "fixture account 20",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_021",
+          "friendly_name": "fixture account 21",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_022",
+          "friendly_name": "fixture account 22",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_023",
+          "friendly_name": "fixture account 23",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_024",
+          "friendly_name": "fixture account 24",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_025",
+          "friendly_name": "fixture account 25",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_026",
+          "friendly_name": "fixture account 26",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_027",
+          "friendly_name": "fixture account 27",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_028",
+          "friendly_name": "fixture account 28",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_029",
+          "friendly_name": "fixture account 29",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_030",
+          "friendly_name": "fixture account 30",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_031",
+          "friendly_name": "fixture account 31",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_032",
+          "friendly_name": "fixture account 32",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_033",
+          "friendly_name": "fixture account 33",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_034",
+          "friendly_name": "fixture account 34",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_035",
+          "friendly_name": "fixture account 35",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_036",
+          "friendly_name": "fixture account 36",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_037",
+          "friendly_name": "fixture account 37",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_038",
+          "friendly_name": "fixture account 38",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_039",
+          "friendly_name": "fixture account 39",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_040",
+          "friendly_name": "fixture account 40",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_041",
+          "friendly_name": "fixture account 41",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_042",
+          "friendly_name": "fixture account 42",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_043",
+          "friendly_name": "fixture account 43",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_044",
+          "friendly_name": "fixture account 44",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_045",
+          "friendly_name": "fixture account 45",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_046",
+          "friendly_name": "fixture account 46",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_047",
+          "friendly_name": "fixture account 47",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_048",
+          "friendly_name": "fixture account 48",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_049",
+          "friendly_name": "fixture account 49",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        },
+        {
+          "sid": "AC_fixture_parent_050",
+          "friendly_name": "fixture account 50",
+          "status": "active",
+          "type": "Full",
+          "date_created": "Mon, 01 Jan 2024 00:00:00 +0000",
+          "date_updated": "Mon, 01 Jan 2024 00:00:00 +0000"
+        }
+      ],
+      "next_page_uri": "/2010-04-01/Accounts.json?Page=1&PageSize=50",
+      "page": 0,
+      "page_size": 50
+    }
+  }
+}

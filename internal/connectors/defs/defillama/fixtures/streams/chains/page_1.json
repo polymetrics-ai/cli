@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/chains",
+    "query": { "limit": "1000", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "Ethereum",
+        "gecko_id": "ethereum",
+        "tokenSymbol": "ETH",
+        "cmcId": "1027",
+        "chainId": 1,
+        "tvl": 50000000.0
+      },
+      {
+        "name": "Fixture Chain",
+        "gecko_id": "fixture-chain",
+        "tokenSymbol": "FIX",
+        "cmcId": "9999",
+        "chainId": 9999,
+        "tvl": 1000.0
+      }
+    ]
+  }
+}

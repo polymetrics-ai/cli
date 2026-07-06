@@ -1,0 +1,4 @@
+{
+  "record": { "id": 1, "label": "Updated Fixture Property" },
+  "expect": { "method": "PATCH", "path": "/contact_properties/1" }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_destination",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "destinationId": {
+      "type": "string"
+    },
+    "resource": {
+      "type": "object"
+    },
+    "destination_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "destinationId"
+  ]
+}

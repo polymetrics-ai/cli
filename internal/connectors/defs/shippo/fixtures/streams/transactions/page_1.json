@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/transactions",
+    "query": {
+      "results": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "object_id": "transaction_fixture_1",
+          "object_owner": "shippotle@shippo.com",
+          "status": "SUCCESS",
+          "object_updated": "2026-01-01T00:00:00Z",
+          "object_created": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "next": null,
+      "previous": null
+    }
+  }
+}

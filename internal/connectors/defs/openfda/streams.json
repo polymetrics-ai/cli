@@ -1,0 +1,473 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "api_key_query",
+        "param": "api_key",
+        "value": "{{ secrets.api_key }}",
+        "when": "{{ secrets.api_key }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "skip",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/drug/event.json",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 404,
+        "hint": "openfda query matched no records for this search"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "openfda rate limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "drug_event",
+      "path": "/drug/event.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_event.json"
+    },
+    {
+      "name": "drug_label",
+      "path": "/drug/label.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_label.json"
+    },
+    {
+      "name": "drug_enforcement",
+      "path": "/drug/enforcement.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_enforcement.json"
+    },
+    {
+      "name": "device_event",
+      "path": "/device/event.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_event.json"
+    },
+    {
+      "name": "food_enforcement",
+      "path": "/food/enforcement.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/food_enforcement.json"
+    },
+    {
+      "name": "animalandveterinary_event",
+      "path": "/animalandveterinary/event.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/animalandveterinary_event.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "cosmetic_event",
+      "path": "/cosmetic/event.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/cosmetic_event.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "food_event",
+      "path": "/food/event.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/food_event.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "drug_ndc",
+      "path": "/drug/ndc.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_ndc.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "drug_drugsfda",
+      "path": "/drug/drugsfda.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_drugsfda.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "drug_shortages",
+      "path": "/drug/shortages.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_shortages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "drug_orangebook",
+      "path": "/drug/orangebook.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/drug_orangebook.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_510k",
+      "path": "/device/510k.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_510k.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_pma",
+      "path": "/device/pma.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_pma.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_udi",
+      "path": "/device/udi.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_udi.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_enforcement",
+      "path": "/device/enforcement.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_enforcement.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_recall",
+      "path": "/device/recall.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_recall.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_classification",
+      "path": "/device/classification.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_classification.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_registrationlisting",
+      "path": "/device/registrationlisting.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_registrationlisting.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "device_covid19serology",
+      "path": "/device/covid19serology.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/device_covid19serology.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tobacco_problem",
+      "path": "/tobacco/problem.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/tobacco_problem.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tobacco_researchdigitalads",
+      "path": "/tobacco/researchdigitalads.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/tobacco_researchdigitalads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tobacco_researchpreventionads",
+      "path": "/tobacco/researchpreventionads.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/tobacco_researchpreventionads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tobacco_researchsmokefree",
+      "path": "/tobacco/researchsmokefree.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/tobacco_researchsmokefree.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "transparency_crl",
+      "path": "/transparency/crl.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/transparency_crl.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "other_historicaldocument",
+      "path": "/other/historicaldocument.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/other_historicaldocument.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "other_nsde",
+      "path": "/other/nsde.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/other_nsde.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "other_substance",
+      "path": "/other/substance.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/other_substance.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "other_unii",
+      "path": "/other/unii.json",
+      "query": {
+        "search": {
+          "template": "{{ config.search }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/other_unii.json",
+      "projection": "passthrough"
+    }
+  ]
+}

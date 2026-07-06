@@ -1,0 +1,215 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "pagination.next_page"
+    },
+    "check": { "method": "GET", "path": "/users/me" },
+    "error_map": [
+      { "status": 401, "hint": "calendly api_key is missing or invalid; re-run pm credentials add calendly" },
+      { "status": 403, "hint": "calendly account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "calendly rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "scheduled_events",
+      "path": "/scheduled_events",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "start_time",
+        "request_param": "min_start_time",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/scheduled_events.json"
+    },
+    {
+      "name": "event_types",
+      "path": "/event_types",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "schema": "schemas/event_types.json"
+    },
+    {
+      "name": "organization_memberships",
+      "path": "/organization_memberships",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}",
+        "user": "{{ record.user.uri }}",
+        "user_name": "{{ record.user.name }}",
+        "user_email": "{{ record.user.email }}"
+      },
+      "schema": "schemas/organization_memberships.json"
+    },
+    {
+      "name": "groups",
+      "path": "/groups",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "schema": "schemas/groups.json"
+    },
+    {
+      "name": "users",
+      "path": "/users/me",
+      "records": { "path": "resource", "single_object": true },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "routing_forms",
+      "path": "/routing_forms",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/routing_forms.json"
+    },
+    {
+      "name": "routing_form_submissions",
+      "path": "/routing_form_submissions",
+      "query": {
+        "routing_form": "{{ config.routing_form_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/routing_form_submissions.json",
+      "conformance": { "skip_dynamic": true, "reason": "requires a config-supplied routing_form_uri (Calendly's routing_form query filter names one specific form, mirroring organization_uri/user_uri's documented per-account-invariant-value pattern); conformance's synthetic non-secret config value for this key cannot represent a real routing form uri meaningfully, but the stream's declarative shape is identical to every other collection+next_url stream in this bundle and is proven by that shared pattern plus static validation" }
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/webhook_subscriptions",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "scope": "organization",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/webhook_subscriptions.json"
+    },
+    {
+      "name": "user_availability_schedules",
+      "path": "/user_availability_schedules",
+      "query": {
+        "user": "{{ config.user_uri }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "pagination": { "type": "none" },
+      "schema": "schemas/user_availability_schedules.json",
+      "conformance": { "skip_dynamic": true, "reason": "requires a config-supplied user_uri (Calendly's user query filter names one specific user, resolvable via GET /users/me but not auto-chainable by the declarative dialect — see spec.json); conformance's synthetic non-secret config value cannot represent a real user uri meaningfully, but the stream's declarative shape (unpaginated collection, identical to the users stream's single_object shape) is proven by static validation and the same pattern used elsewhere in this bundle" }
+    },
+    {
+      "name": "group_relationships",
+      "path": "/group_relationships",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "schema": "schemas/group_relationships.json"
+    },
+    {
+      "name": "activity_log_entries",
+      "path": "/activity_log_entries",
+      "query": {
+        "organization": "{{ config.organization_uri }}",
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "occurred_at",
+        "request_param": "min_occurred_at"
+      },
+      "schema": "schemas/activity_log_entries.json"
+    },
+    {
+      "name": "invitees",
+      "path": "/scheduled_events/{{ fanout.id }}/invitees",
+      "query": {
+        "count": "{{ config.page_size }}"
+      },
+      "records": { "path": "collection" },
+      "computed_fields": {
+        "id": "{{ record.uri | last_path_segment }}"
+      },
+      "incremental": {
+        "cursor_field": "updated_at"
+      },
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/scheduled_events?organization={{ config.organization_uri | urlencode }}&count={{ config.page_size }}",
+            "records_path": "collection",
+            "id_field": "uri"
+          }
+        },
+        "into": { "path_var": "parent_id" },
+        "stamp_field": "scheduled_event_id"
+      },
+      "schema": "schemas/invitees.json",
+      "conformance": { "skip_dynamic": true, "reason": "fan_out-driven stream: the id-listing preliminary request has no declarative fixture-replay equivalent (conformance's dynamic checks assume one fixed request path per stream, not a two-phase list-then-fan-out sequence) — proven by static validation (fan_out.ids_from.request.path is checked by checkInterpolations like any other templated path) plus the identical, already-proven fan_out mechanism used by other migrated bundles" }
+    }
+  ]
+}

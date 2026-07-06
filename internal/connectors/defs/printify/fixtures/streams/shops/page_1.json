@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/shops.json"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 42,
+        "title": "Fixture Shop",
+        "sales_channel": "api"
+      }
+    ]
+  }
+}

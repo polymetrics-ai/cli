@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/api/issues/search", "query": { "p": "1", "ps": "100" } },
+  "response": {
+    "status": 200,
+    "body": { "total": 0, "p": 1, "ps": 100, "issues": [] }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "api": "Gridly REST API v1 (https://api.gridly.com/v1)",
+  "docs": "https://api.gridly.com/docs",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave3 migration: all 3 legacy-parity read streams (views, records, branches) migrated from internal/connectors/gridly, the hand-written connector this bundle replaces at the wave6 registry flip.",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/views", "covered_by": { "stream": "views" } },
+    { "method": "GET", "path": "/v1/views/{view}/records", "covered_by": { "stream": "records" } },
+    { "method": "GET", "path": "/v1/views/{view}/branches", "covered_by": { "stream": "branches" } }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "chartmogul",
+  "display_name": "ChartMogul",
+  "description": "Reads and writes ChartMogul customers, contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account details through the ChartMogul REST API.",
+  "integration_type": "api",
+  "docs_url": "https://dev.chartmogul.com/reference",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 200
+  },
+  "risk": {
+    "read": "external ChartMogul API read of customer, contact, CRM-task, plan, invoice, and subscription-metrics data",
+    "write": "external mutation of ChartMogul customer records; approval required"
+  }
+}

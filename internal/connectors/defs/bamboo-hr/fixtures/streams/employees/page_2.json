@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/directory",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "fields": [
+        {
+          "id": "firstName"
+        }
+      ],
+      "employees": [
+        {
+          "id": "fixture_101",
+          "displayName": "Fixture Employee101",
+          "firstName": "Fixture",
+          "lastName": "Employee101",
+          "preferredName": "Fix101",
+          "jobTitle": "Engineer",
+          "department": "Engineering",
+          "division": "Product",
+          "location": "Remote",
+          "workEmail": "fixture101@example.com",
+          "workPhone": "555-01101",
+          "mobilePhone": "555-02101",
+          "supervisor": "Fixture Manager",
+          "photoUrl": "https://example.com/photo101.png"
+        }
+      ]
+    }
+  }
+}

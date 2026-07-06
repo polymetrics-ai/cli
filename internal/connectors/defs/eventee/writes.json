@@ -1,0 +1,517 @@
+{
+  "actions": [
+    {
+      "name": "clear_test_content",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/test/content",
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "risk": "deletes all tracks, pauses, speakers, workshops, lectures, and halls from the configured test event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_hall",
+      "kind": "create",
+      "method": "POST",
+      "path": "/hall",
+      "record_schema": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a hall in the configured event"
+    },
+    {
+      "name": "update_hall",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/hall/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "updates a hall in the configured event"
+    },
+    {
+      "name": "delete_hall",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/hall/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a hall from the configured event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_lecture",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lecture",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "start", "end", "hall_id", "speakers", "type", "tracks"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "hall_id": { "type": "integer" },
+          "speakers": { "type": "array" },
+          "discussion": { "type": "boolean" },
+          "moderating": { "type": "boolean" },
+          "polling": { "type": "boolean" },
+          "capacity": { "type": "integer" },
+          "type": { "enum": [0, 1] },
+          "stream": { "type": "string" },
+          "virtual_meeting": { "type": "string" },
+          "tracks": { "type": "array" }
+        }
+      },
+      "risk": "creates a lecture or session in the configured event"
+    },
+    {
+      "name": "update_lecture",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/lecture/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "name", "start", "end", "hall_id", "speakers", "type", "tracks"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "hall_id": { "type": "integer" },
+          "speakers": { "type": "array" },
+          "discussion": { "type": "boolean" },
+          "moderating": { "type": "boolean" },
+          "polling": { "type": "boolean" },
+          "capacity": { "type": "integer" },
+          "type": { "enum": [0, 1] },
+          "stream": { "type": "string" },
+          "virtual_meeting": { "type": "string" },
+          "tracks": { "type": "array" }
+        }
+      },
+      "risk": "updates an existing lecture or session in the configured event"
+    },
+    {
+      "name": "delete_lecture",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lecture/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a lecture or session from the configured event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "invite_attendees",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/attendee/invite",
+      "record_schema": {
+        "type": "object",
+        "required": ["users"],
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "email": { "type": "string" },
+                "first_name": { "type": "string" },
+                "last_name": { "type": "string" },
+                "photo": { "type": "string" },
+                "phone": { "type": "string" },
+                "bio": { "type": "string" },
+                "web": { "type": "string" },
+                "facebook_link": { "type": "string" },
+                "twitter_link": { "type": "string" },
+                "linked_in_link": { "type": "string" },
+                "position": { "type": "string" },
+                "company": { "type": "string" },
+                "send_email": { "type": "boolean" },
+                "group_id": { "type": "integer" },
+                "tickets": { "type": "array" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "invites one or more attendees to the configured event"
+    },
+    {
+      "name": "update_attendee_checkin",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/attendee/{{ record.id }}/checkin",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "checkin"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "checkin": { "type": "boolean" }
+        }
+      },
+      "risk": "sets the check-in state for an attendee"
+    },
+    {
+      "name": "remove_attendee",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/attendee",
+      "record_schema": {
+        "type": "object",
+        "required": ["email"],
+        "additionalProperties": false,
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "removes an invited attendee and may remove their access and event-linked information",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_partner",
+      "kind": "create",
+      "method": "POST",
+      "path": "/partner",
+      "record_schema": {
+        "type": "object",
+        "required": ["company"],
+        "additionalProperties": false,
+        "properties": {
+          "company": { "type": "string" },
+          "description": { "type": "string" },
+          "photo_url": { "type": "string" },
+          "logo_url": { "type": "string" },
+          "web": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "address": { "type": "string" },
+          "booth_number": { "type": "string" }
+        }
+      },
+      "risk": "creates a partner, sponsor, or exhibitor profile in the configured event"
+    },
+    {
+      "name": "update_partner",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/partner/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "company"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "company": { "type": "string" },
+          "description": { "type": "string" },
+          "photo_url": { "type": "string" },
+          "logo_url": { "type": "string" },
+          "web": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "address": { "type": "string" },
+          "booth_number": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing partner, sponsor, or exhibitor profile in the configured event"
+    },
+    {
+      "name": "delete_partner",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/partner/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a partner, sponsor, or exhibitor profile from the configured event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_pause",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pause",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" }
+        }
+      },
+      "risk": "creates a pause or break in the configured event agenda"
+    },
+    {
+      "name": "update_pause",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/pause/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "name", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "start": { "type": "string" },
+          "end": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing pause or break in the configured event agenda"
+    },
+    {
+      "name": "delete_pause",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/pause/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a pause or break from the configured event agenda",
+      "confirm": "destructive"
+    },
+    {
+      "name": "invite_registrations",
+      "kind": "create",
+      "method": "PUT",
+      "path": "/registration/invite",
+      "record_schema": {
+        "type": "object",
+        "required": ["registrations"],
+        "additionalProperties": false,
+        "properties": {
+          "registrations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "email": { "type": "string" },
+                "first_name": { "type": "string" },
+                "last_name": { "type": "string" },
+                "photo": { "type": "string" },
+                "phone": { "type": "string" },
+                "bio": { "type": "string" },
+                "web": { "type": "string" },
+                "facebook_link": { "type": "string" },
+                "twitter_link": { "type": "string" },
+                "linked_in_link": { "type": "string" },
+                "position": { "type": "string" },
+                "company": { "type": "string" },
+                "send_email": { "type": "boolean" },
+                "group_id": { "type": "integer" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "invites one or more registrants to the configured event"
+    },
+    {
+      "name": "remove_registration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/registration",
+      "record_schema": {
+        "type": "object",
+        "required": ["email"],
+        "additionalProperties": false,
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "removes an invited registrant from the configured event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_speaker",
+      "kind": "create",
+      "method": "POST",
+      "path": "/speaker",
+      "record_schema": {
+        "type": "object",
+        "required": ["name", "phone"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "photo": { "type": "string" },
+          "phone": { "type": "string" },
+          "bio": { "type": "string" },
+          "web": { "type": "string" },
+          "facebook": { "type": "string" },
+          "twitter": { "type": "string" },
+          "linkedIn": { "type": "string" },
+          "position": { "type": "string" },
+          "company": { "type": "string" },
+          "country": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "creates a speaker profile in the configured event"
+    },
+    {
+      "name": "update_speaker",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/speaker/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "name", "phone"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "photo": { "type": "string" },
+          "phone": { "type": "string" },
+          "bio": { "type": "string" },
+          "web": { "type": "string" },
+          "facebook": { "type": "string" },
+          "twitter": { "type": "string" },
+          "linkedIn": { "type": "string" },
+          "position": { "type": "string" },
+          "company": { "type": "string" },
+          "country": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing speaker profile in the configured event"
+    },
+    {
+      "name": "delete_speaker",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/speaker/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a speaker profile from the configured event",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_track",
+      "kind": "create",
+      "method": "POST",
+      "path": "/label",
+      "record_schema": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "creates a track label in the configured event"
+    },
+    {
+      "name": "update_track",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/label/{{ record.id }}",
+      "path_fields": ["id"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "risk": "updates an existing track label in the configured event"
+    },
+    {
+      "name": "delete_track",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/label/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "deletes a track label from the configured event",
+      "confirm": "destructive"
+    }
+  ]
+}

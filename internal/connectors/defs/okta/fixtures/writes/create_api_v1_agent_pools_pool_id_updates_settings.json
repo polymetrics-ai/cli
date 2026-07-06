@@ -1,0 +1,29 @@
+{
+  "record": {
+    "pool_id": "synthetic-conformance-value",
+    "agentType": "AD",
+    "continueOnError": true,
+    "latestVersion": "latest_version_fixture",
+    "minimalSupportedVersion": "minimal_supported_version_fixture",
+    "poolId": "pool_id_fixture",
+    "poolName": "pool_name_fixture",
+    "releaseChannel": "BETA"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/agentPools/synthetic-conformance-value/updates/settings",
+    "body": {
+      "agentType": "AD",
+      "continueOnError": true,
+      "latestVersion": "latest_version_fixture",
+      "minimalSupportedVersion": "minimal_supported_version_fixture",
+      "poolId": "pool_id_fixture",
+      "poolName": "pool_name_fixture",
+      "releaseChannel": "BETA"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

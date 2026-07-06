@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/authorizationServers/synthetic-conformance-value/policies/synthetic-conformance-value/rules/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "actions": {
+        "token": {
+          "accessTokenLifetimeMinutes": 1,
+          "inlineHook": {
+            "id": "id_fixture"
+          },
+          "refreshTokenLifetimeMinutes": 1,
+          "refreshTokenWindowMinutes": 1
+        }
+      },
+      "conditions": {
+        "grantTypes": {
+          "include": [
+            "include_fixture"
+          ]
+        },
+        "people": {
+          "groups": {
+            "include": [
+              "include_fixture"
+            ]
+          },
+          "users": {
+            "include": [
+              "include_fixture"
+            ]
+          }
+        },
+        "scopes": {
+          "include": [
+            "include_fixture"
+          ]
+        }
+      },
+      "created": "2026-01-01T00:00:00Z",
+      "id": "id_fixture",
+      "lastUpdated": "2026-01-01T00:00:00Z",
+      "name": "name_fixture",
+      "priority": 1,
+      "status": "ACTIVE",
+      "system": true,
+      "type": "RESOURCE_ACCESS",
+      "_links": {
+        "activate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        },
+        "deactivate": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

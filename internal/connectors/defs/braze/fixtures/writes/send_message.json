@@ -1,0 +1,15 @@
+{
+  "record": {
+    "external_user_ids": ["user_fixture_1"],
+    "messages": { "email": { "app_id": "app_fixture_1", "subject": "Fixture", "from": "fixture@example.com", "body": "<p>Fixture</p>" } }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/messages/send",
+    "body": {
+      "external_user_ids": ["user_fixture_1"],
+      "messages": { "email": { "app_id": "app_fixture_1", "subject": "Fixture", "from": "fixture@example.com", "body": "<p>Fixture</p>" } }
+    }
+  },
+  "response": { "status": 201, "body": { "dispatch_id": "dispatch_fixture_1", "message": "success" } }
+}

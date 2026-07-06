@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/~/extension/~/address-book/contact",
+    "query": {
+      "page": "1",
+      "perPage": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "records": [
+        {
+          "id": "contact_fixture_1",
+          "firstName": "Fixture",
+          "lastName": "Contact 1",
+          "email": "fixture1@example.com",
+          "company": "Fixture Co"
+        },
+        {
+          "id": "contact_fixture_2",
+          "firstName": "Fixture",
+          "lastName": "Contact 2",
+          "email": "fixture2@example.com",
+          "company": "Fixture Co"
+        }
+      ]
+    }
+  }
+}

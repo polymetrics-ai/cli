@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "type": "bulkmodifyprospects",
+      "attributes": {
+        "name": "Fixture Bulk Modify Prospects"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/batches/actions/prospectsBulkModify",
+    "body": {
+      "data": {
+        "type": "bulkmodifyprospects",
+        "attributes": {
+          "name": "Fixture Bulk Modify Prospects"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

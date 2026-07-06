@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/resources",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status_code": 200,
+      "resources": [
+        {
+          "id": "resource-fixture-1",
+          "name": "Fixture Resource 1",
+          "description": null,
+          "createdAt": 1700000000000,
+          "updatedAt": 1700000000000
+        },
+        {
+          "id": "resource-fixture-2",
+          "name": "Fixture Resource 2",
+          "description": null,
+          "createdAt": 1700000001000,
+          "updatedAt": 1700000001000
+        }
+      ]
+    }
+  }
+}

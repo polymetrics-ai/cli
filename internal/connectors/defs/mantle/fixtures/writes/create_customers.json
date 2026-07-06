@@ -1,0 +1,66 @@
+{
+  "record": {
+    "name": "fixture",
+    "email": "fixture@example.com",
+    "domain": "fixture",
+    "shopifyDomain": "fixture",
+    "shopifyShopId": "shopify_shop_id_fixture",
+    "url": "https://example.com/fixture",
+    "companyId": "company_id_fixture",
+    "countryCode": "fixture",
+    "preferredCurrency": "fixture",
+    "description": "fixture",
+    "industry": "fixture",
+    "tags": [
+      "fixture"
+    ],
+    "customFields": {
+      "id": "custom_fields_fixture_id"
+    },
+    "appInstallations": [
+      {
+        "id": "id_fixture",
+        "appId": "app_id_fixture",
+        "customFields": {
+          "id": "custom_fields_fixture_id"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/customers",
+    "body": {
+      "name": "fixture",
+      "email": "fixture@example.com",
+      "domain": "fixture",
+      "shopifyDomain": "fixture",
+      "shopifyShopId": "shopify_shop_id_fixture",
+      "url": "https://example.com/fixture",
+      "companyId": "company_id_fixture",
+      "countryCode": "fixture",
+      "preferredCurrency": "fixture",
+      "description": "fixture",
+      "industry": "fixture",
+      "tags": [
+        "fixture"
+      ],
+      "customFields": {
+        "id": "custom_fields_fixture_id"
+      },
+      "appInstallations": [
+        {
+          "id": "id_fixture",
+          "appId": "app_id_fixture",
+          "customFields": {
+            "id": "custom_fields_fixture_id"
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

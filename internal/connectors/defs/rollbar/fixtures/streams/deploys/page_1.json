@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/1/deploys",
+    "query": {
+      "page": "1",
+      "per_page": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "err": 0,
+      "result": {
+        "deploys": [
+          {
+            "id": 1,
+            "name": "Fixture deploys",
+            "title": "Fixture deploys",
+            "status": "active"
+          }
+        ],
+        "page": 1,
+        "total_pages": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": 201,
+    "title": "Fixture Event Type 1 (Updated)"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/event-types/201"
+  },
+  "response": {
+    "status": 200,
+    "body": { "status": "success", "data": { "id": 201, "title": "Fixture Event Type 1 (Updated)" } }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Auth0 Connection Specification",
+  "type": "object",
+  "required": ["base_url"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Auth0 Management API access token, used directly as a Bearer token when set; never logged. Takes priority over the client_id/client_secret M2M mode below (dual-auth ordering, conventions.md §3)."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Auth0 M2M application client id, used with client_secret to perform an OAuth2 client-credentials exchange against <base_url>/oauth/token when access_token is not set. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Auth0 M2M application client secret; paired with client_id for the OAuth2 client-credentials exchange. Never logged."
+    },
+    "audience": {
+      "type": "string",
+      "description": "Audience form parameter sent on the M2M OAuth2 client-credentials token request, scoping the issued token to the Management API (Auth0 requires this explicitly; there is no engine mechanism to derive it from base_url — see docs.md's Known limits). Required when using client_id/client_secret auth; typically <base_url>/api/v2/."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Auth0 tenant domain, e.g. https://your-tenant.us.auth0.com. No default: legacy also requires this explicitly (the base is tenant-specific, never a fixed literal)."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

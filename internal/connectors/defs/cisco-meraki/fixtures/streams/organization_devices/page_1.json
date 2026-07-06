@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": "org_1", "name": "Fixture Org 1" },
+      { "id": "org_2", "name": "Fixture Org 2" }
+    ]
+  }
+}

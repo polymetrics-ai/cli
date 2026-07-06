@@ -1,0 +1,11 @@
+{
+  "record": {
+    "budget_token": "bgt_fixture_1",
+    "user_token": "usr_fixture_1",
+    "threshold": "0.8"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/budget_alerts"
+  }
+}

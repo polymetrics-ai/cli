@@ -12,20 +12,44 @@ SYNOPSIS
 DESCRIPTION
   Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  profiles:
+    primary key: id
+    cursor: updatedAt
+    fields: browserType(), createdAt(), folderName(), id(), name(), notes(), os(), role(), updatedAt()
+  folders:
+    primary key: id
+    fields: id(), name(), profilesCount()
+  user:
+    primary key: _id
+    cursor: createdAt
+    fields: _id(), createdAt(), email(), firstName(), lastName(), plan(), profilesCount()
+  tags:
+    primary key: _id
+    fields: _id(), color(), field(), title()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external GoLogin API read of browser profile and account data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

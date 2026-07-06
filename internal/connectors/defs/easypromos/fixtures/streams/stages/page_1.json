@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/stages/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        { "id": "stage_fixture_1", "name": "Registration", "type": "form", "visible": true, "start_date": "2026-01-01T00:00:00Z", "end_date": "2026-02-01T00:00:00Z" }
+      ],
+      "paging": { "next_cursor": null }
+    }
+  }
+}

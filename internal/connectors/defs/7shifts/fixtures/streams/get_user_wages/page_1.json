@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/users/synthetic-conformance-value/wages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "wage_type": "hourly",
+        "current_wages": [
+          {
+            "id": 1001,
+            "effective_date": "2026-01-01",
+            "role_id": 1001,
+            "wage_type": "hourly",
+            "wage_cents": 1001,
+            "created": "2026-01-01T00:00:00Z",
+            "modified": "2026-01-01T00:00:00Z",
+            "enabled_days": {
+              "Sunday": true,
+              "Monday": true,
+              "Tuesday": true,
+              "Wednesday": true,
+              "Thursday": true,
+              "Friday": true,
+              "Saturday": true
+            },
+            "allocations": [
+              {
+                "location_id": 1001,
+                "amount_tenths": 1001
+              }
+            ]
+          }
+        ],
+        "upcoming_wages": [
+          {
+            "id": 1001,
+            "effective_date": "2026-01-01",
+            "role_id": 1001,
+            "wage_type": "hourly",
+            "wage_cents": 1001,
+            "created": "2026-01-01T00:00:00Z",
+            "modified": "2026-01-01T00:00:00Z",
+            "enabled_days": {
+              "Sunday": true,
+              "Monday": true,
+              "Tuesday": true,
+              "Wednesday": true,
+              "Thursday": true,
+              "Friday": true,
+              "Saturday": true
+            },
+            "allocations": [
+              {
+                "location_id": 1001,
+                "amount_tenths": 1001
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

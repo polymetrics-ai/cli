@@ -1,0 +1,6 @@
+{
+  "response": {
+    "status": 200,
+    "body": { "cluster_name": "fixture-cluster", "version": { "number": "8.13.0" } }
+  }
+}

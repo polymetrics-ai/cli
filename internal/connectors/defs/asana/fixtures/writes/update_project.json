@@ -1,0 +1,15 @@
+{
+  "record": {
+    "gid": "fixture_proj_1",
+    "data": {
+      "archived": true
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/projects/fixture_proj_1",
+    "body": {
+      "data": { "archived": true }
+    }
+  }
+}

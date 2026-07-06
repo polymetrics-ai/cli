@@ -1,0 +1,24 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "board_id": "synthetic-conformance-value",
+    "userGroupIds": [
+      "user_group_id_fixture"
+    ],
+    "role": "VIEWER"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orgs/synthetic-conformance-value/boards/synthetic-conformance-value/groups",
+    "body": {
+      "userGroupIds": [
+        "user_group_id_fixture"
+      ],
+      "role": "VIEWER"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

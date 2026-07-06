@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated",
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "created": { "type": ["string", "null"] },
+    "updated": { "type": ["string", "null"] },
+    "deleted": { "type": ["string", "null"] },
+    "is_active": { "type": ["boolean", "null"] },
+    "ref": { "type": ["string", "null"] },
+    "uptick_ref": { "type": ["string", "null"] },
+    "label": { "type": ["string", "null"] },
+    "location": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "make": { "type": ["string", "null"] },
+    "model": { "type": ["string", "null"] },
+    "size": { "type": ["string", "null"] },
+    "barcode": { "type": ["string", "null"] },
+    "serviced_date": { "type": ["string", "null"] },
+    "property": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "variant": { "type": ["string", "null"] }
+  }
+}

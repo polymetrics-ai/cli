@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v5/objects/visitor-activities/synthetic-conformance-value",
+    "query": {
+      "fields": "id,campaignId,createdAt,customRedirectId,details,emailId,emailTemplateId,fileId,formHandlerId,formId,landingPageId,listEmailId,opportunityId,prospectId,typeName,type,updatedAt,visitId,visitorId,visitorPageViewId"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 101,
+      "campaignId": 1,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "customRedirectId": 1,
+      "details": "details_fixture",
+      "emailId": 1,
+      "emailTemplateId": 1,
+      "fileId": 1,
+      "formHandlerId": 1,
+      "formId": 1,
+      "landingPageId": 1,
+      "listEmailId": 1,
+      "opportunityId": 1,
+      "prospectId": 1,
+      "typeName": "typeName_fixture",
+      "type": 1,
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "visitId": 1,
+      "visitorId": 1,
+      "visitorPageViewId": 1
+    }
+  }
+}

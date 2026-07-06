@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "cust_fixture_1",
+        "email": "fixture1@example.com",
+        "full_name": "Fixture Customer 1",
+        "created_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": "cust_fixture_2",
+        "email": "fixture2@example.com",
+        "full_name": "Fixture Customer 2",
+        "created_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

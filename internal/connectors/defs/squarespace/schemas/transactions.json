@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "transactions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "salesOrderId": { "type": ["string", "null"] },
+    "customerEmail": { "type": ["string", "null"] },
+    "createdOn": { "type": "string", "format": "date-time" },
+    "modifiedOn": { "type": ["string", "null"], "format": "date-time" },
+    "voided": { "type": ["boolean", "null"] },
+    "total": { "type": ["object", "null"] },
+    "totalNetPayment": { "type": ["object", "null"] },
+    "totalNetSales": { "type": ["object", "null"] },
+    "totalNetShipping": { "type": ["object", "null"] },
+    "totalSales": { "type": ["object", "null"] },
+    "totalTaxes": { "type": ["object", "null"] },
+    "payments": { "type": ["array", "null"] },
+    "discounts": { "type": ["array", "null"] },
+    "salesLineItems": { "type": ["array", "null"] },
+    "shippingLineItems": { "type": ["array", "null"] }
+  }
+}

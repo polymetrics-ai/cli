@@ -1,0 +1,7 @@
+{
+  "record": { "id": "subscription_fixture_1", "cancel_at_end": "true" },
+  "expect": {
+    "method": "POST",
+    "path": "/subscription/subscription_fixture_1/cancel"
+  }
+}

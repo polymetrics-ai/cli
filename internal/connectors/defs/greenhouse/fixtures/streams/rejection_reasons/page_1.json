@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rejection_reasons",
+    "query": {
+      "per_page": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "name": "Synthetic Rejection Reasons fixture",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

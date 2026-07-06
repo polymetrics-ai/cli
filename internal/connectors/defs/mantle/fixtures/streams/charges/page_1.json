@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/charges"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "id_fixture",
+        "billedOn": "2026-01-01T00:00:00Z",
+        "name": "fixture",
+        "customerName": "fixture",
+        "customerDomain": "fixture",
+        "appName": "fixture",
+        "type": "fixture",
+        "status": "fixture",
+        "amount": 1.23,
+        "currencyCode": "fixture",
+        "paidOn": "2026-01-01T00:00:00Z",
+        "test": true
+      }
+    ]
+  }
+}

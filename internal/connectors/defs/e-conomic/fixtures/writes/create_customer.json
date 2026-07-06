@@ -1,0 +1,36 @@
+{
+  "record": {
+    "customerNumber": 101,
+    "name": "Fixture Customer A/S",
+    "currency": "DKK",
+    "email": "fixture-customer@example.com",
+    "city": "Copenhagen",
+    "zip": "1000",
+    "country": "Denmark",
+    "address": "1 Fixture Street",
+    "customerGroup": { "customerGroupNumber": 1 },
+    "vatZone": { "vatZoneNumber": 1 },
+    "paymentTerms": { "paymentTermsNumber": 1 }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "customerNumber": 101,
+      "name": "Fixture Customer A/S",
+      "currency": "DKK",
+      "email": "fixture-customer@example.com",
+      "city": "Copenhagen",
+      "zip": "1000",
+      "country": "Denmark",
+      "address": "1 Fixture Street",
+      "customerGroup": { "customerGroupNumber": 1 },
+      "vatZone": { "vatZoneNumber": 1 },
+      "paymentTerms": { "paymentTermsNumber": 1 }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "customerNumber": 101, "self": "https://restapi.e-conomic.com/customers/101" }
+  }
+}

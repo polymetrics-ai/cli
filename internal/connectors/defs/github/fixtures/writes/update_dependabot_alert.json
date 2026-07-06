@@ -1,0 +1,8 @@
+{
+  "record": { "alert_number": 1, "state": "dismissed", "dismissed_reason": "not_used" },
+  "expect": {
+    "method": "PATCH",
+    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/dependabot/alerts/1",
+    "body": { "state": "dismissed", "dismissed_reason": "not_used" }
+  }
+}

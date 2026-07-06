@@ -1,0 +1,24 @@
+{
+  "name": "bitly",
+  "display_name": "Bitly",
+  "description": "Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short domains, webhooks, QR codes, and group tags, and writes bitlink/campaign/group/channel/webhook/custom-bitlink/QR-code mutations, through the Bitly v4 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://dev.bitly.com/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Bitly API read of organization, group, campaign, channel, bitlink, branded-short-domain, webhook, QR code, and tag data",
+    "write": "external mutation of bitlinks, campaigns, groups, channels, webhooks, custom bitlinks, and QR codes; create_webhook/update_webhook register or repoint an outbound event delivery URL of the caller's choosing and warrant review before use, every write ships with an explicit per-action risk string",
+    "approval": "required for destructive actions (delete_bitlink, delete_webhook, delete_qr_code, delete_bitlink_tags) and for webhook URL mutations; creates/updates of bitlinks, campaigns, channels, and QR codes are low-risk"
+  }
+}

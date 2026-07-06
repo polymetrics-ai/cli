@@ -1,0 +1,11 @@
+{
+  "request": { "method": "POST", "path": "/Ads/QueryByAdGroupId", "body": { "AdGroupId": "5000001" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "Ads": [
+        { "Id": "6000001", "Type": "ResponsiveSearch", "Status": "Active", "EditorialStatus": "Active", "DevicePreference": "All" }
+      ]
+    }
+  }
+}

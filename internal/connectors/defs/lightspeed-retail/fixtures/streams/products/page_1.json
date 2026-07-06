@@ -1,0 +1,49 @@
+{
+  "request": { "method": "GET", "path": "/api/2.0/products", "query": { "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "product_fixture_1",
+          "version": 1000,
+          "name": "Fixture One",
+          "handle": "fixture-1",
+          "sku": "SKU-1",
+          "description": "Fixture record",
+          "brand_id": "brand_fixture_1",
+          "supplier_id": "supplier_fixture_1",
+          "product_category": "General",
+          "price_including_tax": 10,
+          "price_excluding_tax": 9,
+          "supply_price": 5,
+          "has_variants": false,
+          "is_active": true,
+          "is_composite": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "product_fixture_2",
+          "version": 1001,
+          "name": "Fixture Two",
+          "handle": "fixture-2",
+          "sku": "SKU-2",
+          "description": "Fixture record",
+          "brand_id": "brand_fixture_1",
+          "supplier_id": "supplier_fixture_1",
+          "product_category": "General",
+          "price_including_tax": 20,
+          "price_excluding_tax": 18,
+          "supply_price": 10,
+          "has_variants": false,
+          "is_active": true,
+          "is_composite": false,
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "version": { "min": 1000, "max": 1001 }
+    }
+  }
+}

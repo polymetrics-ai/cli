@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "object",
+      "description": "Defines which users and groups to assign",
+      "properties": {
+        "assignUserToGroups": {
+          "type": "object",
+          "description": "Contains the `groupIds` array",
+          "properties": {
+            "groupIds": {
+              "type": "array",
+              "description": "Array of `groupIds` to which users are added",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Defines group rule conditions",
+      "properties": {
+        "expression": {
+          "type": "object",
+          "description": "Defines Okta specific [group-rules expression](https://developer.okta.com/docs/reference/okta-expression-language/#expressions-in-group-rules)",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Expression type. Only valid value is '`urn:okta:expression:1.0`'."
+            },
+            "value": {
+              "type": "string",
+              "description": "Okta expression that would result in a Boolean value"
+            }
+          },
+          "additionalProperties": true
+        },
+        "people": {
+          "type": "object",
+          "description": "Defines conditions for `people` in a group rule",
+          "properties": {
+            "groups": {
+              "type": "object",
+              "description": "Currently not supported",
+              "properties": {
+                "exclude": {
+                  "type": "array",
+                  "description": "Currently not supported",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "users": {
+              "type": "object",
+              "description": "Defines conditions specific to user exclusion",
+              "properties": {
+                "exclude": {
+                  "type": "array",
+                  "description": "Excluded `userIds` when processing rules",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "created": {
+      "type": "string",
+      "description": "Creation date for group rule",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "ID of the group rule"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "description": "Date group rule was last updated",
+      "format": "date-time"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the group rule"
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of group rule. You can't update the status of a rule from `INACTIVE` to `ACTIVE`. You must use the activate and deactivate lifecycle operations.",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "INVALID"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "description": "Type to indicate a group rule operation. Only `group_rule` is allowed."
+    },
+    "_embedded": {
+      "type": "object",
+      "description": "This object appears with embedded resources related to the group rule if you use the `expand` query parameter",
+      "properties": {
+        "groupIdToGroupNameMap": {
+          "type": "object",
+          "description": "A mapping of group IDs to group names",
+          "properties": {},
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

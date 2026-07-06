@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orders_archived",
+  "type": "object",
+  "x-primary-key": ["order_number"],
+  "required": ["order_number"],
+  "properties": {
+    "order_number": { "type": "integer" },
+    "date": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "net_amount": { "type": ["number", "null"] },
+    "gross_amount": { "type": ["number", "null"] },
+    "customer_number": { "type": ["integer", "null"] },
+    "self": { "type": ["string", "null"] }
+  }
+}

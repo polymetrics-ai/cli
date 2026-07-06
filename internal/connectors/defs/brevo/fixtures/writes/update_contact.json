@@ -1,0 +1,21 @@
+{
+  "record": {
+    "identifier": "fixture-new@example.com",
+    "attributes": {
+      "FIRSTNAME": "Updated"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/fixture-new@example.com",
+    "body": {
+      "attributes": {
+        "FIRSTNAME": "Updated"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

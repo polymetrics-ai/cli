@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/brands/brand_fixture_2/test-campaigns", "query": { "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [],
+      "has_more": false,
+      "cursor": ""
+    }
+  }
+}

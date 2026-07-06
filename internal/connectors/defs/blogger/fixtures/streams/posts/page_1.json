@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/blogs/fixture_blog_1/posts", "query": { "maxResults": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "blogger#postList",
+      "nextPageToken": "fixture_page_2_token",
+      "items": [
+        {
+          "kind": "blogger#post",
+          "id": "post_fixture_1",
+          "blog": { "id": "fixture_blog_1" },
+          "title": "Fixture Post 1",
+          "content": "<p>Fixture content 1</p>",
+          "url": "https://fixtureblog.blogspot.com/2026/01/post-1.html",
+          "published": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z",
+          "author": { "id": "author_fixture_1", "displayName": "Fixture Author" },
+          "replies": { "totalItems": "0", "selfLink": "https://www.googleapis.com/blogger/v3/blogs/fixture_blog_1/posts/post_fixture_1/comments" },
+          "status": "LIVE"
+        }
+      ]
+    }
+  }
+}

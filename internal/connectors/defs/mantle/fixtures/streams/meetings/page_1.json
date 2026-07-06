@@ -1,0 +1,148 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/meetings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "cursor": "",
+      "meetings": {
+        "id": "id_fixture",
+        "externalId": "external_id_fixture",
+        "title": "fixture",
+        "summary": "fixture",
+        "platform": "fixture",
+        "platformMeetingId": "platform_meeting_id_fixture",
+        "meetingUrl": "https://example.com/fixture",
+        "startTime": "2026-01-01T00:00:00Z",
+        "endTime": "2026-01-01T00:00:00Z",
+        "duration": 1,
+        "recordingUrl": "https://example.com/fixture",
+        "recordingStatus": "fixture",
+        "aiEnrichmentStatus": "fixture",
+        "aiEnrichedAt": "2026-01-01T00:00:00Z",
+        "aiSummary": "fixture",
+        "aiKeyPoints": [
+          {
+            "point": "fixture",
+            "speaker": "fixture",
+            "timestampMs": 1
+          }
+        ],
+        "aiDecisions": [
+          {
+            "decision": "fixture",
+            "context": "fixture"
+          }
+        ],
+        "aiOpenQuestions": [
+          {
+            "question": "fixture",
+            "askedBy": "fixture"
+          }
+        ],
+        "aiTopics": [
+          {
+            "topic": "fixture",
+            "relevance": 1.23
+          }
+        ],
+        "overallSentiment": 1.23,
+        "sentimentTrend": [
+          {
+            "timestampMs": 1,
+            "sentiment": 1.23
+          }
+        ],
+        "aiDealInsights": {
+          "id": "ai_deal_insights_fixture_id"
+        },
+        "taskSuggestions": [
+          {
+            "id": "id_fixture",
+            "title": "fixture",
+            "description": "fixture",
+            "priority": "fixture",
+            "suggestedAssigneeId": "suggested_assignee_id_fixture",
+            "suggestedDueDate": "2026-01-01T00:00:00Z",
+            "triggerPhrase": "fixture",
+            "status": "fixture",
+            "createdTaskId": "created_task_id_fixture",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "deal": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "customer": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "createdBy": {
+          "id": "id_fixture",
+          "name": "fixture",
+          "email": "fixture@example.com"
+        },
+        "attendees": [
+          {
+            "id": "id_fixture",
+            "externalId": "external_id_fixture",
+            "name": "fixture",
+            "email": "fixture@example.com",
+            "color": "fixture",
+            "talkTime": 1,
+            "wordCount": 1,
+            "sentiment": 1.23,
+            "engagementScore": 1.23,
+            "user": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "email": "fixture@example.com"
+            },
+            "contact": {
+              "id": "id_fixture",
+              "name": "fixture",
+              "email": "fixture@example.com"
+            }
+          }
+        ],
+        "transcript": {
+          "id": "id_fixture",
+          "language": "fixture",
+          "status": "fixture",
+          "fullText": "fixture",
+          "externalId": "external_id_fixture",
+          "utterances": [
+            {
+              "id": "id_fixture",
+              "attendeeId": "attendee_id_fixture",
+              "attendee": {
+                "id": "attendee_fixture_id"
+              },
+              "text": "fixture",
+              "startTime": 1,
+              "endTime": 1,
+              "sequence": 1,
+              "confidence": 1.23,
+              "words": [
+                {
+                  "id": "word_fixture_id"
+                }
+              ]
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

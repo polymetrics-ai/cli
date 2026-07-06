@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/roles",
+    "query": { "page[number]": "1", "page[size]": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "role_fixture_1", "type": "roles", "attributes": { "name": "Fixture Engineer" } }
+      ]
+    }
+  }
+}

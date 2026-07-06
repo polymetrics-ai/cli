@@ -1,0 +1,245 @@
+{
+  "actions": [
+    {
+      "name": "create_lead",
+      "kind": "create",
+      "method": "POST",
+      "path": "/lead/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "string" },
+          "status_id": { "type": "string" },
+          "contacts": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a live Close lead; approval required"
+    },
+    {
+      "name": "update_lead",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/lead/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "url": { "type": "string" },
+          "status_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Close lead's fields; approval required"
+    },
+    {
+      "name": "delete_lead",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/lead/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Close lead and its contacts/opportunities; approval required"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lead_id", "name"],
+        "properties": {
+          "lead_id": { "type": "string" },
+          "name": { "type": "string" },
+          "title": { "type": "string" },
+          "emails": { "type": "array" },
+          "phones": { "type": "array" },
+          "urls": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; creates a live Close contact under a lead; approval required"
+    },
+    {
+      "name": "update_contact",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contact/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "title": { "type": "string" },
+          "emails": { "type": "array" },
+          "phones": { "type": "array" },
+          "urls": { "type": "array" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Close contact's fields; approval required"
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Close contact; approval required"
+    },
+    {
+      "name": "create_opportunity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/opportunity/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lead_id"],
+        "properties": {
+          "lead_id": { "type": "string" },
+          "contact_id": { "type": "string" },
+          "note": { "type": "string" },
+          "value": { "type": "number" },
+          "value_period": { "type": "string" },
+          "confidence": { "type": "integer" },
+          "status_id": { "type": "string" },
+          "user_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; creates a live Close opportunity under a lead; approval required"
+    },
+    {
+      "name": "update_opportunity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/opportunity/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "note": { "type": "string" },
+          "value": { "type": "number" },
+          "value_period": { "type": "string" },
+          "confidence": { "type": "integer" },
+          "status_id": { "type": "string" },
+          "user_id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Close opportunity's fields; approval required"
+    },
+    {
+      "name": "delete_opportunity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/opportunity/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Close opportunity; approval required"
+    },
+    {
+      "name": "create_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/task/",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["_type", "lead_id", "text"],
+        "properties": {
+          "_type": { "type": "string", "enum": ["lead"] },
+          "lead_id": { "type": "string" },
+          "text": { "type": "string" },
+          "assigned_to": { "type": "string" },
+          "contact_id": { "type": "string" },
+          "due_date": { "type": "string" },
+          "is_complete": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; creates a live Close task on a lead; approval required"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/task/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "assigned_to": { "type": "string" },
+          "due_date": { "type": "string" },
+          "is_complete": { "type": "boolean" }
+        }
+      },
+      "risk": "external mutation; overwrites a live Close task's fields; approval required"
+    },
+    {
+      "name": "delete_task",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/task/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; irreversibly deletes a live Close task; approval required"
+    }
+  ]
+}

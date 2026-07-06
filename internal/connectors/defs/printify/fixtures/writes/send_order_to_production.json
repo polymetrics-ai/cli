@@ -1,0 +1,9 @@
+{
+  "record": {
+    "order_id": "order_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/shops/synthetic-conformance-value/orders/order_fixture_1/send_to_production.json"
+  }
+}

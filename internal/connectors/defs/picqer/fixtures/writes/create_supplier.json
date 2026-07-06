@@ -1,0 +1,9 @@
+{
+  "record": { "name": "Fixture Supplier", "address": "Fixture Street 1", "city": "Fixture City", "country": "NL" },
+  "expect": {
+    "method": "POST",
+    "path": "/suppliers",
+    "body": { "name": "Fixture Supplier", "address": "Fixture Street 1", "city": "Fixture City", "country": "NL" }
+  },
+  "response": { "status": 200, "body": { "idsupplier": 501, "name": "Fixture Supplier" } }
+}

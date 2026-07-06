@@ -1,0 +1,69 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/team" },
+    "error_map": [
+      { "status": 401, "hint": "insightful credentials are missing or invalid; re-run pm credentials add insightful" },
+      { "status": 403, "hint": "insightful account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "insightful rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "employee",
+      "path": "/employee",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next",
+        "token_path": "next"
+      },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "start"
+      },
+      "schema": "schemas/employee.json"
+    },
+    {
+      "name": "team",
+      "path": "/team",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/team.json"
+    },
+    {
+      "name": "projects",
+      "path": "/project",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next",
+        "token_path": "next"
+      },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "start"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "directory",
+      "path": "/directory",
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next",
+        "token_path": "next"
+      },
+      "incremental": {
+        "cursor_field": "updatedAt",
+        "request_param": "start"
+      },
+      "schema": "schemas/directory.json"
+    }
+  ]
+}

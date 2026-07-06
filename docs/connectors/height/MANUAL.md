@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  tasks:
+    primary key: id
+    cursor: createdAt
+    fields: assigneesIds(), completed(), completedAt(), createdAt(), createdUserId(), deleted(), description(), id(), index(), lastActivityAt(), listIds(), model(), name(), parentTaskId(), status(), url()
+  lists:
+    primary key: id
+    cursor: createdAt
+    fields: createdAt(), defaultList(), description(), id(), key(), model(), name(), type(), updatedAt(), url(), userId(), visualization()
+  field_templates:
+    primary key: id
+    fields: archived(), hidden(), id(), labels(), model(), name(), required(), standardType(), type()
+  users:
+    primary key: id
+    cursor: createdAt
+    fields: admin(), createdAt(), deleted(), email(), firstname(), id(), key(), lastname(), model(), signedUpAt(), state(), username()
+  workspace:
+    primary key: id
+    cursor: createdAt
+    fields: createdAt(), createdUserId(), frozen(), id(), key(), model(), name(), url(), urlType()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Height API read of task, list, field-template, user, and workspace data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

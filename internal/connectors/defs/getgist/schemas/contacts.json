@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contacts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated_at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "type": { "type": ["string", "null"] },
+    "user_id": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "created_at": { "type": ["integer", "null"] },
+    "signed_up_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": ["integer", "null"] },
+    "last_seen_at": { "type": ["integer", "null"] },
+    "last_contacted_at": { "type": ["integer", "null"] },
+    "session_count": { "type": ["integer", "null"] },
+    "unsubscribed_from_emails": { "type": ["boolean", "null"] }
+  }
+}

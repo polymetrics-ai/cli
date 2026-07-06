@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "user_fixture_1",
+    "department_id": "dept_fixture_2"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/users/user_fixture_1",
+    "body": {
+      "department_id": "dept_fixture_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

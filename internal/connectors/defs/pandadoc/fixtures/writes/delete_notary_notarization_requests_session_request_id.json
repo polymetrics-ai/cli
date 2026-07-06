@@ -1,0 +1,16 @@
+{
+  "record": {
+    "session_request_id": "session_request_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/public/v2/notary/notarization-requests/session_request_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "delete_notary_notarization_requests_session_request_id_response",
+      "status": "ok"
+    }
+  }
+}

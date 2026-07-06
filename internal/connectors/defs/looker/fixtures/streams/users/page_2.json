@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "101",
+        "display_name": "Fixture User 101",
+        "email": "fixture101@example.com"
+      }
+    ]
+  }
+}

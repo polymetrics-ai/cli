@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Employee Checklist"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/form_templates",
+    "body": {
+      "name": "Employee Checklist"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "create_form_template_fixture_response"
+    }
+  }
+}

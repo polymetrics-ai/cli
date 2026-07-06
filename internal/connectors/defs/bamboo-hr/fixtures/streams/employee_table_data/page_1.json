@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/synthetic-conformance-value/tables/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "fixture_id",
+        "employeeId": "fixture_id"
+      }
+    ]
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "actions": [
+    {
+      "name": "create_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/employees",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "first_name", "last_name"],
+        "properties": {
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "work_start_date": { "type": "string" },
+          "send_email": { "type": "string" }
+        }
+      },
+      "risk": "creates a new employee record and may email the new hire (send_email); external mutation, approval required"
+    },
+    {
+      "name": "update_employee",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/employees/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "employee_number": { "type": "string" },
+          "work_start_date": { "type": "string" },
+          "location_id": { "type": "integer" },
+          "team_id": { "type": "integer" },
+          "leader_id": { "type": "integer" },
+          "position_id": { "type": "integer" },
+          "approver_ids": { "type": "array", "items": { "type": "integer" } },
+          "selected_leave_types": { "type": "array", "items": { "type": "integer" } }
+        }
+      },
+      "risk": "external mutation updating an employee record (org placement, leave types, reporting line); approval required"
+    },
+    {
+      "name": "update_employee_custom_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/employees/{{ record.employee_id }}/custom-fields/{{ record.custom_field_id }}",
+      "path_fields": ["employee_id", "custom_field_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["employee_id", "custom_field_id", "value"],
+        "properties": {
+          "employee_id": { "type": "string" },
+          "custom_field_id": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "risk": "external mutation of an employee custom field; approval required"
+    },
+    {
+      "name": "terminate_employee",
+      "kind": "create",
+      "method": "POST",
+      "path": "/employees/{{ record.employee_id }}/terminations",
+      "path_fields": ["employee_id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["employee_id", "date", "termination_reason_id"],
+        "properties": {
+          "employee_id": { "type": "string" },
+          "date": { "type": "string" },
+          "termination_reason_id": { "type": "number" },
+          "comments": { "type": "string" }
+        }
+      },
+      "risk": "destructive/irreversible: terminates an employee's record in Sage HR; external mutation, approval required"
+    },
+    {
+      "name": "create_timeoff_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leave-management/requests",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["employee_id", "time_off_policy_id", "type", "part_of_day"],
+        "properties": {
+          "type": { "type": "string", "enum": ["single", "multi"] },
+          "time_off_policy_id": { "type": "integer" },
+          "employee_id": { "type": "integer" },
+          "date": { "type": "string" },
+          "date_from": { "type": "string" },
+          "date_to": { "type": "string" },
+          "part_of_day": { "type": "string", "enum": ["all_day", "first_part_of_day", "second_part_of_day", "specific_timespan"] },
+          "hours": { "type": "number" },
+          "time_from": { "type": "string" },
+          "time_to": { "type": "string" },
+          "details": { "type": "string" }
+        }
+      },
+      "risk": "creates a new time off request against an employee's leave balance; external mutation, approval required"
+    },
+    {
+      "name": "create_kit_day",
+      "kind": "create",
+      "method": "POST",
+      "path": "/leave-management/kit-days",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["employee_id", "policy_id"],
+        "properties": {
+          "policy_id": { "type": "integer" },
+          "employee_id": { "type": "integer" },
+          "date": { "type": "string" },
+          "date_from": { "type": "string" },
+          "date_to": { "type": "string" }
+        }
+      },
+      "risk": "creates a Keeping-In-Touch day entry against an employee's leave policy; external mutation, approval required"
+    },
+    {
+      "name": "update_kit_day_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/leave-management/kit-days/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["cancel", "approve", "decline"] }
+        }
+      },
+      "risk": "approves, declines, or cancels a KIT day request; external mutation, approval required"
+    },
+    {
+      "name": "update_leave_policy_kit_days",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/leave-management/policies/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "kit_days_enabled", "kit_days_quantity"],
+        "properties": {
+          "id": { "type": "string" },
+          "kit_days_enabled": { "type": "boolean" },
+          "kit_days_quantity": { "type": "integer" }
+        }
+      },
+      "risk": "changes a company-wide leave policy's KIT-day configuration; external mutation, approval required"
+    },
+    {
+      "name": "create_onboarding_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/onboarding/tasks",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "boarding_task_template_category_id", "due_in"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "boarding_task_template_category_id": { "type": "number" },
+          "due_in": { "type": "number" },
+          "default_assignee_type": { "type": "string", "enum": ["self", "leader", "employee"] },
+          "assignee_id": { "type": "number" },
+          "require_attachment": { "type": "string" },
+          "add_after": { "type": "number" }
+        }
+      },
+      "risk": "creates a new onboarding task template; external mutation, approval required"
+    },
+    {
+      "name": "create_offboarding_task",
+      "kind": "create",
+      "method": "POST",
+      "path": "/offboarding/tasks",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["title", "boarding_task_template_category_id", "due_in"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "boarding_task_template_category_id": { "type": "number" },
+          "due_in": { "type": "number" },
+          "default_assignee_type": { "type": "string", "enum": ["self", "leader", "employee"] },
+          "assignee_id": { "type": "number" },
+          "require_attachment": { "type": "string" }
+        }
+      },
+      "risk": "creates a new offboarding task template; external mutation, approval required"
+    }
+  ]
+}

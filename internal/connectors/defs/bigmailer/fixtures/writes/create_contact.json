@@ -1,0 +1,13 @@
+{
+  "record": {
+    "brand_id": "brand_fixture_1",
+    "email": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/brands/brand_fixture_1/contacts",
+    "body": {
+      "email": "fixture@example.com"
+    }
+  }
+}

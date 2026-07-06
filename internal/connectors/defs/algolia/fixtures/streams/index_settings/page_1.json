@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/1/indexes/synthetic-conformance-value/settings" },
+  "response": {
+    "status": 200,
+    "body": {
+      "searchableAttributes": ["title", "description"],
+      "attributesForFaceting": [],
+      "ranking": ["typo", "geo", "words"],
+      "customRanking": [],
+      "replicas": [],
+      "hitsPerPage": 20,
+      "paginationLimitedTo": 1000
+    }
+  }
+}

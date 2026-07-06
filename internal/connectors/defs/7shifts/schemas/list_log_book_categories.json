@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "company_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "col": {
+      "type": "integer"
+    },
+    "sort": {
+      "type": "integer"
+    },
+    "field_type": {
+      "type": "string"
+    },
+    "notify": {
+      "type": "boolean"
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "id",
+    "company_id",
+    "name",
+    "col",
+    "sort",
+    "field_type",
+    "notify",
+    "required",
+    "created",
+    "uuid"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_log_book_categories",
+  "x-primary-key": [
+    "id"
+  ]
+}

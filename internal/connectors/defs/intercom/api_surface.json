@@ -1,0 +1,83 @@
+{
+  "api": "Intercom REST API (https://api.intercom.io)",
+  "docs": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, companies, conversations, admins, tags); write/mutation endpoints and any additional list resources are out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins",
+      "covered_by": {
+        "stream": "admins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{id}/reply",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "destructive contact deletion, not a syncable read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "identical account-identity info to /admins; check uses /admins instead"
+      }
+    }
+  ]
+}

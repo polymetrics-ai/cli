@@ -1,0 +1,13 @@
+{
+  "record": {
+    "external_ids": ["user_fixture_1"]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/external_ids/remove",
+    "body": {
+      "external_ids": ["user_fixture_1"]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

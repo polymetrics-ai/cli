@@ -1,0 +1,13 @@
+{
+  "record": {
+    "maintenance_window_id": 123,
+    "status_page_id": 123,
+    "maintenance_id": 123,
+    "name": "Fixture delete_maintenance_from_maintenance_window",
+    "description": "Fixture delete_maintenance_from_maintenance_window record"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/maintenance-windows/123/status/pages/123/maintenances/123"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerFeedback/2024-06-01/items/synthetic-conformance-value/reviews/trends",
+    "query": {
+      "marketplaceId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reviewTrends": {
+        "positiveTopics": [
+          {
+            "topic": "topic-fixture-1",
+            "trendMetrics": [],
+            "asin": "asin-fixture-1"
+          }
+        ]
+      }
+    }
+  }
+}

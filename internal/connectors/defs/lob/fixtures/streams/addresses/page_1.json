@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/addresses",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "adr_fixture_1",
+          "object": "address",
+          "description": "Fixture addresses 1",
+          "name": "Fixture One",
+          "company": "Example Co",
+          "email": "fixture1@example.com",
+          "phone": "5555550100",
+          "address_line1": "210 King St",
+          "address_line2": null,
+          "address_city": "San Francisco",
+          "address_state": "CA",
+          "address_zip": "94107",
+          "address_country": "US",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-01T00:00:00Z",
+          "deleted": false
+        },
+        {
+          "id": "adr_fixture_2",
+          "object": "address",
+          "description": "Fixture addresses 2",
+          "name": "Fixture Two",
+          "company": "Example Co",
+          "email": "fixture2@example.com",
+          "phone": "5555550101",
+          "address_line1": "220 King St",
+          "address_line2": "Suite 2",
+          "address_city": "San Francisco",
+          "address_state": "CA",
+          "address_zip": "94107",
+          "address_country": "US",
+          "date_created": "2026-01-02T00:00:00Z",
+          "date_modified": "2026-01-02T00:00:00Z",
+          "deleted": false
+        }
+      ],
+      "next_url": null,
+      "previous_url": null,
+      "count": 2
+    }
+  }
+}

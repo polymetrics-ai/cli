@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/org/privacy/aerial"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "accountId": "account_id_fixture",
+      "grantedBy": "granted_by_fixture",
+      "grantedDate": "2026-01-01T00:00:00Z",
+      "_links": {
+        "revoke": {
+          "hints": {
+            "allow": [
+              "DELETE"
+            ]
+          },
+          "href": "https://example.invalid/fixture",
+          "name": "name_fixture",
+          "templated": true,
+          "type": "type_fixture"
+        }
+      }
+    }
+  }
+}

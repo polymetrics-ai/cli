@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/performance/employees/synthetic-conformance-value/goals/synthetic-conformance-value/aggregate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "comments": [
+        {
+          "id": "fixture_id",
+          "authorUserId": 1001,
+          "canDelete": true,
+          "canEdit": true,
+          "createdAt": "2026-01-01T00:00:00Z",
+          "text": "fixture_value"
+        }
+      ]
+    }
+  }
+}

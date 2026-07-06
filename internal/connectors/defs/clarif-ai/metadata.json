@@ -1,0 +1,24 @@
+{
+  "name": "clarif-ai",
+  "display_name": "Clarif-ai",
+  "description": "Reads Clarifai applications, datasets, models, model versions, and workflows, and writes application/dataset lifecycle mutations, through the Clarifai v2 REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.clarifai.com/api-guide/api-overview",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Clarifai API read of application, dataset, model, and workflow metadata",
+    "write": "external mutation of Clarifai applications and datasets; delete_dataset is irreversible (deletes the dataset and all its inputs/annotations) and update_application's action=overwrite can replace application settings wholesale; every write ships with an explicit per-action risk string",
+    "approval": "required for update_application and delete_dataset (destructive or full-replace semantics); create_application and create_dataset are low-risk (additive only)"
+  }
+}

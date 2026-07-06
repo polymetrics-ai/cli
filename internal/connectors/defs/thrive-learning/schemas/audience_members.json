@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audience_members",
+  "type": "object",
+  "x-primary-key": ["audience_id", "userId"],
+  "required": ["audience_id", "userId"],
+  "properties": {
+    "audience_id": { "type": "string" },
+    "userId": { "type": ["string", "null"] },
+    "reference": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "alert_id": 123,
+    "note_id": 123,
+    "name": "Fixture update_alert_note",
+    "description": "Fixture update_alert_note record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ams/alerts/123/notes/123",
+    "body": {
+      "name": "Fixture update_alert_note",
+      "description": "Fixture update_alert_note record"
+    }
+  }
+}

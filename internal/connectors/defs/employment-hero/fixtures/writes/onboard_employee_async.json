@@ -1,0 +1,22 @@
+{
+  "record": {
+    "first_name": "Alan",
+    "last_name": "Turing",
+    "user_attributes": {
+      "email": "alan@example.com"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/organisations/synthetic-conformance-value/employees/polling_onboard_employee",
+    "body": {
+      "first_name": "Alan"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "onboard_employee_async_fixture_response"
+    }
+  }
+}

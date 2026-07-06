@@ -1,0 +1,19 @@
+{
+  "record": {
+    "goal_id": "goal_fixture_1",
+    "health_status": "on_track"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/organisations/synthetic-conformance-value/goals/goal_fixture_1/update_status",
+    "body": {
+      "health_status": "on_track"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_goal_health_status_fixture_response"
+    }
+  }
+}

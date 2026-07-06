@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Sentry projects, issues, error events, and releases through the Sentry REST API (read-only).
 
+ICON
+  asset: icons/sentry.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.sentry.io/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  organization
+  page_size
+  project
+  auth_token (secret)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(), id(), isBookmarked(), isPublic(), name(), platform(), slug(), status()
+  issues:
+    primary key: id
+    cursor: lastSeen
+    fields: count(), culprit(), firstSeen(), id(), lastSeen(), level(), shortId(), status(), title(), type(), userCount()
+  events:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(), eventID(), groupID(), id(), message(), platform(), title(), type()
+  releases:
+    primary key: version
+    cursor: dateCreated
+    fields: dateCreated(), dateReleased(), ref(), shortVersion(), status(), url(), version()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Sentry API read of project, issue, event, and release data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

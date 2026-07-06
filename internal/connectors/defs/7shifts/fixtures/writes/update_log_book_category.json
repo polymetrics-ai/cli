@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": 1001,
+    "name": "fixture name",
+    "col": 1001,
+    "sort": 1001,
+    "field_type": "dollar",
+    "notify": true,
+    "required": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/company/synthetic-conformance-value/log_book_categories/1001",
+    "body": {
+      "name": "fixture name",
+      "col": 1001,
+      "sort": 1001,
+      "field_type": "dollar",
+      "notify": true,
+      "required": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

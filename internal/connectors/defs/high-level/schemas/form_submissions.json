@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "form_submissions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "createdAt",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "formId": { "type": ["string", "null"] },
+    "contactId": { "type": ["string", "null"] },
+    "locationId": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] }
+  }
+}

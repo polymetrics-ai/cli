@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/letters",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "ltr_fixture_1",
+          "object": "letter",
+          "description": "Fixture letters 1",
+          "url": "https://lob-assets.example.com/ltr_fixture_1.pdf",
+          "carrier": "USPS",
+          "status": "processed",
+          "send_date": "2026-01-01T00:00:00Z",
+          "expected_delivery_date": "2026-01-10",
+          "date_created": "2026-01-01T00:00:00Z",
+          "date_modified": "2026-01-01T00:00:00Z",
+          "deleted": false
+        }
+      ],
+      "next_url": null,
+      "previous_url": null,
+      "count": 1
+    }
+  }
+}

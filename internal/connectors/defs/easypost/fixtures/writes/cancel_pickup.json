@@ -1,0 +1,5 @@
+{
+  "record": { "id": "pickup_fixture_1" },
+  "expect": { "method": "POST", "path": "/pickups/pickup_fixture_1/cancel" },
+  "response": { "status": 200, "body": { "id": "pickup_fixture_1", "object": "Pickup", "status": "canceled" } }
+}

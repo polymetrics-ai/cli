@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "positions",
+  "type": "object",
+  "x-primary-key": ["id", "account_id"],
+  "required": ["id", "account_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": "string" },
+    "asset_id": { "type": ["string", "null"] },
+    "symbol": { "type": ["string", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "asset_class": { "type": ["string", "null"] },
+    "avg_entry_price": { "type": ["string", "null"] },
+    "qty": { "type": ["string", "null"] },
+    "qty_available": { "type": ["string", "null"] },
+    "side": { "type": ["string", "null"] },
+    "market_value": { "type": ["string", "null"] },
+    "cost_basis": { "type": ["string", "null"] },
+    "unrealized_pl": { "type": ["string", "null"] },
+    "unrealized_plpc": { "type": ["string", "null"] },
+    "current_price": { "type": ["string", "null"] },
+    "lastday_price": { "type": ["string", "null"] },
+    "change_today": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "bamboo-hr",
+  "display_name": "BambooHR",
+  "description": "Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.",
+  "integration_type": "api",
+  "docs_url": "https://documentation.bamboohr.com/reference/getting-started",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "external BambooHR API reads across HR, applicant tracking, benefits, payroll-adjacent, time off, training, goals, and metadata resources",
+    "write": "creates, updates, assigns, approves, or deletes BambooHR HR records according to the selected reverse-ETL action",
+    "approval": "reverse ETL writes require plan preview and approval token"
+  }
+}

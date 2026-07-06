@@ -1,0 +1,8 @@
+{
+  "record": { "userId": "11111111-1111-1111-1111-111111111111", "userRole": "Admin" },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/users/update",
+    "body": { "userId": "11111111-1111-1111-1111-111111111111", "userRole": "Admin" }
+  }
+}

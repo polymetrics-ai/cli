@@ -1,0 +1,914 @@
+{
+  "api": "Greenhouse Harvest API (https://harvest.greenhouse.io/v1)",
+  "docs": "https://developers.greenhouse.io/harvest.html",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B expansion generated from 129 distinct Harvest v1 method/path entries in the official Greenhouse documentation. GET endpoints are streams; non-deprecated JSON-compatible mutations are write actions; deprecated/deactivated v1 mutations are explicitly excluded.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/candidates/{candidate_id}/activity_feed",
+      "covered_by": {
+        "stream": "activity_feed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications",
+      "covered_by": {
+        "stream": "applications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}",
+      "covered_by": {
+        "stream": "application"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/applications/{application_id}",
+      "covered_by": {
+        "write": "delete_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/applications",
+      "covered_by": {
+        "write": "add_application_to_candidate_prospect"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/applications/{application_id}",
+      "covered_by": {
+        "write": "update_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/advance",
+      "covered_by": {
+        "write": "advance_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/transfer_to_job",
+      "covered_by": {
+        "write": "move_application_different_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/move",
+      "covered_by": {
+        "write": "move_application_same_job"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/applications/{application_id}/convert_prospect",
+      "covered_by": {
+        "write": "convert_prospect_to_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/attachments",
+      "covered_by": {
+        "write": "add_attachment_to_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/hire",
+      "covered_by": {
+        "write": "hire_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/reject",
+      "covered_by": {
+        "write": "reject_application"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/applications/{application_id}/reject",
+      "covered_by": {
+        "write": "update_rejection_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_id}/unreject",
+      "covered_by": {
+        "write": "unreject_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/approval_flows",
+      "covered_by": {
+        "stream": "approvals_for_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/approval_flows/{approval_flow_id}",
+      "covered_by": {
+        "stream": "approval_flow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/approval_flows/{approval_flow_id}/request_approvals",
+      "covered_by": {
+        "write": "request_approvals"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/pending_approvals",
+      "covered_by": {
+        "stream": "pending_approvals_for_user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/approver_groups/{approver_group_id}/replace_approvers",
+      "covered_by": {
+        "write": "replace_an_approver_in_an_approver_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/jobs/{job_id}/approval_flows",
+      "covered_by": {
+        "write": "create_or_replace_an_approval_flow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{candidate_id}",
+      "covered_by": {
+        "stream": "candidate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}",
+      "covered_by": {
+        "write": "delete_candidate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/candidates/{candidate_id}",
+      "covered_by": {
+        "write": "edit_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/attachments",
+      "covered_by": {
+        "write": "add_attachment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates",
+      "covered_by": {
+        "write": "add_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/activity_feed/notes",
+      "covered_by": {
+        "write": "add_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/activity_feed/emails",
+      "covered_by": {
+        "write": "add_e_mail_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/educations",
+      "covered_by": {
+        "write": "add_education"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/educations/{education_id}",
+      "covered_by": {
+        "write": "remove_education_from_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{candidate_id}/employments",
+      "covered_by": {
+        "write": "add_employment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/employments/{employment_id}",
+      "covered_by": {
+        "write": "remove_employment_from_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/prospects",
+      "covered_by": {
+        "write": "add_prospect"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/candidates/{candidate_id}/anonymize?fields={field_names}",
+      "covered_by": {
+        "write": "anonymize_candidate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/candidates/merge",
+      "covered_by": {
+        "write": "merge_candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/close_reasons",
+      "covered_by": {
+        "stream": "close_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_fields/{field_type}",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/{custom_field_id}",
+      "covered_by": {
+        "stream": "custom_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_fields",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/custom_fields/{custom_field_id}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_fields/{custom_field_id}",
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "covered_by": {
+        "stream": "custom_field_options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "covered_by": {
+        "write": "create_custom_field_options"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "covered_by": {
+        "write": "update_custom_field_options"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_field/{custom_field_id}/custom_field_options",
+      "covered_by": {
+        "write": "remove_custom_field_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/question_sets",
+      "covered_by": {
+        "stream": "demographic_question_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/question_sets/{demographic_question_set_id}",
+      "covered_by": {
+        "stream": "demographic_question_set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/questions",
+      "covered_by": {
+        "stream": "demographic_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/question_sets/{demographic_question_set_id}/questions",
+      "covered_by": {
+        "stream": "demographic_questions_for_demographic_question_set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/questions/{demographic_question_id}",
+      "covered_by": {
+        "stream": "demographic_question"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/answer_options",
+      "covered_by": {
+        "stream": "demographic_answer_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/questions/{demographic_question_id}/answer_options",
+      "covered_by": {
+        "stream": "demographic_answer_options_for_demographic_question"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/answer_options/{demographic_answer_option_id}",
+      "covered_by": {
+        "stream": "demographic_answer_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/answers",
+      "covered_by": {
+        "stream": "demographic_answers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/demographics/answers",
+      "covered_by": {
+        "stream": "demographic_answers_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/demographics/answers/{demographic_answer_id}",
+      "covered_by": {
+        "stream": "demographic_answer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments/{department_id}",
+      "covered_by": {
+        "stream": "department"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/departments/{department_id}",
+      "covered_by": {
+        "write": "edit_department"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/departments",
+      "covered_by": {
+        "write": "add_department"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/degrees",
+      "covered_by": {
+        "stream": "degrees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/disciplines",
+      "covered_by": {
+        "stream": "disciplines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/schools",
+      "covered_by": {
+        "stream": "schools"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/eeoc",
+      "covered_by": {
+        "stream": "eeoc"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/eeoc",
+      "covered_by": {
+        "stream": "eeoc_data_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_templates",
+      "covered_by": {
+        "stream": "email_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_templates/{email_template_id}",
+      "covered_by": {
+        "stream": "email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/openings",
+      "covered_by": {
+        "stream": "job_openings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/openings/{opening_id}",
+      "covered_by": {
+        "stream": "opening_for_job"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/jobs/{job_id}/openings",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/jobs/{job_id}/openings/{opening_id}",
+      "covered_by": {
+        "write": "edit_openings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs/{job_id}/openings",
+      "covered_by": {
+        "write": "create_new_openings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job_posts",
+      "covered_by": {
+        "stream": "job_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job_posts/{job_post_id}",
+      "covered_by": {
+        "stream": "job_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/job_posts",
+      "covered_by": {
+        "stream": "job_posts_for_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/job_post",
+      "covered_by": {
+        "stream": "job_post_for_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job_posts/{job_post_id}/custom_locations",
+      "covered_by": {
+        "stream": "custom_locations_for_job_post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job_stages",
+      "covered_by": {
+        "stream": "job_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/stages",
+      "covered_by": {
+        "stream": "job_stages_for_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job_stages/{job_stage_id}",
+      "covered_by": {
+        "stream": "job_stage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}",
+      "covered_by": {
+        "stream": "job"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/jobs/{job_id}",
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs",
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{job_id}/hiring_team",
+      "covered_by": {
+        "stream": "hiring_team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/jobs/{job_id}/hiring_team",
+      "covered_by": {
+        "write": "replace_hiring_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs/{job_id}/hiring_team",
+      "covered_by": {
+        "write": "add_hiring_team_members"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/jobs/{job_id}/hiring_team",
+      "covered_by": {
+        "write": "remove_hiring_team_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers",
+      "covered_by": {
+        "stream": "offers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/offers",
+      "covered_by": {
+        "stream": "offers_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/offers/current_offer",
+      "covered_by": {
+        "stream": "current_offer_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers/{offer_id}",
+      "covered_by": {
+        "stream": "offer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/applications/{application_id}/offers/current_offer",
+      "covered_by": {
+        "write": "update_current_offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offices",
+      "covered_by": {
+        "stream": "offices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offices/{office_id}",
+      "covered_by": {
+        "stream": "office"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/offices/{office_id}",
+      "covered_by": {
+        "write": "edit_office"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offices",
+      "covered_by": {
+        "write": "add_office"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prospect_pools",
+      "covered_by": {
+        "stream": "prospect_pools"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prospect_pools/{prospect_pool_id}",
+      "covered_by": {
+        "stream": "prospect_pool"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rejection_reasons",
+      "covered_by": {
+        "stream": "rejection_reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_interviews",
+      "covered_by": {
+        "stream": "scheduled_interviews"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/scheduled_interviews",
+      "covered_by": {
+        "stream": "scheduled_interviews_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "covered_by": {
+        "stream": "scheduled_interview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scheduled_interviews",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Greenhouse marks this Harvest v1 mutation as deprecated or deactivated in the public documentation."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scheduled_interviews/{scheduled_interview_id}",
+      "covered_by": {
+        "write": "remove_scheduled_interview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scorecards",
+      "covered_by": {
+        "stream": "scorecards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{application_id}/scorecards",
+      "covered_by": {
+        "stream": "scorecards_for_application"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scorecards/{scorecard_id}",
+      "covered_by": {
+        "stream": "scorecard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/candidate",
+      "covered_by": {
+        "stream": "candidate_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags/candidate",
+      "covered_by": {
+        "write": "add_candidate_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{candidate_id}/tags",
+      "covered_by": {
+        "stream": "tags_applied_to_candidate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/candidates/{candidate_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "remove_tag_from_candidate"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/candidates/{candidate_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "add_a_candidate_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking_links/{token}",
+      "covered_by": {
+        "stream": "tracking_link_data_for_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/permission_level",
+      "covered_by": {
+        "write": "change_user_permission_level"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "covered_by": {
+        "write": "add_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{user_id}/email_addresses",
+      "covered_by": {
+        "write": "add_e_mail_address_to_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/permissions/jobs",
+      "covered_by": {
+        "stream": "job_permissions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}/permissions/jobs",
+      "covered_by": {
+        "write": "remove_a_job_permission"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}/permissions/jobs",
+      "covered_by": {
+        "write": "add_a_job_permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "covered_by": {
+        "stream": "future_job_permissions"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "covered_by": {
+        "write": "remove_a_future_job_permission"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}/permissions/future_jobs",
+      "covered_by": {
+        "write": "add_a_future_job_permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_roles",
+      "covered_by": {
+        "stream": "user_roles"
+      }
+    }
+  ]
+}

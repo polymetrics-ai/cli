@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/study/synthetic-conformance-value/role"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_embedded": {
+        "roles": [
+          {
+            "id": "role_fixture_1",
+            "name": "Monitor",
+            "description": "Study monitor",
+            "permissions": {
+              "add": false,
+              "view": true,
+              "edit": false,
+              "delete": false,
+              "lock": false,
+              "query": true,
+              "export": true,
+              "randomization_read": false,
+              "sign": false,
+              "email_addresses": false,
+              "randomization_write": false,
+              "sdv": true,
+              "survey_send": false,
+              "survey_view": true
+            }
+          }
+        ]
+      },
+      "page": 1,
+      "page_count": 1
+    }
+  }
+}

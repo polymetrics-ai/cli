@@ -1,0 +1,5 @@
+{
+  "record": { "id": 501 },
+  "expect": { "method": "DELETE", "path": "/notes/501" },
+  "response": { "status": 200, "body": { "success": true, "data": { "id": 501 } } }
+}

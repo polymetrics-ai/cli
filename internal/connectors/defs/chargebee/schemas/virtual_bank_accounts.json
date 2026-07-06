@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "virtual_bank_accounts",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bank_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "account_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gateway": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gateway_account_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "updated_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Unix seconds."
+    },
+    "deleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "updated_at"
+}

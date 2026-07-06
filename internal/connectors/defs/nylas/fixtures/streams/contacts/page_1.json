@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/v3/grants/synthetic-conformance-value/contacts", "query": { "limit": "synthetic-conformance-value" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "request_id": "req_fixture_1",
+      "data": [
+        {
+          "id": "contact_fixture_1",
+          "grant_id": "me",
+          "object": "contact",
+          "given_name": "Fixture1",
+          "surname": "Example",
+          "company_name": "Example Inc",
+          "job_title": "Engineer",
+          "emails": [{ "email": "fixture1@example.com", "type": "work" }],
+          "phone_numbers": [],
+          "source": "address_book"
+        }
+      ],
+      "next_cursor": ""
+    }
+  }
+}

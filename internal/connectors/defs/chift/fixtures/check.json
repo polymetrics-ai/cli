@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/consumers", "query": { "size": "1" } },
+  "response": {
+    "status": 200,
+    "body": [
+      { "consumerid": "con_fixture_check", "name": "Fixture Check Co", "email": "fixture-check@example.com", "phone": "", "redirect_url": "https://example.com/redirect", "active": true, "created_on": "2026-01-01T00:00:00Z" }
+    ]
+  }
+}

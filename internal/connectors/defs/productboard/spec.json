@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Productboard Connection Specification",
+  "type": "object",
+  "required": ["access_token"],
+  "properties": {
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Productboard API access token, sent as 'Authorization: Bearer <access_token>'. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.productboard.com",
+      "description": "Productboard API base URL override for tests or proxies."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound sent as 'updated_since' on the first request of every stream, when set. Not a stateful incremental cursor: legacy applies this as a static, config-driven filter only, with no per-sync cursor advancement."
+    }
+  }
+}

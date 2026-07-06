@@ -1,0 +1,17 @@
+{
+  "record": {
+    "expense_id": "expense_fixture_1",
+    "memo": "Fixture memo updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/expenses/card/expense_fixture_1",
+    "body": {
+      "memo": "Fixture memo updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

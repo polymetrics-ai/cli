@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/entries",
+    "query": {
+      "limit": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 101,
+      "entries": [
+        {
+          "API": "Fixture API 101",
+          "Description": "Deterministic fixture entry 101",
+          "Auth": "apiKey",
+          "HTTPS": true,
+          "Cors": "yes",
+          "Link": "https://example.com/fixture/101",
+          "Category": "Development"
+        }
+      ]
+    }
+  }
+}

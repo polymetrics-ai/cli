@@ -1,0 +1,78 @@
+{
+  "api": "PostHog REST API (https://app.posthog.com or a self-hosted base_url)",
+  "docs": "https://posthog.com/docs/api",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 migration: the 2 legacy-parity read streams only (events, persons); legacy is read-only (Write: false) and the full PostHog surface (insights, cohorts, feature flags, dashboards, actions, annotations) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/events/",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/persons/",
+      "covered_by": {
+        "stream": "persons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/insights/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/insights/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/cohorts/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/cohorts/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/feature_flags/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/feature_flags/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/dashboards/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/dashboards/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/actions/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/actions/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/{project_id}/annotations/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/api/projects/{project_id}/annotations/ is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/capture/",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/capture/ is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    }
+  ]
+}

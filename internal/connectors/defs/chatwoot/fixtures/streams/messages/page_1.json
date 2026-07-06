@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations",
+    "query": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "meta": {
+          "mine_count": 0,
+          "unassigned_count": 0,
+          "assigned_count": 2,
+          "all_count": 2
+        },
+        "payload": [
+          {
+            "id": 101,
+            "account_id": 1,
+            "uuid": "fixture-uuid-101",
+            "inbox_id": 1,
+            "status": "open"
+          },
+          {
+            "id": 102,
+            "account_id": 1,
+            "uuid": "fixture-uuid-102",
+            "inbox_id": 1,
+            "status": "open"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "sub_fixture_1",
+          "name": null,
+          "email": null,
+          "status": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "customer_id": "cus_fixture_1",
+          "plan_id": "plan_fixture_1",
+          "amount": 1000,
+          "currency": "USD"
+        }
+      ],
+      "pagination_metadata": {
+        "has_more": false
+      }
+    }
+  }
+}

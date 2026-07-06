@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversations",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "closed_at": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string"
+    },
+    "initial_channel": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "requester_id": {
+      "type": "string"
+    },
+    "requester_name": {
+      "type": "string"
+    },
+    "requester_email": {
+      "type": "string"
+    },
+    "total_duration": {
+      "type": "integer"
+    },
+    "handling_duration": {
+      "type": "integer"
+    },
+    "last_message_created_at": {
+      "type": "integer"
+    },
+    "originating_country": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

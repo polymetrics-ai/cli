@@ -1,0 +1,13 @@
+{
+  "record": {
+    "person_id": "person_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/people/person_fixture_1.json"
+  },
+  "response": {
+    "status": 202,
+    "body": {}
+  }
+}

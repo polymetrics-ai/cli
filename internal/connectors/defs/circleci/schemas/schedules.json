@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "schedules",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "updated-at",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "project-slug": { "type": ["string", "null"] },
+    "timetable": { "type": ["object", "null"] },
+    "parameters": { "type": ["object", "null"] },
+    "actor": { "type": ["object", "null"] },
+    "created-at": { "type": ["string", "null"] },
+    "updated-at": { "type": "string" }
+  }
+}

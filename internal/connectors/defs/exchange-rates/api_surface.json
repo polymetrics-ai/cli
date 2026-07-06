@@ -1,0 +1,14 @@
+{
+  "api": "exchangeratesapi.io v1 (https://api.exchangeratesapi.io/v1)",
+  "docs": "https://exchangeratesapi.io/documentation/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: exchangeratesapi.io's full documented v1 surface is exactly 6 read-only GET endpoints (symbols, latest, historical /{date}, convert, timeseries, fluctuation) and no write/mutation endpoints of any kind (it is a pure public FX-rate data API). 4 of the 6 are now covered: latest (already migrated), plus convert/timeseries/fluctuation newly added this pass -- all 3 are single-object JSON responses expressible via records.single_object exactly like latest, requiring only new spec.json config keys for their required from/to/amount or start_date/end_date query parameters (no engine gap). The remaining 2 (historical /{date}, symbols) stay excluded for the same genuine engine gaps identified in the prior review -- re-confirmed, not re-derived: historical iteration has no declarative per-call-varying-path looping primitive, and symbols' code->string map does not fit records.keyed_object (which requires map VALUES to themselves be objects). See docs.md Known limits for both.",
+  "endpoints": [
+    { "method": "GET", "path": "/latest", "covered_by": { "stream": "latest" } },
+    { "method": "GET", "path": "/{date}", "excluded": { "category": "out_of_scope", "reason": "date-by-date iteration over a start_date..end_date window within a single Read call has no declarative pagination/looping equivalent (not a body-token/page-number/offset shape, and fan_out's ids_from varies a discovered id list, not a computed date range); requires a StreamHook, forbidden in this JSON-only wave" } },
+    { "method": "GET", "path": "/symbols", "excluded": { "category": "out_of_scope", "reason": "the response is a {code: display_name} map that legacy explodes into one record per currency code; evaluated against the engine's records.keyed_object/key_field flatten (S4 engine mini-wave item 3) and confirmed NOT applicable -- recordsAtKeyed (read.go) requires every map value to itself decode as a JSON object and silently skips scalar values, so a code->string map would emit zero records. An ENGINE_GAP distinct from (narrower than) the one keyed_object already closes for appfigures' map-of-objects shape." } },
+    { "method": "GET", "path": "/convert", "covered_by": { "stream": "convert" } },
+    { "method": "GET", "path": "/timeseries", "covered_by": { "stream": "timeseries" } },
+    { "method": "GET", "path": "/fluctuation", "covered_by": { "stream": "fluctuation" } }
+  ]
+}

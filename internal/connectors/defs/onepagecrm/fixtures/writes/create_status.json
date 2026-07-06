@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_value",
+    "status": "fixture_value",
+    "text": "Fixture text",
+    "description": "Fixture text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/statuses",
+    "body": {
+      "id": "fixture_value",
+      "status": "fixture_value",
+      "text": "Fixture text",
+      "description": "Fixture text"
+    }
+  }
+}

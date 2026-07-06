@@ -1,0 +1,23 @@
+{
+  "name": "flexmail",
+  "display_name": "Flexmail",
+  "description": "Reads Flexmail contacts, custom fields, interests, segments, and sources through the Flexmail REST API.",
+  "integration_type": "api",
+  "docs_url": "https://api.flexmail.eu/documentation/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 500
+  },
+  "risk": {
+    "read": "external Flexmail API read of contact and marketing-list data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

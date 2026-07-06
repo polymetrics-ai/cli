@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "fam_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/item_families/fam_fixture_1/delete"
+  }
+}

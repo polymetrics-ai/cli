@@ -1,0 +1,21 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "subscriptions": {
+      "description": "Synthetic update_a_subscription fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscriptions/subscription_id_fixture",
+    "body": {
+      "subscriptions": {
+        "description": "Synthetic update_a_subscription fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

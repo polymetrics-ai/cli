@@ -1,0 +1,1017 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/domains",
+    "query": {
+      "skip": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_count": 101,
+      "items": [
+        {
+          "name": "fixture-1.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-1.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-2.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-2.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-3.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-3.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-4.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-4.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-5.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-5.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-6.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-6.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-7.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-7.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-8.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-8.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-9.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-9.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-10.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-10.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-11.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-11.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-12.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-12.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-13.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-13.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-14.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-14.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-15.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-15.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-16.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-16.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-17.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-17.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-18.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-18.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-19.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-19.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-20.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-20.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-21.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-21.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-22.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-22.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-23.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-23.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-24.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-24.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-25.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-25.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-26.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-26.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-27.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-27.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-28.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-28.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-29.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-29.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-30.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-30.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-31.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-31.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-32.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-32.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-33.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-33.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-34.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-34.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-35.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-35.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-36.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-36.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-37.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-37.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-38.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-38.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-39.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-39.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-40.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-40.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-41.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-41.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-42.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-42.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-43.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-43.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-44.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-44.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-45.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-45.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-46.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-46.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-47.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-47.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-48.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-48.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-49.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-49.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-50.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-50.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-51.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-51.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-52.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-52.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-53.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-53.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-54.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-54.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-55.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-55.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-56.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-56.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-57.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-57.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-58.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-58.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-59.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-59.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-60.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-60.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-61.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-61.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-62.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-62.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-63.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-63.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-64.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-64.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-65.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-65.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-66.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-66.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-67.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-67.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-68.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-68.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-69.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-69.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-70.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-70.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-71.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-71.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-72.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-72.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-73.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-73.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-74.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-74.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-75.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-75.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-76.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-76.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-77.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-77.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-78.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-78.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-79.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-79.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-80.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-80.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-81.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-81.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-82.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-82.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-83.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-83.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-84.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-84.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-85.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-85.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-86.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-86.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-87.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-87.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-88.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-88.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-89.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-89.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-90.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-90.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-91.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-91.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-92.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-92.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-93.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-93.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-94.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-94.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-95.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-95.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-96.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-96.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-97.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-97.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-98.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-98.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-99.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-99.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        },
+        {
+          "name": "fixture-100.example.com",
+          "state": "active",
+          "type": "custom",
+          "is_disabled": false,
+          "smtp_login": "postmaster@fixture-100.example.com",
+          "spam_action": "disabled",
+          "wildcard": false,
+          "created_at": "Thu, 01 Jan 2026 00:00:00 GMT"
+        }
+      ]
+    }
+  }
+}

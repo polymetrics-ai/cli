@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EmailOctopus Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "EmailOctopus API key, sent as the api_key query parameter on every request. Never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://emailoctopus.com/api/1.6",
+      "description": "EmailOctopus API base URL. Defaults to the production endpoint; override for test proxies."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "EmailOctopus list ID to read contacts from; required only for the list_contacts stream, substituted into /lists/<list_id>/contacts."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

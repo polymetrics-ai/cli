@@ -1,0 +1,29 @@
+{
+  "api": "Feishu / Lark legacy connector hook surface",
+  "docs": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview",
+  "reviewed_at": "2026-07-04",
+  "scope": "Tier-2 quarantine migration for the legacy feishu connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/feishu, which delegates to internal/connectors/feishu until the human-gated wave 6 cutover.",
+  "endpoints": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/feishu records read path",
+      "covered_by": {
+        "stream": "records"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/feishu tables read path",
+      "covered_by": {
+        "stream": "tables"
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/feishu fields read path",
+      "covered_by": {
+        "stream": "fields"
+      }
+    }
+  ]
+}

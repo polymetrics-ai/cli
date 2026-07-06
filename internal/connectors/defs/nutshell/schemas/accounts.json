@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "accounts",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modifiedTime",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["integer", "null"] },
+    "entityType": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "industryId": { "type": ["integer", "null"] },
+    "accountTypeId": { "type": ["integer", "null"] },
+    "url": { "type": ["string", "null"] },
+    "isHotLead": { "type": ["boolean", "null"] },
+    "createdTime": { "type": ["string", "null"] },
+    "modifiedTime": { "type": ["string", "null"] }
+  }
+}

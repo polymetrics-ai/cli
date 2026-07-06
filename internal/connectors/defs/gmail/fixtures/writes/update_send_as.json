@@ -1,0 +1,19 @@
+{
+  "record": {
+    "sendAsEmail": "fixture-alias@example.com",
+    "displayName": "Fixture Alias Updated",
+    "isDefault": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/synthetic-conformance-value/settings/sendAs/fixture-alias@example.com",
+    "body": {
+      "displayName": "Fixture Alias Updated",
+      "isDefault": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "sendAsEmail": "fixture-alias@example.com", "displayName": "Fixture Alias Updated", "isDefault": true }
+  }
+}

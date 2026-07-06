@@ -1,0 +1,20 @@
+{
+  "record": {
+    "uuid": "client_fixture_1",
+    "name": "Fixture Client 1 Updated"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/clients/client_fixture_1",
+    "body": {
+      "name": "Fixture Client 1 Updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "uuid": "client_fixture_1",
+      "name": "Fixture Client 1 Updated"
+    }
+  }
+}

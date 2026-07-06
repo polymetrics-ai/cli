@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "containers",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": ["string", "integer"] },
+    "_object": { "type": ["string", "null"] },
+    "container_number": { "type": ["string", "null"] },
+    "container_type": { "type": ["string", "null"] },
+    "container_size": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

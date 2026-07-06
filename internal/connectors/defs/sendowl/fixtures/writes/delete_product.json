@@ -1,0 +1,7 @@
+{
+  "record": { "id": "101" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/products/101"
+  }
+}

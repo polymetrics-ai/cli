@@ -1,0 +1,13 @@
+{
+  "api": "Elasticsearch REST API (https://www.elastic.co/docs/reference/elasticsearch)",
+  "docs": "https://www.elastic.co/docs/reference/elasticsearch",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave4 migration: the 2 legacy-parity read streams only (indices, documents); legacy elasticsearch is read-only (Write always returns ErrUnsupportedOperation) despite the catalog labeling this connector destination-elasticsearch/source-elasticsearch -- read internal/connectors/elasticsearch/elasticsearch.go (ground truth): Capabilities.Write is false and Write() unconditionally returns connectors.ErrUnsupportedOperation. The full Elasticsearch REST surface (index/document mutation, cluster/node admin, search DSL beyond a plain from/size scan) is out of scope until a write-capable Pass B, if ever approved.",
+  "endpoints": [
+    { "method": "GET", "path": "/_cat/indices", "covered_by": { "stream": "indices" } },
+    { "method": "GET", "path": "/{index}/_search", "covered_by": { "stream": "documents" } },
+    { "method": "GET", "path": "/", "excluded": { "category": "non_data_endpoint", "reason": "cluster info/health root, used only by base.check, not a syncable object stream" } },
+    { "method": "PUT", "path": "/{index}/_doc/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy connector is read-only; no write action exists to migrate" } },
+    { "method": "DELETE", "path": "/{index}", "excluded": { "category": "destructive_admin", "reason": "index deletion; not implemented by legacy, not a read stream" } }
+  ]
+}

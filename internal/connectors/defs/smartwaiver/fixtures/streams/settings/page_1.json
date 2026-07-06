@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v4/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "version": 4,
+      "id": "fixture-req-id-settings-0001",
+      "ts": "2026-01-01T00:00:00Z",
+      "type": "settings",
+      "settings": {
+        "console": {
+          "staticExpiration": "never",
+          "rollingExpiration": "1M"
+        }
+      }
+    }
+  }
+}

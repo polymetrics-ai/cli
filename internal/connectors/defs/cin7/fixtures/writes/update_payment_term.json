@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ID": "term_fixture_1",
+    "Name": "Fixture 15 days",
+    "Duration": 15,
+    "IsActive": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ref/paymentterm",
+    "body": {
+      "ID": "term_fixture_1",
+      "Name": "Fixture 15 days",
+      "Duration": 15,
+      "IsActive": true
+    }
+  }
+}

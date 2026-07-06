@@ -1,0 +1,57 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Intercom-Version": "{{ config.api_version }}"
+    },
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "starting_after",
+      "token_path": "pages.next.starting_after"
+    },
+    "check": { "method": "GET", "path": "/admins" },
+    "error_map": [
+      { "status": 401, "hint": "intercom access_token is missing or invalid; re-run pm credentials add intercom" },
+      { "status": 429, "class": "rate_limited", "hint": "intercom rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "query": { "per_page": "50" },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "companies",
+      "path": "/companies",
+      "query": { "per_page": "50" },
+      "records": { "path": "data" },
+      "schema": "schemas/companies.json"
+    },
+    {
+      "name": "conversations",
+      "path": "/conversations",
+      "query": { "per_page": "50" },
+      "records": { "path": "data" },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "admins",
+      "path": "/admins",
+      "records": { "path": "data" },
+      "schema": "schemas/admins.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": { "path": "data" },
+      "schema": "schemas/tags.json"
+    }
+  ]
+}

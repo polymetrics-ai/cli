@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/recruitment/positions", "query": { "page": "1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 901, "title": "Fixture CTO" }
+      ],
+      "meta": { "current_page": 1, "next_page": null, "previous_page": null, "total_pages": 1, "per_page": 2, "total_entries": 1 }
+    }
+  }
+}

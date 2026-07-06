@@ -1,0 +1,22 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_query", "param": "secret", "value": "{{ secrets.secret }}" }
+    ],
+    "error_map": [
+      { "status": 401, "hint": "zapier-supported-storage secret is missing or invalid; re-run pm credentials add zapier-supported-storage" },
+      { "status": 403, "hint": "zapier-supported-storage account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "zapier-supported-storage rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "records",
+      "path": "/api/records",
+      "records": { "path": "records" },
+      "schema": "schemas/records.json"
+    }
+  ]
+}

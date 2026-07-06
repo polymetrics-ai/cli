@@ -1,0 +1,20 @@
+{
+  "name": "xkcd",
+  "display_name": "XKCD",
+  "description": "Reads public XKCD comic metadata from the JSON API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://xkcd.com/json.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "public XKCD comic metadata read, no credentials involved",
+    "approval": "none; read-only public API"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "pm_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_sources/pm_fixture_1/delete"
+  }
+}

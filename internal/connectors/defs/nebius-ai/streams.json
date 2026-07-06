@@ -1,0 +1,404 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/v1/models"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "nebius-ai api_key is missing or invalid; re-run pm credentials add nebius-ai"
+      },
+      {
+        "status": 403,
+        "class": "permission_denied",
+        "hint": "nebius-ai token lacks permission for this endpoint or project"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "nebius-ai rate limit exceeded; retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "models",
+      "path": "/v1/models",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/models.json"
+    },
+    {
+      "name": "files",
+      "path": "/v1/files",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/files.json"
+    },
+    {
+      "name": "batches",
+      "path": "/v1/batches",
+      "query": {
+        "limit": "{{ config.limit }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/batches.json"
+    },
+    {
+      "name": "files_file_id",
+      "path": "/v1/files/{{ config.file_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/files_file_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "files_file_id_content",
+      "path": "/v1/files/{{ config.file_id }}/content",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/files_file_id_content.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "files_file_id_link",
+      "path": "/v1/files/{{ config.file_id }}/link",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/files_file_id_link.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fine_tuning_jobs",
+      "path": "/v1/fine_tuning/jobs",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/fine_tuning_jobs.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "fine_tuning_jobs_job_id",
+      "path": "/v1/fine_tuning/jobs/{{ config.job_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/fine_tuning_jobs_job_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fine_tuning_jobs_job_id_events",
+      "path": "/v1/fine_tuning/jobs/{{ config.job_id }}/events",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/fine_tuning_jobs_job_id_events.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "fine_tuning_jobs_job_id_checkpoints",
+      "path": "/v1/fine_tuning/jobs/{{ config.job_id }}/checkpoints",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/fine_tuning_jobs_job_id_checkpoints.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "fine_tuning_jobs_job_id_checkpoints_checkpoint_id",
+      "path": "/v1/fine_tuning/jobs/{{ config.job_id }}/checkpoints/{{ config.checkpoint_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/fine_tuning_jobs_job_id_checkpoints_checkpoint_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fine_tuning_models_spec_draft",
+      "path": "/v1/fine_tuning/models/spec-draft",
+      "records": {
+        "path": "models"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/fine_tuning_models_spec_draft.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "fine_tuning_models_spec_draft_2",
+      "path": "/fine_tuning/models/spec-draft",
+      "records": {
+        "path": "models"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/fine_tuning_models_spec_draft_2.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dedicated_endpoints_templates",
+      "path": "/v0/dedicated_endpoints/templates",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/dedicated_endpoints_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "dedicated_endpoints",
+      "path": "/v0/dedicated_endpoints",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/dedicated_endpoints.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "datasets",
+      "path": "/v1/datasets",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/datasets.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "datasets_dataset_id",
+      "path": "/v1/datasets/{{ config.dataset_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_dataset_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "datasets_dataset_id_query_templates",
+      "path": "/v1/datasets/{{ config.dataset_id }}/query_templates",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_dataset_id_query_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "datasets_dataset_id_content",
+      "path": "/v1/datasets/{{ config.dataset_id }}/content",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "limit",
+        "offset_param": "offset",
+        "page_size": 20
+      },
+      "schema": "schemas/datasets_dataset_id_content.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "datasets_dataset_id_export",
+      "path": "/v1/datasets/{{ config.dataset_id }}/export",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_dataset_id_export.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}",
+        "format": "jsonl"
+      }
+    },
+    {
+      "name": "datasets_uploads_upload_id_parts",
+      "path": "/v1/datasets/uploads/{{ config.upload_id }}/parts",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_uploads_upload_id_parts.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "datasets_uploads_upload_id",
+      "path": "/v1/datasets/uploads/{{ config.upload_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/datasets_uploads_upload_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "operations",
+      "path": "/v1/operations",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/operations.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "operations_operation_id",
+      "path": "/v1/operations/{{ config.operation_id }}",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/operations_operation_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "operations_operation_id_results",
+      "path": "/v1/operations/{{ config.operation_id }}/results",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id",
+        "stop_path": "has_more"
+      },
+      "schema": "schemas/operations_operation_id_results.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": "{{ config.limit }}"
+      }
+    },
+    {
+      "name": "operations_operation_id_errors",
+      "path": "/v1/operations/{{ config.operation_id }}/errors",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/operations_operation_id_errors.json",
+      "projection": "passthrough"
+    }
+  ]
+}

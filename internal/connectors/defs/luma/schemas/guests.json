@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "guests",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_first_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_last_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approval_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "check_in_qr_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "eth_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "invited_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "joined_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "registered_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "registration_answers": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "solana_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "utm_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_tickets": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

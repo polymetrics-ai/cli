@@ -1,0 +1,7 @@
+{
+  "record": { "index_name": "fixture_index_1", "hitsPerPage": 20 },
+  "expect": {
+    "method": "PUT",
+    "path": "/1/indexes/fixture_index_1/settings"
+  }
+}

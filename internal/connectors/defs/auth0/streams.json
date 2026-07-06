@@ -1,0 +1,94 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/oauth/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "extra_params": { "audience": "{{ config.audience }}" },
+        "when": "{{ secrets.client_id }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "per_page",
+      "start_page": 0,
+      "page_size": 50
+    },
+    "check": { "method": "GET", "path": "/api/v2/clients" },
+    "error_map": [
+      { "status": 401, "hint": "auth0 access_token is missing or invalid; re-run pm credentials add auth0" },
+      { "status": 429, "class": "rate_limited", "hint": "auth0 rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "users",
+      "path": "/api/v2/users",
+      "query": { "include_totals": "true" },
+      "records": { "path": "users" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "clients",
+      "path": "/api/v2/clients",
+      "query": { "include_totals": "true" },
+      "records": { "path": "clients" },
+      "schema": "schemas/clients.json"
+    },
+    {
+      "name": "connections",
+      "path": "/api/v2/connections",
+      "query": { "include_totals": "true" },
+      "records": { "path": "connections" },
+      "schema": "schemas/connections.json"
+    },
+    {
+      "name": "roles",
+      "path": "/api/v2/roles",
+      "query": { "include_totals": "true" },
+      "records": { "path": "roles" },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "organizations",
+      "path": "/api/v2/organizations",
+      "query": { "include_totals": "true" },
+      "records": { "path": "organizations" },
+      "schema": "schemas/organizations.json"
+    },
+    {
+      "name": "role_users",
+      "path": "/api/v2/roles/{{ fanout.id }}/users",
+      "query": { "include_totals": "true" },
+      "records": { "path": "users" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/roles", "records_path": "roles", "id_field": "id" }
+        },
+        "into": { "path_var": "role_id" },
+        "stamp_field": "role_id"
+      },
+      "schema": "schemas/role_users.json"
+    },
+    {
+      "name": "organization_members",
+      "path": "/api/v2/organizations/{{ fanout.id }}/members",
+      "query": { "include_totals": "true" },
+      "records": { "path": "members" },
+      "fan_out": {
+        "ids_from": {
+          "request": { "path": "/api/v2/organizations", "records_path": "organizations", "id_field": "id" }
+        },
+        "into": { "path_var": "organization_id" },
+        "stamp_field": "organization_id"
+      },
+      "schema": "schemas/organization_members.json"
+    }
+  ]
+}

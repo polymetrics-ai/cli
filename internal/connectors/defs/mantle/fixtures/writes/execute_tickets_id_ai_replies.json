@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "draft": "fixture",
+    "adjustment": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tickets/id_fixture/ai-replies",
+    "body": {
+      "draft": "fixture",
+      "adjustment": "fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

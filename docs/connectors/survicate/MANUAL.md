@@ -10,22 +10,43 @@ SYNOPSIS
   pm credentials add <name> --connector survicate [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Survicate surveys through the Survicate API. Read-only.
+  Reads Survicate surveys, survey questions, responses, and respondent attributes, and manages GDPR personal-data requests, through the Survicate Data Export API v2. Read-only.
+
+ICON
+  asset: icons/survicate.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developers.survicate.com/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  surveys:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), id(), name(), updated_at()
+  survey_questions:
+    primary key: survey_id, id
+    fields: answer_choices(), columns(), fields(), id(), introduction(), question(), survey_id(), type()
+  responses:
+    primary key: uuid
+    fields: attributes(), collected_at(), device_type(), language(), operating_system(), questions(), respondent_uuid(), survey_id(), url(), uuid()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Survicate API read of survey, response, and respondent data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

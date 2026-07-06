@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "forms",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "workspaceId": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "numberOfSubmissions": { "type": ["integer", "null"] },
+    "isClosed": { "type": ["boolean", "null"] },
+    "createdAt": { "type": ["string", "null"], "format": "date-time" },
+    "updatedAt": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

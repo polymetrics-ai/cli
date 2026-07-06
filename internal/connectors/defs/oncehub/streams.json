@@ -1,0 +1,59 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "API-Key", "value": "{{ secrets.api_key }}" }
+    ],
+    "pagination": {
+      "type": "link_header"
+    },
+    "check": { "method": "GET", "path": "/v2/users", "query": { "limit": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "oncehub api_key is missing or invalid; re-run pm credentials add oncehub" },
+      { "status": 429, "class": "rate_limited", "hint": "oncehub rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "bookings",
+      "path": "/v2/bookings",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "incremental": {
+        "cursor_field": "last_updated_time",
+        "request_param": "last_updated_time.gt",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/bookings.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/v2/contacts",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "booking_pages",
+      "path": "/v2/booking-pages",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/booking_pages.json"
+    },
+    {
+      "name": "users",
+      "path": "/v2/users",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "event_types",
+      "path": "/v2/event-types",
+      "query": { "limit": "{{ config.page_size }}" },
+      "records": { "path": "data" },
+      "schema": "schemas/event_types.json"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "commentHtml": "<p>Fixture</p>",
+    "appEventId": "app_event_id_fixture",
+    "dealEventId": "deal_event_id_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/timeline_comments/id_fixture",
+    "body": {
+      "commentHtml": "<p>Fixture</p>",
+      "appEventId": "app_event_id_fixture",
+      "dealEventId": "deal_event_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

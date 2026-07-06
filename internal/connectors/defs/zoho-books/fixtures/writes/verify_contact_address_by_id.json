@@ -1,0 +1,17 @@
+{
+  "record": {
+    "contact_id": "synthetic-conformance-value",
+    "address_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/synthetic-conformance-value/address/synthetic-conformance-value/verify"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": 0,
+      "message": "success"
+    }
+  }
+}

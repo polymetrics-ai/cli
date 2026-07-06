@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "alert_preferences",
+  "type": "object",
+  "properties": {
+    "send_email": { "type": ["boolean", "null"] },
+    "send_push": { "type": ["boolean", "null"] },
+    "frequency": { "type": ["string", "null"] },
+    "notification_frequency": { "type": ["string", "null"] },
+    "shared": { "type": ["boolean", "null"] }
+  }
+}

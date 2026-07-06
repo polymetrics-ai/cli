@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "send_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "campaign_title": { "type": ["string", "null"] },
+    "type": { "type": ["string", "null"] },
+    "list_id": { "type": ["string", "null"] },
+    "emails_sent": { "type": ["integer", "null"] },
+    "abuse_reports": { "type": ["integer", "null"] },
+    "unsubscribed": { "type": ["integer", "null"] },
+    "send_time": { "type": ["string", "null"] }
+  }
+}

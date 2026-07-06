@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/advertisers/synthetic-conformance-value/reports/creative",
+    "query": { "endDate": "2099-12-31", "timezone": "UTC", "dateType": "transaction" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "advertiserId": 42,
+        "advertiserName": "Fixture Advertiser",
+        "publisherId": 7,
+        "publisherName": "Fixture Publisher",
+        "creativeId": 501,
+        "creativeName": "Fixture Banner",
+        "tagName": "fixture-tag",
+        "region": "GB",
+        "currency": "GBP",
+        "impressions": 500,
+        "clicks": 50,
+        "pendingNo": 1,
+        "pendingValue": 10.0,
+        "pendingComm": 1.0,
+        "confirmedNo": 4,
+        "confirmedValue": 40.0,
+        "confirmedComm": 4.0,
+        "bonusNo": 0,
+        "bonusValue": 0.0,
+        "bonusComm": 0.0,
+        "declinedNo": 0,
+        "declinedValue": 0.0,
+        "declinedComm": 0.0,
+        "totalNo": 5,
+        "totalValue": 50.0,
+        "totalComm": 5.0
+      }
+    ]
+  }
+}

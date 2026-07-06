@@ -1,0 +1,107 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.base_url }}/authenticate/",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}"
+      }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": { "method": "GET", "path": "/listings" },
+    "error_map": [
+      { "status": 401, "hint": "clazar client_id/client_secret are missing or invalid; re-run pm credentials add clazar" },
+      { "status": 403, "hint": "clazar account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "clazar rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "buyers",
+      "path": "/buyers",
+      "query": { "response_format": "common" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "last_modified_at",
+        "request_param": "last_modified_at_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/buyers.json"
+    },
+    {
+      "name": "listings",
+      "path": "/listings",
+      "query": { "response_format": "common" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "last_modified_at",
+        "request_param": "last_modified_at_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/listings.json"
+    },
+    {
+      "name": "contracts",
+      "path": "/contracts",
+      "query": { "response_format": "common" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "last_modified_at",
+        "request_param": "last_modified_at_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/contracts.json"
+    },
+    {
+      "name": "opportunities",
+      "path": "/opportunities",
+      "query": { "response_format": "common" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "last_modified_at",
+        "request_param": "last_modified_at_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/opportunities.json"
+    },
+    {
+      "name": "private_offers",
+      "path": "/private_offers",
+      "query": { "response_format": "common" },
+      "records": { "path": "results" },
+      "incremental": {
+        "cursor_field": "last_modified_at",
+        "request_param": "last_modified_at_after",
+        "start_config_key": "start_date"
+      },
+      "schema": "schemas/private_offers.json"
+    },
+    {
+      "name": "reseller_offers",
+      "path": "/reseller_offers",
+      "records": { "path": "results" },
+      "schema": "schemas/reseller_offers.json"
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "results" },
+      "schema": "schemas/contacts.json"
+    },
+    {
+      "name": "metering",
+      "path": "/metering",
+      "records": { "path": "results" },
+      "schema": "schemas/metering.json"
+    }
+  ]
+}

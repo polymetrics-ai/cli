@@ -1,0 +1,26 @@
+{
+  "request": { "method": "GET", "path": "/activities", "query": { "size": "1000", "from": "0" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "count": 1,
+      "activity": [
+        {
+          "jnid": "activities_fixture_1",
+          "type": "activity",
+          "note": "fixture activity note",
+          "record_type_name": "activities",
+          "customer": "cust_fixture_1",
+          "created_by_name": "Fixture User",
+          "sales_rep_name": "Fixture Rep",
+          "source": "fixture",
+          "is_active": true,
+          "is_archived": false,
+          "is_status_change": false,
+          "date_created": 1767225601,
+          "date_updated": 1767225601
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "description": "fixture_value",
+    "benefitType": "health",
+    "benefitVendorId": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/benefit/company_benefit/fixture_id",
+    "body": {
+      "description": "fixture_value",
+      "benefitType": "health",
+      "benefitVendorId": "fixture_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

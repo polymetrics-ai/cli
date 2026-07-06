@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value/teams/synthetic-conformance-value/projects/synthetic-conformance-value/members",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "limit": 50,
+      "size": 1,
+      "data": [
+        {
+          "id": "id_fixture",
+          "email": "fixture@example.invalid",
+          "role": "owner",
+          "type": "project_member"
+        }
+      ],
+      "type": "cursor-list"
+    }
+  }
+}

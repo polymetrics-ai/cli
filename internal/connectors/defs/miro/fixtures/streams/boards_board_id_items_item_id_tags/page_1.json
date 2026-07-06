@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/boards/synthetic-conformance-value/items/synthetic-conformance-value/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "fillColor": "red",
+          "id": "id_fixture",
+          "title": "title_fixture",
+          "type": "type_fixture"
+        }
+      ]
+    }
+  }
+}

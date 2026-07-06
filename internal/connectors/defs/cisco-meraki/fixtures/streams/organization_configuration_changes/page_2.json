@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/org_1/configurationChanges",
+    "query": { "perPage": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "ts": "2026-01-01T00:00:00Z",
+        "adminName": "Fixture Admin",
+        "adminEmail": "fixture.admin@example.com",
+        "adminId": "admin_fixture_1",
+        "networkName": "Fixture Network 1",
+        "networkId": "N_fixture_1",
+        "networkUrl": "https://dashboard.meraki.com/n/fixture_1",
+        "ssidName": null,
+        "ssidNumber": null,
+        "page": "General settings",
+        "label": "Name",
+        "oldValue": "Old Name",
+        "newValue": "New Name",
+        "client": null
+      }
+    ]
+  }
+}

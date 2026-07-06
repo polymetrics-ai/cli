@@ -1,0 +1,41 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "check": { "method": "GET", "path": "/{{ config.page_id }}", "query": { "fields": "id,name" } },
+    "error_map": [
+      { "status": 401, "hint": "facebook-pages access token is missing or invalid; re-run pm credentials add facebook-pages" },
+      { "status": 403, "hint": "facebook-pages token lacks access for this page" },
+      { "status": 429, "class": "rate_limited", "hint": "facebook Graph API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "page",
+      "path": "/{{ config.page_id }}",
+      "query": { "fields": "id,name,category,fan_count,link" },
+      "records": { "path": "", "single_object": true },
+      "schema": "schemas/page.json"
+    },
+    {
+      "name": "posts",
+      "path": "/{{ config.page_id }}/posts",
+      "query": {
+        "fields": "id,message,created_time,updated_time,permalink_url",
+        "limit": { "template": "{{ config.page_size }}", "default": "100" }
+      },
+      "records": { "path": "data" },
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "paging.next"
+      },
+      "incremental": {
+        "cursor_field": "updated_time"
+      },
+      "schema": "schemas/posts.json"
+    }
+  ]
+}

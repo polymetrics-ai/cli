@@ -1,0 +1,24 @@
+{
+  "record": {
+    "short_description": "Fixture incident",
+    "description": "Created by fixture write test",
+    "priority": "3",
+    "urgency": "3",
+    "impact": "3"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/now/table/incident",
+    "body": {
+      "short_description": "Fixture incident",
+      "description": "Created by fixture write test",
+      "priority": "3",
+      "urgency": "3",
+      "impact": "3"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": { "result": { "sys_id": "incident_fixture_1", "number": "INC0000099" } }
+  }
+}

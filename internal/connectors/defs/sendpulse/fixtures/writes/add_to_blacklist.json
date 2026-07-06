@@ -1,0 +1,10 @@
+{
+  "record": {
+    "emails": "YmxvY2tlZEBleGFtcGxlLmNvbQ==",
+    "comment": "fixture suppression"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blacklist"
+  }
+}

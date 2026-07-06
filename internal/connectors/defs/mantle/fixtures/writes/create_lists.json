@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "fixture",
+    "description": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/lists",
+    "body": {
+      "name": "fixture",
+      "description": "fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

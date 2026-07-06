@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/cash-flow-statement/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "symbol": "synthetic-conformance-value",
+        "date": "2025-12-31",
+        "period": "FY",
+        "reportedCurrency": "USD",
+        "fiscalYear": "2025",
+        "fillingDate": "2026-02-01",
+        "acceptedDate": "2026-02-01T16:30:00.000Z",
+        "calendarYear": "2025",
+        "netIncome": 3000000000,
+        "operatingCashFlow": 4000000000,
+        "netCashProvidedByOperatingActivities": 4000000000,
+        "capitalExpenditure": -500000000,
+        "freeCashFlow": 3500000000,
+        "netChangeInCash": 200000000
+      }
+    ]
+  }
+}

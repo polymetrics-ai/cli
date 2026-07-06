@@ -1,0 +1,62 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/apps/synthetic-conformance-value/group-push/mappings",
+    "query": {
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "appConfig": {
+          "type": "ACTIVE_DIRECTORY"
+        },
+        "created": "2026-01-01T00:00:00Z",
+        "errorSummary": "error_summary_fixture",
+        "id": "id_fixture",
+        "lastPush": "2026-01-01T00:00:00Z",
+        "lastUpdated": "2026-01-01T00:00:00Z",
+        "sourceGroupId": "source_group_id_fixture",
+        "status": "ACTIVE",
+        "targetGroupId": "target_group_id_fixture",
+        "_links": {
+          "app": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "sourceGroup": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          },
+          "targetGroup": {
+            "hints": {
+              "allow": [
+                "DELETE"
+              ]
+            },
+            "href": "https://example.invalid/fixture",
+            "name": "name_fixture",
+            "templated": true,
+            "type": "type_fixture"
+          }
+        }
+      }
+    ]
+  }
+}

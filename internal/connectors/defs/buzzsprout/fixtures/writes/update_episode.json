@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": 1001,
+    "title": "Fixture Episode One (Updated)",
+    "private": false
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/synthetic-conformance-value/episodes/1001.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "title": "Fixture Episode One (Updated)",
+      "private": false
+    }
+  }
+}

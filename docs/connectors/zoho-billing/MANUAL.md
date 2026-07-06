@@ -12,20 +12,42 @@ SYNOPSIS
 DESCRIPTION
   Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billing REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  organization_id
+  access_token (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), display_name(), id(), name(), status(), updated_at(), updated_time()
+  subscriptions:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), status(), subscription_id(), updated_at(), updated_time()
+  invoices:
+    primary key: id
+    cursor: updated_at
+    fields: id(), invoice_id(), invoice_number(), name(), status(), updated_at(), updated_time()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoho Billing API read of customer and billing data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

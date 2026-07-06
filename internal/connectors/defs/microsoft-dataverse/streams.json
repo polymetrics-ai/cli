@@ -1,0 +1,92 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "OData-MaxVersion": "4.0",
+      "OData-Version": "4.0"
+    },
+    "auth": [
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}",
+        "when": "{{ config.token_url }}"
+      },
+      {
+        "mode": "oauth2_client_credentials",
+        "token_url": "{{ config.login_base_url }}/{{ secrets.tenant_id }}/oauth2/v2.0/token",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "scopes": "{{ config.scope }}"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/accounts",
+      "query": { "$top": "1" }
+    },
+    "error_map": [
+      { "status": 401, "hint": "microsoft-dataverse client_id/client_secret/tenant_id are missing or invalid; re-run pm credentials add microsoft-dataverse" },
+      { "status": 403, "hint": "microsoft-dataverse application lacks Dataverse security-role access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "microsoft-dataverse rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": { "path": "value" },
+      "schema": "schemas/accounts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's harvest/nextLink @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
+      }
+    },
+    {
+      "name": "contacts",
+      "path": "/contacts",
+      "records": { "path": "value" },
+      "schema": "schemas/contacts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's harvest/nextLink @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
+      }
+    },
+    {
+      "name": "leads",
+      "path": "/leads",
+      "records": { "path": "value" },
+      "schema": "schemas/leads.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's harvest/nextLink @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
+      }
+    },
+    {
+      "name": "opportunities",
+      "path": "/opportunities",
+      "records": { "path": "value" },
+      "schema": "schemas/opportunities.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's harvest/nextLink @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
+      }
+    },
+    {
+      "name": "systemusers",
+      "path": "/systemusers",
+      "records": { "path": "value" },
+      "schema": "schemas/systemusers.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "StreamHook-handled (hooks/microsoft-dataverse/hooks.go ports legacy's harvest/nextLink @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/hooks/microsoft-dataverse/hooks_test.go (TestReadStream_NextLinkPaginationFollowsAbsoluteURL, an httptest.Server-backed 2-page @odata.nextLink absolute-URL follow)."
+      }
+    }
+  ]
+}

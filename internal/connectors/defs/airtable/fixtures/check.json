@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/meta/bases" },
+  "response": {
+    "status": 200,
+    "body": {
+      "bases": [
+        { "id": "app_fixture_1", "name": "Fixture Base", "permissionLevel": "create" }
+      ]
+    }
+  }
+}

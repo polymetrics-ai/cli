@@ -1,0 +1,19 @@
+{
+  "record": {
+    "set": "set_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/choice-set-values",
+    "body": {
+      "set": "set_fixture",
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+    }
+  }
+}

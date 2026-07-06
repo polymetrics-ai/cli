@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "questions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "item_id": { "type": ["string", "null"], "description": "Stamped from the parent item id by fan_out." },
+    "type": { "type": ["string", "null"] },
+    "title": { "type": ["string", "null"] },
+    "kind": { "type": ["string", "null"] },
+    "lead": { "type": ["boolean", "null"] },
+    "created": { "type": ["string", "null"], "description": "Mapped from attributes.timestamps.created via computed_fields." },
+    "modified": { "type": ["string", "null"], "description": "Mapped from attributes.timestamps.modified via computed_fields." }
+  }
+}

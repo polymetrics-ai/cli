@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "social_comments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "account_id": { "type": ["string", "null"] },
+    "content_id": { "type": ["string", "null"] },
+    "platform": { "type": ["string", "null"] },
+    "text": { "type": ["string", "null"] },
+    "like_count": { "type": ["integer", "null"] },
+    "reply_count": { "type": ["integer", "null"] },
+    "commenter_username": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

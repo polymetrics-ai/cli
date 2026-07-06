@@ -1,0 +1,26 @@
+{
+  "record": {
+    "organization_id": "synthetic-conformance-value",
+    "source": {
+      "synthetic": true
+    },
+    "slug": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orgs/synthetic-conformance-value/openapi",
+    "body": {
+      "source": {
+        "synthetic": true
+      },
+      "slug": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "ok": true,
+      "id": "create_open_api_spec_fixture_1"
+    }
+  }
+}

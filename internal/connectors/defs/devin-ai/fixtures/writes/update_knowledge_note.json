@@ -1,0 +1,15 @@
+{
+  "record": {
+    "note_id": "note-fixture-1",
+    "name": "Updated fixture note",
+    "body": "Updated note body"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v3/organizations/synthetic-conformance-value/knowledge/notes/note-fixture-1",
+    "body": {
+      "name": "Updated fixture note",
+      "body": "Updated note body"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/agentPools/synthetic-conformance-value/updates/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "agentType": "AD",
+      "continueOnError": true,
+      "latestVersion": "latest_version_fixture",
+      "minimalSupportedVersion": "minimal_supported_version_fixture",
+      "poolId": "pool_id_fixture",
+      "poolName": "pool_name_fixture",
+      "releaseChannel": "BETA"
+    }
+  }
+}

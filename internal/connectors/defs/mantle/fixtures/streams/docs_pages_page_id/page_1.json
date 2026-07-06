@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/docs/pages/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "handle": "fixture",
+      "title": "fixture",
+      "path": "fixture",
+      "content": "fixture",
+      "seoTitle": "fixture",
+      "seoDescription": "fixture",
+      "openGraphImage": "fixture",
+      "depth": 1,
+      "displayOrder": 1,
+      "publishedAt": "2026-01-01T00:00:00Z",
+      "locale": "fixture",
+      "collection": {
+        "id": "id_fixture",
+        "title": "fixture"
+      },
+      "group": {
+        "id": "id_fixture",
+        "handle": "fixture",
+        "title": "fixture"
+      },
+      "children": [
+        {
+          "id": "id_fixture",
+          "handle": "fixture",
+          "title": "fixture",
+          "path": "fixture",
+          "depth": 1,
+          "displayOrder": 1,
+          "publishedAt": "2026-01-01T00:00:00Z",
+          "children": [
+            {
+              "id": "children_fixture_id"
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "id": "file_fixture_id"
+        }
+      ],
+      "faqs": [
+        {
+          "id": "id_fixture",
+          "status": "active",
+          "displayOrder": 1,
+          "question": "fixture",
+          "answer": "fixture",
+          "icon": "fixture",
+          "locale": "fixture",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "allLocales": [
+        {
+          "locale": "fixture",
+          "handle": "fixture",
+          "title": "fixture",
+          "path": "fixture",
+          "hasContent": true
+        }
+      ],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

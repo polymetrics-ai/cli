@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/legal_hold_policies",
+    "query": { "limit": "synthetic-conformance-value" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entries": [
+        {
+          "id": "legal_hold_policy_fixture_1",
+          "type": "legal_hold_policy",
+          "policy_name": "Fixture Legal Hold",
+          "description": "fixture description",
+          "status": "active",
+          "filter_started_at": "2026-01-01T00:00:00-08:00",
+          "filter_ended_at": null,
+          "assignment_counts": { "folder": 1, "file": 0, "file_version": 0 },
+          "created_by": { "id": "users_fixture_1", "type": "user" },
+          "created_at": "2026-01-01T00:00:00-08:00",
+          "modified_at": "2026-01-02T00:00:00-08:00"
+        }
+      ],
+      "limit": 100,
+      "next_marker": null
+    }
+  }
+}

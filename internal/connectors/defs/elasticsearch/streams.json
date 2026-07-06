@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "{{ config.endpoint }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "elasticsearch",
+        "value": "{{ config.api_key_id }}",
+        "when": "{{ config.api_key_id }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}",
+        "when": "{{ config.username }}"
+      },
+      { "mode": "none" }
+    ],
+    "check": { "method": "GET", "path": "/" },
+    "error_map": [
+      { "status": 401, "hint": "elasticsearch credentials are missing or invalid; re-run pm credentials add elasticsearch" },
+      { "status": 403, "hint": "elasticsearch user lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "elasticsearch rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "indices",
+      "path": "/_cat/indices",
+      "query": { "format": "json" },
+      "records": { "path": "" },
+      "schema": "schemas/indices.json"
+    },
+    {
+      "name": "documents",
+      "path": "/{{ config.index }}/_search",
+      "pagination": {
+        "type": "offset_limit",
+        "offset_param": "from",
+        "limit_param": "size",
+        "page_size": 100
+      },
+      "records": { "path": "hits.hits" },
+      "schema": "schemas/documents.json"
+    }
+  ]
+}

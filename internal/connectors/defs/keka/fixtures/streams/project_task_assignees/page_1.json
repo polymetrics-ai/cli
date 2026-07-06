@@ -1,0 +1,74 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/projects/{{ config.project_id }}/tasks/{{ config.task_id }}",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "projectId": "project_task_assignees_fixture_1",
+          "name": "Fixture project task assignees 1",
+          "description": "fixture_project_task_assignees_1",
+          "taskType": 1,
+          "taskBillingType": 1,
+          "assignedTo": [
+            {
+              "id": "project_task_assignees_fixture_1",
+              "employeeNumber": "FIX-1",
+              "employeeName": "Fixture project task assignees 1"
+            },
+            {
+              "id": "project_task_assignees_fixture_2",
+              "employeeNumber": "FIX-2",
+              "employeeName": "Fixture project task assignees 2"
+            }
+          ],
+          "startDate": "2026-01-01T00:00:00Z",
+          "endDate": "2026-01-01T00:00:00Z",
+          "estimatedHours": 139.5,
+          "id": "project_task_assignees_fixture_1"
+        },
+        {
+          "projectId": "project_task_assignees_fixture_2",
+          "name": "Fixture project task assignees 2",
+          "description": "fixture_project_task_assignees_2",
+          "taskType": 1,
+          "taskBillingType": 1,
+          "assignedTo": [
+            {
+              "id": "project_task_assignees_fixture_1",
+              "employeeNumber": "FIX-1",
+              "employeeName": "Fixture project task assignees 1"
+            },
+            {
+              "id": "project_task_assignees_fixture_2",
+              "employeeNumber": "FIX-2",
+              "employeeName": "Fixture project task assignees 2"
+            }
+          ],
+          "startDate": "2026-01-01T00:00:00Z",
+          "endDate": "2026-01-01T00:00:00Z",
+          "estimatedHours": 139.5,
+          "id": "project_task_assignees_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/project_task_assignees",
+      "lastPage": "https://example.invalid/keka/project_task_assignees",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

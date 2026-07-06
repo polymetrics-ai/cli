@@ -1,0 +1,16 @@
+{
+  "record": {
+    "workspace_id": "ws_fixture_1",
+    "feature_flag_name": "fixture_flag",
+    "comment": "archiving via fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/internal/api/v2/splits/ws/ws_fixture_1/fixture_flag/archive",
+    "body": { "comment": "archiving via fixture" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "name": "fixture_flag" }
+  }
+}

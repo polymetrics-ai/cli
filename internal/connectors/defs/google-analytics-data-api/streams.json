@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "daily_active_users",
+      "method": "GET",
+      "path": "/__legacy_hook/daily_active_users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/daily_active_users.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "website_overview",
+      "method": "GET",
+      "path": "/__legacy_hook/website_overview",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/website_overview.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "traffic_sources",
+      "method": "GET",
+      "path": "/__legacy_hook/traffic_sources",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/traffic_sources.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "devices",
+      "method": "GET",
+      "path": "/__legacy_hook/devices",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/devices.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "pages",
+      "method": "GET",
+      "path": "/__legacy_hook/pages",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/pages.json",
+      "incremental": {
+        "cursor_field": "date",
+        "client_filtered": true
+      }
+    }
+  ]
+}

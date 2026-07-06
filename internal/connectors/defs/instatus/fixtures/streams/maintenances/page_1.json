@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/synthetic-conformance-value/maintenances",
+    "query": { "page": "1", "per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "maintenance_fixture_1",
+        "name": "Fixture Maintenance",
+        "status": "scheduled",
+        "start": "2026-01-03T00:00:00Z",
+        "duration": 60,
+        "autoStart": true,
+        "autoEnd": true
+      }
+    ]
+  }
+}

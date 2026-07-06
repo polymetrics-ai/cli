@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/events/synthetic-conformance-value/ticket_classes/", "query": { "expand": "venue,ticket_classes", "continuation": "ticket_class_cursor_2" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagination": { "has_more_items": false, "continuation": "ticket_class_cursor_2" },
+      "ticket_classes": [
+        {
+          "id": "ticket_class_fixture_3",
+          "event_id": "event_fixture_1",
+          "name": { "text": "Free Pass", "html": "<p>Free Pass</p>" },
+          "description": { "text": "Complimentary entry", "html": "<p>Complimentary entry</p>" },
+          "cost": { "display": "$0.00", "value": 0, "currency": "USD" },
+          "fee": { "display": "$0.00", "value": 0, "currency": "USD" },
+          "quantity_total": 10,
+          "quantity_sold": 5,
+          "free": true,
+          "hidden": true,
+          "on_sale_status": "HIDDEN"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "template_id": 123,
+    "name": "Fixture enable_pir_template",
+    "description": "Fixture enable_pir_template record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/post-incident-reports/templates/123",
+    "body": {
+      "name": "Fixture enable_pir_template",
+      "description": "Fixture enable_pir_template record"
+    }
+  }
+}

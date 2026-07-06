@@ -1,0 +1,516 @@
+{
+  "actions": [
+    {
+      "name": "create_supplier",
+      "kind": "create",
+      "method": "POST",
+      "path": "/suppliers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "address_line_1": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" },
+          "post_code": { "type": "string" },
+          "currency_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_supplier",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/suppliers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_supplier",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/suppliers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_warehouse",
+      "kind": "create",
+      "method": "POST",
+      "path": "/warehouses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "address_line_1": { "type": "string" },
+          "city": { "type": "string" },
+          "country": { "type": "string" },
+          "post_code": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_warehouse",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/warehouses/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_delivery_method",
+      "kind": "create",
+      "method": "POST",
+      "path": "/delivery_methods",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "cost": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_delivery_method",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/delivery_methods/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "cost": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_delivery_method",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/delivery_methods/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "colour": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "type_code"],
+        "properties": {
+          "name": { "type": "string" },
+          "type_code": { "type": "string" },
+          "currency_code": { "type": "string" },
+          "short_name": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_channel",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/channels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_channel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/channels/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_product_property",
+      "kind": "create",
+      "method": "POST",
+      "path": "/product_properties",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["customer"],
+        "properties": {
+          "customer": {
+            "type": "object",
+            "required": ["email", "customer_type"],
+            "properties": {
+              "email": { "type": "string" },
+              "customer_type": { "type": "string", "enum": ["retail", "business"] },
+              "phone": { "type": "string" },
+              "mobile": { "type": "string" },
+              "notes": { "type": "string" },
+              "billing_address_attributes": {
+                "type": "object",
+                "properties": {
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" },
+                  "company": { "type": "string" },
+                  "address1": { "type": "string" },
+                  "address2": { "type": "string" },
+                  "city": { "type": "string" },
+                  "country": { "type": "string" },
+                  "zip": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "customer"],
+        "properties": {
+          "id": { "type": "integer" },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "email": { "type": "string" },
+              "phone": { "type": "string" },
+              "notes": { "type": "string" },
+              "billing_address_attributes": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/products",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["product"],
+        "properties": {
+          "product": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "notes": { "type": "string" },
+              "product_brand_id": { "type": "string" },
+              "product_variants_attributes": { "type": "array" },
+              "images_attributes": { "type": "array" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "product"],
+        "properties": {
+          "id": { "type": "integer" },
+          "product": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "notes": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "delete_product",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/products/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "destructive external mutation; approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/orders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["order"],
+        "properties": {
+          "order": {
+            "type": "object",
+            "properties": {
+              "channel_id": { "type": "integer" },
+              "customer_id": { "type": "integer" },
+              "deliver_to_id": { "type": "integer" },
+              "due_date": { "type": "string" },
+              "number": { "type": "string" },
+              "send_notification_email": { "type": "boolean" },
+              "line_items_attributes": { "type": "array" },
+              "delivery_method_id": { "type": "integer" },
+              "payment_attributes": { "type": "object" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "update_order",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/orders/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "order"],
+        "properties": {
+          "id": { "type": "integer" },
+          "order": {
+            "type": "object",
+            "properties": {
+              "due_date": { "type": "string" },
+              "number": { "type": "string" },
+              "line_items_attributes": { "type": "array" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "cancel_order",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/orders/{{ record.id }}/cancel",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "risk": "external mutation (cancels an order); approval required"
+    },
+    {
+      "name": "create_payment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/payments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["amount", "payment_attributes"],
+        "properties": {
+          "amount": { "type": "number" },
+          "payment_attributes": {
+            "type": "object",
+            "required": ["order_id"],
+            "properties": {
+              "payment_type": { "type": "string" },
+              "order_id": { "type": "number" },
+              "reference_number": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "external mutation; approval required"
+    },
+    {
+      "name": "create_shipment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["carrier_id", "notify_customer", "update_remote_order", "allocation_id", "order_id"],
+        "properties": {
+          "shipment": {
+            "type": "object",
+            "properties": {
+              "tracking_number_attributes": {
+                "type": "object",
+                "required": ["tracking_number"],
+                "properties": {
+                  "tracking_number": { "type": "string" }
+                }
+              }
+            }
+          },
+          "carrier_id": { "type": "number" },
+          "notify_customer": { "type": "boolean" },
+          "update_remote_order": { "type": "boolean" },
+          "allocation_id": { "type": "number" },
+          "order_id": { "type": "number" }
+        }
+      },
+      "risk": "external mutation; approval required"
+    }
+  ]
+}

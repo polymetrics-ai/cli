@@ -1,0 +1,31 @@
+{
+  "api": "Acuity Scheduling API v1 (https://acuityscheduling.com/api/v1)",
+  "docs": "https://developers.acuityscheduling.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: fetched Acuity's documentation index (developers.acuityscheduling.com/llms.txt) plus every individual reference page (each embeds a per-operation OpenAPI 3.1 fragment with exact request/response schemas) for every documented endpoint. Covered: 8 read streams (appointments, clients, appointment_types, calendars, forms plus 3 new: products, orders, labels) and 5 write actions (create_appointment, update_appointment, cancel_appointment, create_block, create_certificate). The write correction from the wave2 surface: cancellation is a PUT (not DELETE) to /appointments/{id}/cancel per Acuity's own reference page (put-appointments-id-cancel) -- the prior entry's method was wrong and is fixed here.",
+  "endpoints": [
+    { "method": "GET", "path": "/api/v1/appointments", "covered_by": { "stream": "appointments" } },
+    { "method": "GET", "path": "/api/v1/appointments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-appointment detail subsumed by the appointments list stream" } },
+    { "method": "POST", "path": "/api/v1/appointments", "covered_by": { "write": "create_appointment" } },
+    { "method": "PUT", "path": "/api/v1/appointments/{id}", "covered_by": { "write": "update_appointment" } },
+    { "method": "PUT", "path": "/api/v1/appointments/{id}/cancel", "covered_by": { "write": "cancel_appointment" } },
+    { "method": "PUT", "path": "/api/v1/appointments/{id}/reschedule", "excluded": { "category": "out_of_scope", "reason": "reschedule is a distinct lifecycle action from update_appointment (date/time only, different validation path); deferred pending real usage demand beyond the covered create/update/cancel set" } },
+    { "method": "GET", "path": "/api/v1/appointments/{id}/payments", "excluded": { "category": "out_of_scope", "reason": "per-appointment payment-transaction sub-resource with no top-level list endpoint of its own; would require per-appointment fan_out this pass does not scope" } },
+    { "method": "GET", "path": "/api/v1/clients", "covered_by": { "stream": "clients" } },
+    { "method": "GET", "path": "/api/v1/appointment-types", "covered_by": { "stream": "appointment_types" } },
+    { "method": "GET", "path": "/api/v1/calendars", "covered_by": { "stream": "calendars" } },
+    { "method": "POST", "path": "/api/v1/calendars", "excluded": { "category": "requires_elevated_scope", "reason": "creates a new staff calendar/seat on the account, which is a billable-seat administrative action beyond ordinary API-key scope" } },
+    { "method": "GET", "path": "/api/v1/forms", "covered_by": { "stream": "forms" } },
+    { "method": "GET", "path": "/api/v1/products", "covered_by": { "stream": "products" } },
+    { "method": "GET", "path": "/api/v1/orders", "covered_by": { "stream": "orders" } },
+    { "method": "GET", "path": "/api/v1/labels", "covered_by": { "stream": "labels" } },
+    { "method": "POST", "path": "/api/v1/blocks", "covered_by": { "write": "create_block" } },
+    { "method": "GET", "path": "/api/v1/blocks/{id}", "excluded": { "category": "out_of_scope", "reason": "Acuity documents no GET /blocks list endpoint, only get-by-id; there is no catalog list to build a read stream from without a separate id source" } },
+    { "method": "DELETE", "path": "/api/v1/blocks/{id}", "excluded": { "category": "destructive_admin", "reason": "removes a blocked-off calendar time range, potentially re-opening it to client bookings" } },
+    { "method": "POST", "path": "/api/v1/certificates", "covered_by": { "write": "create_certificate" } },
+    { "method": "GET", "path": "/api/v1/availability/times", "excluded": { "category": "out_of_scope", "reason": "computed availability slots for a given appointment type/date are a derived scheduling-UI query, not a syncable catalog object with a stable id" } },
+    { "method": "GET", "path": "/api/v1/availability/dates", "excluded": { "category": "out_of_scope", "reason": "computed available-dates-in-a-month query; same derived-data reasoning as availability/times" } },
+    { "method": "GET", "path": "/api/v1/availability/classes", "excluded": { "category": "out_of_scope", "reason": "computed class-availability query for group-class appointment types; same derived-data reasoning as availability/times" } },
+    { "method": "GET", "path": "/api/v1/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-account metadata (business name/timezone), not syncable catalog data" } }
+  ]
+}

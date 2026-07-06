@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping/v2/carrierAccountFormInputs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "linkableCarriersList": [
+        {
+          "carrierId": "carrierId-fixture-1",
+          "linkableAccountTypes": []
+        }
+      ]
+    }
+  }
+}

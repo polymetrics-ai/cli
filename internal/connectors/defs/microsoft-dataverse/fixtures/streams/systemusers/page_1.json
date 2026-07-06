@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/systemusers", "query": { "$top": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "value": [
+        { "systemuserid": "fixture_user_1", "fullname": "Fixture User 1", "internalemailaddress": "fixture1@example.com", "createdon": "2026-01-01T00:00:00Z", "modifiedon": "2026-01-01T00:00:00Z" }
+      ]
+    }
+  }
+}

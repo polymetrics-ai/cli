@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "customers",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "x-cursor-field": "customer-since",
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "external_id": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "email": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "customer-since": { "type": ["string", "null"] },
+    "company": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "city": { "type": ["string", "null"] },
+    "currency": { "type": ["string", "null"] },
+    "mrr": { "type": ["integer", "null"] },
+    "arr": { "type": ["integer", "null"] },
+    "billing-system-type": { "type": ["string", "null"] }
+  }
+}

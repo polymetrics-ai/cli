@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/synthetic-conformance-value", "query": { "fields": "id,name" } },
+  "response": {
+    "status": 200,
+    "body": { "id": "page_fixture", "name": "Fixture Page" }
+  }
+}

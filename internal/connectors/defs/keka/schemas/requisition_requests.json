@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "requisition_requests",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requisitionFor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jobNumber": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "department": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subDepartment": {
+      "type": [
+        "null"
+      ]
+    },
+    "requestedBy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requestedOn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locations": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isPriority": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "budget": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "openPositions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "hired": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "requisitionTypes": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "toBeReplaced": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "jobType": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "targetHiringDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isArchived": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "additionalComments": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "additionalFields": {
+      "type": [
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

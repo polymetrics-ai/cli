@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/workspaces/synthetic-conformance-value/tags" },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 5,
+        "workspace_id": 9,
+        "name": "billable",
+        "at": "2026-01-01T00:00:00Z",
+        "deleted_at": null,
+        "creator_id": 1
+      },
+      {
+        "id": 6,
+        "workspace_id": 9,
+        "name": "internal",
+        "at": "2026-01-02T00:00:00Z",
+        "deleted_at": null,
+        "creator_id": 1
+      }
+    ]
+  }
+}

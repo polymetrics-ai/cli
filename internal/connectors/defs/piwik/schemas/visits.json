@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Piwik Visit",
+  "type": "object",
+  "x-primary-key": ["visit_id"],
+  "x-cursor-field": "last_action_at",
+  "required": ["visit_id"],
+  "properties": {
+    "visit_id": { "type": "string" },
+    "visitor_id": { "type": ["string", "null"] },
+    "last_action_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value",
+    "query": {
+      "fields": "id,username,name,biography,website,profile_picture_url,followers_count,follows_count,media_count"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "17841400000000000",
+      "username": "fixture_account",
+      "name": "Fixture Account",
+      "biography": "deterministic fixture",
+      "website": "https://fixture.example.com",
+      "profile_picture_url": "https://fixture.example.com/pic.jpg",
+      "followers_count": 1200,
+      "follows_count": 300,
+      "media_count": 42
+    }
+  }
+}

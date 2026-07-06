@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/measures/search",
+    "query": {
+      "p": "1",
+      "ps": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "measures": [
+        {
+          "metric": "coverage",
+          "value": "87.5",
+          "component": "fixture-org_fixture-repo",
+          "bestValue": false
+        },
+        {
+          "metric": "bugs",
+          "value": "0",
+          "component": "fixture-org_fixture-repo",
+          "bestValue": true
+        }
+      ]
+    }
+  }
+}

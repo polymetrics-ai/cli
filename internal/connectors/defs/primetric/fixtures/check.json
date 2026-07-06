@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/employees" },
+  "response": {
+    "status": 200,
+    "body": { "data": [], "meta": { "current_page": 1, "total_pages": 0 } }
+  }
+}

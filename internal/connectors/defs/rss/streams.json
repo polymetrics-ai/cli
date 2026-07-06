@@ -1,0 +1,34 @@
+{
+  "base": {
+    "url": "{{ config.feed_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/rss+xml, application/xml, text/xml, */*"
+    },
+    "auth": [
+      { "mode": "none" }
+    ],
+    "pagination": { "type": "none" },
+    "check": { "method": "GET", "path": "" },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "items",
+      "method": "GET",
+      "path": "",
+      "records": { "path": "channel.item" },
+      "incremental": { "cursor_field": "published_at" },
+      "schema": "schemas/items.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies, connectorgen validate/engine/read.go has no XML support); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss" }
+    },
+    {
+      "name": "channel",
+      "method": "GET",
+      "path": "",
+      "records": { "path": "channel" },
+      "schema": "schemas/channel.json",
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss" }
+    }
+  ]
+}

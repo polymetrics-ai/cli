@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/lists", "query": { "page[size]": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "list_fixture_1", "type": "list", "attributes": { "name": "Fixture List 1", "created": "2026-01-01T00:00:00Z", "updated": "2026-01-01T00:00:00Z" } },
+        { "id": "list_fixture_2", "type": "list", "attributes": { "name": "Fixture List 2", "created": "2026-01-02T00:00:00Z", "updated": "2026-01-02T00:00:00Z" } }
+      ],
+      "links": { "next": null }
+    }
+  }
+}

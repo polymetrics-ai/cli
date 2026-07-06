@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/synthetic-conformance-value/records",
+    "query": {
+      "page": "2",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "r101",
+        "path": "/item/101",
+        "cells": [
+          {
+            "columnId": "name",
+            "value": "Fixture 101"
+          }
+        ]
+      }
+    ]
+  }
+}

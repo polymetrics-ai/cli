@@ -1,0 +1,135 @@
+{
+  "api": "Confluence Cloud REST API v2 (https://developer.atlassian.com/cloud/confluence/rest/v2/intro/)",
+  "docs": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion, re-reviewed against the live v2 resource-group documentation pages (api-group-page, api-group-space, api-group-label, api-group-comment, api-group-content-properties, api-group-custom-content, api-group-task, api-group-version, api-group-whiteboard, fetched 2026-07-04): 9 read streams (the 5 wave1-pilot streams retained, plus footer_comments/inline_comments/tasks/custom_content) and 6 write actions covering page/blogpost/comment lifecycle create+update. Every endpoint below is covered_by a stream/write action XOR excluded with a real category and reason (no blanket out_of_scope bucket). Exclusions favor breadth of real syncable content objects over: per-content-id-only sub-resource reads that have no global/cross-space list shape and would require a fan_out parent-id source this bundle does not have config for (ancestors, children, descendants, ~14 separate content-properties path families, ~12 separate version-history path families, smart-links/embeds, databases, folders, classification-levels, redactions, likes); single-item detail GETs that duplicate an already-covered list stream's record shape (duplicate_of); irreversible/destructive deletes with no reverse-ETL use case (destructive_admin); site/instance admin surfaces (admin-key, app-properties, data-policies, space-permissions, space-permission-transition, space-roles, user) that are configuration/access-control snapshots, not syncable business objects (non_data_endpoint); and whiteboard/database/folder/embed creation (canvas/binary/container-shaped payloads with no meaningful declarative record schema for this connector's purpose, out_of_scope).",
+  "endpoints": [
+    { "method": "GET", "path": "/wiki/api/v2/spaces", "covered_by": { "stream": "spaces" } },
+    { "method": "POST", "path": "/wiki/api/v2/spaces", "excluded": { "category": "out_of_scope", "reason": "space creation is a workspace-provisioning admin action, not a reverse-ETL record mutation; no update/delete counterpart exists in v2 either (spaces are immutable via this API once created)" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}", "excluded": { "category": "duplicate_of", "reason": "single-space detail; identical record shape to the spaces list stream's per-item object, already covered by that stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/pages", "excluded": { "category": "duplicate_of", "reason": "space-scoped page list; identical record shape to the global pages stream, itself filterable by space-id; not modeled as a second stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/blogposts", "excluded": { "category": "duplicate_of", "reason": "space-scoped blogpost list; identical record shape to the global blogposts stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/labels", "excluded": { "category": "duplicate_of", "reason": "space-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/content/labels", "excluded": { "category": "duplicate_of", "reason": "space-content-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/custom-content", "excluded": { "category": "duplicate_of", "reason": "space-scoped custom-content list; identical record shape to the global custom_content stream" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/pages", "covered_by": { "stream": "pages" } },
+    { "method": "POST", "path": "/wiki/api/v2/pages", "covered_by": { "write": "create_page" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}", "excluded": { "category": "duplicate_of", "reason": "single-page detail; identical record shape to the pages list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/pages/{id}", "covered_by": { "write": "update_page" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/pages/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible content delete, no reverse-ETL use case for this port" } },
+    { "method": "PUT", "path": "/wiki/api/v2/pages/{id}/title", "excluded": { "category": "out_of_scope", "reason": "narrow single-field title rename fully subsumed by update_page's whole-record PUT; a separate write action for one field of an already-covered mutation adds no capability" } },
+    { "method": "GET", "path": "/wiki/api/v2/labels/{id}/pages", "excluded": { "category": "duplicate_of", "reason": "label-scoped page list; identical record shape to the global pages stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/labels", "excluded": { "category": "duplicate_of", "reason": "page-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/custom-content", "excluded": { "category": "duplicate_of", "reason": "page-scoped custom-content list; identical record shape to the global custom_content stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/footer-comments", "excluded": { "category": "duplicate_of", "reason": "page-scoped footer-comment list; identical record shape to the global footer_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/inline-comments", "excluded": { "category": "duplicate_of", "reason": "page-scoped inline-comment list; identical record shape to the global inline_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "page-id-scoped content-property store has no global/cross-page list endpoint; enumerating it for every page would require a fan_out parent-id source this bundle does not declare config for" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "page-id-scoped version history has no global/cross-page list endpoint, same fan_out gap as content properties" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/ancestors", "excluded": { "category": "out_of_scope", "reason": "page-id-scoped hierarchy lookup, not an independently syncable object list" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/children", "excluded": { "category": "duplicate_of", "reason": "page-scoped child-page list; identical record shape to the global pages stream (children are pages)" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/descendants", "excluded": { "category": "duplicate_of", "reason": "page-scoped descendant-page list; identical record shape to the global pages stream" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/blogposts", "covered_by": { "stream": "blogposts" } },
+    { "method": "POST", "path": "/wiki/api/v2/blogposts", "covered_by": { "write": "create_blogpost" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-blogpost detail; identical record shape to the blogposts list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/blogposts/{id}", "excluded": { "category": "out_of_scope", "reason": "breadth-vs-cost triage: create_blogpost covers the primary lifecycle mutation for this probe run; the update counterpart is deferred, not silently forgotten" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/blogposts/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible content delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/labels/{id}/blogposts", "excluded": { "category": "duplicate_of", "reason": "label-scoped blogpost list; identical record shape to the global blogposts stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/labels", "excluded": { "category": "duplicate_of", "reason": "blogpost-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/custom-content", "excluded": { "category": "duplicate_of", "reason": "blogpost-scoped custom-content list; identical record shape to the global custom_content stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/footer-comments", "excluded": { "category": "duplicate_of", "reason": "blogpost-scoped footer-comment list; identical record shape to the global footer_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/inline-comments", "excluded": { "category": "duplicate_of", "reason": "blogpost-scoped inline-comment list; identical record shape to the global inline_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "blogpost-id-scoped content-property store has no global/cross-blogpost list endpoint, same fan_out gap as page properties" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "blogpost-id-scoped version history has no global/cross-blogpost list endpoint" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/labels", "covered_by": { "stream": "labels" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/attachments", "covered_by": { "stream": "attachments" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-attachment detail; identical record shape to the attachments list stream's per-item object, already covered by that stream" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/attachments/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible binary-content delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}/labels", "excluded": { "category": "duplicate_of", "reason": "attachment-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}/footer-comments", "excluded": { "category": "duplicate_of", "reason": "attachment-scoped footer-comment list; identical record shape to the global footer_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "attachment-id-scoped content-property store has no global/cross-attachment list endpoint" } },
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "attachment-id-scoped version history has no global/cross-attachment list endpoint" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/footer-comments", "covered_by": { "stream": "footer_comments" } },
+    { "method": "POST", "path": "/wiki/api/v2/footer-comments", "covered_by": { "write": "create_footer_comment" } },
+    { "method": "GET", "path": "/wiki/api/v2/footer-comments/{comment-id}", "excluded": { "category": "duplicate_of", "reason": "single-comment detail; identical record shape to the footer_comments list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/footer-comments/{comment-id}", "excluded": { "category": "out_of_scope", "reason": "breadth-vs-cost triage: create_footer_comment covers the primary lifecycle mutation for this probe run; the update counterpart is deferred, not silently forgotten" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/footer-comments/{comment-id}", "excluded": { "category": "destructive_admin", "reason": "irreversible comment delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/footer-comments/{id}/children", "excluded": { "category": "duplicate_of", "reason": "comment-scoped reply list; identical record shape to the global footer_comments stream (replies are footer comments)" } },
+    { "method": "GET", "path": "/wiki/api/v2/footer-comments/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "comment-id-scoped version history has no global/cross-comment list endpoint" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/inline-comments", "covered_by": { "stream": "inline_comments" } },
+    { "method": "POST", "path": "/wiki/api/v2/inline-comments", "covered_by": { "write": "create_inline_comment" } },
+    { "method": "GET", "path": "/wiki/api/v2/inline-comments/{comment-id}", "excluded": { "category": "duplicate_of", "reason": "single-comment detail; identical record shape to the inline_comments list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/inline-comments/{comment-id}", "excluded": { "category": "out_of_scope", "reason": "breadth-vs-cost triage: create_inline_comment covers the primary lifecycle mutation for this probe run; the update counterpart is deferred, not silently forgotten" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/inline-comments/{comment-id}", "excluded": { "category": "destructive_admin", "reason": "irreversible comment delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/inline-comments/{id}/children", "excluded": { "category": "duplicate_of", "reason": "comment-scoped reply list; identical record shape to the global inline_comments stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/inline-comments/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "comment-id-scoped version history has no global/cross-comment list endpoint" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/custom-content", "covered_by": { "stream": "custom_content" } },
+    { "method": "POST", "path": "/wiki/api/v2/custom-content", "excluded": { "category": "out_of_scope", "reason": "breadth-vs-cost triage: custom-content's create body shape varies per app-defined type with no single stable record_schema this probe run can express safely; the read stream is covered" } },
+    { "method": "GET", "path": "/wiki/api/v2/custom-content/{id}", "excluded": { "category": "duplicate_of", "reason": "single-custom-content detail; identical record shape to the custom_content list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/custom-content/{id}", "excluded": { "category": "out_of_scope", "reason": "same app-defined-type body-shape ambiguity as create; deferred" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/custom-content/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible content delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/custom-content/{id}/labels", "excluded": { "category": "duplicate_of", "reason": "custom-content-scoped label list; identical record shape to the global labels stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/custom-content/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "custom-content-id-scoped content-property store has no global/cross-item list endpoint" } },
+    { "method": "GET", "path": "/wiki/api/v2/custom-content/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "custom-content-id-scoped version history has no global/cross-item list endpoint" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/tasks", "covered_by": { "stream": "tasks" } },
+    { "method": "GET", "path": "/wiki/api/v2/tasks/{id}", "excluded": { "category": "duplicate_of", "reason": "single-task detail; identical record shape to the tasks list stream's per-item object, already covered by that stream" } },
+    { "method": "PUT", "path": "/wiki/api/v2/tasks/{id}", "excluded": { "category": "out_of_scope", "reason": "task-status-only partial update (the endpoint's own docs state it supports updating status alone); narrow admin-workflow action, breadth-vs-cost triage deferral" } },
+    { "method": "GET", "path": "/wiki/api/v2/tasks/{id}/versions", "excluded": { "category": "out_of_scope", "reason": "task-id-scoped version history has no global/cross-task list endpoint" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/whiteboards", "excluded": { "category": "out_of_scope", "reason": "whiteboard canvas payload has no meaningful declarative record_schema (freeform visual-canvas document, not structured business data)" } },
+    { "method": "GET", "path": "/wiki/api/v2/whiteboards/{id}", "excluded": { "category": "out_of_scope", "reason": "no global/cross-space whiteboard list endpoint exists to make this a syncable stream; only single-item detail-by-id is documented" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/whiteboards/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible delete, no reverse-ETL use case for this port" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/databases", "excluded": { "category": "out_of_scope", "reason": "same no-global-list gap as whiteboards; database objects are only addressable individually by id, not enumerable as a stream" } },
+    { "method": "GET", "path": "/wiki/api/v2/databases/{id}", "excluded": { "category": "out_of_scope", "reason": "no global/cross-space database list endpoint exists to make this a syncable stream" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/databases/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible delete, no reverse-ETL use case for this port" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/embeds", "excluded": { "category": "out_of_scope", "reason": "same no-global-list gap as whiteboards/databases" } },
+    { "method": "GET", "path": "/wiki/api/v2/embeds/{id}", "excluded": { "category": "out_of_scope", "reason": "no global/cross-space smart-link list endpoint exists to make this a syncable stream" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/embeds/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible delete, no reverse-ETL use case for this port" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/folders", "excluded": { "category": "out_of_scope", "reason": "same no-global-list gap as whiteboards/databases; folders are organizational containers addressable only by id" } },
+    { "method": "GET", "path": "/wiki/api/v2/folders/{id}", "excluded": { "category": "out_of_scope", "reason": "no global/cross-space folder list endpoint exists to make this a syncable stream" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/folders/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible delete, no reverse-ETL use case for this port" } },
+    { "method": "GET", "path": "/wiki/api/v2/folders/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "folder-id-scoped content-property store has no global/cross-folder list endpoint" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/content/convert-ids-to-types", "excluded": { "category": "non_data_endpoint", "reason": "id-to-content-type lookup utility, not a syncable object stream or a record mutation" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/admin-key", "excluded": { "category": "non_data_endpoint", "reason": "instance admin-key status snapshot, not a syncable business object" } },
+    { "method": "POST", "path": "/wiki/api/v2/admin-key", "excluded": { "category": "requires_elevated_scope", "reason": "site-admin-only key activation, org-admin scope well beyond this connector's read/write-content intent" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/permissions", "excluded": { "category": "non_data_endpoint", "reason": "access-control configuration snapshot, not a syncable business object" } },
+    { "method": "POST", "path": "/wiki/api/v2/spaces/{id}/permissions", "excluded": { "category": "requires_elevated_scope", "reason": "space-admin-only access-grant mutation, well beyond this connector's content-sync intent" } },
+    { "method": "DELETE", "path": "/wiki/api/v2/spaces/{id}/permissions/{permission-id}", "excluded": { "category": "requires_elevated_scope", "reason": "space-admin-only access-revoke mutation" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/permissions-by-identifier", "excluded": { "category": "non_data_endpoint", "reason": "access-control configuration lookup, not a syncable business object" } },
+    { "method": "POST", "path": "/wiki/api/v2/space-permission-transitions", "excluded": { "category": "requires_elevated_scope", "reason": "space-admin-only bulk permission-migration action" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "space-id-scoped content-property store has no global/cross-space list endpoint" } },
+    { "method": "POST", "path": "/wiki/api/v2/spaces/{id}/properties", "excluded": { "category": "out_of_scope", "reason": "space-id-scoped content-property write, same fan_out gap as the read side" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/roles", "excluded": { "category": "non_data_endpoint", "reason": "access-control role-assignment snapshot, not a syncable business object" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/classification-levels", "excluded": { "category": "requires_elevated_scope", "reason": "org-level data-classification admin surface, gated behind Data Center/Premium classification features not relevant to a generic content-sync connector" } },
+    { "method": "GET", "path": "/wiki/api/v2/spaces/{id}/classification-level/default", "excluded": { "category": "requires_elevated_scope", "reason": "org-level data-classification admin surface" } },
+    { "method": "PUT", "path": "/wiki/api/v2/spaces/{id}/classification-level", "excluded": { "category": "requires_elevated_scope", "reason": "org-level data-classification admin mutation" } },
+
+    { "method": "POST", "path": "/wiki/api/v2/content/{id}/redact", "excluded": { "category": "requires_elevated_scope", "reason": "org-admin-only content redaction (Guard/Premium data-governance feature), well beyond this connector's read/write-content intent" } },
+    { "method": "GET", "path": "/wiki/api/v2/redactions/{job-id}", "excluded": { "category": "requires_elevated_scope", "reason": "org-admin-only redaction-job status, same scope gate as the redact action" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/content/{id}/data-policy-metadata", "excluded": { "category": "requires_elevated_scope", "reason": "org-level data-loss-prevention policy metadata, Premium/Enterprise governance feature" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/attachments/{id}/likes", "excluded": { "category": "non_data_endpoint", "reason": "user-engagement reaction count/list, not a business content object" } },
+    { "method": "GET", "path": "/wiki/api/v2/blogposts/{id}/likes", "excluded": { "category": "non_data_endpoint", "reason": "user-engagement reaction count/list, not a business content object" } },
+    { "method": "GET", "path": "/wiki/api/v2/pages/{id}/likes", "excluded": { "category": "non_data_endpoint", "reason": "user-engagement reaction count/list, not a business content object" } },
+
+    { "method": "GET", "path": "/wiki/api/v2/operations/{operation-id}", "excluded": { "category": "non_data_endpoint", "reason": "long-running-job status poll, not a syncable business object" } },
+    { "method": "GET", "path": "/wiki/api/v2/users/{account-id}", "excluded": { "category": "non_data_endpoint", "reason": "single user profile lookup by id, no global/cross-instance user-list endpoint exists in v2 to make this a syncable stream" } }
+  ]
+}

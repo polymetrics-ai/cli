@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orgs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "id_fixture",
+      "fullLicensesPurchased": 1,
+      "name": "name_fixture",
+      "plan": "company",
+      "type": "organization"
+    }
+  }
+}

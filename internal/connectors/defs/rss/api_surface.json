@@ -1,0 +1,10 @@
+{
+  "api": "RSS 2.0 feed (RFC-shaped XML; https://www.rssboard.org/rss-specification)",
+  "docs": "https://www.rssboard.org/rss-specification",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave1 fan-out migration: the 2 legacy-parity read streams (items, channel), both derived from a single GET of the configured feed_url; RSS has no mutation surface (read-only feed format) and no other endpoint to enumerate — the connector reads exactly one URL, the one supplied via config.",
+  "endpoints": [
+    { "method": "GET", "path": "{{ config.feed_url }} (channel/item elements)", "covered_by": { "stream": "items" } },
+    { "method": "GET", "path": "{{ config.feed_url }} (channel metadata)", "covered_by": { "stream": "channel" } }
+  ]
+}

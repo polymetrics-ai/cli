@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company/synthetic-conformance-value/receipts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "uuid": "00000000-0000-4000-8000-000000000001",
+        "receipt_id": "fixture-id",
+        "location_id": 1001,
+        "net_total": 1001,
+        "company_id": 1001,
+        "pos_id": 1001,
+        "receipt_date": "2026-01-01T00:00:00Z",
+        "receipt_close_date": "2026-01-01T00:00:00Z",
+        "gross_total": 1001,
+        "tips": 1001,
+        "total_receipt_discounts": 1001,
+        "total_item_discounts": 1001,
+        "external_user_id": "fixture-id",
+        "revenue_center": "fixture revenue center",
+        "receipt_lines": [
+          {
+            "location_id": 1001,
+            "external_item_id": "fixture-id",
+            "external_category_ids": [
+              "fixture-id"
+            ],
+            "quantity": 1001,
+            "price": 1001,
+            "id": "fixture-id",
+            "gross_item_price": 1001,
+            "net_item_price": 1001,
+            "item_discount": 1001,
+            "created_date": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "tip_details": [
+          {
+            "type": "cc",
+            "value": 1001
+          }
+        ],
+        "status": "open",
+        "created_date": "2026-01-01T00:00:00Z",
+        "modified_date": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

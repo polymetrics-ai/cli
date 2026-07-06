@@ -1,0 +1,535 @@
+{
+  "api": "Veeqo API (https://api.veeqo.com)",
+  "docs": "https://developers.veeqo.com/",
+  "reviewed_at": "2026-07-04",
+  "scope": "Pass B full-surface expansion: fetched Veeqo's complete published OpenAPI 3.0 document (developers.veeqo.com/api-schemas/veeqo-api/, embedded inline JSON) plus every individual operation doc page from the site's sitemap (developers.veeqo.com/sitemap-0.xml) to recover detail/update/delete routes not present in the base schema (e.g. GET/PUT /orders/{order_id}, GET/PUT/DELETE /products/{product_id}, GET/PUT /warehouses/{id}). Covered: 9 read streams (orders plus 8 page/page_size-paginated collections: products, customers, warehouses, suppliers, purchase_orders, channels, delivery_methods, tags) and 24 write actions. Corrected from an earlier pass of this file: orders/products/customers/payments/shipments create-or-update bodies are documented NESTED (or partially-nested) envelopes (e.g. {\"customer\": {...}}, {\"order\": {...line_items_attributes...}}, {\"amount\": ..., \"payment_attributes\": {...}}) \u2014 this IS fully expressible in this dialect (body_type: json serializes every top-level record_schema key verbatim, and one of those keys can itself be an object; see yotpo/teamtailor/teamwork's identical envelope-shaped writes elsewhere in this repo), so create_customer/update_customer/create_product/update_product/create_order/update_order/cancel_order/create_payment/create_shipment are all real write actions, not an ENGINE_GAP exclusion (a prior pass of this file incorrectly excluded them on that claim). Remaining exclusions, every one with a real, specific per-endpoint category: single-item detail GETs duplicating an already-covered list stream (duplicate_of); per-order/per-product/per-bundle/per-sellable sub-resources with no top-level list endpoint of their own, which would require per-parent fan_out this pass does not scope (out_of_scope); carrier label-purchase/rate-shopping actions requiring configured carrier credentials beyond plain API-key auth (requires_elevated_scope); binary PDF/PNG label downloads (binary_payload); and account-profile endpoints (non_data_endpoint).",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/orders",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders",
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{order_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orders/{order_id}",
+      "covered_by": {
+        "write": "update_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/orders/{order_id}/cancel",
+      "covered_by": {
+        "write": "cancel_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{id}/returns",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "breadth-vs-cost triage: per-order returns sub-resource list with no top-level list endpoint of its own (would require a fan_out over every order id); out of scope for this pass"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{order_id}/notes",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-order notes sub-resource create; breadth-vs-cost triage, no corresponding list stream covers this pass"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{order_id}/allocations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-order allocations sub-resource list; breadth-vs-cost triage, would require per-order fan_out"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/{order_id}/allocations",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-order allocation create; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{order_id}/allocations/{allocation_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-allocation detail sub-resource; not a distinct list-shaped stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/allocations/{allocation_id}/allocation_package",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-allocation shipping-package dimension update; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/line_items/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-line-item note update on an order; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "covered_by": {
+        "write": "create_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{product_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}",
+      "covered_by": {
+        "write": "update_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}",
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{product_id}/product_property_specifics/{property_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-product custom-property-value sub-resource update; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{product_id}/product_property_specifics/{property_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-product custom-property-value removal; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/product_properties",
+      "covered_by": {
+        "write": "create_product_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kits",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bundle (kit) creation referencing existing product_variant_ids by numeric id with no corresponding read/list stream in this pass; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kits/{kit_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-bundle detail with no list endpoint of its own to seed a stream; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kits/{kit_id}/kit_contents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-bundle contents sub-resource list; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/kits/{kit_id}/kit_contents",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-bundle contents sub-resource create; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/kits/{kit_id}/kit_contents/{kit_content_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-kit-content detail sub-resource"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/kits/{kit_id}/kit_contents/{kit_content_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-bundle-content quantity update; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/kits/{kit_id}/kit_contents/{kit_content_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-bundle-content removal; narrow sub-resource mutation, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/purchase_orders",
+      "covered_by": {
+        "stream": "purchase_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers",
+      "covered_by": {
+        "stream": "suppliers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppliers",
+      "covered_by": {
+        "write": "create_supplier"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-supplier detail; identical record shape to the suppliers list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/suppliers/{id}",
+      "covered_by": {
+        "write": "update_supplier"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppliers/{id}",
+      "covered_by": {
+        "write": "delete_supplier"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{supplier_id}/contacts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-supplier contacts sub-resource list; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/current_company",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "single authenticated-account profile/settings object, not a syncable collection"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/current_company",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "authenticated-account profile self-update, not a syncable-collection mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses",
+      "covered_by": {
+        "stream": "warehouses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses",
+      "covered_by": {
+        "write": "create_warehouse"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-warehouse detail; identical record shape to the warehouses list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/{id}",
+      "covered_by": {
+        "write": "update_warehouse"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-customer detail; identical record shape to the customers list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels",
+      "covered_by": {
+        "write": "create_channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-channel (store) detail; identical record shape to the channels list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/channels/{id}",
+      "covered_by": {
+        "write": "update_channel"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/channels/{id}",
+      "covered_by": {
+        "write": "delete_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/channel_sellables",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-channel product-listing (channel sellable) creation; narrow sub-resource mutation with no corresponding list stream this pass, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery_methods",
+      "covered_by": {
+        "stream": "delivery_methods"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/delivery_methods",
+      "covered_by": {
+        "write": "create_delivery_method"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery_methods/{id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-delivery-method detail; identical record shape to the delivery_methods list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/delivery_methods/{id}",
+      "covered_by": {
+        "write": "update_delivery_method"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/delivery_methods/{id}",
+      "covered_by": {
+        "write": "delete_delivery_method"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}",
+      "excluded": {
+        "category": "duplicate_of",
+        "reason": "single-tag detail; identical record shape to the tags list stream's per-item object, already covered by that stream"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk_tagging",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk multi-record tag-assignment action over an arbitrary taggable-type/id list; not a per-record create/update/delete this dialect models as a typed write, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/bulk_tagging",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "bulk multi-record tag-removal action; same shape as bulk_tagging, breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments",
+      "covered_by": {
+        "write": "create_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments",
+      "covered_by": {
+        "write": "create_shipment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments/{id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "single-shipment detail with no corresponding list endpoint in the documented surface to seed a stream; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipping/shipments",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "carrier-integration label-purchase action requiring configured carrier credentials/rate-shopping context beyond this connector's plain API-key auth scope; a real financial/label-purchase side effect, not a plain data mutation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/rates/{allocation_id}",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "carrier rate-shopping lookup requiring configured carrier credentials beyond this connector's plain API-key auth scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/labels{format}?shipment_ids[]={shipment_ids}",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "returns a binary PDF/PNG shipping-label file, not a JSON record this dialect's read path can project through a schema"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipping/tracking_events/{shipment_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-shipment tracking-event sub-resource list with no top-level list endpoint; breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sellables/{sellable_id}/warehouses/{warehouse_id}/stock_entry",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-sellable-per-warehouse stock-level detail with no top-level list endpoint (would require a 2-level fan_out over every sellable and warehouse pair); breadth-vs-cost triage"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sellables/{sellable_id}/warehouses/{warehouse_id}/stock_entry",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "per-sellable-per-warehouse stock-level update; same fan-out scope limitation as the read side"
+      }
+    }
+  ]
+}

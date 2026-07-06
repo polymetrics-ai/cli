@@ -1,0 +1,53 @@
+{
+  "api": "Partnerize API v2 (https://api.partnerize.com/v2)",
+  "docs": "https://api-documentation.partnerize.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Partnerize surface (transactions, clicks, reporting exports, webhooks) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/conversions",
+      "covered_by": {
+        "stream": "conversions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/publishers",
+      "covered_by": {
+        "stream": "publishers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/clicks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/conversions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      }
+    }
+  ]
+}

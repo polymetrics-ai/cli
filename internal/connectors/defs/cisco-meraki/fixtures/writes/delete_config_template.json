@@ -1,0 +1,10 @@
+{
+  "record": {
+    "organizationId": "org_1",
+    "id": "tmpl_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/organizations/org_1/configTemplates/tmpl_fixture_1"
+  }
+}

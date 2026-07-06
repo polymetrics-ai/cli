@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vendor/orders/v1/purchaseOrders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": {
+        "purchaseOrderNumber": "purchaseOrderNumber-fixture-1",
+        "purchaseOrderState": "purchaseOrderState-fixture-1",
+        "orderDetails": {},
+        "purchase_order_number": "purchase_order_number-fixture-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "issue_id": "synthetic-conformance-value",
+    "body_html": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/issues/synthetic-conformance-value/note",
+    "body": {
+      "body_html": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

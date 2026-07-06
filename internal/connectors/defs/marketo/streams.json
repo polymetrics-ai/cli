@@ -1,0 +1,65 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "nextPageToken",
+      "token_path": "nextPageToken",
+      "stop_path": "moreResult"
+    },
+    "check": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "1" } },
+    "error_map": [
+      { "status": 401, "hint": "marketo access_token is missing, expired, or invalid; supply a fresh REST API access token" },
+      { "status": 403, "hint": "marketo access_token lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "marketo rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "leads",
+      "path": "/leads.json",
+      "query": { "batchSize": "{{ config.page_size }}" },
+      "records": { "path": "result" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "email": "{{ record.email }}",
+        "updatedAt": "{{ record.updatedAt }}",
+        "createdAt": "{{ record.createdAt }}"
+      },
+      "schema": "schemas/leads.json"
+    },
+    {
+      "name": "programs",
+      "path": "/programs.json",
+      "query": { "batchSize": "{{ config.page_size }}" },
+      "records": { "path": "result" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "updatedAt": "{{ record.updatedAt }}",
+        "createdAt": "{{ record.createdAt }}"
+      },
+      "schema": "schemas/programs.json"
+    },
+    {
+      "name": "activities",
+      "path": "/activities.json",
+      "query": {
+        "batchSize": "{{ config.page_size }}",
+        "activityTypeIds": { "template": "{{ config.activity_type_ids }}", "omit_when_absent": true }
+      },
+      "records": { "path": "result" },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "activityTypeId": "{{ record.activityTypeId }}",
+        "activityDate": "{{ record.activityDate }}",
+        "leadId": "{{ record.leadId }}"
+      },
+      "schema": "schemas/activities.json"
+    }
+  ]
+}

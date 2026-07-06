@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/runs/",
+    "query": { "limit": "100", "offset": "0" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "account_id": 1,
+          "project_id": 1,
+          "job_definition_id": 10,
+          "environment_id": 5,
+          "status": 10,
+          "status_humanized": "Success",
+          "is_complete": true,
+          "is_error": false,
+          "is_cancelled": false,
+          "started_at": "2026-01-01T00:00:00Z",
+          "finished_at": "2026-01-01T00:05:00Z",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
+        },
+        {
+          "id": 2,
+          "account_id": 1,
+          "project_id": 1,
+          "job_definition_id": 10,
+          "environment_id": 5,
+          "status": 20,
+          "status_humanized": "Error",
+          "is_complete": true,
+          "is_error": true,
+          "is_cancelled": false,
+          "started_at": "2026-01-01T01:00:00Z",
+          "finished_at": "2026-01-01T01:05:00Z",
+          "created_at": "2026-01-01T01:00:00Z",
+          "updated_at": "2026-01-01T01:05:00Z"
+        }
+      ],
+      "status": { "code": 200, "is_success": true },
+      "extra": { "filters": { "limit": 100, "offset": 0 }, "pagination": { "count": 2, "total_count": 2 } }
+    }
+  }
+}

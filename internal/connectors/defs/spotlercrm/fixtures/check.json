@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/contacts", "query": { "limit": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [] }
+  }
+}

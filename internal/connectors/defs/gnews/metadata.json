@@ -1,0 +1,23 @@
+{
+  "name": "gnews",
+  "display_name": "GNews",
+  "description": "Reads GNews articles from the keyword search and top-headlines endpoints of the GNews REST API. Read-only.",
+  "integration_type": "api",
+  "docs_url": "https://gnews.io/docs/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 10
+  },
+  "risk": {
+    "read": "external GNews API read of news article search results",
+    "approval": "none; read-only news search API"
+  }
+}

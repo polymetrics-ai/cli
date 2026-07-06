@@ -1,0 +1,8 @@
+{
+  "record": { "id": "guardrail_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/guardrails/guardrail_fixture_1"
+  },
+  "response": { "status": 204, "body": {} }
+}

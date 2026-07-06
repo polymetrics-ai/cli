@@ -1,0 +1,487 @@
+{
+  "actions": [
+    {
+      "name": "create_case_v2",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/case/v2/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["case_type", "case_name", "owner_id"],
+        "properties": {
+          "case_type": { "type": "string" },
+          "case_name": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "external_id": { "type": "string" },
+          "properties": { "type": "object" },
+          "indices": { "type": "object" },
+          "close": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a CommCare case by submitting a server-generated XForm"
+    },
+    {
+      "name": "update_case_v2",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/case/v2/{{ record.case_id }}",
+      "path_fields": ["case_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["case_id"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "case_type": { "type": "string" },
+          "case_name": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "external_id": { "type": "string" },
+          "properties": { "type": "object" },
+          "indices": { "type": "object" },
+          "close": { "type": "boolean" }
+        }
+      },
+      "risk": "updates an existing CommCare case by id"
+    },
+    {
+      "name": "upsert_case_v2_by_external_id",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/case/v2/ext/{{ record.external_id }}/",
+      "path_fields": ["external_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["external_id"],
+        "properties": {
+          "external_id": { "type": "string" },
+          "case_type": { "type": "string" },
+          "case_name": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "properties": { "type": "object" },
+          "indices": { "type": "object" },
+          "close": { "type": "boolean" }
+        }
+      },
+      "risk": "updates or creates a CommCare case matched by external id"
+    },
+    {
+      "name": "upsert_case_v2",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/case/v2/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["external_id"],
+        "properties": {
+          "external_id": { "type": "string" },
+          "case_type": { "type": "string" },
+          "case_name": { "type": "string" },
+          "owner_id": { "type": "string" },
+          "properties": { "type": "object" },
+          "indices": { "type": "object" },
+          "close": { "type": "boolean" }
+        }
+      },
+      "risk": "updates or creates a CommCare case matched by the request body's external_id"
+    },
+    {
+      "name": "create_mobile_worker",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/user/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["username", "email"],
+        "properties": {
+          "username": { "type": "string" },
+          "password": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "default_phone_number": { "type": "string" },
+          "language": { "type": "string" },
+          "phone_numbers": { "type": "array" },
+          "groups": { "type": "array" },
+          "user_data": { "type": "object" },
+          "primary_location": { "type": "string" },
+          "locations": { "type": "array" },
+          "require_account_confirmation": { "type": "boolean" },
+          "send_confirmation_email_now": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a mobile worker account; password-bearing creation is intentionally not represented in fixtures or docs"
+    },
+    {
+      "name": "update_mobile_worker",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/user/v1/{{ record.mobile_worker_id }}/",
+      "path_fields": ["mobile_worker_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["mobile_worker_id"],
+        "properties": {
+          "mobile_worker_id": { "type": "string" },
+          "password": { "type": "string" },
+          "email": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "default_phone_number": { "type": "string" },
+          "language": { "type": "string" },
+          "phone_numbers": { "type": "array" },
+          "groups": { "type": "array" },
+          "user_data": { "type": "object" },
+          "primary_location": { "type": "string" },
+          "locations": { "type": "array" },
+          "send_confirmation_email_now": { "type": "boolean" }
+        }
+      },
+      "risk": "updates a mobile worker profile and assignments"
+    },
+    {
+      "name": "delete_mobile_worker",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.project_space }}/api/user/v1/{{ record.mobile_worker_id }}/",
+      "path_fields": ["mobile_worker_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["mobile_worker_id"],
+        "properties": { "mobile_worker_id": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a mobile worker",
+      "confirm": "destructive"
+    },
+    {
+      "name": "send_mobile_worker_password_reset",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/user/v1/{{ record.mobile_worker_id }}/email_password_reset/",
+      "path_fields": ["mobile_worker_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["mobile_worker_id"],
+        "properties": { "mobile_worker_id": { "type": "string" } }
+      },
+      "risk": "sends a password reset email to a mobile worker"
+    },
+    {
+      "name": "create_web_user_invitation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/invitation/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["email", "role"],
+        "properties": {
+          "email": { "type": "string" },
+          "role": { "type": "string" },
+          "primary_location_id": { "type": "string" },
+          "assigned_location_ids": { "type": "array" },
+          "profile": { "type": "string" },
+          "user_data": { "type": "object" },
+          "tableau_role": { "type": "string" },
+          "tableau_groups": { "type": "array" }
+        }
+      },
+      "risk": "invites a web user to the project"
+    },
+    {
+      "name": "update_web_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/a/{{ config.project_space }}/api/web-user/v1/{{ record.web_user_id }}/",
+      "path_fields": ["web_user_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["web_user_id"],
+        "properties": {
+          "web_user_id": { "type": "string" },
+          "role": { "type": "string" },
+          "primary_location_id": { "type": "string" },
+          "assigned_location_ids": { "type": "array" },
+          "profile": { "type": "string" },
+          "user_data": { "type": "object" },
+          "tableau_role": { "type": "string" },
+          "tableau_groups": { "type": "array" }
+        }
+      },
+      "risk": "updates a web user's role, locations, profile, and custom data"
+    },
+    {
+      "name": "enable_web_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/web-user/v1/{{ record.web_user_id }}/enable",
+      "path_fields": ["web_user_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["web_user_id"],
+        "properties": { "web_user_id": { "type": "string" } }
+      },
+      "risk": "enables a web user account"
+    },
+    {
+      "name": "disable_web_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/web-user/v1/{{ record.web_user_id }}/disable",
+      "path_fields": ["web_user_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["web_user_id"],
+        "properties": { "web_user_id": { "type": "string" } }
+      },
+      "risk": "disables a web user account"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/group/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "case_sharing": { "type": "boolean" },
+          "reporting": { "type": "boolean" },
+          "users": { "type": "array" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "creates a user group"
+    },
+    {
+      "name": "create_groups_bulk",
+      "kind": "create",
+      "method": "PATCH",
+      "path": "/a/{{ config.project_space }}/api/group/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["objects"],
+        "properties": { "objects": { "type": "array" } }
+      },
+      "risk": "creates multiple user groups from one request body"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/group/v1/{{ record.group_id }}/",
+      "path_fields": ["group_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "name": { "type": "string" },
+          "case_sharing": { "type": "boolean" },
+          "reporting": { "type": "boolean" },
+          "users": { "type": "array" },
+          "metadata": { "type": "object" }
+        }
+      },
+      "risk": "updates a user group and replaces provided assignments/custom metadata"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.project_space }}/api/group/v1/{{ record.group_id }}/",
+      "path_fields": ["group_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["group_id"],
+        "properties": { "group_id": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a user group",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_location_v2",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/location/v2/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["name", "location_type_code"],
+        "properties": {
+          "name": { "type": "string" },
+          "location_type_code": { "type": "string" },
+          "site_code": { "type": "string" },
+          "latitude": { "type": ["string", "null"] },
+          "longitude": { "type": ["string", "null"] },
+          "location_data": { "type": "object" },
+          "parent_location_id": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "creates a location in the project hierarchy"
+    },
+    {
+      "name": "update_location_v2",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/location/v2/{{ record.location_id }}",
+      "path_fields": ["location_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["location_id"],
+        "properties": {
+          "location_id": { "type": "string" },
+          "name": { "type": "string" },
+          "location_type_code": { "type": "string" },
+          "site_code": { "type": "string" },
+          "latitude": { "type": ["string", "null"] },
+          "longitude": { "type": ["string", "null"] },
+          "location_data": { "type": "object" },
+          "parent_location_id": { "type": ["string", "null"] }
+        }
+      },
+      "risk": "updates a location in the project hierarchy"
+    },
+    {
+      "name": "bulk_upsert_locations_v2",
+      "kind": "upsert",
+      "method": "PATCH",
+      "path": "/a/{{ config.project_space }}/api/location/v2/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["objects"],
+        "properties": { "objects": { "type": "array" } }
+      },
+      "risk": "atomically creates and updates multiple locations"
+    },
+    {
+      "name": "create_lookup_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/lookup_table/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["tag", "fields"],
+        "properties": {
+          "tag": { "type": "string" },
+          "fields": { "type": "array" },
+          "is_global": { "type": "boolean" }
+        }
+      },
+      "risk": "creates a lookup table definition"
+    },
+    {
+      "name": "update_lookup_table",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/lookup_table/v1/{{ record.lookup_table_id }}",
+      "path_fields": ["lookup_table_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lookup_table_id", "tag", "fields"],
+        "properties": {
+          "lookup_table_id": { "type": "string" },
+          "tag": { "type": "string" },
+          "fields": { "type": "array" },
+          "is_global": { "type": "boolean" }
+        }
+      },
+      "risk": "updates a lookup table definition"
+    },
+    {
+      "name": "delete_lookup_table",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.project_space }}/api/lookup_table/v1/{{ record.lookup_table_id }}",
+      "path_fields": ["lookup_table_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lookup_table_id"],
+        "properties": { "lookup_table_id": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a lookup table definition",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_lookup_table_row",
+      "kind": "create",
+      "method": "POST",
+      "path": "/a/{{ config.project_space }}/api/lookup_table_item/v1/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["data_type_id", "fields"],
+        "properties": {
+          "data_type_id": { "type": "string" },
+          "fields": { "type": "object" },
+          "sort_key": { "type": "integer" }
+        }
+      },
+      "risk": "creates a lookup table row"
+    },
+    {
+      "name": "update_lookup_table_row",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/a/{{ config.project_space }}/api/lookup_table_item/v1/{{ record.lookup_table_item_id }}",
+      "path_fields": ["lookup_table_item_id"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lookup_table_item_id", "data_type_id", "fields"],
+        "properties": {
+          "lookup_table_item_id": { "type": "string" },
+          "data_type_id": { "type": "string" },
+          "fields": { "type": "object" },
+          "sort_key": { "type": "integer" }
+        }
+      },
+      "risk": "updates a lookup table row"
+    },
+    {
+      "name": "delete_lookup_table_row",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/a/{{ config.project_space }}/api/lookup_table_item/v1/{{ record.lookup_table_item_id }}",
+      "path_fields": ["lookup_table_item_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["lookup_table_item_id"],
+        "properties": { "lookup_table_item_id": { "type": "string" } }
+      },
+      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "risk": "deletes a lookup table row",
+      "confirm": "destructive"
+    }
+  ]
+}

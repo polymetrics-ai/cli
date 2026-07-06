@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/v1/journalists/all", "query": { "page": "2", "size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": 200,
+      "numResults": 101,
+      "results": [
+        { "id": "journalist-fixture-2", "name": "Fixture Journalist Two", "fullName": "Fixture Journalist Two", "title": "Editor", "twitterHandle": "fixturejourno2", "avgMonthlyPosts": 4, "updatedAt": "2026-01-01T00:05:00Z" }
+      ]
+    }
+  }
+}

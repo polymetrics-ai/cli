@@ -1,0 +1,31 @@
+{
+  "record": {
+    "knowledge_base_id": "synthetic-conformance-value",
+    "typeOfQuestion": "fixture_typeOfQuestion",
+    "instructions": "fixture_instructions",
+    "sampleAnswer": "fixture_sampleAnswer",
+    "toneOfVoice": "fixture_toneOfVoice",
+    "responseLength": "fixture_responseLength",
+    "links": [],
+    "isAutoSend": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v3/ai-sdr/knowledge-bases/synthetic-conformance-value/reply-handlers",
+    "body": {
+      "typeOfQuestion": "fixture_typeOfQuestion",
+      "instructions": "fixture_instructions",
+      "sampleAnswer": "fixture_sampleAnswer",
+      "toneOfVoice": "fixture_toneOfVoice",
+      "responseLength": "fixture_responseLength",
+      "links": [],
+      "isAutoSend": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id_1"
+    }
+  }
+}

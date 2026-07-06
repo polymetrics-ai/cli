@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "mailing_lists",
+  "type": "object",
+  "x-primary-key": ["address"],
+  "x-cursor-field": "created_at",
+  "properties": {
+    "address": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "access_level": { "type": ["string", "null"] },
+    "members_count": { "type": ["integer", "null"] },
+    "created_at": { "type": ["string", "null"] }
+  }
+}

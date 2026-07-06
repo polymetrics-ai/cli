@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/messages/outbound",
+    "query": {
+      "count": "100",
+      "offset": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "TotalCount": 101,
+      "Messages": [
+        {
+          "MessageID": "msg-fixture-101",
+          "MessageStream": "outbound",
+          "To": [
+            {
+              "Email": "fixture101@example.com",
+              "Name": null
+            }
+          ],
+          "From": "\"Fixture Sender\" <sender@example.com>",
+          "Subject": "Fixture Subject 101",
+          "ReceivedAt": "2026-01-01T00:00:00Z",
+          "Status": "Sent"
+        }
+      ]
+    }
+  }
+}

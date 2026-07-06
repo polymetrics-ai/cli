@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture create_account_custom_field",
+    "type": "text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/customfield",
+    "body": {
+      "name": "Fixture create_account_custom_field",
+      "type": "text"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

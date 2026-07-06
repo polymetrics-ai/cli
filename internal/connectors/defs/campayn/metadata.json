@@ -1,0 +1,21 @@
+{
+  "name": "campayn",
+  "display_name": "Campayn",
+  "description": "Reads and writes Campayn subscriber lists, signup forms, contacts, email campaigns, and calendar reports through the Campayn REST API.",
+  "integration_type": "api",
+  "docs_url": "https://github.com/nebojsac/Campayn-API",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "risk": {
+    "read": "external Campayn API read of subscriber lists, campaigns, and reports",
+    "write": "external mutation of Campayn contacts and list-subscription state (add contact, update contact, unsubscribe by id or email); no destructive delete endpoint is documented by the upstream API",
+    "approval": "none; low-risk marketing-list mutations, no documented destructive writes"
+  }
+}

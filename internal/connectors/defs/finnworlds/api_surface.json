@@ -1,0 +1,12 @@
+{
+  "api": "Finnworlds API v1 (https://api.finnworlds.com/api/v1/)",
+  "docs": "https://finnworlds.com/documentation/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Unquarantine (fan_out engine mini-wave) migration of internal/connectors/finnworlds at legacy capability parity: all 4 legacy read streams (dividends, stock_splits, historical_candlestick, commodities). Legacy finnworlds is read-only.",
+  "endpoints": [
+    { "method": "GET", "path": "/dividends", "covered_by": { "stream": "dividends" } },
+    { "method": "GET", "path": "/stocksplits", "covered_by": { "stream": "stock_splits" } },
+    { "method": "GET", "path": "/historicalcandlestick", "covered_by": { "stream": "historical_candlestick" } },
+    { "method": "GET", "path": "/commodities", "covered_by": { "stream": "commodities" } }
+  ]
+}

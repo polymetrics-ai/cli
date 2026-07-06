@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tags",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "count": { "type": ["integer", "null"] },
+    "description": { "type": ["string", "null"] },
+    "link": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "slug": { "type": ["string", "null"] },
+    "taxonomy": { "type": ["string", "null"] },
+    "_links": { "type": ["object", "null"] }
+  }
+}

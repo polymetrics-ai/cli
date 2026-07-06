@@ -1,0 +1,92 @@
+{
+  "api": "eBay Sell Fulfillment API v1",
+  "docs": "https://developer.ebay.com/api-docs/sell/fulfillment/overview.html",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy-parity migration: the 4 legacy streams (orders, order_line_items, shipping_fulfillments, payment_disputes) matching internal/connectors/ebay-fulfillment's exact endpoint set; the full eBay Sell Fulfillment surface (single-order lookup, shipping-fulfillment sub-resource CRUD, issue-refund) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order",
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (exploded lineItems)",
+      "covered_by": {
+        "stream": "order_line_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (shipping projection)",
+      "covered_by": {
+        "stream": "shipping_fulfillments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute",
+      "covered_by": {
+        "stream": "payment_disputes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/sell/fulfillment/v1/order/{orderId} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+      }
+    }
+  ]
+}

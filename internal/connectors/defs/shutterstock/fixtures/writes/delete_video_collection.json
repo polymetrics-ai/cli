@@ -1,0 +1,13 @@
+{
+  "record": {
+    "video_collection_id": "video-collection-id-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/videos/collections/video-collection-id-fixture-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/configuration/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 123,
+        "title": "Fixture configuration_jobs",
+        "name": "Fixture configuration_jobs",
+        "overview": "Deterministic TMDb fixture",
+        "release_date": "2026-01-01",
+        "vote_average": 7.5
+      }
+    ]
+  }
+}

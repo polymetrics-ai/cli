@@ -1,0 +1,9 @@
+{
+  "record": { "datasets": [{ "id": "fixture-dataset-1", "description": "Fixture dataset" }] },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/apps/synthetic-conformance-value/datasets",
+    "body": { "datasets": [{ "id": "fixture-dataset-1", "description": "Fixture dataset" }] }
+  },
+  "response": { "status": 200, "body": { "status": { "code": 10000, "description": "Ok" }, "datasets": [{ "id": "fixture-dataset-1" }] } }
+}

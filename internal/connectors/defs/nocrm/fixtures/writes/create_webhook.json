@@ -1,0 +1,16 @@
+{
+  "record": {
+    "event": "lead.creation",
+    "target_type": "url",
+    "target": "https://example.invalid/nocrm-hook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "event": "lead.creation",
+      "target_type": "url",
+      "target": "https://example.invalid/nocrm-hook"
+    }
+  }
+}

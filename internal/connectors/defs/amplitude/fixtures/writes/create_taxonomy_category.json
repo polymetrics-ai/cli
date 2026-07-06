@@ -1,0 +1,12 @@
+{
+  "record": { "category_name": "Fixture Taxonomy Category" },
+  "expect": {
+    "method": "POST",
+    "path": "/api/2/taxonomy/category",
+    "body": { "category_name": "Fixture Taxonomy Category" }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true }
+  }
+}

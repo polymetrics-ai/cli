@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": 1,
+    "public": "public_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/wishlists/1",
+    "body": {
+      "public": "public_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+    }
+  }
+}

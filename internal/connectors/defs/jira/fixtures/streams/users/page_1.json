@@ -1,0 +1,16 @@
+{
+  "request": { "method": "GET", "path": "/rest/api/3/users/search", "query": { "maxResults": "50", "startAt": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "accountId": "fixture-account-1",
+        "accountType": "atlassian",
+        "self": "https://fixture.atlassian.net/rest/api/3/user?accountId=fixture-account-1",
+        "displayName": "Fixture User 1",
+        "emailAddress": "fixture1@example.com",
+        "active": true
+      }
+    ]
+  }
+}

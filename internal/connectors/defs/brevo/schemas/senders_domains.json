@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "senders_domains",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "domain_name": { "type": ["string", "null"] },
+    "authenticated": { "type": ["boolean", "null"] },
+    "verified": { "type": ["boolean", "null"] },
+    "ip": { "type": ["string", "null"] }
+  }
+}

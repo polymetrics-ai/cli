@@ -1,0 +1,39 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "type": "contact_added",
+    "oldValue": {
+      "id": "old_value_fixture_id"
+    },
+    "newValue": {
+      "id": "new_value_fixture_id"
+    },
+    "actorType": "customer",
+    "agentId": "agent_id_fixture",
+    "contactId": "contact_id_fixture",
+    "threadMessageId": "thread_message_id_fixture",
+    "occurredAt": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/tickets/id_fixture/events",
+    "body": {
+      "type": "contact_added",
+      "oldValue": {
+        "id": "old_value_fixture_id"
+      },
+      "newValue": {
+        "id": "new_value_fixture_id"
+      },
+      "actorType": "customer",
+      "agentId": "agent_id_fixture",
+      "contactId": "contact_id_fixture",
+      "threadMessageId": "thread_message_id_fixture",
+      "occurredAt": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

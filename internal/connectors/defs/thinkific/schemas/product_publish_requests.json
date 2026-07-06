@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "product_publish_requests",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "product_id": { "type": ["integer", "null"] },
+    "status": { "type": ["string", "null"] },
+    "response_text": { "type": ["string", "null"] },
+    "requesting_user_id": { "type": ["integer", "null"] },
+    "responding_user_id": { "type": ["integer", "null"] },
+    "completed_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "api": "Bugsnag Data Access API v2",
+  "docs": "https://bugsnagapiv2.docs.apiary.io/",
+  "reviewed_at": "2026-07-03",
+  "scope": "Full legacy-parity migration: the 6 legacy streams (organizations, projects, collaborators, errors, events, releases) matching internal/connectors/bugsnag's exact endpoint set; the full Bugsnag Data Access API surface (single-resource lookups, error/event mutation, release group management) is out of scope outside this connector's current declared surface",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/user/organizations",
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/projects",
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}/collaborators",
+      "covered_by": {
+        "stream": "collaborators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/errors",
+      "covered_by": {
+        "stream": "errors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/releases",
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organization_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/errors/{error_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/errors/{error_id}",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "destructive administrative mutation is not exposed as a reverse-ETL action for this connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/releases/{release_group_id}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      }
+    }
+  ]
+}

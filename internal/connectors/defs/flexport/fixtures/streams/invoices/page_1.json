@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_object": "/api/response",
+      "self": "https://api.flexport.com/invoices",
+      "version": 2,
+      "data": {
+        "_object": "/api/collections/paginated",
+        "prev": null,
+        "next": null,
+        "data": [
+          {
+            "_object": "/invoice",
+            "id": "invoice_fixture_1",
+            "invoice_number": "FLEX-FIXTURE-1",
+            "status": "outstanding",
+            "currency": "USD",
+            "total": "1000.00",
+            "issued_date": "2026-01-10",
+            "due_date": "2026-02-10",
+            "created_at": "2026-01-10T12:00:00Z",
+            "updated_at": "2026-01-11T12:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

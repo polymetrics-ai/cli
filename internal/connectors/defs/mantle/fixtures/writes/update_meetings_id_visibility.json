@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "visibility": "private"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/meetings/id_fixture/visibility",
+    "body": {
+      "visibility": "private"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

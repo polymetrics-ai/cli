@@ -1,0 +1,83 @@
+{
+  "api": "Microsoft Dataverse Web API v9.2 (https://<org>.crm.dynamics.com/api/data/v9.2)",
+  "docs": "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview",
+  "reviewed_at": "2026-07-03",
+  "scope": "connector-v2 migration: the 5 legacy-parity read streams only; the full Dataverse Web API surface (custom entities, actions/functions, batch requests, $expand relationship traversal, etc.) is out of scope until Pass B",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads",
+      "covered_by": {
+        "stream": "leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities",
+      "covered_by": {
+        "stream": "opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/systemusers",
+      "covered_by": {
+        "stream": "systemusers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts({id})",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/accounts({id}) is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts({id})",
+      "excluded": {
+        "category": "destructive_admin",
+        "reason": "/accounts({id}) is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/EntityDefinitions",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/EntityDefinitions is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/$batch",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "/$batch is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    }
+  ]
+}

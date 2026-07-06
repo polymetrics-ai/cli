@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/journal_entries/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "entry": {
+        "id": "id_fixture",
+        "appId": "app_id_fixture",
+        "app": {
+          "id": "id_fixture",
+          "name": "fixture"
+        },
+        "date": "2026-01-01T00:00:00Z",
+        "title": "fixture",
+        "description": "fixture",
+        "tags": [
+          "fixture"
+        ],
+        "url": "https://example.com/fixture",
+        "emoji": "fixture",
+        "files": [
+          {
+            "id": "id_fixture",
+            "title": "fixture",
+            "altText": "fixture",
+            "url": "https://example.com/fixture",
+            "fileType": "fixture",
+            "fileSize": 1,
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

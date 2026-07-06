@@ -1,0 +1,35 @@
+{
+  "record": {
+    "endpoint_id": "synthetic-conformance-value",
+    "name": "name_fixture",
+    "description": "description_fixture",
+    "enabled": true,
+    "gpu_type": "gpu-l40s-d",
+    "gpu_count": 1,
+    "custom_weights_id": "custom_weights_id_fixture",
+    "scaling": {
+      "min_replicas": 1,
+      "max_replicas": 1
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/dedicated_endpoints/synthetic-conformance-value",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "enabled": true,
+      "gpu_type": "gpu-l40s-d",
+      "gpu_count": 1,
+      "custom_weights_id": "custom_weights_id_fixture",
+      "scaling": {
+        "min_replicas": 1,
+        "max_replicas": 1
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

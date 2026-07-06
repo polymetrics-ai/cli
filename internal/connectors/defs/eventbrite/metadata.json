@@ -1,0 +1,23 @@
+{
+  "name": "eventbrite",
+  "display_name": "Eventbrite",
+  "description": "Reads Eventbrite organizations, events, attendees, orders, and ticket classes through the Eventbrite v3 REST API. Read-only source.",
+  "integration_type": "api",
+  "docs_url": "https://www.eventbrite.com/platform/api",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Eventbrite API read of organization, event, attendee, and order data",
+    "approval": "none; read-only, no reverse-ETL writes"
+  }
+}

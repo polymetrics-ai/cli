@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/metadata_objects", "query": { "limit": "200", "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "name": "lists fixture 1",
+        "description": "Fixture list 1",
+        "attribute1": "a1",
+        "attribute2": "a2",
+        "list_id": 201,
+        "account_id": 301,
+        "code": "F-1",
+        "created_at": "01/01/2026 00:01",
+        "updated_at": "01/01/2026 00:01"
+      }
+    ]
+  }
+}

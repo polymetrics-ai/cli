@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Entra ID Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://graph.microsoft.com/v1.0",
+      "description": "Microsoft Graph REST API base URL override for tests or proxies. Defaults to https://graph.microsoft.com/v1.0."
+    },
+    "login_base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://login.microsoftonline.com",
+      "description": "Azure AD login base URL override for tests or proxies; combined with tenant_id to derive the OAuth2 token endpoint."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full OAuth2 token endpoint override. When set, takes priority over the derived login_base_url/tenant_id endpoint (see docs.md Known limits for the dual-candidate auth mechanism used to express this)."
+    },
+    "scope": {
+      "type": "string",
+      "default": "https://graph.microsoft.com/.default",
+      "description": "OAuth2 client-credentials scope. Defaults to the static Graph application-permission scope."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID (Azure AD) application (client) ID used for the OAuth2 client-credentials grant. Never logged."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID application client secret, sent only in the OAuth2 client-credentials token-exchange request; never logged."
+    },
+    "tenant_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Microsoft Entra ID tenant ID (GUID or verified domain), used to derive the per-tenant token endpoint. Marked secret to match legacy, which reads it from Secrets."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records requested per @odata.nextLink page (1-999), sent as the $top query parameter on the first request of each stream."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional hard cap on the number of @odata.nextLink pages read per stream, consumed by hooks/microsoft-entra-id/hooks.go's StreamHook — NOT a declarative streams.json field (pagination is entirely hook-driven since next_url_path cannot address the literal \"@odata.nextLink\" key; see docs.md Known limits). Permissive parse: empty, \"all\", or \"unlimited\" means unbounded."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

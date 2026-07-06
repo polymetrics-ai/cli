@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/qr-codes" },
+  "response": {
+    "status": 200,
+    "body": {
+      "qr_codes": [
+        {
+          "qrcode_id": "qr_fixture_1",
+          "group_guid": "grp_fixture_1",
+          "title": "Fixture QR Code",
+          "destination": { "bitlink_id": "bit.ly/fixture1" },
+          "is_customized": false,
+          "qr_code_type": "static",
+          "bitlink_id": "bit.ly/fixture1",
+          "archived": false,
+          "tags": ["fixture"],
+          "created_by": "fixture-user",
+          "expiration_at": null,
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

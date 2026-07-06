@@ -1,0 +1,7 @@
+{
+  "record": { "project_id": 100, "id": 300, "name": "Updated Fixture Task" },
+  "expect": {
+    "method": "PUT",
+    "path": "/workspaces/synthetic-conformance-value/projects/100/tasks/300"
+  }
+}

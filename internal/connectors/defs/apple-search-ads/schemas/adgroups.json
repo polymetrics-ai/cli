@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "adgroups",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "x-cursor-field": "modification_time",
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "integer" },
+    "campaign_id": { "type": ["integer", "null"] },
+    "name": { "type": ["string", "null"] },
+    "status": { "type": ["string", "null"] },
+    "serving_status": { "type": ["string", "null"] },
+    "display_status": { "type": ["string", "null"] },
+    "pricing_model": { "type": ["string", "null"] },
+    "default_bid_amount": { "type": ["object", "null"] },
+    "cpa_goal": { "type": ["object", "null"] },
+    "start_time": { "type": ["string", "null"] },
+    "end_time": { "type": ["string", "null"] },
+    "creation_time": { "type": ["string", "null"] },
+    "modification_time": { "type": ["string", "null"] },
+    "deleted": { "type": ["boolean", "null"] }
+  }
+}

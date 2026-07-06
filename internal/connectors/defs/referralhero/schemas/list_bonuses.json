@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReferralHero List Bonus",
+  "type": "object",
+  "properties": {
+    "title": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "referrals": { "type": ["integer", "null"] }
+  }
+}

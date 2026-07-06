@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/backstage/api/1.0/synthetic-conformance-value/campaigns", "query": { "page": "1", "page_size": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        { "id": "camp_fixture_1", "name": "Fixture Campaign 1", "created_at": "2026-01-01T00:00:00Z" },
+        { "id": "camp_fixture_2", "name": "Fixture Campaign 2", "created_at": "2026-01-02T00:00:00Z" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "record": {
+    "location": "fixture_location_1",
+    "jobTitle": "Fixture jobTitle",
+    "reportingManager": "fixture_reporting_manager_1",
+    "attendanceNumber": "FIX-1",
+    "timeType": 0,
+    "employee_id": "fixture_employee_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/hris/employees/fixture_employee_id/jobdetails",
+    "body": {
+      "location": "fixture_location_1",
+      "jobTitle": "Fixture jobTitle",
+      "reportingManager": "fixture_reporting_manager_1",
+      "attendanceNumber": "FIX-1",
+      "timeType": 0
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "update_employee_job_details_fixture_1",
+        "name": "Fixture update employee job details"
+      },
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

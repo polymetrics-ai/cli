@@ -1,0 +1,11 @@
+{
+  "record": { "id": "cmt_fixture_1" },
+  "expect": {
+    "method": "DELETE",
+    "path": "/comments/cmt_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

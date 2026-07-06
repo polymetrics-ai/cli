@@ -1,0 +1,22 @@
+{
+  "request": { "method": "GET", "path": "/purchaseorders", "query": { "offset": "0" } },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "idpurchaseorder": 701,
+        "idsupplier": 501,
+        "idwarehouse": 501,
+        "purchaseorderid": "20260001",
+        "supplier_name": "Fixture Supplier",
+        "supplier_orderid": null,
+        "status": "concept",
+        "remarks": "",
+        "delivery_date": "2026-01-15",
+        "created": "2026-01-01T00:00:00Z",
+        "updated": "2026-01-01T00:00:00Z",
+        "products": []
+      }
+    ]
+  }
+}

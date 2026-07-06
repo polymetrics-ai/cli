@@ -1,0 +1,20 @@
+{
+  "record": {
+    "customer_bank_account_tokens": {
+      "description": "Synthetic create_a_customer_bank_account_token fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer_bank_account_tokens",
+    "body": {
+      "customer_bank_account_tokens": {
+        "description": "Synthetic create_a_customer_bank_account_token fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

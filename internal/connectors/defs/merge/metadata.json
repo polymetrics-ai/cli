@@ -1,0 +1,22 @@
+{
+  "name": "merge",
+  "display_name": "Merge",
+  "description": "Reads Merge ATS common-model objects (candidates, applications, jobs, offers, departments, users) through the Merge unified REST API.",
+  "integration_type": "api",
+  "docs_url": "https://docs.merge.dev/api-reference/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Merge unified API read of ATS candidate and hiring data"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": { "method": "GET", "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/tags/synthetic-conformance-value/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "name": "synthetic-conformance-value",
+      "repository": 1,
+      "full_size": 4096,
+      "creator": 1,
+      "last_updater": 1,
+      "last_updater_username": "fixtureuser",
+      "v2": "true",
+      "status": "active",
+      "last_updated": "2026-01-01T00:00:00Z",
+      "tag_last_pulled": "2026-01-02T00:00:00Z",
+      "tag_last_pushed": "2026-01-01T00:00:00Z"
+    }
+  }
+}

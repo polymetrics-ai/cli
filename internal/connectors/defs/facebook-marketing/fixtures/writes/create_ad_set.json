@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "Fixture Ad Set",
+    "campaign_id": "campaign_fixture_1",
+    "billing_event": "IMPRESSIONS",
+    "optimization_goal": "LINK_CLICKS",
+    "targeting": { "geo_locations": { "countries": ["US"] } },
+    "status": "PAUSED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/synthetic-conformance-value/adsets"
+  }
+}

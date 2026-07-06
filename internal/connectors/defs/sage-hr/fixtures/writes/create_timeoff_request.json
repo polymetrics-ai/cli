@@ -1,0 +1,5 @@
+{
+  "record": { "employee_id": 1, "time_off_policy_id": 1, "type": "single", "part_of_day": "all_day", "date": "2026-02-10" },
+  "expect": { "method": "POST", "path": "/leave-management/requests" },
+  "response": { "status": 201, "body": { "id": 1 } }
+}

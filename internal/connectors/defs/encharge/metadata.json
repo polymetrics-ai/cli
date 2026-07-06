@@ -1,0 +1,23 @@
+{
+  "name": "encharge",
+  "display_name": "Encharge",
+  "description": "Reads Encharge people, segments, fields, account tags, and schemas through the Encharge REST API.",
+  "integration_type": "api",
+  "docs_url": "https://developers.encharge.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Encharge API read of people, segment, field, and tag data",
+    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ratings",
+  "type": "object",
+  "properties": {
+    "date": { "type": ["string", "null"] },
+    "stars": { "type": ["number", "null"] },
+    "breakdown": { "type": ["string", "null"] },
+    "average": { "type": ["number", "null"] }
+  }
+}

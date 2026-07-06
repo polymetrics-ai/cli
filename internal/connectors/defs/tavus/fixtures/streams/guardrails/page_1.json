@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/guardrails",
+    "query": { "legacy": "false", "page": "0", "limit": "100" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "uuid": "guardrail_fixture_1", "guardrail_name": "fixture_compliance_guardrail", "guardrail_prompt": "Never discuss competitor products.", "modality": "verbal", "callback_url": "", "tags": ["compliance"] }
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      { "mode": "api_key_header", "header": "Access-Token", "value": "{{ secrets.access_token }}" }
+    ],
+    "pagination": {
+      "type": "page_number",
+      "page_param": "page",
+      "size_param": "page_size",
+      "start_page": 1,
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/advertiser/info/"
+    },
+    "error_map": [
+      { "status": 401, "hint": "tiktok-marketing access token is missing or invalid; re-run pm credentials add tiktok-marketing" },
+      { "status": 403, "hint": "tiktok-marketing account lacks access for this request" },
+      { "status": 429, "class": "rate_limited", "hint": "tiktok-marketing rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "advertisers",
+      "path": "/advertiser/info/",
+      "query": {
+        "advertiser_ids": { "template": "[\"{{ config.advertiser_id }}\"]", "omit_when_absent": true }
+      },
+      "records": { "path": "data.list" },
+      "schema": "schemas/advertisers.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaign/get/",
+      "query": {
+        "advertiser_id": { "template": "{{ config.advertiser_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.list" },
+      "incremental": {
+        "cursor_field": "modify_time"
+      },
+      "schema": "schemas/campaigns.json"
+    },
+    {
+      "name": "adgroups",
+      "path": "/adgroup/get/",
+      "query": {
+        "advertiser_id": { "template": "{{ config.advertiser_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.list" },
+      "incremental": {
+        "cursor_field": "modify_time"
+      },
+      "schema": "schemas/adgroups.json"
+    },
+    {
+      "name": "ads",
+      "path": "/ad/get/",
+      "query": {
+        "advertiser_id": { "template": "{{ config.advertiser_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "data.list" },
+      "incremental": {
+        "cursor_field": "modify_time"
+      },
+      "schema": "schemas/ads.json"
+    }
+  ]
+}

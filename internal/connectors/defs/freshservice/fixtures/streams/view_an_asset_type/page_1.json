@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/asset_types/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "asset_type": {
+        "id": "view_an_asset_type",
+        "name": "Fixture view_an_asset_type",
+        "subject": "Fixture view_an_asset_type",
+        "description": "Fixture view_an_asset_type record",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T12:00:00Z"
+      }
+    }
+  }
+}

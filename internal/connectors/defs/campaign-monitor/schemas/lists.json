@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists",
+  "type": "object",
+  "x-primary-key": ["ListID"],
+  "required": ["ListID"],
+  "properties": {
+    "ListID": { "type": "string" },
+    "Name": { "type": ["string", "null"] }
+  }
+}

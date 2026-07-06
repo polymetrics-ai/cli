@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contents/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Fixture content",
+      "slug": "fixture-content",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+}

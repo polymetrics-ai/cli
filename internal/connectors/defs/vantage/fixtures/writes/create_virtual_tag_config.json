@@ -1,0 +1,16 @@
+{
+  "record": {
+    "key": "fixture_tag",
+    "overridable": true,
+    "values": [
+      {
+        "key": "value_1",
+        "filter": "costs.provider = 'aws'"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/virtual_tag_configs"
+  }
+}

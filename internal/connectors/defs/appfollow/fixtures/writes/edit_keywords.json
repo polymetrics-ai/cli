@@ -1,0 +1,16 @@
+{
+  "record": {
+    "country": "us",
+    "device": "iphone",
+    "keywords": "fixture keyword one,fixture keyword two"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/aso/keywords",
+    "body": {
+      "country": "us",
+      "device": "iphone",
+      "keywords": "fixture keyword one,fixture keyword two"
+    }
+  }
+}

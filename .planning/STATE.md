@@ -1,8 +1,24 @@
 # State
 
-Current phase: wave1-http-api-longtail-complete-opencode
+Current milestone: connector-architecture-v2
 
-Status: completed
+Current phase: wave2-fanout-http-sm
+
+Status: pending (BLOCKED on S3 engine mini-wave: incremental-lower-bound query vars + ResolveCheck ==/in when-grammar + carried minors)
+
+Completed: wave1-pilot (2026-07-02) — 10/10 pilots migrated at parity, 2 Fable review rounds,
+gap-loop cycle 1 (engine mini-wave + 10-pilot repair), re-review GO completed_with_warnings.
+See .planning/phases/wave1-pilot/SUMMARY.md + docs/migration/pilot-costs.json.
+
+Completed: wave0-engine-harness (2026-07-02) — declarative engine (85.7% cov), 3 goldens with
+parity (stripe/searxng/postgres), connectorgen, conformance v2, certify source stages, lint gates,
+migration recipe + schemas, inventory (557 connectors S137/M388/L31/XL1 → ~77 Pass A bundle
+agents). Reviewer GO after 1 gap-loop cycle. See .planning/phases/wave0-engine-harness/SUMMARY.md.
+
+Model policy (user directive): coordinator/planner/reviewer roles → `fable`; backend/tester/
+security/reliability roles → `sonnet` (Sonnet 5); Go work applies cc-skills-golang skills.
+
+Previous phase: wave1-http-api-longtail-complete-opencode (completed)
 
 Latest verification (2026-06-26):
 

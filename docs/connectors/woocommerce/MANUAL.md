@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads WooCommerce orders, products, customers, and coupons through the WooCommerce REST API (wc/v3).
 
+ICON
+  asset: icons/woocommerce.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://woocommerce.github.io/woocommerce-rest-api-docs/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  page_size
+  start_date
+  api_key (secret)
+  api_secret (secret)
+
+ETL STREAMS
+  orders:
+    primary key: id
+    cursor: date_modified_gmt
+    fields: currency(), customer_id(), date_created(), date_created_gmt(), date_modified(), date_modified_gmt(), date_paid(), id(), number(), payment_method(), status(), total(), total_tax()
+  products:
+    primary key: id
+    cursor: date_modified_gmt
+    fields: date_created_gmt(), date_modified_gmt(), id(), name(), price(), regular_price(), sale_price(), sku(), slug(), status(), stock_quantity(), stock_status(), total_sales(), type()
+  customers:
+    primary key: id
+    cursor: date_modified_gmt
+    fields: date_created(), date_created_gmt(), date_modified(), date_modified_gmt(), email(), first_name(), id(), is_paying_customer(), last_name(), role(), username()
+  coupons:
+    primary key: id
+    cursor: date_modified_gmt
+    fields: amount(), code(), date_created(), date_created_gmt(), date_expires(), date_modified(), date_modified_gmt(), discount_type(), id(), usage_count(), usage_limit()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external WooCommerce store read of orders, products, customers, and coupons
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

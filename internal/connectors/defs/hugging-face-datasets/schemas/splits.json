@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "splits",
+  "type": "object",
+  "x-primary-key": ["dataset", "config", "split"],
+  "required": ["dataset", "config", "split"],
+  "properties": {
+    "dataset": { "type": "string" },
+    "config": { "type": "string" },
+    "split": { "type": "string" }
+  }
+}

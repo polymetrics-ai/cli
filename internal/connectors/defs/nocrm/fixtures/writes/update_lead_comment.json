@@ -1,0 +1,16 @@
+{
+  "record": {
+    "lead_id": "456",
+    "id": "123",
+    "content": "Fixture content",
+    "activity_id": "42"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/leads/456/comments/123",
+    "body": {
+      "content": "Fixture content",
+      "activity_id": "42"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "request": { "method": "GET", "path": "/ping", "query": { "limit": "1" } },
+  "response": { "status": 200, "body": { "ok": true } }
+}

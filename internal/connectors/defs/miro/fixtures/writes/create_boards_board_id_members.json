@@ -1,0 +1,25 @@
+{
+  "record": {
+    "board_id": "synthetic-conformance-value",
+    "emails": [
+      "fixture@example.invalid"
+    ],
+    "role": "commenter",
+    "message": "message_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/boards/synthetic-conformance-value/members",
+    "body": {
+      "emails": [
+        "fixture@example.invalid"
+      ],
+      "role": "commenter",
+      "message": "message_fixture"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

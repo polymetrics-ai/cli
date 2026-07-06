@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v3/companies/statements/compact"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "simId": 111111,
+        "ticker": "FIX",
+        "statements": [
+          {
+            "statement": "PL",
+            "columns": [
+              "Revenue",
+              "Net Income"
+            ],
+            "data": [
+              [
+                1000000,
+                100000
+              ]
+            ],
+            "fiscalPeriod": "Q1",
+            "fiscalYear": 2026
+          }
+        ]
+      }
+    ]
+  }
+}

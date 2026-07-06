@@ -1,0 +1,22 @@
+{
+  "name": "pivotal-tracker",
+  "display_name": "Pivotal Tracker",
+  "description": "Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.",
+  "integration_type": "api",
+  "docs_url": "https://www.pivotaltracker.com/help/api/rest/v5",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Pivotal Tracker API read of project, story, iteration, and epic data"
+  }
+}

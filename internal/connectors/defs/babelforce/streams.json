@@ -1,0 +1,86 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/__legacy_hook/check"
+    },
+    "error_map": []
+  },
+  "streams": [
+    {
+      "name": "calls",
+      "method": "GET",
+      "path": "/__legacy_hook/calls",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/calls.json",
+      "incremental": {
+        "cursor_field": "dateCreated",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "calls_extended",
+      "method": "GET",
+      "path": "/__legacy_hook/calls_extended",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/calls_extended.json",
+      "incremental": {
+        "cursor_field": "dateCreated",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "recordings",
+      "method": "GET",
+      "path": "/__legacy_hook/recordings",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/recordings.json",
+      "incremental": {
+        "cursor_field": "dateCreated",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "numbers",
+      "method": "GET",
+      "path": "/__legacy_hook/numbers",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/numbers.json",
+      "incremental": {
+        "cursor_field": "dateCreated",
+        "client_filtered": true
+      }
+    },
+    {
+      "name": "users",
+      "method": "GET",
+      "path": "/__legacy_hook/users",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json",
+      "incremental": {
+        "cursor_field": "dateCreated",
+        "client_filtered": true
+      }
+    }
+  ]
+}

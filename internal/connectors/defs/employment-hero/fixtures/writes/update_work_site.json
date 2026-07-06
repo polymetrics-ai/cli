@@ -1,0 +1,19 @@
+{
+  "record": {
+    "work_site_id": "work_site_fixture_1",
+    "name": "Updated Site"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v1/organisations/synthetic-conformance-value/work_sites/work_site_fixture_1",
+    "body": {
+      "name": "Updated Site"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "update_work_site_fixture_response"
+    }
+  }
+}

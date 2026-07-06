@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/scheduling/schedules"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "fixture_id",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "deletedAt": "2026-01-01T00:00:00Z",
+          "earlyClockInThreshold": 1001,
+          "employeeIds": [
+            1001
+          ],
+          "locationId": 1001,
+          "managerUserIds": [
+            1001
+          ],
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

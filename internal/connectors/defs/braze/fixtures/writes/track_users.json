@@ -1,0 +1,17 @@
+{
+  "record": {
+    "attributes": [
+      { "external_id": "user_fixture_1", "first_name": "Fixture" }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/track",
+    "body": {
+      "attributes": [
+        { "external_id": "user_fixture_1", "first_name": "Fixture" }
+      ]
+    }
+  },
+  "response": { "status": 201, "body": { "message": "success" } }
+}

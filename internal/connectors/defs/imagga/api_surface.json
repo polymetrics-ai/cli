@@ -1,0 +1,13 @@
+{
+  "api": "Imagga REST API v2 (https://docs.imagga.com/)",
+  "docs": "https://docs.imagga.com/",
+  "reviewed_at": "2026-07-03",
+  "scope": "wave2 fan-out migration, PARTIAL (gap-closure pass): 'usage', 'tags', and 'categories' are ported at Tier 1 via the S4 engine mini-wave's stream.fan_out primitive (one request per configured image_url). 'colors' and 'faces_detections' remain NOT ported — both require a per-record derived key the dialect cannot express (colors: 3 sibling arrays under one object with no multi-array-union primitive; faces_detections: a face_index primary-key component derived from array position, not any field value) — see docs.md Known limits. Legacy stays authoritative for those 2 streams until a Tier-2 hook closes the remaining gap.",
+  "endpoints": [
+    { "method": "GET", "path": "/v2/usage", "covered_by": { "stream": "usage" } },
+    { "method": "GET", "path": "/v2/tags", "covered_by": { "stream": "tags" } },
+    { "method": "GET", "path": "/v2/categories/personal_photos", "covered_by": { "stream": "categories" } },
+    { "method": "GET", "path": "/v2/colors", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: result.colors nests 3 sibling arrays (overall_colors/foreground_colors/background_colors) that must be unioned into one record stream tagged by color_scope; records.path/keyed_object have no multi-array-union primitive, only a single dotted-path array or object-of-ids. Needs a StreamHook or a new records dialect primitive, out of scope for this Tier-1-only gap-closure pass." } },
+    { "method": "GET", "path": "/v2/faces/detections", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: legacy's primary key ['image_url','face_index'] derives face_index from the record's 0-based POSITION within result.faces[], not from any field value; computed_fields/records extraction have no array-index accessor, so this PK component cannot be reconstructed without changing emitted record data. Needs a StreamHook or a new records dialect primitive, out of scope for this Tier-1-only gap-closure pass." } }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "change_id": 123,
+    "status_page_id": 123,
+    "maintenance_id": 123,
+    "update_id": 123,
+    "name": "Fixture update_maintenance_update_from_change",
+    "description": "Fixture update_maintenance_update_from_change record"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/changes/123/status/pages/123/maintenances/123/updates/123",
+    "body": {
+      "name": "Fixture update_maintenance_update_from_change",
+      "description": "Fixture update_maintenance_update_from_change record"
+    }
+  }
+}

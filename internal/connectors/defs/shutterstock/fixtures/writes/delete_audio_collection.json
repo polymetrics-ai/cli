@@ -1,0 +1,13 @@
+{
+  "record": {
+    "audio_collection_id": "audio-collection-id-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/audio/collections/audio-collection-id-fixture-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

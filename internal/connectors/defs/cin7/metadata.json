@@ -1,0 +1,23 @@
+{
+  "name": "cin7",
+  "display_name": "Cin7",
+  "description": "Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchases, inventory availability, and reference/lookup data, and writes products, customers, suppliers, and reference-table records, through the Cin7 Core External API v2.",
+  "integration_type": "api",
+  "docs_url": "https://dearinventory.docs.apiary.io/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external Cin7 Core API read of inventory, customer, order, and reference/lookup data",
+    "write": "external mutation of live Cin7 Core catalog, customer, supplier, and reference-table records; approval required"
+  }
+}

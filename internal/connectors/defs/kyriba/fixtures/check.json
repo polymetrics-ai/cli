@@ -1,0 +1,7 @@
+{
+  "request": { "method": "GET", "path": "/bank-accounts", "query": { "page": "1", "size": "1" } },
+  "response": {
+    "status": 200,
+    "body": { "data": [ { "id": "ba_fixture_1", "accountNumber": "001", "currency": "USD", "status": "active" } ] }
+  }
+}

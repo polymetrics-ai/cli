@@ -1,0 +1,58 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/psa/clients",
+    "query": {
+      "pageNumber": "1",
+      "pageSize": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "Fixture clients 1",
+          "code": "FIX",
+          "description": "fixture_clients_1",
+          "billingAddress": {
+            "addressLine1": "fixture_clients_1",
+            "addressLine2": "fixture_clients_1",
+            "countryCode": "FIX",
+            "city": "fixture_clients_1",
+            "state": "fixture_clients_1",
+            "zip": "fixture_clients_1"
+          },
+          "clientContacts": [
+            {
+              "clientId": "clients_fixture_1",
+              "name": "Fixture clients 1",
+              "email": "fixture1@example.invalid",
+              "phone": "+15550100"
+            }
+          ],
+          "id": "clients_fixture_1"
+        },
+        {
+          "name": "Fixture clients 2",
+          "code": "FIX",
+          "description": "fixture_clients_2",
+          "billingAddress": null,
+          "clientContacts": [],
+          "id": "clients_fixture_2"
+        }
+      ],
+      "pageNumber": 1,
+      "pageSize": 100,
+      "firstPage": "https://example.invalid/keka/clients",
+      "lastPage": "https://example.invalid/keka/clients",
+      "totalPages": 1,
+      "totalRecords": 2,
+      "nextPage": null,
+      "previousPage": null,
+      "succeeded": true,
+      "message": null,
+      "errors": null
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tweets/search/recent",
+    "query": {
+      "query": "synthetic-conformance-value",
+      "max_results": "synthetic-conformance-value",
+      "tweet.fields": "id,text,author_id,created_at,conversation_id,lang,source,in_reply_to_user_id,possibly_sensitive,public_metrics",
+      "expansions": "author_id",
+      "user.fields": "id,name,username,created_at,description,location,verified,protected,url,public_metrics",
+      "start_time": "2020-01-01T00:00:00Z",
+      "end_time": "synthetic-conformance-value",
+      "next_token": "fixture_cursor_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tweet_fixture_3",
+          "text": "Fixture tweet three",
+          "author_id": "author_fixture_1",
+          "created_at": "2026-01-03T00:00:00.000Z",
+          "conversation_id": "tweet_fixture_3",
+          "lang": "en",
+          "source": "Twitter Web App",
+          "in_reply_to_user_id": null,
+          "possibly_sensitive": false,
+          "public_metrics": { "like_count": 30, "retweet_count": 3, "reply_count": 0, "quote_count": 0 }
+        }
+      ],
+      "includes": {
+        "users": [
+          { "id": "author_fixture_1", "name": "Fixture Author 1", "username": "fixture_author_1", "created_at": "2025-01-01T00:00:00.000Z", "description": "Fixture author one.", "location": "Nowhere", "verified": false, "protected": false, "url": "https://example.com/1", "public_metrics": { "followers_count": 100 } }
+        ]
+      },
+      "meta": { "result_count": 1 }
+    }
+  }
+}

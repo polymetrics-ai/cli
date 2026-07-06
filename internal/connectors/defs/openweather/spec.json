@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenWeather Connection Specification",
+  "type": "object",
+  "required": ["appid", "lat", "lon"],
+  "properties": {
+    "appid": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OpenWeather API key, sent as the appid query parameter; never logged."
+    },
+    "lat": {
+      "type": "string",
+      "description": "Latitude of the location to read (e.g. \"33.44\")."
+    },
+    "lon": {
+      "type": "string",
+      "description": "Longitude of the location to read (e.g. \"-94.04\")."
+    },
+    "units": {
+      "type": "string",
+      "description": "Optional unit system: standard, metric, or imperial. Absent when unset (OpenWeather's own default, standard/Kelvin, applies)."
+    },
+    "lang": {
+      "type": "string",
+      "description": "Optional two-letter language code for weather condition text. Absent when unset."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.openweathermap.org/data/3.0",
+      "description": "OpenWeather API base URL override for tests or proxies."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

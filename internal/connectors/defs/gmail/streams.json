@@ -1,0 +1,171 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "gmail",
+        "token_url": "{{ config.token_url }}",
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "token": "{{ secrets.client_refresh_token }}",
+        "scopes": "{{ config.scopes }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "pageToken",
+      "token_path": "nextPageToken"
+    },
+    "check": { "method": "GET", "path": "/users/{{ config.user_id }}/labels" },
+    "error_map": [
+      { "status": 401, "hint": "gmail OAuth refresh grant failed or access token expired; re-run pm credentials add gmail" },
+      { "status": 403, "hint": "gmail account lacks access for this request/scope" },
+      { "status": 429, "class": "rate_limited", "hint": "gmail API rate limit exceeded; the connector will retry with backoff" }
+    ]
+  },
+  "streams": [
+    {
+      "name": "messages",
+      "path": "/users/{{ config.user_id }}/messages",
+      "query": {
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
+      },
+      "records": { "path": "messages" },
+      "computed_fields": {
+        "thread_id": "{{ record.threadId }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "threads",
+      "path": "/users/{{ config.user_id }}/threads",
+      "query": {
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
+      },
+      "records": { "path": "threads" },
+      "computed_fields": {
+        "history_id": "{{ record.historyId }}"
+      },
+      "schema": "schemas/threads.json"
+    },
+    {
+      "name": "drafts",
+      "path": "/users/{{ config.user_id }}/drafts",
+      "query": {
+        "maxResults": "{{ config.page_size }}",
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
+      },
+      "records": { "path": "drafts" },
+      "computed_fields": {
+        "message_id": "{{ record.message.id }}",
+        "thread_id": "{{ record.message.threadId }}"
+      },
+      "schema": "schemas/drafts.json"
+    },
+    {
+      "name": "labels",
+      "path": "/users/{{ config.user_id }}/labels",
+      "query": {
+        "includeSpamTrash": { "template": "{{ config.include_spam_and_trash }}", "omit_when_absent": true },
+        "q": { "template": "after:{{ config.start_date | unix_seconds }}", "omit_when_absent": true }
+      },
+      "records": { "path": "labels" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "message_list_visibility": "{{ record.messageListVisibility }}",
+        "label_list_visibility": "{{ record.labelListVisibility }}",
+        "messages_total": "{{ record.messagesTotal }}",
+        "messages_unread": "{{ record.messagesUnread }}",
+        "threads_total": "{{ record.threadsTotal }}",
+        "threads_unread": "{{ record.threadsUnread }}"
+      },
+      "schema": "schemas/labels.json"
+    },
+    {
+      "name": "history",
+      "path": "/users/{{ config.user_id }}/history",
+      "query": {
+        "maxResults": "{{ config.page_size }}",
+        "startHistoryId": { "template": "{{ config.start_history_id }}", "omit_when_absent": true }
+      },
+      "records": { "path": "history" },
+      "incremental": {
+        "cursor_field": "id",
+        "request_param": "startHistoryId",
+        "start_config_key": "start_history_id"
+      },
+      "computed_fields": {
+        "messages_added": "{{ record.messagesAdded }}",
+        "messages_deleted": "{{ record.messagesDeleted }}",
+        "labels_added": "{{ record.labelsAdded }}",
+        "labels_removed": "{{ record.labelsRemoved }}"
+      },
+      "schema": "schemas/history.json"
+    },
+    {
+      "name": "filters",
+      "path": "/users/{{ config.user_id }}/settings/filters",
+      "records": { "path": "filter" },
+      "pagination": { "type": "none" },
+      "schema": "schemas/filters.json"
+    },
+    {
+      "name": "send_as",
+      "path": "/users/{{ config.user_id }}/settings/sendAs",
+      "records": { "path": "sendAs" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "send_as_email": "{{ record.sendAsEmail }}",
+        "display_name": "{{ record.displayName }}",
+        "reply_to_address": "{{ record.replyToAddress }}",
+        "is_primary": "{{ record.isPrimary }}",
+        "is_default": "{{ record.isDefault }}",
+        "treat_as_alias": "{{ record.treatAsAlias }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/send_as.json"
+    },
+    {
+      "name": "delegates",
+      "path": "/users/{{ config.user_id }}/settings/delegates",
+      "records": { "path": "delegates" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "delegate_email": "{{ record.delegateEmail }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/delegates.json"
+    },
+    {
+      "name": "forwarding_addresses",
+      "path": "/users/{{ config.user_id }}/settings/forwardingAddresses",
+      "records": { "path": "forwardingAddresses" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "forwarding_email": "{{ record.forwardingEmail }}",
+        "verification_status": "{{ record.verificationStatus }}"
+      },
+      "schema": "schemas/forwarding_addresses.json"
+    },
+    {
+      "name": "profile",
+      "path": "/users/{{ config.user_id }}/profile",
+      "records": { "path": "" },
+      "pagination": { "type": "none" },
+      "computed_fields": {
+        "email_address": "{{ record.emailAddress }}",
+        "messages_total": "{{ record.messagesTotal }}",
+        "threads_total": "{{ record.threadsTotal }}",
+        "history_id": "{{ record.historyId }}"
+      },
+      "schema": "schemas/profile.json"
+    }
+  ]
+}

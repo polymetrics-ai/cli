@@ -1,0 +1,22 @@
+{
+  "name": "freshbooks",
+  "display_name": "FreshBooks",
+  "description": "Reads FreshBooks clients, invoices, expenses, payments, and items through the FreshBooks accounting REST API.",
+  "integration_type": "api",
+  "docs_url": "https://www.freshbooks.com/api/start",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external FreshBooks API read of accounting data (clients, invoices, expenses, payments, items)"
+  }
+}

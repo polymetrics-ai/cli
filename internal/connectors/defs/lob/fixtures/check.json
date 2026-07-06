@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/addresses",
+    "query": { "limit": "1" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "adr_fixture_check", "object": "address", "date_created": "2026-01-01T00:00:00Z" }
+      ],
+      "object": "list",
+      "next_url": null
+    }
+  }
+}

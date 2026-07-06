@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "investments",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "required": ["id"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": ["string", "null"] },
+    "editedName": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "tickerSymbol": { "type": ["string", "null"] },
+    "exchange": { "type": ["string", "null"] },
+    "cik": { "type": ["string", "null"] },
+    "figi": { "type": ["string", "null"] },
+    "lei": { "type": ["string", "null"] },
+    "country": { "type": ["string", "null"] },
+    "sector": { "type": ["string", "null"] },
+    "industry": { "type": ["string", "null"] },
+    "marketType": { "type": ["string", "null"] },
+    "financingType": { "type": ["string", "null"] },
+    "employees": { "type": ["integer", "null"] },
+    "website": { "type": ["string", "null"] },
+    "isArchived": { "type": ["boolean", "null"] },
+    "isFavorite": { "type": ["boolean", "null"] },
+    "isLocked": { "type": ["boolean", "null"] },
+    "visibility": { "type": ["string", "null"] },
+    "createdAt": { "type": ["string", "null"] },
+    "updatedAt": { "type": ["string", "null"] }
+  }
+}

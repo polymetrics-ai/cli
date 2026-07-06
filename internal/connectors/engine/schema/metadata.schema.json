@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "metadata.json",
+  "type": "object",
+  "required": ["name", "display_name", "description", "integration_type", "release_stage", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "display_name": { "type": "string" },
+    "description": { "type": "string" },
+    "integration_type": { "type": "string" },
+    "docs_url": { "type": "string" },
+    "release_stage": { "type": "string" },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "check": { "type": "boolean" },
+        "read": { "type": "boolean" },
+        "write": { "type": "boolean" },
+        "query": { "type": "boolean" },
+        "cdc": { "type": "boolean" },
+        "dynamic_schema": { "type": "boolean" }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "read_page_size": { "type": "integer" },
+        "write_batch_size": { "type": "integer" }
+      }
+    },
+    "rate_limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "strategy": { "type": "string" },
+        "requests_per_hour": { "type": "integer" },
+        "requests_per_minute": { "type": "integer" }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "read": { "type": "string" },
+        "write": { "type": "string" },
+        "approval": { "type": "string" }
+      }
+    },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "skip_dynamic": { "type": "boolean" },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}

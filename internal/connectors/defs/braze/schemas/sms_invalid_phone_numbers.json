@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sms_invalid_phone_numbers",
+  "type": "object",
+  "x-primary-key": ["phone", "invalid_detected_at"],
+  "x-cursor-field": "invalid_detected_at",
+  "required": ["phone"],
+  "properties": {
+    "phone": { "type": "string" },
+    "invalid_detected_at": { "type": ["string", "null"] },
+    "reason": { "type": ["string", "null"] }
+  }
+}

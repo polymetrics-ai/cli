@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "org_fixture_1",
+    "display_name": "Fixture Organization Updated"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/organizations/org_fixture_1",
+    "body": {
+      "display_name": "Fixture Organization Updated"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "org_fixture_1",
+      "display_name": "Fixture Organization Updated"
+    }
+  }
+}

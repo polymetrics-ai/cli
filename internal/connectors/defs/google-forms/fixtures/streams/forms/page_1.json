@@ -1,0 +1,24 @@
+{
+  "request": { "method": "GET", "path": "/forms/synthetic-conformance-value" },
+  "response": {
+    "status": 200,
+    "body": {
+      "formId": "fixture_form_1",
+      "revisionId": "00000001",
+      "responderUri": "https://docs.google.com/forms/d/e/fixture_1/viewform",
+      "info": {
+        "title": "Fixture Form 1",
+        "documentTitle": "Fixture Form 1 Doc",
+        "description": "Deterministic fixture form."
+      },
+      "items": [
+        {
+          "itemId": "item_1",
+          "title": "Question 1",
+          "description": "Deterministic fixture item.",
+          "questionItem": { "question": { "questionId": "q_1" } }
+        }
+      ]
+    }
+  }
+}

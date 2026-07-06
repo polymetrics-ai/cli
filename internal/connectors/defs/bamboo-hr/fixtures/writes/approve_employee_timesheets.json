@@ -1,0 +1,26 @@
+{
+  "record": {
+    "lastChanged": 1001,
+    "timesheets": [
+      {
+        "timesheetId": 1001
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time_tracking/timesheets/approve",
+    "body": {
+      "lastChanged": 1001,
+      "timesheets": [
+        {
+          "timesheetId": 1001
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

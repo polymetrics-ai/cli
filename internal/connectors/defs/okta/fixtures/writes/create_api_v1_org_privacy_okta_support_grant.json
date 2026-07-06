@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/org/privacy/oktaSupport/grant"
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

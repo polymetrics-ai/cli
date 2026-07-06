@@ -1,0 +1,19 @@
+{
+  "request": { "method": "GET", "path": "/campaigns" },
+  "response": {
+    "status": 200,
+    "body": {
+      "campaigns": [
+        {
+          "guid": "cmp_fixture_1",
+          "name": "Fixture Campaign",
+          "description": "conformance fixture campaign",
+          "group_guid": "grp_fixture_1",
+          "channel_guids": ["chn_fixture_1"],
+          "created": "2026-01-01T00:00:00+0000",
+          "modified": "2026-01-02T00:00:00+0000"
+        }
+      ]
+    }
+  }
+}

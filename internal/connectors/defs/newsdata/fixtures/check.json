@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/latest"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "totalResults": 1,
+      "results": [
+        { "article_id": "fixture-latest-1", "title": "Fixture Article 1", "link": "https://example.com/latest/1", "pubDate": "2026-01-01 00:00:00" }
+      ],
+      "nextPage": null
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "org_id": "synthetic-conformance-value",
+    "group_id": "synthetic-conformance-value",
+    "membersToAdd": [
+      "members_to_add_fixture"
+    ],
+    "membersToRemove": [
+      "members_to_remove_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/orgs/synthetic-conformance-value/groups/synthetic-conformance-value/members",
+    "body": {
+      "membersToAdd": [
+        "members_to_add_fixture"
+      ],
+      "membersToRemove": [
+        "members_to_remove_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

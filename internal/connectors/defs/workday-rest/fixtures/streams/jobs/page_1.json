@@ -1,0 +1,12 @@
+{
+  "request": { "method": "GET", "path": "/ccx/api/hcm/v1/synthetic-conformance-value/jobs", "query": { "page": "1", "limit": "100" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": "job-1", "descriptor": "Fixture Software Engineer", "updated": "2026-01-01T00:00:00Z" },
+        { "id": "job-2", "descriptor": "Fixture Product Manager", "updated": "2026-01-01T00:01:00Z" }
+      ]
+    }
+  }
+}
